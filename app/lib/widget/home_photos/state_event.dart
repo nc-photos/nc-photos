@@ -27,6 +27,7 @@ class _State {
     required this.minimapYRatio,
     this.scrollDate,
     required this.hasMissingVideoPreview,
+    this.bannerAdExtent,
     this.error,
   });
 
@@ -82,6 +83,8 @@ class _State {
   final Date? scrollDate;
 
   final bool hasMissingVideoPreview;
+
+  final double? bannerAdExtent;
 
   final ExceptionEvent? error;
 }
@@ -328,6 +331,15 @@ class _TripMissingVideoPreview implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+class _UpdateBannerAdExtent implements _Event {
+  const _UpdateBannerAdExtent(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final double? value;
 }
 
 @toString
