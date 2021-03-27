@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/di_container.dart';
@@ -92,6 +93,10 @@ Future<void> init(InitIsolateType isolateType) async {
     unawaited(_initRefreshRate());
   }
   await _initTimeZone();
+
+  if (isolateType == InitIsolateType.main) {
+    await _initAds();
+  }
 
   _hasInitedInThisIsolate = true;
 }
@@ -269,6 +274,18 @@ Future<Pref> _createSecurePref() async {
   final provider = PrefSecureStorageProvider();
   await provider.init();
   return Pref.scoped(provider);
+}
+
+Future<void> _initAds() {
+  final stopwatch = Stopwatch()..start();
+  try {
+    return Future.any([
+      MobileAds.instance.initialize(),
+      Future.delayed(const Duration(milliseconds: 1500)),
+    ]);
+  } finally {
+    _log.fine("[_initAds] Elapsed: ${stopwatch.elapsedMilliseconds}ms");
+  }
 }
 
 final _log = Logger("app_init");

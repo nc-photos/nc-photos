@@ -26,6 +26,7 @@ import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
+import 'package:nc_photos/widget/ad.dart';
 import 'package:nc_photos/widget/album_importer.dart';
 import 'package:nc_photos/widget/archive_browser/archive_browser.dart';
 import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
@@ -165,6 +166,11 @@ class _BodyView extends StatelessWidget {
                     ? const _AppBar()
                     : const _SelectionAppBar(),
               ),
+              if (features.isSupportAds)
+                const SliverPadding(
+                  padding: EdgeInsets.symmetric(vertical: 8),
+                  sliver: SliverToBoxAdapter(child: AdBanner()),
+                ),
               const SliverToBoxAdapter(child: SizedBox(height: 8)),
               _BlocBuilder(
                 buildWhen: (previous, current) =>

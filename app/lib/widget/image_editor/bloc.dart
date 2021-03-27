@@ -451,6 +451,8 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   final PrefController prefController;
   final AnyFile file;
 
+  final adGateHandler = AdGateHandler();
+
   var _processorToken = 0;
   final _processorTokenMutex = Mutex();
   final _processorMutex = Mutex();

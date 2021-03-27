@@ -10,3 +10,5 @@ final isSupportEnhancement = getRawPlatform() == NpPlatform.android;
 final isSupportLocalFiles =
     getRawPlatform() == NpPlatform.android &&
     AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU;
+
+final isSupportAds = getRawPlatform() != NpPlatform.web;

@@ -25,7 +25,16 @@ class _AppBar extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.save_outlined),
               tooltip: L10n.global().saveTooltip,
-              onPressed: () {
+              onPressed: () async {
+                if (!await context.bloc.adGateHandler(
+                  context: context,
+                  contentText:
+                      "Photo editing is a premium feature but you can unlock it by watching an ad. Once unlocked it will last for 1 day.",
+                  rewardedText: "Your photo will now be processed",
+                )) {
+                  return;
+                }
+
                 context.addEvent(const _Save());
               },
             ),

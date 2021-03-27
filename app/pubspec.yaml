@@ -191,6 +191,8 @@ dependencies:
   visibility_detector: 0.3.3
   wakelock_plus: ^1.1.1
   woozy_search: ^2.0.3
+  # android/ios only
+  google_mobile_ads: 7.0.0
 
 dependency_overrides:
   video_player:
