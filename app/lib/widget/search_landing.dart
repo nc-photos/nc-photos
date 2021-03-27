@@ -21,11 +21,13 @@ import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/k.dart' as k;
+import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
+import 'package:nc_photos/widget/ad.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
@@ -138,6 +140,11 @@ class _WrappedSearchLandingState extends State<_WrappedSearchLanding> {
         ],
         child: Column(
           children: [
+            if (features.isSupportAds)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: AdBanner(),
+              ),
             ValueStreamBuilder<PersonProvider>(
               stream:
                   context

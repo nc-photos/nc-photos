@@ -47,6 +47,9 @@ class _MinimapView extends StatelessWidget {
                           // prevent overlap
                           top = prevItemY! + _minDateY;
                         }
+                        // add extra padding for the banner ads
+                        top +=
+                            (state.bannerAdExtent ?? 0) * state.minimapYRatio;
                         prevItemY = top;
                         final text =
                             "${DateFormat.y().format(prevDate!.toLocalDateTime())} —";

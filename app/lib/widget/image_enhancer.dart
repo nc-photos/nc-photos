@@ -25,6 +25,7 @@ import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
+import 'package:nc_photos/widget/handler/ad_gate_handler.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:nc_photos/widget/selectable.dart';
@@ -189,6 +190,14 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     final args = await _getArgs(context, _selectedOption.algorithm);
     if (args == null) {
       // user canceled
+      return;
+    }
+    if (!await _adGateHandler(
+      context: context,
+      contentText:
+          "Photo enhancement is a premium feature but you can unlock it by watching an ad. Once unlocked it will last for 1 day.",
+      rewardedText: "Your photo will now be processed in the background",
+    )) {
       return;
     }
     final uriGetter = AnyFileContentGetterFactory.uri(
@@ -600,6 +609,8 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
   late final DiContainer _c;
   late var _selectedOption = _options[0];
   late final _pageController = PageController(keepPage: false);
+
+  final _adGateHandler = AdGateHandler();
 }
 
 enum _Algorithm {

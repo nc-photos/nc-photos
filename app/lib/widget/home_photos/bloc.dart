@@ -60,6 +60,8 @@ class _Bloc extends Bloc<_Event, _State>
 
     on<_TripMissingVideoPreview>(_onTripMissingVideoPreview);
 
+    on<_UpdateBannerAdExtent>(_onUpdateBannerAdExtent);
+
     on<_SetError>(_onSetError);
     on<_ShowRemoteOnlyWarning>((ev, emit) {
       emit(state.copyWith(shouldShowRemoteOnlyWarning: Unique(true)));
@@ -554,6 +556,7 @@ class _Bloc extends Bloc<_Event, _State>
     if (state.isEnableMemoryCollection && state.memoryCollections.isNotEmpty) {
       totalHeight += _MemoryCollectionItemView.height;
     }
+    totalHeight += state.bannerAdExtent ?? 0;
     final ratio =
         (contentHeight - draggableThumbSize) / (totalHeight - contentHeight);
     _log.info(
@@ -723,6 +726,11 @@ class _Bloc extends Bloc<_Event, _State>
     if (!state.hasMissingVideoPreview) {
       emit(state.copyWith(hasMissingVideoPreview: true));
     }
+  }
+
+  void _onUpdateBannerAdExtent(_UpdateBannerAdExtent ev, Emitter<_State> emit) {
+    _log.info(ev);
+    emit(state.copyWith(bannerAdExtent: ev.value));
   }
 
   void _onSetError(_SetError ev, Emitter<_State> emit) {

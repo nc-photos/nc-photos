@@ -38,9 +38,11 @@ import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/gps_map_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/object_extension.dart';
+import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:nc_photos/widget/ad.dart';
 import 'package:nc_photos/widget/album_share_outlier_browser.dart';
 import 'package:nc_photos/widget/app_bar_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
@@ -358,6 +360,11 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                                             : const SizedBox(height: 4),
                               ),
                             ),
+                            if (features.isSupportAds)
+                              const SliverPadding(
+                                padding: EdgeInsets.symmetric(vertical: 8),
+                                sliver: SliverToBoxAdapter(child: AdBanner()),
+                              ),
                             _BlocBuilder(
                               buildWhen:
                                   (previous, current) =>

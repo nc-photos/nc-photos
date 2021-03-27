@@ -28,6 +28,7 @@ import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/widget/about_geocoding_dialog.dart';
+import 'package:nc_photos/widget/ad.dart';
 import 'package:nc_photos/widget/handler/add_selection_to_collection_handler.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
@@ -167,6 +168,11 @@ class _WrappedViewerDetailPaneState extends State<_WrappedViewerDetailPane>
               padding: EdgeInsets.symmetric(horizontal: 32),
               child: Divider(),
             ),
+            if (features.isSupportAds)
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: AdBanner(),
+              ),
             const _NameItem(),
             const _OwnerItem(),
             const _TagItem(),

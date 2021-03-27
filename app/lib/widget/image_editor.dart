@@ -14,6 +14,7 @@ import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
+import 'package:nc_photos/widget/handler/ad_gate_handler.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:nc_photos/widget/image_editor/color_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/crop_controller.dart';
@@ -273,6 +274,15 @@ class _ImageEditorState extends State<ImageEditor> {
   }
 
   Future<void> _onSavePressed(BuildContext context) async {
+    if (!await _adGateHandler(
+      context: context,
+      contentText:
+          "Photo editing is a premium feature but you can unlock it by watching an ad. Once unlocked it will last for 1 day.",
+      rewardedText: "Your photo will now be processed in the background",
+    )) {
+      return;
+    }
+
     final c = KiwiContainer().resolve<DiContainer>();
     final uriGetter = AnyFileContentGetterFactory.uri(
       widget.file,
@@ -335,6 +345,8 @@ class _ImageEditorState extends State<ImageEditor> {
   var _colorFilters = <ColorArguments>[];
   var _transformFilters = <TransformArguments>[];
   TransformArguments? _cropFilter;
+
+  final _adGateHandler = AdGateHandler();
 }
 
 enum _ToolType { color, transform }

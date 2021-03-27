@@ -36,6 +36,7 @@ class _State {
     required this.selectedCanDelete,
     required this.selectedCanAddToCollection,
     required this.selectedCanUpload,
+    this.bannerAdExtent,
     this.error,
     required this.shouldShowRemoteOnlyWarning,
     required this.shouldShowLocalOnlyWarning,
@@ -114,6 +115,8 @@ class _State {
   final bool selectedCanDelete;
   final bool selectedCanAddToCollection;
   final bool selectedCanUpload;
+
+  final double? bannerAdExtent;
 
   final ExceptionEvent? error;
   final Unique<bool> shouldShowRemoteOnlyWarning;
@@ -380,6 +383,16 @@ class _TripMissingVideoPreview implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _UpdateBannerAdExtent implements _Event {
+  const _UpdateBannerAdExtent(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final double? value;
 }
 
 @toString
