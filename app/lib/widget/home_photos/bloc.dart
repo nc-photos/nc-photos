@@ -53,6 +53,8 @@ class _Bloc extends Bloc<_Event, _State>
 
     on<_TripMissingVideoPreview>(_onTripMissingVideoPreview);
 
+    on<_UpdateBannerAdExtent>(_onUpdateBannerAdExtent);
+
     on<_SetError>(_onSetError);
 
     _subscriptions
@@ -381,7 +383,8 @@ class _Bloc extends Bloc<_Event, _State>
       viewHeight: state.viewHeight! - state.viewOverlayPadding!,
     );
     final totalHeight =
-        minimapItems.map((e) => e.logicalHeight + e.padding).sum;
+        minimapItems.map((e) => e.logicalHeight + e.padding).sum +
+            (state.bannerAdExtent ?? 0);
     final ratio = state.viewHeight! / totalHeight;
     _log.info(
         "[_onTransformMinimap] view height: ${state.viewHeight!}, logical height: $totalHeight");
@@ -512,6 +515,11 @@ class _Bloc extends Bloc<_Event, _State>
     if (!state.hasMissingVideoPreview) {
       emit(state.copyWith(hasMissingVideoPreview: true));
     }
+  }
+
+  void _onUpdateBannerAdExtent(_UpdateBannerAdExtent ev, Emitter<_State> emit) {
+    _log.info(ev);
+    emit(state.copyWith(bannerAdExtent: ev.value));
   }
 
   void _onSetError(_SetError ev, Emitter<_State> emit) {

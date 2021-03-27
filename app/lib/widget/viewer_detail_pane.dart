@@ -29,6 +29,7 @@ import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
 import 'package:nc_photos/use_case/list_file_tag.dart';
 import 'package:nc_photos/use_case/update_property.dart';
 import 'package:nc_photos/widget/about_geocoding_dialog.dart';
+import 'package:nc_photos/widget/ad.dart';
 import 'package:nc_photos/widget/handler/add_selection_to_collection_handler.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/photo_date_time_edit_dialog.dart';
@@ -258,6 +259,11 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
               child: Divider(),
             ),
           ],
+          if (features.isSupportAds)
+            const Padding(
+              padding: EdgeInsets.symmetric(vertical: 8),
+              child: AdBanner(),
+            ),
           ListTile(
             leading: const ListTileCenterLeading(
               child: Icon(Icons.image_outlined),
