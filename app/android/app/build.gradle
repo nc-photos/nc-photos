@@ -128,3 +128,6 @@ dependencies {
     implementation 'com.nkming.nc_photos.np_android_core:np_android_core'
     coreLibraryDesugaring "com.android.tools:desugar_jdk_libs:2.0.3"
 }
+
+apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.firebase.crashlytics'
