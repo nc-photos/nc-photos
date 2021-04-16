@@ -4,6 +4,11 @@
 	"@translator": {
 		"description": "Name of the translator(s) for this language"
 	},
+	"settingsPrivacyTitle": "Privacy",
+	"settingsPrivacyDescription": "Privacy-related settings",
+	"settingsPrivacyPageTitle": "Privacy settings",
+	"settingsPrivacyPolicyTitle": "Privacy policy",
+	"setupPrivacyAgreeStatement": "Please read carefully the above privacy policy. By continuing, you agree to our privacy policy",
 	"photosTabLabel": "Photos",
 	"@photosTabLabel": {
 		"description": "Label of the tab that lists user photos"
