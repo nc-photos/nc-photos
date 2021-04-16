@@ -6,3 +6,4 @@ final isSupportSelfSignedCert = getRawPlatform() == NpPlatform.android;
 final isSupportEnhancement = getRawPlatform() == NpPlatform.android;
 
 final isSupportAds = getRawPlatform() != NpPlatform.web;
+final isSupportCrashlytics = getRawPlatform() != NpPlatform.web;
