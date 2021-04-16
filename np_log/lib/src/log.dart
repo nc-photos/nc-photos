@@ -5,7 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
-void initLog({required bool isDebugMode}) {
+void initLog({
+  required bool isDebugMode,
+  void Function(LogRecord record)? onLog,
+}) {
   Logger.root.level = !isDebugMode ? Level.WARNING : Level.ALL;
   Logger.root.onRecord.listen((record) {
     if (record.loggerName == "SuperSliverList") {
@@ -38,6 +41,8 @@ void initLog({required bool isDebugMode}) {
     } else {
       debugPrint(_colorized(msg, record.level), wrapWidth: 1024);
     }
+
+    onLog?.call(record);
   });
 }
 

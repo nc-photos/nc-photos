@@ -7,6 +7,8 @@
 	"settingsPrivacyTitle": "Privacy",
 	"settingsPrivacyDescription": "Privacy-related settings",
 	"settingsPrivacyPageTitle": "Privacy settings",
+	"settingsAnalyticsTitle": "Analytics",
+	"settingsAnalyticsSubtitle": "Collect analytics after an error to help developers better diagnose the issue",
 	"settingsPrivacyPolicyTitle": "Privacy policy",
 	"setupPrivacyAgreeStatement": "Please read carefully the above privacy policy. By continuing, you agree to our privacy policy",
 	"photosTabLabel": "Photos",
