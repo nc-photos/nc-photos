@@ -2,7 +2,11 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-void initLog({required bool isDebugMode, void Function(String) print = print}) {
+void initLog({
+  required bool isDebugMode,
+  void Function(String) print = print,
+  void Function(LogRecord record)? onLog,
+}) {
   Logger.root.level = !isDebugMode ? Level.WARNING : Level.ALL;
   Logger.root.onRecord.listen((record) {
     if (record.loggerName == "SuperSliverList") {
@@ -35,6 +39,8 @@ void initLog({required bool isDebugMode, void Function(String) print = print}) {
     }
     print(msg);
     LogStream().add(msg);
+
+    onLog?.call(record);
   });
 }
 

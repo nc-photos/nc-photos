@@ -12,3 +12,4 @@ final isSupportLocalFiles =
     AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU;
 
 final isSupportAds = getRawPlatform() != NpPlatform.web;
+final isSupportCrashlytics = getRawPlatform() != NpPlatform.web;

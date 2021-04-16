@@ -1,10 +1,13 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/permission_util.dart';
+import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/platform/features.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/widget/home/home.dart';
@@ -316,6 +319,17 @@ class _PrivacyState extends State<_Privacy> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          SwitchListTile(
+            title: Text(L10n.global().settingsAnalyticsTitle),
+            value: _isEnableAnalytics,
+            onChanged: _onAnalyticsValueChanged,
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(L10n.global().settingsAnalyticsSubtitle),
+          ),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: InkWell(
@@ -353,4 +367,26 @@ class _PrivacyState extends State<_Privacy> {
       ),
     );
   }
+
+  @override
+  dispose() {
+    super.dispose();
+    // persist user's choice
+    _log.info("[dispose] Analytics: $_isEnableAnalytics");
+    if (features.isSupportCrashlytics) {
+      FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(
+        _isEnableAnalytics,
+      );
+    }
+  }
+
+  void _onAnalyticsValueChanged(bool value) {
+    setState(() {
+      _isEnableAnalytics = value;
+    });
+  }
+
+  bool _isEnableAnalytics = true;
+
+  static final _log = Logger("widget.setup._PrivacyState");
 }

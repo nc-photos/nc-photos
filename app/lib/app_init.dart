@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -45,6 +48,7 @@ import 'package:nc_photos/entity/tagged_file/data_source.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/android_info.dart';
 import 'package:nc_photos/mobile/self_signed_cert_manager.dart';
+import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/touch_manager.dart';
@@ -92,6 +96,7 @@ Future<void> init(InitIsolateType isolateType) async {
     unawaited(_initRefreshRate());
   }
 
+  await _initFirebase();
   await _initAds();
 
   _hasInitedInThisIsolate = true;
@@ -105,6 +110,16 @@ void initLog() {
   np_log.initLog(
     isDebugMode: np_log.isDevMode,
     print: (log) => debugPrint(log, wrapWidth: 1024),
+    onLog: (record) {
+      if (_shouldReportCrashlytics(record)) {
+        FirebaseCrashlytics.instance.recordError(
+          record.error,
+          record.stackTrace,
+          reason: record.message,
+          printDetails: false,
+        );
+      }
+    },
   );
 }
 
@@ -272,6 +287,40 @@ Future<Pref> _createSecurePref() async {
 
 Future<InitializationStatus> _initAds() {
   return MobileAds.instance.initialize();
+}
+
+Future<void> _initFirebase() async {
+  await Firebase.initializeApp();
+
+  // Crashlytics
+  if (features.isSupportCrashlytics) {
+    if (kDebugMode) {
+      await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(false);
+      await FirebaseCrashlytics.instance.deleteUnsentReports();
+    }
+  }
+}
+
+bool _shouldReportCrashlytics(LogRecord record) {
+  if (kDebugMode ||
+      !features.isSupportCrashlytics ||
+      record.level < Level.SHOUT) {
+    return false;
+  }
+  final e = record.error;
+  // We ignore these SocketExceptions as they are likely caused by an unstable
+  // internet connection
+  // 7: No address associated with hostname
+  // 101: Network is unreachable
+  // 103: Software caused connection abort
+  // 104: Connection reset by peer
+  // 110: Connection timed out
+  // 113: No route to host
+  if (e is SocketException &&
+      e.osError?.errorCode.isIn([7, 101, 103, 104, 110, 113]) == true) {
+    return false;
+  }
+  return true;
 }
 
 final _log = Logger("app_init");
