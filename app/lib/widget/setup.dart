@@ -6,6 +6,7 @@ import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/permission_util.dart';
 import 'package:nc_photos/platform/features.dart';
+import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
 import 'package:nc_photos/widget/sign_in.dart';
@@ -50,6 +51,7 @@ class _SetupState extends State<Setup> {
         _HiddenPrefDirNotice(),
       if (isSupportLocalFiles && (_initialProgress & _PageId.localFiles == 0))
         _LocalFiles(key: _localFilesKey),
+      if (_initialProgress & _PageId.privacy == 0) _Privacy(),
     ];
     final isLastPage = page >= pages.length - 1;
     return Column(
@@ -151,8 +153,12 @@ class _PageId {
   static const exif = 0x01;
   static const hiddenPrefDirNotice = 0x02;
   static const localFiles = 0x04;
+  static const privacy = 0x010000;
   static final all =
-      exif | hiddenPrefDirNotice | (isSupportLocalFiles ? localFiles : 0);
+      exif |
+      hiddenPrefDirNotice |
+      (isSupportLocalFiles ? localFiles : 0) |
+      privacy;
 }
 
 abstract interface class _Page implements Widget {
@@ -293,4 +299,58 @@ class _LocalFilesState extends State<_LocalFiles> {
 
   final _key = GlobalKey<LocalRootPickerState>();
   var _isReady = false;
+}
+
+class _Privacy extends StatefulWidget implements _Page {
+  @override
+  createState() => _PrivacyState();
+
+  @override
+  getPageId() => _PageId.privacy;
+}
+
+class _PrivacyState extends State<_Privacy> {
+  @override
+  build(BuildContext context) {
+    return SingleChildScrollView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: InkWell(
+              onTap: () {
+                launch(k.privacyPolicyUrl);
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                child: Text(
+                  L10n.global().settingsPrivacyPolicyTitle,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(L10n.global().setupPrivacyAgreeStatement),
+          ),
+          const SizedBox(height: 32),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              L10n.global().setupSettingsModifyLaterHint,
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
+            ),
+          ),
+          const SizedBox(height: 8),
+        ],
+      ),
+    );
+  }
 }

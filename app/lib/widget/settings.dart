@@ -115,6 +115,12 @@ class _SettingsState extends State<Settings> {
                 pageBuilder: () => const MiscSettings(),
               ),
               _SubPageItem(
+                leading: const Icon(Icons.privacy_tip_outlined),
+                label: L10n.global().settingsPrivacyTitle,
+                description: L10n.global().settingsPrivacyDescription,
+                pageBuilder: () => _PrivacySettings(),
+              ),
+              _SubPageItem(
                 leading: const Icon(Icons.warning_amber),
                 label: L10n.global().settingsExpertTitle,
                 pageBuilder: () => const ExpertSettings(),
@@ -261,4 +267,39 @@ class _SubPageItem extends StatelessWidget {
   final String label;
   final String? description;
   final Widget Function() pageBuilder;
+}
+
+class _PrivacySettings extends StatefulWidget {
+  @override
+  createState() => _PrivacySettingsState();
+}
+
+class _PrivacySettingsState extends State<_PrivacySettings> {
+  @override
+  build(BuildContext context) {
+    return Scaffold(
+      body: Builder(builder: (context) => _buildContent(context)),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return CustomScrollView(
+      slivers: [
+        SliverAppBar(
+          pinned: true,
+          title: Text(L10n.global().settingsPrivacyPageTitle),
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate([
+            ListTile(
+              title: Text(L10n.global().settingsPrivacyPolicyTitle),
+              onTap: () {
+                launch(k.privacyPolicyUrl);
+              },
+            ),
+          ]),
+        ),
+      ],
+    );
+  }
 }
