@@ -120,6 +120,7 @@ enum PrefKey implements PrefKeyInterface {
   homeCollectionsNavBarButtons,
   isFallbackClientExif,
   lastAdRewardTime,
+  isPersonalizedAds,
   ;
 
   @override
@@ -224,6 +225,8 @@ enum PrefKey implements PrefKeyInterface {
         return "isFallbackClientExif";
       case PrefKey.lastAdRewardTime:
         return "lastAdRewardTime";
+      case PrefKey.isPersonalizedAds:
+        return "isPersonalizedAds";
     }
   }
 }
