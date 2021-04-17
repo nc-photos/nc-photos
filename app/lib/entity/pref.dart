@@ -131,7 +131,8 @@ enum PrefKey implements PrefKeyInterface {
   uploadConvertDownsizeMp,
   isShowUploadConvertWarning,
   isEnableLocalFile,
-  lastAdRewardTime;
+  lastAdRewardTime,
+  isPersonalizedAds;
 
   @override
   String toStringKey() {
@@ -193,6 +194,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.isShowUploadConvertWarning => "isShowUploadConvertWarning",
       PrefKey.isEnableLocalFile => "isEnableLocalFile",
       PrefKey.lastAdRewardTime => "lastAdRewardTime",
+      PrefKey.isPersonalizedAds => "isPersonalizedAds",
     };
   }
 }

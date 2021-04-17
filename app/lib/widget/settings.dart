@@ -7,6 +7,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/debug_util.dart';
+import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/language_util.dart' as language_util;
 import 'package:nc_photos/mobile/platform.dart'
@@ -283,6 +284,9 @@ class _PrivacySettingsState extends State<_PrivacySettings> {
       _isEnableAnalytics =
           FirebaseCrashlytics.instance.isCrashlyticsCollectionEnabled;
     }
+    if (features.isSupportAds) {
+      _isEnablePersonalizedAds = Pref().isPersonalizedAdsOr(false);
+    }
   }
 
   @override
@@ -308,6 +312,13 @@ class _PrivacySettingsState extends State<_PrivacySettings> {
                 value: _isEnableAnalytics,
                 onChanged: (value) => _onAnalyticsChanged(value),
               ),
+            if (features.isSupportAds)
+              SwitchListTile(
+                title: Text(L10n.global().settingsPersonalizedAdsTitle),
+                subtitle: Text(L10n.global().settingsPersonalizedAdsSubtitle),
+                value: _isEnablePersonalizedAds,
+                onChanged: (value) => _onPersonalizedAdsChanged(value),
+              ),
             ListTile(
               title: Text(L10n.global().settingsPrivacyPolicyTitle),
               onTap: () {
@@ -327,5 +338,13 @@ class _PrivacySettingsState extends State<_PrivacySettings> {
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(value);
   }
 
+  void _onPersonalizedAdsChanged(bool value) {
+    Pref().setPersonalizedAds(value);
+    setState(() {
+      _isEnablePersonalizedAds = value;
+    });
+  }
+
   late bool _isEnableAnalytics;
+  late bool _isEnablePersonalizedAds;
 }

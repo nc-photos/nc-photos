@@ -9,6 +9,8 @@
 	"settingsPrivacyPageTitle": "Privacy settings",
 	"settingsAnalyticsTitle": "Analytics",
 	"settingsAnalyticsSubtitle": "Collect analytics after an error to help developers better diagnose the issue",
+	"settingsPersonalizedAdsTitle": "Personalized ads",
+	"settingsPersonalizedAdsSubtitle": "Show more relevant ads",
 	"settingsPrivacyPolicyTitle": "Privacy policy",
 	"setupPrivacyAgreeStatement": "Please read carefully the above privacy policy. By continuing, you agree to our privacy policy",
 	"photosTabLabel": "Photos",

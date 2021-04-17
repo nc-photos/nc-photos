@@ -206,6 +206,13 @@ extension PrefExtension on Pref {
       PrefKey.lastAdRewardTime,
       value,
       (key, value) => provider.setInt(key, value));
+
+  bool? isPersonalizedAds() => provider.getBool(PrefKey.isPersonalizedAds);
+  bool isPersonalizedAdsOr(bool def) => isPersonalizedAds() ?? def;
+  Future<bool> setPersonalizedAds(bool value) => _set<bool>(
+      PrefKey.isPersonalizedAds,
+      value,
+      (key, value) => provider.setBool(key, value));
 }
 
 extension AccountPrefExtension on AccountPref {
