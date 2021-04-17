@@ -133,7 +133,8 @@ enum PrefKey implements PrefKeyInterface {
   isEnableLocalFile,
   isViewerUseOriginalImage,
   backupOnRemoteExifEdit,
-  lastAdRewardTime;
+  lastAdRewardTime,
+  isPersonalizedAds;
 
   @override
   String toStringKey() {
@@ -197,6 +198,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.isViewerUseOriginalImage => "isViewerUseOriginalImage",
       PrefKey.backupOnRemoteExifEdit => "backupOnRemoteExifEdit",
       PrefKey.lastAdRewardTime => "lastAdRewardTime",
+      PrefKey.isPersonalizedAds => "isPersonalizedAds",
     };
   }
 }
