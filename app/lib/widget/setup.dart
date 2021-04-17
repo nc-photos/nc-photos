@@ -264,6 +264,17 @@ class _PrivacyState extends State<_Privacy> {
             child: Text(L10n.global().settingsAnalyticsSubtitle),
           ),
           const SizedBox(height: 16),
+          SwitchListTile(
+            title: Text(L10n.global().settingsPersonalizedAdsTitle),
+            value: _isEnablePersonalizedAds,
+            onChanged: _onPersonalizedAdsValueChanged,
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(L10n.global().settingsPersonalizedAdsSubtitle),
+          ),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: InkWell(
@@ -305,11 +316,13 @@ class _PrivacyState extends State<_Privacy> {
   dispose() {
     super.dispose();
     // persist user's choice
-    _log.info("[dispose] Analytics: $_isEnableAnalytics");
+    _log.info(
+        "[dispose] Analytics: $_isEnableAnalytics, Personalized Ads: $_isEnablePersonalizedAds");
     if (features.isSupportCrashlytics) {
       FirebaseCrashlytics.instance
           .setCrashlyticsCollectionEnabled(_isEnableAnalytics);
     }
+    Pref().setPersonalizedAds(_isEnablePersonalizedAds);
   }
 
   void _onAnalyticsValueChanged(bool value) {
@@ -318,7 +331,14 @@ class _PrivacyState extends State<_Privacy> {
     });
   }
 
+  void _onPersonalizedAdsValueChanged(bool value) {
+    setState(() {
+      _isEnablePersonalizedAds = value;
+    });
+  }
+
   bool _isEnableAnalytics = true;
+  bool _isEnablePersonalizedAds = true;
 
   static final _log = Logger("widget.setup._PrivacyState");
 }
