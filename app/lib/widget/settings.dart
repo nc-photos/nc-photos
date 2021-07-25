@@ -148,6 +148,16 @@ class _SettingsState extends State<Settings> {
                 },
               ),
               ListTile(
+                title: const Text("Paid version"),
+                subtitle: const Text("Support the app"),
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (_) => _PaidVersionDialog(),
+                  );
+                },
+              ),
+              ListTile(
                 title: Text(L10n.global().settingsSourceCodeTitle),
                 onTap: () {
                   launch(_sourceRepo);
@@ -347,4 +357,35 @@ class _PrivacySettingsState extends State<_PrivacySettings> {
 
   late bool _isEnableAnalytics;
   late bool _isEnablePersonalizedAds;
+}
+
+class _PaidVersionDialog extends StatelessWidget {
+  @override
+  build(BuildContext context) {
+    return AlertDialog(
+      title: const Text("Support the app"),
+      content: const Text(_paidVersionDialogContent),
+      actions: [
+        TextButton(
+          onPressed: () {
+            launch(
+              "https://play.google.com/store/apps/details?id=com.nkming.nc_photos.paid&referrer=utm_source%3Dfreeapp",
+            );
+          },
+          child: const Text("Play store"),
+        ),
+      ],
+    );
+  }
+
+  static const _paidVersionDialogContent =
+      """Buy the paid version to support the development of this app
+
+FAQ
+- Any exclusive features?
+No. But there will be no ads
+
+- Is it compatible with the free version?
+Yes. Your albums will be accessible in both apps
+""";
 }
