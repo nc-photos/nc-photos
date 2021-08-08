@@ -147,6 +147,13 @@ class _SettingsState extends State<Settings> {
                   },
                 ),
                 ListTile(
+                  title: const Text("Rate on Google Play"),
+                  onTap: () {
+                    launch(
+                        "https://play.google.com/store/apps/details?id=com.nkming.nc_photos");
+                  },
+                ),
+                ListTile(
                   title: const Text("Paid version"),
                   subtitle: const Text("Support the app"),
                   onTap: () {
