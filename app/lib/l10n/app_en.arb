@@ -1538,6 +1538,10 @@
 	"signInViaNextcloudLoginFlowV2": "via Nextcloud Login Flow v2",
 	"signInViaUsernamePassword": "via username and password",
 
+	"donationTitle": "Buy me a coffee",
+	"donationButtonLabel": "BUY ME A COFFEE",
+	"donationShortMessage": "Want to help?",
+
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
 		"description": "Error message when server responds with HTTP401"
