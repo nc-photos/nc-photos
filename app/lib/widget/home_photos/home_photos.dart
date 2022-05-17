@@ -54,6 +54,7 @@ import 'package:nc_photos/use_case/any_file/download_any_file.dart';
 import 'package:nc_photos/use_case/any_file/upload_any_file.dart';
 import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker/collection_picker.dart';
+import 'package:nc_photos/widget/donation_dialog.dart';
 import 'package:nc_photos/widget/double_tap_exit_container/double_tap_exit_container.dart';
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/home_app_bar.dart';
@@ -406,6 +407,10 @@ class _BodyState extends State<_Body> {
   void initState() {
     super.initState();
     _onBackToTopListener.begin();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      DonationDialogHandler().showIfNeeded(context);
+    });
   }
 
   @override
