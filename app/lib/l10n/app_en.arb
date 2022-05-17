@@ -1570,6 +1570,10 @@
 		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a local only action"
 	},
 
+	"donationTitle": "Buy me a coffee",
+	"donationButtonLabel": "BUY ME A COFFEE",
+	"donationShortMessage": "Want to help?",
+
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
 		"description": "Error message when server responds with HTTP401"
