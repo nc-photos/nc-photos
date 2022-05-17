@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/debug_util.dart';
+import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/language_util.dart' as language_util;
 import 'package:nc_photos/mobile/platform.dart'
@@ -137,6 +138,13 @@ class _SettingsState extends State<Settings> {
                       _isShowDevSettings = true;
                     });
                   }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.coffee_outlined),
+                title: Text(L10n.global().donationTitle),
+                onTap: () {
+                  launch(help_util.donateUrl);
                 },
               ),
               ListTile(

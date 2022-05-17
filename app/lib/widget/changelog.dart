@@ -72,6 +72,15 @@ class Changelog extends StatelessWidget {
   Widget _buildContent(BuildContext context) {
     return Column(
       children: [
+        _ChangelogBanner(
+          title: Text(L10n.global().donationShortMessage),
+          action: TextButton(
+            onPressed: () {
+              launch(help_util.donateUrl);
+            },
+            child: Text(L10n.global().donationButtonLabel),
+          ),
+        ),
         Expanded(
           child: ListView.builder(
             itemCount: _changelogs.length,
