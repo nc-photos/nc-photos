@@ -119,6 +119,8 @@ enum PrefKey implements PrefKeyInterface {
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
   isFallbackClientExif,
+  lastDonationDialogTime,
+  shouldRemindDonationLater,
   ;
 
   @override
@@ -221,6 +223,10 @@ enum PrefKey implements PrefKeyInterface {
         return "homeCollectionsNavBarButtons";
       case PrefKey.isFallbackClientExif:
         return "isFallbackClientExif";
+      case PrefKey.lastDonationDialogTime:
+        return "lastDonationDialogTime";
+      case PrefKey.shouldRemindDonationLater:
+        return "shouldRemindDonationLater";
     }
   }
 }
