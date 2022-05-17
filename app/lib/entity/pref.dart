@@ -124,7 +124,9 @@ enum PrefKey implements PrefKeyInterface {
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
   isFallbackClientExif,
-  localDirs;
+  localDirs,
+  lastDonationDialogTime,
+  shouldRemindDonationLater;
 
   @override
   String toStringKey() {
@@ -179,6 +181,8 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.homeCollectionsNavBarButtons => "homeCollectionsNavBarButtons",
       PrefKey.isFallbackClientExif => "isFallbackClientExif",
       PrefKey.localDirs => "localDirs",
+      PrefKey.lastDonationDialogTime => "lastDonationDialogTime",
+      PrefKey.shouldRemindDonationLater => "shouldRemindDonationLater",
     };
   }
 }

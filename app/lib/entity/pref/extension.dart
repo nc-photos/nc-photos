@@ -199,6 +199,26 @@ extension PrefExtension on Pref {
   );
 
   bool? isNewHttpEngine() => provider.getBool(PrefKey.isNewHttpEngine);
+
+  int? getLastDonationDialogTime() =>
+      provider.getInt(PrefKey.lastDonationDialogTime);
+  int getLastDonationDialogTimeOr(int def) =>
+      getLastDonationDialogTime() ?? def;
+  Future<bool> setLastDonationDialogTime(int value) => _set<int>(
+    PrefKey.lastDonationDialogTime,
+    value,
+    (key, value) => provider.setInt(key, value),
+  );
+
+  bool? shouldRemindDonationLater() =>
+      provider.getBool(PrefKey.shouldRemindDonationLater);
+  bool shouldRemindDonationLaterOr([bool def = false]) =>
+      shouldRemindDonationLater() ?? def;
+  Future<bool> setShouldRemindDonationLater(bool value) => _set<bool>(
+    PrefKey.shouldRemindDonationLater,
+    value,
+    (key, value) => provider.setBool(key, value),
+  );
 }
 
 extension AccountPrefExtension on AccountPref {
