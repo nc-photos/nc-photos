@@ -61,6 +61,7 @@ import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/update_checker.dart';
 import 'package:nc_photos/widget/upload_folder_picker.dart';
 import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
@@ -255,6 +256,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handleCollectionViewerRoute(settings);
     route ??= _handleUploadFolderPickerRoute(settings);
     route ??= _handleLocalResultViewerRoute(settings);
+    route ??= _handleUpdateCheckerRoute(settings);
     return route;
   }
 
@@ -637,6 +639,17 @@ class _WrappedAppState extends State<_WrappedApp>
         "[_handleLocalResultViewerRoute] Failed while handling route",
         e,
       );
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleUpdateCheckerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == UpdateChecker.routeName) {
+        return UpdateChecker.buildRoute();
+      }
+    } catch (e) {
+      _log.severe("[_handleUpdateCheckerRoute] Failed while handling route", e);
     }
     return null;
   }
