@@ -28,6 +28,7 @@ import 'package:nc_photos/widget/settings/photos_settings.dart';
 import 'package:nc_photos/widget/settings/settings_list_caption.dart';
 import 'package:nc_photos/widget/settings/theme_settings.dart';
 import 'package:nc_photos/widget/settings/viewer_settings.dart';
+import 'package:nc_photos/widget/update_checker.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 
@@ -145,6 +146,12 @@ class _SettingsState extends State<Settings> {
                 title: Text(L10n.global().donationTitle),
                 onTap: () {
                   launch(help_util.donateUrl);
+                },
+              ),
+              ListTile(
+                title: const Text("Check for updates"),
+                onTap: () {
+                  Navigator.of(context).pushNamed(UpdateChecker.routeName);
                 },
               ),
               ListTile(
