@@ -56,6 +56,7 @@ import 'package:nc_photos/widget/splash.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/update_checker.dart';
 import 'package:nc_photos/widget/viewer.dart';
 import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
@@ -242,6 +243,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handleCollectionBrowserRoute(settings);
     route ??= _handleAccountSettingsRoute(settings);
     route ??= _handlePlacePickerRoute(settings);
+    route ??= _handleUpdateCheckerRoute(settings);
     return route;
   }
 
@@ -559,6 +561,17 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe("[_handlePlacePickerRoute] Failed while handling route", e);
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleUpdateCheckerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == UpdateChecker.routeName) {
+        return UpdateChecker.buildRoute();
+      }
+    } catch (e) {
+      _log.severe("[_handleUpdateCheckerRoute] Failed while handling route", e);
     }
     return null;
   }
