@@ -47,7 +47,7 @@ class UpdateChecker {
   String? _updateUrl;
   String? _versionStr;
 
-  static const _buildVariant = "";
+  static const _buildVariant = "gitlab";
 
   static final _log = Logger("update_checker.UpdateChecker");
 }
