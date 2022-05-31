@@ -353,7 +353,7 @@ class PrefController {
       BehaviorSubject.seeded(pref.isViewerForceRotationOr(false));
   @npSubjectAccessor
   late final _gpsMapProviderController = BehaviorSubject.seeded(
-      GpsMapProvider.values[pref.getGpsMapProviderOr(0)]);
+      GpsMapProvider.values[pref.getGpsMapProviderOr(1)]);
   @npSubjectAccessor
   late final _isAlbumBrowserShowDateController =
       BehaviorSubject.seeded(pref.isAlbumBrowserShowDateOr(false));
