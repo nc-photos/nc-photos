@@ -421,7 +421,7 @@ class PrefController {
   );
   @npSubjectAccessor
   late final _gpsMapProviderController = BehaviorSubject.seeded(
-    GpsMapProvider.values[pref.getGpsMapProviderOr(0)],
+    GpsMapProvider.values[pref.getGpsMapProviderOr(1)],
   );
   @npSubjectAccessor
   late final _isAlbumBrowserShowDateController = BehaviorSubject.seeded(
