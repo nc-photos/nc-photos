@@ -6,6 +6,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/debug_util.dart';
+import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/language_util.dart' as language_util;
@@ -14,6 +15,7 @@ import 'package:nc_photos/mobile/platform.dart'
     as platform;
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/platform/notification.dart';
+import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
@@ -48,6 +50,12 @@ class Settings extends StatefulWidget {
 
 @npLog
 class _SettingsState extends State<Settings> {
+  @override
+  void initState() {
+    super.initState();
+    _isEnableAutoUpdateCheck = Pref().isEnableAutoUpdateCheckOr();
+  }
+
   @override
   Widget build(BuildContext context) {
     final translator = L10n.global().translator;
@@ -149,10 +157,34 @@ class _SettingsState extends State<Settings> {
                 },
               ),
               ListTile(
+                trailing:
+                    Pref().isAutoUpdateCheckAvailableOr()
+                        ? Stack(
+                          fit: StackFit.passthrough,
+                          children: [
+                            const Icon(Icons.upload),
+                            Positioned.directional(
+                              textDirection: Directionality.of(context),
+                              end: 0,
+                              top: 0,
+                              child: const Icon(
+                                Icons.circle,
+                                color: Colors.red,
+                                size: 8,
+                              ),
+                            ),
+                          ],
+                        )
+                        : null,
                 title: const Text("Check for updates"),
                 onTap: () {
                   Navigator.of(context).pushNamed(UpdateChecker.routeName);
                 },
+              ),
+              SwitchListTile(
+                title: const Text("Check for updates automatically"),
+                value: _isEnableAutoUpdateCheck,
+                onChanged: _onEnableAutoUpdateCheckChanged,
               ),
               ListTile(
                 title: Text(L10n.global().settingsSourceCodeTitle),
@@ -241,6 +273,39 @@ class _SettingsState extends State<Settings> {
       );
     }
   }
+
+  Future<void> _onEnableAutoUpdateCheckChanged(bool value) async {
+    _log.info("[_onEnableAutoUpdateCheckChanged] New value: $value");
+    final oldValue = _isEnableAutoUpdateCheck;
+    setState(() {
+      _isEnableAutoUpdateCheck = value;
+    });
+    if (!await Pref().setIsEnableAutoUpdateCheck(value)) {
+      _log.severe("[_onEnableAutoUpdateCheckChanged] Failed writing pref");
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().writePreferenceFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
+      setState(() {
+        _isEnableAutoUpdateCheck = oldValue;
+      });
+    } else {
+      if (!value) {
+        // reset state after disabling
+        if (mounted) {
+          setState(() {
+            Pref()
+              ..setIsAutoUpdateCheckAvailable(false)
+              ..setLastAutoUpdateCheckTime(0);
+          });
+        }
+      }
+    }
+  }
+
+  late bool _isEnableAutoUpdateCheck;
 
   var _devSettingsUnlockCount = 3;
   var _isShowDevSettings = false;

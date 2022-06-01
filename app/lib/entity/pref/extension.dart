@@ -219,6 +219,36 @@ extension PrefExtension on Pref {
     value,
     (key, value) => provider.setBool(key, value),
   );
+
+  int? getLastAutoUpdateCheckTime() =>
+      provider.getInt(PrefKey.lastAutoUpdateCheckTime);
+  int getLastAutoUpdateCheckTimeOr(int def) =>
+      getLastAutoUpdateCheckTime() ?? def;
+  Future<bool> setLastAutoUpdateCheckTime(int value) => _set<int>(
+    PrefKey.lastAutoUpdateCheckTime,
+    value,
+    (key, value) => provider.setInt(key, value),
+  );
+
+  bool? isAutoUpdateCheckAvailable() =>
+      provider.getBool(PrefKey.isAutoUpdateCheckAvailable);
+  bool isAutoUpdateCheckAvailableOr([bool def = false]) =>
+      isAutoUpdateCheckAvailable() ?? def;
+  Future<bool> setIsAutoUpdateCheckAvailable(bool value) => _set<bool>(
+    PrefKey.isAutoUpdateCheckAvailable,
+    value,
+    (key, value) => provider.setBool(key, value),
+  );
+
+  bool? isEnableAutoUpdateCheck() =>
+      provider.getBool(PrefKey.isEnableAutoUpdateCheck);
+  bool isEnableAutoUpdateCheckOr([bool def = true]) =>
+      isEnableAutoUpdateCheck() ?? def;
+  Future<bool> setIsEnableAutoUpdateCheck(bool value) => _set<bool>(
+    PrefKey.isEnableAutoUpdateCheck,
+    value,
+    (key, value) => provider.setBool(key, value),
+  );
 }
 
 extension AccountPrefExtension on AccountPref {

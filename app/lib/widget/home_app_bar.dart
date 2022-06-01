@@ -5,6 +5,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/account_picker_dialog.dart';
@@ -53,15 +54,48 @@ class HomeSliverAppBar extends StatelessWidget {
               }
             },
           ),
-        _ProfileIconView(
-          account: account,
-          isProcessing: isShowProgressIcon,
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (_) => const AccountPickerDialog(),
-            );
-          },
+        Stack(
+          fit: StackFit.passthrough,
+          children: [
+            _ProfileIconView(
+              account: account,
+              isProcessing: isShowProgressIcon,
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => const AccountPickerDialog(),
+                );
+              },
+            ),
+            ValueStreamBuilder(
+              stream: context.read<PrefController>().isAutoUpdateCheckAvailable,
+              builder: (context, snapshot) {
+                final isAutoUpdateCheckAvailable = snapshot.requireData;
+                if (isAutoUpdateCheckAvailable) {
+                  return Positioned.directional(
+                    textDirection: Directionality.of(context),
+                    end: 0,
+                    top: 0,
+                    child: Container(
+                      width: 12,
+                      height: 12,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        color: Colors.red,
+                      ),
+                      child: const Icon(
+                        Icons.upload,
+                        color: Colors.white,
+                        size: 12,
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
+              },
+            ),
+          ],
         ),
         const SizedBox(width: 8),
       ],

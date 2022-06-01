@@ -569,6 +569,10 @@ class PrefController {
   late final _isEnableLocalFileController = BehaviorSubject.seeded(
     pref.isEnableLocalFile() ?? true,
   );
+  @npSubjectAccessor
+  late final _isAutoUpdateCheckAvailableController = BehaviorSubject.seeded(
+    pref.isAutoUpdateCheckAvailableOr(false),
+  );
 }
 
 extension PrefControllerExtension on PrefController {
