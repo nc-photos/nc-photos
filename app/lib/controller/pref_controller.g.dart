@@ -291,6 +291,15 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<List<String>> get localDirsNew => localDirs.skip(1);
   Stream<List<String>> get localDirsChange => localDirs.distinct().skip(1);
   List<String> get localDirsValue => _localDirsController.value;
+  // _isAutoUpdateCheckAvailableController
+  ValueStream<bool> get isAutoUpdateCheckAvailable =>
+      _isAutoUpdateCheckAvailableController.stream;
+  Stream<bool> get isAutoUpdateCheckAvailableNew =>
+      isAutoUpdateCheckAvailable.skip(1);
+  Stream<bool> get isAutoUpdateCheckAvailableChange =>
+      isAutoUpdateCheckAvailable.distinct().skip(1);
+  bool get isAutoUpdateCheckAvailableValue =>
+      _isAutoUpdateCheckAvailableController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

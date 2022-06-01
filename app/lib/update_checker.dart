@@ -1,8 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
+import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
+import 'package:nc_photos/object_extension.dart';
 
 enum UpdateCheckerResult { updateAvailable, alreadyLatest, error }
 
@@ -47,4 +50,43 @@ class UpdateChecker {
   static const _buildVariant = "";
 
   static final _log = Logger("update_checker.UpdateChecker");
+}
+
+class AutoUpdateChecker {
+  const AutoUpdateChecker();
+
+  Future<void> call() async {
+    try {
+      if (Pref().isAutoUpdateCheckAvailableOr()) {
+        return;
+      }
+
+      final prev =
+          Pref().getLastAutoUpdateCheckTime()?.run(
+            (obj) => DateTime.fromMillisecondsSinceEpoch(obj).toUtc(),
+          ) ??
+          DateTime(0);
+      final now = DateTime.now().toUtc();
+      if (now.isAfter(prev) && now.difference(prev) > const Duration(days: 7)) {
+        unawaited(
+          Pref().setLastAutoUpdateCheckTime(now.millisecondsSinceEpoch),
+        );
+        await _check();
+      }
+    } catch (e, stackTrace) {
+      _log.severe("[call] Exception", e, stackTrace);
+    }
+  }
+
+  Future<void> _check() async {
+    _log.info("[_check] Auto update check");
+    final checker = UpdateChecker();
+    final result = await checker();
+    if (result == UpdateCheckerResult.updateAvailable) {
+      _log.info("[_check] New update available");
+      unawaited(Pref().setIsAutoUpdateCheckAvailable(true));
+    }
+  }
+
+  static final _log = Logger("update_checker.AutoUpdateChecker");
 }

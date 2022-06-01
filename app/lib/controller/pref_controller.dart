@@ -504,6 +504,10 @@ class PrefController {
   late final _localDirsController = BehaviorSubject.seeded(
     pref.getLocalDirs() ?? [],
   );
+  @npSubjectAccessor
+  late final _isAutoUpdateCheckAvailableController = BehaviorSubject.seeded(
+    pref.isAutoUpdateCheckAvailableOr(false),
+  );
 }
 
 extension PrefControllerExtension on PrefController {

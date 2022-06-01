@@ -126,7 +126,10 @@ enum PrefKey implements PrefKeyInterface {
   isFallbackClientExif,
   localDirs,
   lastDonationDialogTime,
-  shouldRemindDonationLater;
+  shouldRemindDonationLater,
+  lastAutoUpdateCheckTime,
+  isAutoUpdateCheckAvailable,
+  isEnableAutoUpdateCheck;
 
   @override
   String toStringKey() {
@@ -183,6 +186,9 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.localDirs => "localDirs",
       PrefKey.lastDonationDialogTime => "lastDonationDialogTime",
       PrefKey.shouldRemindDonationLater => "shouldRemindDonationLater",
+      PrefKey.lastAutoUpdateCheckTime => "lastAutoUpdateCheckTime",
+      PrefKey.isAutoUpdateCheckAvailable => "isAutoUpdateCheckAvailable",
+      PrefKey.isEnableAutoUpdateCheck => "isEnableAutoUpdateCheck",
     };
   }
 }

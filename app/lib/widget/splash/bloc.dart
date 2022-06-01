@@ -26,6 +26,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       _initFirstRun(),
       _migrateApp(emit),
     ]);
+    if (Pref().isEnableAutoUpdateCheckOr()) {
+      unawaited(const AutoUpdateChecker()());
+    }
     emit(state.copyWith(isDone: true));
   }
 
@@ -48,6 +51,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _migrateApp(Emitter<_State> emit) async {
     if (_shouldUpgrade()) {
+      unawaited(Pref().setIsAutoUpdateCheckAvailable(false));
       await _handleUpgrade(emit);
     }
   }
