@@ -436,6 +436,9 @@ class PrefController {
   @npSubjectAccessor
   late final _isFallbackClientExifController =
       BehaviorSubject.seeded(pref.isFallbackClientExif() ?? false);
+  @npSubjectAccessor
+  late final _isAutoUpdateCheckAvailableController =
+      BehaviorSubject.seeded(pref.isAutoUpdateCheckAvailableOr(false));
 }
 
 extension PrefControllerExtension on PrefController {
