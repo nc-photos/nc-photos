@@ -455,6 +455,9 @@ class PrefController {
   @npSubjectAccessor
   late final _isVideoPlayerLoopController =
       BehaviorSubject.seeded(pref.isVideoPlayerLoop() ?? false);
+  @npSubjectAccessor
+  late final _isAutoUpdateCheckAvailableController =
+      BehaviorSubject.seeded(pref.isAutoUpdateCheckAvailableOr(false));
 }
 
 extension PrefControllerExtension on PrefController {

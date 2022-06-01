@@ -287,6 +287,15 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<bool> get isVideoPlayerLoopChange =>
       isVideoPlayerLoop.distinct().skip(1);
   bool get isVideoPlayerLoopValue => _isVideoPlayerLoopController.value;
+// _isAutoUpdateCheckAvailableController
+  ValueStream<bool> get isAutoUpdateCheckAvailable =>
+      _isAutoUpdateCheckAvailableController.stream;
+  Stream<bool> get isAutoUpdateCheckAvailableNew =>
+      isAutoUpdateCheckAvailable.skip(1);
+  Stream<bool> get isAutoUpdateCheckAvailableChange =>
+      isAutoUpdateCheckAvailable.distinct().skip(1);
+  bool get isAutoUpdateCheckAvailableValue =>
+      _isAutoUpdateCheckAvailableController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {
