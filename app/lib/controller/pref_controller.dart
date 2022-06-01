@@ -575,6 +575,10 @@ class PrefController {
   late final _isBackupOnRemoteExifEditController = BehaviorSubject.seeded(
     pref.isBackupOnRemoteExifEdit() ?? true,
   );
+  @npSubjectAccessor
+  late final _isAutoUpdateCheckAvailableController = BehaviorSubject.seeded(
+    pref.isAutoUpdateCheckAvailableOr(false),
+  );
 }
 
 extension PrefControllerExtension on PrefController {

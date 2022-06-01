@@ -348,6 +348,15 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isBackupOnRemoteExifEdit.distinct().skip(1);
   bool get isBackupOnRemoteExifEditValue =>
       _isBackupOnRemoteExifEditController.value;
+  // _isAutoUpdateCheckAvailableController
+  ValueStream<bool> get isAutoUpdateCheckAvailable =>
+      _isAutoUpdateCheckAvailableController.stream;
+  Stream<bool> get isAutoUpdateCheckAvailableNew =>
+      isAutoUpdateCheckAvailable.skip(1);
+  Stream<bool> get isAutoUpdateCheckAvailableChange =>
+      isAutoUpdateCheckAvailable.distinct().skip(1);
+  bool get isAutoUpdateCheckAvailableValue =>
+      _isAutoUpdateCheckAvailableController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

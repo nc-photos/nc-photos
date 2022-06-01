@@ -134,7 +134,10 @@ enum PrefKey implements PrefKeyInterface {
   isViewerUseOriginalImage,
   backupOnRemoteExifEdit,
   lastDonationDialogTime,
-  shouldRemindDonationLater;
+  shouldRemindDonationLater,
+  lastAutoUpdateCheckTime,
+  isAutoUpdateCheckAvailable,
+  isEnableAutoUpdateCheck;
 
   @override
   String toStringKey() {
@@ -199,6 +202,9 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.backupOnRemoteExifEdit => "backupOnRemoteExifEdit",
       PrefKey.lastDonationDialogTime => "lastDonationDialogTime",
       PrefKey.shouldRemindDonationLater => "shouldRemindDonationLater",
+      PrefKey.lastAutoUpdateCheckTime => "lastAutoUpdateCheckTime",
+      PrefKey.isAutoUpdateCheckAvailable => "isAutoUpdateCheckAvailable",
+      PrefKey.isEnableAutoUpdateCheck => "isEnableAutoUpdateCheck",
     };
   }
 }
