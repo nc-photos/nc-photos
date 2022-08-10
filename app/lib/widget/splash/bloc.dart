@@ -6,6 +6,21 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     : super(_State.init()) {
     on<_Init>(_onInit);
     on<_ChangelogDismissed>(_onChangelogDismissed);
+
+    // TODO: this does NOT belong here
+    PurchaseHandler()
+      ..pushOnSuccessListener((details) {
+        SnackBarManager().showSnackBar(SnackBar(
+          content: Text(L10n.global().donationSuccessMessage),
+          duration: k.snackBarDurationNormal,
+        ));
+      })
+      ..pushOnFailureListener((details) {
+        SnackBarManager().showSnackBar(SnackBar(
+          content: Text(L10n.global().donationFailureMessage),
+          duration: k.snackBarDurationNormal,
+        ));
+      });
   }
 
   @override

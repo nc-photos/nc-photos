@@ -1591,6 +1591,16 @@
 	"uploadBatchConvertSettingsDownscaling": "Downscaling",
 	"viewerLastPageText": "No more photos",
 
+	"donationTitle": "Buy me a coffee",
+	"donationButtonLabel": "BUY ME A COFFEE",
+	"donationShortMessage": "Want to help?",
+	"donationThankYouMessage": "First of all, thank you for buying the app!",
+	"donationLongMessage": "Photos is a personal project with a lack of funding. If you like this app, please consider donating to support the project. Your donations will ensure this project to remain active and sustainable.",
+	"donationBottomMessage": "Donations are 100% voluntary. NO features will ever require a donation.",
+	"donationSuccessMessage": "Thank you for your support! ☕",
+	"donationFailureMessage": "Payment declined",
+	"donationPendingMessage": "Payment is pending",
+
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
 		"description": "Error message when server responds with HTTP401"

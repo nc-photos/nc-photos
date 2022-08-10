@@ -183,6 +183,8 @@ dependencies:
   wakelock_plus: ^1.1.1
   woozy_search: ^2.0.3
 
+  in_app_purchase: 3.2.3
+
 dependency_overrides:
   video_player:
     git:

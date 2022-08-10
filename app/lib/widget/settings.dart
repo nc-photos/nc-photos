@@ -15,6 +15,7 @@ import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/platform/notification.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/url_launcher_util.dart';
+import 'package:nc_photos/widget/donation.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/settings/collection_settings.dart';
 import 'package:nc_photos/widget/settings/developer_settings.dart';
@@ -137,6 +138,13 @@ class _SettingsState extends State<Settings> {
                       _isShowDevSettings = true;
                     });
                   }
+                },
+              ),
+              ListTile(
+                leading: const Icon(Icons.coffee_outlined),
+                title: Text(L10n.global().donationTitle),
+                onTap: () {
+                  Navigator.of(context).pushNamed(Donation.routeName);
                 },
               ),
               ListTile(
