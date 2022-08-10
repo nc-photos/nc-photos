@@ -31,6 +31,7 @@ import 'package:nc_photos/widget/changelog.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker.dart';
 import 'package:nc_photos/widget/connect.dart';
+import 'package:nc_photos/widget/donation.dart';
 import 'package:nc_photos/widget/enhanced_photo_browser.dart';
 import 'package:nc_photos/widget/home.dart';
 import 'package:nc_photos/widget/image_editor.dart';
@@ -242,6 +243,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handleCollectionBrowserRoute(settings);
     route ??= _handleAccountSettingsRoute(settings);
     route ??= _handlePlacePickerRoute(settings);
+    route ??= _handleDonationRoute(settings);
     return route;
   }
 
@@ -559,6 +561,17 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe("[_handlePlacePickerRoute] Failed while handling route", e);
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleDonationRoute(RouteSettings settings) {
+    try {
+      if (settings.name == Donation.routeName) {
+        return Donation.buildRoute();
+      }
+    } catch (e) {
+      _log.severe("[_handleDonationRoute] Failed while handling route", e);
     }
     return null;
   }
