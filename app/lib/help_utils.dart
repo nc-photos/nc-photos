@@ -18,3 +18,5 @@ const contributorsUrl = "https://nc-photos.web.app/link/contributors";
 const videoPreviewUrl = "https://nc-photos.web.app/link/help/video-previews";
 const recognizeSetupUrl = "https://nc-photos.web.app/link/help/people-recognize";
 const recognizeSetupJaUrl = "https://nc-photos.web.app/link/help/ja-jp/people-recognize";
+
+const nextcloudProviderUrl = "https://nc-photos.web.app/link/sign-up";
