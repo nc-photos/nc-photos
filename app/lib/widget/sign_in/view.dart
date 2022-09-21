@@ -106,7 +106,12 @@ class _BodyState extends State<_Body> {
                         ),
                       )
                     else
-                      Container(),
+                      TextButton(
+                        onPressed: () {
+                          launch(help_util.nextcloudProviderUrl);
+                        },
+                        child: const Text("DON'T HAVE ONE?"),
+                      ),
                     ElevatedButton(
                       onPressed: () {
                         if (_formKey.currentState?.validate() == true) {
