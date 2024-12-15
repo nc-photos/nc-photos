@@ -1,0 +1,20 @@
+name: np_exiv2_lib
+description: "A new Flutter plugin project."
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: ">=3.3.0 <4.0.0"
+  flutter: ">=3.19.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.nkming.nc_photos.np_exiv2_lib
+        pluginClass: NpExiv2LibPlugin
