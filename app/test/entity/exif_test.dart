@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
 import 'package:equatable/equatable.dart';
-import 'package:exifdart/exifdart.dart';
 import 'package:nc_photos/entity/exif.dart';
+import 'package:np_exiv2/np_exiv2.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -96,7 +96,7 @@ void main() {
 
       test("Rational", () {
         final exif = Exif(<String, dynamic>{
-          "XResolution": Rational(72, 1),
+          "XResolution": const Rational(72, 1),
         });
         expect(exif.toJson(), <String, dynamic>{
           "XResolution": {"n": 72, "d": 1},
@@ -114,7 +114,11 @@ void main() {
 
       test("List<Rational>", () {
         final exif = Exif(<String, dynamic>{
-          "GPSLatitude": [Rational(2, 1), Rational(3, 1), Rational(4, 100)],
+          "GPSLatitude": [
+            const Rational(2, 1),
+            const Rational(3, 1),
+            const Rational(4, 100),
+          ],
         });
         expect(exif.toJson(), <String, dynamic>{
           "GPSLatitude": [
@@ -164,12 +168,20 @@ void main() {
             }));
       });
 
-      test("Rational", () {
+      test("Rational (legacy)", () {
         final json = <String, dynamic>{
           "XResolution": {"numerator": 72, "denominator": 1},
         };
         final Rational exif = Exif.fromJson(json)["XResolution"];
-        expect(exif.makeComparable(), _Rational(72, 1));
+        expect(exif.makeComparable(), const _Rational(72, 1));
+      });
+
+      test("Rational", () {
+        final json = <String, dynamic>{
+          "XResolution": {"n": 72, "d": 1},
+        };
+        final Rational exif = Exif.fromJson(json)["XResolution"];
+        expect(exif.makeComparable(), const _Rational(72, 1));
       });
 
       test("List<int>", () {
@@ -193,8 +205,11 @@ void main() {
         };
         final List<Rational> exif =
             Exif.fromJson(json)["GPSLatitude"].cast<Rational>();
-        expect(exif.map((e) => e.makeComparable()).toList(),
-            [_Rational(2, 1), _Rational(3, 1), _Rational(4, 100)]);
+        expect(exif.map((e) => e.makeComparable()).toList(), [
+          const _Rational(2, 1),
+          const _Rational(3, 1),
+          const _Rational(4, 100)
+        ]);
       });
     });
 
@@ -212,6 +227,21 @@ void main() {
         expect(exif.dateTimeOriginal, null);
       });
     });
+
+    group("from Nextcloud", () {
+      test("Rational", () {
+        final exif = Exif({
+          "ExposureTime": "123/456",
+        });
+        expect(exif.exposureTime?.makeComparable(), const _Rational(123, 456));
+      });
+      test("int", () {
+        final exif = Exif({
+          "ISOSpeedRatings": "1234",
+        });
+        expect(exif.isoSpeedRatings, 1234);
+      });
+    });
   });
 }
 
@@ -220,7 +250,7 @@ extension on Rational {
 }
 
 class _Rational extends Rational with EquatableMixin {
-  _Rational(super.numerator, super.denominator);
+  const _Rational(super.numerator, super.denominator);
 
   factory _Rational.of(Rational r) {
     return _Rational(r.numerator, r.denominator);
