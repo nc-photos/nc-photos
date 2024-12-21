@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
-import 'package:exifdart/exifdart.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:np_common/type.dart';
+import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_log/np_log.dart';
 
 part 'exif.g.dart';
@@ -47,9 +47,9 @@ class Exif with EquatableMixin {
           .map((e) {
         dynamic jsonValue;
         if (e.value is Rational) {
-          jsonValue = e.value.toJson();
+          jsonValue = (e.value as Rational).toJson();
         } else if (e.value is List) {
-          jsonValue = e.value.map((e) {
+          jsonValue = (e.value as List).map((e) {
             if (e is Rational) {
               return e.toJson();
             } else {
@@ -69,11 +69,12 @@ class Exif with EquatableMixin {
       json.entries.map((e) {
         dynamic exifValue;
         if (e.value is Map) {
-          exifValue = Rational.fromJson(e.value.cast<String, dynamic>());
+          exifValue =
+              _rationalFromJson((e.value as Map).cast<String, dynamic>());
         } else if (e.value is List) {
-          exifValue = e.value.map((e) {
+          exifValue = (e.value as List).map((e) {
             if (e is Map) {
-              return Rational.fromJson(e.cast<String, dynamic>());
+              return _rationalFromJson(e.cast<String, dynamic>());
             } else {
               return e;
             }
@@ -186,4 +187,16 @@ class Exif with EquatableMixin {
   final Map<String, dynamic> data;
 
   static final dateTimeFormat = DateFormat("yyyy:MM:dd HH:mm:ss");
+}
+
+extension on Rational {
+  Map<String, int> toJson() => {
+        "n": numerator,
+        "d": denominator,
+      };
+}
+
+Rational _rationalFromJson(Map<String, dynamic> json) {
+  return Rational(
+      json["n"] ?? json["numerator"], json["d"] ?? json["denominator"]);
 }

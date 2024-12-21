@@ -1,10 +1,10 @@
 import 'package:clock/clock.dart';
-import 'package:exifdart/exifdart.dart' hide Metadata;
 import 'package:flutter/foundation.dart';
 import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_string/np_string.dart';
 import 'package:test/test.dart';
 
@@ -1266,11 +1266,19 @@ void _fromApiGpsPlace1() {
   expect(
     actual?.exif,
     _MetadataGpsMatcher(Exif({
-      "GPSLatitude": [Rational(40, 1), Rational(44, 1), Rational(5799, 100)],
+      "GPSLatitude": [
+        const Rational(40, 1),
+        const Rational(44, 1),
+        const Rational(5799, 100),
+      ],
       "GPSLatitudeRef": "N",
-      "GPSLongitude": [Rational(73, 1), Rational(58, 1), Rational(500, 100)],
+      "GPSLongitude": [
+        const Rational(73, 1),
+        const Rational(58, 1),
+        const Rational(500, 100),
+      ],
       "GPSLongitudeRef": "W",
-      "GPSAltitude": Rational(1234567, 100000),
+      "GPSAltitude": const Rational(1234567, 100000),
       "GPSAltitudeRef": 0,
     })),
   );
@@ -1292,11 +1300,19 @@ void _fromApiGpsPlace2() {
   expect(
     actual?.exif,
     _MetadataGpsMatcher(Exif({
-      "GPSLatitude": [Rational(37, 1), Rational(41, 1), Rational(2019, 100)],
+      "GPSLatitude": [
+        const Rational(37, 1),
+        const Rational(41, 1),
+        const Rational(2019, 100),
+      ],
       "GPSLatitudeRef": "S",
-      "GPSLongitude": [Rational(178, 1), Rational(32, 1), Rational(5330, 100)],
+      "GPSLongitude": [
+        const Rational(178, 1),
+        const Rational(32, 1),
+        const Rational(5330, 100),
+      ],
       "GPSLongitudeRef": "E",
-      "GPSAltitude": Rational(1234567, 100000),
+      "GPSAltitude": const Rational(1234567, 100000),
       "GPSAltitudeRef": 1,
     })),
   );

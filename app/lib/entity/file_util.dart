@@ -140,5 +140,8 @@ final supportedVideoFormatMimes =
 
 const _metadataSupportedFormatMimes = [
   "image/jpeg",
+  "image/png",
+  "image/webp",
   "image/heic",
+  "image/gif",
 ];

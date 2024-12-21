@@ -1,18 +1,14 @@
 import 'dart:io' as io;
 import 'dart:typed_data';
 
-import 'package:exifdart/exifdart.dart' as exifdart;
-import 'package:exifdart/exifdart_io.dart';
-import 'package:exifdart/exifdart_memory.dart';
-import 'package:image_size_getter/image_size_getter.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/file.dart' as app;
-import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/file_extension.dart';
-import 'package:nc_photos/image_size_getter_util.dart';
+import 'package:np_collection/np_collection.dart';
+import 'package:np_exiv2/np_exiv2.dart' as exiv2;
 import 'package:np_log/np_log.dart';
 
 part 'load_metadata.g.dart';
@@ -24,8 +20,7 @@ class LoadMetadata {
       Account account, app.File file, Uint8List binary) {
     return _loadMetadata(
       mime: file.contentType ?? "",
-      exifdartReaderBuilder: () => MemoryBlobReader(binary),
-      imageSizeGetterInputBuilder: () => AsyncMemoryInput(binary),
+      reader: () => exiv2.readBuffer(binary),
       filename: file.path,
     );
   }
@@ -37,90 +32,70 @@ class LoadMetadata {
     mime = mime ?? await file.readMime();
     return _loadMetadata(
       mime: mime ?? "",
-      exifdartReaderBuilder: () => FileReader(file),
-      imageSizeGetterInputBuilder: () => AsyncFileInput(file),
+      reader: () => exiv2.readFile(file.path),
       filename: file.path,
     );
   }
 
   Future<app.Metadata> _loadMetadata({
     required String mime,
-    required exifdart.AbstractBlobReader Function() exifdartReaderBuilder,
-    required AsyncImageInput Function() imageSizeGetterInputBuilder,
+    required exiv2.ReadResult Function() reader,
     String? filename,
   }) async {
-    var metadata = exifdart.Metadata();
-    if (file_util.isMetadataSupportedMime(mime)) {
-      try {
-        metadata = await exifdart.readMetadata(exifdartReaderBuilder());
-      } catch (e, stacktrace) {
-        _log.shout(
-            "[_loadMetadata] Failed while readMetadata for $mime file: ${logFilename(filename)}",
-            e,
-            stacktrace);
-        // ignore exif
-      }
+    final exiv2.ReadResult result;
+    try {
+      result = reader();
+    } catch (e, stacktrace) {
+      _log.shout(
+          "[_loadMetadata] Failed while readMetadata for $mime file: ${logFilename(filename)}",
+          e,
+          stacktrace);
+      rethrow;
     }
-
-    int imageWidth = 0, imageHeight = 0;
-    if (metadata.imageWidth == null || metadata.imageHeight == null) {
-      try {
-        final resolution =
-            await AsyncImageSizeGetter.getSize(imageSizeGetterInputBuilder());
-        // image size getter doesn't handle exif orientation
-        if (metadata.exif?.containsKey("Orientation") == true &&
-            metadata.exif!["Orientation"] >= 5 &&
-            metadata.exif!["Orientation"] <= 8) {
-          // 90 deg CW/CCW
-          imageWidth = resolution.height;
-          imageHeight = resolution.width;
-        } else {
-          imageWidth = resolution.width;
-          imageHeight = resolution.height;
-        }
-      } catch (e, stacktrace) {
-        // is this even an image file?
-        _log.shout(
-            "[_loadMetadata] Failed while getSize for $mime file: ${logFilename(filename)}",
-            e,
-            stacktrace);
-      }
-    } else {
-      if (metadata.rotateAngleCcw != null &&
-          metadata.rotateAngleCcw! % 180 != 0) {
-        imageWidth = metadata.imageHeight!;
-        imageHeight = metadata.imageWidth!;
-      } else {
-        imageWidth = metadata.imageWidth!;
-        imageHeight = metadata.imageHeight!;
-      }
-    }
-
-    final map = {
-      if (metadata.exif != null) "exif": metadata.exif,
-      if (imageWidth > 0 && imageHeight > 0)
-        "resolution": {
-          "width": imageWidth,
-          "height": imageHeight,
-        },
+    final metadata = {
+      ...result.iptcData
+          .map((e) {
+            try {
+              return MapEntry(e.tagKey, e.value.asTyped());
+            } catch (_) {
+              _log.shout(
+                  "[_loadMetadata] Unable to convert IPTC tag: ${e.tagKey}, ${e.value.toDebugString()}");
+              return null;
+            }
+          })
+          .nonNulls
+          .toMap(),
+      ...result.exifData
+          .map((e) {
+            try {
+              return MapEntry(e.tagKey, e.value.asTyped());
+            } catch (_) {
+              _log.shout(
+                  "[_loadMetadata] Unable to convert EXIF tag: ${e.tagKey}, ${e.value.toDebugString()}");
+              return null;
+            }
+          })
+          .nonNulls
+          .toMap(),
     };
-    return _buildMetadata(map);
-  }
 
-  app.Metadata _buildMetadata(Map<String, dynamic> map) {
-    int? imageWidth, imageHeight;
-    Exif? exif;
-    if (map.containsKey("resolution")) {
-      imageWidth = map["resolution"]["width"];
-      imageHeight = map["resolution"]["height"];
+    var imageWidth = 0, imageHeight = 0;
+    // exiv2 doesn't handle exif orientation
+    if (metadata.containsKey("Orientation") &&
+        metadata["Orientation"] as int >= 5 &&
+        metadata["Orientation"] as int <= 8) {
+      // 90 deg CW/CCW
+      imageWidth = result.height;
+      imageHeight = result.width;
+    } else {
+      imageWidth = result.width;
+      imageHeight = result.height;
     }
-    if (map.containsKey("exif")) {
-      exif = Exif(map["exif"]);
-    }
+
     return app.Metadata(
       imageWidth: imageWidth,
       imageHeight: imageHeight,
-      exif: exif,
+      exif: metadata.isNotEmpty ? Exif(metadata) : null,
     );
   }
 }

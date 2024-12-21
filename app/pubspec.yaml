@@ -56,10 +56,6 @@ dependencies:
   dynamic_color: ^1.7.0
   equatable: ^2.0.5
   event_bus: ^2.0.0
-  exifdart:
-    git:
-      url: https://github.com/nc-photos/exifdart.git
-      ref: 1.3.0
   flex_seed_scheme: ^1.5.0
   fluttertoast: ^8.2.5
   flutter_background_service:
@@ -107,6 +103,10 @@ dependencies:
     path: ../np_datetime
   np_db:
     path: ../np_db
+  np_exiv2:
+    path: ../np_exiv2
+  np_exiv2_lib:
+    path: ../np_exiv2_lib
   np_geocoder:
     path: ../np_geocoder
   np_gps_map:
