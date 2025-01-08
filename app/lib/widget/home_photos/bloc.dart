@@ -47,6 +47,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_UpdateScrollDate>(_onUpdateScrollDate);
 
     on<_SetEnableMemoryCollection>(_onSetEnableMemoryCollection);
+    on<_UpdateZoom>(_onUpdateZoom);
     on<_UpdateDateTimeGroup>(_onUpdateDateTimeGroup);
     on<_UpdateMemories>(_onUpdateMemories);
 
@@ -320,6 +321,8 @@ class _Bloc extends Bloc<_Event, _State>
     await prefController.setHomePhotosZoomLevel(newZoom);
     if ((currZoom >= 0) != (newZoom >= 0)) {
       add(const _UpdateDateTimeGroup());
+    } else if (newZoom != currZoom) {
+      add(const _UpdateZoom());
     }
   }
 
@@ -424,6 +427,19 @@ class _Bloc extends Bloc<_Event, _State>
     if (ev.value) {
       add(const _UpdateMemories());
     }
+  }
+
+  void _onUpdateZoom(_UpdateZoom ev, _Emitter emit) {
+    _log.info(ev);
+    if (state.viewWidth != null) {
+      final measurement = _measureItem(state.viewWidth!,
+          photo_list_util.getThumbSize(state.zoom).toDouble());
+      emit(state.copyWith(
+        itemPerRow: measurement.itemPerRow,
+        itemSize: measurement.itemSize,
+      ));
+    }
+    add(const _TransformMinimap());
   }
 
   void _onUpdateDateTimeGroup(_UpdateDateTimeGroup ev, Emitter<_State> emit) {

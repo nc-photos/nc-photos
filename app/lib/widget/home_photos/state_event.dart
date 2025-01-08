@@ -294,6 +294,14 @@ class _SetEnableMemoryCollection implements _Event {
 }
 
 @toString
+class _UpdateZoom implements _Event {
+  const _UpdateZoom();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
 class _UpdateDateTimeGroup implements _Event {
   const _UpdateDateTimeGroup();
 
