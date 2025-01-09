@@ -54,7 +54,7 @@ import 'package:nc_photos/widget/navigation_bar_blur_filter.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
 import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
-import 'package:nc_photos/widget/selectable_item_list.dart';
+import 'package:nc_photos/widget/selectable_section_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
 import 'package:nc_photos/widget/viewer.dart';
@@ -300,32 +300,33 @@ class _BodyState extends State<_Body> {
   Widget build(BuildContext context) {
     return FingerListener(
       onFingerChanged: (finger) {
-        setState(() {
-          _finger = finger;
-        });
+        context.bloc.add(_SetFinger(finger));
       },
       child: GestureDetector(
         onScaleStart: (_) {
-          _bloc.add(const _StartScaling());
+          context.bloc.add(const _StartScaling());
         },
         onScaleUpdate: (details) {
-          _bloc.add(_SetScale(details.scale));
+          context.bloc.add(_SetScale(details.scale));
         },
         onScaleEnd: (_) {
-          _bloc.add(const _EndScaling());
+          context.bloc.add(const _EndScaling());
         },
         child: LayoutBuilder(
           builder: (context, constraints) {
-            context.addEvent(_SetLayoutConstraint(
+            if (constraints.hasBoundedHeight) {
+              context.addEvent(_SetLayoutConstraint(
                 constraints.maxWidth,
-                constraints.maxHeight -
-                    MediaQuery.of(context).padding.top -
-                    kToolbarHeight -
-                    AppDimension.of(context).homeBottomAppBarHeight));
+                constraints.maxHeight,
+                MediaQuery.of(context).padding.top +
+                    kToolbarHeight +
+                    AppDimension.of(context).homeBottomAppBarHeight,
+              ));
+            }
             return _BlocBuilder(
               buildWhen: (previous, current) =>
-                  previous.contentListMaxExtent !=
-                      current.contentListMaxExtent ||
+                  previous.minimapItems != current.minimapItems ||
+                  previous.viewHeight != current.viewHeight ||
                   (previous.isEnableMemoryCollection &&
                           previous.memoryCollections.isNotEmpty) !=
                       (current.isEnableMemoryCollection &&
@@ -333,10 +334,8 @@ class _BodyState extends State<_Body> {
               builder: (context, state) {
                 final scrollExtent = _getScrollViewExtent(
                   context: context,
-                  constraints: constraints,
                   hasMemoryCollection: state.isEnableMemoryCollection &&
                       state.memoryCollections.isNotEmpty,
-                  contentListMaxExtent: state.contentListMaxExtent,
                 );
                 return Stack(
                   children: [
@@ -355,10 +354,10 @@ class _BodyState extends State<_Body> {
                           Theme.of(context).colorScheme.onSecondaryContainer,
                       heightScrollThumb: 60,
                       onScrollBegin: () {
-                        _bloc.add(const _StartScrolling());
+                        context.bloc.add(const _StartScrolling());
                       },
                       onScrollEnd: () {
-                        _bloc.add(const _EndScrolling());
+                        context.bloc.add(const _EndScrolling());
                       },
                       child: ScrollConfiguration(
                         behavior: ScrollConfiguration.of(context)
@@ -368,9 +367,9 @@ class _BodyState extends State<_Body> {
                           backgroundColor:
                               Theme.of(context).colorScheme.secondaryContainer,
                           onRefresh: () async {
-                            _bloc.add(const _RequestRefresh());
+                            context.bloc.add(const _RequestRefresh());
                             var hasNotNull = false;
-                            await _bloc.stream.firstWhere((s) {
+                            await context.bloc.stream.firstWhere((s) {
                               if (s.syncProgress != null) {
                                 hasNotNull = true;
                               }
@@ -379,52 +378,57 @@ class _BodyState extends State<_Body> {
                           },
                           child: Stack(
                             children: [
-                              CustomScrollView(
-                                controller: _scrollController,
-                                physics: _finger >= 2
-                                    ? const NeverScrollableScrollPhysics()
-                                    : null,
-                                slivers: [
-                                  _BlocSelector<bool>(
-                                    selector: (state) =>
-                                        state.selectedItems.isEmpty,
-                                    builder: (context, isEmpty) => isEmpty
-                                        ? const _AppBar()
-                                        : const _SelectionAppBar(),
-                                  ),
-                                  _BlocBuilder(
-                                    buildWhen: (previous, current) =>
-                                        (previous.isEnableMemoryCollection &&
-                                            previous.memoryCollections
-                                                .isNotEmpty) !=
-                                        (current.isEnableMemoryCollection &&
-                                            current
-                                                .memoryCollections.isNotEmpty),
-                                    builder: (context, state) {
-                                      if (state.isEnableMemoryCollection &&
-                                          state.memoryCollections.isNotEmpty) {
-                                        return const _MemoryCollectionList();
-                                      } else {
-                                        return const SliverToBoxAdapter();
-                                      }
-                                    },
-                                  ),
-                                  _BlocSelector<double?>(
-                                    selector: (state) => state.scale,
-                                    builder: (context, scale) =>
-                                        SliverTransitionedScale(
-                                      scale: scale,
-                                      baseSliver: const _ContentList(),
-                                      overlaySliver: const _ScalingList(),
+                              _BlocSelector<bool>(
+                                selector: (state) => state.finger >= 2,
+                                builder: (context, isScaleMode) =>
+                                    CustomScrollView(
+                                  controller: _scrollController,
+                                  physics: isScaleMode
+                                      ? const NeverScrollableScrollPhysics()
+                                      : null,
+                                  slivers: [
+                                    _BlocSelector<bool>(
+                                      selector: (state) =>
+                                          state.selectedItems.isEmpty,
+                                      builder: (context, isEmpty) => isEmpty
+                                          ? const _AppBar()
+                                          : const _SelectionAppBar(),
                                     ),
-                                  ),
-                                  SliverToBoxAdapter(
-                                    child: SizedBox(
-                                      height: AppDimension.of(context)
-                                          .homeBottomAppBarHeight,
+                                    _BlocBuilder(
+                                      buildWhen: (previous, current) =>
+                                          (previous.isEnableMemoryCollection &&
+                                              previous.memoryCollections
+                                                  .isNotEmpty) !=
+                                          (current.isEnableMemoryCollection &&
+                                              current.memoryCollections
+                                                  .isNotEmpty),
+                                      builder: (context, state) {
+                                        if (state.isEnableMemoryCollection &&
+                                            state
+                                                .memoryCollections.isNotEmpty) {
+                                          return const _MemoryCollectionList();
+                                        } else {
+                                          return const SliverToBoxAdapter();
+                                        }
+                                      },
                                     ),
-                                  ),
-                                ],
+                                    _BlocSelector<double?>(
+                                      selector: (state) => state.scale,
+                                      builder: (context, scale) =>
+                                          SliverTransitionedScale(
+                                        scale: scale,
+                                        baseSliver: const _ContentList(),
+                                        overlaySliver: const _ScalingList(),
+                                      ),
+                                    ),
+                                    SliverToBoxAdapter(
+                                      child: SizedBox(
+                                        height: AppDimension.of(context)
+                                            .homeBottomAppBarHeight,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                               _BlocSelector<bool>(
                                 selector: (state) => state.isScrolling,
@@ -475,11 +479,12 @@ class _BodyState extends State<_Body> {
   /// Return the estimated scroll extent of the custom scroll view, or null
   double? _getScrollViewExtent({
     required BuildContext context,
-    required BoxConstraints constraints,
     required bool hasMemoryCollection,
-    required double? contentListMaxExtent,
   }) {
-    if (contentListMaxExtent != null && constraints.hasBoundedHeight) {
+    if (context.state.minimapItems?.isNotEmpty == true &&
+        context.state.viewHeight != null) {
+      final contentListMaxExtent = context.state.minimapItems!
+          .fold(.0, (previousValue, e) => previousValue + e.logicalHeight);
       final appBarExtent = _getAppBarExtent(context);
       final bottomAppBarExtent =
           AppDimension.of(context).homeBottomAppBarHeight;
@@ -490,13 +495,13 @@ class _BodyState extends State<_Body> {
       // + sliver app bar height + bottom app bar height
       // + metadata task header height + smart album list height
       final scrollExtent = contentListMaxExtent -
-          constraints.maxHeight +
+          context.state.viewHeight! +
           appBarExtent +
           bottomAppBarExtent +
           // metadataTaskHeaderExtent +
           smartAlbumListHeight;
       _log.info("[_getScrollViewExtent] $contentListMaxExtent "
-          "- ${constraints.maxHeight} "
+          "- ${context.state.viewHeight} "
           "+ $appBarExtent "
           "+ $bottomAppBarExtent "
           // "+ $metadataTaskHeaderExtent "
@@ -511,10 +516,7 @@ class _BodyState extends State<_Body> {
   double _getAppBarExtent(BuildContext context) =>
       MediaQuery.of(context).padding.top + kToolbarHeight;
 
-  late final _bloc = context.bloc;
-
   final _scrollController = ScrollController();
-  var _finger = 0;
 
   late final _onBackToTopListener =
       AppEventListener<HomePhotos2BackToTopEvent>(_onBackToTop);
@@ -524,10 +526,11 @@ typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
 // typedef _BlocListener = BlocListener<_Bloc, _State>;
 typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
 typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+typedef _Emitter = Emitter<_State>;
 
 extension on BuildContext {
   _Bloc get bloc => read<_Bloc>();
-  // _State get state => bloc.state;
+  _State get state => bloc.state;
   void addEvent(_Event event) => bloc.add(event);
 }
 

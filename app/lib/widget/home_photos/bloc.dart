@@ -33,12 +33,12 @@ class _Bloc extends Bloc<_Event, _State>
     on<_AddVisibleDate>(_onAddVisibleDate);
     on<_RemoveVisibleDate>(_onRemoveVisibleDate);
 
-    on<_SetContentListMaxExtent>(_onSetContentListMaxExtent);
     on<_SetSyncProgress>(_onSetSyncProgress);
 
     on<_StartScaling>(_onStartScaling);
     on<_EndScaling>(_onEndScaling);
     on<_SetScale>(_onSetScale);
+    on<_SetFinger>(_onSetFinger);
 
     on<_StartScrolling>(_onStartScrolling);
     on<_EndScrolling>(_onEndScrolling);
@@ -284,12 +284,6 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(visibleDates: state.visibleDates.removed(ev.date)));
   }
 
-  void _onSetContentListMaxExtent(
-      _SetContentListMaxExtent ev, Emitter<_State> emit) {
-    _log.info(ev);
-    emit(state.copyWith(contentListMaxExtent: ev.value));
-  }
-
   void _onSetSyncProgress(_SetSyncProgress ev, Emitter<_State> emit) {
     _log.info(ev);
     emit(state.copyWith(syncProgress: ev.progress));
@@ -341,6 +335,11 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(scale: ev.scale));
   }
 
+  void _onSetFinger(_SetFinger ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(finger: ev.value));
+  }
+
   void _onSetLayoutConstraint(_SetLayoutConstraint ev, Emitter<_State> emit) {
     _log.info(ev);
     if (state.viewHeight == ev.viewHeight && state.viewWidth == ev.viewWidth) {
@@ -352,6 +351,7 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(
       viewWidth: ev.viewWidth,
       viewHeight: ev.viewHeight,
+      viewOverlayPadding: ev.viewOverlayPadding,
       itemPerRow: measurement.itemPerRow,
       itemSize: measurement.itemSize,
     ));
@@ -373,9 +373,10 @@ class _Bloc extends Bloc<_Event, _State>
       filesSummary: state.filesSummary,
       itemSize: state.itemSize!,
       itemPerRow: state.itemPerRow!,
-      viewHeight: state.viewHeight!,
+      viewHeight: state.viewHeight! - state.viewOverlayPadding!,
     );
-    final totalHeight = minimapItems.map((e) => e.logicalHeight).sum;
+    final totalHeight =
+        minimapItems.map((e) => e.logicalHeight + e.padding).sum;
     final ratio = state.viewHeight! / totalHeight;
     _log.info(
         "[_onTransformMinimap] view height: ${state.viewHeight!}, logical height: $totalHeight");
@@ -513,8 +514,7 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(error: ExceptionEvent(ev.error, ev.stackTrace)));
   }
 
-  Future _transformItems(
-      List<FileDescriptor> files, DbFilesSummary? summary) async {
+  void _transformItems(List<FileDescriptor> files, DbFilesSummary? summary) {
     _log.info("[_transformItems] Queue ${files.length} items");
     _itemTransformerQueue.addJob(
       _ItemTransformerArgument(
@@ -664,8 +664,9 @@ class _Bloc extends Bloc<_Event, _State>
       results.add(_MinimapItem(
         date: currentMonth,
         logicalY: currentMonthY,
-        // we need to take screen(view) height into account
         logicalHeight: h,
+        // we need to take screen(view) height into account
+        padding: viewHeight,
       ));
     }
     return results;
@@ -712,8 +713,9 @@ class _Bloc extends Bloc<_Event, _State>
       results.add(_MinimapItem(
         date: currentMonth,
         logicalY: currentMonthY,
+        logicalHeight: currentMonthHeight,
         // we need to take screen(view) height into account
-        logicalHeight: currentMonthHeight + viewHeight,
+        padding: viewHeight,
       ));
     }
     return results;
@@ -773,15 +775,17 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
     ...fileGroups.keys,
     if (arg.summary != null) ...arg.summary!.items.keys,
   ], (key1, key2) => key2.compareTo(key1));
-  final transformed = <_Item>[];
+  final transformed = <List<_Item>>[];
   final dates = <Date>{};
   for (final d in dateTimeSet) {
     final date = dateHelper.onDate(d);
     if (date != null) {
-      transformed.add(_DateItem(
-        date: d,
-        isMonthOnly: !arg.isGroupByDay,
-      ));
+      transformed.add([
+        _DateItem(
+          date: d,
+          isMonthOnly: !arg.isGroupByDay,
+        )
+      ]);
     }
     if (fileGroups.containsKey(d)) {
       dates.add(d);
@@ -791,7 +795,7 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
         if (item == null) {
           continue;
         }
-        transformed.add(item);
+        transformed.last.add(item);
       }
     } else if (arg.summary != null) {
       // summary
@@ -803,7 +807,7 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
       }
       final summary = arg.summary!.items[d]!;
       for (var i = 0; i < summary.count; ++i) {
-        transformed.add(_SummaryFileItem(date: d, index: i));
+        transformed.last.add(_SummaryFileItem(date: d, index: i));
       }
     }
   }

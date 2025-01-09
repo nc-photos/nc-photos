@@ -55,10 +55,17 @@ class _ContentListBody extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.transformedItems != current.transformedItems ||
           previous.selectedItems != current.selectedItems,
-      builder: (context, state) => SelectableItemList<_Item>(
-        maxCrossAxisExtent: maxCrossAxisExtent,
-        items: state.transformedItems,
-        itemBuilder: (context, index, item) {
+      builder: (context, state) => SelectableSectionList<_Item>(
+        sections: state.transformedItems
+            .map((e) => SelectableSection(
+                  header: e.first,
+                  items: e.sublist(1),
+                ))
+            .toList(),
+        selectedItems: state.selectedItems,
+        sectionHeaderBuilder: (context, section, item) =>
+            item.buildWidget(context),
+        itemBuilder: (context, section, index, item) {
           final w = item.buildWidget(context);
           if (isNeedVisibilityInfo) {
             return _ContentListItemView(
@@ -70,33 +77,30 @@ class _ContentListBody extends StatelessWidget {
             return w;
           }
         },
-        staggeredTileBuilder: (_, item) => item.staggeredTile,
-        selectedItems: state.selectedItems,
+        maxCrossAxisExtent: maxCrossAxisExtent,
         onSelectionChange: (_, selected) {
           context.addEvent(_SetSelectedItems(items: selected.cast()));
         },
-        onItemTap: (context, index, _) {
-          if (state.transformedItems[index] is! _FileItem) {
+        onItemTap: (context, section, index, _) {
+          final sectionItems = state.transformedItems[section];
+          if (sectionItems[index + 1] is! _FileItem) {
             return;
           }
           final actualIndex = index -
-              state.transformedItems
-                  .sublist(0, index)
+              sectionItems
+                  .sublist(1, index + 1)
                   .where((e) => e is! _FileItem)
                   .length;
           Navigator.of(context).pushNamed(
             Viewer.routeName,
             arguments: ViewerArguments(
-              state.transformedItems
+              sectionItems
                   .whereType<_FileItem>()
                   .map((e) => e.file.fdId)
                   .toList(),
               actualIndex,
             ),
           );
-        },
-        onMaxExtentChange: (value) {
-          context.addEvent(_SetContentListMaxExtent(value));
         },
       ),
     );

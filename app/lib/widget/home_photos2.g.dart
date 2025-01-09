@@ -16,19 +16,20 @@ abstract class $_StateCopyWithWorker {
   _State call(
       {List<FileDescriptor>? files,
       bool? isLoading,
-      List<_Item>? transformedItems,
+      List<List<_Item>>? transformedItems,
       Set<_Item>? selectedItems,
       DbFilesSummary? filesSummary,
       Set<_VisibleDate>? visibleDates,
       Set<Date>? queriedDates,
       bool? isEnableMemoryCollection,
       List<Collection>? memoryCollections,
-      double? contentListMaxExtent,
       Progress? syncProgress,
       int? zoom,
       double? scale,
+      int? finger,
       double? viewWidth,
       double? viewHeight,
+      double? viewOverlayPadding,
       int? itemPerRow,
       double? itemSize,
       bool? isScrolling,
@@ -53,12 +54,13 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       dynamic queriedDates,
       dynamic isEnableMemoryCollection,
       dynamic memoryCollections,
-      dynamic contentListMaxExtent = copyWithNull,
       dynamic syncProgress = copyWithNull,
       dynamic zoom,
       dynamic scale = copyWithNull,
+      dynamic finger,
       dynamic viewWidth = copyWithNull,
       dynamic viewHeight = copyWithNull,
+      dynamic viewOverlayPadding = copyWithNull,
       dynamic itemPerRow = copyWithNull,
       dynamic itemSize = copyWithNull,
       dynamic isScrolling,
@@ -71,7 +73,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
         files: files as List<FileDescriptor>? ?? that.files,
         isLoading: isLoading as bool? ?? that.isLoading,
         transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
+            transformedItems as List<List<_Item>>? ?? that.transformedItems,
         selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
         filesSummary: filesSummary as DbFilesSummary? ?? that.filesSummary,
         visibleDates: visibleDates as Set<_VisibleDate>? ?? that.visibleDates,
@@ -80,19 +82,20 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
             isEnableMemoryCollection as bool? ?? that.isEnableMemoryCollection,
         memoryCollections:
             memoryCollections as List<Collection>? ?? that.memoryCollections,
-        contentListMaxExtent: contentListMaxExtent == copyWithNull
-            ? that.contentListMaxExtent
-            : contentListMaxExtent as double?,
         syncProgress: syncProgress == copyWithNull
             ? that.syncProgress
             : syncProgress as Progress?,
         zoom: zoom as int? ?? that.zoom,
         scale: scale == copyWithNull ? that.scale : scale as double?,
+        finger: finger as int? ?? that.finger,
         viewWidth:
             viewWidth == copyWithNull ? that.viewWidth : viewWidth as double?,
         viewHeight: viewHeight == copyWithNull
             ? that.viewHeight
             : viewHeight as double?,
+        viewOverlayPadding: viewOverlayPadding == copyWithNull
+            ? that.viewOverlayPadding
+            : viewOverlayPadding as double?,
         itemPerRow:
             itemPerRow == copyWithNull ? that.itemPerRow : itemPerRow as int?,
         itemSize:
@@ -184,7 +187,7 @@ extension _$_ContentListBodyNpLog on _ContentListBody {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {files: [length: ${files.length}], isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, filesSummary: $filesSummary, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], contentListMaxExtent: ${contentListMaxExtent == null ? null : "${contentListMaxExtent!.toStringAsFixed(3)}"}, syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, error: $error}";
+    return "_State {files: [length: ${files.length}], isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, filesSummary: $filesSummary, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, error: $error}";
   }
 }
 
@@ -266,13 +269,6 @@ extension _$_RemoveVisibleDateToString on _RemoveVisibleDate {
   }
 }
 
-extension _$_SetContentListMaxExtentToString on _SetContentListMaxExtent {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_SetContentListMaxExtent {value: ${value == null ? null : "${value!.toStringAsFixed(3)}"}}";
-  }
-}
-
 extension _$_SetSyncProgressToString on _SetSyncProgress {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
@@ -301,6 +297,13 @@ extension _$_SetScaleToString on _SetScale {
   }
 }
 
+extension _$_SetFingerToString on _SetFinger {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFinger {value: $value}";
+  }
+}
+
 extension _$_StartScrollingToString on _StartScrolling {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
@@ -318,7 +321,7 @@ extension _$_EndScrollingToString on _EndScrolling {
 extension _$_SetLayoutConstraintToString on _SetLayoutConstraint {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetLayoutConstraint {viewWidth: ${viewWidth.toStringAsFixed(3)}, viewHeight: ${viewHeight.toStringAsFixed(3)}}";
+    return "_SetLayoutConstraint {viewWidth: ${viewWidth.toStringAsFixed(3)}, viewHeight: ${viewHeight.toStringAsFixed(3)}, viewOverlayPadding: ${viewOverlayPadding.toStringAsFixed(3)}}";
   }
 }
 
@@ -340,6 +343,13 @@ extension _$_SetEnableMemoryCollectionToString on _SetEnableMemoryCollection {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetEnableMemoryCollection {value: $value}";
+  }
+}
+
+extension _$_UpdateZoomToString on _UpdateZoom {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_UpdateZoom {}";
   }
 }
 

@@ -99,9 +99,12 @@ class _DateItem extends _Item {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return PhotoListDate(
-      date: date,
-      isMonthOnly: isMonthOnly,
+    return SizedBox(
+      height: 32,
+      child: PhotoListDate(
+        date: date,
+        isMonthOnly: isMonthOnly,
+      ),
     );
   }
 
@@ -133,7 +136,7 @@ class _ItemTransformerResult {
     required this.dates,
   });
 
-  final List<_Item> items;
+  final List<List<_Item>> items;
   final Set<Date> dates;
 }
 
