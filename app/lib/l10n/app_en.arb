@@ -346,11 +346,11 @@
 	},
 	"settingsMemoriesRangeTitle": "Memories range",
 	"@settingsMemoriesRangeTitle": {
-		"description": "How many adjacent days to be inclded in memories for a particular year"
+		"description": "How many adjacent days to be included in memories for a particular year"
 	},
 	"settingsMemoriesRangeValueText": "{range, plural, one{+-{range} day} other{+-{range} days}}",
 	"@settingsMemoriesRangeValueText": {
-		"description": "How many adjacent days to be inclded in memories for a particular year, could be 0",
+		"description": "How many adjacent days to be included in memories for a particular year, could be 0",
 		"placeholders": {
 			"range": {
 				"example": "1"
