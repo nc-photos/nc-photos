@@ -274,6 +274,12 @@ class PrefController {
         defaultValue: _homeCollectionsNavBarButtonsDefault,
       );
 
+  Future<bool> setFallbackClientExif(bool value) => _set<bool>(
+        controller: _isFallbackClientExifController,
+        setter: (pref, value) => pref.setFallbackClientExif(value),
+        value: value,
+      );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -427,6 +433,9 @@ class PrefController {
                   .map(PrefHomeCollectionsNavButton.fromJson)
                   .toList()) ??
           _homeCollectionsNavBarButtonsDefault);
+  @npSubjectAccessor
+  late final _isFallbackClientExifController =
+      BehaviorSubject.seeded(pref.isFallbackClientExif() ?? false);
 }
 
 extension PrefControllerExtension on PrefController {

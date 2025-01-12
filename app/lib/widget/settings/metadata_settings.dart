@@ -17,10 +17,6 @@ part 'metadata/bloc.dart';
 part 'metadata/state_event.dart';
 part 'metadata_settings.g.dart';
 
-typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
-typedef _BlocListener = BlocListener<_Bloc, _State>;
-typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
-
 class MetadataSettings extends StatelessWidget {
   const MetadataSettings({super.key});
 
@@ -29,7 +25,7 @@ class MetadataSettings extends StatelessWidget {
     return BlocProvider(
       create: (_) => _Bloc(
         prefController: context.read(),
-      ),
+      )..add(const _Init()),
       child: const _WrappedMetadataSettings(),
     );
   }
@@ -44,12 +40,6 @@ class _WrappedMetadataSettings extends StatefulWidget {
 
 class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
     with RouteAware, PageVisibilityMixin {
-  @override
-  void initState() {
-    super.initState();
-    _bloc.add(const _Init());
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -102,12 +92,32 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
                           value: state.isWifiOnly,
                           onChanged: state.isEnable
                               ? (value) {
-                                  _bloc.add(_SetWifiOnly(value));
+                                  context.addEvent(_SetWifiOnly(value));
                                 }
                               : null,
                         );
                       },
                     ),
+                  _BlocBuilder(
+                    buildWhen: (previous, current) =>
+                        previous.isEnable != current.isEnable ||
+                        previous.isFallback != current.isFallback,
+                    builder: (context, state) => SwitchListTile(
+                      title:
+                          Text(L10n.global().settingsFallbackClientExifTitle),
+                      subtitle: state.isFallback
+                          ? Text(
+                              L10n.global().settingsFallbackClientExifTrueText)
+                          : Text(L10n.global()
+                              .settingsFallbackClientExifFalseText),
+                      value: state.isFallback,
+                      onChanged: state.isEnable
+                          ? (value) {
+                              _onFallbackChanged(context, value);
+                            }
+                          : null,
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -148,12 +158,55 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
         ),
       );
       if (context.mounted && result == true) {
-        _bloc.add(const _SetEnable(true));
+        context.addEvent(const _SetEnable(true));
       }
     } else {
-      _bloc.add(const _SetEnable(false));
+      context.addEvent(const _SetEnable(false));
     }
   }
 
-  late final _bloc = context.read<_Bloc>();
+  Future<void> _onFallbackChanged(BuildContext context, bool value) async {
+    if (value) {
+      final result = await showDialog<bool>(
+        context: context,
+        builder: (context) => AlertDialog(
+          title:
+              Text(L10n.global().settingsFallbackClientExifConfirmDialogTitle),
+          content:
+              Text(L10n.global().settingsFallbackClientExifConfirmDialogText),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(L10n.global().enableButtonLabel),
+            ),
+          ],
+        ),
+      );
+      if (context.mounted && result == true) {
+        context.addEvent(const _SetFallback(true));
+      }
+    } else {
+      context.addEvent(const _SetFallback(false));
+    }
+  }
+}
+
+typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
+typedef _BlocListener = BlocListener<_Bloc, _State>;
+// typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
+typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+typedef _Emitter = Emitter<_State>;
+
+extension on BuildContext {
+  _Bloc get bloc => read<_Bloc>();
+  // _State get state => bloc.state;
+  void addEvent(_Event event) => bloc.add(event);
 }

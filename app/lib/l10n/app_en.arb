@@ -290,6 +290,14 @@
 	"@settingsExifWifiOnlyFalseSubtitle": {
 		"description": "Shown when users allow processing exif data over any network"
 	},
+	"settingsFallbackClientExifTitle": "Fallback to client side parser",
+	"@settingsFallbackClientExifTitle": {
+		"description": "Fallback to client side EXIF parser"
+	},
+	"settingsFallbackClientExifTrueText": "If Nextcloud failed to extract the file metadata, use the client side parser instead",
+	"settingsFallbackClientExifFalseText": "If Nextcloud failed to extract the file metadata, leave it as is",
+	"settingsFallbackClientExifConfirmDialogTitle": "Enable client side fallback?",
+	"settingsFallbackClientExifConfirmDialogText": "Normally Nextcloud server will automatically process your photos and store the EXIF metadata in background. However the background job may fail due to configuration issue or server bug. If enabled, we will process those files ourselves instead.",
 	"settingsMemoriesTitle": "Memories",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"

@@ -2,6 +2,11 @@
   "ca": [
     "settingsMetadataTitle",
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsShareFolderPickerDescription",
     "settingsPersonProviderTitle",
     "settingsServerAppSectionTitle",
@@ -285,6 +290,11 @@
 
   "cs": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
     "settingsCollectionsCustomizeNavigationBarTitle",
@@ -306,6 +316,11 @@
 
   "de": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
     "settingsCollectionsCustomizeNavigationBarTitle",
@@ -335,6 +350,11 @@
     "settingsExifSupportTitle2",
     "settingsExifWifiOnlyTitle",
     "settingsExifWifiOnlyFalseSubtitle",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsAccountLabelTitle",
     "settingsAccountLabelDescription",
     "settingsPersonProviderTitle",
@@ -491,6 +511,11 @@
 
   "es": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
     "settingsCollectionsCustomizeNavigationBarTitle",
@@ -512,6 +537,11 @@
 
   "fi": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
     "settingsCollectionsCustomizeNavigationBarTitle",
@@ -569,6 +599,11 @@
 
   "fr": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
     "settingsCollectionsCustomizeNavigationBarTitle",
@@ -590,6 +625,11 @@
 
   "it": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsPersonProviderTitle",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
@@ -682,6 +722,11 @@
     "settingsExifSupportTrueSubtitle",
     "settingsExifWifiOnlyTitle",
     "settingsExifWifiOnlyFalseSubtitle",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsMemoriesTitle",
     "settingsMemoriesSubtitle",
     "settingsAccountTitle",
@@ -1052,6 +1097,11 @@
 
   "pl": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsMemoriesRangeValueText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
@@ -1115,6 +1165,11 @@
     "nameInputInvalidEmpty",
     "settingsMetadataTitle",
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsPersonProviderTitle",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
@@ -1188,6 +1243,11 @@
 
   "ru": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
     "settingsCollectionsCustomizeNavigationBarTitle",
@@ -1243,8 +1303,21 @@
     "fileNotFound"
   ],
 
+  "sk": [
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText"
+  ],
+
   "tr": [
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
     "createCollectionDialogAlbumLabel2",
@@ -1259,6 +1332,11 @@
   "zh": [
     "settingsMetadataTitle",
     "settingsExifSupportTitle2",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsPersonProviderTitle",
     "settingsMemoriesRangeValueText",
     "settingsViewerCustomizeAppBarTitle",
@@ -1354,6 +1432,11 @@
     "settingsExifSupportTitle2",
     "settingsExifWifiOnlyTitle",
     "settingsExifWifiOnlyFalseSubtitle",
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
     "settingsAccountLabelTitle",
     "settingsAccountLabelDescription",
     "settingsPersonProviderTitle",

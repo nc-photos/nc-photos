@@ -17,7 +17,16 @@ class ServiceConfig {
     await Preference.setBool(_pref, _prefIsEnableClientExif, flag);
   }
 
+  static Future<bool> isFallbackClientExif() async {
+    return Preference.getBool(_pref, _prefIsFallbackClientExif, false).notNull();
+  }
+
+  static Future<void> setFallbackClientExif(bool flag) async {
+    await Preference.setBool(_pref, _prefIsFallbackClientExif, flag);
+  }
+
   static const _pref = "service";
   static const _prefProcessWifiOnly = "shouldProcessWifiOnly";
   static const _prefIsEnableClientExif = "isEnableClientExif";
+  static const _prefIsFallbackClientExif = "isFallbackClientExif";
 }

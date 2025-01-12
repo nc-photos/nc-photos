@@ -198,6 +198,11 @@ extension on Pref {
       return provider.setString(PrefKey.homeCollectionsNavBarButtons, value);
     }
   }
+
+  bool? isFallbackClientExif() =>
+      provider.getBool(PrefKey.isFallbackClientExif);
+  Future<bool> setFallbackClientExif(bool value) =>
+      provider.setBool(PrefKey.isFallbackClientExif, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {
