@@ -460,6 +460,14 @@
 	"@exifSupportDetails": {
 		"description": "Detailed description of the exif support feature"
 	},
+	"exifSupportNextcloud28Notes": "Bu işlem uygulama tarafı desteği sunucunuza kurar. Uygulama, Nextcloud tarafından desteklenmeyen dosyaları ve öznitelikleri işleyecektir",
+	"@exifSupportNextcloud28Notes": {
+		"description": "Extra notes for Nextcloud 28+"
+	},
+	"exifSupportConfirmationDialogTitle2": "İstemci tarafı EXIF ​​desteğini etkinleştir",
+	"@exifSupportConfirmationDialogTitle2": {
+		"description": "Title of the dialog to confirm enabling exif support"
+	},
 	"exifSupportConfirmationDialogTitle": "EXIF Desteğini Etkinleştir",
 	"@exifSupportConfirmationDialogTitle": {
 		"description": "Title of the dialog to confirm enabling exif support"
@@ -1071,6 +1079,14 @@
 	"@createCollectionDialogAlbumDescription": {
 		"description": "Describe how an album collection works"
 	},
+	"createCollectionDialogAlbumLabel2": "Uygulama tarafı Albüm",
+	"@createCollectionDialogAlbumLabel2": {
+		"description": "Create an album as collection"
+	},
+	"createCollectionDialogAlbumDescription2": "Sadece bu uygulama ile erişilebilen, ekstra özelliklere sahip albüm desteği",
+	"@createCollectionDialogAlbumDescription2": {
+		"description": "Describe how an album collection works"
+	},
 	"createCollectionDialogFolderLabel": "Klasör",
 	"@createCollectionDialogFolderLabel": {
 		"description": "Create a folder as collection"
@@ -1398,6 +1414,11 @@
 		"description": "Export an arbitrary Collection (typical one with generated contents) as a new static Collection"
 	},
 	"exportCollectionDialogTitle": "Koleksiyonu Dışa Aktar",
+	"createCollectionDialogNextcloudAlbumLabel2": "Sunucu tarafı Albüm",
+	"@createCollectionDialogNextcloudAlbumLabel2": {
+		"description": "Server-side albums that are available in Nextcloud 25+"
+	},
+	"createCollectionDialogNextcloudAlbumDescription2": "Sunucunuzda herhangi bir uygulama ile erişilebilen bir albüm oluşturun",
 	"createCollectionDialogNextcloudAlbumLabel": "Nextcloud Albüm",
 	"@createCollectionDialogNextcloudAlbumLabel": {
 		"description": "Server-side albums that are available in Nextcloud 25+"
@@ -1439,6 +1460,10 @@
 	"settingsMetadataTitle": "Dosya Üstverisi",
 	"@settingsMetadataTitle": {
 		"description": "Metadata (e.g., date, resolution, GPS, etc)"
+	},
+	"settingsExifSupportTitle2": "Uygulama taraflı EXIF ​​desteği",
+	"@settingsExifSupportTitle2": {
+		"description": "Title of the EXIF support setting"
 	},
 	"settingsPersonProviderTitle": "Kişi Sağlayıcısı",
 	"@settingsPersonProviderTitle": {
@@ -1552,5 +1577,11 @@
 	"@customizeButtonsUnsupportedWarning": {
 		"description": "Some button can't be removed. This message will be shown instead when user try to do so"
 	},
+	"placePickerTitle": "Bir yer seçin",
+	"albumAddMapTooltip": "Konum ekle",
+	"@albumAddMapTooltip": {
+		"description": "Add a map that display between photos to an album"
+	},
+	"fileNotFound": "Dosya bulunamadı",
 	"dontShowAgain": "Tekrar gösterme"
 }
