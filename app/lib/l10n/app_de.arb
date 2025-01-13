@@ -1510,6 +1510,21 @@
 	"mapBrowserDateRangeThisYear": "Dieses Jahr",
 	"mapBrowserDateRangeCustom": "benutzerdefiniert",
 	"homeTabMapBrowser": "Karte",
-	"mapBrowserSetDefaultDateRangeButton": "Als Standardwerrt setzen",
-	"todayText": "Heute"
+	"mapBrowserSetDefaultDateRangeButton": "Als Standardwert setzen",
+	"todayText": "Heute",
+	"settingsCollectionsCustomizeNavigationBarTitle": "Navigationsleiste anpassen",
+	"alternativeSignIn": "Stattdessen mit Nutzername und Passwort anmelden",
+	"@alternativeSignIn": {
+		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
+	},
+	"dragAndDropRearrangeButtons": "Ziehen um Buttons neu anzuordnen",
+	"@dragAndDropRearrangeButtons": {
+		"description": "Instruction to customize buttons layout"
+	},
+	"placePickerTitle": "Ort auswählen",
+	"albumAddMapTooltip": "Karte einfügen",
+	"@albumAddMapTooltip": {
+		"description": "Add a map that display between photos to an album"
+	},
+	"fileNotFound": "Datei nicht gefunden"
 }

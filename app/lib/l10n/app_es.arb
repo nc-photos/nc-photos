@@ -1511,5 +1511,56 @@
 	"mapBrowserDateRangeCustom": "Personalizado",
 	"homeTabMapBrowser": "Mapa",
 	"mapBrowserSetDefaultDateRangeButton": "Usar por defecto",
-	"todayText": "Hoy"
+	"todayText": "Hoy",
+	"settingsExifSupportTitle2": "Soporte EXIF en Cliente",
+	"@settingsExifSupportTitle2": {
+		"description": "Title of the EXIF support setting"
+	},
+	"settingsViewerCustomizeAppBarTitle": "Personalizar barra de opciones",
+	"settingsViewerCustomizeBottomAppBarTitle": "Personalizar barra de opciones inferior",
+	"settingsCollectionsCustomizeNavigationBarTitle": "Personalizar barra de navegación",
+	"exifSupportNextcloud28Notes": "El soporte para el lado del Cliente complementa a tu servidor. La aplicación procesará los archivos y atributos que Nextcloud no soporta",
+	"@exifSupportNextcloud28Notes": {
+		"description": "Extra notes for Nextcloud 28+"
+	},
+	"exifSupportConfirmationDialogTitle2": "¿Habilitar el soporte EXIF para el lado del Cliente?",
+	"@exifSupportConfirmationDialogTitle2": {
+		"description": "Title of the dialog to confirm enabling exif support"
+	},
+	"createCollectionDialogAlbumLabel2": "Álbum lado Cliente",
+	"@createCollectionDialogAlbumLabel2": {
+		"description": "Create an album as collection"
+	},
+	"createCollectionDialogAlbumDescription2": "Álbum con características adicionales, accesible sólo con ésta aplicación",
+	"@createCollectionDialogAlbumDescription2": {
+		"description": "Describe how an album collection works"
+	},
+	"createCollectionDialogNextcloudAlbumLabel2": "Álbum lado Servidor",
+	"@createCollectionDialogNextcloudAlbumLabel2": {
+		"description": "Server-side albums that are available in Nextcloud 25+"
+	},
+	"createCollectionDialogNextcloudAlbumDescription2": "Crea un álbum en tu servidor, accesible con cualquier aplicación.",
+	"alternativeSignIn": "Inicia sesión con usuario y contraseña en su lugar",
+	"@alternativeSignIn": {
+		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
+	},
+	"livePhotoTooltip": "Live photo",
+	"dragAndDropRearrangeButtons": "Arrastra y suelta para reordenar los botones",
+	"@dragAndDropRearrangeButtons": {
+		"description": "Instruction to customize buttons layout"
+	},
+	"customizeCollectionsNavBarDescription": "Arrastra y suelta para reordenar los botones, toca cada botón para minimizarlo",
+	"@customizeCollectionsNavBarDescription": {
+		"description": "Instruction to customize navigation bar buttons in the Collections page"
+	},
+	"customizeButtonsUnsupportedWarning": "Este botón no se puede personalizar",
+	"@customizeButtonsUnsupportedWarning": {
+		"description": "Some button can't be removed. This message will be shown instead when user try to do so"
+	},
+	"placePickerTitle": "Elige un lugar",
+	"albumAddMapTooltip": "Añadir mapa",
+	"@albumAddMapTooltip": {
+		"description": "Add a map that display between photos to an album"
+	},
+	"fileNotFound": "Archivo no encontrado"
 }

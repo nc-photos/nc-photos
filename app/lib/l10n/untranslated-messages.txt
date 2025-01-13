@@ -323,21 +323,15 @@
     "settingsFallbackClientExifConfirmDialogText",
     "settingsViewerCustomizeAppBarTitle",
     "settingsViewerCustomizeBottomAppBarTitle",
-    "settingsCollectionsCustomizeNavigationBarTitle",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "createCollectionDialogNextcloudAlbumLabel2",
     "createCollectionDialogNextcloudAlbumDescription2",
-    "alternativeSignIn",
     "livePhotoTooltip",
-    "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
-    "customizeButtonsUnsupportedWarning",
-    "placePickerTitle",
-    "albumAddMapTooltip",
-    "fileNotFound"
+    "customizeButtonsUnsupportedWarning"
   ],
 
   "el": [
@@ -510,29 +504,11 @@
   ],
 
   "es": [
-    "settingsExifSupportTitle2",
     "settingsFallbackClientExifTitle",
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText",
-    "settingsViewerCustomizeAppBarTitle",
-    "settingsViewerCustomizeBottomAppBarTitle",
-    "settingsCollectionsCustomizeNavigationBarTitle",
-    "exifSupportNextcloud28Notes",
-    "exifSupportConfirmationDialogTitle2",
-    "createCollectionDialogAlbumLabel2",
-    "createCollectionDialogAlbumDescription2",
-    "createCollectionDialogNextcloudAlbumLabel2",
-    "createCollectionDialogNextcloudAlbumDescription2",
-    "alternativeSignIn",
-    "livePhotoTooltip",
-    "dragAndDropRearrangeButtons",
-    "customizeCollectionsNavBarDescription",
-    "customizeButtonsUnsupportedWarning",
-    "placePickerTitle",
-    "albumAddMapTooltip",
-    "fileNotFound"
+    "settingsFallbackClientExifConfirmDialogText"
   ],
 
   "fi": [
@@ -598,29 +574,11 @@
   ],
 
   "fr": [
-    "settingsExifSupportTitle2",
     "settingsFallbackClientExifTitle",
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText",
-    "settingsViewerCustomizeAppBarTitle",
-    "settingsViewerCustomizeBottomAppBarTitle",
-    "settingsCollectionsCustomizeNavigationBarTitle",
-    "exifSupportNextcloud28Notes",
-    "exifSupportConfirmationDialogTitle2",
-    "createCollectionDialogAlbumLabel2",
-    "createCollectionDialogAlbumDescription2",
-    "createCollectionDialogNextcloudAlbumLabel2",
-    "createCollectionDialogNextcloudAlbumDescription2",
-    "alternativeSignIn",
-    "livePhotoTooltip",
-    "dragAndDropRearrangeButtons",
-    "customizeCollectionsNavBarDescription",
-    "customizeButtonsUnsupportedWarning",
-    "placePickerTitle",
-    "albumAddMapTooltip",
-    "fileNotFound"
+    "settingsFallbackClientExifConfirmDialogText"
   ],
 
   "it": [
@@ -1312,21 +1270,11 @@
   ],
 
   "tr": [
-    "settingsExifSupportTitle2",
     "settingsFallbackClientExifTitle",
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText",
-    "exifSupportNextcloud28Notes",
-    "exifSupportConfirmationDialogTitle2",
-    "createCollectionDialogAlbumLabel2",
-    "createCollectionDialogAlbumDescription2",
-    "createCollectionDialogNextcloudAlbumLabel2",
-    "createCollectionDialogNextcloudAlbumDescription2",
-    "placePickerTitle",
-    "albumAddMapTooltip",
-    "fileNotFound"
+    "settingsFallbackClientExifConfirmDialogText"
   ],
 
   "zh": [

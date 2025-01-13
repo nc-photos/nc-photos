@@ -1511,5 +1511,56 @@
 	"mapBrowserDateRangeCustom": "Personnalisée",
 	"homeTabMapBrowser": "Carte",
 	"mapBrowserSetDefaultDateRangeButton": "Définir par défaut",
-	"todayText": "Aujourd'hui"
+	"todayText": "Aujourd'hui",
+	"settingsExifSupportTitle2": "Prise en charge EXIF ​​côté client",
+	"@settingsExifSupportTitle2": {
+		"description": "Title of the EXIF support setting"
+	},
+	"settingsViewerCustomizeAppBarTitle": "Personnaliser la barre d'applications",
+	"settingsViewerCustomizeBottomAppBarTitle": "Personnaliser la barre d'application inférieure",
+	"settingsCollectionsCustomizeNavigationBarTitle": "Personnaliser la barre de navigation",
+	"exifSupportNextcloud28Notes": "Le support côté client complète votre serveur. L'application traitera les fichiers et les attributs non pris en charge par Nextcloud",
+	"@exifSupportNextcloud28Notes": {
+		"description": "Extra notes for Nextcloud 28+"
+	},
+	"exifSupportConfirmationDialogTitle2": "Activer la prise en charge EXIF côté client ?",
+	"@exifSupportConfirmationDialogTitle2": {
+		"description": "Title of the dialog to confirm enabling exif support"
+	},
+	"createCollectionDialogAlbumLabel2": "Album côté client",
+	"@createCollectionDialogAlbumLabel2": {
+		"description": "Create an album as collection"
+	},
+	"createCollectionDialogAlbumDescription2": "Album avec des fonctionnalités supplémentaires, accessible uniquement avec cette application",
+	"@createCollectionDialogAlbumDescription2": {
+		"description": "Describe how an album collection works"
+	},
+	"createCollectionDialogNextcloudAlbumLabel2": "Album côté serveur",
+	"@createCollectionDialogNextcloudAlbumLabel2": {
+		"description": "Server-side albums that are available in Nextcloud 25+"
+	},
+	"createCollectionDialogNextcloudAlbumDescription2": "Créez un album sur votre serveur, accessible avec n'importe quelle application",
+	"alternativeSignIn": "Connectez-vous plutôt avec votre nom d'utilisateur et votre mot de passe",
+	"@alternativeSignIn": {
+		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
+	},
+	"livePhotoTooltip": "Photo en direct",
+	"dragAndDropRearrangeButtons": "Faites un glisser-déposer pour réorganiser les boutons",
+	"@dragAndDropRearrangeButtons": {
+		"description": "Instruction to customize buttons layout"
+	},
+	"customizeCollectionsNavBarDescription": "Faites un glisser-déposer pour réorganiser les boutons, appuyez sur les boutons ci-dessus pour les minimiser",
+	"@customizeCollectionsNavBarDescription": {
+		"description": "Instruction to customize navigation bar buttons in the Collections page"
+	},
+	"customizeButtonsUnsupportedWarning": "Ce bouton ne peut pas être personnalisé",
+	"@customizeButtonsUnsupportedWarning": {
+		"description": "Some button can't be removed. This message will be shown instead when user try to do so"
+	},
+	"placePickerTitle": "Choisissez un endroit",
+	"albumAddMapTooltip": "Ajouter une carte",
+	"@albumAddMapTooltip": {
+		"description": "Add a map that display between photos to an album"
+	},
+	"fileNotFound": "Fichier introuvable"
 }
