@@ -116,6 +116,8 @@ class _Bloc extends Bloc<_Event, _State>
         .isPermitted(capability);
   }
 
+  bool get isAdHocCollection => _isAdHocCollection;
+
   void _onUpdateCollection(_UpdateCollection ev, Emitter<_State> emit) {
     _log.info(ev);
     emit(state.copyWith(collection: ev.collection));
