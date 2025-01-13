@@ -46,7 +46,7 @@ Screenshots contain photos by:
 - Dutch/Nederlands (contributed by Micha)
 - Finnish/Suomi (contributed by pHamala)
 - French/Français (contributed by Choukajohn, Fymyte, mgreil)
-- German/Deutsch (contributed by Andreas, Niclas H, Odious, PhilProg, shagn)
+- German/Deutsch (contributed by Andreas, MrNobody, Niclas H, Odious, PhilProg, shagn)
 - Greek/Ελληνικά (contributed by Chris Karasoulis)
 - Italian/Italiano (contributed by Albe)
 - Polish/Polski (contributed by Shieldziak, szymok)
