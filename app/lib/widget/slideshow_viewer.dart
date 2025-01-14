@@ -10,7 +10,9 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
+import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/k.dart' as k;
@@ -25,6 +27,7 @@ import 'package:nc_photos/widget/video_viewer.dart';
 import 'package:nc_photos/widget/viewer_mixin.dart';
 import 'package:nc_photos/widget/wakelock_util.dart';
 import 'package:np_codegen/np_codegen.dart';
+import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
@@ -37,18 +40,19 @@ part 'slideshow_viewer/view.dart';
 
 class SlideshowViewerArguments {
   const SlideshowViewerArguments(
-    this.account,
     this.fileIds,
     this.startIndex,
+    this.collectionId,
     this.config,
   );
 
-  final Account account;
   final List<int> fileIds;
   final int startIndex;
+  final String? collectionId;
   final SlideshowConfig config;
 }
 
+// fix for shared files
 class SlideshowViewer extends StatelessWidget {
   static const routeName = "/slideshow-viewer";
 
@@ -61,38 +65,41 @@ class SlideshowViewer extends StatelessWidget {
 
   const SlideshowViewer({
     super.key,
-    required this.account,
     required this.fileIds,
     required this.startIndex,
+    required this.collectionId,
     required this.config,
   });
 
   SlideshowViewer.fromArgs(SlideshowViewerArguments args, {Key? key})
       : this(
           key: key,
-          account: args.account,
           fileIds: args.fileIds,
           startIndex: args.startIndex,
+          collectionId: args.collectionId,
           config: args.config,
         );
 
   @override
   Widget build(BuildContext context) {
+    final accountController = context.read<AccountController>();
     return BlocProvider(
       create: (context) => _Bloc(
-        filesController: context.read<AccountController>().filesController,
-        account: context.read<AccountController>().account,
+        account: accountController.account,
+        filesController: accountController.filesController,
+        collectionsController: accountController.collectionsController,
         fileIds: fileIds,
         startIndex: startIndex,
+        collectionId: collectionId,
         config: config,
       )..add(const _Init()),
       child: const _WrappedSlideshowViewer(),
     );
   }
 
-  final Account account;
   final List<int> fileIds;
   final int startIndex;
+  final String? collectionId;
   final SlideshowConfig config;
 }
 
@@ -166,6 +173,7 @@ class _WrappedSlideshowViewerState extends State<_WrappedSlideshowViewer>
 typedef _BlocListener = BlocListener<_Bloc, _State>;
 typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
 typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+typedef _Emitter = Emitter<_State>;
 
 extension on BuildContext {
   _Bloc get bloc => read<_Bloc>();

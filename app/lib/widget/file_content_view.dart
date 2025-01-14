@@ -7,7 +7,6 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
-import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception_event.dart';
@@ -29,7 +28,7 @@ part 'file_content_view/view.dart';
 class FileContentView extends StatefulWidget {
   const FileContentView({
     super.key,
-    required this.fileId,
+    required this.file,
     required this.shouldPlayLivePhoto,
     required this.canZoom,
     required this.canPlay,
@@ -43,7 +42,7 @@ class FileContentView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _FileContentViewState();
 
-  final int fileId;
+  final FileDescriptor file;
   final bool shouldPlayLivePhoto;
   final bool canZoom;
   final bool canPlay;
@@ -60,8 +59,7 @@ class _FileContentViewState extends State<FileContentView> {
     super.initState();
     _bloc = _Bloc(
       account: context.read<AccountController>().account,
-      filesController: context.read<AccountController>().filesController,
-      fileId: widget.fileId,
+      file: widget.file,
       shouldPlayLivePhoto: widget.shouldPlayLivePhoto,
       canZoom: widget.canZoom,
       canPlay: widget.canPlay,
@@ -135,40 +133,33 @@ class _WrappedFileContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.file,
-      builder: (context, file) {
-        if (file == null) {
-          _log.severe("[build] File is null");
-          return Container();
-        } else if (file_util.isSupportedImageFormat(file)) {
-          return _BlocSelector(
-            selector: (state) => state.shouldPlayLivePhoto,
-            builder: (context, shouldPlayLivePhoto) {
-              if (shouldPlayLivePhoto) {
-                final livePhotoType = getLivePhotoTypeFromFile(file);
-                if (livePhotoType != null) {
-                  return _LivePhotoPageContentView(
-                    livePhotoType: livePhotoType,
-                  );
-                } else {
-                  _log.warning("[build] Not a live photo");
-                  return const _PhotoPageContentView();
-                }
-              } else {
-                return const _PhotoPageContentView();
-              }
-            },
-          );
-        } else if (file_util.isSupportedVideoFormat(file)) {
-          return const _VideoPageContentView();
-        } else {
-          _log.shout("[build] Unknown file format: ${file.fdMime}");
-          // _pageStates[index]!.itemHeight = 0;
-          return Container();
-        }
-      },
-    );
+    final file = context.bloc.file;
+    if (file_util.isSupportedImageFormat(file)) {
+      return _BlocSelector(
+        selector: (state) => state.shouldPlayLivePhoto,
+        builder: (context, shouldPlayLivePhoto) {
+          if (shouldPlayLivePhoto) {
+            final livePhotoType = getLivePhotoTypeFromFile(file);
+            if (livePhotoType != null) {
+              return _LivePhotoPageContentView(
+                livePhotoType: livePhotoType,
+              );
+            } else {
+              _log.warning("[build] Not a live photo");
+              return const _PhotoPageContentView();
+            }
+          } else {
+            return const _PhotoPageContentView();
+          }
+        },
+      );
+    } else if (file_util.isSupportedVideoFormat(file)) {
+      return const _VideoPageContentView();
+    } else {
+      _log.shout("[build] Unknown file format: ${file.fdMime}");
+      // _pageStates[index]!.itemHeight = 0;
+      return Container();
+    }
   }
 }
 

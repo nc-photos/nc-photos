@@ -4,20 +4,17 @@ part of '../file_content_view.dart';
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   _Bloc({
     required this.account,
-    required this.filesController,
-    required this.fileId,
+    required this.file,
     required bool shouldPlayLivePhoto,
     required bool canZoom,
     required bool canPlay,
     required bool isPlayControlVisible,
   }) : super(_State.init(
-          file: filesController.stream.value.dataMap[fileId],
           shouldPlayLivePhoto: shouldPlayLivePhoto,
           canZoom: canZoom,
           canPlay: canPlay,
           isPlayControlVisible: isPlayControlVisible,
         )) {
-    on<_SetFile>(_onSetFile);
     on<_SetShouldPlayLivePhoto>(_onSetShouldPlayLivePhoto);
     on<_SetCanZoom>(_onSetCanZoom);
     on<_SetCanPlay>(_onSetCanPlay);
@@ -30,13 +27,6 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     on<_SetLivePhotoLoadFailed>(_onSetLivePhotoLoadFailed);
 
     on<_SetError>(_onSetError);
-
-    _subscriptions.add(filesController.stream.listen((ev) {
-      add(_SetFile(ev.dataMap[fileId]));
-    }));
-    _subscriptions.add(filesController.errorStream.listen((ev) {
-      add(_SetError(ev.error, ev.stackTrace));
-    }));
   }
 
   @override
@@ -61,11 +51,6 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       _isHandlingError = false;
     }
     super.onError(error, stackTrace);
-  }
-
-  void _onSetFile(_SetFile ev, _Emitter emit) {
-    _log.info(ev);
-    emit(state.copyWith(file: ev.value));
   }
 
   void _onSetShouldPlayLivePhoto(_SetShouldPlayLivePhoto ev, _Emitter emit) {
@@ -127,8 +112,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   final Account account;
-  final FilesController filesController;
-  final int fileId;
+  final FileDescriptor file;
 
   final _subscriptions = <StreamSubscription>[];
   var _isHandlingError = false;

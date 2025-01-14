@@ -42,9 +42,11 @@ class _SyncByServer {
       final files = await fileRepoRemote.list(account, dir);
       await FileSqliteCacheUpdater(db)(account, dir, remote: files);
       final isEnableClientExif = await ServiceConfig.isEnableClientExif();
+      final isFallbackClientExif = await ServiceConfig.isFallbackClientExif();
       for (final f in files.where((e) => fileIds.contains(e.fdId))) {
         File? result;
         if (!_supportedMimes.contains(f.fdMime)) {
+          // unsupported image format
           if (isEnableClientExif) {
             _log.info(
                 "[_syncDir] File ${f.path} (mime: ${f.fdMime}) not supported by server, fallback to client");
@@ -54,7 +56,16 @@ class _SyncByServer {
                 "[_syncDir] File ${f.path} (mime: ${f.fdMime}) not supported by server");
           }
         } else {
-          if (f.metadata != null && f.location == null) {
+          // supported image format
+          if (f.metadata == null) {
+            // no metadata from server
+            if (isFallbackClientExif) {
+              _log.info(
+                  "[_syncDir] File ${f.path} metadata not found on server, fallback to client");
+              result = await fallback.syncOne(f);
+            }
+          } else {
+            // server metadata available
             result = await _syncOne(f);
           }
         }
@@ -73,17 +84,26 @@ class _SyncByServer {
   Future<File?> _syncOne(File file) async {
     _log.fine("[_syncOne] Syncing ${file.path}");
     try {
-      final lat = file.metadata!.exif?.gpsLatitudeDeg;
-      final lng = file.metadata!.exif?.gpsLongitudeDeg;
-      ImageLocation? location;
-      if (lat != null && lng != null) {
-        _log.fine("[_syncOne] Reverse geocoding for ${file.path}");
-        final l = await _geocoder(lat, lng);
-        if (l != null) {
-          location = l.toImageLocation();
+      OrNull<ImageLocation>? locationUpdate;
+
+      try {
+        final lat = file.metadata!.exif?.gpsLatitudeDeg;
+        final lng = file.metadata!.exif?.gpsLongitudeDeg;
+        ImageLocation? location;
+        if (lat != null && lng != null) {
+          _log.fine("[_syncOne] Reverse geocoding for ${file.path}");
+          final l = await _geocoder(lat, lng);
+          if (l != null) {
+            location = l.toImageLocation();
+          }
         }
+        locationUpdate = OrNull(location ?? ImageLocation.empty());
+      } catch (e, stackTrace) {
+        _log.severe("[_syncOne] Failed while reverse geocoding: ${file.path}",
+            e, stackTrace);
+        // if failed, we skip updating the location
       }
-      final locationUpdate = OrNull(location ?? ImageLocation.empty());
+
       await UpdateProperty(fileRepo: fileRepo2)(
         account,
         file,
@@ -92,7 +112,7 @@ class _SyncByServer {
       );
       return file;
     } catch (e, stackTrace) {
-      _log.severe("[_syncOne] Failed while updating location: ${file.path}", e,
+      _log.severe("[_syncOne] Failed while updating metadata: ${file.path}", e,
           stackTrace);
       return null;
     }

@@ -6,6 +6,7 @@ class _State {
   const _State({
     required this.isEnable,
     required this.isWifiOnly,
+    required this.isFallback,
     this.error,
   });
 
@@ -14,6 +15,7 @@ class _State {
 
   final bool isEnable;
   final bool isWifiOnly;
+  final bool isFallback;
 
   final ExceptionEvent? error;
 }
@@ -43,6 +45,16 @@ class _SetEnable implements _Event {
 @toString
 class _SetWifiOnly implements _Event {
   const _SetWifiOnly(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
+}
+
+@toString
+class _SetFallback implements _Event {
+  const _SetFallback(this.value);
 
   @override
   String toString() => _$toString();

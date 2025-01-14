@@ -4,7 +4,6 @@ part of '../file_content_view.dart';
 @toString
 class _State {
   const _State({
-    required this.file,
     required this.shouldPlayLivePhoto,
     required this.canZoom,
     required this.canPlay,
@@ -18,14 +17,12 @@ class _State {
   });
 
   factory _State.init({
-    required FileDescriptor? file,
     required bool shouldPlayLivePhoto,
     required bool canZoom,
     required bool canPlay,
     required bool isPlayControlVisible,
   }) =>
       _State(
-        file: file,
         shouldPlayLivePhoto: shouldPlayLivePhoto,
         canZoom: canZoom,
         canPlay: canPlay,
@@ -39,7 +36,6 @@ class _State {
   @override
   String toString() => _$toString();
 
-  final FileDescriptor? file;
   final bool shouldPlayLivePhoto;
   final bool canZoom;
   final bool canPlay;
@@ -54,16 +50,6 @@ class _State {
 }
 
 abstract class _Event {}
-
-@toString
-class _SetFile implements _Event {
-  const _SetFile(this.value);
-
-  @override
-  String toString() => _$toString();
-
-  final FileDescriptor? value;
-}
 
 @toString
 class _SetShouldPlayLivePhoto implements _Event {

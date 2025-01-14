@@ -14,8 +14,7 @@ part of 'file_content_view.dart';
 
 abstract class $_StateCopyWithWorker {
   _State call(
-      {FileDescriptor? file,
-      bool? shouldPlayLivePhoto,
+      {bool? shouldPlayLivePhoto,
       bool? canZoom,
       bool? canPlay,
       bool? isPlayControlVisible,
@@ -32,8 +31,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
 
   @override
   _State call(
-      {dynamic file = copyWithNull,
-      dynamic shouldPlayLivePhoto,
+      {dynamic shouldPlayLivePhoto,
       dynamic canZoom,
       dynamic canPlay,
       dynamic isPlayControlVisible,
@@ -44,7 +42,6 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       dynamic contentHeight = copyWithNull,
       dynamic error = copyWithNull}) {
     return _State(
-        file: file == copyWithNull ? that.file : file as FileDescriptor?,
         shouldPlayLivePhoto:
             shouldPlayLivePhoto as bool? ?? that.shouldPlayLivePhoto,
         canZoom: canZoom as bool? ?? that.canZoom,
@@ -102,14 +99,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {file: ${file == null ? null : "${file!.fdPath}"}, shouldPlayLivePhoto: $shouldPlayLivePhoto, canZoom: $canZoom, canPlay: $canPlay, isPlayControlVisible: $isPlayControlVisible, isLoaded: $isLoaded, isZoomed: $isZoomed, isPlaying: $isPlaying, isLivePhotoLoadFailed: $isLivePhotoLoadFailed, contentHeight: ${contentHeight == null ? null : "${contentHeight!.toStringAsFixed(3)}"}, error: $error}";
-  }
-}
-
-extension _$_SetFileToString on _SetFile {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_SetFile {value: ${value == null ? null : "${value!.fdPath}"}}";
+    return "_State {shouldPlayLivePhoto: $shouldPlayLivePhoto, canZoom: $canZoom, canPlay: $canPlay, isPlayControlVisible: $isPlayControlVisible, isLoaded: $isLoaded, isZoomed: $isZoomed, isPlaying: $isPlaying, isLivePhotoLoadFailed: $isLivePhotoLoadFailed, contentHeight: ${contentHeight == null ? null : "${contentHeight!.toStringAsFixed(3)}"}, error: $error}";
   }
 }
 

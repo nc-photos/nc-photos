@@ -1,30 +1,30 @@
 {
-	"appTitle": "Photos",
-	"translator": "mgreil\nFymyte\nChoukajohn",
+	"appTitle": "Fotky",
+	"translator": "Števob",
 	"@translator": {
 		"description": "Name of the translator(s) for this language"
 	},
-	"photosTabLabel": "Photos",
+	"photosTabLabel": "Fotky",
 	"@photosTabLabel": {
 		"description": "Label of the tab that lists user photos"
 	},
-	"collectionsTooltip": "Collections",
+	"collectionsTooltip": "Zbierky",
 	"@collectionsTooltip": {
 		"description": "Groups of photos, e.g., albums, trash bin, etc"
 	},
-	"zoomTooltip": "Zoom",
+	"zoomTooltip": "Priblížiť",
 	"@zoomTooltip": {
 		"description": "Tooltip of the zoom button"
 	},
-	"refreshMenuLabel": "Rafraîchir",
+	"refreshMenuLabel": "Obnoviť",
 	"@refreshMenuLabel": {
 		"description": "Label of the refresh entry in menu"
 	},
-	"settingsMenuLabel": "Paramètres",
+	"settingsMenuLabel": "Nastavenia",
 	"@settingsMenuLabel": {
 		"description": "Label of the settings entry in menu"
 	},
-	"selectionAppBarTitle": "{count, plural, =1{{count} sélectionné} other{{count} sélectionnés}}",
+	"selectionAppBarTitle": "{count, plural, other{{count} vybraných}}",
 	"@selectionAppBarTitle": {
 		"description": "Title of the contextual app bar that shows number of selected items",
 		"placeholders": {
@@ -33,7 +33,7 @@
 			}
 		}
 	},
-	"deleteSelectedProcessingNotification": "{count, plural, =1{Suppression de 1 élément} other{Suppression de {count} éléments}}",
+	"deleteSelectedProcessingNotification": "{count, plural, one{Mazanie 1 položky} other{Mazanie {count} položiek}}",
 	"@deleteSelectedProcessingNotification": {
 		"description": "Inform user that the selected items are being deleted",
 		"placeholders": {
@@ -42,11 +42,11 @@
 			}
 		}
 	},
-	"deleteSelectedSuccessNotification": "Tous les éléments ont été supprimés avec succès",
+	"deleteSelectedSuccessNotification": "Všetky položky boli úspešne odstránené",
 	"@deleteSelectedSuccessNotification": {
 		"description": "Inform user that the selected items are deleted successfully"
 	},
-	"deleteSelectedFailureNotification": "{count, plural, =1{Échec de la suppression de 1 élément} other{Échec de la suppression de {count} éléments}}",
+	"deleteSelectedFailureNotification": "{count, plural, one{Nepodarilo sa vymazať 1 položku} other{Nepodarilo sa vymazať {count} položiek}}",
 	"@deleteSelectedFailureNotification": {
 		"description": "Inform user that some/all the selected items cannot be deleted",
 		"placeholders": {
@@ -55,11 +55,11 @@
 			}
 		}
 	},
-	"archiveTooltip": "Archiver",
+	"archiveTooltip": "Archivovať",
 	"@archiveTooltip": {
 		"description": "Archive selected items"
 	},
-	"archiveSelectedProcessingNotification": "{count, plural, =1{Archivage de 1 élément} other{Archivage de {count} éléments}}",
+	"archiveSelectedProcessingNotification": "{count, plural, one{Archivujem 1 položku} other{Archivujem {count} položiek}}",
 	"@archiveSelectedProcessingNotification": {
 		"description": "Archiving the selected items",
 		"placeholders": {
@@ -68,11 +68,11 @@
 			}
 		}
 	},
-	"archiveSelectedSuccessNotification": "Tous les éléments ont été archivés avec succès",
+	"archiveSelectedSuccessNotification": "Všetky položky boli úspešne archivované",
 	"@archiveSelectedSuccessNotification": {
 		"description": "Archived all selected items successfully"
 	},
-	"archiveSelectedFailureNotification": "{count, plural, =1{Échec de l'archivage de 1 élément} other{Échec de l'archivage de {count} éléments}}",
+	"archiveSelectedFailureNotification": "{count, plural, one{Nepodarilo sa archivovať 1 položku} other{Nepodarilo sa archivovať {count} položiek}}",
 	"@archiveSelectedFailureNotification": {
 		"description": "Cannot archive some of the selected items",
 		"placeholders": {
@@ -81,11 +81,11 @@
 			}
 		}
 	},
-	"unarchiveTooltip": "Désarchiver",
+	"unarchiveTooltip": "Dearchivovať",
 	"@unarchiveTooltip": {
 		"description": "Unarchive selected items"
 	},
-	"unarchiveSelectedProcessingNotification": "{count, plural, =1{Désarchivage de 1 élément} other{Désarchivage de {count} éléments}}",
+	"unarchiveSelectedProcessingNotification": "{count, plural, one{Dearchivujem 1 položku} other{Dearchivujem {count} položiek}}",
 	"@unarchiveSelectedProcessingNotification": {
 		"description": "Unarchiving selected items",
 		"placeholders": {
@@ -94,11 +94,11 @@
 			}
 		}
 	},
-	"unarchiveSelectedSuccessNotification": "Tous les éléments ont été désarchivés avec succès",
+	"unarchiveSelectedSuccessNotification": "Všetky položky boli úspešne dearchivované",
 	"@unarchiveSelectedSuccessNotification": {
 		"description": "Unarchived all selected items successfully"
 	},
-	"unarchiveSelectedFailureNotification": "{count, plural, =1{Échec du désarchivage de 1 élément} other{Échec du désarchivage de {count} éléments}}",
+	"unarchiveSelectedFailureNotification": "{count, plural, one{Nepodarilo sa dearchivovať 1 položku} other{Nepodarilo sa dearchivovať {count} položiek}}",
 	"@unarchiveSelectedFailureNotification": {
 		"description": "Cannot unarchive some of the selected items",
 		"placeholders": {
@@ -107,31 +107,31 @@
 			}
 		}
 	},
-	"deleteTooltip": "Supprimer",
+	"deleteTooltip": "Odstrániť",
 	"@deleteTooltip": {
 		"description": "Delete selected items"
 	},
-	"deleteProcessingNotification": "Suppression de l'élément",
+	"deleteProcessingNotification": "Mazanie položky",
 	"@deleteProcessingNotification": {
 		"description": "Inform user that the item is being deleted"
 	},
-	"deleteSuccessNotification": "Élément supprimé avec succès",
+	"deleteSuccessNotification": "Položka úspešne odstránená",
 	"@deleteSuccessNotification": {
 		"description": "Inform user that the item is deleted successfully"
 	},
-	"deleteFailureNotification": "Échec de la suppression de l'élément",
+	"deleteFailureNotification": "Nepodarilo sa vymazať položku",
 	"@deleteFailureNotification": {
 		"description": "Inform user that the item cannot be deleted"
 	},
-	"removeSelectedFromAlbumFailureNotification": "Échec de la suppression des éléments de l'album",
+	"removeSelectedFromAlbumFailureNotification": "Nepodarilo sa odstrániť položky z albumu",
 	"@removeSelectedFromAlbumFailureNotification": {
 		"description": "Inform user that the selected items cannot be removed from an album"
 	},
-	"addServerTooltip": "Ajouter un serveur",
+	"addServerTooltip": "Pridať server",
 	"@addServerTooltip": {
 		"description": "Tooltip of the button that adds a new server"
 	},
-	"removeServerSuccessNotification": "{server} supprimé avec succès",
+	"removeServerSuccessNotification": "Server {server} úspešne odstránený",
 	"@removeServerSuccessNotification": {
 		"description": "Inform user that a server is removed successfully",
 		"placeholders": {
@@ -140,11 +140,11 @@
 			}
 		}
 	},
-	"createAlbumTooltip": "Créer un nouvel album",
+	"createAlbumTooltip": "Nový album",
 	"@createAlbumTooltip": {
 		"description": "Tooltip of the button that creates a new album"
 	},
-	"albumSize": "{count, plural, =0{Vide} =1{1 élément} other{{count} éléments}}",
+	"albumSize": "{count, plural, =0{Prázdne} one{1 položka} other{{count} položiek}}",
 	"@albumSize": {
 		"description": "Number of items inside an album",
 		"placeholders": {
@@ -153,11 +153,11 @@
 			}
 		}
 	},
-	"albumArchiveLabel": "Archive",
+	"albumArchiveLabel": "Archív",
 	"@albumArchiveLabel": {
 		"description": "A collection containing all archived photos"
 	},
-	"connectingToServer": "Connexion à\n{server}",
+	"connectingToServer": "Pripájam sa k\n{server}",
 	"@connectingToServer": {
 		"description": "(deprecated, may be removed in the future) Inform user that the app is connecting to a server",
 		"placeholders": {
@@ -166,169 +166,169 @@
 			}
 		}
 	},
-	"connectingToServer2": "En attente d'autorisation du server",
+	"connectingToServer2": "Čakám na autorizáciu zo strany servera",
 	"@connectingToServer2": {
 		"description": "Shown when the app is waiting for the user to sign in via an external browser"
 	},
-	"connectingToServerInstruction": "En attente de connexion via navigateur",
+	"connectingToServerInstruction": "Prihláste sa cez otvorený prehliadač",
 	"@connectingToServerInstruction": {
 		"description": "Shown when the app is waiting for the user to sign in via an external browser"
 	},
-	"nameInputHint": "Nom",
+	"nameInputHint": "Názov",
 	"@nameInputHint": {
 		"description": "Hint of the text field expecting name data"
 	},
-	"nameInputInvalidEmpty": "Ce champ est requis",
+	"nameInputInvalidEmpty": "Názov je povinný",
 	"@nameInputInvalidEmpty": {
 		"description": "Shown when a name input is required but value not given. This is intended to be a generic message and does not assume what this 'name' represents"
 	},
-	"skipButtonLabel": "IGNORER",
+	"skipButtonLabel": "PRESKOČIŤ",
 	"@skipButtonLabel": {
 		"description": "Label of the skip button"
 	},
-	"confirmButtonLabel": "CONFIRMER",
+	"confirmButtonLabel": "POTVRDIŤ",
 	"@confirmButtonLabel": {
 		"description": "Label of the confirm button"
 	},
-	"signInHeaderText": "Connectez-vous à un serveur Nextcloud",
+	"signInHeaderText": "Prihláste sa na Nextcloud server",
 	"@signInHeaderText": {
 		"description": "(deprecated, may be removed in the future)"
 	},
-	"signIn2faHintText": "Utilisez un mot de passe d'application si vous avez activé l'authentification à deux facteurs sur le serveur",
+	"signIn2faHintText": "Použite heslo aplikácie, ak máte na serveri povolené dvojfaktorové overenie",
 	"@signIn2faHintText": {
 		"description": "(deprecated, may be removed in the future)"
 	},
-	"signInHeaderText2": "Connexion a Nextcloud",
+	"signInHeaderText2": "Nextcloud\nPrihlásiť sa",
 	"@signInHeaderText2": {
 		"description": "Sign in to Nextcloud server"
 	},
-	"serverAddressInputHint": "Adresse du serveur",
+	"serverAddressInputHint": "Adresa servera",
 	"@serverAddressInputHint": {
 		"description": "Hint of the text field expecting server address data"
 	},
-	"serverAddressInputInvalidEmpty": "Veuillez saisir l'adresse du serveur",
+	"serverAddressInputInvalidEmpty": "Zadajte adresu servera",
 	"@serverAddressInputInvalidEmpty": {
 		"description": "Inform user that the server address input field cannot be empty"
 	},
-	"usernameInputHint": "Nom d'utilisateur",
+	"usernameInputHint": "Používateľské meno",
 	"@usernameInputHint": {
 		"description": "Hint of the text field expecting username data"
 	},
-	"usernameInputInvalidEmpty": "Veuillez entrer votre nom d'utilisateur",
+	"usernameInputInvalidEmpty": "Zadajte svoje používateľské meno",
 	"@usernameInputInvalidEmpty": {
 		"description": "Inform user that the username input field cannot be empty"
 	},
-	"passwordInputHint": "Mot de passe",
+	"passwordInputHint": "Heslo",
 	"@passwordInputHint": {
 		"description": "Hint of the text field expecting password data"
 	},
-	"passwordInputInvalidEmpty": "Veuillez entrer votre mot de passe",
+	"passwordInputInvalidEmpty": "Zadajte svoje heslo",
 	"@passwordInputInvalidEmpty": {
 		"description": "Inform user that the password input field cannot be empty"
 	},
-	"rootPickerHeaderText": "Choisissez les dossiers à inclure",
+	"rootPickerHeaderText": "Vyberte priečinky, ktoré sa majú zahrnúť",
 	"@rootPickerHeaderText": {
 		"description": "Inform user what to do in root picker widget"
 	},
-	"rootPickerSubHeaderText": "Seules les photos à l'intérieur des dossiers seront affichées. Appuyez sur Ignorer pour tout inclure",
+	"rootPickerSubHeaderText": "Zobrazia sa len fotografie vo vnútri vybraných priečinkov. Stlačte Preskočiť pre zahrnutie všetkých",
 	"@rootPickerSubHeaderText": {
 		"description": "Inform user what to do in root picker widget"
 	},
-	"rootPickerNavigateUpItemText": "(retourner en arrière)",
+	"rootPickerNavigateUpItemText": "(ísť späť)",
 	"@rootPickerNavigateUpItemText": {
 		"description": "Text of the list item to navigate up the directory tree"
 	},
-	"rootPickerUnpickFailureNotification": "Échec de la désélection de l'élement",
+	"rootPickerUnpickFailureNotification": "Nepodarilo sa zrušiť výber položky",
 	"@rootPickerUnpickFailureNotification": {
 		"description": "Failed while unpicking an item in the root picker list"
 	},
-	"rootPickerListEmptyNotification": "Veuillez choisir au moins un dossier ou appuyez sur ignorer pour tout inclure",
+	"rootPickerListEmptyNotification": "Vyberte aspoň jeden priečinok alebo stlačte preskočiť pre zahrnutie všetkých",
 	"@rootPickerListEmptyNotification": {
 		"description": "Error when user pressing confirm without picking any folders"
 	},
-	"setupWidgetTitle": "Commencer",
+	"setupWidgetTitle": "Začíname",
 	"@setupWidgetTitle": {
 		"description": "Title of the introductory widget"
 	},
-	"setupSettingsModifyLaterHint": "Vous pouvez modifier cela plus tard dans les paramètres",
+	"setupSettingsModifyLaterHint": "Môžete to neskôr zmeniť v Nastaveniach",
 	"@setupSettingsModifyLaterHint": {
 		"description": "Inform user that they can modify this setting after the setup process"
 	},
-	"setupHiddenPrefDirNoticeDetail": "Cette application crée un dossier sur le serveur Nextcloud pour stocker les fichiers de préférences. Veuillez ne pas le modifier ou le supprimer à moins que vous ne prévoyiez de supprimer cette application",
+	"setupHiddenPrefDirNoticeDetail": "Táto aplikácia vytvára priečinok na Nextcloud serveri pre uloženie súborov s preferenciami. Prosím neupravujte ani neodstraňujte ho, pokiaľ neplánujete odstrániť túto aplikáciu",
 	"@setupHiddenPrefDirNoticeDetail": {
 		"description": "Inform user about the preference folder created by this app"
 	},
-	"settingsWidgetTitle": "Paramètres",
+	"settingsWidgetTitle": "Nastavenia",
 	"@settingsWidgetTitle": {
 		"description": "Title of the Settings widget"
 	},
-	"settingsLanguageTitle": "Langue",
+	"settingsLanguageTitle": "Jazyk",
 	"@settingsLanguageTitle": {
 		"description": "Set display language"
 	},
-	"settingsLanguageOptionSystemDefaultLabel": "Utiliser la langue système",
+	"settingsLanguageOptionSystemDefaultLabel": "Predvolená systémová",
 	"@settingsLanguageOptionSystemDefaultLabel": {
 		"description": "Follow the Android system language"
 	},
-	"settingsExifSupportTrueSubtitle": "Demande une utilisation plus intense du réseau",
+	"settingsExifSupportTrueSubtitle": "Vyžaduje dodatočný sieťový prenos",
 	"@settingsExifSupportTrueSubtitle": {
 		"description": "Subtitle of the EXIF support setting when the value is true. The goal is to warn user about the possible side effects of enabling this setting"
 	},
-	"settingsExifWifiOnlyTitle": "Ne traîter les fichier EXIF que lorsque connecté au Wifi",
+	"settingsExifWifiOnlyTitle": "Spracovať EXIF iba cez Wi-Fi",
 	"@settingsExifWifiOnlyTitle": {
 		"description": "Whether to only process EXIF data when connected to a Wi-Fi network"
 	},
-	"settingsExifWifiOnlyFalseSubtitle": "Des frais supplémentaires peuvent s'appliquer",
+	"settingsExifWifiOnlyFalseSubtitle": "Môžu sa účtovať poplatky za dáta",
 	"@settingsExifWifiOnlyFalseSubtitle": {
 		"description": "Shown when users allow processing exif data over any network"
 	},
-	"settingsMemoriesTitle": "Souvenirs",
+	"settingsMemoriesTitle": "Spomienky",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
 	},
-	"settingsMemoriesSubtitle": "Voir les photos prises dans le passé",
+	"settingsMemoriesSubtitle": "Zobraziť fotografie nasnímané v minulosti",
 	"@settingsMemoriesSubtitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
 	},
-	"settingsAccountTitle": "Compte",
-	"settingsAccountLabelTitle": "Nom",
+	"settingsAccountTitle": "Účet",
+	"settingsAccountLabelTitle": "Označenie",
 	"@settingsAccountLabelTitle": {
 		"description": "An account label is used to replace the server URL in the app bar, could be useful for privacy reason"
 	},
-	"settingsAccountLabelDescription": "Utiliser ce nom pour remplacer l'URL du server",
-	"settingsIncludedFoldersTitle": "Dossiers inclus",
+	"settingsAccountLabelDescription": "Nastavte označenie, ktoré sa zobrazí namiesto URL servera",
+	"settingsIncludedFoldersTitle": "Zahrnuté priečinky",
 	"@settingsIncludedFoldersTitle": {
 		"description": "Change the included folders of an account"
 	},
-	"settingsShareFolderTitle": "Dossier de partage",
+	"settingsShareFolderTitle": "Zdieľaný priečinok",
 	"@settingsShareFolderTitle": {
 		"description": "Set the share folder such that it matches the parameter in config.php"
 	},
-	"settingsShareFolderDialogTitle": "Localisez le dossier de partage",
+	"settingsShareFolderDialogTitle": "Nájsť priečinok na zdieľanie",
 	"@settingsShareFolderDialogTitle": {
 		"description": "Set the share folder such that it matches the parameter in config.php"
 	},
-	"settingsShareFolderDialogDescription": "Ce paramètre correspond au paramètre share_folder dans config.php. Les deux valeurs DOIVENT être identiques.\n\nVeuillez localiser le même dossier que celui défini dans config.php.",
+	"settingsShareFolderDialogDescription": "Toto nastavenie zodpovedá parametru share_folder v config.php. Obe hodnoty MUSIA byť identické.\n\nNájdite ten istý priečinok, aký je nastavený v config.php.",
 	"@settingsShareFolderDialogDescription": {
 		"description": "Set the share folder such that it matches the parameter in config.php"
 	},
-	"settingsShareFolderPickerDescription": "Veuillez localiser le même dossier que celui défini dans config.php. Appuyez sur default si vous n'avez pas défini le paramètre.",
+	"settingsShareFolderPickerDescription": "Nájdite ten istý priečinok, aký je nastavený v config.php. Stlačte predvolené, ak ste parameter nenastavili.",
 	"@settingsShareFolderPickerDescription": {
 		"description": "Set the share folder such that it matches the parameter in config.php"
 	},
-	"settingsServerAppSectionTitle": "Prise en charge de l'application serveur",
+	"settingsServerAppSectionTitle": "Podpora serverovej aplikácie",
 	"@settingsServerAppSectionTitle": {
 		"description": "Enable/disable various server apps"
 	},
-	"settingsPhotosDescription": "Sélectionner le contenu de l'onglet photo",
+	"settingsPhotosDescription": "Prispôsobiť obsah zobrazený na karte Fotky",
 	"@settingsPhotosDescription": {
 		"description": "The 'Photos' here means the tab called 'Photos', not literally a photo. The title of this setting will also reuse the label of that tab"
 	},
-	"settingsMemoriesRangeTitle": "Intervalle",
+	"settingsMemoriesRangeTitle": "Rozsah spomienok",
 	"@settingsMemoriesRangeTitle": {
 		"description": "How many adjacent days to be inclded in memories for a particular year"
 	},
-	"settingsMemoriesRangeValueText": "{range, plural, one{+-{range} jour} other{+-{range} jours}}",
+	"settingsMemoriesRangeValueText": "{range, plural, one{+-{range} deň} other{+-{range} dní}}",
 	"@settingsMemoriesRangeValueText": {
 		"description": "How many adjacent days to be inclded in memories for a particular year, could be 0",
 		"placeholders": {
@@ -337,139 +337,139 @@
 			}
 		}
 	},
-	"settingsViewerTitle": "Visionneur",
-	"settingsViewerDescription": "Personnaliser le visionneur de vidéo/image",
-	"settingsScreenBrightnessTitle": "Luminosité d'écran",
-	"settingsScreenBrightnessDescription": "Remplacer le niveau de luminosité du système",
-	"settingsForceRotationTitle": "Ignorer le verrouillage de la rotation",
-	"settingsForceRotationDescription": "Faire pivoter l'écran même lorsque la rotation automatique est désactivée",
-	"settingsMapProviderTitle": "Fournisseur de carte",
-	"settingsShowDateInAlbumTitle": "Regrouper les photos par date",
-	"settingsShowDateInAlbumDescription": "Appliquer uniquement lorsque l'album est trié par heure",
-	"settingsImageEditTitle": "Editeur",
+	"settingsViewerTitle": "Prehliadač",
+	"settingsViewerDescription": "Prispôsobiť prehliadač obrázkov/videí",
+	"settingsScreenBrightnessTitle": "Jas obrazovky",
+	"settingsScreenBrightnessDescription": "Prepísať systémovú úroveň jasu",
+	"settingsForceRotationTitle": "Ignorovať uzamknutie rotácie",
+	"settingsForceRotationDescription": "Otočte obrazovku aj keď je automatické otáčanie zakázané",
+	"settingsMapProviderTitle": "Poskytovateľ máp",
+	"settingsShowDateInAlbumTitle": "Zoskupiť fotografie podľa dátumu",
+	"settingsShowDateInAlbumDescription": "Použiť len keď je album triedený podľa času",
+	"settingsImageEditTitle": "Editor",
 	"@settingsImageEditTitle": {
 		"description": "Include settings for image enhancements and the image editor"
 	},
-	"settingsImageEditDescription": "Personnaliser l'amélioration des images et l'éditeur",
-	"settingsEnhanceMaxResolutionTitle2": "Résolution des images pour l'amélioration",
-	"settingsEnhanceMaxResolutionDescription": "Les photos avec une resolution supérieure seront réduites.\n\nLes images hautes résolutions prennent beaucoup plus de temps et de mémoire à traîter. Baisser cette résolution si l'application se ferme pendants le traitement de vos photos.",
-	"settingsImageEditSaveResultsToServerTitle": "Enregistrer les résultats sur le server",
+	"settingsImageEditDescription": "Prispôsobiť vylepšenia obrázkov a editor obrázkov",
+	"settingsEnhanceMaxResolutionTitle2": "Rozlíšenie obrázkov pre vylepšenia",
+	"settingsEnhanceMaxResolutionDescription": "Fotografie väčšie než zvolené rozlíšenie budú zmenšené.\n\nVeľmi vysoké rozlíšenie vyžaduje podstatne viac pamäte a času na spracovanie. Ak aplikácia padá pri vylepšovaní fotiek, znížte túto hodnotu.",
+	"settingsImageEditSaveResultsToServerTitle": "Ukladať výsledky na server",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
 	},
-	"settingsImageEditSaveResultsToServerTrueDescription": "Les résultats sont sauvegardées sur le server, ou sur l'appareil si l'envoi échou.",
-	"settingsImageEditSaveResultsToServerFalseDescription": "Les résultats sont sauvegardés sur l'appareil",
-	"settingsThemeTitle": "Thème",
-	"settingsThemeDescription": "Personnalisez l'apparence de l'application",
-	"settingsFollowSystemThemeTitle": "Suivre le thème système",
+	"settingsImageEditSaveResultsToServerTrueDescription": "Výsledky sa ukladajú na server, ak sa nepodarí nahrať, uložia sa do zariadenia",
+	"settingsImageEditSaveResultsToServerFalseDescription": "Výsledky sa ukladajú do tohto zariadenia",
+	"settingsThemeTitle": "Téma",
+	"settingsThemeDescription": "Prispôsobiť vzhľad aplikácie",
+	"settingsFollowSystemThemeTitle": "Riaď sa systémovou témou",
 	"@settingsFollowSystemThemeTitle": {
 		"description": "Respect the system dark mode settings introduced on Android 10"
 	},
-	"settingsSeedColorTitle": "Couleur principale",
+	"settingsSeedColorTitle": "Farba témy",
 	"@settingsSeedColorTitle": {
 		"description": "Customize the colors used in app"
 	},
-	"settingsSeedColorDescription": "Utilisée pour déduire les couleurs de l'application",
+	"settingsSeedColorDescription": "Používa sa na odvodenie všetkých farieb v aplikácii",
 	"@settingsSeedColorDescription": {
 		"description": "Customize the colors used in app"
 	},
-	"settingsSeedColorPickerTitle": "Choisissez une couleur",
+	"settingsSeedColorPickerTitle": "Vyberte farbu",
 	"@settingsSeedColorPickerTitle": {
 		"description": "Dialog to customize the colors used in app"
 	},
-	"settingsUseBlackInDarkThemeTitle": "Thème plus sombre",
+	"settingsUseBlackInDarkThemeTitle": "Tmavšia téma",
 	"@settingsUseBlackInDarkThemeTitle": {
 		"description": "Make the dark theme darker"
 	},
-	"settingsUseBlackInDarkThemeTrueDescription": "Utiliser le noir dans le thème sombre",
+	"settingsUseBlackInDarkThemeTrueDescription": "Použiť čiernu v tmavej téme",
 	"@settingsUseBlackInDarkThemeTrueDescription": {
 		"description": "When black in dark theme is set to true"
 	},
-	"settingsUseBlackInDarkThemeFalseDescription": "Utiliser le gris foncé dans le thème sombre",
+	"settingsUseBlackInDarkThemeFalseDescription": "Použiť tmavosivú v tmavej téme",
 	"@settingsUseBlackInDarkThemeFalseDescription": {
 		"description": "When black in dark theme is set to false"
 	},
-	"settingsMiscellaneousTitle": "Divers",
-	"settingsDoubleTapExitTitle": "Tapper deux fois pour quitter",
+	"settingsMiscellaneousTitle": "Rôzne",
+	"settingsDoubleTapExitTitle": "Dvojité ťuknutie pre ukončenie",
 	"@settingsDoubleTapExitTitle": {
 		"description": "If enabled, users need to tap the back button twice to exit app"
 	},
-	"settingsPhotosTabSortByNameTitle": "Trier par nom de fichier",
+	"settingsPhotosTabSortByNameTitle": "Triediť podľa názvu súboru v Fotkách",
 	"@settingsPhotosTabSortByNameTitle": {
 		"description": "Sort photos listed in the Photos tab by filename (descending)"
 	},
-	"settingsExperimentalTitle": "Expérimental",
-	"settingsExperimentalDescription": "Des fonctionnalités qui ne sont pas prêtes pour une utilisation quotidienne",
-	"settingsExpertTitle": "Options avancées",
+	"settingsExperimentalTitle": "Experimentálne",
+	"settingsExperimentalDescription": "Funkcie, ktoré nie sú pripravené na každodenné použitie",
+	"settingsExpertTitle": "Pokročilé",
 	"@settingsExpertTitle": {
 		"description": "Settings that must be tweaked with caution"
 	},
-	"settingsExpertWarningText": "Soyer certains de comprendre chaque option avant de continuer",
-	"settingsClearCacheDatabaseTitle": "Effacer la base de données",
-	"settingsClearCacheDatabaseDescription": "Effacer les données mis en cache et relancer une synchronisation complète avec le server",
-	"settingsClearCacheDatabaseSuccessNotification": "Base de données effacé avec succès. Vous pouvez redemander l'application",
-	"settingsAboutSectionTitle": "À propos",
+	"settingsExpertWarningText": "Uistite sa, že plne rozumiete účelu každej možnosti pred pokračovaním",
+	"settingsClearCacheDatabaseTitle": "Vymazať databázu súborov",
+	"settingsClearCacheDatabaseDescription": "Vymažte info o súboroch z cache a spustite úplnú resynchronizáciu so serverom",
+	"settingsClearCacheDatabaseSuccessNotification": "Databáza úspešne vymazaná. Odporúča sa reštartovať aplikáciu",
+	"settingsAboutSectionTitle": "O aplikácii",
 	"@settingsAboutSectionTitle": {
 		"description": "Title of the about section in settings widget"
 	},
-	"settingsVersionTitle": "Version",
+	"settingsVersionTitle": "Verzia",
 	"@settingsVersionTitle": {
 		"description": "Title of the version data item"
 	},
-	"settingsServerVersionTitle": "Serveur",
+	"settingsServerVersionTitle": "Server",
 	"@settingsServerVersionTitle": {
 		"description": "This item will show the server software version, e.g., Nextcloud 25"
 	},
-	"settingsSourceCodeTitle": "Code source",
+	"settingsSourceCodeTitle": "Zdrojový kód",
 	"@settingsSourceCodeTitle": {
 		"description": "Title of the source code item"
 	},
-	"settingsBugReportTitle": "Signaler un problème",
+	"settingsBugReportTitle": "Nahlásiť problém",
 	"@settingsBugReportTitle": {
 		"description": "Report issue"
 	},
-	"settingsCaptureLogsTitle": "Capturer les logs",
+	"settingsCaptureLogsTitle": "Zachytiť protokoly",
 	"@settingsCaptureLogsTitle": {
 		"description": "Capture app logs for bug report"
 	},
-	"settingsCaptureLogsDescription": "Aider le développeur à diagnostiquer les bugs",
-	"settingsTranslatorTitle": "Traducteurs",
+	"settingsCaptureLogsDescription": "Pomôžte vývojárovi diagnostikovať chyby",
+	"settingsTranslatorTitle": "Prekladateľ",
 	"@settingsTranslatorTitle": {
 		"description": "Title of the translator item"
 	},
-	"writePreferenceFailureNotification": "Échec du réglage des préférences",
+	"writePreferenceFailureNotification": "Nepodarilo sa nastaviť preferenciu",
 	"@writePreferenceFailureNotification": {
 		"description": "Inform user that the preference file cannot be modified"
 	},
-	"enableButtonLabel": "ACTIVER",
+	"enableButtonLabel": "POVOLIŤ",
 	"@enableButtonLabel": {
 		"description": "Label of the enable button"
 	},
-	"exifSupportDetails": "L'activation de la prise en charge EXIF ​​rendra diverses métadonnées disponibles, telles que la date de prise de vue, le modèle de l'appareil photo, etc. Afin de lire ces métadonnées, une utilisation supplémentaire du réseau est requise pour télécharger l'image originale en taille réelle. L'application ne commencera à télécharger qu'une fois connectée à un réseau Wi-Fi",
+	"exifSupportDetails": "Povolením podpory EXIF získate rôzne metadáta (dátum snímania, model fotoaparátu, atď.). Na načítanie týchto metadát je potrebné stiahnuť pôvodný obrázok. Sťahovanie sa spustí iba pri pripojení na Wi-Fi",
 	"@exifSupportDetails": {
 		"description": "Detailed description of the exif support feature"
 	},
-	"captureLogDetails": "Pour prendre des logs pour un rapport de bug :\n\n1. Activez ce paramètre\n2. Reproduisez le problème\n3. Désactivez ce paramètre\n4. Recherchez nc-photos.log dans le dossier de téléchargement\n\n*Si le problème provoque le blocage de l'application, aucun log ne peut être capturé. Dans ce cas, veuillez contacter le développeur pour plus d'instructions",
+	"captureLogDetails": "Ak chcete vytvoriť protokoly pre nahlásenie chyby:\n\n1. Povoľte toto nastavenie\n2. Reprodukujte problém\n3. Zakážte toto nastavenie\n4. Nájdite súbor nc-photos.log v priečinku na stiahnutie\n\n*Ak problém spôsobí pád aplikácie, protokoly nebude možné zachytiť. V takom prípade prosím kontaktujte vývojára pre ďalšie inštrukcie",
 	"@captureLogDetails": {
 		"description": "Detailed description on capturing logs"
 	},
-	"captureLogSuccessNotification": "Logs enregistrés avec succès",
+	"captureLogSuccessNotification": "Protokoly úspešne upravené",
 	"@captureLogSuccessNotification": {
 		"description": "Captured logs are successfully saved to the download directory"
 	},
-	"doneButtonLabel": "TERMINÉ",
+	"doneButtonLabel": "HOTOVO",
 	"@doneButtonLabel": {
 		"description": "Label of the done button"
 	},
-	"nextButtonLabel": "SUIVANT",
+	"nextButtonLabel": "ĎALEJ",
 	"@nextButtonLabel": {
 		"description": "Label of the next button"
 	},
-	"connectButtonLabel": "CONNECTER",
+	"connectButtonLabel": "PRIPOJIŤ",
 	"@connectButtonLabel": {
 		"description": "Label of the connect button"
 	},
-	"rootPickerSkipConfirmationDialogContent2": "Tous vos fichiers seront inclus. Cela peut augmenter l'utilisation de la mémoire et dégrader les performances",
+	"rootPickerSkipConfirmationDialogContent2": "Všetky vaše súbory budú zahrnuté. Môže to zvýšiť spotrebu pamäte a zhoršiť výkon",
 	"@rootPickerSkipConfirmationDialogContent2": {
 		"description": "Warn user not to include all files in their server"
 	},
@@ -500,176 +500,176 @@
 			}
 		}
 	},
-	"detailsTooltip": "Détails",
+	"detailsTooltip": "Podrobnosti",
 	"@detailsTooltip": {
 		"description": "Tooltip of the details button"
 	},
-	"downloadTooltip": "Télécharger",
+	"downloadTooltip": "Stiahnuť",
 	"@downloadTooltip": {
 		"description": "Tooltip of the download button"
 	},
-	"downloadProcessingNotification": "Téléchargement du fichier",
+	"downloadProcessingNotification": "Sťahovanie súboru",
 	"@downloadProcessingNotification": {
 		"description": "Inform user that the file is being downloaded"
 	},
-	"downloadSuccessNotification": "Fichier téléchargé avec succès",
+	"downloadSuccessNotification": "Súbor úspešne stiahnutý",
 	"@downloadSuccessNotification": {
 		"description": "Inform user that the file is downloaded successfully"
 	},
-	"downloadFailureNotification": "Échec du téléchargement du fichier",
+	"downloadFailureNotification": "Nepodarilo sa stiahnuť súbor",
 	"@downloadFailureNotification": {
 		"description": "Inform user that the file cannot be downloaded"
 	},
-	"nextTooltip": "Suivant",
+	"nextTooltip": "Ďalej",
 	"@nextTooltip": {
 		"description": "Tooltip of the next button"
 	},
-	"previousTooltip": "Précédent",
+	"previousTooltip": "Predchádzajúce",
 	"@previousTooltip": {
 		"description": "Tooltip of the previous button"
 	},
-	"webSelectRangeNotification": "Maintenez la touche Maj enfoncée + cliquez pour tout sélectionner entre les deux",
+	"webSelectRangeNotification": "Podržte shift + kliknite pre výber všetkých medzi nimi",
 	"@webSelectRangeNotification": {
 		"description": "Inform web user how to select items in range"
 	},
-	"mobileSelectRangeNotification": "Appuyez longuement sur un autre élément pour tout sélectionner entre",
+	"mobileSelectRangeNotification": "Dlhým stlačením inej položky vyberiete všetko medzi nimi",
 	"@mobileSelectRangeNotification": {
 		"description": "Inform mobile user how to select items in range"
 	},
-	"updateDateTimeDialogTitle": "Modifier la date et l'heure",
+	"updateDateTimeDialogTitle": "Upraviť dátum & čas",
 	"@updateDateTimeDialogTitle": {
 		"description": "Dialog to modify the date & time of a file"
 	},
-	"dateSubtitle": "Date",
-	"timeSubtitle": "Heure",
-	"dateYearInputHint": "Année",
-	"dateMonthInputHint": "Mois",
-	"dateDayInputHint": "Jour",
-	"timeHourInputHint": "Heure",
-	"timeMinuteInputHint": "Minute",
-	"timeSecondInputHint": "Seconde",
-	"dateTimeInputInvalid": "Valeure invalide",
+	"dateSubtitle": "Dátum",
+	"timeSubtitle": "Čas",
+	"dateYearInputHint": "Rok",
+	"dateMonthInputHint": "Mesiac",
+	"dateDayInputHint": "Deň",
+	"timeHourInputHint": "Hodina",
+	"timeMinuteInputHint": "Minúta",
+	"timeSecondInputHint": "Sekunda",
+	"dateTimeInputInvalid": "Neplatná hodnota",
 	"@dateTimeInputInvalid": {
 		"description": "Invalid date/time input (e.g., non-numeric characters)"
 	},
-	"updateDateTimeFailureNotification": "Échec de la modification de la date et de l'heure",
+	"updateDateTimeFailureNotification": "Nepodarilo sa upraviť dátum & čas",
 	"@updateDateTimeFailureNotification": {
 		"description": "Failed to set the date & time of a file"
 	},
-	"albumDirPickerHeaderText": "Choisissez les dossiers à associer",
+	"albumDirPickerHeaderText": "Vyberte zložky, ktoré majú byť pridružené",
 	"@albumDirPickerHeaderText": {
 		"description": "Pick the folders for a folder based album"
 	},
-	"albumDirPickerSubHeaderText": "Seules les photos des dossiers associés seront incluses dans cet album",
+	"albumDirPickerSubHeaderText": "Len fotografie v pridružených zložkách budú zahrnuté do tohto albumu",
 	"@albumDirPickerSubHeaderText": {
 		"description": "Pick the folders for a folder based album"
 	},
-	"albumDirPickerListEmptyNotification": "Veuillez choisir au moins un dossier",
+	"albumDirPickerListEmptyNotification": "Vyberte aspoň jednu zložku",
 	"@albumDirPickerListEmptyNotification": {
 		"description": "Error when user pressing confirm without picking any folders"
 	},
-	"importFoldersTooltip": "Importer des dossiers",
+	"importFoldersTooltip": "Importovať priečinky",
 	"@importFoldersTooltip": {
 		"description": "Menu entry in the album page to import folders as albums"
 	},
-	"albumImporterHeaderText": "Importer des dossiers sous forme d'albums",
+	"albumImporterHeaderText": "Importovať zložky ako albumy",
 	"@albumImporterHeaderText": {
 		"description": "Import folders as albums"
 	},
-	"albumImporterSubHeaderText": "Les dossiers suggérés sont répertoriés ci-dessous. Selon le nombre de fichiers sur votre serveur, cela peut prendre un certain temps",
+	"albumImporterSubHeaderText": "Navrhované zložky sú uvedené nižšie. V závislosti od počte súborov na vašom serveri môže import chvíľu trvať",
 	"@albumImporterSubHeaderText": {
 		"description": "Import folders as albums"
 	},
-	"importButtonLabel": "IMPORTER",
-	"albumImporterProgressText": "Importation de dossiers",
+	"importButtonLabel": "IMPORTOVAŤ",
+	"albumImporterProgressText": "Importovanie zložiek",
 	"@albumImporterProgressText": {
 		"description": "Message shown while importing"
 	},
-	"doneButtonTooltip": "Terminé",
-	"editTooltip": "Modifier",
-	"editAccountConflictFailureNotification": "Un compte existe déjà avec les mêmes paramètres",
+	"doneButtonTooltip": "Hotovo",
+	"editTooltip": "Upraviť",
+	"editAccountConflictFailureNotification": "Účet s rovnakým nastavením už existuje",
 	"@editAccountConflictFailureNotification": {
 		"description": "Error when user modified an account such that it's identical to another one"
 	},
-	"genericProcessingDialogContent": "S'il vous plaît, attendez",
+	"genericProcessingDialogContent": "Prosím počkajte",
 	"@genericProcessingDialogContent": {
 		"description": "Generic dialog shown when the app is temporarily blocking user input to work on something"
 	},
-	"sortTooltip": "Trier",
-	"sortOptionDialogTitle": "Trier par",
+	"sortTooltip": "Triediť",
+	"sortOptionDialogTitle": "Triediť podľa",
 	"@sortOptionDialogTitle": {
 		"description": "Select how the photos should be sorted"
 	},
-	"sortOptionTimeAscendingLabel": "Le plus âgé en premier",
+	"sortOptionTimeAscendingLabel": "Najstaršie ako prvé",
 	"@sortOptionTimeAscendingLabel": {
 		"description": "Sort by time, in ascending order"
 	},
-	"sortOptionTimeDescendingLabel": "Le plus récent d'abord",
+	"sortOptionTimeDescendingLabel": "Najnovšie ako prvé",
 	"@sortOptionTimeDescendingLabel": {
 		"description": "Sort by time, in descending order"
 	},
-	"sortOptionFilenameAscendingLabel": "Nom de fichier",
+	"sortOptionFilenameAscendingLabel": "Názov súboru",
 	"@sortOptionFilenameAscendingLabel": {
 		"description": "Sort by filename, in ascending order"
 	},
-	"sortOptionFilenameDescendingLabel": "Nom de fichier (descendant)",
+	"sortOptionFilenameDescendingLabel": "Názov súboru (zostupne)",
 	"@sortOptionFilenameDescendingLabel": {
 		"description": "Sort by filename, in descending order"
 	},
-	"sortOptionAlbumNameLabel": "Nom d'album",
+	"sortOptionAlbumNameLabel": "Názov albumu",
 	"@sortOptionAlbumNameLabel": {
 		"description": "Sort by album name, in ascending order"
 	},
-	"sortOptionAlbumNameDescendingLabel": "Nom d'album (inversé)",
+	"sortOptionAlbumNameDescendingLabel": "Názov albumu (zostupne)",
 	"@sortOptionAlbumNameDescendingLabel": {
 		"description": "Sort by album name, in descending order"
 	},
-	"sortOptionManualLabel": "Manuel",
+	"sortOptionManualLabel": "Manuálne",
 	"@sortOptionManualLabel": {
 		"description": "Sort manually"
 	},
-	"albumEditDragRearrangeNotification": "Appuyez longuement sur un élément et faites-le glisser pour le réorganiser manuellement",
+	"albumEditDragRearrangeNotification": "Dlhým stlačením a potiahnutím položky ju presuňte ručne",
 	"@albumEditDragRearrangeNotification": {
 		"description": "Instructions on how to rearrange photos"
 	},
-	"albumAddTextTooltip": "Ajouter du texte",
+	"albumAddTextTooltip": "Pridať text",
 	"@albumAddTextTooltip": {
 		"description": "Add some text that display between photos to an album"
 	},
-	"shareTooltip": "Partager",
+	"shareTooltip": "Zdieľať",
 	"@shareTooltip": {
 		"description": "Share selected items to other apps"
 	},
-	"shareSelectedEmptyNotification": "Sélectionnez quelques photos à partager",
+	"shareSelectedEmptyNotification": "Vyberte niektoré fotografie na zdieľanie",
 	"@shareSelectedEmptyNotification": {
 		"description": "Shown when user pressed the share button with only non-sharable items (e.g., text labels) selected"
 	},
-	"shareDownloadingDialogContent": "Téléchargement",
+	"shareDownloadingDialogContent": "Sťahujem",
 	"@shareDownloadingDialogContent": {
 		"description": "Downloading photos to be shared"
 	},
-	"searchTooltip": "Chercher",
-	"clearTooltip": "Nettoyer",
+	"searchTooltip": "Hľadať",
+	"clearTooltip": "Vymazať",
 	"@clearTooltip": {
 		"description": "Clear some sort of user input, typically a text field"
 	},
-	"listNoResultsText": "Aucun résultat",
+	"listNoResultsText": "Žiadne výsledky",
 	"@listNoResultsText": {
 		"description": "When there's nothing in a list"
 	},
-	"listEmptyText": "Vide",
+	"listEmptyText": "Prázdne",
 	"@listEmptyText": {
 		"description": "When there's nothing in a list"
 	},
-	"albumTrashLabel": "Corbeille",
+	"albumTrashLabel": "Kôš",
 	"@albumTrashLabel": {
 		"description": "Deleted photos"
 	},
-	"restoreTooltip": "Restaurer",
+	"restoreTooltip": "Obnoviť",
 	"@restoreTooltip": {
 		"description": "Restore selected items from trashbin"
 	},
-	"restoreSelectedProcessingNotification": "{count, plural, =1{Restauration d'1 élément} other{Restauration de {count} éléments}}",
+	"restoreSelectedProcessingNotification": "{count, plural, one{Obnovujem 1 položku} other{Obnovujem {count} položiek}}",
 	"@restoreSelectedProcessingNotification": {
 		"description": "Restoring selected items from trashbin",
 		"placeholders": {
@@ -678,11 +678,11 @@
 			}
 		}
 	},
-	"restoreSelectedSuccessNotification": "Tous les éléments ont été restaurés avec succès",
+	"restoreSelectedSuccessNotification": "Všetky položky boli úspešne obnovené",
 	"@restoreSelectedSuccessNotification": {
 		"description": "Restored all selected items from trashbin successfully"
 	},
-	"restoreSelectedFailureNotification": "{count, plural, =1{Échec de la restauration de 1 élément} other{Échec de la restauration de {count} éléments}}",
+	"restoreSelectedFailureNotification": "{count, plural, one{Nepodarilo sa obnoviť 1 položku} other{Nepodarilo sa obnoviť {count} položiek}}",
 	"@restoreSelectedFailureNotification": {
 		"description": "Cannot restore some of the selected items from trashbin",
 		"placeholders": {
@@ -691,71 +691,71 @@
 			}
 		}
 	},
-	"restoreProcessingNotification": "Restauration de l'élément",
+	"restoreProcessingNotification": "Obnovovanie položky",
 	"@restoreProcessingNotification": {
 		"description": "Restoring the opened item from trashbin"
 	},
-	"restoreSuccessNotification": "Élément restauré avec succès",
+	"restoreSuccessNotification": "Položka úspešne obnovená",
 	"@restoreSuccessNotification": {
 		"description": "Restored the opened item from trashbin successfully"
 	},
-	"restoreFailureNotification": "Échec de la restauration de l'élément",
+	"restoreFailureNotification": "Nepodarilo sa obnoviť položku",
 	"@restoreFailureNotification": {
 		"description": "Cannot restore the opened item from trashbin"
 	},
-	"deletePermanentlyTooltip": "Supprimer définitivement",
+	"deletePermanentlyTooltip": "Odstrániť natrvalo",
 	"@deletePermanentlyTooltip": {
 		"description": "Permanently delete selected items from trashbin"
 	},
-	"deletePermanentlyConfirmationDialogTitle": "Supprimer définitivement",
+	"deletePermanentlyConfirmationDialogTitle": "Odstrániť natrvalo",
 	"@deletePermanentlyConfirmationDialogTitle": {
 		"description": "Make sure the user wants to delete the items"
 	},
-	"deletePermanentlyConfirmationDialogContent": "Les éléments sélectionnés seront supprimés définitivement du serveur.\n\nCette action est irréversible",
+	"deletePermanentlyConfirmationDialogContent": "Vybrané položky budú natrvalo odstránené zo servera.\n\nTáto akcia je nevratná",
 	"@deletePermanentlyConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete the items"
 	},
-	"albumSharedLabel": "Partagé",
+	"albumSharedLabel": "Zdieľané",
 	"@albumSharedLabel": {
 		"description": "A small label placed next to a shared album"
 	},
-	"metadataTaskProcessingNotification": "Traitement des métadonnées de l'image en arrière-plan",
+	"metadataTaskProcessingNotification": "Spracovávanie metadát obrázkov na pozadí",
 	"@metadataTaskProcessingNotification": {
 		"description": "Shown when the app is reading image metadata"
 	},
-	"metadataTaskPauseNoWiFiNotification": "En attente du Wi-Fi",
+	"metadataTaskPauseNoWiFiNotification": "Čakám na Wi-Fi",
 	"@metadataTaskPauseNoWiFiNotification": {
 		"description": "Shown when the app has paused reading image metadata"
 	},
-	"configButtonLabel": "CONFIGURER",
-	"useAsAlbumCoverTooltip": "Utiliser comme couverture d'album",
-	"helpTooltip": "Aide",
-	"helpButtonLabel": "AIDE",
-	"removeFromAlbumTooltip": "Retirer de l'album",
+	"configButtonLabel": "KONFIGURÁCIA",
+	"useAsAlbumCoverTooltip": "Použiť ako obal albumu",
+	"helpTooltip": "Pomoc",
+	"helpButtonLabel": "POMOC",
+	"removeFromAlbumTooltip": "Odstrániť z albumu",
 	"@removeFromAlbumTooltip": {
 		"description": "Remove the opened photo from an album"
 	},
-	"changelogTitle": "Journal des modifications",
+	"changelogTitle": "Zoznam zmien",
 	"@changelogTitle": {
 		"description": "Title of the changelog page"
 	},
-	"serverCertErrorDialogTitle": "Le certificat du serveur ne peut pas être approuvé",
+	"serverCertErrorDialogTitle": "Certifikátu servera nemožno dôverovať",
 	"@serverCertErrorDialogTitle": {
 		"description": "Title of the dialog to warn user about an untrusted SSL certificate"
 	},
-	"serverCertErrorDialogContent": "Le serveur peut être piraté ou quelqu'un essaie de voler vos informations",
+	"serverCertErrorDialogContent": "Server môže byť napadnutý alebo sa niekto pokúša ukradnúť vaše informácie",
 	"@serverCertErrorDialogContent": {
 		"description": "Warn user about an untrusted SSL certificate"
 	},
-	"advancedButtonLabel": "AVANCÉ",
+	"advancedButtonLabel": "POKROČILÉ",
 	"@advancedButtonLabel": {
 		"description": "Label of the advanced button"
 	},
-	"whitelistCertDialogTitle": "Certificat inconnu de la liste blanche ?",
+	"whitelistCertDialogTitle": "Pridať neznámy certifikát do dôveryhodných?",
 	"@whitelistCertDialogTitle": {
 		"description": "Title of the dialog to let user decide whether to whitelist an untrusted SSL certificate"
 	},
-	"whitelistCertDialogContent": "Vous pouvez ajouter le certificat à la liste blanche pour que l'application l'accepte. AVERTISSEMENT : Cela pose un grand risque pour la sécurité. Assurez-vous que le certificat est auto-signé par vous ou une partie de confiance\n\nHôte : {host}\nEmpreinte digitale : {fingerprint}",
+	"whitelistCertDialogContent": "Certifikát môžete pridať do zoznamu dôveryhodných, aby ho aplikácia prijala. VAROVANIE: To predstavuje veľké bezpečnostné riziko. Uistite sa, že certifikát je samopodpísaný vami alebo dôveryhodnou stranou.\n\nHost: {host}\nOdtlačok: {fingerprint}",
 	"@whitelistCertDialogContent": {
 		"description": "Let user decide whether to whitelist an untrusted SSL certificate",
 		"placeholders": {
@@ -767,99 +767,99 @@
 			}
 		}
 	},
-	"whitelistCertButtonLabel": "ACCEPTER LE RISQUE ET AJOUTER À LA LISTE BLANCHE",
+	"whitelistCertButtonLabel": "PRIJAT RIZIKO A PRIDAŤ DO ZOZNAMU",
 	"@whitelistCertButtonLabel": {
 		"description": "Label of the whitelist certificate button"
 	},
-	"fileSharedByDescription": "Partagé avec vous par cet utilisateur",
+	"fileSharedByDescription": "Zdieľané s vami týmto používateľom",
 	"@fileSharedByDescription": {
 		"description": "The app will show the owner of the file if it's being shared with you by others. The name of the owner is displayed above this line"
 	},
-	"emptyTrashbinTooltip": "Vider la corbeille",
+	"emptyTrashbinTooltip": "Vyprázdniť kôš",
 	"@emptyTrashbinTooltip": {
 		"description": "Permanently delete all items from trashbin"
 	},
-	"emptyTrashbinConfirmationDialogTitle": "Vider la corbeille",
+	"emptyTrashbinConfirmationDialogTitle": "Vyprázdniť kôš",
 	"@emptyTrashbinConfirmationDialogTitle": {
 		"description": "Make sure the user wants to delete all items"
 	},
-	"emptyTrashbinConfirmationDialogContent": "Tous les éléments seront définitivement supprimés du serveur.\n\nCette action est irréversible",
+	"emptyTrashbinConfirmationDialogContent": "Všetky položky budú natrvalo odstránené zo servera.\n\nTáto akcia je nevratná",
 	"@emptyTrashbinConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete all items"
 	},
-	"unsetAlbumCoverTooltip": "Enlever la couverture",
+	"unsetAlbumCoverTooltip": "Zrušiť obal",
 	"@unsetAlbumCoverTooltip": {
 		"description": "Unset the cover of the opened album"
 	},
-	"muteTooltip": "Mettre en sourdine",
+	"muteTooltip": "Stlmiť",
 	"@muteTooltip": {
 		"description": "Mute the video player"
 	},
-	"unmuteTooltip": "Rétablir le son",
+	"unmuteTooltip": "Zapnúť zvuk",
 	"@unmuteTooltip": {
 		"description": "Unmute the video player"
 	},
-	"collectionPeopleLabel": "Personnes",
+	"collectionPeopleLabel": "Ľudia",
 	"@collectionPeopleLabel": {
 		"description": "Browse photos grouped by person"
 	},
-	"slideshowTooltip": "Diaporama",
+	"slideshowTooltip": "Prezentácia",
 	"@slideshowTooltip": {
 		"description": "A button to start a slideshow from the current collection"
 	},
-	"slideshowSetupDialogTitle": "Configuration diaporama",
+	"slideshowSetupDialogTitle": "Nastaviť prezentáciu",
 	"@slideshowSetupDialogTitle": {
 		"description": "Setup slideshow before starting"
 	},
-	"slideshowSetupDialogDurationTitle": "Durée image (MM:SS)",
+	"slideshowSetupDialogDurationTitle": "Dĺžka zobrazenia obrázka (MM:SS)",
 	"@slideshowSetupDialogDurationTitle": {
 		"description": "Set the duration of each image in MM:SS format. This setting is ignored for videos"
 	},
-	"slideshowSetupDialogShuffleTitle": "Mélanger",
+	"slideshowSetupDialogShuffleTitle": "Zamiešať",
 	"@slideshowSetupDialogShuffleTitle": {
 		"description": "Whether to shuffle the collection"
 	},
-	"slideshowSetupDialogRepeatTitle": "Répéter",
+	"slideshowSetupDialogRepeatTitle": "Opakovať",
 	"@slideshowSetupDialogRepeatTitle": {
 		"description": "Whether to restart the slideshow from the beginning after the last slide"
 	},
-	"slideshowSetupDialogReverseTitle": "Inverser",
+	"slideshowSetupDialogReverseTitle": "Obrátiť poradie",
 	"@slideshowSetupDialogReverseTitle": {
 		"description": "Whether to play the slideshow in reverse order"
 	},
-	"linkCopiedNotification": "Lien copié",
+	"linkCopiedNotification": "Odkaz skopírovaný",
 	"@linkCopiedNotification": {
 		"description": "Copied the share link to clipboard"
 	},
-	"shareMethodDialogTitle": "Partager comme",
+	"shareMethodDialogTitle": "Zdieľať ako",
 	"@shareMethodDialogTitle": {
 		"description": "Let the user pick how they want to share"
 	},
-	"shareMethodPreviewTitle": "Aperçu",
+	"shareMethodPreviewTitle": "Náhľad",
 	"@shareMethodPreviewTitle": {
 		"description": "Share the preview of a file"
 	},
-	"shareMethodPreviewDescription": "Partager un aperçu de plus basse qualité aux autres application (ne supporte que les images)",
-	"shareMethodOriginalFileTitle": "Fichier original",
+	"shareMethodPreviewDescription": "Zdieľať zníženú kvalitu náhľadu do iných aplikácií (len obrázky)",
+	"shareMethodOriginalFileTitle": "Pôvodný súbor",
 	"@shareMethodOriginalFileTitle": {
 		"description": "Share the original file"
 	},
-	"shareMethodOriginalFileDescription": "Télécharge le fichier original et le partage aux autres applications",
-	"shareMethodPublicLinkTitle": "Lien public",
+	"shareMethodOriginalFileDescription": "Stiahnuť pôvodný súbor a zdieľať ho s inými aplikáciami",
+	"shareMethodPublicLinkTitle": "Verejný odkaz",
 	"@shareMethodPublicLinkTitle": {
 		"description": "Create a share link on server and share it"
 	},
-	"shareMethodPublicLinkDescription": "Créez un nouveau lien public sur le serveur. Toute personne disposant du lien peut accéder au fichier",
-	"shareMethodPasswordLinkTitle": "Lien protégé par mot de passe",
+	"shareMethodPublicLinkDescription": "Vytvoriť na serveri nový verejný odkaz. Ktokoľvek s odkazom môže súbor získať",
+	"shareMethodPasswordLinkTitle": "Odkaz chránený heslom",
 	"@shareMethodPasswordLinkTitle": {
 		"description": "Create a password protected share link on server and share it"
 	},
-	"shareMethodPasswordLinkDescription": "Créer un nouveau lien protégé par mot de passe sur le serveur",
-	"collectionSharingLabel": "Partage",
+	"shareMethodPasswordLinkDescription": "Vytvoriť na serveri nový odkaz chránený heslom",
+	"collectionSharingLabel": "Zdieľanie",
 	"@collectionSharingLabel": {
 		"description": "List items being shared by the current account"
 	},
-	"fileLastSharedDescription": "Dernier partage le {date}",
+	"fileLastSharedDescription": "Naposledy zdieľané {date}",
 	"@fileLastSharedDescription": {
 		"description": "The date when this file was last shared by you",
 		"placeholders": {
@@ -869,7 +869,7 @@
 			}
 		}
 	},
-	"fileLastSharedByOthersDescription": "{user} a partagé avec vous le {date}",
+	"fileLastSharedByOthersDescription": "{user} s vami zdieľal dňa {date}",
 	"@fileLastSharedByOthersDescription": {
 		"description": "The date when this file was shared with you",
 		"placeholders": {
@@ -882,7 +882,7 @@
 			}
 		}
 	},
-	"albumLastSharedByOthersDescription": "{user} a partagé un album avec vous le {date}",
+	"albumLastSharedByOthersDescription": "{user} s vami zdieľal album {date}",
 	"@albumLastSharedByOthersDescription": {
 		"description": "The date when this album was shared with you",
 		"placeholders": {
@@ -895,43 +895,43 @@
 			}
 		}
 	},
-	"sharedWithLabel": "Partagé avec",
+	"sharedWithLabel": "Zdieľané s",
 	"@sharedWithLabel": {
 		"description": "A list of users or links where this file is sharing with"
 	},
-	"unshareTooltip": "Annuler le partage",
+	"unshareTooltip": "Zrušiť zdieľanie",
 	"@unshareTooltip": {
 		"description": "Remove a share"
 	},
-	"unshareSuccessNotification": "Partage supprimé",
+	"unshareSuccessNotification": "Odstránenie zdieľania prebehlo úspešne",
 	"@unshareSuccessNotification": {
 		"description": "Removed a share"
 	},
-	"locationLabel": "Emplacement",
+	"locationLabel": "Poloha",
 	"@locationLabel": {
 		"description": "Show where the file is located"
 	},
-	"multipleFilesLinkShareDialogContent": "Nextcloud ne prend pas en charge le lien de partage pour plusieurs fichiers. L'application copiera à la place les fichiers dans un nouveau dossier et partagera le dossier à la place.",
+	"multipleFilesLinkShareDialogContent": "Nextcloud nepodporuje zdieľanie odkazu pre viaceré súbory. Aplikácia namiesto toho SKOPÍRUJE súbory do nového priečinka a ten zdieľa.",
 	"@multipleFilesLinkShareDialogContent": {
 		"description": "Dialog shown when sharing multiple files as link"
 	},
-	"folderNameInputHint": "Nom de dossier",
+	"folderNameInputHint": "Názov priečinka",
 	"@folderNameInputHint": {
 		"description": "Input field for folder name"
 	},
-	"folderNameInputInvalidEmpty": "Veuillez entrer le nom du dossier",
+	"folderNameInputInvalidEmpty": "Zadajte názov priečinka",
 	"@folderNameInputInvalidEmpty": {
 		"description": "Folder name cannot be left empty"
 	},
-	"folderNameInputInvalidCharacters": "Contient des caractères non valides",
+	"folderNameInputInvalidCharacters": "Obsahuje neplatné znaky",
 	"@folderNameInputInvalidCharacters": {
 		"description": "Folder name contains characters that are not allowed"
 	},
-	"createShareProgressText": "Créé un partage",
+	"createShareProgressText": "Vytváram zdieľanie",
 	"@createShareProgressText": {
 		"description": "Message shown when sharing files"
 	},
-	"copyItemsFailureNotification": "{count, plural, =1{Échec de la copie de 1 élément} other{Échec de la copie de {count} éléments}}",
+	"copyItemsFailureNotification": "{count, plural, one{Nepodarilo sa skopírovať 1 položku} other{Nepodarilo sa skopírovať {count} položiek}}",
 	"@copyItemsFailureNotification": {
 		"description": "Error message shown when some files cannot be copied",
 		"placeholders": {
@@ -940,23 +940,23 @@
 			}
 		}
 	},
-	"unshareLinkShareDirDialogTitle": "Supprimer le dossier ?",
+	"unshareLinkShareDirDialogTitle": "Vymazať priečinok?",
 	"@unshareLinkShareDirDialogTitle": {
 		"description": "Dialog shown after user unshared a dir originally created by the app to share multiple files"
 	},
-	"unshareLinkShareDirDialogContent": "Ce dossier a été créé par l'application pour partager plusieurs fichiers sous forme de lien. Il n'est désormais plus partagé avec aucun tiers, voulez-vous supprimer ce dossier ?",
+	"unshareLinkShareDirDialogContent": "Tento priečinok bol vytvorený aplikáciou na zdieľanie viacerých súborov ako odkaz. Teraz už nie je s nikým zdieľaný, chcete tento priečinok vymazať?",
 	"@unshareLinkShareDirDialogContent": {
 		"description": "Dialog shown after user unshared a dir originally created by the app to share multiple files"
 	},
-	"addToCollectionsViewTooltip": "Ajouter à la collection",
+	"addToCollectionsViewTooltip": "Pridať do zbierky",
 	"@addToCollectionsViewTooltip": {
 		"description": "Albums shared with you are not automatically added to the Collections view, unless you choose to do so, which is what this button does"
 	},
-	"shareAlbumDialogTitle": "Partager avec un utilisateur",
+	"shareAlbumDialogTitle": "Zdieľať s používateľom",
 	"@shareAlbumDialogTitle": {
 		"description": "Dialog to share an album with another user"
 	},
-	"shareAlbumSuccessWithErrorNotification": "Album partagé avec {user}, mais échec du partage de certains fichiers",
+	"shareAlbumSuccessWithErrorNotification": "Album zdieľaný s {user}, ale nepodarilo sa zdieľať niektoré súbory",
 	"@shareAlbumSuccessWithErrorNotification": {
 		"description": "Shared an album with another user successfully, but some files inside the album cannot be shared",
 		"placeholders": {
@@ -965,7 +965,7 @@
 			}
 		}
 	},
-	"unshareAlbumSuccessWithErrorNotification": "Suppression de partage de l'album avec {user}, mais échec du partage de certains fichiers",
+	"unshareAlbumSuccessWithErrorNotification": "Album prestal byť zdieľaný s {user}, ale nepodarilo sa odzdielať niektoré súbory",
 	"@unshareAlbumSuccessWithErrorNotification": {
 		"description": "Unshared an album with another user successfully, but some files inside the album cannot be unshared",
 		"placeholders": {
@@ -974,19 +974,19 @@
 			}
 		}
 	},
-	"fixSharesTooltip": "Fixer les partages",
+	"fixSharesTooltip": "Opraviť zdieľania",
 	"@fixSharesTooltip": {
 		"description": "Fix file shares in an album. Due to limitation of the server API, album and its files are shared separately, but they are both needed for shared album to work correctly. This button will attempt to synchronize them"
 	},
-	"fixTooltip": "Réparer",
+	"fixTooltip": "Opraviť",
 	"@fixTooltip": {
 		"description": "Fix an issue"
 	},
-	"fixAllTooltip": "Tout réparer",
+	"fixAllTooltip": "Opraviť všetko",
 	"@fixAllTooltip": {
 		"description": "Fix all listed issues"
 	},
-	"missingShareDescription": "Non partagé avec {user}",
+	"missingShareDescription": "Nezdieľané s {user}",
 	"@missingShareDescription": {
 		"description": "The album is shared with user but a file is NOT",
 		"placeholders": {
@@ -995,7 +995,7 @@
 			}
 		}
 	},
-	"extraShareDescription": "Partagé avec {user}",
+	"extraShareDescription": "Zdieľané s {user}",
 	"@extraShareDescription": {
 		"description": "The album is NOT shared with user but a file is",
 		"placeholders": {
@@ -1004,26 +1004,26 @@
 			}
 		}
 	},
-	"defaultButtonLabel": "DÉFAUT",
-	"addUserInputHint": "Ajouter un utilisateur",
+	"defaultButtonLabel": "VÝCHODZIE",
+	"addUserInputHint": "Pridať užívateľa",
 	"@addUserInputHint": {
 		"description": "Input a user name to share this album with"
 	},
-	"sharedAlbumInfoDialogTitle": "Présentation de l'album partagé",
+	"sharedAlbumInfoDialogTitle": "Predstavujeme zdieľaný album",
 	"@sharedAlbumInfoDialogTitle": {
 		"description": "This dialog is shown when user first open a shared album"
 	},
-	"sharedAlbumInfoDialogContent": "L'album partagé permet à plusieurs utilisateurs sur le même serveur d'accéder au même album. Veuillez lire attentivement les limitations avant de continuer",
+	"sharedAlbumInfoDialogContent": "Zdieľaný album umožňuje viacerým používateľom na rovnakom serveri pristupovať k rovnakému albumu. Pred pokračovaním si pozorne prečítajte obmedzenia.",
 	"@sharedAlbumInfoDialogContent": {
 		"description": "This dialog is shown when user first open a shared album"
 	},
-	"learnMoreButtonLabel": "EN APPRENDRE PLUS",
-	"migrateDatabaseProcessingNotification": "Mise à jour de la base de données",
+	"learnMoreButtonLabel": "DOZVEDIEŤ SA VIAC",
+	"migrateDatabaseProcessingNotification": "Aktualizácia databázy",
 	"@migrateDatabaseProcessingNotification": {
 		"description": "Migrate database to work with the updated app"
 	},
-	"migrateDatabaseFailureNotification": "Échec de la migration de la base de données",
-	"memoryAlbumName": "{count, plural, =1{Il y a 1 an} other{Il y a {count} ans}}",
+	"migrateDatabaseFailureNotification": "Nepodarilo sa migrovať databázu",
+	"memoryAlbumName": "{count, plural, one{pred 1 rokom} other{pred {count} rokmi}}",
 	"@memoryAlbumName": {
 		"description": "Memory albums are generated by the app and include photos in the past years",
 		"placeholders": {
@@ -1032,409 +1032,409 @@
 			}
 		}
 	},
-	"homeFolderNotFoundDialogTitle": "Dossier personnel introuvable",
+	"homeFolderNotFoundDialogTitle": "Domovský priečinok nebol nájdený",
 	"@homeFolderNotFoundDialogTitle": {
 		"description": "The app failed to scan the user's home folder on signing in"
 	},
-	"homeFolderNotFoundDialogContent": "Veuillez corriger l'URL WebDAV indiquée ci-dessous. Vous pouvez trouver l'URL dans l'interface Web de Nextcloud.",
+	"homeFolderNotFoundDialogContent": "Prosím opravte URL WebDAV uvedenú nižšie. URL môžete nájsť vo webovom rozhraní Nextcloud.",
 	"@homeFolderNotFoundDialogContent": {
 		"description": "Ask the user to provide us the correct WebDAV URL"
 	},
-	"homeFolderInputInvalidEmpty": "Veuillez saisir le nom de votre dossier personnel",
+	"homeFolderInputInvalidEmpty": "Zadajte názov vášho domovského priečinka",
 	"@homeFolderInputInvalidEmpty": {
 		"description": "Home folder can't be left empty"
 	},
-	"createCollectionTooltip": "Nouvelle collection",
+	"createCollectionTooltip": "Nová zbierka",
 	"@createCollectionTooltip": {
 		"description": "Create a new collection. A collection can be an album, a folder, or something else in the future"
 	},
-	"createCollectionDialogFolderLabel": "Dossier",
+	"createCollectionDialogFolderLabel": "Priečinok",
 	"@createCollectionDialogFolderLabel": {
 		"description": "Create a folder as collection"
 	},
-	"createCollectionDialogFolderDescription": "Afficher les photos dans un dossier",
+	"createCollectionDialogFolderDescription": "Zobraziť fotografie vo vnútri priečinka",
 	"@createCollectionDialogFolderDescription": {
 		"description": "Describe how a folder collection works"
 	},
-	"collectionFavoritesLabel": "Favoris",
+	"collectionFavoritesLabel": "Obľúbené",
 	"@collectionFavoritesLabel": {
 		"description": "Browse photos added to favorites"
 	},
-	"favoriteTooltip": "Favoris",
+	"favoriteTooltip": "Obľúbiť",
 	"@favoriteTooltip": {
 		"description": "Add photo to favorites"
 	},
-	"favoriteSuccessNotification": "Ajouté aux favoris",
+	"favoriteSuccessNotification": "Pridané do obľúbených",
 	"@favoriteSuccessNotification": {
 		"description": "Successfully added photos to favorites"
 	},
-	"favoriteFailureNotification": "Échec de l'ajout aux favoris",
+	"favoriteFailureNotification": "Nepodarilo sa pridať do obľúbených",
 	"@favoriteFailureNotification": {
 		"description": "Failed adding photos to favorites"
 	},
-	"unfavoriteTooltip": "Supprimer des favoris",
+	"unfavoriteTooltip": "Odobrať z obľúbených",
 	"@unfavoriteTooltip": {
 		"description": "Remove photo to favorites"
 	},
-	"unfavoriteSuccessNotification": "Supprimé des favoris",
+	"unfavoriteSuccessNotification": "Odstránené z obľúbených",
 	"@unfavoriteSuccessNotification": {
 		"description": "Successfully removed photos from favorites"
 	},
-	"unfavoriteFailureNotification": "Échec de la suppression des favoris",
+	"unfavoriteFailureNotification": "Nepodarilo sa odstrániť z obľúbených",
 	"@unfavoriteFailureNotification": {
 		"description": "Failed removing photos from favorites"
 	},
-	"createCollectionDialogTagLabel": "Tag",
+	"createCollectionDialogTagLabel": "Štítok",
 	"@createCollectionDialogTagLabel": {
 		"description": "Create a collection containing files with tags"
 	},
-	"createCollectionDialogTagDescription": "Afficher les photos avec des tags spécifiques",
+	"createCollectionDialogTagDescription": "Zobraziť fotografie so špecifickými štítkami",
 	"@createCollectionDialogTagDescription": {
 		"description": "Describe how a tag collection works"
 	},
-	"addTagInputHint": "Ajouter un tag",
+	"addTagInputHint": "Pridať štítok",
 	"@addTagInputHint": {
 		"description": "Input a tag"
 	},
-	"tagPickerNoTagSelectedNotification": "Veuillez ajouter au moins 1 tag",
+	"tagPickerNoTagSelectedNotification": "Prosím pridajte aspoň 1 štítok",
 	"@tagPickerNoTagSelectedNotification": {
 		"description": "At least 1 tag is required to create a tag collection. This error is shown when user try to create one without selecting any tags"
 	},
-	"backgroundServiceStopping": "Arrêt du service",
+	"backgroundServiceStopping": "Zastavovanie služby",
 	"@backgroundServiceStopping": {
 		"description": "The background service is stopping itself"
 	},
-	"metadataTaskPauseLowBatteryNotification": "La batterie est faible",
+	"metadataTaskPauseLowBatteryNotification": "Nízka batéria",
 	"@metadataTaskPauseLowBatteryNotification": {
 		"description": "Shown when the app has paused reading image metadata due to low battery"
 	},
-	"enhanceTooltip": "Améliorer",
+	"enhanceTooltip": "Vylepšiť",
 	"@enhanceTooltip": {
 		"description": "Enhance a photo"
 	},
-	"enhanceButtonLabel": "AMÉLIORER",
-	"enhanceIntroDialogTitle": "Amélioré vos photos",
-	"enhanceIntroDialogDescription": "Vos photos sont traîter sur l'appareil. Par défaut, elle sont réduite à 2048x1546. Vous pouvez ajuster la résolution dans les paramètres",
-	"enhanceLowLightTitle": "Amélioration pour basse lumière",
+	"enhanceButtonLabel": "VYLEPŠIŤ",
+	"enhanceIntroDialogTitle": "Vylepšite svoje fotografie",
+	"enhanceIntroDialogDescription": "Vaše fotografie sa spracovávajú lokálne na vašom zariadení. Predvolene sa zmenšia na 2048x1536. Výstupné rozlíšenie môžete upraviť v Nastaveniach",
+	"enhanceLowLightTitle": "Vylepšenie pri slabom svetle",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"
 	},
-	"enhanceLowLightDescription": "Augmente la luminosité des photos prise en environnement peu lumineux",
-	"enhanceLowLightParamBrightnessLabel": "Luminosité",
+	"enhanceLowLightDescription": "Zosvetlite fotografie urobené v slabom osvetlení",
+	"enhanceLowLightParamBrightnessLabel": "Jas",
 	"@enhanceLowLightParamBrightnessLabel": {
 		"description": "This parameter sets how much brighter the output will be"
 	},
-	"collectionEditedPhotosLabel": "Edité (local)",
+	"collectionEditedPhotosLabel": "Upravené (lokálne)",
 	"@collectionEditedPhotosLabel": {
 		"description": "List photos on your device that were modified by the app, via image enhancements or the image editor"
 	},
-	"deletePermanentlyLocalConfirmationDialogContent": "Les éléments sélectionné serons supprimer définitivement de l'appareil.\n\nCette action n'est pas réversible",
+	"deletePermanentlyLocalConfirmationDialogContent": "Vybrané položky budú natrvalo odstránené z tohto zariadenia.\n\nTáto akcia je nevratná",
 	"@deletePermanentlyLocalConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete the items from the current device"
 	},
-	"enhancePortraitBlurTitle": "Flou d'arrière plan",
+	"enhancePortraitBlurTitle": "Portrétový efekt rozmazania",
 	"@enhancePortraitBlurTitle": {
 		"description": "Blur the background of a photo"
 	},
-	"enhancePortraitBlurDescription": "Ajoute un effet de flou a l'arrière de vos photos, fonctionne mieux pour les portraits",
-	"enhancePortraitBlurParamBlurLabel": "Niveau de flou",
+	"enhancePortraitBlurDescription": "Rozmažte pozadie vašich fotografií, najlepšie funguje pri portrétoch",
+	"enhancePortraitBlurParamBlurLabel": "Rozmazanie",
 	"@enhancePortraitBlurParamBlurLabel": {
 		"description": "This parameter sets the radius of the blur filter"
 	},
-	"enhanceSuperResolution4xTitle": "Super-resolution (4x)",
+	"enhanceSuperResolution4xTitle": "Super-rozlíšenie (4x)",
 	"@enhanceSuperResolution4xTitle": {
 		"description": "Upscale an image. The algorithm implemented in the app will upscale to 4x the original resolution (eg, 100x100 to 400x400)"
 	},
-	"enhanceSuperResolution4xDescription": "Augmente la résolution de vos photos par 4 (voir l'aide pour plus de détail sur la résolution maximum)",
-	"enhanceStyleTransferTitle": "Transfert de style",
+	"enhanceSuperResolution4xDescription": "Zväčšite vaše fotografie na 4x pôvodného rozlíšenia (pozrite nápovedu pre detaily)",
+	"enhanceStyleTransferTitle": "Prenos štýlu",
 	"@enhanceStyleTransferTitle": {
 		"description": "Transfer the image style from a reference image to a photo"
 	},
-	"enhanceStyleTransferStyleDialogTitle": "Choisissez un style",
+	"enhanceStyleTransferStyleDialogTitle": "Vyberte štýl",
 	"@enhanceStyleTransferStyleDialogTitle": {
 		"description": "Pick a reference image for the style transfer algorithm"
 	},
-	"enhanceStyleTransferStyleDialogDescription": "Transferer le style d'une image de référence sur vos photos",
-	"enhanceStyleTransferNoStyleSelectedNotification": "Choisissez un style",
+	"enhanceStyleTransferStyleDialogDescription": "Preneste vzhľad z referenčného obrázka do vašich fotografií",
+	"enhanceStyleTransferNoStyleSelectedNotification": "Prosím vyberte štýl",
 	"@enhanceStyleTransferNoStyleSelectedNotification": {
 		"description": "Show this error if users did not pick a reference image"
 	},
-	"enhanceColorPopTitle": "Augmenter le contraste",
+	"enhanceColorPopTitle": "Farebný efekt",
 	"@enhanceColorPopTitle": {
 		"description": "Desaturate the background of a photo"
 	},
-	"enhanceColorPopDescription": "Desature l'arrière plan des photos, fonctionne mieux avec les portraits",
-	"enhanceGenericParamWeightLabel": "Poids",
+	"enhanceColorPopDescription": "Odstráňte farebnosť pozadia vašich fotografií, najlepšie funguje pri portrétoch",
+	"enhanceGenericParamWeightLabel": "Váha",
 	"@enhanceGenericParamWeightLabel": {
 		"description": "This generic parameter sets the weight of the applied effect. The effect will be more obvious when the weight is high."
 	},
-	"enhanceRetouchTitle": "Retouche automatique",
+	"enhanceRetouchTitle": "Automatické retušovanie",
 	"@enhanceRetouchTitle": {
 		"description": "Automatically improve your photo"
 	},
-	"enhanceRetouchDescription": "Retouche automatiquement vos photos, ameliore l'éclat des couleurs",
-	"doubleTapExitNotification": "Tapper une deuxième fois pour quitter",
+	"enhanceRetouchDescription": "Automaticky upravte vaše fotografie, zlepšite celkové farby a živost",
+	"doubleTapExitNotification": "Ťuknite znova pre ukončenie",
 	"@doubleTapExitNotification": {
 		"description": "If double tap to exit is enabled in settings, shown when users tap the back button"
 	},
-	"imageEditDiscardDialogTitle": "Quitter sans enregistrer ?",
+	"imageEditDiscardDialogTitle": "Zahodiť zmeny?",
 	"@imageEditDiscardDialogTitle": {
 		"description": "Warn before dismissing image editor (e.g., user pressing back button)"
 	},
-	"imageEditDiscardDialogContent": "Vos changements ne sont pas sauvegardés",
-	"discardButtonLabel": "Quitter",
+	"imageEditDiscardDialogContent": "Vaše zmeny neboli uložené",
+	"discardButtonLabel": "ZAHODIŤ",
 	"@discardButtonLabel": {
 		"description": "Discard the current unsaved content"
 	},
-	"saveTooltip": "Sauvegarder",
+	"saveTooltip": "Uložiť",
 	"@saveTooltip": {
 		"description": "Save the current content"
 	},
-	"imageEditColorBrightness": "Luminosité",
+	"imageEditColorBrightness": "Jas",
 	"@imageEditColorBrightness": {
 		"description": "Adjust the brightness of an image"
 	},
-	"imageEditColorContrast": "Contraste",
+	"imageEditColorContrast": "Kontrast",
 	"@imageEditColorContrast": {
 		"description": "Adjust the contrast of an image"
 	},
-	"imageEditColorWhitePoint": "Point blanc",
+	"imageEditColorWhitePoint": "Biely bod",
 	"@imageEditColorWhitePoint": {
 		"description": "Adjust the white point of an image. Learn more about this adjustment: https://www.photoreview.com.au/tips/editing/advanced-levels-adjustments"
 	},
-	"imageEditColorBlackPoint": "Point noir",
+	"imageEditColorBlackPoint": "Čierny bod",
 	"@imageEditColorBlackPoint": {
 		"description": "Adjust the black point of an image"
 	},
-	"imageEditColorSaturation": "Saturation",
+	"imageEditColorSaturation": "Saturácia",
 	"@imageEditColorSaturation": {
 		"description": "Adjust the color saturation of an image"
 	},
-	"imageEditColorWarmth": "Chaleur",
+	"imageEditColorWarmth": "Teplota",
 	"@imageEditColorWarmth": {
 		"description": "This roughly equals to adjusting the color temperature of an image. The end result is to shift the image colors such that it looks 'warmer' or 'cooler'"
 	},
-	"imageEditColorTint": "Teinte",
+	"imageEditColorTint": "Odtieň",
 	"@imageEditColorTint": {
 		"description": "Shift colors from a green to a magenta tint"
 	},
-	"imageEditTitle": "Aperçu des modifications",
+	"imageEditTitle": "Náhľad úprav",
 	"@imageEditTitle": {
 		"description": "Title of the image editor"
 	},
-	"imageEditToolbarColorLabel": "Couleur",
+	"imageEditToolbarColorLabel": "Farba",
 	"@imageEditToolbarColorLabel": {
 		"description": "Label of the color tools. These can be used to adjust the color of an image"
 	},
-	"imageEditToolbarTransformLabel": "Transformation",
+	"imageEditToolbarTransformLabel": "Transformovať",
 	"@imageEditToolbarTransformLabel": {
 		"description": "Label of the transformation tools. These can be used to transform an image, e.g., rotate it"
 	},
-	"imageEditTransformOrientation": "Orientation",
+	"imageEditTransformOrientation": "Orientácia",
 	"@imageEditTransformOrientation": {
 		"description": "Change the orientation of the image, 90 degree per step"
 	},
-	"imageEditTransformOrientationClockwise": "h",
+	"imageEditTransformOrientationClockwise": "po smere hodín",
 	"@imageEditTransformOrientationClockwise": {
 		"description": "Indicate a clockwise rotation. This text must be short as there's only minimal space"
 	},
-	"imageEditTransformOrientationCounterclockwise": "ah",
+	"imageEditTransformOrientationCounterclockwise": "proti smeru hodín",
 	"@imageEditTransformOrientationCounterclockwise": {
 		"description": "Indicate a counterclockwise rotation. This text must be short as there's only minimal space"
 	},
-	"imageEditTransformCrop": "Rogner",
+	"imageEditTransformCrop": "Orezať",
 	"@imageEditTransformCrop": {
 		"description": "Crop the image"
 	},
-	"categoriesLabel": "Catégories",
-	"searchLandingCategoryVideosLabel": "Vidéos",
+	"categoriesLabel": "Kategórie",
+	"searchLandingCategoryVideosLabel": "Videá",
 	"@searchLandingCategoryVideosLabel": {
 		"description": "Search all videos"
 	},
-	"searchFilterButtonLabel": "FILTRES",
+	"searchFilterButtonLabel": "FILTRE",
 	"@searchFilterButtonLabel": {
 		"description": "Modify search filters"
 	},
-	"searchFilterDialogTitle": "Filtres",
+	"searchFilterDialogTitle": "Filtre vyhľadávania",
 	"@searchFilterDialogTitle": {
 		"description": "Dialog to modify search filters"
 	},
-	"applyButtonLabel": "APPLIQUER",
+	"applyButtonLabel": "POUŽIŤ",
 	"@applyButtonLabel": {
 		"description": "A confirmation button, typically in a dialog, that apply the current settings"
 	},
-	"searchFilterOptionAnyLabel": "Tous",
+	"searchFilterOptionAnyLabel": "Hocičo",
 	"@searchFilterOptionAnyLabel": {
 		"description": "This is the default option for all search filters. Filters with this value will be ignored"
 	},
-	"searchFilterOptionTrueLabel": "Vrai",
+	"searchFilterOptionTrueLabel": "Pravda",
 	"@searchFilterOptionTrueLabel": {
 		"description": "Positive option for a boolean filter"
 	},
-	"searchFilterOptionFalseLabel": "Faux",
+	"searchFilterOptionFalseLabel": "Nepravda",
 	"@searchFilterOptionFalseLabel": {
 		"description": "Negative option for a boolean filter"
 	},
-	"searchFilterTypeLabel": "Type",
+	"searchFilterTypeLabel": "Typ",
 	"@searchFilterTypeLabel": {
 		"description": "Filter search results by file type"
 	},
-	"searchFilterTypeOptionImageLabel": "Image",
+	"searchFilterTypeOptionImageLabel": "Obrázok",
 	"@searchFilterTypeOptionImageLabel": {
 		"description": "Filter search results by file type"
 	},
-	"searchFilterBubbleTypeImageText": "images",
+	"searchFilterBubbleTypeImageText": "obrázky",
 	"@searchFilterBubbleTypeImageText": {
 		"description": "List of active search filters shown in the result page (by file type, image)"
 	},
-	"searchFilterTypeOptionVideoLabel": "Vidéo",
+	"searchFilterTypeOptionVideoLabel": "Video",
 	"@searchFilterTypeOptionVideoLabel": {
 		"description": "Filter search results by file type"
 	},
-	"searchFilterBubbleTypeVideoText": "vidéos",
+	"searchFilterBubbleTypeVideoText": "videá",
 	"@searchFilterBubbleTypeVideoText": {
 		"description": "List of active search filters shown in the result page (by file type, video)"
 	},
-	"searchFilterFavoriteLabel": "Favoris",
+	"searchFilterFavoriteLabel": "Obľúbené",
 	"@searchFilterFavoriteLabel": {
 		"description": "Filter search results by whether it's in favorites"
 	},
-	"searchFilterBubbleFavoriteTrueText": "favoris",
+	"searchFilterBubbleFavoriteTrueText": "obľúbené",
 	"@searchFilterBubbleFavoriteTrueText": {
 		"description": "List of active search filters shown in the result page (by favorites, true)"
 	},
-	"searchFilterBubbleFavoriteFalseText": "Non favoris",
+	"searchFilterBubbleFavoriteFalseText": "nie obľúbené",
 	"@searchFilterBubbleFavoriteFalseText": {
 		"description": "List of active search filters shown in the result page (by favorites, false)"
 	},
-	"showAllButtonLabel": "Tous",
+	"showAllButtonLabel": "ZOBRAZIŤ VŠETKO",
 	"@showAllButtonLabel": {
 		"description": "A button to show all items of a certain item group (e.g., show all recognized faces)"
 	},
-	"gpsPlaceText": "A proximité de {place}",
+	"gpsPlaceText": "Blízko {place}",
 	"@gpsPlaceText": {
 		"description": "The estimated place where a photo was taken at. The place could be a town, a city, an administrative region, or a country.",
 		"placeholders": {
 			"place": {}
 		}
 	},
-	"gpsPlaceAboutDialogTitle": "A propos",
+	"gpsPlaceAboutDialogTitle": "O mieste",
 	"@gpsPlaceAboutDialogTitle": {
 		"description": "Warn about the inaccurate nature of our offline reverse geocoding feature (i.e., converting coordinates into addresses)"
 	},
-	"gpsPlaceAboutDialogContent": "La localisation affiché n'est qu'une estimation et n'est pas garantie d'être exact. Ceci ne represente en rien notre point de vu sur des espaces disputés.",
+	"gpsPlaceAboutDialogContent": "Tu zobrazené miesto je len približný odhad a nie je zaručená jeho presnosť. Nevyjadruje naše názory na žiadne sporné územia.",
 	"@gpsPlaceAboutDialogContent": {
 		"description": "Warn about the inaccurate nature of our offline reverse geocoding feature (i.e., converting coordinates into addresses)"
 	},
-	"collectionPlacesLabel": "Localisation",
+	"collectionPlacesLabel": "Miesta",
 	"@collectionPlacesLabel": {
 		"description": "Browse photos grouped by place"
 	},
-	"imageSaveOptionDialogTitle": "Sauvegarder",
+	"imageSaveOptionDialogTitle": "Ukladanie výsledku",
 	"@imageSaveOptionDialogTitle": {
 		"description": "This dialog asks users to choose between saving the edited/enhanced result on the device or server"
 	},
-	"imageSaveOptionDialogContent": "Sélectionner où sauvegarder les images traitées. Si vous choisissez sur le serveur mais que l'envoi échoué, l'image sera sauvegardée sur l'appareil",
+	"imageSaveOptionDialogContent": "Vyberte, kam uložiť tento a budúce spracované obrázky. Ak zvolíte server, ale aplikácia ho nedokáže nahrať, bude uložený do vášho zariadenia.",
 	"@imageSaveOptionDialogContent": {
 		"description": "This dialog asks users to choose between saving the edited/enhanced result on the device or server"
 	},
-	"imageSaveOptionDialogDeviceButtonLabel": "APPAREIL",
+	"imageSaveOptionDialogDeviceButtonLabel": "ZARIADENIE",
 	"@imageSaveOptionDialogDeviceButtonLabel": {
 		"description": "Save the image on the current device"
 	},
-	"imageSaveOptionDialogServerButtonLabel": "SERVEUR",
+	"imageSaveOptionDialogServerButtonLabel": "SERVER",
 	"@imageSaveOptionDialogServerButtonLabel": {
 		"description": "Save the image on your Nextcloud server"
 	},
-	"initialSyncMessage": "Synchronisation avec le serveur pour la première fois",
+	"initialSyncMessage": "Synchronizácia so serverom prebieha prvýkrát",
 	"@initialSyncMessage": {
 		"description": "After adding a new account, the app need to sync with the server before showing anything. This message will be shown on screen instead with a proper progress bar and the folder being synced."
 	},
-	"loopTooltip": "Répéter",
+	"loopTooltip": "Opakovať",
 	"@loopTooltip": {
 		"description": "Enable or disable loop in the video player"
 	},
-	"createCollectionFailureNotification": "La création de la collection a échouée",
+	"createCollectionFailureNotification": "Nepodarilo sa vytvoriť zbierku",
 	"@createCollectionFailureNotification": {
 		"description": "Inform user that a collection cannot be created"
 	},
-	"addItemToCollectionTooltip": "Ajouter a la collection",
+	"addItemToCollectionTooltip": "Pridať do zbierky",
 	"@addItemToCollectionTooltip": {
 		"description": "Add one or more items to a collection"
 	},
-	"addItemToCollectionFailureNotification": "L'ajout a la collection a échoué",
+	"addItemToCollectionFailureNotification": "Nepodarilo sa pridať do zbierky",
 	"@addItemToCollectionFailureNotification": {
 		"description": "Inform user that the item cannot be added to a collection"
 	},
-	"setCollectionCoverFailureNotification": "Le changement de la couverture a échoué",
+	"setCollectionCoverFailureNotification": "Nepodarilo sa nastaviť obal zbierky",
 	"@setCollectionCoverFailureNotification": {
 		"description": "Cannot set the opened item as the collection cover"
 	},
-	"exportCollectionTooltip": "Exporter",
+	"exportCollectionTooltip": "Exportovať",
 	"@exportCollectionTooltip": {
 		"description": "Export an arbitrary Collection (typical one with generated contents) as a new static Collection"
 	},
-	"exportCollectionDialogTitle": "Exporter la collection",
-	"removeCollectionsFailedNotification": "La suppression des collections a échouée",
-	"errorUnauthenticated": "Accès non authentifié. Veuillez vous reconnecter si le problème persiste",
+	"exportCollectionDialogTitle": "Exportovať zbierku",
+	"removeCollectionsFailedNotification": "Nepodarilo sa odstrániť niektoré zbierky",
+	"errorUnauthenticated": "Neautentifikovaný prístup. Prihláste sa znova, ak problém pretrváva",
 	"@errorUnauthenticated": {
 		"description": "Error message when server responds with HTTP401"
 	},
-	"errorDisconnected": "Impossible de se connecter. Le serveur peut être hors ligne ou votre appareil peut être déconnecté",
+	"errorDisconnected": "Nie je možné sa pripojiť. Server môže byť offline alebo vaše zariadenie odpojené",
 	"@errorDisconnected": {
 		"description": "Error message when the app can't connect to the server"
 	},
-	"errorLocked": "Le fichier est verrouillé sur le serveur. Veuillez réessayer plus tard",
+	"errorLocked": "Súbor je uzamknutý na serveri. Skúste to neskôr",
 	"@errorLocked": {
 		"description": "Error message when server responds with HTTP423"
 	},
-	"errorInvalidBaseUrl": "Impossible de communiquer. Veuillez vous assurer que l'adresse est l'URL de base de votre instance Nextcloud",
+	"errorInvalidBaseUrl": "Nie je možné komunikovať. Uistite sa, že adresa je základná URL vašej inštancie Nextcloud",
 	"@errorInvalidBaseUrl": {
 		"description": "Error message when the base URL is invalid"
 	},
-	"errorWrongPassword": "Impossible à authentifier. Veuillez vérifier le nom d'utilisateur et le mot de passe",
+	"errorWrongPassword": "Nie je možné sa autentifikovať. Skontrolujte používateľské meno a heslo",
 	"@errorWrongPassword": {
 		"description": "Error message when the username or password is wrong"
 	},
-	"errorServerError": "Erreur du serveur. Veuillez vous assurer que le serveur est correctement configuré",
+	"errorServerError": "Chyba servera. Uistite sa, že server je správne nastavený",
 	"@errorServerError": {
 		"description": "HTTP 500"
 	},
-	"errorAlbumDowngrade": "Impossible de modifier cet album car il a été créé par une version ultérieure de cette application. Veuillez mettre à jour l'application et réessayer",
+	"errorAlbumDowngrade": "Tento album nie je možné upraviť, pretože bol vytvorený novšou verziou tejto aplikácie. Aktualizujte aplikáciu a skúste znova",
 	"@errorAlbumDowngrade": {
 		"description": "Album files are versioned. Overwriting a newer version is disallowed as it will lead to unexpected data loss"
 	},
-	"errorNoStoragePermission": "Exiger une autorisation d'accès au stockage",
+	"errorNoStoragePermission": "Požadované povolenie na prístup k úložisku",
 	"@errorNoStoragePermission": {
 		"description": "Missing permission on Android"
 	},
-	"settingsMetadataTitle": "Métadonnées",
+	"settingsMetadataTitle": "Metadata súborov",
 	"@settingsMetadataTitle": {
 		"description": "Metadata (e.g., date, resolution, GPS, etc)"
 	},
-	"settingsPersonProviderTitle": "Application de reconnaissance faciale",
+	"settingsPersonProviderTitle": "Poskytovateľ osôb",
 	"@settingsPersonProviderTitle": {
 		"description": "Select the server app for face recognition"
 	},
-	"settingsSeedColorSystemColorDescription": "Utiliser les couleurs système",
+	"settingsSeedColorSystemColorDescription": "Použiť systémovú farbu",
 	"@settingsSeedColorSystemColorDescription": {
 		"description": "Use color provided by the OS, i.e., Material You"
 	},
-	"settingsSeedColorPickerSystemColorButtonLabel": "COULEURS SYSTÈME",
+	"settingsSeedColorPickerSystemColorButtonLabel": "POUŽIŤ SYSTÉMOVÚ FARBU",
 	"@settingsSeedColorPickerSystemColorButtonLabel": {
 		"description": "Use color provided by the OS, i.e., Material You"
 	},
-	"searchLandingPeopleListEmptyText2": "Appuyer sur paramètres pour changer de fournisseur ou aide pour en savoir plus",
+	"searchLandingPeopleListEmptyText2": "Stlačte nastavenia pre zmenu poskytovateľa alebo pomoc pre viac informácií",
 	"@searchLandingPeopleListEmptyText2": {
 		"description": "Shown in the search landing page under the People section when there are no people"
 	},
-	"accountSettingsTooltip": "Paramètres du compte",
-	"contributorsTooltip": "Contributeur",
-	"setAsTooltip": "Utiliser comme",
+	"accountSettingsTooltip": "Nastavenie účtu",
+	"contributorsTooltip": "Prispievatelia",
+	"setAsTooltip": "Nastaviť ako",
 	"@setAsTooltip": {
 		"description": "e.g., set as wallpaper"
 	},
-	"deleteAccountConfirmDialogText": "Vous êtes sur le point de vous déconnecter de {server}",
+	"deleteAccountConfirmDialogText": "Chystáte sa odhlásiť zo servera {server}",
 	"@deleteAccountConfirmDialogText": {
 		"description": "Confirmation dialog when deleting an account (i.e., signing out)",
 		"placeholders": {
@@ -1443,14 +1443,14 @@
 			}
 		}
 	},
-	"settingsThemePrimaryColor": "Primaire",
-	"settingsThemeSecondaryColor": "Secondaire",
-	"settingsThemePresets": "Préréglages",
-	"settingsAppLock": "Verrouillage de l'application",
+	"settingsThemePrimaryColor": "Primárna",
+	"settingsThemeSecondaryColor": "Sekundárna",
+	"settingsThemePresets": "Predvoľby",
+	"settingsAppLock": "Zámok aplikácie",
 	"@settingsAppLock": {
 		"description": "If enabled, users need to authenticate themselves when opening the app"
 	},
-	"settingsAppLockTypeBiometric": "Biométrique",
+	"settingsAppLockTypeBiometric": "Biometria",
 	"@settingsAppLockTypeBiometric": {
 		"description": "Unlock app with fingerprint, face, etc"
 	},
@@ -1458,109 +1458,109 @@
 	"@settingsAppLockTypePin": {
 		"description": "Unlock app with 4 to 6 digits PIN"
 	},
-	"settingsAppLockTypePassword": "Mot de passe",
+	"settingsAppLockTypePassword": "Heslo",
 	"@settingsAppLockTypePassword": {
 		"description": "Unlock app with password"
 	},
-	"settingsAppLockDescription": "Si cette option est activée, il vous sera demandé de vous authentifier à l'ouverture de l'application. Cette fonctionnalité ne vous protège PAS contre les attaques réelles.",
-	"settingsAppLockSetupBiometricFallbackDialogTitle": "Choisissez une solution de secours lorsque la biométrie n'est pas disponible",
-	"settingsAppLockSetupPinDialogTitle": "Définir le code PIN pour déverrouiller l'application",
-	"settingsAppLockConfirmPinDialogTitle": "Saisissez à nouveau le même code PIN",
-	"settingsAppLockSetupPasswordDialogTitle": "Définir le mot de passe pour déverrouiller l'application",
-	"settingsAppLockConfirmPasswordDialogTitle": "Saisissez à nouveau le même mot de passe",
-	"appLockUnlockHint": "Déverrouiller l'application",
+	"settingsAppLockDescription": "Ak je povolené, pri otvorení aplikácie budete požiadaní o autentifikáciu. Táto funkcia VÁS NECHRÁNI pred reálnymi fyzickými útokmi.",
+	"settingsAppLockSetupBiometricFallbackDialogTitle": "Vyberte alternatívu, keď nie je k dispozícii biometria",
+	"settingsAppLockSetupPinDialogTitle": "Nastavte PIN na odomknutie aplikácie",
+	"settingsAppLockConfirmPinDialogTitle": "Zadajte rovnaký PIN znova",
+	"settingsAppLockSetupPasswordDialogTitle": "Nastavte heslo na odomknutie aplikácie",
+	"settingsAppLockConfirmPasswordDialogTitle": "Zadajte rovnaké heslo znova",
+	"appLockUnlockHint": "Odomknúť aplikáciu",
 	"@appLockUnlockHint": {
 		"description": "Unlock app via selected means (e.g., password) in case app lock is enabled by user"
 	},
-	"appLockUnlockWrongPassword": "Mot de passe incorrect",
+	"appLockUnlockWrongPassword": "Nesprávne heslo",
 	"@appLockUnlockWrongPassword": {
 		"description": "Unlock app via selected means (e.g., password) in case app lock is enabled by user"
 	},
-	"enabledText": "Activé",
-	"disabledText": "Désactivé",
-	"settingsManageTrustedCertificateTitle": "Gérer les certificats de confiance",
-	"trustedCertManagerPageTitle": "Certificats de confiance",
+	"enabledText": "Povolené",
+	"disabledText": "Zakázané",
+	"settingsManageTrustedCertificateTitle": "Spravovať dôveryhodné certifikáty",
+	"trustedCertManagerPageTitle": "Dôveryhodné certifikáty",
 	"@trustedCertManagerPageTitle": {
 		"description": "A page to manage trusted certificates"
 	},
-	"trustedCertManagerAlreadyTrustedError": "Déjà approuvé",
+	"trustedCertManagerAlreadyTrustedError": "Už je dôveryhodný",
 	"@trustedCertManagerAlreadyTrustedError": {
 		"description": "The selected cert has been trusted already"
 	},
-	"trustedCertManagerSelectServer": "Sélectionnez le serveur HTTPS",
+	"trustedCertManagerSelectServer": "Vyberte HTTPS server",
 	"@trustedCertManagerSelectServer": {
 		"description": "Select a server from the account list"
 	},
-	"trustedCertManagerNoHttpsServerError": "Aucun serveur disponible",
+	"trustedCertManagerNoHttpsServerError": "Žiadny dostupný HTTPS server",
 	"@trustedCertManagerNoHttpsServerError": {
 		"description": "There's no HTTPS server in the account list"
 	},
-	"trustedCertManagerFailedToRemoveCertError": "Impossible de supprimer le certificat",
-	"missingVideoThumbnailHelpDialogTitle": "Vous rencontrez des problèmes avec les miniatures des vidéos ?",
-	"dontShowAgain": "Ne plus afficher",
-	"settingsUseNewHttpEngine": "Utiliser le nouveau moteur HTTP",
-	"settingsUseNewHttpEngineDescription": "Nouveau moteur HTTP basé sur Chromium, prenant en charge de nouvelles normes telles que HTTP/2* et HTTP/3 QUIC*.\n\nLimitations :\nNous ne pouvons plus gérer les certificats auto-signés. Vous devez importer vos certificats CA dans le magasin de confiance du système pour qu'ils fonctionnent.\n\n* HTTPS est requis pour HTTP/2 et HTTP/3",
-	"settingsRestartNeededDialog": "Veuillez redémarrer l'application pour appliquer les modifications",
-	"mapBrowserDateRangeLabel": "Plage de dates",
+	"trustedCertManagerFailedToRemoveCertError": "Nepodarilo sa odstrániť certifikát",
+	"missingVideoThumbnailHelpDialogTitle": "Máte problémy s miniatúrami videí?",
+	"dontShowAgain": "Už viac nezobrazovať",
+	"settingsUseNewHttpEngine": "Použiť nový HTTP engine",
+	"settingsUseNewHttpEngineDescription": "Nový HTTP engine založený na Chromium, podporuje nové štandardy ako HTTP/2* a HTTP/3 QUIC*.\n\nObmedzenia:\nVlastnoručne podpísané certifikáty nemožno nami spravovať. Musíte importovať vaše CA certifikáty do systémového úložiska dôveryhodných certifikátov.\n\n* HTTPS je požadované pre HTTP/2 a HTTP/3",
+	"settingsRestartNeededDialog": "Reštartujte aplikáciu pre použitie zmien",
+	"mapBrowserDateRangeLabel": "Časové rozpätie",
 	"@mapBrowserDateRangeLabel": {
 		"description": "Filter photos by date range"
 	},
-	"mapBrowserDateRangeThisMonth": "Ce mois-ci",
-	"mapBrowserDateRangePrevMonth": "Mois précédent",
-	"mapBrowserDateRangeThisYear": "Cette année",
-	"mapBrowserDateRangeCustom": "Personnalisée",
-	"homeTabMapBrowser": "Carte",
-	"mapBrowserSetDefaultDateRangeButton": "Définir par défaut",
-	"todayText": "Aujourd'hui",
-	"settingsExifSupportTitle2": "Prise en charge EXIF ​​côté client",
+	"mapBrowserDateRangeThisMonth": "Tento mesiac",
+	"mapBrowserDateRangePrevMonth": "Predchádzajúci mesiac",
+	"mapBrowserDateRangeThisYear": "Tento rok",
+	"mapBrowserDateRangeCustom": "Vlastné",
+	"homeTabMapBrowser": "Mapa",
+	"mapBrowserSetDefaultDateRangeButton": "Nastaviť ako predvolené",
+	"todayText": "Dnes",
+	"settingsExifSupportTitle2": "Klientská podpora EXIF",
 	"@settingsExifSupportTitle2": {
 		"description": "Title of the EXIF support setting"
 	},
-	"settingsViewerCustomizeAppBarTitle": "Personnaliser la barre d'applications",
-	"settingsViewerCustomizeBottomAppBarTitle": "Personnaliser la barre d'application inférieure",
-	"settingsCollectionsCustomizeNavigationBarTitle": "Personnaliser la barre de navigation",
-	"exifSupportNextcloud28Notes": "Le support côté client complète votre serveur. L'application traitera les fichiers et les attributs non pris en charge par Nextcloud",
+	"settingsViewerCustomizeAppBarTitle": "Prispôsobiť hornú lištu aplikácie",
+	"settingsViewerCustomizeBottomAppBarTitle": "Prispôsobiť spodnú lištu aplikácie",
+	"settingsCollectionsCustomizeNavigationBarTitle": "Prispôsobiť navigačný panel",
+	"exifSupportNextcloud28Notes": "Klientska podpora dopĺňa váš server. Aplikácia spracuje súbory a atribúty nepodporované Nextcloudom",
 	"@exifSupportNextcloud28Notes": {
 		"description": "Extra notes for Nextcloud 28+"
 	},
-	"exifSupportConfirmationDialogTitle2": "Activer la prise en charge EXIF côté client ?",
+	"exifSupportConfirmationDialogTitle2": "Povoliť klientsku podporu EXIF?",
 	"@exifSupportConfirmationDialogTitle2": {
 		"description": "Title of the dialog to confirm enabling exif support"
 	},
-	"createCollectionDialogAlbumLabel2": "Album côté client",
+	"createCollectionDialogAlbumLabel2": "Klientsky album",
 	"@createCollectionDialogAlbumLabel2": {
 		"description": "Create an album as collection"
 	},
-	"createCollectionDialogAlbumDescription2": "Album avec des fonctionnalités supplémentaires, accessible uniquement avec cette application",
+	"createCollectionDialogAlbumDescription2": "Album s dodatočnými funkciami, prístupný len v tejto aplikácii",
 	"@createCollectionDialogAlbumDescription2": {
 		"description": "Describe how an album collection works"
 	},
-	"createCollectionDialogNextcloudAlbumLabel2": "Album côté serveur",
+	"createCollectionDialogNextcloudAlbumLabel2": "Serverový album",
 	"@createCollectionDialogNextcloudAlbumLabel2": {
 		"description": "Server-side albums that are available in Nextcloud 25+"
 	},
-	"createCollectionDialogNextcloudAlbumDescription2": "Créez un album sur votre serveur, accessible avec n'importe quelle application",
-	"alternativeSignIn": "Connectez-vous plutôt avec votre nom d'utilisateur et votre mot de passe",
+	"createCollectionDialogNextcloudAlbumDescription2": "Vytvorte album na vašom serveri, prístupné z akejkoľvek aplikácie",
+	"alternativeSignIn": "Prihlásiť sa pomocou používateľského mena a hesla",
 	"@alternativeSignIn": {
 		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
 	},
-	"livePhotoTooltip": "Photo en direct",
-	"dragAndDropRearrangeButtons": "Faites un glisser-déposer pour réorganiser les boutons",
+	"livePhotoTooltip": "Live fotka",
+	"dragAndDropRearrangeButtons": "Presúvaním a ťahaním zoraďte tlačidlá",
 	"@dragAndDropRearrangeButtons": {
 		"description": "Instruction to customize buttons layout"
 	},
-	"customizeCollectionsNavBarDescription": "Faites un glisser-déposer pour réorganiser les boutons, appuyez sur les boutons ci-dessus pour les minimiser",
+	"customizeCollectionsNavBarDescription": "Presúvajte tlačidlá potiahnutím a ťahom, ťuknutím na tlačidlá hore ich minimalizujete",
 	"@customizeCollectionsNavBarDescription": {
 		"description": "Instruction to customize navigation bar buttons in the Collections page"
 	},
-	"customizeButtonsUnsupportedWarning": "Ce bouton ne peut pas être personnalisé",
+	"customizeButtonsUnsupportedWarning": "Toto tlačidlo nie je možné prispôsobiť",
 	"@customizeButtonsUnsupportedWarning": {
 		"description": "Some button can't be removed. This message will be shown instead when user try to do so"
 	},
-	"placePickerTitle": "Choisissez un endroit",
-	"albumAddMapTooltip": "Ajouter une carte",
+	"placePickerTitle": "Vyberte miesto",
+	"albumAddMapTooltip": "Pridať text",
 	"@albumAddMapTooltip": {
 		"description": "Add a map that display between photos to an album"
 	},
-	"fileNotFound": "Fichier introuvable"
+	"fileNotFound": "Súbor nenájdený"
 }

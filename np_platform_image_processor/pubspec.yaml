@@ -19,8 +19,8 @@ dependencies:
     path: ../np_platform_raw_image
   to_string:
     git:
-      url: https://gitlab.com/nkming2/dart-to-string
-      ref: to_string-1.0.0
+      url: https://github.com/nkming2/dart-to-string.git
+      ref: to_string-1.1.0
       path: to_string
 
 dev_dependencies:
@@ -32,8 +32,8 @@ dev_dependencies:
     path: ../np_lints
   to_string_build:
     git:
-      url: https://gitlab.com/nkming2/dart-to-string
-      ref: to_string_build-1.0.0
+      url: https://github.com/nkming2/dart-to-string.git
+      ref: to_string_build-1.1.1
       path: to_string_build
 
 flutter:

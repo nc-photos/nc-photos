@@ -1,16 +1,21 @@
 part of '../slideshow_viewer.dart';
 
 @npLog
-class _Bloc extends Bloc<_Event, _State> with BlocLogger {
+class _Bloc extends Bloc<_Event, _State>
+    with BlocLogger, BlocForEachMixin<_Event, _State> {
   _Bloc({
-    required this.filesController,
     required this.account,
+    required this.filesController,
+    required this.collectionsController,
     required this.fileIds,
     required this.startIndex,
+    required this.collectionId,
     required this.config,
   }) : super(_State.init()) {
     on<_Init>(_onInit);
-    on<_SetFiles>(_onSetFiles);
+    on<_SetCollectionItems>(_onSetCollectionItems);
+    on<_MergeFiles>(_onMergeFiles);
+
     on<_ToggleShowUi>(_onToggleShowUi);
     on<_PreloadSidePages>(_onPreloadSidePages);
     on<_VideoCompleted>(_onVideoCompleted);
@@ -24,14 +29,35 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     on<_RequestPage>(_onRequestPage);
     on<_RequestExit>(_onRequestExit);
 
-    _subscriptions.add(filesController.stream.listen((event) {
-      add(_SetFiles(event.dataMap));
+    if (collectionId != null) {
+      _subscriptions.add(collectionsController.stream.listen((event) {
+        for (final c in event.data) {
+          if (c.collection.id == collectionId) {
+            _collectionItemsSubscription?.cancel();
+            _collectionItemsSubscription = c.controller.stream.listen((event) {
+              add(_SetCollectionItems(event.items));
+            });
+            return;
+          }
+        }
+        _log.warning("[_Bloc] Collection not found: $collectionId");
+        add(const _SetCollectionItems(null));
+        _collectionItemsSubscription?.cancel();
+      }));
+    }
+    _subscriptions.add(stream
+        .distinct((a, b) =>
+            identical(a.rawFiles, b.rawFiles) &&
+            identical(a.collectionItems, b.collectionItems))
+        .listen((event) {
+      add(const _MergeFiles());
     }));
   }
 
   @override
   Future<void> close() {
     _pageChangeTimer?.cancel();
+    _collectionItemsSubscription?.cancel();
     for (final s in _subscriptions) {
       s.cancel();
     }
@@ -74,20 +100,55 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     emit(state.copyWith(
       hasInit: true,
       page: initialPage,
-      currentFile: getFileByPageIndex(initialPage),
       hasPrev: initialPage > 0,
       hasNext: pageCount == null || initialPage < (pageCount! - 1),
     ));
+    if (state.files.isNotEmpty) {
+      emit(state.copyWith(
+        currentFile: getFileByPageIndex(initialPage),
+      ));
+    }
     unawaited(_prepareNextPage());
+
+    await forEach(
+      emit,
+      filesController.stream,
+      onData: (data) => state.copyWith(
+        rawFiles: data.dataMap,
+      ),
+    );
   }
 
-  void _onSetFiles(_SetFiles ev, Emitter<_State> emit) {
+  void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
     _log.info(ev);
-    final files = fileIds.map((e) => ev.dataMap[e]).toList();
-    emit(state.copyWith(
-      files: files,
-      currentFile: files[convertPageToFileIndex(state.page)],
-    ));
+    final itemMap = ev.value
+        ?.whereType<CollectionFileItem>()
+        .map((e) => MapEntry(e.file.fdId, e))
+        .toMap();
+    emit(state.copyWith(collectionItems: itemMap));
+  }
+
+  void _onMergeFiles(_MergeFiles ev, _Emitter emit) {
+    _log.info(ev);
+    final Map<int, FileDescriptor> merged;
+    if (collectionId == null) {
+      // not collection, nothing to merge
+      merged = state.rawFiles;
+    } else {
+      if (state.collectionItems == null) {
+        // collection not ready
+        return;
+      }
+      merged = state.rawFiles.addedAll(state.collectionItems!
+          .map((key, value) => MapEntry(key, value.file)));
+    }
+    final files = fileIds.map((e) => merged[e]).toList();
+    emit(state.copyWith(files: files));
+    if (state.hasInit) {
+      emit(state.copyWith(
+        currentFile: files[convertPageToFileIndex(state.page)],
+      ));
+    }
   }
 
   void _onToggleShowUi(_ToggleShowUi ev, Emitter<_State> emit) {
@@ -277,10 +338,12 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     add(_NextPage(nextPage));
   }
 
-  final FilesController filesController;
   final Account account;
+  final FilesController filesController;
+  final CollectionsController collectionsController;
   final List<int> fileIds;
   final int startIndex;
+  final String? collectionId;
   final SlideshowConfig config;
 
   late final Map<int, List<int>> _shuffledIndex;
@@ -289,4 +352,5 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   Timer? _pageChangeTimer;
 
   final _subscriptions = <StreamSubscription>[];
+  StreamSubscription? _collectionItemsSubscription;
 }

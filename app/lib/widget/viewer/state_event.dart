@@ -5,6 +5,7 @@ part of '../viewer.dart';
 class _State {
   const _State({
     required this.fileIdOrders,
+    required this.rawFiles,
     required this.files,
     required this.fileStates,
     required this.index,
@@ -41,6 +42,7 @@ class _State {
   }) =>
       _State(
         fileIdOrders: fileIds,
+        rawFiles: const {},
         files: const {},
         fileStates: const {},
         index: index,
@@ -70,6 +72,7 @@ class _State {
 
   @Format(r"$$?")
   final List<int> fileIdOrders;
+  final Map<int, FileDescriptor> rawFiles;
   final Map<int, FileDescriptor> files;
   final Map<int, _PageState> fileStates;
   final int index;
@@ -77,7 +80,7 @@ class _State {
   final _PageState? currentFileState;
   final Collection? collection;
   final CollectionItemsController? collectionItemsController;
-  final Map<int, CollectionItem>? collectionItems;
+  final Map<int, CollectionFileItem>? collectionItems;
   final bool isShowDetailPane;
   final bool isClosingDetailPane;
   final bool isDetailPaneActive;
@@ -175,6 +178,17 @@ class _SetCollectionItems implements _Event {
   String toString() => _$toString();
 
   final List<CollectionItem>? value;
+}
+
+@toString
+/// Merge regular files with collection items. The point of doing this is to
+/// support shared files in an server side shared album, as these files do not
+/// have a record in filesController
+class _MergeFiles implements _Event {
+  const _MergeFiles();
+
+  @override
+  String toString() => _$toString();
 }
 
 @toString

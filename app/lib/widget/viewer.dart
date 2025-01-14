@@ -253,9 +253,9 @@ class _WrappedViewerState extends State<_WrappedViewer>
     final newIndex = await Navigator.of(context).pushNamed<int>(
       SlideshowViewer.routeName,
       arguments: SlideshowViewerArguments(
-        slideshowRequest.value!.account,
         slideshowRequest.value!.fileIds,
         slideshowRequest.value!.startIndex,
+        slideshowRequest.value!.collectionId,
         result,
       ),
     );

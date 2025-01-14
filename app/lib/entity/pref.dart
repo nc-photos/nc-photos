@@ -118,6 +118,7 @@ enum PrefKey implements PrefKeyInterface {
   viewerAppBarButtons,
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
+  isFallbackClientExif,
   ;
 
   @override
@@ -218,6 +219,8 @@ enum PrefKey implements PrefKeyInterface {
         return "viewerBottomAppBarButtons";
       case PrefKey.homeCollectionsNavBarButtons:
         return "homeCollectionsNavBarButtons";
+      case PrefKey.isFallbackClientExif:
+        return "isFallbackClientExif";
     }
   }
 }

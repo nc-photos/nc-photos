@@ -266,6 +266,13 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
           homeCollectionsNavBarButtons.distinct().skip(1);
   List<PrefHomeCollectionsNavButton> get homeCollectionsNavBarButtonsValue =>
       _homeCollectionsNavBarButtonsController.value;
+// _isFallbackClientExifController
+  ValueStream<bool> get isFallbackClientExif =>
+      _isFallbackClientExifController.stream;
+  Stream<bool> get isFallbackClientExifNew => isFallbackClientExif.skip(1);
+  Stream<bool> get isFallbackClientExifChange =>
+      isFallbackClientExif.distinct().skip(1);
+  bool get isFallbackClientExifValue => _isFallbackClientExifController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

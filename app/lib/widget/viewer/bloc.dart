@@ -26,6 +26,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_RequestPage>(_onRequestPage);
     on<_SetCollection>(_onSetCollection);
     on<_SetCollectionItems>(_onSetCollectionItems);
+    on<_MergeFiles>(_onMergeFiles);
 
     on<_ToggleAppBar>(_onToggleAppBar);
     on<_ShowAppBar>(_onShowAppBar);
@@ -86,6 +87,13 @@ class _Bloc extends Bloc<_Event, _State>
         .add(prefController.viewerBottomAppBarButtonsChange.listen((event) {
       add(_SetBottomAppBarButtons(event));
     }));
+    _subscriptions.add(stream
+        .distinct((a, b) =>
+            identical(a.rawFiles, b.rawFiles) &&
+            identical(a.collectionItems, b.collectionItems))
+        .listen((event) {
+      add(const _MergeFiles());
+    }));
 
     add(_SetIndex(startIndex));
   }
@@ -121,8 +129,7 @@ class _Bloc extends Bloc<_Event, _State>
         emit,
         filesController.stream,
         onData: (data) => state.copyWith(
-          files: data.dataMap,
-          currentFile: data.dataMap[state.fileIdOrders[state.index]],
+          rawFiles: data.dataMap,
         ),
       ),
       forEach(
@@ -174,6 +181,26 @@ class _Bloc extends Bloc<_Event, _State>
         .map((e) => MapEntry(e.file.fdId, e))
         .toMap();
     emit(state.copyWith(collectionItems: itemMap));
+  }
+
+  void _onMergeFiles(_MergeFiles ev, _Emitter emit) {
+    _log.info(ev);
+    final Map<int, FileDescriptor> files;
+    if (collectionId == null) {
+      // not collection, nothing to merge
+      files = state.rawFiles;
+    } else {
+      if (state.collectionItems == null) {
+        // collection not ready
+        return;
+      }
+      files = state.rawFiles.addedAll(state.collectionItems!
+          .map((key, value) => MapEntry(key, value.file)));
+    }
+    emit(state.copyWith(
+      files: files,
+      currentFile: files[state.fileIdOrders[state.index]],
+    ));
   }
 
   void _onToggleAppBar(_ToggleAppBar ev, _Emitter emit) {
@@ -344,10 +371,10 @@ class _Bloc extends Bloc<_Event, _State>
   void _onStartSlideshow(_StartSlideshow ev, _Emitter emit) {
     _log.info(ev);
     final req = _SlideshowRequest(
-      account: account,
       fileIds: state.fileIdOrders,
       startIndex:
           state.fileIdOrders.indexOf(ev.fileId).let((i) => i == -1 ? 0 : i),
+      collectionId: collectionId,
     );
     emit(state.copyWith(slideshowRequest: Unique(req)));
   }

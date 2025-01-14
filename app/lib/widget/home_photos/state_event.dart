@@ -12,12 +12,13 @@ class _State {
     required this.queriedDates,
     required this.isEnableMemoryCollection,
     required this.memoryCollections,
-    this.contentListMaxExtent,
     this.syncProgress,
     required this.zoom,
     this.scale,
+    required this.finger,
     this.viewWidth,
     this.viewHeight,
+    this.viewOverlayPadding,
     this.itemPerRow,
     this.itemSize,
     required this.isScrolling,
@@ -43,6 +44,7 @@ class _State {
         isEnableMemoryCollection: isEnableMemoryCollection,
         memoryCollections: const [],
         zoom: zoom,
+        finger: 0,
         isScrolling: false,
         filesSummary: const DbFilesSummary(items: {}),
         minimapYRatio: 1,
@@ -54,7 +56,7 @@ class _State {
 
   final List<FileDescriptor> files;
   final bool isLoading;
-  final List<_Item> transformedItems;
+  final List<List<_Item>> transformedItems;
   final Set<_Item> selectedItems;
   final DbFilesSummary filesSummary;
   final Set<_VisibleDate> visibleDates;
@@ -63,14 +65,15 @@ class _State {
   final bool isEnableMemoryCollection;
   final List<Collection> memoryCollections;
 
-  final double? contentListMaxExtent;
   final Progress? syncProgress;
 
   final int zoom;
   final double? scale;
+  final int finger;
 
   final double? viewWidth;
   final double? viewHeight;
+  final double? viewOverlayPadding;
   final int? itemPerRow;
   final double? itemSize;
   final bool isScrolling;
@@ -123,7 +126,7 @@ class _OnItemTransformed implements _Event {
   @override
   String toString() => _$toString();
 
-  final List<_Item> items;
+  final List<List<_Item>> items;
   final Set<Date> dates;
 }
 
@@ -195,16 +198,6 @@ class _RemoveVisibleDate implements _Event {
 }
 
 @toString
-class _SetContentListMaxExtent implements _Event {
-  const _SetContentListMaxExtent(this.value);
-
-  @override
-  String toString() => _$toString();
-
-  final double? value;
-}
-
-@toString
 class _SetSyncProgress implements _Event {
   const _SetSyncProgress(this.progress);
 
@@ -241,6 +234,16 @@ class _SetScale implements _Event {
 }
 
 @toString
+class _SetFinger implements _Event {
+  const _SetFinger(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final int value;
+}
+
+@toString
 class _StartScrolling implements _Event {
   const _StartScrolling();
 
@@ -258,13 +261,15 @@ class _EndScrolling implements _Event {
 
 @toString
 class _SetLayoutConstraint implements _Event {
-  const _SetLayoutConstraint(this.viewWidth, this.viewHeight);
+  const _SetLayoutConstraint(
+      this.viewWidth, this.viewHeight, this.viewOverlayPadding);
 
   @override
   String toString() => _$toString();
 
   final double viewWidth;
   final double viewHeight;
+  final double viewOverlayPadding;
 }
 
 @toString
@@ -291,6 +296,14 @@ class _SetEnableMemoryCollection implements _Event {
   String toString() => _$toString();
 
   final bool value;
+}
+
+@toString
+class _UpdateZoom implements _Event {
+  const _UpdateZoom();
+
+  @override
+  String toString() => _$toString();
 }
 
 @toString

@@ -15,6 +15,7 @@ part of 'viewer.dart';
 abstract class $_StateCopyWithWorker {
   _State call(
       {List<int>? fileIdOrders,
+      Map<int, FileDescriptor>? rawFiles,
       Map<int, FileDescriptor>? files,
       Map<int, _PageState>? fileStates,
       int? index,
@@ -22,7 +23,7 @@ abstract class $_StateCopyWithWorker {
       _PageState? currentFileState,
       Collection? collection,
       CollectionItemsController? collectionItemsController,
-      Map<int, CollectionItem>? collectionItems,
+      Map<int, CollectionFileItem>? collectionItems,
       bool? isShowDetailPane,
       bool? isClosingDetailPane,
       bool? isDetailPaneActive,
@@ -48,6 +49,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call(
       {dynamic fileIdOrders,
+      dynamic rawFiles,
       dynamic files,
       dynamic fileStates,
       dynamic index,
@@ -75,6 +77,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       dynamic error = copyWithNull}) {
     return _State(
         fileIdOrders: fileIdOrders as List<int>? ?? that.fileIdOrders,
+        rawFiles: rawFiles as Map<int, FileDescriptor>? ?? that.rawFiles,
         files: files as Map<int, FileDescriptor>? ?? that.files,
         fileStates: fileStates as Map<int, _PageState>? ?? that.fileStates,
         index: index as int? ?? that.index,
@@ -92,7 +95,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
             : collectionItemsController as CollectionItemsController?,
         collectionItems: collectionItems == copyWithNull
             ? that.collectionItems
-            : collectionItems as Map<int, CollectionItem>?,
+            : collectionItems as Map<int, CollectionFileItem>?,
         isShowDetailPane: isShowDetailPane as bool? ?? that.isShowDetailPane,
         isClosingDetailPane:
             isClosingDetailPane as bool? ?? that.isClosingDetailPane,
@@ -206,7 +209,7 @@ extension _$_PageViewStateNpLog on _PageViewState {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {fileIdOrders: $fileIdOrders, files: {length: ${files.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: ${currentFile == null ? null : "${currentFile!.fdPath}"}, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemovePage: $pendingRemovePage, imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, error: $error}";
+    return "_State {fileIdOrders: $fileIdOrders, rawFiles: {length: ${rawFiles.length}}, files: {length: ${files.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: ${currentFile == null ? null : "${currentFile!.fdPath}"}, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemovePage: $pendingRemovePage, imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, error: $error}";
   }
 }
 
@@ -249,6 +252,13 @@ extension _$_SetCollectionItemsToString on _SetCollectionItems {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetCollectionItems {value: ${value == null ? null : "[length: ${value!.length}]"}}";
+  }
+}
+
+extension _$_MergeFilesToString on _MergeFiles {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_MergeFiles {}";
   }
 }
 

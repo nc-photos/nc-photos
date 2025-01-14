@@ -14,14 +14,14 @@ class _ShareRequest {
 
 class _SlideshowRequest {
   const _SlideshowRequest({
-    required this.account,
     required this.fileIds,
     required this.startIndex,
+    required this.collectionId,
   });
 
-  final Account account;
   final List<int> fileIds;
   final int startIndex;
+  final String? collectionId;
 }
 
 class _SetAsRequest {

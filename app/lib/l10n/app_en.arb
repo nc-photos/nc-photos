@@ -290,6 +290,14 @@
 	"@settingsExifWifiOnlyFalseSubtitle": {
 		"description": "Shown when users allow processing exif data over any network"
 	},
+	"settingsFallbackClientExifTitle": "Fallback to client side parser",
+	"@settingsFallbackClientExifTitle": {
+		"description": "Fallback to client side EXIF parser"
+	},
+	"settingsFallbackClientExifTrueText": "If Nextcloud failed to extract the file metadata, use the client side parser instead",
+	"settingsFallbackClientExifFalseText": "If Nextcloud failed to extract the file metadata, leave it as is",
+	"settingsFallbackClientExifConfirmDialogTitle": "Enable client side fallback?",
+	"settingsFallbackClientExifConfirmDialogText": "Normally Nextcloud server will automatically process your photos and store the EXIF metadata in background. However the background job may fail due to configuration issue or server bug. If enabled, we will process those files ourselves instead.",
 	"settingsMemoriesTitle": "Memories",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
@@ -338,11 +346,11 @@
 	},
 	"settingsMemoriesRangeTitle": "Memories range",
 	"@settingsMemoriesRangeTitle": {
-		"description": "How many adjacent days to be inclded in memories for a particular year"
+		"description": "How many adjacent days to be included in memories for a particular year"
 	},
 	"settingsMemoriesRangeValueText": "{range, plural, one{+-{range} day} other{+-{range} days}}",
 	"@settingsMemoriesRangeValueText": {
-		"description": "How many adjacent days to be inclded in memories for a particular year, could be 0",
+		"description": "How many adjacent days to be included in memories for a particular year, could be 0",
 		"placeholders": {
 			"range": {
 				"example": "1"

@@ -51,6 +51,8 @@ Future<void> startService({
       prefController.shouldProcessExifWifiOnlyValue);
   await ServiceConfig.setEnableClientExif(
       prefController.isEnableClientExifValue);
+  await ServiceConfig.setFallbackClientExif(
+      prefController.isFallbackClientExifValue);
   await service.start();
 }
 

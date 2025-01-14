@@ -138,9 +138,11 @@ class _MinimapItem {
     required this.date,
     required this.logicalY,
     required this.logicalHeight,
+    this.padding = 0,
   });
 
   final Date date;
   final double logicalY;
   final double logicalHeight;
+  final double padding;
 }

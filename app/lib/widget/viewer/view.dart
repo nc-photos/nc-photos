@@ -257,7 +257,7 @@ class _PageViewState extends State<_PageView> {
                                 previous.isDetailPaneActive !=
                                     current.isDetailPaneActive,
                             builder: (context, state) => FileContentView(
-                              fileId: file.fdId,
+                              file: file,
                               shouldPlayLivePhoto: state
                                       .fileStates[widget.fileId]
                                       ?.shouldPlayLivePhoto ??

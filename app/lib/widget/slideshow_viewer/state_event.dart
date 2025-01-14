@@ -8,6 +8,8 @@ class _State {
     required this.page,
     required this.nextPage,
     required this.shouldAnimateNextPage,
+    required this.rawFiles,
+    this.collectionItems,
     required this.files,
     this.currentFile,
     required this.isShowUi,
@@ -25,6 +27,7 @@ class _State {
         page: 0,
         nextPage: 0,
         shouldAnimateNextPage: true,
+        rawFiles: {},
         files: [],
         isShowUi: false,
         isPlay: true,
@@ -43,8 +46,11 @@ class _State {
   final int page;
   final int nextPage;
   final bool shouldAnimateNextPage;
+  final Map<int, FileDescriptor> rawFiles;
+  final Map<int, CollectionFileItem>? collectionItems;
   final List<FileDescriptor?> files;
   final FileDescriptor? currentFile;
+
   final bool isShowUi;
   final bool isPlay;
   final bool isVideoCompleted;
@@ -66,13 +72,14 @@ class _Init implements _Event {
 }
 
 @toString
-class _SetFiles implements _Event {
-  const _SetFiles(this.dataMap);
+/// Merge regular files with collection items. The point of doing this is to
+/// support shared files in an server side shared album, as these files do not
+/// have a record in filesController
+class _MergeFiles implements _Event {
+  const _MergeFiles();
 
   @override
   String toString() => _$toString();
-
-  final Map<int, FileDescriptor> dataMap;
 }
 
 @toString
@@ -177,4 +184,14 @@ class _RequestExit implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _SetCollectionItems implements _Event {
+  const _SetCollectionItems(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final List<CollectionItem>? value;
 }
