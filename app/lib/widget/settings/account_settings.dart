@@ -27,8 +27,8 @@ import 'package:nc_photos/widget/root_picker.dart';
 import 'package:nc_photos/widget/settings/settings_list_caption.dart';
 import 'package:nc_photos/widget/share_folder_picker.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 

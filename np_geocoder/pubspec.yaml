@@ -18,10 +18,10 @@ dependencies:
       url: https://github.com/nc-photos/kd-tree-dart.git
       ref: 0.2.0-nc-photos-1
   logging: ^1.2.0
-  np_codegen:
-    path: ../codegen
   np_collection:
     path: ../np_collection
+  np_log:
+    path: ../np_log
   np_math:
     path: ../np_math
   np_string:
@@ -39,10 +39,10 @@ dev_dependencies:
   analyzer: ^6.2.0
   build_runner: ^2.4.9
   build_runner_core: ">=7.2.9"
-  np_codegen_build:
-    path: ../codegen_build
   np_lints:
     path: ../np_lints
+  np_log_build:
+    path: ../np_log_build
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git

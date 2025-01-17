@@ -18,7 +18,7 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/use_case/ls_single_file.dart';
 import 'package:nc_photos/widget/server_cert_error_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 
 part 'connect.g.dart';

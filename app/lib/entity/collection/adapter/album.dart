@@ -30,10 +30,10 @@ import 'package:nc_photos/use_case/import_pending_shared_album.dart';
 import 'package:nc_photos/use_case/preprocess_album.dart';
 import 'package:nc_photos/use_case/unimport_shared_album.dart';
 import 'package:nc_photos/use_case/update_album_with_actual_items.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 
 part 'album.g.dart';

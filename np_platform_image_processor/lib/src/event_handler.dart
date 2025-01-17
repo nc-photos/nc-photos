@@ -1,6 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_image_processor/src/event.dart';
 import 'package:np_platform_image_processor/src/k.dart' as k;
 

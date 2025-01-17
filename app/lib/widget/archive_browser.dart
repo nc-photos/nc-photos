@@ -29,8 +29,8 @@ import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
 import 'package:nc_photos/widget/viewer.dart';
 import 'package:np_async/np_async.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'archive_browser.g.dart';

@@ -28,7 +28,7 @@ import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:nc_photos/widget/selectable.dart';
 import 'package:nc_photos/widget/settings/enhancement_settings.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:np_ui/np_ui.dart';

@@ -7,8 +7,8 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/content_provider/memory.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_datetime/np_datetime.dart';
+import 'package:np_log/np_log.dart';
 
 part 'photo_list_util.g.dart';
 

@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db_sqlite/src/table.dart';
 import 'package:np_db_sqlite/src/util.dart';
+import 'package:np_log/np_log.dart';
 
 part 'database.g.dart';
 

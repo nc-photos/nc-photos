@@ -7,7 +7,7 @@ import 'package:nc_photos/entity/recognize_face_item.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/use_case/recognize_face/list_recognize_face.dart';
 import 'package:nc_photos/use_case/recognize_face/list_recognize_face_item.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'sync_recognize_face.g.dart';
 

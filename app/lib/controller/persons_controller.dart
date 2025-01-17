@@ -8,7 +8,7 @@ import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/use_case/person/list_person.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'persons_controller.g.dart';

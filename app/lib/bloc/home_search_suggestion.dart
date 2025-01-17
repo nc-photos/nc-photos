@@ -15,7 +15,6 @@ import 'package:nc_photos/use_case/collection/list_collection.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:nc_photos/use_case/list_tag.dart';
 import 'package:nc_photos/use_case/person/list_person.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';

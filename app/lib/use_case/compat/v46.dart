@@ -1,8 +1,8 @@
 import 'package:logging/logging.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 
 part 'v46.g.dart';
 

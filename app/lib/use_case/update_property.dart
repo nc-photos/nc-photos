@@ -3,8 +3,8 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file/repo.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_log/np_log.dart';
 
 part 'update_property.g.dart';
 

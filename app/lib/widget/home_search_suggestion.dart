@@ -13,7 +13,7 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 
 part 'home_search_suggestion.g.dart';

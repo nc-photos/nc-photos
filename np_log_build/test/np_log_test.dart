@@ -1,4 +1,4 @@
-import 'package:np_codegen_build/src/np_log_generator.dart';
+import 'package:np_log_build/src/np_log_generator.dart';
 import 'package:test/test.dart';
 
 import 'util.dart';
@@ -34,7 +34,7 @@ extension _$FooNpLog on Foo {
 
 String _genSrc(String src) {
   return """
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 part 'test.g.dart';
 $src
 """;

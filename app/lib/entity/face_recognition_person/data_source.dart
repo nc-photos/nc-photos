@@ -9,8 +9,8 @@ import 'package:nc_photos/entity/face_recognition_person/repo.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:np_api/np_api.dart' as api;
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 
 part 'data_source.g.dart';
 

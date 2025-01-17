@@ -5,7 +5,6 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 

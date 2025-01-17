@@ -3,8 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
 import 'package:np_api/src/type.dart';
 import 'package:np_api/src/util.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_http/np_http.dart';
+import 'package:np_log/np_log.dart';
 import 'package:xml/xml.dart';
 
 part 'api.g.dart';

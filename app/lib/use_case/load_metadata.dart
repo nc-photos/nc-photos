@@ -13,7 +13,7 @@ import 'package:nc_photos/entity/file.dart' as app;
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/file_extension.dart';
 import 'package:nc_photos/image_size_getter_util.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'load_metadata.g.dart';
 

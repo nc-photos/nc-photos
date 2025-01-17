@@ -5,8 +5,8 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/use_case/cache_favorite.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 
 part 'sync_favorite.g.dart';
 

@@ -66,6 +66,8 @@ dev_dependencies:
     path: ../codegen_build
   np_lints:
     path: ../np_lints
+  np_log_build:
+    path: ../np_log_build
   test: ^1.22.1
   to_string_build:
     git:

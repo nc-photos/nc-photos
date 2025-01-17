@@ -6,7 +6,7 @@ import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/use_case/face_recognition_person/sync_face_recognition_person.dart';
 import 'package:nc_photos/use_case/recognize_face/sync_recognize_face.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'sync_person.g.dart';
 

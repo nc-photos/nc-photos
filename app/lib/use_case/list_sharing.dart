@@ -11,7 +11,7 @@ import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/use_case/find_file.dart';
 import 'package:nc_photos/use_case/ls.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:path/path.dart' as path_lib;
 
 part 'list_sharing.g.dart';

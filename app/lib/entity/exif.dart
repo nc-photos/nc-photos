@@ -2,8 +2,8 @@ import 'package:equatable/equatable.dart';
 import 'package:exifdart/exifdart.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 
 part 'exif.g.dart';
 

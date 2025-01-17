@@ -3,7 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/url_launcher_util.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 
 part 'changelog.g.dart';

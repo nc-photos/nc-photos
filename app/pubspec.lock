@@ -1183,6 +1183,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_log_build:
+    dependency: "direct dev"
+    description:
+      path: "../np_log_build"
+      relative: true
+    source: path
+    version: "1.0.0"
   np_math:
     dependency: "direct main"
     description:

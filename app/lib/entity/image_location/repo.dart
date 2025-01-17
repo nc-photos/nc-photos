@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_datetime/np_datetime.dart';
+import 'package:np_log/np_log.dart';
 
 part 'repo.g.dart';
 

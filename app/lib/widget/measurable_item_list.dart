@@ -2,7 +2,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/widget/measureable_sliver_staggered_grid.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:uuid/uuid.dart';
 
 part 'measurable_item_list.g.dart';

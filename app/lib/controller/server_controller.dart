@@ -7,7 +7,7 @@ import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/entity/server_status.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:np_api/np_api.dart' as api;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'server_controller.g.dart';

@@ -9,8 +9,8 @@ import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/use_case/compat/v15.dart';
 import 'package:nc_photos/use_case/compat/v25.dart';
 import 'package:nc_photos/use_case/ls.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 
 part 'list_album2.g.dart';
 

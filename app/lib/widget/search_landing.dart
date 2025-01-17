@@ -30,7 +30,7 @@ import 'package:nc_photos/widget/people_browser.dart';
 import 'package:nc_photos/widget/person_thumbnail.dart';
 import 'package:nc_photos/widget/places_browser.dart';
 import 'package:nc_photos/widget/settings/account_settings.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 

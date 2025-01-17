@@ -202,6 +202,8 @@ dev_dependencies:
     path: ../np_db_sqlite
   np_lints:
     path: ../np_lints
+  np_log_build:
+    path: ../np_log_build
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git

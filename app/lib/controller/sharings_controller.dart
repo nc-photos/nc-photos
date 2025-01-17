@@ -16,7 +16,7 @@ import 'package:nc_photos/rx_extension.dart';
 import 'package:nc_photos/use_case/list_share_with_me.dart';
 import 'package:nc_photos/use_case/list_sharing.dart';
 import 'package:nc_photos/use_case/ls_single_file.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:rxdart/rxdart.dart';
 
 part 'sharings_controller.g.dart';

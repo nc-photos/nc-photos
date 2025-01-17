@@ -6,7 +6,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/widget/protected_page_password_auth_dialog.dart';
 import 'package:nc_photos/widget/protected_page_pin_auth_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 
 part 'protected_page_handler.g.dart';

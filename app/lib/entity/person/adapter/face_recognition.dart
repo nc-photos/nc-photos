@@ -9,7 +9,7 @@ import 'package:nc_photos/entity/person_face.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/use_case/face_recognition_person/list_face_recognition_face.dart';
 import 'package:nc_photos/use_case/find_file_descriptor.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'face_recognition.g.dart';
 

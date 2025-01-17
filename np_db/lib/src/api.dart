@@ -3,12 +3,12 @@ import 'dart:io' as io;
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/src/entity.dart';
 import 'package:np_db_sqlite/np_db_sqlite.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'api.g.dart';

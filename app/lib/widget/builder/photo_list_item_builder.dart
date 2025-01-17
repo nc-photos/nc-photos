@@ -12,8 +12,8 @@ import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
 import 'package:nc_photos/widget/photo_list_util.dart';
 import 'package:nc_photos/widget/selectable_item_stream_list_mixin.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_datetime/np_datetime.dart';
+import 'package:np_log/np_log.dart';
 
 part 'photo_list_item_builder.g.dart';
 

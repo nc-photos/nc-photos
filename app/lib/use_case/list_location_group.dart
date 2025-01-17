@@ -4,7 +4,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'list_location_group.g.dart';

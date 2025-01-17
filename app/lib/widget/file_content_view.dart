@@ -14,8 +14,8 @@ import 'package:nc_photos/live_photo_util.dart';
 import 'package:nc_photos/widget/image_viewer.dart';
 import 'package:nc_photos/widget/live_photo_viewer.dart';
 import 'package:nc_photos/widget/video_viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/unique.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 

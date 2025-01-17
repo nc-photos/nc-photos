@@ -131,7 +131,7 @@ class _PropParser {
 }
 
 List<NcAlbum> _parseNcAlbumsIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return NcAlbumParser()._parse(xml);
 }

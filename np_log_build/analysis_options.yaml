@@ -1,0 +1,5 @@
+include: package:np_lints/np.yaml
+
+linter:
+  rules:
+    avoid_print: false

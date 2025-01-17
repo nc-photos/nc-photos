@@ -4,7 +4,6 @@ import 'package:clock/clock.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/type.dart';
 import 'package:np_log/np_log.dart';

@@ -5,7 +5,7 @@ import 'package:logging/logging.dart';
 import 'package:np_api/src/entity/entity.dart';
 import 'package:np_api/src/entity/parser.dart';
 import 'package:np_api/src/util.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:xml/xml.dart';
 
 part 'file_parser.g.dart';
@@ -224,7 +224,7 @@ class _PropParser {
 }
 
 List<File> _parseFilesIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return FileParser()._parse(xml);
 }

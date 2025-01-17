@@ -7,7 +7,7 @@ import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/use_case/create_dir.dart';
 import 'package:nc_photos/use_case/ls.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'v15.g.dart';
 

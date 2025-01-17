@@ -5,9 +5,9 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/object_extension.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 
 part 'upgrader.g.dart';

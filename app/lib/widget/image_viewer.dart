@@ -13,7 +13,7 @@ import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/widget/cached_network_image_mod.dart' as mod;
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/zoomable_viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'image_viewer.g.dart';
 

@@ -69,7 +69,7 @@ class _PropParser {
 }
 
 List<TaggedFile> _parseTaggedFilesIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return TaggedFileParser()._parse(xml);
 }

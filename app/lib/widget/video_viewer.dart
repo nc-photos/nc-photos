@@ -16,7 +16,7 @@ import 'package:nc_photos/use_case/request_public_link.dart';
 import 'package:nc_photos/widget/disposable.dart';
 import 'package:nc_photos/widget/wakelock_util.dart';
 import 'package:nc_photos/widget/zoomable_viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:video_player/video_player.dart';
