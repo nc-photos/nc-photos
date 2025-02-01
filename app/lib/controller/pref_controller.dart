@@ -436,7 +436,7 @@ class PrefController {
           _homeCollectionsNavBarButtonsDefault);
   @npSubjectAccessor
   late final _isFallbackClientExifController =
-      BehaviorSubject.seeded(pref.isFallbackClientExif() ?? false);
+      BehaviorSubject.seeded(pref.isFallbackClientExif() ?? true);
 }
 
 extension PrefControllerExtension on PrefController {
