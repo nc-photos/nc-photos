@@ -10,7 +10,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     on<_SetServerUrl>(_onSetServerUrl);
     on<_Connect>(_onConnect);
     on<_SetConnectedAccount>(_onSetConnectedAccount);
-    on<_SetAltMode>(_onSetAltMode);
+    on<_SetSignInMethod>(_onSetSignInMethod);
     on<_SetUsername>(_onSetUsername);
     on<_SetPassword>(_onSetPassword);
     on<_SetObscurePassword>(_onSetObscurePassword);
@@ -49,18 +49,21 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     final scheme = state.scheme.toValueString();
     final serverUrl = state.serverUrl.trim().trimRightAny("/");
     final _ConnectArg arg;
-    if (!state.isAltMode) {
-      arg = _ConnectArg(
-        scheme: scheme,
-        address: serverUrl,
-      );
-    } else {
-      arg = _ConnectArg(
-        scheme: scheme,
-        address: serverUrl,
-        username: state.username,
-        password: state.password,
-      );
+    switch (state.method) {
+      case _SignInMethod.serverFlowV2:
+        arg = _ConnectArg(
+          scheme: scheme,
+          address: serverUrl,
+        );
+        break;
+      case _SignInMethod.usernamePassword:
+        arg = _ConnectArg(
+          scheme: scheme,
+          address: serverUrl,
+          username: state.username,
+          password: state.password,
+        );
+        break;
     }
     _log.info("[_onConnect] Try connecting: $arg");
     emit(state.copyWith(connectArg: arg));
@@ -82,9 +85,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     }
   }
 
-  void _onSetAltMode(_SetAltMode ev, Emitter<_State> emit) {
+  void _onSetSignInMethod(_SetSignInMethod ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(isAltMode: ev.value));
+    emit(state.copyWith(method: ev.value));
   }
 
   void _onSetUsername(_SetUsername ev, Emitter<_State> emit) {

@@ -1516,10 +1516,6 @@
 	"homeTabMapBrowser": "Map",
 	"mapBrowserSetDefaultDateRangeButton": "Set as default",
 	"todayText": "Today",
-	"alternativeSignIn": "Sign in with username and password instead",
-	"@alternativeSignIn": {
-		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
-	},
 	"livePhotoTooltip": "Live photo",
 	"dragAndDropRearrangeButtons": "Drag and drop to rearrange buttons",
 	"@dragAndDropRearrangeButtons": {
@@ -1539,6 +1535,8 @@
 		"description": "Add a map that display between photos to an album"
 	},
 	"fileNotFound": "File not found",
+	"signInViaNextcloudLoginFlowV2": "via Nextcloud Login Flow v2",
+	"signInViaUsernamePassword": "via username and password",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
@@ -1571,5 +1569,9 @@
 	"errorNoStoragePermission": "Require storage access permission",
 	"@errorNoStoragePermission": {
 		"description": "Missing permission on Android"
+	},
+	"errorServerNoCert": "Server certificate not found. Try HTTP instead?",
+	"@errorServerNoCert": {
+		"description": "No cert to establish HTTPS connection"
 	}
 }

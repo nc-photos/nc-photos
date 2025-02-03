@@ -13,7 +13,7 @@ class _State {
     this.connectedAccount,
     required this.isConnecting,
     required this.isCompleted,
-    required this.isAltMode,
+    required this.method,
     this.error,
   });
 
@@ -25,7 +25,7 @@ class _State {
         shouldObscurePassword: true,
         isConnecting: false,
         isCompleted: false,
-        isAltMode: false,
+        method: _SignInMethod.serverFlowV2,
       );
 
   @override
@@ -41,7 +41,7 @@ class _State {
   final bool isConnecting;
   final bool isCompleted;
 
-  final bool isAltMode;
+  final _SignInMethod method;
 
   final ExceptionEvent? error;
 }
@@ -87,13 +87,13 @@ class _SetConnectedAccount implements _Event {
 }
 
 @toString
-class _SetAltMode implements _Event {
-  const _SetAltMode(this.value);
+class _SetSignInMethod implements _Event {
+  const _SetSignInMethod(this.value);
 
   @override
   String toString() => _$toString();
 
-  final bool value;
+  final _SignInMethod value;
 }
 
 @toString

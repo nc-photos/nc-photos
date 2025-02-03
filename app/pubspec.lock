@@ -1190,6 +1190,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_login_flow:
+    dependency: "direct main"
+    description:
+      path: "../np_login_flow"
+      relative: true
+    source: path
+    version: "0.0.1"
   np_math:
     dependency: "direct main"
     description:

@@ -16,7 +16,6 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/controller/trusted_cert_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/language_util.dart' as language_util;
-import 'package:nc_photos/legacy/connect.dart' as legacy;
 import 'package:nc_photos/mobile/self_signed_cert_manager.dart';
 import 'package:nc_photos/navigation_manager.dart';
 import 'package:nc_photos/protected_page_handler.dart';
@@ -30,7 +29,7 @@ import 'package:nc_photos/widget/archive_browser.dart';
 import 'package:nc_photos/widget/changelog.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker.dart';
-import 'package:nc_photos/widget/connect.dart';
+import 'package:nc_photos/widget/connect2/connect.dart';
 import 'package:nc_photos/widget/enhanced_photo_browser.dart';
 import 'package:nc_photos/widget/home.dart';
 import 'package:nc_photos/widget/image_editor.dart';
@@ -222,7 +221,6 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handleBasicRoute(settings);
     route ??= _handleViewerRoute(settings);
     route ??= _handleConnectRoute(settings);
-    route ??= _handleConnectLegacyRoute(settings);
     route ??= _handleHomeRoute(settings);
     route ??= _handleRootPickerRoute(settings);
     route ??= _handleAlbumDirPickerRoute(settings);
@@ -274,19 +272,6 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe("[_handleConnectRoute] Failed while handling route", e);
-    }
-    return null;
-  }
-
-  Route<dynamic>? _handleConnectLegacyRoute(RouteSettings settings) {
-    try {
-      if (settings.name == legacy.Connect.routeName &&
-          settings.arguments != null) {
-        final args = settings.arguments as legacy.ConnectArguments;
-        return legacy.Connect.buildRoute(args, settings);
-      }
-    } catch (e) {
-      _log.severe("[_handleConnectLegacyRoute] Failed while handling route", e);
     }
     return null;
   }

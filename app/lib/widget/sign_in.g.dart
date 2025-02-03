@@ -23,7 +23,7 @@ abstract class $_StateCopyWithWorker {
       Account? connectedAccount,
       bool? isConnecting,
       bool? isCompleted,
-      bool? isAltMode,
+      _SignInMethod? method,
       ExceptionEvent? error});
 }
 
@@ -41,7 +41,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       dynamic connectedAccount = copyWithNull,
       dynamic isConnecting,
       dynamic isCompleted,
-      dynamic isAltMode,
+      dynamic method,
       dynamic error = copyWithNull}) {
     return _State(
         scheme: scheme as _Scheme? ?? that.scheme,
@@ -58,7 +58,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
             : connectedAccount as Account?,
         isConnecting: isConnecting as bool? ?? that.isConnecting,
         isCompleted: isCompleted as bool? ?? that.isCompleted,
-        isAltMode: isAltMode as bool? ?? that.isAltMode,
+        method: method as _SignInMethod? ?? that.method,
         error: error == copyWithNull ? that.error : error as ExceptionEvent?);
   }
 
@@ -95,7 +95,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {scheme: ${scheme.name}, serverUrl: $serverUrl, username: $username, password: $password, shouldObscurePassword: $shouldObscurePassword, connectArg: $connectArg, connectedAccount: $connectedAccount, isConnecting: $isConnecting, isCompleted: $isCompleted, isAltMode: $isAltMode, error: $error}";
+    return "_State {scheme: ${scheme.name}, serverUrl: $serverUrl, username: $username, password: $password, shouldObscurePassword: $shouldObscurePassword, connectArg: $connectArg, connectedAccount: $connectedAccount, isConnecting: $isConnecting, isCompleted: $isCompleted, method: ${method.name}, error: $error}";
   }
 }
 
@@ -127,10 +127,10 @@ extension _$_SetConnectedAccountToString on _SetConnectedAccount {
   }
 }
 
-extension _$_SetAltModeToString on _SetAltMode {
+extension _$_SetSignInMethodToString on _SetSignInMethod {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetAltMode {value: $value}";
+    return "_SetSignInMethod {value: ${value.name}}";
   }
 }
 

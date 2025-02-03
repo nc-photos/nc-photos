@@ -115,6 +115,8 @@ dependencies:
     path: ../np_http
   np_log:
     path: ../np_log
+  np_login_flow:
+    path: ../np_login_flow
   np_math:
     path: ../np_math
   np_platform_image_processor:
