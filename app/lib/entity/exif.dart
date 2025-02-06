@@ -34,6 +34,20 @@ class Exif with EquatableMixin {
   bool containsKey(String key) => data.containsKey(key);
 
   JsonObj toJson() {
+    dynamic convertValue(dynamic value) {
+      if (value is List) {
+        return value.map(convertValue).toList();
+      } else if (value is Rational) {
+        return value.toJson();
+      } else if (value is Date) {
+        return value.toJson();
+      } else if (value is Time) {
+        return value.toJson();
+      } else {
+        return value;
+      }
+    }
+
     return Map.fromEntries(
       // we are filtering out MakerNote here because it's generally very large
       // and could exceed the 1MB cursor size limit on Android. Second, the
@@ -45,20 +59,7 @@ class Exif with EquatableMixin {
               e.key != "UserComment" &&
               e.key != "ImageDescription")
           .map((e) {
-        dynamic jsonValue;
-        if (e.value is Rational) {
-          jsonValue = (e.value as Rational).toJson();
-        } else if (e.value is List) {
-          jsonValue = (e.value as List).map((e) {
-            if (e is Rational) {
-              return e.toJson();
-            } else {
-              return e;
-            }
-          }).toList();
-        } else {
-          jsonValue = e.value;
-        }
+        final jsonValue = convertValue(e.value);
         return MapEntry(e.key, jsonValue);
       }),
     );
@@ -69,12 +70,11 @@ class Exif with EquatableMixin {
       json.entries.map((e) {
         dynamic exifValue;
         if (e.value is Map) {
-          exifValue =
-              _rationalFromJson((e.value as Map).cast<String, dynamic>());
+          exifValue = _objectFromJson((e.value as Map).cast<String, dynamic>());
         } else if (e.value is List) {
           exifValue = (e.value as List).map((e) {
             if (e is Map) {
-              return _rationalFromJson(e.cast<String, dynamic>());
+              return _objectFromJson(e.cast<String, dynamic>());
             } else {
               return e;
             }
@@ -190,13 +190,41 @@ class Exif with EquatableMixin {
 }
 
 extension on Rational {
-  Map<String, int> toJson() => {
+  JsonObj toJson() => {
         "n": numerator,
         "d": denominator,
       };
 }
 
-Rational _rationalFromJson(Map<String, dynamic> json) {
-  return Rational(
-      json["n"] ?? json["numerator"], json["d"] ?? json["denominator"]);
+extension on Date {
+  JsonObj toJson() => {
+        "_": "Date",
+        "y": year,
+        "m": month,
+        "d": day,
+      };
+}
+
+extension on Time {
+  JsonObj toJson() => {
+        "_": "Time",
+        "h": hour,
+        "m": minute,
+        "s": second,
+        "th": tzHour,
+        "tm": tzMinute,
+      };
+}
+
+Object _objectFromJson(JsonObj json) {
+  switch (json["_"]) {
+    case "Date":
+      return Date(json["y"], json["m"], json["d"]);
+    case "Time":
+      return Time(json["h"], json["m"], json["s"], json["th"], json["tm"]);
+    case null:
+    default:
+      return Rational(
+          json["n"] ?? json["numerator"], json["d"] ?? json["denominator"]);
+  }
 }
