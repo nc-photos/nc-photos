@@ -91,7 +91,7 @@ class Value {
           return _listOrValue(_data);
         case TypeId.asciiString:
           // this is supposed to be ascii but vendors are putting utf-8 strings
-          return utf8.decode(_data);
+          return _removeNullTerminator(utf8.decode(_data));
         case TypeId.unsignedShort:
           return _listOrValue(_data.buffer.asUint16List());
         case TypeId.unsignedLong:
@@ -121,7 +121,7 @@ class Value {
         case TypeId.signedLongLong:
           return _listOrValue(_data.buffer.asInt64List());
         case TypeId.string:
-          return utf8.decode(_data);
+          return _removeNullTerminator(utf8.decode(_data));
         case TypeId.date:
           return _data.buffer.asInt32List().let((e) => Date(e[0], e[1], e[2]));
         case TypeId.time:
@@ -171,17 +171,36 @@ class Value {
         data = e.sublist(8);
       }
       if (charset == "ASCII") {
-        return ascii.decode(data, allowInvalid: true);
+        return _removeNullTerminator(ascii.decode(data, allowInvalid: true));
       } else if (charset == "JIS") {
-        return ShiftJIS().decode(data);
+        return _removeNullTerminator(ShiftJIS().decode(data));
       } else if (charset == "UNICODE") {
         // UTF16
-        return String.fromCharCodes(data.buffer.asUint16List());
+        return _removeNullTerminator(
+            String.fromCharCodes(data.buffer.asUint16List()));
       } else {
         // unknown, treat as utf8
-        return utf8.decode(data);
+        return _removeNullTerminator(utf8.decode(data));
       }
     });
+  }
+
+  String _removeNullTerminator(String src) {
+    // C strings are null terminated, dart's aren't
+    if (src.isEmpty) {
+      // ?
+      return src;
+    } else {
+      var end = src.length;
+      while (end > 0 && src[end - 1] == "\u0000") {
+        --end;
+      }
+      if (end == 0) {
+        return "";
+      } else {
+        return src.substring(0, end);
+      }
+    }
   }
 
   final TypeId typeId;
