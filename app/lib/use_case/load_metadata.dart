@@ -78,6 +78,9 @@ class LoadMetadata {
           .nonNulls
           .toMap(),
     };
+    // keys starting with 0x are probably some proprietary values that we'll
+    // never use
+    metadata.removeWhere((key, value) => key.startsWith("0x"));
 
     var imageWidth = 0, imageHeight = 0;
     // exiv2 doesn't handle exif orientation
