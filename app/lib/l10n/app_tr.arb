@@ -286,6 +286,14 @@
 	"@settingsExifWifiOnlyFalseSubtitle": {
 		"description": "Shown when users allow processing exif data over any network"
 	},
+	"settingsFallbackClientExifTitle": "Uygulama tarafı EXIF işleyiciye geri dön",
+	"@settingsFallbackClientExifTitle": {
+		"description": "Fallback to client side EXIF parser"
+	},
+	"settingsFallbackClientExifTrueText": "Nextcloud dosya meta verilerini çıkarmayı başaramazsa, bunun yerine uygulama tarafı işleyiciyi kullanın",
+	"settingsFallbackClientExifFalseText": "Nextcloud dosya meta verilerini çıkarmayı başaramadıysa olduğu gibi bırakın",
+	"settingsFallbackClientExifConfirmDialogTitle": "Uygulama tarafı EXIF işleyiciyi etkinleştir?",
+	"settingsFallbackClientExifConfirmDialogText": "Normalde Nextcloud sunucusu fotoğraflarınızı otomatik olarak işler ve EXIF ​​meta verilerini arka planda depolar. Ancak arka plan görevi yapılandırma sorunu veya sunucu hatası nedeniyle başarısız olabilir. Etkinleştirilirse, bu dosyaları uygulamada işleriz.",
 	"settingsMemoriesTitle": "Anılar",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
