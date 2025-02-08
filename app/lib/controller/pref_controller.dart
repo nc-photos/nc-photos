@@ -281,6 +281,18 @@ class PrefController {
         value: value,
       );
 
+  Future<bool> setVideoPlayerMute(bool value) => _set<bool>(
+        controller: _isVideoPlayerMuteController,
+        setter: (pref, value) => pref.setVideoPlayerMute(value),
+        value: value,
+      );
+
+  Future<bool> setVideoPlayerLoop(bool value) => _set<bool>(
+        controller: _isVideoPlayerLoopController,
+        setter: (pref, value) => pref.setVideoPlayerLoop(value),
+        value: value,
+      );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -437,6 +449,12 @@ class PrefController {
   @npSubjectAccessor
   late final _isFallbackClientExifController =
       BehaviorSubject.seeded(pref.isFallbackClientExif() ?? true);
+  @npSubjectAccessor
+  late final _isVideoPlayerMuteController =
+      BehaviorSubject.seeded(pref.isVideoPlayerMute() ?? false);
+  @npSubjectAccessor
+  late final _isVideoPlayerLoopController =
+      BehaviorSubject.seeded(pref.isVideoPlayerLoop() ?? false);
 }
 
 extension PrefControllerExtension on PrefController {

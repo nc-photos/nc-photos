@@ -101,6 +101,13 @@ String getFileUrlRelative(FileDescriptor file) {
   return file.fdPath;
 }
 
+Uri getFileUri(Account account, FileDescriptor file) {
+  final serverUri = account.uri;
+  return serverUri.replace(
+    path: "${serverUri.path}/${getFileUrlRelative(file)}",
+  );
+}
+
 String getWebdavRootUrlRelative(Account account) =>
     "remote.php/dav/files/${account.userId}";
 

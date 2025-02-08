@@ -17,13 +17,18 @@ abstract class $_StateCopyWithWorker {
       {bool? shouldPlayLivePhoto,
       bool? canZoom,
       bool? canPlay,
+      bool? canLoop,
       bool? isPlayControlVisible,
       bool? isLoaded,
       bool? isZoomed,
       bool? isPlaying,
-      Unique<bool>? isLivePhotoLoadFailed,
       double? contentHeight,
-      ExceptionEvent? error});
+      double? videoAspectRatio,
+      Duration? videoDuration,
+      bool? videoIsLooping,
+      double? videoVolume,
+      ({Object error, StackTrace? stackTrace})? error,
+      ({Object error, StackTrace? stackTrace})? loadError});
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
@@ -34,29 +39,42 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       {dynamic shouldPlayLivePhoto,
       dynamic canZoom,
       dynamic canPlay,
+      dynamic canLoop,
       dynamic isPlayControlVisible,
       dynamic isLoaded,
       dynamic isZoomed,
       dynamic isPlaying,
-      dynamic isLivePhotoLoadFailed,
       dynamic contentHeight = copyWithNull,
-      dynamic error = copyWithNull}) {
+      dynamic videoAspectRatio,
+      dynamic videoDuration,
+      dynamic videoIsLooping,
+      dynamic videoVolume,
+      dynamic error = copyWithNull,
+      dynamic loadError = copyWithNull}) {
     return _State(
         shouldPlayLivePhoto:
             shouldPlayLivePhoto as bool? ?? that.shouldPlayLivePhoto,
         canZoom: canZoom as bool? ?? that.canZoom,
         canPlay: canPlay as bool? ?? that.canPlay,
+        canLoop: canLoop as bool? ?? that.canLoop,
         isPlayControlVisible:
             isPlayControlVisible as bool? ?? that.isPlayControlVisible,
         isLoaded: isLoaded as bool? ?? that.isLoaded,
         isZoomed: isZoomed as bool? ?? that.isZoomed,
         isPlaying: isPlaying as bool? ?? that.isPlaying,
-        isLivePhotoLoadFailed: isLivePhotoLoadFailed as Unique<bool>? ??
-            that.isLivePhotoLoadFailed,
         contentHeight: contentHeight == copyWithNull
             ? that.contentHeight
             : contentHeight as double?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+        videoAspectRatio: videoAspectRatio as double? ?? that.videoAspectRatio,
+        videoDuration: videoDuration as Duration? ?? that.videoDuration,
+        videoIsLooping: videoIsLooping as bool? ?? that.videoIsLooping,
+        videoVolume: videoVolume as double? ?? that.videoVolume,
+        error: error == copyWithNull
+            ? that.error
+            : error as ({Object error, StackTrace? stackTrace})?,
+        loadError: loadError == copyWithNull
+            ? that.loadError
+            : loadError as ({Object error, StackTrace? stackTrace})?);
   }
 
   final _State that;
@@ -99,7 +117,14 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {shouldPlayLivePhoto: $shouldPlayLivePhoto, canZoom: $canZoom, canPlay: $canPlay, isPlayControlVisible: $isPlayControlVisible, isLoaded: $isLoaded, isZoomed: $isZoomed, isPlaying: $isPlaying, isLivePhotoLoadFailed: $isLivePhotoLoadFailed, contentHeight: ${contentHeight == null ? null : "${contentHeight!.toStringAsFixed(3)}"}, error: $error}";
+    return "_State {shouldPlayLivePhoto: $shouldPlayLivePhoto, canZoom: $canZoom, canPlay: $canPlay, canLoop: $canLoop, isPlayControlVisible: $isPlayControlVisible, isLoaded: $isLoaded, isZoomed: $isZoomed, isPlaying: $isPlaying, contentHeight: ${contentHeight == null ? null : "${contentHeight!.toStringAsFixed(3)}"}, videoAspectRatio: ${videoAspectRatio.toStringAsFixed(3)}, videoDuration: $videoDuration, videoIsLooping: $videoIsLooping, videoVolume: ${videoVolume.toStringAsFixed(3)}, error: $error, loadError: $loadError}";
+  }
+}
+
+extension _$_InitToString on _Init {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_Init {}";
   }
 }
 
@@ -124,6 +149,13 @@ extension _$_SetCanPlayToString on _SetCanPlay {
   }
 }
 
+extension _$_SetCanLoopToString on _SetCanLoop {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetCanLoop {value: $value}";
+  }
+}
+
 extension _$_SetIsPlayControlVisibleToString on _SetIsPlayControlVisible {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
@@ -135,6 +167,13 @@ extension _$_SetLoadedToString on _SetLoaded {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetLoaded {}";
+  }
+}
+
+extension _$_SetVideoMetadataToString on _SetVideoMetadata {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetVideoMetadata {aspectRatio: ${aspectRatio.toStringAsFixed(3)}, duration: $duration}";
   }
 }
 
@@ -152,24 +191,38 @@ extension _$_SetIsZoomedToString on _SetIsZoomed {
   }
 }
 
-extension _$_SetPlayingToString on _SetPlaying {
+extension _$_ToggleVideoPlayToString on _ToggleVideoPlay {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetPlaying {}";
+    return "_ToggleVideoPlay {}";
   }
 }
 
-extension _$_SetPauseToString on _SetPause {
+extension _$_ToggleVideoLoopToString on _ToggleVideoLoop {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetPause {}";
+    return "_ToggleVideoLoop {}";
+  }
+}
+
+extension _$_ToggleVideoMuteToString on _ToggleVideoMute {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_ToggleVideoMute {}";
+  }
+}
+
+extension _$_UpdateVideoPlayerValueToString on _UpdateVideoPlayerValue {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_UpdateVideoPlayerValue {value: $value}";
   }
 }
 
 extension _$_SetLivePhotoLoadFailedToString on _SetLivePhotoLoadFailed {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetLivePhotoLoadFailed {}";
+    return "_SetLivePhotoLoadFailed {error: $error, stackTrace: $stackTrace}";
   }
 }
 

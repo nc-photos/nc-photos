@@ -17,10 +17,10 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/use_case/restore_trashbin.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
+import 'package:nc_photos/widget/file_content_view.dart';
 import 'package:nc_photos/widget/handler/remove_selection_handler.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:nc_photos/widget/image_viewer.dart';
-import 'package:nc_photos/widget/video_viewer.dart';
 import 'package:np_log/np_log.dart';
 
 part 'trashbin_viewer.g.dart';
@@ -263,24 +263,23 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
   }
 
   Widget _buildVideoView(BuildContext context, int index) {
-    return VideoViewer(
-      account: widget.account,
+    return FileContentView(
       file: widget.streamFiles[index],
+      shouldPlayLivePhoto: false,
+      isPlayControlVisible: _isShowVideoControl,
+      onZoomChanged: (isZoomed) {
+        setState(() {
+          _isZoomed = isZoomed;
+        });
+      },
+      onVideoPlayingChanged: (isPlaying) {
+        if (isPlaying) {
+          _onVideoPlay();
+        } else {
+          _onVideoPause();
+        }
+      },
       onLoaded: () => _onVideoLoaded(index),
-      onPlay: _onVideoPlay,
-      onPause: _onVideoPause,
-      isControlVisible: _isShowVideoControl,
-      canZoom: true,
-      onZoomStarted: () {
-        setState(() {
-          _isZoomed = true;
-        });
-      },
-      onZoomEnded: () {
-        setState(() {
-          _isZoomed = false;
-        });
-      },
     );
   }
 

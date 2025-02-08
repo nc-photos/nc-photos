@@ -37,7 +37,7 @@ class LivePhotoViewer extends StatefulWidget {
   final Account account;
   final FileDescriptor file;
   final VoidCallback? onLoaded;
-  final VoidCallback? onLoadFailure;
+  final void Function(Object? error, StackTrace? stackTrace)? onLoadFailure;
   final ValueChanged<double>? onHeightChanged;
   final bool canPlay;
   final LivePhotoType? livePhotoType;
@@ -52,10 +52,10 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
       if (mounted) {
         _initController(url);
       }
-    }).onError((e, stacktrace) {
-      _log.shout("[initState] Failed while _getVideoUrl", e, stacktrace);
+    }).onError((e, stackTrace) {
+      _log.shout("[initState] Failed while _getVideoUrl", e, stackTrace);
       SnackBarManager().showSnackBarForException(e);
-      widget.onLoadFailure?.call();
+      widget.onLoadFailure?.call(e, stackTrace);
     });
 
     _lifecycleListener = AppLifecycleListener(onShow: () {
@@ -119,7 +119,7 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     } catch (e, stackTrace) {
       _log.shout("[_initController] Failed while initialize", e, stackTrace);
       SnackBarManager().showSnackBarForException(e);
-      widget.onLoadFailure?.call();
+      widget.onLoadFailure?.call(e, stackTrace);
     }
   }
 

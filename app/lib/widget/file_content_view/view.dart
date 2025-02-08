@@ -20,8 +20,8 @@ class _LivePhotoPageContentView extends StatelessWidget {
         onHeightChanged: (height) {
           context.addEvent(_SetContentHeight(height));
         },
-        onLoadFailure: () {
-          context.addEvent(const _SetLivePhotoLoadFailed());
+        onLoadFailure: (e, stackTrace) {
+          context.addEvent(_SetLivePhotoLoadFailed(e ?? Object(), stackTrace));
         },
       ),
     );
@@ -52,45 +52,6 @@ class _PhotoPageContentView extends StatelessWidget {
         },
         onZoomEnded: () {
           context.addEvent(const _SetIsZoomed(false));
-        },
-      ),
-    );
-  }
-}
-
-class _VideoPageContentView extends StatelessWidget {
-  const _VideoPageContentView();
-
-  @override
-  Widget build(BuildContext context) {
-    return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.canZoom != current.canZoom ||
-          previous.isPlayControlVisible != current.isPlayControlVisible ||
-          previous.canPlay != current.canPlay,
-      builder: (context, state) => VideoViewer(
-        account: context.bloc.account,
-        file: context.bloc.file,
-        canZoom: state.canZoom,
-        canPlay: state.canPlay,
-        isControlVisible: state.isPlayControlVisible,
-        onLoaded: () {
-          context.addEvent(const _SetLoaded());
-        },
-        onHeightChanged: (height) {
-          context.addEvent(_SetContentHeight(height));
-        },
-        onZoomStarted: () {
-          context.addEvent(const _SetIsZoomed(true));
-        },
-        onZoomEnded: () {
-          context.addEvent(const _SetIsZoomed(false));
-        },
-        onPlay: () {
-          context.addEvent(const _SetPlaying());
-        },
-        onPause: () {
-          context.addEvent(const _SetPause());
         },
       ),
     );

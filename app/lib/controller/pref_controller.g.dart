@@ -273,6 +273,20 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<bool> get isFallbackClientExifChange =>
       isFallbackClientExif.distinct().skip(1);
   bool get isFallbackClientExifValue => _isFallbackClientExifController.value;
+// _isVideoPlayerMuteController
+  ValueStream<bool> get isVideoPlayerMute =>
+      _isVideoPlayerMuteController.stream;
+  Stream<bool> get isVideoPlayerMuteNew => isVideoPlayerMute.skip(1);
+  Stream<bool> get isVideoPlayerMuteChange =>
+      isVideoPlayerMute.distinct().skip(1);
+  bool get isVideoPlayerMuteValue => _isVideoPlayerMuteController.value;
+// _isVideoPlayerLoopController
+  ValueStream<bool> get isVideoPlayerLoop =>
+      _isVideoPlayerLoopController.stream;
+  Stream<bool> get isVideoPlayerLoopNew => isVideoPlayerLoop.skip(1);
+  Stream<bool> get isVideoPlayerLoopChange =>
+      isVideoPlayerLoop.distinct().skip(1);
+  bool get isVideoPlayerLoopValue => _isVideoPlayerLoopController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

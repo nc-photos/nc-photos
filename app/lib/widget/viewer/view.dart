@@ -280,9 +280,13 @@ class _PageViewState extends State<_PageView> {
                                   context.addEvent(const _ShowAppBar());
                                 }
                               },
-                              onLivePhotoLoadFailue: () {
-                                context
-                                    .addEvent(_PauseLivePhoto(widget.fileId));
+                              onLoadFailure: () {
+                                if (state.fileStates[widget.fileId]
+                                        ?.shouldPlayLivePhoto ==
+                                    true) {
+                                  context
+                                      .addEvent(_PauseLivePhoto(widget.fileId));
+                                }
                               },
                             ),
                           ),

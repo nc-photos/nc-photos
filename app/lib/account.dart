@@ -105,6 +105,23 @@ class Account with EquatableMixin {
 extension AccountExtension on Account {
   String get url => "$scheme://$address";
 
+  Uri get uri {
+    final pos = address.trimAny("/").indexOf("/");
+    final String authority, path;
+    if (pos == -1) {
+      authority = address;
+      path = "";
+    } else {
+      authority = address.substring(0, pos);
+      path = address.substring(pos);
+    }
+    if (scheme == "http") {
+      return Uri.http(authority, path);
+    } else {
+      return Uri.https(authority, path);
+    }
+  }
+
   /// Compare the server identity of two Accounts
   ///
   /// Return true if two Accounts point to the same user on server. Be careful
