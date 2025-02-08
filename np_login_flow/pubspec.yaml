@@ -12,6 +12,7 @@ dependencies:
   clock: ^1.1.1
   flutter:
     sdk: flutter
+  http: ^1.1.2
   logging: ^1.2.0
   np_api:
     path: ../np_api

@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:clock/clock.dart';
@@ -39,8 +40,8 @@ class ServerFlowV2 implements LoginFlow {
   }) async {
     _log.info("[login] $uri");
     final initiateLoginResponse = await _initiateLogin(uri);
-    launchUrl(Uri.parse(initiateLoginResponse.login),
-        mode: LaunchMode.externalApplication);
+    unawaited(launchUrl(Uri.parse(initiateLoginResponse.login),
+        mode: LaunchMode.externalApplication));
     final loginResponse = await _pollLoginResult(initiateLoginResponse.poll);
     return LoginResult(
       server: loginResponse.server,
