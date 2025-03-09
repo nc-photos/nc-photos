@@ -21,7 +21,8 @@ class FindFileDescriptor {
     List<int> fileIds, {
     void Function(int fileId)? onFileNotFound,
   }) async {
-    _log.info("[call] fileIds: ${fileIds.toReadableString()}");
+    _log.info(
+        "[call] fileIds: (length: ${fileIds.length}) ${fileIds.toReadableString(truncate: 10)}...");
     final dbResults = await _c.npDb.getFileDescriptors(
       account: account.toDb(),
       fileIds: fileIds,

@@ -167,7 +167,6 @@ class FilesController {
   /// Update files property and return number of files updated
   Future<void> updateProperty(
     List<FileDescriptor> files, {
-    OrNull<Metadata>? metadata,
     OrNull<bool>? isArchived,
     OrNull<DateTime>? overrideDateTime,
     bool? isFavorite,
@@ -187,7 +186,6 @@ class FilesController {
         final result = _mockUpdateProperty(
           src: _dataStreamController.value.files,
           files: files,
-          metadata: metadata,
           isArchived: isArchived,
           overrideDateTime: overrideDateTime,
           isFavorite: isFavorite,
@@ -238,7 +236,6 @@ class FilesController {
         final result = _mockUpdateProperty(
           src: _timelineStreamController.value.data,
           files: files,
-          metadata: metadata,
           isArchived: isArchived,
           overrideDateTime: overrideDateTime,
           isFavorite: isFavorite,
@@ -256,7 +253,6 @@ class FilesController {
         await UpdateProperty(fileRepo: _c.fileRepo2)(
           account,
           f,
-          metadata: metadata,
           isArchived: isArchived,
           overrideDateTime: overrideDateTime,
           favorite: isFavorite,
@@ -441,6 +437,9 @@ class FilesController {
       final interests = fileIds
           .where((e) => !_dataStreamController.value.files.containsKey(e))
           .toList();
+      if (interests.isEmpty) {
+        return;
+      }
       final files = await FindFileDescriptor(_c)(
         account,
         interests,
