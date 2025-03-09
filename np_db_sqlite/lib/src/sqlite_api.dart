@@ -551,6 +551,32 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
+  Future<List<int>> getFileIds({
+    required DbAccount account,
+    List<String>? includeRelativeRoots,
+    List<String>? includeRelativeDirs,
+    List<String>? excludeRelativeRoots,
+    bool? isArchived,
+    List<String>? mimes,
+  }) async {
+    final stopwatch = Stopwatch()..start();
+    try {
+      return await _db.use((db) async {
+        return await db.queryFileIds(
+          account: ByAccount.db(account),
+          includeRelativeRoots: includeRelativeRoots,
+          includeRelativeDirs: includeRelativeDirs,
+          excludeRelativeRoots: excludeRelativeRoots,
+          isArchived: isArchived,
+          mimes: mimes,
+        );
+      });
+    } finally {
+      _log.fine("[getFileIds] Elapsed: ${stopwatch.elapsedMilliseconds}ms");
+    }
+  }
+
+  @override
   Future<DbLocationGroupResult> groupLocations({
     required DbAccount account,
     List<String>? includeRelativeRoots,

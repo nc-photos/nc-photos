@@ -36,6 +36,15 @@ class FileRemoteDataSource implements FileDataSource2 {
   }
 
   @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) {
+    throw UnsupportedError("getFileIds not supported");
+  }
+
+  @override
   Future<void> updateProperty(
     Account account,
     FileDescriptor f, {
@@ -123,6 +132,27 @@ class FileNpDbDataSource implements FileDataSource2 {
       isArchived: isArchived,
       offset: offset,
       limit: limit,
+    );
+  }
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) async {
+    _log.info("[getFileIds] $account");
+    return await db.getFileIds(
+      account: account.toDb(),
+      // need this because this arg expect empty string for root instead of "."
+      includeRelativeRoots: account.roots
+          .map((e) => File(path: file_util.unstripPath(account, e))
+              .strippedPathWithEmpty)
+          .toList(),
+      includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
+      excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
+      mimes: file_util.supportedFormatMimes,
+      isArchived: isArchived,
     );
   }
 

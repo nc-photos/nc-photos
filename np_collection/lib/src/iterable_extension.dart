@@ -12,7 +12,14 @@ extension IterableExtension<T> on Iterable<T> {
 
   /// Return a string representation of this iterable by joining the result of
   /// toString for each items
-  String toReadableString() => "[${join(', ')}]";
+  String toReadableString({
+    int truncate = -1,
+  }) {
+    return switch (truncate) {
+      <= 0 => "[${join(', ')}]",
+      _ => "[${take(truncate).join(', ')},...]",
+    };
+  }
 
   Iterable<({int i, T e})> withIndex() => mapIndexed((i, e) => (i: i, e: e));
 

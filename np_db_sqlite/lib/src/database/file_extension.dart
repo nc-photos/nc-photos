@@ -113,7 +113,8 @@ extension SqliteDbFileExtension on SqliteDb {
     required ByAccount account,
     required Iterable<int> fileIds,
   }) {
-    _log.info("[queryFilesByFileIds] fileIds: ${fileIds.toReadableString()}");
+    _log.info(
+        "[queryFilesByFileIds] fileIds: (length: ${fileIds.length}) ${fileIds.toReadableString(truncate: 10)}");
     return fileIds.withPartition((sublist) {
       final query = _queryFiles().let((q) {
         q
@@ -152,11 +153,38 @@ extension SqliteDbFileExtension on SqliteDb {
 
   Future<List<int>> queryFileIds({
     required ByAccount account,
+    List<String>? includeRelativeRoots,
+    List<String>? includeRelativeDirs,
+    List<String>? excludeRelativeRoots,
     bool? isFavorite,
+    bool? isArchived,
+    List<String>? mimes,
     int? limit,
   }) async {
-    _log.info("[queryFileIds] isFavorite: $isFavorite, "
-        "limit: $limit");
+    _log.info(
+      "[queryFileIds] "
+      "includeRelativeRoots: $includeRelativeRoots, "
+      "includeRelativeDirs: $includeRelativeDirs, "
+      "excludeRelativeRoots: $excludeRelativeRoots, "
+      "isFavorite: $isFavorite, "
+      "isArchived: $isArchived, "
+      "mimes: $mimes, "
+      "limit: $limit, ",
+    );
+
+    List<int>? dirIds;
+    if (includeRelativeDirs?.isNotEmpty == true) {
+      final sqlAccount = await accountOf(account);
+      final result = await _accountFileRowIdsOf(ByAccount.sql(sqlAccount),
+              includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList())
+          .notNull();
+      dirIds = result.values.map((e) => e.fileRowId).toList();
+      if (dirIds.length != includeRelativeDirs.length) {
+        _log.warning(
+            "[queryFileIds] Some dirs not found: $includeRelativeDirs");
+      }
+    }
+
     final query = _queryFiles().let((q) {
       q
         ..setQueryMode(
@@ -164,12 +192,46 @@ extension SqliteDbFileExtension on SqliteDb {
           expressions: [files.fileId],
         )
         ..setAccount(account);
+      if (includeRelativeRoots != null) {
+        if (includeRelativeRoots.none((p) => p.isEmpty)) {
+          for (final r in includeRelativeRoots) {
+            q.byOrRelativePathPattern("$r/%");
+          }
+          if (dirIds != null) {
+            for (final i in dirIds) {
+              q.byOrDirRowId(i);
+            }
+          }
+        }
+      } else {
+        if (dirIds != null) {
+          for (final i in dirIds) {
+            q.byOrDirRowId(i);
+          }
+        }
+      }
       if (isFavorite != null) {
         q.byFavorite(isFavorite);
       }
+      if (isArchived != null) {
+        q.byArchived(isArchived);
+      }
       return q.build();
     });
-    query.orderBy([OrderingTerm.desc(accountFiles.bestDateTime)]);
+    if (excludeRelativeRoots != null) {
+      for (final r in excludeRelativeRoots) {
+        query.where(accountFiles.relativePath.like("$r/%").not());
+      }
+    }
+    if (mimes != null) {
+      query.where(files.contentType.isIn(mimes));
+    } else {
+      query.where(files.isCollection.isNotValue(true));
+    }
+    query.orderBy([
+      OrderingTerm.desc(accountFiles.bestDateTime),
+      OrderingTerm.desc(accountFiles.rowId),
+    ]);
     if (limit != null) {
       query.limit(limit);
     }
@@ -468,7 +530,7 @@ extension SqliteDbFileExtension on SqliteDb {
   }) async {
     _log.info(
       "[queryFileDescriptors] "
-      "fileIds: $fileIds, "
+      "fileIds: ${fileIds?.toReadableString(truncate: 10)}, "
       "includeRelativeRoots: $includeRelativeRoots, "
       "includeRelativeDirs: $includeRelativeDirs, "
       "excludeRelativeRoots: $excludeRelativeRoots, "

@@ -24,6 +24,12 @@ abstract class FileRepo2 {
     bool? isArchived,
   });
 
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  });
+
   Future<void> updateProperty(
     Account account,
     FileDescriptor f, {
@@ -51,6 +57,14 @@ class BasicFileRepo implements FileRepo2 {
   }) =>
       dataSrc.getFileDescriptors(account, shareDirPath,
           timeRange: timeRange, isArchived: isArchived);
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) =>
+      dataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -93,6 +107,14 @@ class CachedFileRepo implements FileRepo2 {
   }) =>
       cacheDataSrc.getFileDescriptors(account, shareDirPath,
           timeRange: timeRange, isArchived: isArchived);
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) =>
+      cacheDataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -150,6 +172,12 @@ abstract class FileDataSource2 {
     Account account,
     String shareDirPath, {
     TimeRange? timeRange,
+    bool? isArchived,
+  });
+
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
     bool? isArchived,
   });
 

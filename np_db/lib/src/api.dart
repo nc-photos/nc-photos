@@ -449,6 +449,15 @@ abstract class NpDb {
     List<String>? mimes,
   });
 
+  Future<List<int>> getFileIds({
+    required DbAccount account,
+    List<String>? includeRelativeRoots,
+    List<String>? includeRelativeDirs,
+    List<String>? excludeRelativeRoots,
+    bool? isArchived,
+    List<String>? mimes,
+  });
+
   Future<DbLocationGroupResult> groupLocations({
     required DbAccount account,
     List<String>? includeRelativeRoots,
