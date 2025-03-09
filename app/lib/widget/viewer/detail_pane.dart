@@ -1,4 +1,4 @@
-part of '../viewer.dart';
+part of 'viewer.dart';
 
 class _DetailPaneContainer extends StatelessWidget {
   const _DetailPaneContainer({
@@ -72,11 +72,12 @@ class _DetailPane extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocBuilder(
       buildWhen: (previous, current) =>
-          previous.files[fileId] != current.files[fileId] ||
+          previous.mergedFileIdFileMap[fileId] !=
+              current.mergedFileIdFileMap[fileId] ||
           previous.collection != current.collection ||
           previous.collectionItems?[fileId] != current.collectionItems?[fileId],
       builder: (context, state) {
-        final file = state.files[fileId];
+        final file = state.mergedFileIdFileMap[fileId];
         final collection = state.collection;
         final collectionItem = state.collectionItems?[fileId];
         return file == null

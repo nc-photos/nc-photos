@@ -1,4 +1,4 @@
-part of '../viewer.dart';
+part of 'viewer.dart';
 
 class _ContentBody extends StatefulWidget {
   const _ContentBody();
@@ -15,18 +15,20 @@ class _ContentBodyState extends State<_ContentBody> {
       listeners: [
         _BlocListener(
           listenWhen: (previous, current) =>
-              previous.pendingRemovePage != current.pendingRemovePage,
+              previous.pendingRemoveFile != current.pendingRemoveFile,
           listener: (context, state) {
-            final index = state.pendingRemovePage.value;
-            if (index == null) {
+            final file = state.pendingRemoveFile.value;
+            if (file == null) {
               return;
             }
-            if (state.fileIdOrders.length <= 1) {
+            final pageCount =
+                context.bloc.allFilesCount - state.removedFileIds.length;
+            if (pageCount <= 1) {
               // removing the only item, pop view
               Navigator.of(context).pop();
-            } else if (index == state.index) {
+            } else if (file.fdId == state.currentFile?.fdId) {
               // removing current page
-              if (index >= state.fileIdOrders.length - 1) {
+              if (state.index >= pageCount - 1) {
                 // removing the last item, go back
                 _pageViewController
                     .previousPage(
@@ -35,7 +37,7 @@ class _ContentBodyState extends State<_ContentBody> {
                 )
                     .then((_) {
                   if (mounted) {
-                    context.addEvent(_RemovePage(index));
+                    context.addEvent(_RemoveFile(file));
                   }
                 });
               } else {
@@ -46,12 +48,12 @@ class _ContentBodyState extends State<_ContentBody> {
                 )
                     .then((_) {
                   if (mounted) {
-                    context.addEvent(_RemovePage(index));
+                    context.addEvent(_RemoveFile(file));
                   }
                 });
               }
             } else {
-              context.addEvent(_RemovePage(index));
+              context.addEvent(_RemoveFile(file));
             }
           },
         ),
@@ -77,17 +79,25 @@ class _ContentBodyState extends State<_ContentBody> {
             ),
             _BlocBuilder(
               buildWhen: (previous, current) =>
-                  previous.fileIdOrders != current.fileIdOrders ||
-                  previous.isZoomed != current.isZoomed,
+                  previous.isZoomed != current.isZoomed ||
+                  previous.removedFileIds != current.removedFileIds,
               builder: (context, state) => HorizontalPageViewer(
                 key: _key,
-                pageCount: state.fileIdOrders.length,
-                pageBuilder: (context, i) => _PageView(
-                  key: Key("FileContentView-${state.fileIdOrders[i]}"),
-                  fileId: state.fileIdOrders[i],
-                  pageHeight: MediaQuery.of(context).size.height,
+                pageCount:
+                    context.bloc.allFilesCount - state.removedFileIds.length,
+                pageBuilder: (context, i) => _BlocSelector(
+                  selector: (state) => state.pageFileIdMap[i],
+                  builder: (context, fileId) => fileId == null
+                      ? const Center(
+                          child: AppIntermediateCircularProgressIndicator(),
+                        )
+                      : _PageView(
+                          key: Key("Viewer-$fileId"),
+                          fileId: fileId,
+                          pageHeight: MediaQuery.of(context).size.height,
+                        ),
                 ),
-                initialPage: state.index,
+                initialPage: context.bloc.initialIndex,
                 controller: _pageViewController,
                 viewportFraction: _viewportFraction,
                 canSwitchPage: !state.isZoomed,
@@ -225,7 +235,7 @@ class _PageViewState extends State<_PageView> {
         ),
       ],
       child: _BlocSelector(
-        selector: (state) => state.files[widget.fileId],
+        selector: (state) => state.mergedFileIdFileMap[widget.fileId],
         builder: (context, file) {
           if (file == null) {
             return const Center(

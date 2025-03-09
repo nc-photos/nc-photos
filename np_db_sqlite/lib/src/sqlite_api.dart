@@ -475,6 +475,7 @@ class NpDbSqlite implements NpDb {
     bool? isArchived,
     List<String>? mimes,
     TimeRange? timeRange,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) async {
@@ -491,6 +492,7 @@ class NpDbSqlite implements NpDb {
         isArchived: isArchived,
         mimes: mimes,
         timeRange: timeRange,
+        isAscending: isAscending,
         offset: offset,
         limit: limit,
       );

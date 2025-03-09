@@ -419,6 +419,7 @@ abstract class NpDb {
     bool? isArchived,
     List<String>? mimes,
     TimeRange? timeRange,
+    bool? isAscending,
     int? offset,
     int? limit,
   });

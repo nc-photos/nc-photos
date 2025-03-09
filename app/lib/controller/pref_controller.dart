@@ -13,7 +13,7 @@ import 'package:nc_photos/language_util.dart';
 import 'package:nc_photos/protected_page_handler.dart';
 import 'package:nc_photos/size.dart';
 import 'package:nc_photos/widget/home_collections.dart';
-import 'package:nc_photos/widget/viewer.dart';
+import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/type.dart';

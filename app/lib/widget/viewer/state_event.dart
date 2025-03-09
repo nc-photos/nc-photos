@@ -1,12 +1,12 @@
-part of '../viewer.dart';
+part of 'viewer.dart';
 
 @genCopyWith
 @toString
 class _State {
   const _State({
-    required this.fileIdOrders,
-    required this.rawFiles,
-    required this.files,
+    required this.pageFileIdMap,
+    required this.fileIdFileMap,
+    required this.mergedFileIdFileMap,
     required this.fileStates,
     required this.index,
     required this.currentFile,
@@ -24,29 +24,31 @@ class _State {
     required this.isShowAppBar,
     required this.appBarButtons,
     required this.bottomAppBarButtons,
-    required this.pendingRemovePage,
+    required this.pendingRemoveFile,
+    required this.removedFileIds,
     required this.imageEditorRequest,
     required this.imageEnhancerRequest,
     required this.shareRequest,
+    required this.startSlideshowRequest,
     required this.slideshowRequest,
     required this.setAsRequest,
+    required this.isBusy,
     this.error,
   });
 
   factory _State.init({
-    required List<int> fileIds,
-    required int index,
-    required FileDescriptor? currentFile,
+    required int initialIndex,
+    required FileDescriptor initialFile,
     required List<ViewerAppBarButtonType> appBarButtons,
     required List<ViewerAppBarButtonType> bottomAppBarButtons,
   }) =>
       _State(
-        fileIdOrders: fileIds,
-        rawFiles: const {},
-        files: const {},
+        pageFileIdMap: const {},
+        fileIdFileMap: const {},
+        mergedFileIdFileMap: const {},
         fileStates: const {},
-        index: index,
-        currentFile: currentFile,
+        index: initialIndex,
+        currentFile: initialFile,
         isShowDetailPane: false,
         isClosingDetailPane: false,
         isDetailPaneActive: false,
@@ -57,12 +59,15 @@ class _State {
         isShowAppBar: true,
         appBarButtons: appBarButtons,
         bottomAppBarButtons: bottomAppBarButtons,
-        pendingRemovePage: Unique(null),
+        pendingRemoveFile: Unique(null),
+        removedFileIds: const [],
         imageEditorRequest: Unique(null),
         imageEnhancerRequest: Unique(null),
         shareRequest: Unique(null),
+        startSlideshowRequest: Unique(null),
         slideshowRequest: Unique(null),
         setAsRequest: Unique(null),
+        isBusy: false,
       );
 
   @override
@@ -70,10 +75,9 @@ class _State {
 
   bool get canOpenDetailPane => !isZoomed;
 
-  @Format(r"$$?")
-  final List<int> fileIdOrders;
-  final Map<int, FileDescriptor> rawFiles;
-  final Map<int, FileDescriptor> files;
+  final Map<int, int> pageFileIdMap;
+  final Map<int, FileDescriptor> fileIdFileMap;
+  final Map<int, FileDescriptor> mergedFileIdFileMap;
   final Map<int, _PageState> fileStates;
   final int index;
   final FileDescriptor? currentFile;
@@ -93,14 +97,17 @@ class _State {
   final List<ViewerAppBarButtonType> appBarButtons;
   final List<ViewerAppBarButtonType> bottomAppBarButtons;
 
-  final Unique<int?> pendingRemovePage;
+  final Unique<FileDescriptor?> pendingRemoveFile;
+  final List<int> removedFileIds;
 
   final Unique<ImageEditorArguments?> imageEditorRequest;
   final Unique<ImageEnhancerArguments?> imageEnhancerRequest;
   final Unique<_ShareRequest?> shareRequest;
+  final Unique<_StartSlideshowRequest?> startSlideshowRequest;
   final Unique<_SlideshowRequest?> slideshowRequest;
   final Unique<_SetAsRequest?> setAsRequest;
 
+  final bool isBusy;
   final ExceptionEvent? error;
 }
 
@@ -180,15 +187,25 @@ class _SetCollectionItems implements _Event {
   final List<CollectionItem>? value;
 }
 
-@toString
 /// Merge regular files with collection items. The point of doing this is to
 /// support shared files in an server side shared album, as these files do not
 /// have a record in filesController
+@toString
 class _MergeFiles implements _Event {
   const _MergeFiles();
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _NewPageContent implements _Event {
+  const _NewPageContent(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Map<int, FileDescriptor> value;
 }
 
 @toString
@@ -366,6 +383,17 @@ class _StartSlideshow implements _Event {
 }
 
 @toString
+class _StartSlideshowResult implements _Event {
+  const _StartSlideshowResult(this.request, this.config);
+
+  @override
+  String toString() => _$toString();
+
+  final _StartSlideshowRequest request;
+  final SlideshowConfig config;
+}
+
+@toString
 class _SetAs implements _Event {
   const _SetAs(this.fileId);
 
@@ -447,13 +475,13 @@ class _SetIsZoomed implements _Event {
 }
 
 @toString
-class _RemovePage implements _Event {
-  const _RemovePage(this.value);
+class _RemoveFile implements _Event {
+  const _RemoveFile(this.file);
 
   @override
   String toString() => _$toString();
 
-  final int value;
+  final FileDescriptor file;
 }
 
 @toString

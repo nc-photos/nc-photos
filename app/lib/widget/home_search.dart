@@ -22,6 +22,7 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/throttler.dart';
 import 'package:nc_photos/widget/builder/photo_list_item_builder.dart';
+import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/handler/add_selection_to_collection_handler.dart';
 import 'package:nc_photos/widget/handler/remove_selection_handler.dart';
 import 'package:nc_photos/widget/home_search_suggestion.dart';
@@ -32,7 +33,6 @@ import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
 import 'package:nc_photos/widget/search_landing.dart';
 import 'package:nc_photos/widget/selectable_item_stream_list_mixin.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
-import 'package:nc_photos/widget/viewer.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
@@ -88,10 +88,11 @@ class _HomeSearchState extends State<HomeSearch>
   onItemTap(SelectableItem item, int index) {
     item.as<PhotoListFileItem>()?.run((fileItem) {
       Navigator.of(context).pushNamed(
-        Viewer.routeName,
-        arguments: ViewerArguments(
-          _backingFiles.map((e) => e.fdId).toList(),
+        CollectionViewer.routeName,
+        arguments: CollectionViewerArguments(
+          _backingFiles,
           fileItem.fileIndex,
+          null,
         ),
       );
     });

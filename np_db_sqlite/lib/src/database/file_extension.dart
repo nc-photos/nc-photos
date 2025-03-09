@@ -462,6 +462,7 @@ extension SqliteDbFileExtension on SqliteDb {
     bool? isArchived,
     List<String>? mimes,
     TimeRange? timeRange,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) async {
@@ -555,7 +556,17 @@ extension SqliteDbFileExtension on SqliteDb {
       for (final k in relativePathKeywords ?? const []) {
         query.where(accountFiles.relativePath.like("%$k%"));
       }
-      query.orderBy([OrderingTerm.desc(accountFiles.bestDateTime)]);
+      if (isAscending ?? false) {
+        query.orderBy([
+          OrderingTerm.asc(accountFiles.bestDateTime),
+          OrderingTerm.asc(accountFiles.rowId),
+        ]);
+      } else {
+        query.orderBy([
+          OrderingTerm.desc(accountFiles.bestDateTime),
+          OrderingTerm.desc(accountFiles.rowId),
+        ]);
+      }
       if (limit != null) {
         query.limit(limit, offset: offset);
       }

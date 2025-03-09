@@ -81,24 +81,31 @@ class _ContentListBody extends StatelessWidget {
         onSelectionChange: (_, selected) {
           context.addEvent(_SetSelectedItems(items: selected.cast()));
         },
-        onItemTap: (context, section, index, _) {
-          final sectionItems = state.transformedItems[section];
-          if (sectionItems[index + 1] is! _FileItem) {
+        onItemTap: (context, section, index, item) {
+          if (item is! _FileItem) {
+            // ?
             return;
           }
-          final actualIndex = index -
-              sectionItems
-                  .sublist(1, index + 1)
-                  .where((e) => e is! _FileItem)
-                  .length;
+          final fileDate = item.file.fdDateTime.toLocal().toDate();
+          final summary = context.state.filesSummary.items;
+          var count = 0;
+          for (final e in summary.entries.sortedBy((e) => e.key).reversed) {
+            if (e.key.isAfter(fileDate)) {
+              count += e.value.count;
+            } else {
+              break;
+            }
+          }
+          count += index;
+
           Navigator.of(context).pushNamed(
-            Viewer.routeName,
-            arguments: ViewerArguments(
-              sectionItems
-                  .whereType<_FileItem>()
-                  .map((e) => e.file.fdId)
-                  .toList(),
-              actualIndex,
+            TimelineViewer.routeName,
+            arguments: TimelineViewerArguments(
+              initialFile: item.file,
+              initialIndex: count,
+              allFilesCount: context.state.filesSummary.items.values
+                  .map((e) => e.count)
+                  .sum,
             ),
           );
         },

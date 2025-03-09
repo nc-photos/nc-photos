@@ -57,7 +57,7 @@ import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
 import 'package:nc_photos/widget/selectable_section_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
-import 'package:nc_photos/widget/viewer.dart';
+import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';

@@ -6,7 +6,8 @@ import 'package:np_math/np_math.dart';
 extension ListExtension<T> on List<T> {
   Iterable<T> takeIndex(List<int> indexes) => indexes.map((e) => this[e]);
 
-  List<T> slice(int start, [int? stop, int step = 1]) {
+  // Like slice in python
+  List<T> pySlice(int start, [int? stop, int step = 1]) {
     assert(step > 0);
     if (start < 0) {
       start = math.max(length + start, 0);
@@ -34,6 +35,11 @@ extension ListExtension<T> on List<T> {
       }
     }
   }
+
+  @Deprecated(
+      "This function conflict with the collections package. Use pySlice instead")
+  List<T> slice(int start, [int? stop, int step = 1]) =>
+      pySlice(start, stop, step);
 
   void stableSort([int Function(T a, T b)? compare]) {
     mergeSort(this, compare: compare);

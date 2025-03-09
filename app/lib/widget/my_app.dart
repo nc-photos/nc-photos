@@ -29,6 +29,7 @@ import 'package:nc_photos/widget/archive_browser.dart';
 import 'package:nc_photos/widget/changelog.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker.dart';
+import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/connect2/connect.dart';
 import 'package:nc_photos/widget/enhanced_photo_browser.dart';
 import 'package:nc_photos/widget/home.dart';
@@ -52,10 +53,10 @@ import 'package:nc_photos/widget/sharing_browser.dart';
 import 'package:nc_photos/widget/sign_in.dart';
 import 'package:nc_photos/widget/slideshow_viewer.dart';
 import 'package:nc_photos/widget/splash.dart';
+import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
-import 'package:nc_photos/widget/viewer.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
@@ -219,7 +220,6 @@ class _WrappedAppState extends State<_WrappedApp>
     _log.info("[_onGenerateRoute] Route: ${settings.name}");
     Route<dynamic>? route;
     route ??= _handleBasicRoute(settings);
-    route ??= _handleViewerRoute(settings);
     route ??= _handleConnectRoute(settings);
     route ??= _handleHomeRoute(settings);
     route ??= _handleRootPickerRoute(settings);
@@ -240,6 +240,8 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handleCollectionBrowserRoute(settings);
     route ??= _handleAccountSettingsRoute(settings);
     route ??= _handlePlacePickerRoute(settings);
+    route ??= _handleTimelineViewerRoute(settings);
+    route ??= _handleCollectionViewerRoute(settings);
     return route;
   }
 
@@ -248,18 +250,6 @@ class _WrappedAppState extends State<_WrappedApp>
       if (e.key == settings.name) {
         return e.value(settings);
       }
-    }
-    return null;
-  }
-
-  Route<dynamic>? _handleViewerRoute(RouteSettings settings) {
-    try {
-      if (settings.name == Viewer.routeName && settings.arguments != null) {
-        final args = settings.arguments as ViewerArguments;
-        return Viewer.buildRoute(args, settings);
-      }
-    } catch (e) {
-      _log.severe("[_handleViewerRoute] Failed while handling route", e);
     }
     return null;
   }
@@ -544,6 +534,34 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe("[_handlePlacePickerRoute] Failed while handling route", e);
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleTimelineViewerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == TimelineViewer.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as TimelineViewerArguments;
+        return TimelineViewer.buildRoute(args, settings);
+      }
+    } catch (e) {
+      _log.severe(
+          "[_handleTimelineViewerRoute] Failed while handling route", e);
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleCollectionViewerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == CollectionViewer.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as CollectionViewerArguments;
+        return CollectionViewer.buildRoute(args, settings);
+      }
+    } catch (e) {
+      _log.severe(
+          "[_handleCollectionViewerRoute] Failed while handling route", e);
     }
     return null;
   }

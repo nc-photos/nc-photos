@@ -12,11 +12,35 @@ part of 'viewer.dart';
 // CopyWithGenerator
 // **************************************************************************
 
+abstract class $ViewerPositionInfoCopyWithWorker {
+  ViewerPositionInfo call({int? pageIndex, FileDescriptor? originalFile});
+}
+
+class _$ViewerPositionInfoCopyWithWorkerImpl
+    implements $ViewerPositionInfoCopyWithWorker {
+  _$ViewerPositionInfoCopyWithWorkerImpl(this.that);
+
+  @override
+  ViewerPositionInfo call({dynamic pageIndex, dynamic originalFile}) {
+    return ViewerPositionInfo(
+        pageIndex: pageIndex as int? ?? that.pageIndex,
+        originalFile: originalFile as FileDescriptor? ?? that.originalFile);
+  }
+
+  final ViewerPositionInfo that;
+}
+
+extension $ViewerPositionInfoCopyWith on ViewerPositionInfo {
+  $ViewerPositionInfoCopyWithWorker get copyWith => _$copyWith;
+  $ViewerPositionInfoCopyWithWorker get _$copyWith =>
+      _$ViewerPositionInfoCopyWithWorkerImpl(this);
+}
+
 abstract class $_StateCopyWithWorker {
   _State call(
-      {List<int>? fileIdOrders,
-      Map<int, FileDescriptor>? rawFiles,
-      Map<int, FileDescriptor>? files,
+      {Map<int, int>? pageFileIdMap,
+      Map<int, FileDescriptor>? fileIdFileMap,
+      Map<int, FileDescriptor>? mergedFileIdFileMap,
       Map<int, _PageState>? fileStates,
       int? index,
       FileDescriptor? currentFile,
@@ -34,12 +58,15 @@ abstract class $_StateCopyWithWorker {
       bool? isShowAppBar,
       List<ViewerAppBarButtonType>? appBarButtons,
       List<ViewerAppBarButtonType>? bottomAppBarButtons,
-      Unique<int?>? pendingRemovePage,
+      Unique<FileDescriptor?>? pendingRemoveFile,
+      List<int>? removedFileIds,
       Unique<ImageEditorArguments?>? imageEditorRequest,
       Unique<ImageEnhancerArguments?>? imageEnhancerRequest,
       Unique<_ShareRequest?>? shareRequest,
+      Unique<_StartSlideshowRequest?>? startSlideshowRequest,
       Unique<_SlideshowRequest?>? slideshowRequest,
       Unique<_SetAsRequest?>? setAsRequest,
+      bool? isBusy,
       ExceptionEvent? error});
 }
 
@@ -48,9 +75,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
 
   @override
   _State call(
-      {dynamic fileIdOrders,
-      dynamic rawFiles,
-      dynamic files,
+      {dynamic pageFileIdMap,
+      dynamic fileIdFileMap,
+      dynamic mergedFileIdFileMap,
       dynamic fileStates,
       dynamic index,
       dynamic currentFile = copyWithNull,
@@ -68,17 +95,22 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       dynamic isShowAppBar,
       dynamic appBarButtons,
       dynamic bottomAppBarButtons,
-      dynamic pendingRemovePage,
+      dynamic pendingRemoveFile,
+      dynamic removedFileIds,
       dynamic imageEditorRequest,
       dynamic imageEnhancerRequest,
       dynamic shareRequest,
+      dynamic startSlideshowRequest,
       dynamic slideshowRequest,
       dynamic setAsRequest,
+      dynamic isBusy,
       dynamic error = copyWithNull}) {
     return _State(
-        fileIdOrders: fileIdOrders as List<int>? ?? that.fileIdOrders,
-        rawFiles: rawFiles as Map<int, FileDescriptor>? ?? that.rawFiles,
-        files: files as Map<int, FileDescriptor>? ?? that.files,
+        pageFileIdMap: pageFileIdMap as Map<int, int>? ?? that.pageFileIdMap,
+        fileIdFileMap:
+            fileIdFileMap as Map<int, FileDescriptor>? ?? that.fileIdFileMap,
+        mergedFileIdFileMap: mergedFileIdFileMap as Map<int, FileDescriptor>? ??
+            that.mergedFileIdFileMap,
         fileStates: fileStates as Map<int, _PageState>? ?? that.fileStates,
         index: index as int? ?? that.index,
         currentFile: currentFile == copyWithNull
@@ -114,8 +146,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
         bottomAppBarButtons:
             bottomAppBarButtons as List<ViewerAppBarButtonType>? ??
                 that.bottomAppBarButtons,
-        pendingRemovePage:
-            pendingRemovePage as Unique<int?>? ?? that.pendingRemovePage,
+        pendingRemoveFile: pendingRemoveFile as Unique<FileDescriptor?>? ??
+            that.pendingRemoveFile,
+        removedFileIds: removedFileIds as List<int>? ?? that.removedFileIds,
         imageEditorRequest:
             imageEditorRequest as Unique<ImageEditorArguments?>? ??
                 that.imageEditorRequest,
@@ -124,10 +157,14 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
                 that.imageEnhancerRequest,
         shareRequest:
             shareRequest as Unique<_ShareRequest?>? ?? that.shareRequest,
+        startSlideshowRequest:
+            startSlideshowRequest as Unique<_StartSlideshowRequest?>? ??
+                that.startSlideshowRequest,
         slideshowRequest: slideshowRequest as Unique<_SlideshowRequest?>? ??
             that.slideshowRequest,
         setAsRequest:
             setAsRequest as Unique<_SetAsRequest?>? ?? that.setAsRequest,
+        isBusy: isBusy as bool? ?? that.isBusy,
         error: error == copyWithNull ? that.error : error as ExceptionEvent?);
   }
 
@@ -178,38 +215,52 @@ extension _$_WrappedViewerStateNpLog on _WrappedViewerState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("widget.viewer._WrappedViewerState");
+  static final log = Logger("widget.viewer.viewer._WrappedViewerState");
 }
 
 extension _$_BlocNpLog on _Bloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("widget.viewer._Bloc");
+  static final log = Logger("widget.viewer.viewer._Bloc");
 }
 
 extension _$_ContentBodyStateNpLog on _ContentBodyState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("widget.viewer._ContentBodyState");
+  static final log = Logger("widget.viewer.viewer._ContentBodyState");
 }
 
 extension _$_PageViewStateNpLog on _PageViewState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("widget.viewer._PageViewState");
+  static final log = Logger("widget.viewer.viewer._PageViewState");
+}
+
+extension _$_ViewerContentControllerNpLog on _ViewerContentController {
+  // ignore: unused_element
+  Logger get _log => log;
+
+  static final log = Logger("widget.viewer.viewer._ViewerContentController");
 }
 
 // **************************************************************************
 // ToStringGenerator
 // **************************************************************************
 
+extension _$ViewerContentProviderResultToString on ViewerContentProviderResult {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "ViewerContentProviderResult {files: ${files.map((e) => e.fdId).toReadableString()}}";
+  }
+}
+
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {fileIdOrders: $fileIdOrders, rawFiles: {length: ${rawFiles.length}}, files: {length: ${files.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: ${currentFile == null ? null : "${currentFile!.fdPath}"}, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemovePage: $pendingRemovePage, imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, error: $error}";
+    return "_State {pageFileIdMap: {length: ${pageFileIdMap.length}}, fileIdFileMap: {length: ${fileIdFileMap.length}}, mergedFileIdFileMap: {length: ${mergedFileIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: ${currentFile == null ? null : "${currentFile!.fdPath}"}, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedFileIds: [length: ${removedFileIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, isBusy: $isBusy, error: $error}";
   }
 }
 
@@ -259,6 +310,13 @@ extension _$_MergeFilesToString on _MergeFiles {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_MergeFiles {}";
+  }
+}
+
+extension _$_NewPageContentToString on _NewPageContent {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_NewPageContent {value: {length: ${value.length}}}";
   }
 }
 
@@ -388,6 +446,13 @@ extension _$_StartSlideshowToString on _StartSlideshow {
   }
 }
 
+extension _$_StartSlideshowResultToString on _StartSlideshowResult {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_StartSlideshowResult {request: $request, config: $config}";
+  }
+}
+
 extension _$_SetAsToString on _SetAs {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
@@ -451,10 +516,10 @@ extension _$_SetIsZoomedToString on _SetIsZoomed {
   }
 }
 
-extension _$_RemovePageToString on _RemovePage {
+extension _$_RemoveFileToString on _RemoveFile {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_RemovePage {value: $value}";
+    return "_RemoveFile {file: ${file.fdPath}}";
   }
 }
 
