@@ -96,7 +96,7 @@ class ViewerContentProviderResult {
 abstract interface class ViewerContentProvider {
   /// Return a fixed amount of file ids near the file [at].
   ///
-  /// [count] count be negative, and the returned list should include files
+  /// [count] could be negative, and the returned list should include files
   /// before [at]. The returned list must be sorted in display order. If [count]
   /// is positive, the first element in the result should be the item right
   /// after [at] then going forward. If [count] is negative, the first element
@@ -111,6 +111,9 @@ abstract interface class ViewerContentProvider {
   /// requested, even with an empty list.
   Future<ViewerContentProviderResult> getFiles(
       ViewerPositionInfo at, int count);
+
+  /// Return a single file at the specified page
+  Future<FileDescriptor> getFile(int page, int fileId);
 
   /// Called when user removed a file returned from [getFiles]
   void notifyFileRemoved(int page, FileDescriptor file);
@@ -338,7 +341,10 @@ class _WrappedViewerState extends State<_WrappedViewer>
     );
     _log.info("[_onSlideshowRequest] Slideshow ended, jump to: $newIndex");
     if (newIndex != null && context.mounted) {
-      context.addEvent(_RequestPage(newIndex));
+      context.addEvent(_JumpToLastSlideshow(
+        index: newIndex,
+        fileId: slideshowRequest.fileIds[newIndex],
+      ));
     }
   }
 

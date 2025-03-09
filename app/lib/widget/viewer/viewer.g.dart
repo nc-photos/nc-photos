@@ -285,10 +285,10 @@ extension _$_SetIndexToString on _SetIndex {
   }
 }
 
-extension _$_RequestPageToString on _RequestPage {
+extension _$_JumpToLastSlideshowToString on _JumpToLastSlideshow {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_RequestPage {index: $index}";
+    return "_JumpToLastSlideshow {index: $index, fileId: $fileId}";
   }
 }
 

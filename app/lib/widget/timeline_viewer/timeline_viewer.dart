@@ -13,6 +13,7 @@ import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/flutter_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
+import 'package:nc_photos/use_case/find_file_descriptor.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_datetime/np_datetime.dart';
@@ -128,6 +129,12 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
       return const ViewerContentProviderResult(files: []);
     }
     return ViewerContentProviderResult(files: results);
+  }
+
+  @override
+  Future<FileDescriptor> getFile(int page, int fileId) async {
+    final results = await FindFileDescriptor(c)(account, [fileId]);
+    return results.first;
   }
 
   @override

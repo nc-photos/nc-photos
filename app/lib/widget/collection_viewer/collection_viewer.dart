@@ -86,6 +86,11 @@ class _CollectionViewerContentProvider implements ViewerContentProvider {
   }
 
   @override
+  Future<FileDescriptor> getFile(int page, int fileId) async {
+    return files[page];
+  }
+
+  @override
   void notifyFileRemoved(int page, FileDescriptor file) {
     if (files[page].fdId != file.fdId) {
       _log.warning(

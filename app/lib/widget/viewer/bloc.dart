@@ -30,7 +30,7 @@ class _Bloc extends Bloc<_Event, _State>
         )) {
     on<_Init>(_onInit);
     on<_SetIndex>(_onSetIndex);
-    on<_RequestPage>(_onRequestPage);
+    on<_JumpToLastSlideshow>(_onJumpToLastSlideshow);
     on<_SetCollection>(_onSetCollection);
     on<_SetCollectionItems>(_onSetCollectionItems);
     on<_MergeFiles>(_onMergeFiles);
@@ -215,9 +215,16 @@ class _Bloc extends Bloc<_Event, _State>
     }
   }
 
-  void _onRequestPage(_RequestPage ev, _Emitter emit) {
+  Future<void> _onJumpToLastSlideshow(
+      _JumpToLastSlideshow ev, _Emitter emit) async {
     _log.info(ev);
-    emit(state.copyWith(index: ev.index));
+    await contentController.fastJump(page: ev.index, fileId: ev.fileId);
+    emit(state.copyWith(
+      index: ev.index,
+      pageFileIdMap: state.pageFileIdMap.containsKey(ev.index)
+          ? null
+          : state.pageFileIdMap.addedAll({ev.index: ev.fileId}),
+    ));
   }
 
   void _onSetCollection(_SetCollection ev, _Emitter emit) {
@@ -251,10 +258,22 @@ class _Bloc extends Bloc<_Event, _State>
       merged = state.fileIdFileMap.addedAll(state.collectionItems!
           .map((key, value) => MapEntry(key, value.file)));
     }
-    emit(state.copyWith(
+
+    var newState = state.copyWith(
       mergedFileIdFileMap: merged,
       currentFile: merged[state.pageFileIdMap[state.index]],
-    ));
+    );
+    final fileId = state.pageFileIdMap[state.index];
+    if (state.currentFileState == null && fileId != null) {
+      final fileState = state.fileStates[fileId] ?? _PageState.create();
+      newState = newState.copyWith(
+        fileStates: state.fileStates[fileId] == null
+            ? state.fileStates.addedAll({fileId: fileState})
+            : null,
+        currentFileState: fileState,
+      );
+    }
+    emit(newState);
   }
 
   void _onNewPageContent(_NewPageContent ev, _Emitter emit) {

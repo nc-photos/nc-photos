@@ -157,13 +157,17 @@ class _SetIndex implements _Event {
 }
 
 @toString
-class _RequestPage implements _Event {
-  const _RequestPage(this.index);
+class _JumpToLastSlideshow implements _Event {
+  const _JumpToLastSlideshow({
+    required this.index,
+    required this.fileId,
+  });
 
   @override
   String toString() => _$toString();
 
   final int index;
+  final int fileId;
 }
 
 @toString

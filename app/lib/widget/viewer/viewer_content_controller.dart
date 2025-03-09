@@ -104,6 +104,21 @@ class _ViewerContentController {
     _pageContentMap = nextMap;
   }
 
+  Future<void> fastJump({
+    required int page,
+    required int fileId,
+  }) async {
+    // make this class smarter to handle this without clearing cache
+    if (page > _pageContentMap.keys.last || page < _pageContentMap.keys.first) {
+      _log.fine(
+          "[fastJump] Out of range, resetting map: $page, [${_pageContentMap.keys.first}, ${_pageContentMap.keys.last}]");
+      _pageContentMap.clear();
+      _pageContentMap.addAll({
+        page: await contentProvider.getFile(page, fileId),
+      });
+    }
+  }
+
   final ViewerContentProvider contentProvider;
   final int allFilesCount;
   final FileDescriptor initialFile;
