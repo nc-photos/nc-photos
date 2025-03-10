@@ -1300,11 +1300,6 @@
   ],
 
   "tr": [
-    "settingsFallbackClientExifTitle",
-    "settingsFallbackClientExifTrueText",
-    "settingsFallbackClientExifFalseText",
-    "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
     "errorServerNoCert"
