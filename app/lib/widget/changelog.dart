@@ -27,6 +27,7 @@ part 'changelog/changelog_700.dart';
 part 'changelog/changelog_710.dart';
 part 'changelog/changelog_720.dart';
 part 'changelog/changelog_730.dart';
+part 'changelog/changelog_740.dart';
 
 // Compatibility with flutter 3.22
 typedef WidgetStateProperty = MaterialStateProperty;
@@ -368,6 +369,7 @@ Widget _subBulletPoint(Widget child) => Row(
     );
 
 final _changelogs = <int, List<Widget> Function(BuildContext)>{
+  740: (_) => const [_Changelog740()],
   730: (_) => const [_Changelog730()],
   720: (_) => const [_Changelog720()],
   710: (_) => const [_Changelog710()],
