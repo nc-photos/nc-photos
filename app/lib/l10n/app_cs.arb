@@ -1511,5 +1511,56 @@
 	"mapBrowserDateRangeCustom": "Vlastní",
 	"homeTabMapBrowser": "Mapa",
 	"mapBrowserSetDefaultDateRangeButton": "Nastavit jako výchozí",
-	"todayText": "Dnes"
+	"todayText": "Dnes",
+	"settingsExifSupportTitle2": "Podpora EXIF na straně klienta",
+	"@settingsExifSupportTitle2": {
+		"description": "Title of the EXIF support setting"
+	},
+	"settingsViewerCustomizeAppBarTitle": "Přizpůsobit lištu aplikace",
+	"settingsViewerCustomizeBottomAppBarTitle": "Přizpůsobit spodní lištu aplikace",
+	"settingsCollectionsCustomizeNavigationBarTitle": "Přizpůsobit navigační lištu",
+	"exifSupportNextcloud28Notes": "Podpora na straně klienta doplňuje váš server. Aplikace bude zpracovávat soubory a atributy, které nejsou podporované Nextcloudem",
+	"@exifSupportNextcloud28Notes": {
+		"description": "Extra notes for Nextcloud 28+"
+	},
+	"exifSupportConfirmationDialogTitle2": "Povolit podporu EXIF na straně klienta?",
+	"@exifSupportConfirmationDialogTitle2": {
+		"description": "Title of the dialog to confirm enabling exif support"
+	},
+	"createCollectionDialogAlbumLabel2": "Album na straně klienta",
+	"@createCollectionDialogAlbumLabel2": {
+		"description": "Create an album as collection"
+	},
+	"createCollectionDialogAlbumDescription2": "Album s extra funkcemi, dostupné pouze s touto aplikací",
+	"@createCollectionDialogAlbumDescription2": {
+		"description": "Describe how an album collection works"
+	},
+	"createCollectionDialogNextcloudAlbumLabel2": "Album na straně serveru",
+	"@createCollectionDialogNextcloudAlbumLabel2": {
+		"description": "Server-side albums that are available in Nextcloud 25+"
+	},
+	"createCollectionDialogNextcloudAlbumDescription2": "Vytvořte album na svém serveru, které bude dostupné s jakoukoli aplikací",
+	"alternativeSignIn": "Místo toho se přihlásit jménem a heslem",
+	"@alternativeSignIn": {
+		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
+	},
+	"livePhotoTooltip": "Živá fotka",
+	"dragAndDropRearrangeButtons": "Přesuňte tlačítka pro změnu jejich pořadí",
+	"@dragAndDropRearrangeButtons": {
+		"description": "Instruction to customize buttons layout"
+	},
+	"customizeCollectionsNavBarDescription": "Přesuňte tlačítka pro změnu jejich pořadí, klepněte na tlačítka výše pro jejich minimalizaci",
+	"@customizeCollectionsNavBarDescription": {
+		"description": "Instruction to customize navigation bar buttons in the Collections page"
+	},
+	"customizeButtonsUnsupportedWarning": "Toto tlačítko nelze přizpůsobit",
+	"@customizeButtonsUnsupportedWarning": {
+		"description": "Some button can't be removed. This message will be shown instead when user try to do so"
+	},
+	"placePickerTitle": "Vyberte si místo",
+	"albumAddMapTooltip": "Přidat mapu",
+	"@albumAddMapTooltip": {
+		"description": "Add a map that display between photos to an album"
+	},
+	"fileNotFound": "Soubor nenalezen"
 }
