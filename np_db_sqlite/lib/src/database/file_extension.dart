@@ -147,7 +147,10 @@ extension SqliteDbFileExtension on SqliteDb {
     accountFiles.bestDateTime
         .isBetweenTimeRange(range)
         ?.let((e) => query.where(e));
-    query.orderBy([OrderingTerm.desc(accountFiles.bestDateTime.unixepoch)]);
+    query.orderBy([
+      OrderingTerm.desc(accountFiles.bestDateTime),
+      OrderingTerm.desc(files.fileId),
+    ]);
     return _mapCompleteFile(query);
   }
 
@@ -230,7 +233,7 @@ extension SqliteDbFileExtension on SqliteDb {
     }
     query.orderBy([
       OrderingTerm.desc(accountFiles.bestDateTime),
-      OrderingTerm.desc(accountFiles.rowId),
+      OrderingTerm.desc(files.fileId),
     ]);
     if (limit != null) {
       query.limit(limit);
@@ -621,12 +624,12 @@ extension SqliteDbFileExtension on SqliteDb {
       if (isAscending ?? false) {
         query.orderBy([
           OrderingTerm.asc(accountFiles.bestDateTime),
-          OrderingTerm.asc(accountFiles.rowId),
+          OrderingTerm.asc(files.fileId),
         ]);
       } else {
         query.orderBy([
           OrderingTerm.desc(accountFiles.bestDateTime),
-          OrderingTerm.desc(accountFiles.rowId),
+          OrderingTerm.desc(files.fileId),
         ]);
       }
       if (limit != null) {
