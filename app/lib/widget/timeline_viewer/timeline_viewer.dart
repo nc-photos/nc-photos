@@ -13,6 +13,7 @@ import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/flutter_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
+import 'package:nc_photos/use_case/file/list_file_id.dart';
 import 'package:nc_photos/use_case/find_file_descriptor.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_collection/np_collection.dart';
@@ -140,6 +141,15 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
   @override
   void notifyFileRemoved(int page, FileDescriptor file) {
     // we always query the latest data from db
+  }
+
+  @override
+  Future<List<int>> listFileIds() async {
+    return await ListFileId(fileRepo: c.fileRepo2)(
+      account,
+      shareDirPath,
+      isArchived: false,
+    );
   }
 
   final DiContainer c;

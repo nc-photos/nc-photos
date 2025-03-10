@@ -99,5 +99,10 @@ class _CollectionViewerContentProvider implements ViewerContentProvider {
     files.removeAt(page);
   }
 
+  @override
+  Future<List<int>> listFileIds() async {
+    return files.map((e) => e.fdId).toList();
+  }
+
   final List<FileDescriptor> files;
 }

@@ -117,6 +117,9 @@ abstract interface class ViewerContentProvider {
 
   /// Called when user removed a file returned from [getFiles]
   void notifyFileRemoved(int page, FileDescriptor file);
+
+  /// Return all file ids, typically for slideshow
+  Future<List<int>> listFileIds();
 }
 
 class ViewerArguments {

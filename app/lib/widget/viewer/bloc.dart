@@ -464,11 +464,7 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     emit(state.copyWith(isBusy: true));
     try {
-      final fileIds = await ListFileId(fileRepo: _c.fileRepo2)(
-        account,
-        file_util.unstripPath(account, accountPrefController.shareFolderValue),
-        isArchived: false,
-      );
+      final fileIds = await contentProvider.listFileIds();
       final req = _SlideshowRequest(
         fileIds: fileIds,
         startIndex: fileIds.indexOf(ev.request.fileId),
