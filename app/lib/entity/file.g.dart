@@ -34,6 +34,13 @@ extension _$MetadataUpgraderV3NpLog on MetadataUpgraderV3 {
   static final log = Logger("entity.file.MetadataUpgraderV3");
 }
 
+extension _$MetadataUpgraderV4NpLog on MetadataUpgraderV4 {
+  // ignore: unused_element
+  Logger get _log => log;
+
+  static final log = Logger("entity.file.MetadataUpgraderV4");
+}
+
 // **************************************************************************
 // ToStringGenerator
 // **************************************************************************
@@ -48,7 +55,7 @@ extension _$ImageLocationToString on ImageLocation {
 extension _$MetadataToString on Metadata {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "Metadata {lastUpdated: $lastUpdated, ${fileEtag == null ? "" : "fileEtag: $fileEtag, "}${imageWidth == null ? "" : "imageWidth: $imageWidth, "}${imageHeight == null ? "" : "imageHeight: $imageHeight, "}${exif == null ? "" : "exif: $exif"}}";
+    return "Metadata {lastUpdated: $lastUpdated, ${fileEtag == null ? "" : "fileEtag: $fileEtag, "}${imageWidth == null ? "" : "imageWidth: $imageWidth, "}${imageHeight == null ? "" : "imageHeight: $imageHeight, "}${exif == null ? "" : "exif: $exif, "}src: ${src.name}}";
   }
 }
 

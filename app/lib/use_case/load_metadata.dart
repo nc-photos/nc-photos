@@ -99,6 +99,7 @@ class LoadMetadata {
       imageWidth: imageWidth,
       imageHeight: imageHeight,
       exif: metadata.isNotEmpty ? Exif(metadata) : null,
+      src: app.MetadataSrc.exiv2,
     );
   }
 }
