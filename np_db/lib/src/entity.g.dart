@@ -294,7 +294,8 @@ abstract class $DbImageDataCopyWithWorker {
       int? width,
       int? height,
       JsonObj? exif,
-      DateTime? exifDateTimeOriginal});
+      DateTime? exifDateTimeOriginal,
+      int? src});
 }
 
 class _$DbImageDataCopyWithWorkerImpl implements $DbImageDataCopyWithWorker {
@@ -307,7 +308,8 @@ class _$DbImageDataCopyWithWorkerImpl implements $DbImageDataCopyWithWorker {
       dynamic width = copyWithNull,
       dynamic height = copyWithNull,
       dynamic exif = copyWithNull,
-      dynamic exifDateTimeOriginal = copyWithNull}) {
+      dynamic exifDateTimeOriginal = copyWithNull,
+      dynamic src = copyWithNull}) {
     return DbImageData(
         lastUpdated: lastUpdated as DateTime? ?? that.lastUpdated,
         fileEtag:
@@ -317,7 +319,8 @@ class _$DbImageDataCopyWithWorkerImpl implements $DbImageDataCopyWithWorker {
         exif: exif == copyWithNull ? that.exif : exif as JsonObj?,
         exifDateTimeOriginal: exifDateTimeOriginal == copyWithNull
             ? that.exifDateTimeOriginal
-            : exifDateTimeOriginal as DateTime?);
+            : exifDateTimeOriginal as DateTime?,
+        src: src == copyWithNull ? that.src : src as int?);
   }
 
   final DbImageData that;
@@ -690,7 +693,7 @@ extension _$DbFileDescriptorToString on DbFileDescriptor {
 extension _$DbImageDataToString on DbImageData {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbImageData {lastUpdated: $lastUpdated, fileEtag: $fileEtag, width: $width, height: $height, exif: $exif, exifDateTimeOriginal: $exifDateTimeOriginal}";
+    return "DbImageData {lastUpdated: $lastUpdated, fileEtag: $fileEtag, width: $width, height: $height, exif: $exif, exifDateTimeOriginal: $exifDateTimeOriginal, src: $src}";
   }
 }
 

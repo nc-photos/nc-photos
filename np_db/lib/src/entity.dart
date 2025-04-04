@@ -239,6 +239,7 @@ class DbImageData with EquatableMixin {
     required this.height,
     required this.exif,
     required this.exifDateTimeOriginal,
+    required this.src,
   });
 
   @override
@@ -252,6 +253,7 @@ class DbImageData with EquatableMixin {
         height,
         exif,
         exifDateTimeOriginal,
+        src,
       ];
 
   final DateTime lastUpdated;
@@ -260,6 +262,7 @@ class DbImageData with EquatableMixin {
   final int? height;
   final JsonObj? exif;
   final DateTime? exifDateTimeOriginal;
+  final int? src;
 }
 
 @genCopyWith

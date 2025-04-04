@@ -79,6 +79,7 @@ class Images extends Table {
   IntColumn get width => integer().nullable()();
   IntColumn get height => integer().nullable()();
   TextColumn get exifRaw => text().nullable()();
+  IntColumn get src => integer().nullable()();
 
   // exif columns
   DateTimeColumn get dateTimeOriginal =>

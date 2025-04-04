@@ -1485,6 +1485,11 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
   late final GeneratedColumn<String> exifRaw = GeneratedColumn<String>(
       'exif_raw', aliasedName, true,
       type: DriftSqlType.string, requiredDuringInsert: false);
+  static const VerificationMeta _srcMeta = const VerificationMeta('src');
+  @override
+  late final GeneratedColumn<int> src = GeneratedColumn<int>(
+      'src', aliasedName, true,
+      type: DriftSqlType.int, requiredDuringInsert: false);
   static const VerificationMeta _dateTimeOriginalMeta =
       const VerificationMeta('dateTimeOriginal');
   @override
@@ -1501,6 +1506,7 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
         width,
         height,
         exifRaw,
+        src,
         dateTimeOriginal
       ];
   @override
@@ -1536,6 +1542,10 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
       context.handle(_exifRawMeta,
           exifRaw.isAcceptableOrUnknown(data['exif_raw']!, _exifRawMeta));
     }
+    if (data.containsKey('src')) {
+      context.handle(
+          _srcMeta, src.isAcceptableOrUnknown(data['src']!, _srcMeta));
+    }
     context.handle(_dateTimeOriginalMeta, const VerificationResult.success());
     return context;
   }
@@ -1559,6 +1569,8 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
           .read(DriftSqlType.int, data['${effectivePrefix}height']),
       exifRaw: attachedDatabase.typeMapping
           .read(DriftSqlType.string, data['${effectivePrefix}exif_raw']),
+      src: attachedDatabase.typeMapping
+          .read(DriftSqlType.int, data['${effectivePrefix}src']),
       dateTimeOriginal: $ImagesTable.$converterdateTimeOriginaln.fromSql(
           attachedDatabase.typeMapping.read(DriftSqlType.dateTime,
               data['${effectivePrefix}date_time_original'])),
@@ -1585,6 +1597,7 @@ class Image extends DataClass implements Insertable<Image> {
   final int? width;
   final int? height;
   final String? exifRaw;
+  final int? src;
   final DateTime? dateTimeOriginal;
   const Image(
       {required this.accountFile,
@@ -1593,6 +1606,7 @@ class Image extends DataClass implements Insertable<Image> {
       this.width,
       this.height,
       this.exifRaw,
+      this.src,
       this.dateTimeOriginal});
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -1613,6 +1627,9 @@ class Image extends DataClass implements Insertable<Image> {
     }
     if (!nullToAbsent || exifRaw != null) {
       map['exif_raw'] = Variable<String>(exifRaw);
+    }
+    if (!nullToAbsent || src != null) {
+      map['src'] = Variable<int>(src);
     }
     if (!nullToAbsent || dateTimeOriginal != null) {
       map['date_time_original'] = Variable<DateTime>(
@@ -1635,6 +1652,7 @@ class Image extends DataClass implements Insertable<Image> {
       exifRaw: exifRaw == null && nullToAbsent
           ? const Value.absent()
           : Value(exifRaw),
+      src: src == null && nullToAbsent ? const Value.absent() : Value(src),
       dateTimeOriginal: dateTimeOriginal == null && nullToAbsent
           ? const Value.absent()
           : Value(dateTimeOriginal),
@@ -1651,6 +1669,7 @@ class Image extends DataClass implements Insertable<Image> {
       width: serializer.fromJson<int?>(json['width']),
       height: serializer.fromJson<int?>(json['height']),
       exifRaw: serializer.fromJson<String?>(json['exifRaw']),
+      src: serializer.fromJson<int?>(json['src']),
       dateTimeOriginal:
           serializer.fromJson<DateTime?>(json['dateTimeOriginal']),
     );
@@ -1665,6 +1684,7 @@ class Image extends DataClass implements Insertable<Image> {
       'width': serializer.toJson<int?>(width),
       'height': serializer.toJson<int?>(height),
       'exifRaw': serializer.toJson<String?>(exifRaw),
+      'src': serializer.toJson<int?>(src),
       'dateTimeOriginal': serializer.toJson<DateTime?>(dateTimeOriginal),
     };
   }
@@ -1676,6 +1696,7 @@ class Image extends DataClass implements Insertable<Image> {
           Value<int?> width = const Value.absent(),
           Value<int?> height = const Value.absent(),
           Value<String?> exifRaw = const Value.absent(),
+          Value<int?> src = const Value.absent(),
           Value<DateTime?> dateTimeOriginal = const Value.absent()}) =>
       Image(
         accountFile: accountFile ?? this.accountFile,
@@ -1684,6 +1705,7 @@ class Image extends DataClass implements Insertable<Image> {
         width: width.present ? width.value : this.width,
         height: height.present ? height.value : this.height,
         exifRaw: exifRaw.present ? exifRaw.value : this.exifRaw,
+        src: src.present ? src.value : this.src,
         dateTimeOriginal: dateTimeOriginal.present
             ? dateTimeOriginal.value
             : this.dateTimeOriginal,
@@ -1697,6 +1719,7 @@ class Image extends DataClass implements Insertable<Image> {
           ..write('width: $width, ')
           ..write('height: $height, ')
           ..write('exifRaw: $exifRaw, ')
+          ..write('src: $src, ')
           ..write('dateTimeOriginal: $dateTimeOriginal')
           ..write(')'))
         .toString();
@@ -1704,7 +1727,7 @@ class Image extends DataClass implements Insertable<Image> {
 
   @override
   int get hashCode => Object.hash(accountFile, lastUpdated, fileEtag, width,
-      height, exifRaw, dateTimeOriginal);
+      height, exifRaw, src, dateTimeOriginal);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1715,6 +1738,7 @@ class Image extends DataClass implements Insertable<Image> {
           other.width == this.width &&
           other.height == this.height &&
           other.exifRaw == this.exifRaw &&
+          other.src == this.src &&
           other.dateTimeOriginal == this.dateTimeOriginal);
 }
 
@@ -1725,6 +1749,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
   final Value<int?> width;
   final Value<int?> height;
   final Value<String?> exifRaw;
+  final Value<int?> src;
   final Value<DateTime?> dateTimeOriginal;
   const ImagesCompanion({
     this.accountFile = const Value.absent(),
@@ -1733,6 +1758,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
     this.width = const Value.absent(),
     this.height = const Value.absent(),
     this.exifRaw = const Value.absent(),
+    this.src = const Value.absent(),
     this.dateTimeOriginal = const Value.absent(),
   });
   ImagesCompanion.insert({
@@ -1742,6 +1768,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
     this.width = const Value.absent(),
     this.height = const Value.absent(),
     this.exifRaw = const Value.absent(),
+    this.src = const Value.absent(),
     this.dateTimeOriginal = const Value.absent(),
   }) : lastUpdated = Value(lastUpdated);
   static Insertable<Image> custom({
@@ -1751,6 +1778,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
     Expression<int>? width,
     Expression<int>? height,
     Expression<String>? exifRaw,
+    Expression<int>? src,
     Expression<DateTime>? dateTimeOriginal,
   }) {
     return RawValuesInsertable({
@@ -1760,6 +1788,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
       if (width != null) 'width': width,
       if (height != null) 'height': height,
       if (exifRaw != null) 'exif_raw': exifRaw,
+      if (src != null) 'src': src,
       if (dateTimeOriginal != null) 'date_time_original': dateTimeOriginal,
     });
   }
@@ -1771,6 +1800,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
       Value<int?>? width,
       Value<int?>? height,
       Value<String?>? exifRaw,
+      Value<int?>? src,
       Value<DateTime?>? dateTimeOriginal}) {
     return ImagesCompanion(
       accountFile: accountFile ?? this.accountFile,
@@ -1779,6 +1809,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
       width: width ?? this.width,
       height: height ?? this.height,
       exifRaw: exifRaw ?? this.exifRaw,
+      src: src ?? this.src,
       dateTimeOriginal: dateTimeOriginal ?? this.dateTimeOriginal,
     );
   }
@@ -1805,6 +1836,9 @@ class ImagesCompanion extends UpdateCompanion<Image> {
     if (exifRaw.present) {
       map['exif_raw'] = Variable<String>(exifRaw.value);
     }
+    if (src.present) {
+      map['src'] = Variable<int>(src.value);
+    }
     if (dateTimeOriginal.present) {
       map['date_time_original'] = Variable<DateTime>($ImagesTable
           .$converterdateTimeOriginaln
@@ -1822,6 +1856,7 @@ class ImagesCompanion extends UpdateCompanion<Image> {
           ..write('width: $width, ')
           ..write('height: $height, ')
           ..write('exifRaw: $exifRaw, ')
+          ..write('src: $src, ')
           ..write('dateTimeOriginal: $dateTimeOriginal')
           ..write(')'))
         .toString();

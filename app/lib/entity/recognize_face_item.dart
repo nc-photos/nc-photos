@@ -96,6 +96,7 @@ extension RecognizeFaceItemExtension on RecognizeFaceItem {
       metadata = Metadata(
         imageWidth: fileMetadataWidth,
         imageHeight: fileMetadataHeight,
+        src: MetadataSrc.legacy,
       );
     }
     return File(

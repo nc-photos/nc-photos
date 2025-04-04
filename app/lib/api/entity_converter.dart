@@ -75,6 +75,10 @@ class ApiFileConverter {
                   fileContentType: file.contentType,
                   logFilePath: file.href,
                 ),
+                upgraderV4: MetadataUpgraderV4(
+                  fileContentType: file.contentType,
+                  logFilePath: file.href,
+                ),
               ));
     }
   }

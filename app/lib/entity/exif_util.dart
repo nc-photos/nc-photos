@@ -1,6 +1,6 @@
-import 'package:exifdart/exifdart.dart';
 import 'package:flutter/foundation.dart';
 import 'package:nc_photos/entity/exif.dart';
+import 'package:np_exiv2/np_exiv2.dart';
 
 extension ExifExtension on Exif {
   double? get gpsLatitudeDeg {

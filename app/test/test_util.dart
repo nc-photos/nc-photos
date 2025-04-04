@@ -122,6 +122,7 @@ class FilesBuilder {
                 lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
                 imageWidth: 640,
                 imageHeight: 480,
+                src: MetadataSrc.legacy,
               )
             : metadata.obj,
         location: location,

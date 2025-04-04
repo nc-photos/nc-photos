@@ -397,6 +397,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.5"
+  euc:
+    dependency: transitive
+    description:
+      name: euc
+      sha256: "569b21c71ee5a3aa3e96f70512cd10d1fad7b438429fade65ec2a50038a09dc5"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.0.6+8"
   event_bus:
     dependency: "direct main"
     description:
@@ -405,15 +413,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  exifdart:
-    dependency: "direct main"
-    description:
-      path: "."
-      ref: "1.3.0"
-      resolved-ref: c91db71fbb3d3cee1c79716502dd37eadc8327ff
-      url: "https://github.com/nc-photos/exifdart.git"
-    source: git
-    version: "1.3.0"
   fake_async:
     dependency: transitive
     description:
@@ -1148,6 +1147,20 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_exiv2:
+    dependency: "direct main"
+    description:
+      path: "../np_exiv2"
+      relative: true
+    source: path
+    version: "1.0.0"
+  np_exiv2_lib:
+    dependency: "direct main"
+    description:
+      path: "../np_exiv2_lib"
+      relative: true
+    source: path
+    version: "0.0.1"
   np_geocoder:
     dependency: "direct main"
     description:
