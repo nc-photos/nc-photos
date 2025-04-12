@@ -1182,6 +1182,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_image_format_interface:
+    dependency: transitive
+    description:
+      path: "../np_image_format_interface"
+      relative: true
+    source: path
+    version: "1.0.0"
   np_lints:
     dependency: "direct dev"
     description:
@@ -1217,6 +1224,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_platform_image_format_jxl:
+    dependency: "direct main"
+    description:
+      path: "../np_platform_image_format_jxl"
+      relative: true
+    source: path
+    version: "0.0.1"
   np_platform_image_processor:
     dependency: "direct main"
     description:

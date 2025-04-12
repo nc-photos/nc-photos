@@ -119,6 +119,8 @@ dependencies:
     path: ../np_login_flow
   np_math:
     path: ../np_math
+  np_platform_image_format_jxl:
+    path: ../np_platform_image_format_jxl
   np_platform_image_processor:
     path: ../np_platform_image_processor
   np_platform_lock:
