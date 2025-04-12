@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:to_string/to_string.dart';
 
 part 'size.g.dart';
@@ -17,8 +16,6 @@ class SizeInt {
 
   @override
   int get hashCode => Object.hash(width, height);
-
-  Size toSizeF() => Size(width.toDouble(), height.toDouble());
 
   @override
   String toString() => _$toString();
