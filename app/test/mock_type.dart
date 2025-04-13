@@ -319,6 +319,15 @@ class MockFileDataSource2 implements FileDataSource2 {
   }
 
   @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) {
+    throw UnimplementedError();
+  }
+
+  @override
   Future<void> remove(Account account, FileDescriptor f) {
     throw UnimplementedError();
   }
@@ -362,6 +371,28 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
         return false;
       }
     }).toList();
+  }
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) async {
+    return files
+        .where((f) {
+          if (account.roots.any((r) => file_util.isOrUnderDirPath(
+              f.fdPath, file_util.unstripPath(account, r)))) {
+            return true;
+          } else if (file_util.isOrUnderDirPath(
+              f.fdPath, file_util.unstripPath(account, shareDirPath))) {
+            return true;
+          } else {
+            return false;
+          }
+        })
+        .map((e) => e.fdId)
+        .toList();
   }
 
   @override
