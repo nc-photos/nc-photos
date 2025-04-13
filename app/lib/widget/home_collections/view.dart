@@ -34,6 +34,7 @@ class _ItemView extends StatelessWidget {
       cover: _CollectionCover(
         account: account,
         url: item.coverUrl,
+        mime: item.coverMime,
       ),
       title: item.name,
       subtitle: subtitle,
@@ -50,6 +51,7 @@ class _CollectionCover extends StatelessWidget {
   const _CollectionCover({
     required this.account,
     required this.url,
+    required this.mime,
   });
 
   @override
@@ -63,21 +65,16 @@ class _CollectionCover extends StatelessWidget {
             ? FittedBox(
                 clipBehavior: Clip.hardEdge,
                 fit: BoxFit.cover,
-                child: CachedNetworkImage(
-                  cacheManager: CoverCacheManager.inst,
+                child: CachedNetworkImageBuilder(
+                  type: CachedNetworkImageType.cover,
                   imageUrl: url!,
-                  httpHeaders: {
-                    "Authorization":
-                        AuthUtil.fromAccount(account).toHeaderValue(),
-                  },
-                  fadeInDuration: const Duration(),
-                  filterQuality: FilterQuality.high,
+                  mime: mime,
+                  account: account,
                   errorWidget: (context, url, error) {
                     // just leave it empty
                     return Container();
                   },
-                  imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-                ),
+                ).build(),
               )
             : Icon(
                 Icons.panorama,
@@ -90,4 +87,5 @@ class _CollectionCover extends StatelessWidget {
 
   final Account account;
   final String? url;
+  final String? mime;
 }

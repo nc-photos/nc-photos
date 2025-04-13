@@ -84,10 +84,14 @@ class ApiFileConverter {
   }
 
   static File fromApi(api.File file) {
+    final mime = file.contentType == "application/octet-stream" &&
+            file.href.endsWith(".jxl")
+        ? "image/jxl"
+        : file.contentType;
     return File(
       path: _hrefToPath(file.href),
       contentLength: file.contentLength,
-      contentType: file.contentType,
+      contentType: mime,
       etag: file.etag,
       lastModified: file.lastModified,
       isCollection: file.isCollection,

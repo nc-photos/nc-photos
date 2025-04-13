@@ -198,6 +198,7 @@ class _ItemView extends StatelessWidget {
         builder: (context, constraints) => PersonThumbnail(
           account: account,
           coverUrl: item.coverUrl,
+          coverMime: item.coverMime,
           person: item.person,
           dimension: constraints.maxWidth,
         ),

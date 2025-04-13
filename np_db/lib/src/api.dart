@@ -92,6 +92,8 @@ class DbLocationGroup with EquatableMixin {
     required this.count,
     required this.latestFileId,
     required this.latestDateTime,
+    required this.latestFileMime,
+    required this.latestFileRelativePath,
   });
 
   @override
@@ -104,6 +106,8 @@ class DbLocationGroup with EquatableMixin {
         count,
         latestFileId,
         latestDateTime,
+        latestFileMime,
+        latestFileRelativePath,
       ];
 
   final String place;
@@ -111,6 +115,8 @@ class DbLocationGroup with EquatableMixin {
   final int count;
   final int latestFileId;
   final DateTime latestDateTime;
+  final String? latestFileMime;
+  final String latestFileRelativePath;
 }
 
 @toString
@@ -137,6 +143,8 @@ class DbImageLatLng with EquatableMixin {
     required this.lat,
     required this.lng,
     required this.fileId,
+    required this.fileRelativePath,
+    required this.mime,
   });
 
   @override
@@ -147,11 +155,15 @@ class DbImageLatLng with EquatableMixin {
         lat,
         lng,
         fileId,
+        fileRelativePath,
+        mime,
       ];
 
   final double lat;
   final double lng;
   final int fileId;
+  final String fileRelativePath;
+  final String? mime;
 }
 
 @genCopyWith

@@ -59,7 +59,7 @@ class PhotoListImageItem extends PhotoListFileItem {
   Widget buildWidget(BuildContext context) => PhotoListImage(
         account: account,
         previewUrl: previewUrl,
-        isGif: file.fdMime == "image/gif",
+        mime: file.fdMime,
         isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
         heroKey: flutter_util.getImageHeroTag(file),
       );
@@ -78,9 +78,10 @@ class PhotoListVideoItem extends PhotoListFileItem {
   });
 
   @override
-  buildWidget(BuildContext context) => PhotoListVideo(
+  Widget buildWidget(BuildContext context) => PhotoListVideo(
         account: account,
         previewUrl: previewUrl,
+        mime: file.fdMime,
         isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
       );
 
@@ -201,8 +202,8 @@ class PhotoListImage extends StatelessWidget {
     super.key,
     required this.account,
     required this.previewUrl,
+    required this.mime,
     this.padding = const EdgeInsets.all(2),
-    this.isGif = false,
     this.isFavorite = false,
     this.heroKey,
   });
@@ -225,6 +226,7 @@ class PhotoListImage extends StatelessWidget {
       child = NetworkRectThumbnail(
         account: account,
         imageUrl: previewUrl!,
+        mime: mime,
         errorBuilder: (_) => buildPlaceholder(),
       );
       if (heroKey != null) {
@@ -245,7 +247,7 @@ class PhotoListImage extends StatelessWidget {
               color: Theme.of(context).listPlaceholderBackgroundColor,
               child: child,
             ),
-            if (isGif)
+            if (mime == "image/gif")
               Container(
                 alignment: AlignmentDirectional.topEnd,
                 padding: const EdgeInsets.symmetric(horizontal: 2),
@@ -265,7 +267,7 @@ class PhotoListImage extends StatelessWidget {
 
   final Account account;
   final String? previewUrl;
-  final bool isGif;
+  final String? mime;
   final EdgeInsetsGeometry padding;
   final bool isFavorite;
   // if not null, the image will be contained by a Hero widget
@@ -277,6 +279,7 @@ class PhotoListVideo extends StatelessWidget {
     super.key,
     required this.account,
     required this.previewUrl,
+    required this.mime,
     this.isFavorite = false,
     this.onError,
   });
@@ -294,6 +297,7 @@ class PhotoListVideo extends StatelessWidget {
               child: NetworkRectThumbnail(
                 account: account,
                 imageUrl: previewUrl,
+                mime: mime,
                 errorBuilder: (context) {
                   onError?.call();
                   return Padding(
@@ -327,6 +331,7 @@ class PhotoListVideo extends StatelessWidget {
 
   final Account account;
   final String previewUrl;
+  final String? mime;
   final bool isFavorite;
   final VoidCallback? onError;
 }

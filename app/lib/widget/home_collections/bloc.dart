@@ -159,7 +159,7 @@ class _Bloc extends Bloc<_Event, _State>
     collection_util.CollectionSort sort,
   ) {
     final sorted = collections.sortedBy(sort);
-    return sorted.map((c) => _Item(c)).toList();
+    return sorted.map(_Item.fromCollection).toList();
   }
 
   final Account account;

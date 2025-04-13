@@ -670,6 +670,8 @@ class NpDbSqlite implements NpDb {
           lat: e.lat,
           lng: e.lng,
           fileId: e.fileId,
+          fileRelativePath: e.fileRelativePath,
+          mime: e.mime,
         ));
   }
 

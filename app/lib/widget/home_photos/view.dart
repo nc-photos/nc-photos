@@ -199,12 +199,14 @@ class _MemoryCollectionList extends StatelessWidget {
             itemCount: memoryCollections.length,
             itemBuilder: (context, index) {
               final c = memoryCollections[index];
+              final result = c.getCoverUrl(
+                k.photoThumbSize,
+                k.photoThumbSize,
+                isKeepAspectRatio: true,
+              );
               return _MemoryCollectionItemView(
-                coverUrl: c.getCoverUrl(
-                  k.photoThumbSize,
-                  k.photoThumbSize,
-                  isKeepAspectRatio: true,
-                ),
+                coverUrl: result?.url,
+                coverMime: result?.mime,
                 label: c.name,
                 onTap: () {
                   Navigator.of(context).pushNamed(
@@ -228,6 +230,7 @@ class _MemoryCollectionItemView extends StatelessWidget {
 
   const _MemoryCollectionItemView({
     required this.coverUrl,
+    required this.coverMime,
     required this.label,
     this.onTap,
   });
@@ -252,6 +255,7 @@ class _MemoryCollectionItemView extends StatelessWidget {
                   child: PhotoListImage(
                     account: context.bloc.account,
                     previewUrl: coverUrl,
+                    mime: coverMime,
                     padding: const EdgeInsets.all(0),
                   ),
                 ),
@@ -298,6 +302,7 @@ class _MemoryCollectionItemView extends StatelessWidget {
   }
 
   final String? coverUrl;
+  final String? coverMime;
   final String label;
   final VoidCallback? onTap;
 }

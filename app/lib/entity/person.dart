@@ -13,6 +13,16 @@ enum PersonProvider {
   static PersonProvider fromValue(int value) => PersonProvider.values[value];
 }
 
+class PersonCoverResult {
+  const PersonCoverResult({
+    required this.url,
+    required this.mime,
+  });
+
+  final String url;
+  final String? mime;
+}
+
 @genCopyWith
 @toString
 class Person with EquatableMixin {
@@ -38,7 +48,7 @@ class Person with EquatableMixin {
   int? get count => contentProvider.count;
 
   /// See [PersonContentProvider.getCoverUrl]
-  String? getCoverUrl(
+  PersonCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
@@ -81,7 +91,7 @@ abstract class PersonContentProvider with EquatableMixin {
   /// free to ignore them if it's not supported
   ///
   /// [isKeepAspectRatio] is only a hint and implementations may ignore it
-  String? getCoverUrl(
+  PersonCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,

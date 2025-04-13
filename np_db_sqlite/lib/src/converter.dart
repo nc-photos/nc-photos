@@ -211,6 +211,8 @@ abstract class ImageLocationGroupConverter {
       count: src.count,
       latestFileId: src.latestFileId,
       latestDateTime: src.latestDateTime,
+      latestFileMime: src.latestFileMime,
+      latestFileRelativePath: src.latestFileRelativePath,
     );
   }
 }

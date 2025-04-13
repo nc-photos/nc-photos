@@ -38,7 +38,7 @@ class CollectionTagProvider
   List<CollectionShare> get shares => [];
 
   @override
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,

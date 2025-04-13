@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +21,6 @@ import 'package:nc_photos/entity/collection/util.dart' as collection_util;
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/exception_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';

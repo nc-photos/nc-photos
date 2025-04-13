@@ -7,6 +7,8 @@ class ImageLocationGroup {
     required this.count,
     required this.latestFileId,
     required this.latestDateTime,
+    required this.latestFileMime,
+    required this.latestFileRelativePath,
   });
 
   final String place;
@@ -14,6 +16,8 @@ class ImageLocationGroup {
   final int count;
   final int latestFileId;
   final DateTime latestDateTime;
+  final String? latestFileMime;
+  final String latestFileRelativePath;
 }
 
 class ImageLatLng {
@@ -21,11 +25,15 @@ class ImageLatLng {
     required this.lat,
     required this.lng,
     required this.fileId,
+    required this.fileRelativePath,
+    required this.mime,
   });
 
   final double lat;
   final double lng;
   final int fileId;
+  final String fileRelativePath;
+  final String? mime;
 }
 
 extension SqliteDbImageLocationExtension on SqliteDb {
@@ -42,7 +50,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
       q
         ..setQueryMode(
           FilesQueryMode.expression,
-          expressions: [files.fileId],
+          expressions: [files.fileId, files.contentType],
         )
         ..setExtraJoins([
           innerJoin(
@@ -61,6 +69,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
       return q.build();
     });
     query.addColumns([
+      accountFiles.relativePath,
       imageLocations.latitude,
       imageLocations.longitude,
     ]);
@@ -88,6 +97,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
               lat: r.read(imageLocations.latitude)!,
               lng: r.read(imageLocations.longitude)!,
               fileId: r.read(files.fileId)!,
+              fileRelativePath: r.read(accountFiles.relativePath)!,
+              mime: r.read(files.contentType),
             ))
         .get();
   }
@@ -168,6 +179,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         imageLocations.countryCode,
         count,
         files.fileId,
+        files.contentType,
+        accountFiles.relativePath,
         latest,
       ])
       ..groupBy(
@@ -196,6 +209,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         count: r.read(count)!,
         latestFileId: r.read(files.fileId)!,
         latestDateTime: r.read(latest)!.toUtc(),
+        latestFileMime: r.read(files.contentType),
+        latestFileRelativePath: r.read(accountFiles.relativePath)!,
       );
     }).get();
   }
@@ -293,6 +308,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         imageLocations.countryCode,
         count,
         files.fileId,
+        files.contentType,
+        accountFiles.relativePath,
         latest,
       ])
       ..groupBy(
@@ -320,6 +337,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
               count: r.read(count)!,
               latestFileId: r.read(files.fileId)!,
               latestDateTime: r.read(latest)!.toUtc(),
+              latestFileMime: r.read(files.contentType),
+              latestFileRelativePath: r.read(accountFiles.relativePath)!,
             ))
         .get();
   }

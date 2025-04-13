@@ -22,6 +22,7 @@ class _PersonItemView extends StatelessWidget {
                 account: account,
                 person: item.person,
                 coverUrl: item.coverUrl,
+                coverMime: item.coverMime,
               ),
             ),
           ),
@@ -64,6 +65,7 @@ class _PlaceItemView extends StatelessWidget {
               dimension: 72,
               account: account,
               coverUrl: item.coverUrl,
+              coverMime: item.coverMime,
             ),
           ),
           const SizedBox(height: 8),
@@ -128,6 +130,7 @@ class _LocationCoverImage extends StatelessWidget {
     required this.dimension,
     required this.account,
     required this.coverUrl,
+    required this.coverMime,
   });
 
   @override
@@ -137,6 +140,7 @@ class _LocationCoverImage extends StatelessWidget {
       cover = NetworkRectThumbnail(
         account: account,
         imageUrl: coverUrl!,
+        mime: coverMime,
         errorBuilder: (_) => const _LocationCoverPlaceholder(),
       );
     } catch (_) {
@@ -161,4 +165,5 @@ class _LocationCoverImage extends StatelessWidget {
   final double dimension;
   final Account account;
   final String? coverUrl;
+  final String? coverMime;
 }

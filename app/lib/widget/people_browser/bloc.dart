@@ -46,7 +46,7 @@ class _Bloc extends Bloc<_Event, _State>
       _TransformItems ev, Emitter<_State> emit) async {
     _log.info("[_onTransformItems] $ev");
     final transformed =
-        ev.persons.sorted(_sorter).map((p) => _Item(p)).toList();
+        ev.persons.sorted(_sorter).map(_Item.fromPerson).toList();
     emit(state.copyWith(transformedItems: transformed));
   }
 
