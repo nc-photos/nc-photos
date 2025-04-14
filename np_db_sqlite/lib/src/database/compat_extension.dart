@@ -1,6 +1,48 @@
 part of '../database_extension.dart';
 
-extension SqliteDbCompatExtension on SqliteDb {
+extension SqliteDbCompat75Extension on SqliteDb {
+  Future<void> migrateV75() async {
+    final updateFiles = <int>[];
+    var i = 0;
+    while (true) {
+      final q = selectOnly(files).join([
+        innerJoin(accountFiles, accountFiles.file.equalsExp(files.rowId),
+            useColumns: false),
+      ]);
+      q
+        ..addColumns([files.rowId])
+        ..where(files.contentType.equals("application/octet-stream"))
+        ..where(accountFiles.relativePath.like("%.jxl"))
+        ..orderBy([
+          OrderingTerm(
+            expression: accountFiles.rowId,
+            mode: OrderingMode.asc,
+          ),
+        ])
+        ..limit(1000, offset: i);
+      final fileRowIds = await q.map((r) => r.read(files.rowId)!).get();
+      updateFiles.addAll(fileRowIds);
+      if (fileRowIds.length < 1000) {
+        break;
+      }
+    }
+
+    _log.info("[migrateV75] ${updateFiles.length} rows require updating");
+    await batch((batch) {
+      for (final e in updateFiles) {
+        batch.update(
+          files,
+          const FilesCompanion(
+            contentType: Value("image/jxl"),
+          ),
+          where: (table) => table.rowId.equals(e),
+        );
+      }
+    });
+  }
+}
+
+extension SqliteDbCompat55Extension on SqliteDb {
   Future<void> migrateV55(
       void Function(int current, int count)? onProgress) async {
     final countExp = accountFiles.rowId.count();

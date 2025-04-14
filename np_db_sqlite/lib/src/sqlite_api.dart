@@ -1035,6 +1035,13 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
+  Future<void> migrateV75() async {
+    await _db.use((db) async {
+      await db.migrateV75();
+    });
+  }
+
+  @override
   Future<void> sqlVacuum() async {
     await _db.useNoTransaction((db) async {
       await db.customStatement("VACUUM;");

@@ -576,6 +576,9 @@ abstract class NpDb {
   /// Migrate to app v55
   Future<void> migrateV55(void Function(int current, int count)? onProgress);
 
+  /// Migrate to app v75
+  Future<void> migrateV75();
+
   /// Run vacuum statement on a database backed by sqlite
   ///
   /// This method is not necessarily supported by all implementations
