@@ -36,11 +36,6 @@ extension ListExtension<T> on List<T> {
     }
   }
 
-  @Deprecated(
-      "This function conflict with the collections package. Use pySlice instead")
-  List<T> slice(int start, [int? stop, int step = 1]) =>
-      pySlice(start, stop, step);
-
   void stableSort([int Function(T a, T b)? compare]) {
     mergeSort(this, compare: compare);
   }

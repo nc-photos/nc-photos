@@ -48,7 +48,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     final item = state.obsecuredInput.last;
     emit(state.copyWith(
       input: state.input.slice(0, -1),
-      obsecuredInput: state.obsecuredInput.slice(0, -1),
+      obsecuredInput: state.obsecuredInput.pySlice(0, -1),
     ));
     listKey.currentState?.removeItem(
       index,

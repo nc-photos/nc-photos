@@ -30,7 +30,7 @@ Future<void> _root() async {
   expect(
     await Ls(fileRepo)(
         account, File(path: file_util.unstripPath(account, "."))),
-    files.slice(1, 3),
+    files.pySlice(1, 3),
   );
 }
 

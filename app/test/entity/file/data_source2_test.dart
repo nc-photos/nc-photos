@@ -53,7 +53,7 @@ Future<void> _getFileDescriptors() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
@@ -90,7 +90,7 @@ Future<void> _getFileDescriptorsMultipleAccount() async {
     await c.sqliteDb.insertAccounts([user1Account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
     await util.insertFiles(c.sqliteDb, user1Account, user1Files);
     await util.insertDirRelation(

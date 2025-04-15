@@ -71,7 +71,7 @@ Future<void> _multiple() async {
   expect(
     await InflateFileDescriptor(c)(
       account,
-      files.slice(1, 7, 2).map(util.fileToFileDescriptor).toList(),
+      files.pySlice(1, 7, 2).map(util.fileToFileDescriptor).toList(),
     ),
     [files[1], files[3], files[5]],
   );
