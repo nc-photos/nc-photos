@@ -343,9 +343,11 @@ internal class ImageProcessorService : Service() {
 
 	@SuppressLint("StaticFieldLeak")
 	private fun runCommand(cmd: ImageProcessorImageCommand) {
-		notificationManager.notify(
-			NOTIFICATION_ID, buildNotification(cmd.filename)
-		)
+		if (notificationManager.areNotificationsEnabled()) {
+			notificationManager.notify(
+				NOTIFICATION_ID, buildNotification(cmd.filename)
+			)
+		}
 		cmdTask = object : ImageProcessorCommandTask(applicationContext) {
 			override fun onPostExecute(result: MessageEvent) {
 				notifyResult(result, cmd.isSaveToServer)
@@ -369,9 +371,11 @@ internal class ImageProcessorService : Service() {
 	private fun runCommand(
 		@Suppress("UNUSED_PARAMETER") cmd: ImageProcessorGracePeriodCommand
 	) {
-		notificationManager.notify(
-			NOTIFICATION_ID, buildGracePeriodNotification()
-		)
+		if (notificationManager.areNotificationsEnabled()) {
+			notificationManager.notify(
+				NOTIFICATION_ID, buildGracePeriodNotification()
+			)
+		}
 		@Suppress("Deprecation") cmdTask =
 			object : AsyncTask<Unit, Unit, Unit>(), AsyncTaskCancellable {
 				override fun doInBackground(vararg params: Unit?) {
@@ -403,14 +407,18 @@ internal class ImageProcessorService : Service() {
 					ImageProcessorUploadSuccessEvent()
 				)
 			}
-			notificationManager.notify(
-				RESULT_NOTIFICATION_ID, buildResultNotification(event.result)
-			)
+			if (notificationManager.areNotificationsEnabled()) {
+				notificationManager.notify(
+					RESULT_NOTIFICATION_ID, buildResultNotification(event.result)
+				)
+			}
 		} else if (event is ImageProcessorFailedEvent) {
-			notificationManager.notify(
-				RESULT_FAILED_NOTIFICATION_ID,
-				buildResultFailedNotification(event.exception)
-			)
+			if (notificationManager.areNotificationsEnabled()) {
+				notificationManager.notify(
+					RESULT_FAILED_NOTIFICATION_ID,
+					buildResultFailedNotification(event.exception)
+				)
+			}
 		}
 	}
 
