@@ -412,5 +412,5 @@ class _ToolButton extends StatelessWidget {
   final bool isSelected;
 }
 
-const _previewWidth = 480;
-const _previewHeight = 360;
+const _previewWidth = 640;
+const _previewHeight = 480;
