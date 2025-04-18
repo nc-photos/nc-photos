@@ -131,7 +131,6 @@ class CachedNetworkImageBuilder {
     return CachedNetworkImage(
       fit: fit,
       cacheManager: getCacheManager(type, mime),
-      cacheKey: _getCacheKey(imageUrl, type),
       imageUrl: imageUrl,
       httpHeaders: {
         "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
@@ -149,6 +148,7 @@ class CachedNetworkImageBuilder {
           return decoder(raw);
         }
       },
+      compareKey: type.name,
     );
   }
 
@@ -182,9 +182,5 @@ CacheManager getCacheManager(CachedNetworkImageType type, String? mime) {
 Future<FileInfo?> getFileFromCache(
     CachedNetworkImageType type, String imageUrl, String? mime) async {
   final cacheManager = getCacheManager(CachedNetworkImageType.largeImage, mime);
-  return await cacheManager.getFileFromCache(_getCacheKey(imageUrl, type));
-}
-
-String _getCacheKey(String imageUrl, CachedNetworkImageType type) {
-  return "{imageUrl:$imageUrl,type:$type}";
+  return await cacheManager.getFileFromCache(imageUrl);
 }

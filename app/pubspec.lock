@@ -166,8 +166,8 @@ packages:
     dependency: "direct main"
     description:
       path: cached_network_image
-      ref: "v3.3.1-nc-photos-1"
-      resolved-ref: "5497955a98209802c7901d78afc2ad986df9fd31"
+      ref: "v3.3.1-nc-photos-2"
+      resolved-ref: ad6a909dafa1c6a608d778cf7d0f9918b1699448
       url: "https://github.com/nc-photos/flutter_cached_network_image.git"
     source: git
     version: "3.3.1"
@@ -175,8 +175,8 @@ packages:
     dependency: "direct main"
     description:
       path: cached_network_image_platform_interface
-      ref: "v3.3.1-nc-photos-1"
-      resolved-ref: "5497955a98209802c7901d78afc2ad986df9fd31"
+      ref: "v3.3.1-nc-photos-2"
+      resolved-ref: ad6a909dafa1c6a608d778cf7d0f9918b1699448
       url: "https://github.com/nc-photos/flutter_cached_network_image.git"
     source: git
     version: "4.0.0"
@@ -184,8 +184,8 @@ packages:
     dependency: transitive
     description:
       path: cached_network_image_web
-      ref: "v3.3.1-nc-photos-1"
-      resolved-ref: "5497955a98209802c7901d78afc2ad986df9fd31"
+      ref: "v3.3.1-nc-photos-2"
+      resolved-ref: ad6a909dafa1c6a608d778cf7d0f9918b1699448
       url: "https://github.com/nc-photos/flutter_cached_network_image.git"
     source: git
     version: "1.1.1"
