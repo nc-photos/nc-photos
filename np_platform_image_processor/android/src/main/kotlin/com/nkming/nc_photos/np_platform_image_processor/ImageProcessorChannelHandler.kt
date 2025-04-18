@@ -292,7 +292,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 	private val id = nextId++
 }
 
-internal interface ImageFilter {
+interface ImageFilter {
 	companion object {
 		fun fromJson(json: Map<String, Any>): ImageFilter {
 			return when (json["type"]) {

@@ -104,10 +104,11 @@ class _ImageEditorState extends State<ImageEditor> {
       );
 
   Future<void> _initImage() async {
-    final cacheManager =
-        getCacheManager(CachedNetworkImageType.largeImage, widget.file.fdMime);
-    final fileInfo = await cacheManager.getFileFromCache(
-        getViewerUrlForImageFile(widget.account, widget.file));
+    final fileInfo = await getFileFromCache(
+      CachedNetworkImageType.largeImage,
+      getViewerUrlForImageFile(widget.account, widget.file),
+      widget.file.fdMime,
+    );
     // no need to set shouldfixOrientation because the previews are always in
     // the correct orientation
     _src = await ImageLoader.loadUri(
