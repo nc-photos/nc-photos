@@ -26,14 +26,14 @@ String getFilePreviewUrl(
   required bool isKeepAspectRatio,
 }) {
   return "${account.url}/"
-      "${getFilePreviewUrlRelative(account, file, width: width, height: height, mode: mode, isKeepAspectRatio: isKeepAspectRatio)}";
+      "${_getFilePreviewUrlRelative(account, file, width: width, height: height, mode: mode, isKeepAspectRatio: isKeepAspectRatio)}";
 }
 
 /// Return the relative preview image URL for [file]
 ///
 /// If [isKeepAspectRatio] == true, the preview will maintain the original
 /// aspect ratio, otherwise it will be cropped
-String getFilePreviewUrlRelative(
+String _getFilePreviewUrlRelative(
   Account account,
   FileDescriptor file, {
   required int width,
@@ -65,24 +65,6 @@ String getFilePreviewUrlRelative(
   return url;
 }
 
-/// Return the preview image URL for [fileId]. See [getFilePreviewUrlRelative]
-String getFilePreviewUrlByFileId(
-  Account account,
-  int fileId, {
-  required int width,
-  required int height,
-  String? mode,
-  required bool isKeepAspectRatio,
-}) {
-  String url = "${account.url}/index.php/core/preview?fileId=$fileId";
-  url = "$url&x=$width&y=$height";
-  if (mode != null) {
-    url = "$url&mode=$mode";
-  }
-  url = "$url&a=${isKeepAspectRatio ? 1 : 0}";
-  return url;
-}
-
 /// Return the preview image URL for [fileId], using the new Photos API in
 /// Nextcloud 25
 String getPhotosApiFilePreviewUrlByFileId(
@@ -94,17 +76,13 @@ String getPhotosApiFilePreviewUrlByFileId(
     "${account.url}/index.php/apps/photos/api/v1/preview/$fileId?x=$width&y=$height";
 
 String getFileUrl(Account account, FileDescriptor file) {
-  return "${account.url}/${getFileUrlRelative(file)}";
-}
-
-String getFileUrlRelative(FileDescriptor file) {
-  return file.fdPath;
+  return "${account.url}/${file.fdPath}";
 }
 
 Uri getFileUri(Account account, FileDescriptor file) {
   final serverUri = account.uri;
   return serverUri.replace(
-    path: "${serverUri.path}/${getFileUrlRelative(file)}",
+    path: "${serverUri.path}/${file.fdPath}",
   );
 }
 

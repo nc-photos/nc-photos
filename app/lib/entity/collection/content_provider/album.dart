@@ -1,14 +1,15 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/entity/album.dart';
 import 'package:nc_photos/entity/album/provider.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/util.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
+import 'package:np_common/size.dart';
 import 'package:to_string/to_string.dart';
 
 part 'album.g.dart';
@@ -86,7 +87,7 @@ class CollectionAlbumProvider
       const [];
 
   @override
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
@@ -95,12 +96,14 @@ class CollectionAlbumProvider
     if (fd == null) {
       return null;
     } else {
-      return api_util.getFilePreviewUrlByFileId(
-        account,
-        fd.fdId,
-        width: width,
-        height: height,
-        isKeepAspectRatio: isKeepAspectRatio ?? false,
+      return CollectionCoverResult(
+        url: getStaticViewUrlForImageFile(
+          account,
+          fd,
+          size: SizeInt(width, height),
+          isKeepAspectRatio: isKeepAspectRatio ?? false,
+        ),
+        mime: fd.fdMime,
       );
     }
   }

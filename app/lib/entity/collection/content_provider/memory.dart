@@ -1,11 +1,12 @@
 import 'package:equatable/equatable.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/util.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:nc_photos/object_extension.dart';
+import 'package:nc_photos/file_view_util.dart';
+import 'package:np_common/object_util.dart';
+import 'package:np_common/size.dart';
 import 'package:to_string/to_string.dart';
 
 part 'memory.g.dart';
@@ -46,17 +47,19 @@ class CollectionMemoryProvider
   List<CollectionShare> get shares => [];
 
   @override
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
   }) {
-    return cover?.run((cover) => api_util.getFilePreviewUrl(
-          account,
-          cover,
-          width: width,
-          height: height,
-          isKeepAspectRatio: isKeepAspectRatio ?? false,
+    return cover?.let((cover) => CollectionCoverResult(
+          url: getStaticViewUrlForImageFile(
+            account,
+            cover,
+            size: SizeInt(width, height),
+            isKeepAspectRatio: isKeepAspectRatio ?? false,
+          ),
+          mime: cover.fdMime,
         ));
   }
 

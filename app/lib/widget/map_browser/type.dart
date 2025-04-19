@@ -4,14 +4,20 @@ class _DataPoint extends DataPoint {
   const _DataPoint({
     required super.position,
     required this.fileId,
+    required this.fileRelativePath,
+    required this.mime,
   });
 
   factory _DataPoint.fromImageLatLng(ImageLatLng src) => _DataPoint(
         position: MapCoord(src.latitude, src.longitude),
         fileId: src.fileId,
+        fileRelativePath: src.fileRelativePath,
+        mime: src.mime,
       );
 
   final int fileId;
+  final String fileRelativePath;
+  final String? mime;
 }
 
 class _MarkerBuilder {
@@ -64,6 +70,8 @@ class _OsmMarkerBuilder extends _MarkerBuilder {
     return _OsmMarker(
       account: account,
       fileId: dataPoints.first.fileId,
+      fileRelativePath: dataPoints.first.fileRelativePath,
+      mime: dataPoints.first.mime,
       size: _getMarkerSize(dataPoints.length),
       color: Theme.of(context).colorScheme.primaryContainer,
       text: text,
@@ -106,9 +114,21 @@ class _GoogleMarkerBuilder extends _MarkerBuilder {
 
   Future<String?> _getImagePath(List<_DataPoint> dataPoints) async {
     try {
-      final url = NetworkRectThumbnail.imageUrlForFileId(
-          account, dataPoints.first.fileId);
-      final fileInfo = await ThumbnailCacheManager.inst.getSingleFile(
+      final url = getThumbnailUrlForImageFile(
+        account,
+        FileDescriptor(
+          fdPath:
+              file_util.unstripPath(account, dataPoints.first.fileRelativePath),
+          fdId: dataPoints.first.fileId,
+          fdMime: dataPoints.first.mime,
+          fdIsArchived: false,
+          fdIsFavorite: false,
+          fdDateTime: clock.now(),
+        ),
+      );
+      final cacheManager = getCacheManager(
+          CachedNetworkImageType.thumbnail, dataPoints.first.mime);
+      final fileInfo = await cacheManager.getSingleFile(
         url,
         headers: {
           "authorization": AuthUtil.fromAccount(account).toHeaderValue(),
@@ -178,15 +198,17 @@ class _GoogleMarkerBitmapBuilder {
 
   Future<void> _drawImage(Canvas canvas) async {
     try {
+      final rect =
+          Rect.fromLTRB(0, 0, size - _shadowPadding, size - _shadowPadding);
       final imageData = await File(imagePath!).readAsBytes();
-      final imageDescriptor = await ImageDescriptor.encoded(
-        await ImmutableBuffer.fromUint8List(imageData),
+      final codec = await _getImageCodec(
+        imageData,
+        resize: SizeInt(rect.width.ceil(), rect.height.ceil()),
       );
-      final codec = await imageDescriptor.instantiateCodec();
       final frame = await codec.getNextFrame();
       paintImage(
         canvas: canvas,
-        rect: Rect.fromLTRB(0, 0, size - _shadowPadding, size - _shadowPadding),
+        rect: rect,
         image: frame.image,
         fit: BoxFit.cover,
         filterQuality: FilterQuality.low,
@@ -231,6 +253,17 @@ class _GoogleMarkerBitmapBuilder {
     return Path()
       ..addOval(
           Rect.fromLTWH(0, 0, size - _shadowPadding, size - _shadowPadding));
+  }
+
+  Future<Codec> _getImageCodec(Uint8List imageData, {SizeInt? resize}) async {
+    if (isJxl(imageData)) {
+      return jxlImageCodec(imageData);
+    } else {
+      final imageDescriptor = await ImageDescriptor.encoded(
+        await ImmutableBuffer.fromUint8List(imageData),
+      );
+      return imageDescriptor.instantiateCodec();
+    }
   }
 
   final String? imagePath;

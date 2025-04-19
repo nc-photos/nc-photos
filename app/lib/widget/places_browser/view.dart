@@ -112,6 +112,7 @@ class _PlaceItemView extends StatelessWidget {
       child: _LocationThumbnail(
         account: account,
         coverUrl: item.coverUrl,
+        coverMime: item.coverMime,
       ),
     );
   }
@@ -141,6 +142,7 @@ class _CountryItemView extends StatelessWidget {
               _LocationThumbnail(
                 account: account,
                 coverUrl: item.coverUrl,
+                coverMime: item.coverMime,
               ),
               const SizedBox(width: 8),
               Text(item.name),
@@ -181,6 +183,7 @@ class _LocationThumbnail extends StatelessWidget {
   const _LocationThumbnail({
     required this.account,
     required this.coverUrl,
+    required this.coverMime,
   });
 
   @override
@@ -189,6 +192,7 @@ class _LocationThumbnail extends StatelessWidget {
       return NetworkRectThumbnail(
         account: account,
         imageUrl: coverUrl!,
+        mime: coverMime,
         errorBuilder: (_) => const _LocationPlaceholder(),
       );
     } catch (_) {
@@ -200,6 +204,7 @@ class _LocationThumbnail extends StatelessWidget {
 
   final Account account;
   final String? coverUrl;
+  final String? coverMime;
 }
 
 class _LocationPlaceholder extends StatelessWidget {

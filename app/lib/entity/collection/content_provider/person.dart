@@ -5,6 +5,7 @@ import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/util.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
 import 'package:nc_photos/entity/person.dart';
+import 'package:np_common/object_util.dart';
 
 class CollectionPersonProvider
     with EquatableMixin
@@ -38,13 +39,17 @@ class CollectionPersonProvider
   List<CollectionShare> get shares => [];
 
   @override
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
   }) {
-    return person.getCoverUrl(width, height,
-        isKeepAspectRatio: isKeepAspectRatio);
+    final result = person.getCoverUrl(
+      width,
+      height,
+      isKeepAspectRatio: isKeepAspectRatio,
+    );
+    return result?.let((e) => CollectionCoverResult(url: e.url, mime: e.mime));
   }
 
   @override

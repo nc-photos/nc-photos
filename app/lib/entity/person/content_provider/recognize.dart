@@ -2,12 +2,12 @@ import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/entity/recognize_face.dart';
 import 'package:nc_photos/entity/recognize_face_item.dart';
-import 'package:nc_photos/object_extension.dart';
+import 'package:nc_photos/file_view_util.dart';
 import 'package:np_common/object_util.dart';
+import 'package:np_common/size.dart';
 import 'package:to_string/to_string.dart';
 
 part 'recognize.g.dart';
@@ -35,17 +35,19 @@ class PersonRecognizeProvider
   int? get count => items?.length;
 
   @override
-  String? getCoverUrl(
+  PersonCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
   }) =>
-      items?.firstOrNull?.run((i) => api_util.getFilePreviewUrl(
-            account,
-            i.toFile(),
-            width: width,
-            height: height,
-            isKeepAspectRatio: isKeepAspectRatio ?? false,
+      items?.firstOrNull?.let((i) => PersonCoverResult(
+            url: getStaticViewUrlForImageFile(
+              account,
+              i.toFile(),
+              size: SizeInt(width, height),
+              isKeepAspectRatio: isKeepAspectRatio ?? false,
+            ),
+            mime: i.contentType,
           ));
 
   @override

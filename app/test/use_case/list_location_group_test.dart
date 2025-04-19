@@ -101,13 +101,14 @@ Future<void> _nFile1Location() async {
 
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
-    LocationGroup(
-        "Some place", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2))
+    LocationGroup("Some place", "AD", 2, 2,
+        DateTime.utc(2020, 1, 2, 3, 4, 5 + 2), "image/jpeg", "test2.jpg"),
   });
   expect(result.admin1.toSet(), <LocationGroup>{});
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
-    LocationGroup("Andorra", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2))
+    LocationGroup("Andorra", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+        "image/jpeg", "test2.jpg"),
   });
 }
 
@@ -164,17 +165,18 @@ Future<void> _nFileNLocation() async {
 
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
-    LocationGroup(
-        "Some place", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2)),
-    LocationGroup(
-        "Another place", "ZW", 2, 4, DateTime.utc(2020, 1, 2, 3, 4, 5 + 4)),
+    LocationGroup("Some place", "AD", 2, 2,
+        DateTime.utc(2020, 1, 2, 3, 4, 5 + 2), "image/jpeg", "test2.jpg"),
+    LocationGroup("Another place", "ZW", 2, 4,
+        DateTime.utc(2020, 1, 2, 3, 4, 5 + 4), "image/jpeg", "test4.jpg"),
   });
   expect(result.admin1.toSet(), <LocationGroup>{});
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
-    LocationGroup("Andorra", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2)),
-    LocationGroup(
-        "Zimbabwe", "ZW", 2, 4, DateTime.utc(2020, 1, 2, 3, 4, 5 + 4)),
+    LocationGroup("Andorra", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+        "image/jpeg", "test2.jpg"),
+    LocationGroup("Zimbabwe", "ZW", 2, 4, DateTime.utc(2020, 1, 2, 3, 4, 5 + 4),
+        "image/jpeg", "test4.jpg"),
   });
 }
 
@@ -195,6 +197,7 @@ Future<void> _multipleRoots() async {
         ..addDir("admin")
         ..addDir("admin/test1")
         ..addDir("admin/test2")
+        ..addDir("admin/test3")
         ..addJpeg("admin/test1/test1.jpg",
             location: const ImageLocation(
               name: "Some place",
@@ -242,12 +245,13 @@ Future<void> _multipleRoots() async {
 
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
-    LocationGroup(
-        "Some place", "AD", 4, 6, DateTime.utc(2020, 1, 2, 3, 4, 5 + 6))
+    LocationGroup("Some place", "AD", 4, 7,
+        DateTime.utc(2020, 1, 2, 3, 4, 5 + 7), "image/jpeg", "test2/test4.jpg"),
   });
   expect(result.admin1.toSet(), <LocationGroup>{});
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
-    LocationGroup("Andorra", "AD", 4, 6, DateTime.utc(2020, 1, 2, 3, 4, 5 + 6))
+    LocationGroup("Andorra", "AD", 4, 7, DateTime.utc(2020, 1, 2, 3, 4, 5 + 7),
+        "image/jpeg", "test2/test4.jpg"),
   });
 }

@@ -290,6 +290,7 @@ class _FileTile extends StatelessWidget {
               account: account,
               imageUrl:
                   NetworkRectThumbnail.imageUrlForFile(account, item.file),
+              mime: item.file.fdMime,
               dimension: _leadingSize,
               errorBuilder: (_) => const Icon(Icons.folder, size: 32),
             ),
@@ -330,6 +331,7 @@ class _AlbumTile extends StatelessWidget {
           : NetworkRectThumbnail(
               account: account,
               imageUrl: NetworkRectThumbnail.imageUrlForFile(account, cover),
+              mime: cover.fdMime,
               dimension: _leadingSize,
               errorBuilder: (_) => const Icon(Icons.photo_album, size: 32),
             ),

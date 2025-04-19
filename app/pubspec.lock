@@ -165,27 +165,30 @@ packages:
   cached_network_image:
     dependency: "direct main"
     description:
-      name: cached_network_image
-      sha256: "28ea9690a8207179c319965c13cd8df184d5ee721ae2ce60f398ced1219cea1f"
-      url: "https://pub.dev"
-    source: hosted
+      path: cached_network_image
+      ref: "v3.3.1-nc-photos-2"
+      resolved-ref: ad6a909dafa1c6a608d778cf7d0f9918b1699448
+      url: "https://github.com/nc-photos/flutter_cached_network_image.git"
+    source: git
     version: "3.3.1"
   cached_network_image_platform_interface:
     dependency: "direct main"
     description:
-      name: cached_network_image_platform_interface
-      sha256: "9e90e78ae72caa874a323d78fa6301b3fb8fa7ea76a8f96dc5b5bf79f283bf2f"
-      url: "https://pub.dev"
-    source: hosted
+      path: cached_network_image_platform_interface
+      ref: "v3.3.1-nc-photos-2"
+      resolved-ref: ad6a909dafa1c6a608d778cf7d0f9918b1699448
+      url: "https://github.com/nc-photos/flutter_cached_network_image.git"
+    source: git
     version: "4.0.0"
   cached_network_image_web:
     dependency: transitive
     description:
-      name: cached_network_image_web
-      sha256: "205d6a9f1862de34b93184f22b9d2d94586b2f05c581d546695e3d8f6a805cd7"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.0"
+      path: cached_network_image_web
+      ref: "v3.3.1-nc-photos-2"
+      resolved-ref: ad6a909dafa1c6a608d778cf7d0f9918b1699448
+      url: "https://github.com/nc-photos/flutter_cached_network_image.git"
+    source: git
+    version: "1.1.1"
   characters:
     dependency: transitive
     description:
@@ -1182,6 +1185,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_image_format_interface:
+    dependency: transitive
+    description:
+      path: "../np_image_format_interface"
+      relative: true
+    source: path
+    version: "1.0.0"
   np_lints:
     dependency: "direct dev"
     description:
@@ -1217,6 +1227,13 @@ packages:
       relative: true
     source: path
     version: "1.0.0"
+  np_platform_image_format_jxl:
+    dependency: "direct main"
+    description:
+      path: "../np_platform_image_format_jxl"
+      relative: true
+    source: path
+    version: "0.0.1"
   np_platform_image_processor:
     dependency: "direct main"
     description:

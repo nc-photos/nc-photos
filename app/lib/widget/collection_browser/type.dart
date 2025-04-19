@@ -60,7 +60,7 @@ class _PhotoItem extends _FileItem {
       child: PhotoListImage(
         account: account,
         previewUrl: _previewUrl,
-        isGif: file.fdMime == "image/gif",
+        mime: file.fdMime,
         isFavorite: file.fdIsFavorite,
         heroKey: flutter_util.getImageHeroTag(file),
       ),
@@ -88,6 +88,7 @@ class _VideoItem extends _FileItem {
       child: PhotoListVideo(
         account: account,
         previewUrl: _previewUrl,
+        mime: file.fdMime,
         isFavorite: file.fdIsFavorite,
       ),
     );

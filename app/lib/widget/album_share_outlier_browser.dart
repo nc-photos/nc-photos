@@ -264,6 +264,7 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
       return NetworkRectThumbnail(
         account: widget.account,
         imageUrl: NetworkRectThumbnail.imageUrlForFile(widget.account, file),
+        mime: file.fdMime,
         dimension: 56,
         errorBuilder: (_) => const Icon(Icons.image_not_supported, size: 32),
       );

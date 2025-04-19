@@ -79,6 +79,8 @@ class _OsmMarker extends StatelessWidget {
   const _OsmMarker({
     required this.account,
     required this.fileId,
+    required this.fileRelativePath,
+    required this.mime,
     required this.size,
     required this.color,
     required this.text,
@@ -113,8 +115,18 @@ class _OsmMarker extends StatelessWidget {
             children: [
               NetworkRectThumbnail(
                 account: account,
-                imageUrl:
-                    NetworkRectThumbnail.imageUrlForFileId(account, fileId),
+                imageUrl: NetworkRectThumbnail.imageUrlForFile(
+                  account,
+                  FileDescriptor(
+                    fdPath: file_util.unstripPath(account, fileRelativePath),
+                    fdId: fileId,
+                    fdMime: mime,
+                    fdIsArchived: false,
+                    fdIsFavorite: false,
+                    fdDateTime: clock.now(),
+                  ),
+                ),
+                mime: mime,
                 errorBuilder: (_) => const SizedBox.shrink(),
               ),
               Align(
@@ -139,6 +151,8 @@ class _OsmMarker extends StatelessWidget {
 
   final Account account;
   final int fileId;
+  final String fileRelativePath;
+  final String? mime;
   final double size;
   final Color color;
   final String text;

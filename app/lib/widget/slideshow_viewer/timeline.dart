@@ -91,9 +91,8 @@ class _TimelineItem extends StatelessWidget {
               ? PhotoListImage(
                   account: context.bloc.account,
                   previewUrl: NetworkRectThumbnail.imageUrlForFile(
-                    context.bloc.account,
-                    file!,
-                  ),
+                      context.bloc.account, file!),
+                  mime: file!.fdMime,
                 )
               : AspectRatio(
                   aspectRatio: 1,

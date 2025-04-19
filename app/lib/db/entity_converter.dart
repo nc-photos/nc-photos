@@ -275,6 +275,8 @@ abstract class DbLocationGroupConverter {
       src.count,
       src.latestFileId,
       src.latestDateTime,
+      src.latestFileMime,
+      src.latestFileRelativePath,
     );
   }
 }
@@ -285,6 +287,8 @@ abstract class DbImageLatLngConverter {
       latitude: src.lat,
       longitude: src.lng,
       fileId: src.fileId,
+      fileRelativePath: src.fileRelativePath,
+      mime: src.mime,
     );
   }
 }

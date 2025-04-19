@@ -1,16 +1,13 @@
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/widgets.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
-import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
 import 'package:nc_photos/np_api_util.dart';
-import 'package:nc_photos/widget/cached_network_image_mod.dart' as mod;
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/zoomable_viewer.dart';
 import 'package:np_log/np_log.dart';
@@ -95,8 +92,10 @@ class RemoteImageViewer extends StatefulWidget {
   createState() => _RemoteImageViewerState();
 
   static void preloadImage(Account account, FileDescriptor file) {
-    LargeImageCacheManager.inst.getFileStream(
-      _getImageUrl(account, file),
+    final cacheManager =
+        getCacheManager(CachedNetworkImageType.largeImage, file.fdMime);
+    cacheManager.getFileStream(
+      getViewerUrlForImageFile(account, file),
       headers: {
         "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
       },
@@ -249,20 +248,6 @@ class _ImageViewerState extends State<_ImageViewer>
   final _key = GlobalKey();
 }
 
-String _getImageUrl(Account account, FileDescriptor file) {
-  if (file.fdMime == "image/gif") {
-    return api_util.getFileUrl(account, file);
-  } else {
-    return api_util.getFilePreviewUrl(
-      account,
-      file,
-      width: k.photoLargeSize,
-      height: k.photoLargeSize,
-      isKeepAspectRatio: true,
-    );
-  }
-}
-
 class _PreviewImage extends StatelessWidget {
   const _PreviewImage({
     required this.account,
@@ -271,21 +256,17 @@ class _PreviewImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return mod.CachedNetworkImage(
-      fit: BoxFit.contain,
-      cacheManager: ThumbnailCacheManager.inst,
+    return CachedNetworkImageBuilder(
+      type: CachedNetworkImageType.thumbnail,
       imageUrl: NetworkRectThumbnail.imageUrlForFile(account, file),
-      httpHeaders: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
-      fadeInDuration: const Duration(),
-      filterQuality: FilterQuality.high,
-      imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+      mime: file.fdMime,
+      account: account,
+      fit: BoxFit.contain,
       imageBuilder: (context, child, imageProvider) {
         const SizeChangedLayoutNotification().dispatch(context);
         return child;
       },
-    );
+    ).build();
   }
 
   final Account account;
@@ -301,16 +282,12 @@ class _FullSizedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return mod.CachedNetworkImage(
+    return CachedNetworkImageBuilder(
+      type: CachedNetworkImageType.largeImage,
+      imageUrl: getViewerUrlForImageFile(account, file),
+      mime: file.fdMime,
+      account: account,
       fit: BoxFit.contain,
-      cacheManager: LargeImageCacheManager.inst,
-      imageUrl: _getImageUrl(account, file),
-      httpHeaders: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
-      fadeInDuration: const Duration(),
-      filterQuality: FilterQuality.high,
-      imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
       imageBuilder: (context, child, imageProvider) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           onItemLoaded?.call();
@@ -318,7 +295,7 @@ class _FullSizedImage extends StatelessWidget {
         const SizeChangedLayoutNotification().dispatch(context);
         return child;
       },
-    );
+    ).build();
   }
 
   final Account account;

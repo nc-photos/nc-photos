@@ -6,7 +6,11 @@ import android.graphics.BitmapFactory
 import android.graphics.Matrix
 import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
+import com.awxkee.jxlcoder.JxlCoder
+import com.awxkee.jxlcoder.PreferredColorConfig
+import com.awxkee.jxlcoder.ScaleMode
 import java.io.InputStream
+import java.nio.ByteBuffer
 import kotlin.contracts.ExperimentalContracts
 import kotlin.contracts.InvocationKind
 import kotlin.contracts.contract
@@ -94,9 +98,69 @@ interface BitmapUtil {
 			shouldUpscale: Boolean = true,
 			shouldFixOrientation: Boolean = false,
 		): Bitmap {
+			val isJxl = openUriInputStream(context, uri)!!.use {
+				val bytes = ByteArray(16)
+				it.read(bytes)
+				return@use JxlUtil.isJxl(bytes)
+			}
+			return if (isJxl) {
+				loadJxlImage(
+					context, uri, targetW, targetH, resizeMethod,
+					isAllowSwapSide, shouldUpscale, shouldFixOrientation
+				)
+			} else {
+				loadAndroidImage(
+					context, uri, targetW, targetH, resizeMethod,
+					isAllowSwapSide, shouldUpscale, shouldFixOrientation
+				)
+			}
+		}
+
+		private fun loadJxlImage(
+			context: Context,
+			uri: Uri,
+			targetW: Int,
+			targetH: Int,
+			resizeMethod: BitmapResizeMethod,
+			isAllowSwapSide: Boolean,
+			shouldUpscale: Boolean,
+			shouldFixOrientation: Boolean,
+		): Bitmap {
+			val bytes =
+				openUriInputStream(context, uri)!!.use { it.readBytes() }
+			val imgSize = JxlCoder.getSize(bytes)!!
+			val shouldSwapSide = isAllowSwapSide &&
+					imgSize.width != imgSize.height &&
+					(imgSize.width >= imgSize.height) != (targetW >= targetH)
+			val dstW = if (shouldSwapSide) targetH else targetW
+			val dstH = if (shouldSwapSide) targetW else targetH
+			val scaleMode = when (resizeMethod) {
+				BitmapResizeMethod.FIT -> ScaleMode.FIT
+				BitmapResizeMethod.FILL -> ScaleMode.FILL
+			}
+			val result = JxlCoder.decodeSampled(bytes, dstW, dstH,
+				PreferredColorConfig.RGBA_8888, scaleMode)
+			return if (shouldFixOrientation) {
+				fixOrientation(context, uri, result)
+			} else {
+				result
+			}
+		}
+
+		private fun loadAndroidImage(
+			context: Context,
+			uri: Uri,
+			targetW: Int,
+			targetH: Int,
+			resizeMethod: BitmapResizeMethod,
+			isAllowSwapSide: Boolean,
+			shouldUpscale: Boolean,
+			shouldFixOrientation: Boolean,
+		): Bitmap {
 			val opt = loadImageBounds(context, uri)
-			val shouldSwapSide =
-				isAllowSwapSide && opt.outWidth != opt.outHeight && (opt.outWidth >= opt.outHeight) != (targetW >= targetH)
+			val shouldSwapSide = isAllowSwapSide &&
+					opt.outWidth != opt.outHeight &&
+					(opt.outWidth >= opt.outHeight) != (targetW >= targetH)
 			val dstW = if (shouldSwapSide) targetH else targetW
 			val dstH = if (shouldSwapSide) targetW else targetH
 			val subsample = calcBitmapSubsample(

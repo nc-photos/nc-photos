@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/pref.dart';
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
-import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/theme.dart';
@@ -105,14 +104,11 @@ class _ImageEditorState extends State<ImageEditor> {
       );
 
   Future<void> _initImage() async {
-    final fileInfo = await LargeImageCacheManager.inst
-        .getFileFromCache(api_util.getFilePreviewUrl(
-      widget.account,
-      widget.file,
-      width: k.photoLargeSize,
-      height: k.photoLargeSize,
-      isKeepAspectRatio: true,
-    ));
+    final fileInfo = await getFileFromCache(
+      CachedNetworkImageType.largeImage,
+      getViewerUrlForImageFile(widget.account, widget.file),
+      widget.file.fdMime,
+    );
     // no need to set shouldfixOrientation because the previews are always in
     // the correct orientation
     _src = await ImageLoader.loadUri(

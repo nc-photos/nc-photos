@@ -52,7 +52,7 @@ class _Bloc extends Bloc<_Event, _State>
           }
         })
         .take(10)
-        .map(_PersonItem.new)
+        .map(_PersonItem.fromPerson)
         .toList();
     emit(state.copyWith(transformedPersonItems: transformed));
   }

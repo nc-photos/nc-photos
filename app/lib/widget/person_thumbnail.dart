@@ -12,6 +12,7 @@ class PersonThumbnail extends StatefulWidget {
     required this.dimension,
     required this.account,
     required this.coverUrl,
+    required this.coverMime,
     required this.person,
   });
 
@@ -21,6 +22,7 @@ class PersonThumbnail extends StatefulWidget {
   final double dimension;
   final Account account;
   final String? coverUrl;
+  final String? coverMime;
   final Person person;
 }
 
@@ -47,6 +49,7 @@ class _PersonThumbnailState extends State<PersonThumbnail> {
         child: NetworkRectThumbnail(
           account: widget.account,
           imageUrl: widget.coverUrl!,
+          mime: widget.coverMime,
           errorBuilder: (_) => const _Placeholder(),
           onSize: (size) {
             WidgetsBinding.instance.addPostFrameCallback((_) {

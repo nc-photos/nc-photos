@@ -126,6 +126,7 @@ final supportedFormatMimes = [
   "image/webp",
   "image/heic",
   "image/gif",
+  "image/jxl",
   "video/mp4",
   "video/quicktime",
   if ([NpPlatform.android, NpPlatform.web].contains(getRawPlatform()))

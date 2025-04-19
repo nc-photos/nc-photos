@@ -670,6 +670,8 @@ class NpDbSqlite implements NpDb {
           lat: e.lat,
           lng: e.lng,
           fileId: e.fileId,
+          fileRelativePath: e.fileRelativePath,
+          mime: e.mime,
         ));
   }
 
@@ -1029,6 +1031,13 @@ class NpDbSqlite implements NpDb {
       void Function(int current, int count)? onProgress) async {
     await _db.use((db) async {
       await db.migrateV55(onProgress);
+    });
+  }
+
+  @override
+  Future<void> migrateV75() async {
+    await _db.use((db) async {
+      await db.migrateV75();
     });
   }
 

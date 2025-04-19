@@ -114,6 +114,13 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        jniLibs {
+            pickFirst "lib/**/libbrotlicommon.so"
+            pickFirst "lib/**/libbrotlidec.so"
+        }
+    }
 }
 
 flutter {

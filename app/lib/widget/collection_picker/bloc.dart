@@ -74,7 +74,7 @@ class _Bloc extends Bloc<_Event, _State>
                 KiwiContainer().resolve<DiContainer>(), account, c)
             .isPermitted(CollectionCapability.manualItem))
         .sortedBy(collection_util.CollectionSort.dateDescending);
-    return sorted.map((c) => _Item(c)).toList();
+    return sorted.map(_Item.fromCollection).toList();
   }
 
   final Account account;

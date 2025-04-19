@@ -98,6 +98,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     if (lastVersion < 550) {
       await _upgrade55(lastVersion, emit);
     }
+    if (lastVersion < 750) {
+      await _upgrade75(lastVersion, emit);
+    }
   }
 
   Future<void> _upgrade29(int lastVersion) async {
@@ -143,6 +146,25 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     if (!isClosed) {
       emit(state.copyWith(
         upgradeProgress: null,
+        upgradeText: null,
+      ));
+    }
+  }
+
+  Future<void> _upgrade75(int lastVersion, Emitter<_State> emit) async {
+    _log.info("[_upgrade75] migrate DB");
+    emit(state.copyWith(
+      upgradeText: L10n.global().migrateDatabaseProcessingNotification,
+    ));
+    try {
+      await CompatV75.migrateDb(npDb);
+    } catch (e, stackTrace) {
+      _log.shout("[_upgrade75] Failed while migrateDb", e, stackTrace);
+      final accounts = prefController.accountsValue;
+      await npDb.clearAndInitWithAccounts(accounts.toDb());
+    }
+    if (!isClosed) {
+      emit(state.copyWith(
         upgradeText: null,
       ));
     }

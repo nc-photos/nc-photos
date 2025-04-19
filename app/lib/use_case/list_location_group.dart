@@ -11,8 +11,15 @@ part 'list_location_group.g.dart';
 
 @toString
 class LocationGroup with EquatableMixin {
-  const LocationGroup(this.place, this.countryCode, this.count,
-      this.latestFileId, this.latestDateTime);
+  const LocationGroup(
+    this.place,
+    this.countryCode,
+    this.count,
+    this.latestFileId,
+    this.latestDateTime,
+    this.latestFileMime,
+    this.latestFileRelativePath,
+  );
 
   @override
   String toString() => _$toString();
@@ -24,6 +31,8 @@ class LocationGroup with EquatableMixin {
         count,
         latestFileId,
         latestDateTime,
+        latestFileMime,
+        latestFileRelativePath,
       ];
 
   final String place;
@@ -31,6 +40,8 @@ class LocationGroup with EquatableMixin {
   final int count;
   final int latestFileId;
   final DateTime latestDateTime;
+  final String? latestFileMime;
+  final String latestFileRelativePath;
 }
 
 @toString
