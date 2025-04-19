@@ -129,25 +129,28 @@ class _WrappedHomeCollectionsState extends State<_WrappedHomeCollections>
       child: _BlocSelector(
         selector: (state) => state.selectedItems.isEmpty,
         builder: (context, isSelectedEmpty) => isSelectedEmpty
-            ? const DoubleTapExitContainer(
-                child: _BodyView(),
+            ? DoubleTapExitContainer(
+                child: _BodyView(
+                  key: _bodyKey,
+                ),
               )
             : PopScope(
                 canPop: false,
                 onPopInvoked: (_) {
                   context.addEvent(const _SetSelectedItems(items: {}));
                 },
-                child: const _BodyView(),
+                child: _BodyView(key: _bodyKey),
               ),
       ),
     );
   }
 
   late final _Bloc _bloc = context.read();
+  final _bodyKey = GlobalKey();
 }
 
 class _BodyView extends StatelessWidget {
-  const _BodyView();
+  const _BodyView({super.key});
 
   @override
   Widget build(BuildContext context) {
