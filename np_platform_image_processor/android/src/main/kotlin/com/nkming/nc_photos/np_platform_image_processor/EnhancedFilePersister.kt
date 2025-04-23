@@ -18,7 +18,7 @@ interface EnhancedFilePersister {
 class EnhancedFileDevicePersister(context: Context) :
 	EnhancedFilePersister {
 	override fun persist(cmd: ImageProcessorImageCommand, file: File): Uri {
-		val basename = cmd.fileUrl.substringBeforeLast('.')
+		val basename = cmd.filename.substringBeforeLast('.')
 		val uri = MediaStoreUtil.copyFileToDownload(
 			context, Uri.fromFile(file), "${basename}.jpg",
 			"Photos (for Nextcloud)/${getSubDir(cmd)}"
