@@ -3,7 +3,6 @@
 #include <cmath>
 #include <cstdint>
 
-#include "../math_util.h"
 #include "hslhsv.h"
 
 using namespace std;

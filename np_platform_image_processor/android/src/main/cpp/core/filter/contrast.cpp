@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
@@ -5,7 +6,6 @@
 #include <vector>
 
 #include "../log.h"
-#include "../math_util.h"
 #include "hslhsv.h"
 
 using namespace core;
@@ -23,7 +23,7 @@ private:
 };
 
 inline uint8_t applySingle(const uint8_t p, const float mul) {
-  return clamp(0, static_cast<int>((p - 127) * mul + 127), 0xFF);
+  return clamp(static_cast<int>((p - 127) * mul + 127), 0, 0xFF);
 }
 
 std::vector<uint8_t> buildLut(const float mul);

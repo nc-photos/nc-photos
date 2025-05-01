@@ -13,7 +13,6 @@
 
 #include "util.h"
 #include "log.h"
-#include "math_util.h"
 
 using namespace im_proc;
 using namespace std;
@@ -121,9 +120,9 @@ vector<uint8_t> rgbFloatToRgb8(const float *rgbF, const size_t size,
 #pragma omp parallel for
   for (size_t i = 0; i < size; ++i) {
     if (isNormalized) {
-      rgb8[i] = clamp<int>(0, rgbF[i] * 255, 255);
+      rgb8[i] = clamp<int>(rgbF[i] * 255, 0, 255);
     } else {
-      rgb8[i] = clamp<int>(0, rgbF[i], 255);
+      rgb8[i] = clamp<int>(rgbF[i], 0, 255);
     }
   }
   return rgb8;
@@ -175,7 +174,7 @@ void alphaBlend(const uint8_t *src, uint8_t *dst, const size_t width,
             (src[i4 + i] * srcA + dst[i4 + i] * dstA * (1 - srcA)) / endA;
       }
       // a
-      dst[i4 + 3] = clamp<int>(0, endA * 255, 255);
+      dst[i4 + 3] = clamp<int>(endA * 255, 0, 255);
     }
   }
 }

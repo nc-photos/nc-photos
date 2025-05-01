@@ -1,10 +1,10 @@
+#include <algorithm>
 #include <cstdint>
 #include <cstring>
 #include <exception>
 #include <vector>
 
 #include "../log.h"
-#include "../math_util.h"
 #include "yuv.h"
 
 using namespace core;
@@ -50,8 +50,8 @@ vector<uint8_t> Tint::apply(const uint8_t *rgba8, const size_t width,
     const auto p = i * 4;
     auto yuv = filter::rgb8ToYuv(rgba8 + p);
     // +-0.1
-    yuv[1] = clamp(0.f, yuv[1] + 0.1f * weight, 1.f);
-    yuv[2] = clamp(0.f, yuv[2] + 0.1f * weight, 1.f);
+    yuv[1] = clamp(yuv[1] + 0.1f * weight, 0.f, 1.f);
+    yuv[2] = clamp(yuv[2] + 0.1f * weight, 0.f, 1.f);
     const auto &newRgb = filter::yuvToRgb8(yuv.data());
     memcpy(output.data() + p, newRgb.data(), 3);
     output[p + 3] = rgba8[p + 3];
