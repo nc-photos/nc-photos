@@ -29,7 +29,7 @@ apply plugin: 'kotlin-android'
 android {
     namespace 'com.nkming.nc_photos.np_platform_image_processor'
    	compileSdk 34
-    ndkVersion "25.2.9519653"
+    ndkVersion "27.2.12479018"
 
     defaultConfig {
    		minSdk 23
