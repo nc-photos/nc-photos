@@ -1,10 +1,9 @@
+#include <algorithm>
 #include <cstdint>
 #include <vector>
 
 #include "../log.h"
-#include "../math_util.h"
 
-using namespace core;
 using namespace std;
 
 namespace {
@@ -21,11 +20,11 @@ private:
   static uint8_t applyInputLevel(const uint8_t p, const float weight) {
     const auto pf = p / 255.f;
     const auto max = 1 - weight * INPUT_AMPLITUDE;
-    return clamp<int>(0, clamp(0.f, pf, max) / max * 255.f, 255);
+    return clamp<int>(clamp(pf, 0.f, max) / max * 255.f, 0, 255);
   }
 
   static uint8_t applyOutputLevel(const uint8_t p, const float weight) {
-    return clamp<int>(0, p / 255.f * (255 - weight * OUTPUT_AMPLITUDE), 255);
+    return clamp<int>(p / 255.f * (255 - weight * OUTPUT_AMPLITUDE), 0, 255);
   }
 
   static std::vector<uint8_t> buildLut(const float weight);
@@ -42,12 +41,12 @@ private:
   static inline uint8_t applyInputLevel(const uint8_t p, const float weight) {
     const auto pf = p / 255.f;
     const auto min = weight * INPUT_AMPLITUDE;
-    return clamp<int>(0, (clamp(min, pf, 1.f) - min) / (1 - min) * 255.f, 255);
+    return clamp<int>((clamp(pf, min, 1.f) - min) / (1 - min) * 255.f, 0, 255);
   }
 
   static inline uint8_t applyOutputLevel(const uint8_t p, const float weight) {
     const auto x = weight * OUTPUT_AMPLITUDE;
-    return clamp<int>(0, p / 255.f * (255 - x) + x, 255);
+    return clamp<int>(p / 255.f * (255 - x) + x, 0, 255);
   }
 
   static std::vector<uint8_t> buildLut(const float weight);

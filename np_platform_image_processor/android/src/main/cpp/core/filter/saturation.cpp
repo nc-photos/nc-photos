@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
@@ -5,7 +6,6 @@
 #include <vector>
 
 #include "../log.h"
-#include "../math_util.h"
 #include "hslhsv.h"
 #include "saturation.h"
 
@@ -32,7 +32,7 @@ vector<uint8_t> Saturation::apply(const uint8_t *rgba8, const size_t width,
   for (size_t i = 0; i < width * height; ++i) {
     const auto p = i * 4;
     auto hsl = filter::rgb8ToHsl(rgba8 + p);
-    hsl[1] = clamp(0.f, hsl[1] * (1 + weight), 1.f);
+    hsl[1] = clamp(hsl[1] * (1 + weight), 0.f, 1.f);
     const auto &newRgb = filter::hslToRgb8(hsl.data());
     memcpy(output.data() + p, newRgb.data(), 3);
     output[p + 3] = rgba8[p + 3];
