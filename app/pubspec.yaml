@@ -31,7 +31,7 @@ dependencies:
   android_intent_plus:
     git:
       url: https://github.com/nc-photos/plus_plugins.git
-      ref: android_intent_plus-v3.1.1-nc-photos-1
+      ref: android_intent_plus-v3.1.1-nc-photos-2
       path: packages/android_intent_plus
   battery_plus: ^4.0.1
   bloc_concurrency: ^0.2.5
@@ -48,7 +48,7 @@ dependencies:
   circular_reveal_animation: ^2.0.1
   clock: ^1.1.1
   collection: ^1.18.0
-  connectivity_plus: ^3.0.6
+  connectivity_plus: ^4.0.2
   copy_with:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
@@ -69,7 +69,7 @@ dependencies:
   flutter_background_service:
     git:
       url: https://github.com/nc-photos/flutter_background_service.git
-      ref: v0.2.6-nc-photos-3
+      ref: v0.2.6-nc-photos-4
   flutter_bloc: ^8.1.5
   flutter_cache_manager: any
   flutter_colorpicker: ^1.1.0
@@ -79,7 +79,7 @@ dependencies:
     git:
       url: https://github.com/nc-photos/flutter_staggered_grid_view.git
       ref: v0.4.0-nc-photos-2
-  flutter_typeahead: ^4.0.0
+  flutter_typeahead: ^5.2.0
   google_maps_flutter: 2.5.3
   http: ^1.1.2
   image_size_getter:
