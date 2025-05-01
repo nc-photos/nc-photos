@@ -4,4 +4,5 @@
 
 	<string name="download_successful_notification_action_share">SHARE</string>
 	<string name="download_successful_notification_action_share_chooser">Share with:</string>
+	<string name="attach_data_chooser_title">Set as</string>
 </resources>
