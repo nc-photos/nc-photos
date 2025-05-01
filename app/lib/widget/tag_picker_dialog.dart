@@ -86,20 +86,22 @@ class _TagPickerDialogState extends State<TagPickerDialog> {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 40),
       child: TypeAheadField<Tag>(
-        textFieldConfiguration: TextFieldConfiguration(
-          controller: _searchController,
-          decoration: InputDecoration(
-            hintText: L10n.global().addTagInputHint,
-          ),
-        ),
+        controller: _searchController,
         suggestionsCallback: _onSearch,
         itemBuilder: (_, suggestion) => ListTile(
           title: Text(suggestion.displayName),
         ),
-        onSuggestionSelected: _onSearchSuggestionSelected,
+        onSelected: _onSearchSuggestionSelected,
         hideOnEmpty: true,
         hideOnLoading: true,
         autoFlipDirection: true,
+        builder: (context, controller, focusNode) => TextField(
+          controller: controller,
+          focusNode: focusNode,
+          decoration: InputDecoration(
+            hintText: L10n.global().addTagInputHint,
+          ),
+        ),
       ),
     );
   }
@@ -130,7 +132,7 @@ class _TagPickerDialogState extends State<TagPickerDialog> {
     Navigator.of(context).pop(_selected);
   }
 
-  Future<Iterable<Tag>> _onSearch(String pattern) async {
+  Future<List<Tag>> _onSearch(String pattern) async {
     _suggestionBloc.add(SearchSuggestionBlocSearchEvent(pattern.toCi()));
     await Future.delayed(const Duration(milliseconds: 250));
     await wait(() => _suggestionBloc.state is! SearchSuggestionBlocLoading);
