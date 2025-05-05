@@ -127,7 +127,7 @@ class CachedNetworkImageBuilder {
   });
 
   CachedNetworkImage build() {
-    _log.finer("[build] $mime, $imageUrl");
+    // _log.finer("[build] $mime, $imageUrl");
     return CachedNetworkImage(
       fit: fit,
       cacheManager: getCacheManager(type, mime),
