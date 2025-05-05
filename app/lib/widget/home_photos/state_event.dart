@@ -23,6 +23,8 @@ class _State {
     this.itemSize,
     required this.isScrolling,
     required this.filesSummary,
+    required this.localFiles,
+    required this.localFilesSummary,
     this.minimapItems,
     required this.minimapYRatio,
     this.scrollDate,
@@ -47,6 +49,8 @@ class _State {
         finger: 0,
         isScrolling: false,
         filesSummary: const DbFilesSummary(items: {}),
+        localFiles: const [],
+        localFilesSummary: const LocalFilesSummary(items: {}),
         minimapYRatio: 1,
         hasMissingVideoPreview: false,
       );
@@ -59,6 +63,8 @@ class _State {
   final List<List<_Item>> transformedItems;
   final Set<_Item> selectedItems;
   final DbFilesSummary filesSummary;
+  final List<LocalFile> localFiles;
+  final LocalFilesSummary localFilesSummary;
   final Set<_VisibleDate> visibleDates;
   final Set<Date> queriedDates;
 
@@ -110,13 +116,16 @@ class _RequestRefresh implements _Event {
 /// Transform the file list (e.g., filtering, sorting, etc)
 @toString
 class _TransformItems implements _Event {
-  const _TransformItems(this.files, this.summary);
+  const _TransformItems(
+      this.files, this.summary, this.localFiles, this.localSummary);
 
   @override
   String toString() => _$toString();
 
   final List<FileDescriptor> files;
   final DbFilesSummary summary;
+  final List<LocalFile> localFiles;
+  final LocalFilesSummary localSummary;
 }
 
 @toString
