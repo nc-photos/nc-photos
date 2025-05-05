@@ -1,14 +1,17 @@
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
+import 'package:nc_photos/entity/local_file/repo.dart';
 import 'package:nc_photos/mobile/android/android_info.dart';
 import 'package:nc_photos/mobile/android/k.dart' as android;
 import 'package:nc_photos/mobile/share.dart';
-import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/object_util.dart';
+import 'package:np_datetime/np_datetime.dart';
 import 'package:np_log/np_log.dart';
 
 part 'data_source.g.dart';
@@ -16,6 +19,13 @@ part 'data_source.g.dart';
 @npLog
 class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   const LocalFileMediaStoreDataSource();
+
+  @override
+  Future<List<LocalFile>> getFiles({TimeRange? timeRange}) async {
+    _log.info("[getFiles] timeRange: $timeRange");
+    final results = await MediaStore.queryFiles2(timeRange: timeRange);
+    return results.map(_toLocalFile).toList();
+  }
 
   @override
   listDir(String path) async {
@@ -63,6 +73,13 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
         onFailure?.call(f, e, stackTrace);
       }
     }
+  }
+
+  @override
+  Future<LocalFilesSummary> getFilesSummary() async {
+    _log.info("[getFilesSummary]");
+    final results = await MediaStore.getFilesSummary();
+    return LocalFilesSummary(items: results);
   }
 
   Future<void> _deleteFiles30(
@@ -123,11 +140,17 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   static LocalFile _toLocalFile(MediaStoreQueryResult r) => LocalUriFile(
+    id: "${r.id}",
     uri: r.uri,
     displayName: r.displayName,
     path: r.path,
-    lastModified: DateTime.fromMillisecondsSinceEpoch(r.dateModified),
+    lastModified: DateTime.fromMillisecondsSinceEpoch(
+      r.dateModified,
+      isUtc: true,
+    ),
     mime: r.mimeType,
-    dateTaken: r.dateTaken?.run(DateTime.fromMillisecondsSinceEpoch),
+    dateTaken: r.dateTaken?.let(
+      (e) => DateTime.fromMillisecondsSinceEpoch(e, isUtc: true),
+    ),
   );
 }

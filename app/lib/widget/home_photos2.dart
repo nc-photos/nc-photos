@@ -18,6 +18,7 @@ import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/metadata_controller.dart';
 import 'package:nc_photos/controller/persons_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
@@ -31,6 +32,7 @@ import 'package:nc_photos/entity/collection/content_provider/memory.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/event/event.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
@@ -50,6 +52,7 @@ import 'package:nc_photos/widget/double_tap_exit_container/double_tap_exit_conta
 import 'package:nc_photos/widget/file_sharer_dialog.dart';
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/home_app_bar.dart';
+import 'package:nc_photos/widget/local_file_viewer.dart';
 import 'package:nc_photos/widget/navigation_bar_blur_filter.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
@@ -100,6 +103,7 @@ class HomePhotos2 extends StatelessWidget {
             personsController: accountController.personsController,
             metadataController: accountController.metadataController,
             serverController: accountController.serverController,
+            localFilesController: context.read(),
             bottomAppBarHeight: AppDimension.of(context).homeBottomAppBarHeight,
             draggableThumbSize:
                 AppDimension.of(context).timelineDraggableThumbSize,
