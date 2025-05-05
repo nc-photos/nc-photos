@@ -12,6 +12,7 @@ import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/controller/trusted_cert_controller.dart';
 import 'package:nc_photos/di_container.dart';
@@ -97,6 +98,9 @@ class MyApp extends StatelessWidget {
           create: (_) => TrustedCertController(
             manager: SelfSignedCertManager(),
           ),
+        ),
+        RepositoryProvider(
+          create: (_) => LocalFilesController(_c),
         ),
       ],
       child: BlocProvider(
