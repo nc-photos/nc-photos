@@ -2,9 +2,12 @@ import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos_plugin/src/exception.dart';
 import 'package:nc_photos_plugin/src/k.dart' as k;
+import 'package:np_common/object_util.dart';
+import 'package:np_datetime/np_datetime.dart';
 
 class MediaStoreQueryResult {
   const MediaStoreQueryResult(
+    this.id,
     this.uri,
     this.displayName,
     this.path,
@@ -13,6 +16,7 @@ class MediaStoreQueryResult {
     this.dateTaken,
   );
 
+  final int id;
   final String uri;
   final String displayName;
   final String path;
@@ -91,6 +95,45 @@ class MediaStore {
           .cast<Map>()
           .map(
             (e) => MediaStoreQueryResult(
+              e["id"],
+              e["uri"],
+              e["displayName"],
+              e["path"],
+              e["dateModified"],
+              e["mimeType"],
+              e["dateTaken"],
+            ),
+          )
+          .toList();
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  static Future<List<MediaStoreQueryResult>> queryFiles2({
+    TimeRange? timeRange,
+  }) async {
+    try {
+      final List results = await _methodChannel
+          .invokeMethod("queryFiles2", <String, dynamic>{
+            "timeRangeBeg": timeRange?.from?.millisecondsSinceEpoch,
+            "isTimeRangeBegInclusive": timeRange?.let(
+              (e) => e.fromBound == TimeRangeBound.inclusive,
+            ),
+            "timeRangeEnd": timeRange?.to?.millisecondsSinceEpoch,
+            "isTimeRangeEndInclusive": timeRange?.let(
+              (e) => e.toBound == TimeRangeBound.inclusive,
+            ),
+          });
+      return results
+          .cast<Map>()
+          .map(
+            (e) => MediaStoreQueryResult(
+              e["id"],
               e["uri"],
               e["displayName"],
               e["path"],
@@ -114,6 +157,25 @@ class MediaStore {
       "deleteFiles",
       <String, dynamic>{"uris": uris},
     ))?.cast<String>();
+  }
+
+  static Future<Map<Date, int>> getFilesSummary() async {
+    try {
+      return (await _methodChannel.invokeMethod<Map>(
+        "getFilesSummary",
+      ))!.cast<int, int>().map(
+        (key, value) => MapEntry(
+          Date.fromDateTime(DateTime.fromMillisecondsSinceEpoch(key)),
+          value,
+        ),
+      );
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else {
+        rethrow;
+      }
+    }
   }
 
   static Stream get stream => _eventStream;

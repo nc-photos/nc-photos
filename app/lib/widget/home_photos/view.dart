@@ -122,34 +122,41 @@ class _ContentListBody extends StatelessWidget {
                       );
                     },
                     onItemTap: (context, section, index, item) {
-                      if (item is! _FileItem) {
-                        // ?
-                        return;
-                      }
-                      final fileDate = item.file.fdDateTime.toLocal().toDate();
-                      final summary = context.state.filesSummary.items;
-                      var count = 0;
-                      for (final e
-                          in summary.entries.sortedBy((e) => e.key).reversed) {
-                        if (e.key.isAfter(fileDate)) {
-                          count += e.value.count;
-                        } else {
-                          break;
+                      if (item is _FileItem) {
+                        final fileDate =
+                            item.file.fdDateTime.toLocal().toDate();
+                        final summary = context.state.filesSummary.items;
+                        var count = 0;
+                        for (final e
+                            in summary.entries
+                                .sortedBy((e) => e.key)
+                                .reversed) {
+                          if (e.key.isAfter(fileDate)) {
+                            count += e.value.count;
+                          } else {
+                            break;
+                          }
                         }
-                      }
-                      count += index;
+                        count += index;
 
-                      Navigator.of(context).pushNamed(
-                        TimelineViewer.routeName,
-                        arguments: TimelineViewerArguments(
-                          initialFile: item.file,
-                          initialIndex: count,
-                          allFilesCount:
-                              context.state.filesSummary.items.values
-                                  .map((e) => e.count)
-                                  .sum,
-                        ),
-                      );
+                        Navigator.of(context).pushNamed(
+                          TimelineViewer.routeName,
+                          arguments: TimelineViewerArguments(
+                            initialFile: item.file,
+                            initialIndex: count,
+                            allFilesCount:
+                                context.state.filesSummary.items.values
+                                    .map((e) => e.count)
+                                    .sum,
+                          ),
+                        );
+                      } else if (item is _LocalFileItem) {
+                        Navigator.pushNamed(
+                          context,
+                          LocalFileViewer.routeName,
+                          arguments: LocalFileViewerArguments([item.file], 0),
+                        );
+                      }
                     },
                   ),
     );
@@ -221,6 +228,8 @@ class _ContentListItemViewState extends State<_ContentListItemView> {
       date = item.file.fdDateTime.toLocal().toDate();
     } else if (item is _SummaryFileItem) {
       date = item.date;
+    } else if (item is _LocalFileItem) {
+      date = item.file.bestDateTime.toLocal().toDate();
     }
     return date;
   }

@@ -101,11 +101,41 @@ class _DateItem extends _Item {
   final bool isMonthOnly;
 }
 
+class _LocalFileItem extends _Item {
+  const _LocalFileItem({required this.file});
+
+  @override
+  String get id => "localfile-${file.id}";
+
+  @override
+  bool get isSelectable => true;
+
+  @override
+  StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is _LocalFileItem && file.compareIdentity(other.file));
+
+  @override
+  int get hashCode => file.identityHashCode;
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return PhotoListLocalImage(file: file);
+  }
+
+  final LocalFile file;
+}
+
 class _ItemTransformerArgument {
   const _ItemTransformerArgument({
     required this.account,
     required this.files,
-    this.summary,
+    required this.summary,
+    required this.localFiles,
+    required this.localSummary,
     this.itemPerRow,
     this.itemSize,
     required this.isGroupByDay,
@@ -113,7 +143,9 @@ class _ItemTransformerArgument {
 
   final Account account;
   final List<FileDescriptor> files;
-  final DbFilesSummary? summary;
+  final DbFilesSummary summary;
+  final List<LocalFile> localFiles;
+  final LocalFilesSummary localSummary;
   final int? itemPerRow;
   final double? itemSize;
   final bool isGroupByDay;

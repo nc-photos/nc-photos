@@ -136,56 +136,7 @@ class PhotoListLocalImageItem extends PhotoListLocalFileItem {
   });
 
   @override
-  buildWidget(BuildContext context) {
-    final ImageProvider provider;
-    if (file is LocalUriFile) {
-      provider = ContentUriImage((file as LocalUriFile).uri);
-    } else {
-      throw ArgumentError("Invalid file");
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(2),
-      child: FittedBox(
-        clipBehavior: Clip.hardEdge,
-        fit: BoxFit.cover,
-        child: Stack(
-          children: [
-            Container(
-              // arbitrary size here
-              constraints: BoxConstraints.tight(const Size(128, 128)),
-              color: Theme.of(context).listPlaceholderBackgroundColor,
-              child: Image(
-                image: ResizeImage.resizeIfNeeded(
-                  k.photoThumbSize,
-                  null,
-                  provider,
-                ),
-                filterQuality: FilterQuality.high,
-                fit: BoxFit.cover,
-                errorBuilder: (context, e, stackTrace) {
-                  return Center(
-                    child: Icon(
-                      Icons.image_not_supported,
-                      size: 64,
-                      color: Theme.of(context).listPlaceholderForegroundColor,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              // arbitrary size here
-              constraints: BoxConstraints.tight(const Size(128, 128)),
-              alignment: AlignmentDirectional.bottomEnd,
-              padding: const EdgeInsets.all(8),
-              child: const Icon(Icons.cloud_off, size: 20, color: Colors.white),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget buildWidget(BuildContext context) => PhotoListLocalImage(file: file);
 }
 
 class PhotoListImage extends StatelessWidget {
@@ -399,4 +350,62 @@ class PhotoListDate extends StatelessWidget {
 
   final Date date;
   final bool isMonthOnly;
+}
+
+class PhotoListLocalImage extends StatelessWidget {
+  const PhotoListLocalImage({super.key, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    final ImageProvider provider;
+    if (file is LocalUriFile) {
+      provider = ContentUriImage((file as LocalUriFile).uri);
+    } else {
+      throw ArgumentError("Invalid file");
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(2),
+      child: FittedBox(
+        clipBehavior: Clip.hardEdge,
+        fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            Container(
+              // arbitrary size here
+              constraints: BoxConstraints.tight(const Size(128, 128)),
+              color: Theme.of(context).listPlaceholderBackgroundColor,
+              child: Image(
+                image: ResizeImage.resizeIfNeeded(
+                  k.photoThumbSize,
+                  null,
+                  provider,
+                ),
+                filterQuality: FilterQuality.high,
+                fit: BoxFit.cover,
+                errorBuilder: (context, e, stackTrace) {
+                  return Center(
+                    child: Icon(
+                      Icons.image_not_supported,
+                      size: 64,
+                      color: Theme.of(context).listPlaceholderForegroundColor,
+                    ),
+                  );
+                },
+              ),
+            ),
+            Container(
+              // arbitrary size here
+              constraints: BoxConstraints.tight(const Size(128, 128)),
+              alignment: AlignmentDirectional.bottomEnd,
+              padding: const EdgeInsets.all(8),
+              child: const Icon(Icons.cloud_off, size: 20, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  final LocalFile file;
 }

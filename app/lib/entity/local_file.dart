@@ -17,6 +17,7 @@ abstract class LocalFile with EquatableMixin {
 
   String get logTag;
 
+  String get id;
   String get filename;
   DateTime get lastModified;
   String? get mime;
@@ -31,6 +32,7 @@ extension LocalFileExtension on LocalFile {
 @ToString(ignoreNull: true)
 class LocalUriFile with EquatableMixin implements LocalFile {
   const LocalUriFile({
+    required this.id,
     required this.uri,
     required this.displayName,
     required this.path,
@@ -40,7 +42,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   });
 
   @override
-  compareIdentity(LocalFile other) {
+  bool compareIdentity(LocalFile other) {
     if (other is! LocalUriFile) {
       return false;
     } else {
@@ -49,20 +51,30 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   }
 
   @override
-  get identityHashCode => uri.hashCode;
+  int get identityHashCode => uri.hashCode;
 
   @override
   String toString() => _$toString();
 
   @override
-  get logTag => path;
+  String get logTag => path;
 
   @override
-  get filename => displayName;
+  String get filename => displayName;
 
   @override
-  get props => [uri, displayName, path, lastModified, mime, dateTaken];
+  List<Object?> get props => [
+    id,
+    uri,
+    displayName,
+    path,
+    lastModified,
+    mime,
+    dateTaken,
+  ];
 
+  @override
+  final String id;
   final String uri;
   final String displayName;
 
@@ -79,40 +91,12 @@ class LocalUriFile with EquatableMixin implements LocalFile {
 typedef LocalFileOnFailureListener =
     void Function(LocalFile file, Object? error, StackTrace? stackTrace);
 
-class LocalFileRepo {
-  const LocalFileRepo(this.dataSrc);
-
-  /// See [LocalFileDataSource.listDir]
-  Future<List<LocalFile>> listDir(String path) => dataSrc.listDir(path);
-
-  /// See [LocalFileDataSource.deleteFiles]
-  Future<void> deleteFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  }) => dataSrc.deleteFiles(files, onFailure: onFailure);
-
-  /// See [LocalFileDataSource.shareFiles]
-  Future<void> shareFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  }) => dataSrc.shareFiles(files, onFailure: onFailure);
-
-  final LocalFileDataSource dataSrc;
-}
-
-abstract class LocalFileDataSource {
-  /// List all files under [path]
-  Future<List<LocalFile>> listDir(String path);
-
-  /// Delete files
-  Future<void> deleteFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  });
-
-  /// Share files
-  Future<void> shareFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  });
+int compareLocalFileDateTimeDescending(LocalFile x, LocalFile y) {
+  final tmp = y.bestDateTime.compareTo(x.bestDateTime);
+  if (tmp != 0) {
+    return tmp;
+  } else {
+    // compare file name if files are modified at the same time
+    return y.filename.compareTo(x.filename);
+  }
 }

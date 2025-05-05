@@ -19,6 +19,8 @@ abstract class $_StateCopyWithWorker {
     List<List<_Item>>? transformedItems,
     Set<_Item>? selectedItems,
     DbFilesSummary? filesSummary,
+    List<LocalFile>? localFiles,
+    LocalFilesSummary? localFilesSummary,
     Set<_VisibleDate>? visibleDates,
     Set<Date>? queriedDates,
     bool? isEnableMemoryCollection,
@@ -51,6 +53,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic transformedItems,
     dynamic selectedItems,
     dynamic filesSummary,
+    dynamic localFiles,
+    dynamic localFilesSummary,
     dynamic visibleDates,
     dynamic queriedDates,
     dynamic isEnableMemoryCollection,
@@ -78,6 +82,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           transformedItems as List<List<_Item>>? ?? that.transformedItems,
       selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
       filesSummary: filesSummary as DbFilesSummary? ?? that.filesSummary,
+      localFiles: localFiles as List<LocalFile>? ?? that.localFiles,
+      localFilesSummary:
+          localFilesSummary as LocalFilesSummary? ?? that.localFilesSummary,
       visibleDates: visibleDates as Set<_VisibleDate>? ?? that.visibleDates,
       queriedDates: queriedDates as Set<Date>? ?? that.queriedDates,
       isEnableMemoryCollection:
@@ -191,7 +198,7 @@ extension _$_ContentListBodyNpLog on _ContentListBody {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {files: [length: ${files.length}], isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, filesSummary: $filesSummary, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, error: $error}";
+    return "_State {files: [length: ${files.length}], isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, filesSummary: $filesSummary, localFiles: [length: ${localFiles.length}], localFilesSummary: $localFilesSummary, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, error: $error}";
   }
 }
 
@@ -212,7 +219,7 @@ extension _$_RequestRefreshToString on _RequestRefresh {
 extension _$_TransformItemsToString on _TransformItems {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_TransformItems {files: [length: ${files.length}], summary: $summary}";
+    return "_TransformItems {files: [length: ${files.length}], summary: $summary, localFiles: [length: ${localFiles.length}], localSummary: $localSummary}";
   }
 }
 
