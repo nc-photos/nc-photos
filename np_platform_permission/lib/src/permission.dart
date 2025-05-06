@@ -22,12 +22,12 @@ class Permission {
     ))!;
   }
 
-  static Future<bool> hasReadExternalStorage() async {
-    return (await _methodChannel.invokeMethod<bool>("hasReadExternalStorage"))!;
+  static Future<bool> hasReadMedia() async {
+    return (await _methodChannel.invokeMethod<bool>("hasReadMedia"))!;
   }
 
-  static Future<void> requestReadExternalStorage() =>
-      _methodChannel.invokeMethod("requestReadExternalStorage");
+  static Future<void> requestReadMedia() =>
+      _methodChannel.invokeMethod("requestReadMedia");
 
   static Future<bool> hasPostNotifications() async {
     return (await _methodChannel.invokeMethod<bool>("hasPostNotifications"))!;

@@ -19,7 +19,7 @@ import 'package:nc_photos/use_case/compat/v55.dart';
 import 'package:nc_photos/use_case/compat/v75.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/changelog.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/setup.dart';
 import 'package:nc_photos/widget/sign_in.dart';
 import 'package:np_db/np_db.dart';

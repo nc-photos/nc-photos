@@ -6,8 +6,8 @@ Future<Map<String, int>> requestPermissionsForResult(
   List<String> permissions,
 ) => _doRequest(() => Permission.request(permissions));
 
-Future<Map<String, int>> requestReadExternalStorageForResult() =>
-    _doRequest(() => Permission.requestReadExternalStorage());
+Future<Map<String, int>> requestReadMediaForResult() =>
+    _doRequest(() => Permission.requestReadMedia());
 
 Future<Map<String, int>> requestPostNotificationsForResult() =>
     _doRequest(() => Permission.requestPostNotifications());
