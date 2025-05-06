@@ -48,4 +48,6 @@ abstract class AndroidVersion {
   static const Q = 29;
   static const R = 30;
   static const S = 31;
+  // ignore: constant_identifier_names
+  static const TIRAMISU = 33;
 }

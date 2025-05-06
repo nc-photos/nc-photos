@@ -17,7 +17,7 @@ import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/connect2/connect.dart';
 import 'package:nc_photos/widget/expandable_container.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/root_picker.dart';
 import 'package:np_collection/np_collection.dart';

@@ -290,7 +290,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 		result: MethodChannel.Result
 	) {
 		if (!PermissionUtil.hasReadMedia(context)) {
-			activity?.let { PermissionUtil.requestReadMedia(it) }
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
 			result.error("permissionError", "Permission not granted", null)
 			return
 		}
@@ -434,7 +434,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 	@RequiresApi(Build.VERSION_CODES.R)
 	private fun getFilesSummary(result: MethodChannel.Result) {
 		if (!PermissionUtil.hasReadMedia(context)) {
-			activity?.let { PermissionUtil.requestReadMedia(it) }
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
 			result.error("permissionError", "Permission not granted", null)
 			return
 		}

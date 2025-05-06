@@ -35,24 +35,48 @@ class LocalFilesSummaryStreamEvent {
   final LocalFilesSummary summary;
 }
 
-@npLog
-class LocalFilesController {
-  LocalFilesController(this._c);
-
+abstract interface class LocalFilesController {
   void dispose() {}
 
   /// Return a stream of local files for timeline
   ///
   /// This stream is typically used for the photo timeline
+  ValueStream<LocalTimelineStreamEvent> get timelineStream;
+
+  Stream<ExceptionEvent> get timelineErrorStream;
+
+  /// Return a stream of local file summaries
+  ///
+  /// File summary contains the number of local files grouped by their dates
+  ValueStream<LocalFilesSummaryStreamEvent> get summaryStream2;
+
+  Stream<ExceptionEvent> get summaryErrorStream;
+
+  Future<void> queryTimelineByDateRange(DateRange dateRange);
+}
+
+@npLog
+class LocalFilesControllerImpl implements LocalFilesController {
+  LocalFilesControllerImpl(this._c);
+
+  @override
+  void dispose() {}
+
+  /// Return a stream of local files for timeline
+  ///
+  /// This stream is typically used for the photo timeline
+  @override
   ValueStream<LocalTimelineStreamEvent> get timelineStream =>
       _timelineStreamController.stream;
 
+  @override
   Stream<ExceptionEvent> get timelineErrorStream =>
       _timelineErrorStreamController.stream;
 
   /// Return a stream of local file summaries
   ///
   /// File summary contains the number of local files grouped by their dates
+  @override
   ValueStream<LocalFilesSummaryStreamEvent> get summaryStream2 {
     if (!_isSummaryStreamInited) {
       _isSummaryStreamInited = true;
@@ -61,9 +85,11 @@ class LocalFilesController {
     return _summaryStreamController.stream;
   }
 
+  @override
   Stream<ExceptionEvent> get summaryErrorStream =>
       _summaryErrorStreamController.stream;
 
+  @override
   Future<void> queryTimelineByDateRange(DateRange dateRange) async {
     try {
       final files = await ListLocalFile(_c)(
@@ -131,4 +157,32 @@ class LocalFilesController {
       BehaviorSubject<LocalFilesSummaryStreamEvent>();
   final _summaryErrorStreamController =
       StreamController<ExceptionEvent>.broadcast();
+}
+
+class DummyLocalFilesController implements LocalFilesController {
+  @override
+  void dispose() {}
+
+  @override
+  Future<void> queryTimelineByDateRange(DateRange dateRange) async {}
+
+  @override
+  Stream<ExceptionEvent> get summaryErrorStream => const Stream.empty();
+
+  @override
+  ValueStream<LocalFilesSummaryStreamEvent> get summaryStream2 =>
+      _summaryStreamController.stream;
+
+  @override
+  Stream<ExceptionEvent> get timelineErrorStream => const Stream.empty();
+
+  @override
+  ValueStream<LocalTimelineStreamEvent> get timelineStream =>
+      _timelineStreamController.stream;
+
+  final _timelineStreamController = BehaviorSubject.seeded(
+    const LocalTimelineStreamEvent(data: {}),
+  );
+  final _summaryStreamController =
+      BehaviorSubject<LocalFilesSummaryStreamEvent>();
 }
