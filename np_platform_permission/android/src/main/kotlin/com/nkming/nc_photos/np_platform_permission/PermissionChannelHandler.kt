@@ -83,19 +83,19 @@ internal class PermissionChannelHandler(context: Context) :
 				}
 			}
 
-			"hasReadExternalStorage" -> {
+			"hasReadMedia" -> {
 				try {
 					result.success(
-						PermissionUtil.hasReadExternalStorage(context)
+						PermissionUtil.hasReadMedia(context)
 					)
 				} catch (e: Throwable) {
 					result.error("systemException", e.toString(), null)
 				}
 			}
 
-			"requestReadExternalStorage" -> {
+			"requestReadMedia" -> {
 				try {
-					PermissionUtil.requestReadExternalStorage(activity!!)
+					PermissionUtil.requestReadMedia(activity!!)
 					result.success(null)
 				} catch (e: Throwable) {
 					result.error("systemException", e.toString(), null)
