@@ -247,6 +247,8 @@ class _Bloc extends Bloc<_Event, _State>
         queriedDates: ev.dates,
       ),
     );
+    // update with the new queriedDates
+    _requestMoreFiles();
   }
 
   void _onSetSelectedItems(_SetSelectedItems ev, Emitter<_State> emit) {
@@ -693,22 +695,20 @@ class _Bloc extends Bloc<_Event, _State>
     });
   }
 
-  void _requestMoreFiles([Set<Date>? queriedDates]) {
-    queriedDates ??= state.queriedDates;
+  void _requestMoreFiles() {
+    final queriedDates = state.queriedDates;
     final missingDates =
         state.visibleDates
             .map((e) => e.date)
-            .whereNot((d) => queriedDates!.contains(d))
+            .whereNot((d) => queriedDates.contains(d))
             .where(
               (d) =>
                   state.filesSummary.items.containsKey(d) ||
                   state.localFilesSummary.items.containsKey(d),
             )
             .toSet();
-    if (missingDates.isNotEmpty) {
+    if (missingDates.isNotEmpty && !_isQueryingFiles) {
       _requestFilesFrom(missingDates.sortedBySelf().last);
-    } else {
-      _isQueryingFiles = false;
     }
   }
 
@@ -718,41 +718,44 @@ class _Bloc extends Bloc<_Event, _State>
 
     _log.info("[_requestFilesFrom] $at");
     _isQueryingFiles = true;
-    final summary = state.filesSummary;
-    final localSummary = state.localFilesSummary;
-    var dates = {
-      ...summary.items.keys,
-      ...localSummary.items.keys,
-    }.sorted((a, b) => b.compareTo(a));
-    final i = dates.indexWhere((e) => e.isBeforeOrAt(at));
-    if (i == -1) {
-      _log.info("[_requestFilesFrom] No more files before $at");
-      return;
-    }
-    dates = dates.sublist(i);
-    final begin = dates.first;
-    _log.info("[_requestFilesFrom] First date of interest: $begin");
-    var count = 0;
-    Date? end;
-    final included = <Date>[];
-    for (final d in dates) {
-      included.add(d);
-      count += (summary.items[d]?.count ?? 0) + (localSummary.items[d] ?? 0);
-      end = d;
-      if (count >= targetFileCount) {
-        break;
+    try {
+      final summary = state.filesSummary;
+      final localSummary = state.localFilesSummary;
+      var dates = {
+        ...summary.items.keys,
+        ...localSummary.items.keys,
+      }.sorted((a, b) => b.compareTo(a));
+      final i = dates.indexWhere((e) => e.isBeforeOrAt(at));
+      if (i == -1) {
+        _log.info("[_requestFilesFrom] No more files before $at");
+        return;
       }
+      dates = dates.sublist(i);
+      final begin = dates.first;
+      _log.info("[_requestFilesFrom] First date of interest: $begin");
+      var count = 0;
+      Date? end;
+      final included = <Date>[];
+      for (final d in dates) {
+        included.add(d);
+        count += (summary.items[d]?.count ?? 0) + (localSummary.items[d] ?? 0);
+        end = d;
+        if (count >= targetFileCount) {
+          break;
+        }
+      }
+      _log.info("[_requestFilesFrom] Query $count files until $end");
+      await Future.wait([
+        filesController.queryTimelineByDateRange(
+          DateRange(from: end, to: at.add(day: 1)),
+        ),
+        localFilesController.queryTimelineByDateRange(
+          DateRange(from: end, to: at.add(day: 1)),
+        ),
+      ]);
+    } finally {
+      _isQueryingFiles = false;
     }
-    _log.info("[_requestFilesFrom] Query $count files until $end");
-    await Future.wait([
-      filesController.queryTimelineByDateRange(
-        DateRange(from: end, to: at.add(day: 1)),
-      ),
-      localFilesController.queryTimelineByDateRange(
-        DateRange(from: end, to: at.add(day: 1)),
-      ),
-    ]);
-    _requestMoreFiles(state.queriedDates.addedAll(included));
   }
 
   List<_MinimapItem> _makeMonthGroupMinimapItems({
@@ -931,43 +934,54 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
     if (date != null) {
       transformed.add([_DateItem(date: d, isMonthOnly: !arg.isGroupByDay)]);
     }
-    if (fileGroups.containsKey(d) || localFileGroups.containsKey(d)) {
+
+    final items = <(DateTime, _Item)>[];
+    final summaryItems = <_SummaryFileItem>[];
+    if (arg.summary.items.containsKey(d)) {
+      if (fileGroups.containsKey(d)) {
+        items.addAll(
+          fileGroups[d]
+                  ?.map(
+                    (f) => _buildSingleItem(
+                      arg.account,
+                      f,
+                    )?.let((e) => (f.fdDateTime, e)),
+                  )
+                  .nonNulls ??
+              [],
+        );
+      } else {
+        final summary = arg.summary.items[d]!;
+        for (var i = 0; i < summary.count; ++i) {
+          summaryItems.add(
+            _SummaryFileItem(date: d, index: summaryItems.length),
+          );
+        }
+      }
+    }
+    if (arg.localSummary.items.containsKey(d)) {
+      if (localFileGroups.containsKey(d)) {
+        items.addAll(
+          localFileGroups[d]?.map(
+                (f) => (f.bestDateTime, _buildSingleLocalItem(f)),
+              ) ??
+              [],
+        );
+      } else {
+        final count = arg.localSummary.items[d]!;
+        for (var i = 0; i < count; ++i) {
+          summaryItems.add(
+            _SummaryFileItem(date: d, index: summaryItems.length),
+          );
+        }
+      }
+    }
+    items.sort((a, b) => b.$1.compareTo(a.$1));
+    transformed.last.addAll(items.map((e) => e.$2));
+    transformed.last.addAll(summaryItems);
+
+    if (summaryItems.isEmpty) {
       dates.add(d);
-      final items = <(DateTime, _Item)>[];
-      items.addAll(
-        fileGroups[d]
-                ?.map(
-                  (f) => _buildSingleItem(
-                    arg.account,
-                    f,
-                  )?.let((e) => (f.fdDateTime, e)),
-                )
-                .nonNulls ??
-            [],
-      );
-      items.addAll(
-        localFileGroups[d]?.map(
-              (f) => (f.bestDateTime, _buildSingleLocalItem(f)),
-            ) ??
-            [],
-      );
-      items.sort((a, b) => b.$1.compareTo(a.$1));
-      transformed.last.addAll(items.map((e) => e.$2));
-    } else {
-      // summary
-      if (!(arg.summary.items.containsKey(d) ||
-              arg.localSummary.items.containsKey(d)) ||
-          arg.itemPerRow == null ||
-          arg.itemSize == null) {
-        // ???
-        continue;
-      }
-      final summary = arg.summary.items[d];
-      final localSummary = arg.localSummary.items[d];
-      final count = (summary?.count ?? 0) + (localSummary ?? 0);
-      for (var i = 0; i < count; ++i) {
-        transformed.last.add(_SummaryFileItem(date: d, index: i));
-      }
     }
   }
   return _ItemTransformerResult(items: transformed, dates: dates);
