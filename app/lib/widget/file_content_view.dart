@@ -10,8 +10,10 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
+import 'package:nc_photos/entity/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/live_photo_util.dart';
 import 'package:nc_photos/np_api_util.dart';
@@ -55,7 +57,7 @@ class FileContentView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _FileContentViewState();
 
-  final FileDescriptor file;
+  final AnyFile file;
   final bool shouldPlayLivePhoto;
   final bool canZoom;
   final bool canPlay;
@@ -177,7 +179,7 @@ class _WrappedFileContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final file = context.bloc.file;
-    if (file_util.isSupportedImageFormat(file)) {
+    if (file_util.isSupportedImageMime(file.afMime ?? "")) {
       return _BlocSelector(
         selector: (state) => state.shouldPlayLivePhoto,
         builder: (context, shouldPlayLivePhoto) {
@@ -194,10 +196,10 @@ class _WrappedFileContentView extends StatelessWidget {
           }
         },
       );
-    } else if (file_util.isSupportedVideoFormat(file)) {
+    } else if (file_util.isSupportedVideoMime(file.afMime ?? "")) {
       return const _VideoContentView();
     } else {
-      _log.shout("[build] Unknown file format: ${file.fdMime}");
+      _log.shout("[build] Unknown file format: ${file.afMime}");
       // _pageStates[index]!.itemHeight = 0;
       return Container();
     }

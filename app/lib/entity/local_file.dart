@@ -1,9 +1,10 @@
 import 'package:equatable/equatable.dart';
+import 'package:nc_photos/entity/any_file.dart';
 import 'package:to_string/to_string.dart';
 
 part 'local_file.g.dart';
 
-abstract class LocalFile with EquatableMixin {
+abstract class LocalFile with EquatableMixin implements AnyFile {
   const LocalFile();
 
   /// Compare the identity of two local files
@@ -55,6 +56,18 @@ class LocalUriFile with EquatableMixin implements LocalFile {
 
   @override
   String toString() => _$toString();
+
+  @override
+  String get afId => id;
+
+  @override
+  String get afName => filename;
+
+  @override
+  String? get afMime => mime;
+
+  @override
+  DateTime get afDateTime => dateTaken ?? lastModified;
 
   @override
   String get logTag => path;
