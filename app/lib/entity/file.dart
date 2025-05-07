@@ -603,6 +603,18 @@ class File with EquatableMixin implements FileDescriptor {
   @override
   get fdDateTime => bestDateTime;
 
+  @override
+  String get afId => "$fdId";
+
+  @override
+  String get afName => filename;
+
+  @override
+  String? get afMime => fdMime;
+
+  @override
+  DateTime get afDateTime => fdDateTime;
+
   final String path;
   final int? contentLength;
   final String? contentType;

@@ -1,5 +1,6 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nc_photos/entity/any_file.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/type.dart';
 import 'package:np_string/np_string.dart';
@@ -23,7 +24,7 @@ int compareFileDescriptorDateTimeDescending(
 
 @genCopyWith
 @toString
-class FileDescriptor with EquatableMixin {
+class FileDescriptor with EquatableMixin implements AnyFile {
   const FileDescriptor({
     required this.fdPath,
     required this.fdId,
@@ -65,6 +66,18 @@ class FileDescriptor with EquatableMixin {
     fdIsFavorite,
     fdDateTime,
   ];
+
+  @override
+  String get afId => "$fdId";
+
+  @override
+  String get afName => filename;
+
+  @override
+  String? get afMime => fdMime;
+
+  @override
+  DateTime get afDateTime => fdDateTime;
 
   final String fdPath;
   final int fdId;

@@ -5,8 +5,11 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/cache_manager_util.dart';
+import 'package:nc_photos/entity/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/file_view_util.dart';
+import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/request_public_link.dart';
@@ -33,7 +36,7 @@ class LivePhotoViewer extends StatefulWidget {
   State<StatefulWidget> createState() => _LivePhotoViewerState();
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
   final VoidCallback? onLoaded;
   final void Function(Object? error, StackTrace? stackTrace)? onLoadFailure;
   final ValueChanged<double>? onHeightChanged;
@@ -46,17 +49,11 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
   @override
   void initState() {
     super.initState();
-    _getVideoUrl()
-        .then((url) {
-          if (mounted) {
-            _initController(url);
-          }
-        })
-        .onError((e, stackTrace) {
-          _log.shout("[initState] Failed while _getVideoUrl", e, stackTrace);
-          SnackBarManager().showSnackBarForException(e);
-          widget.onLoadFailure?.call(e, stackTrace);
-        });
+    _initController().onError((e, stackTrace) {
+      _log.shout("[initState] Failed while _initController", e, stackTrace);
+      SnackBarManager().showSnackBarForException(e);
+      widget.onLoadFailure?.call(e, stackTrace);
+    });
 
     _lifecycleListener = AppLifecycleListener(
       onShow: () {
@@ -92,15 +89,9 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     );
   }
 
-  Future<void> _initController(String url) async {
+  Future<void> _initController() async {
     try {
-      _controllerValue = VideoPlayerController.networkUrl(
-        Uri.parse(url),
-        httpHeaders: {
-          "Authorization": AuthUtil.fromAccount(widget.account).toHeaderValue(),
-        },
-        livePhotoType: widget.livePhotoType,
-      );
+      _controllerValue = await _createVideoController();
       await _controller.initialize();
       await _controller.setVolume(0);
       await _controller.setLooping(true);
@@ -120,6 +111,70 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
       SnackBarManager().showSnackBarForException(e);
       widget.onLoadFailure?.call(e, stackTrace);
     }
+  }
+
+  Future<VideoPlayerController> _createVideoController() async {
+    if (widget.file is FileDescriptor) {
+      if (getRawPlatform() != NpPlatform.web) {
+        try {
+          return _createVideoControllerWithFileUrl(
+            widget.file as FileDescriptor,
+          );
+        } catch (e, stackTrace) {
+          _log.warning(
+            "[_createVideoController] Failed while _createVideoControllerWithFileUrl",
+            e,
+            stackTrace,
+          );
+        }
+      }
+      return await _createVideoControllerWithPublicUrl(
+        widget.file as FileDescriptor,
+      );
+    } else if (widget.file is LocalUriFile) {
+      return _createVideoControllerWithContentUri(widget.file as LocalUriFile);
+    } else {
+      throw StateError("File type not supported");
+    }
+  }
+
+  VideoPlayerController _createVideoControllerWithFileUrl(FileDescriptor file) {
+    final uri = api_util.getFileUri(widget.account, file);
+    _log.fine("[_createVideoWithFileUrl] URI: $uri");
+    final controller = VideoPlayerController.networkUrl(
+      uri,
+      httpHeaders: {
+        "Authorization": AuthUtil.fromAccount(widget.account).toHeaderValue(),
+      },
+      livePhotoType: widget.livePhotoType,
+    );
+    return controller;
+  }
+
+  Future<VideoPlayerController> _createVideoControllerWithPublicUrl(
+    FileDescriptor file,
+  ) async {
+    final url = await RequestPublicLink()(widget.account, file);
+    _log.fine("[_createVideoControllerWithPublicUrl] URL: $url");
+    final controller = VideoPlayerController.networkUrl(
+      Uri.parse(url),
+      httpHeaders: {
+        "Authorization": AuthUtil.fromAccount(widget.account).toHeaderValue(),
+      },
+      livePhotoType: widget.livePhotoType,
+    );
+    return controller;
+  }
+
+  VideoPlayerController _createVideoControllerWithContentUri(
+    LocalUriFile file,
+  ) {
+    _log.fine("[_createVideoControllerWithContentUri] URI: ${file.uri}");
+    final controller = VideoPlayerController.contentUri(
+      Uri.parse(file.uri),
+      livePhotoType: widget.livePhotoType,
+    );
+    return controller;
   }
 
   Widget _buildPlayer(BuildContext context) {
@@ -153,14 +208,6 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     );
   }
 
-  Future<String> _getVideoUrl() async {
-    if (getRawPlatform() == NpPlatform.web) {
-      return RequestPublicLink()(widget.account, widget.file);
-    } else {
-      return api_util.getFileUrl(widget.account, widget.file);
-    }
-  }
-
   void _onControllerChanged() {
     if (!_controller.value.isInitialized) {
       return;
@@ -191,17 +238,10 @@ class _PlaceHolderView extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        CachedNetworkImageBuilder(
-          type: CachedNetworkImageType.largeImage,
-          imageUrl: getViewerUrlForImageFile(account, file),
-          mime: file.fdMime,
-          account: account,
-          fit: BoxFit.contain,
-          imageBuilder: (context, child, imageProvider) {
-            const SizeChangedLayoutNotification().dispatch(context);
-            return child;
-          },
-        ).build(),
+        if (file is FileDescriptor)
+          _RemotePlaceHolderView(account: account, file: file as FileDescriptor)
+        else if (file is LocalUriFile)
+          _LocalPlaceHolderView(file: file as LocalUriFile),
         ColoredBox(color: Colors.black.withValues(alpha: .7)),
         const Center(child: _ProgressIndicator()),
       ],
@@ -209,7 +249,41 @@ class _PlaceHolderView extends StatelessWidget {
   }
 
   final Account account;
+  final AnyFile file;
+}
+
+class _RemotePlaceHolderView extends StatelessWidget {
+  const _RemotePlaceHolderView({required this.account, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    return CachedNetworkImageBuilder(
+      type: CachedNetworkImageType.largeImage,
+      imageUrl: getViewerUrlForImageFile(account, file),
+      mime: file.afMime,
+      account: account,
+      fit: BoxFit.contain,
+      imageBuilder: (context, child, imageProvider) {
+        const SizeChangedLayoutNotification().dispatch(context);
+        return child;
+      },
+    ).build();
+  }
+
+  final Account account;
   final FileDescriptor file;
+}
+
+class _LocalPlaceHolderView extends StatelessWidget {
+  const _LocalPlaceHolderView({required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    final provider = ContentUriImage(file.uri);
+    return Image(image: provider, fit: BoxFit.contain);
+  }
+
+  final LocalUriFile file;
 }
 
 class _ProgressIndicator extends StatefulWidget {
