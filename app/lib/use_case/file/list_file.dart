@@ -10,10 +10,18 @@ class ListFile {
     Account account,
     String shareDirPath, {
     TimeRange? timeRange,
+    bool? isArchived,
+    bool? isAscending,
+    int? offset,
+    int? limit,
   }) => _c.fileRepo2.getFileDescriptors(
     account,
     shareDirPath,
     timeRange: timeRange,
+    isArchived: isArchived,
+    isAscending: isAscending,
+    offset: offset,
+    limit: limit,
   );
 
   final DiContainer _c;

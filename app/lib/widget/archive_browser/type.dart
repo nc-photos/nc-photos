@@ -39,7 +39,7 @@ class _PhotoItem extends _FileItem {
       previewUrl: _previewUrl,
       mime: file.fdMime,
       isFavorite: file.fdIsFavorite,
-      heroKey: flutter_util.getImageHeroTag(file),
+      heroKey: flutter_util.HeroTag.fromFile(file),
     );
   }
 

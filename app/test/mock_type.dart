@@ -322,6 +322,7 @@ class MockFileDataSource2 implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) {
@@ -329,7 +330,7 @@ class MockFileDataSource2 implements FileDataSource2 {
   }
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
@@ -366,6 +367,7 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) async {
@@ -389,7 +391,7 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
   }
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
@@ -412,7 +414,12 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
             return false;
           }
         })
-        .map((e) => e.fdId)
+        .map(
+          (e) => FileIdWithTimestamp(
+            fileId: e.fdId,
+            timestamp: e.fdDateTime.millisecondsSinceEpoch,
+          ),
+        )
         .toList();
   }
 
@@ -574,7 +581,7 @@ class MockTagRepo implements TagRepo {
   }
 
   @override
-  Future<List<Tag>> listByFile(Account account, File file) {
+  Future<List<Tag>> listByFile(Account account, FileDescriptor file) {
     throw UnimplementedError();
   }
 }

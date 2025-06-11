@@ -69,7 +69,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _onInit(_Init ev, _Emitter emit) async {
     _log.info(ev);
-    if (file_util.isSupportedVideoMime(file.afMime ?? "")) {
+    if (file_util.isSupportedVideoMime(file.mime ?? "")) {
       return _initVideo(emit);
     }
   }
@@ -236,61 +236,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<VideoPlayerController> _initVideoController() async {
-    if (file is FileDescriptor) {
-      if (getRawPlatform() != NpPlatform.web) {
-        try {
-          return await _initVideoControllerWithFileUrl(file as FileDescriptor);
-        } catch (e, stackTrace) {
-          _log.warning(
-            "[_initVideoController] Failed while _initVideoControllerWithFileUrl",
-            e,
-            stackTrace,
-          );
-        }
-      }
-      return await _initVideoControllerWithPublicUrl(file as FileDescriptor);
-    } else if (file is LocalUriFile) {
-      return await _initVideoControllerWithContentUri(file as LocalUriFile);
-    } else {
-      throw StateError("File type not supported");
-    }
-  }
-
-  Future<VideoPlayerController> _initVideoControllerWithFileUrl(
-    FileDescriptor file,
-  ) async {
-    final uri = api_util.getFileUri(account, file);
-    _log.fine("[_initVideoWithFileUrl] URI: $uri");
-    final controller = VideoPlayerController.networkUrl(
-      uri,
-      httpHeaders: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
-    );
-    await controller.initialize();
-    return controller;
-  }
-
-  Future<VideoPlayerController> _initVideoControllerWithPublicUrl(
-    FileDescriptor file,
-  ) async {
-    final url = await RequestPublicLink()(account, file);
-    _log.fine("[_initVideoControllerWithPublicUrl] URL: $url");
-    final controller = VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      httpHeaders: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
-    );
-    await controller.initialize();
-    return controller;
-  }
-
-  Future<VideoPlayerController> _initVideoControllerWithContentUri(
-    LocalUriFile file,
-  ) async {
-    _log.fine("[_initVideoControllerWithContentUri] URI: ${file.uri}");
-    final controller = VideoPlayerController.contentUri(Uri.parse(file.uri));
+    final controller =
+        await AnyFilePresenterFactory.videoPlayerController(
+          file,
+          account: account,
+        ).build();
     await controller.initialize();
     return controller;
   }

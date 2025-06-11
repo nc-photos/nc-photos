@@ -5,11 +5,10 @@ import 'package:flutter/services.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
-import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/pref.dart';
-import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/object_extension.dart';
@@ -28,7 +27,7 @@ class ImageEditorArguments {
   const ImageEditorArguments(this.account, this.file);
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
 }
 
 class ImageEditor extends StatefulWidget {
@@ -49,7 +48,7 @@ class ImageEditor extends StatefulWidget {
   createState() => _ImageEditorState();
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
 }
 
 class _ImageEditorState extends State<ImageEditor> {
@@ -91,15 +90,14 @@ class _ImageEditorState extends State<ImageEditor> {
   );
 
   Future<void> _initImage() async {
-    final fileInfo = await getFileFromCache(
-      CachedNetworkImageType.largeImage,
-      getViewerUrlForImageFile(widget.account, widget.file),
-      widget.file.fdMime,
+    final uriGetter = AnyFileContentGetterFactory.largePreviewuri(
+      widget.file,
+      account: widget.account,
     );
     // no need to set shouldfixOrientation because the previews are always in
     // the correct orientation
     _src = await ImageLoader.loadUri(
-      "file://${fileInfo!.file.path}",
+      await uriGetter.get(),
       _previewWidth,
       _previewHeight,
       ImageLoaderResizeMethod.fit,
@@ -276,9 +274,13 @@ class _ImageEditorState extends State<ImageEditor> {
 
   Future<void> _onSavePressed(BuildContext context) async {
     final c = KiwiContainer().resolve<DiContainer>();
+    final uriGetter = AnyFileContentGetterFactory.uri(
+      widget.file,
+      account: widget.account,
+    );
     await ImageProcessor.filter(
-      "${widget.account.url}/${widget.file.fdPath}",
-      widget.file.filename,
+      await uriGetter.get(),
+      widget.file.name,
       4096,
       3072,
       _buildFilterList(),

@@ -18,10 +18,11 @@ abstract class $_StateCopyWithWorker {
     int? page,
     int? nextPage,
     bool? shouldAnimateNextPage,
-    Map<int, FileDescriptor>? rawFiles,
+    List<FileDescriptor>? remoteFiles,
+    List<LocalFile>? localFiles,
     Map<int, CollectionFileItem>? collectionItems,
-    List<FileDescriptor?>? files,
-    FileDescriptor? currentFile,
+    List<AnyFile?>? files,
+    AnyFile? currentFile,
     bool? isShowUi,
     bool? isPlay,
     bool? isVideoCompleted,
@@ -42,7 +43,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic page,
     dynamic nextPage,
     dynamic shouldAnimateNextPage,
-    dynamic rawFiles,
+    dynamic remoteFiles,
+    dynamic localFiles,
     dynamic collectionItems = copyWithNull,
     dynamic files,
     dynamic currentFile = copyWithNull,
@@ -61,16 +63,17 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       nextPage: nextPage as int? ?? that.nextPage,
       shouldAnimateNextPage:
           shouldAnimateNextPage as bool? ?? that.shouldAnimateNextPage,
-      rawFiles: rawFiles as Map<int, FileDescriptor>? ?? that.rawFiles,
+      remoteFiles: remoteFiles as List<FileDescriptor>? ?? that.remoteFiles,
+      localFiles: localFiles as List<LocalFile>? ?? that.localFiles,
       collectionItems:
           collectionItems == copyWithNull
               ? that.collectionItems
               : collectionItems as Map<int, CollectionFileItem>?,
-      files: files as List<FileDescriptor?>? ?? that.files,
+      files: files as List<AnyFile?>? ?? that.files,
       currentFile:
           currentFile == copyWithNull
               ? that.currentFile
-              : currentFile as FileDescriptor?,
+              : currentFile as AnyFile?,
       isShowUi: isShowUi as bool? ?? that.isShowUi,
       isPlay: isPlay as bool? ?? that.isPlay,
       isVideoCompleted: isVideoCompleted as bool? ?? that.isVideoCompleted,
@@ -122,7 +125,7 @@ extension _$_PageViewNpLog on _PageView {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {hasInit: $hasInit, page: $page, nextPage: $nextPage, shouldAnimateNextPage: $shouldAnimateNextPage, rawFiles: {length: ${rawFiles.length}}, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, files: [length: ${files.length}], currentFile: ${currentFile == null ? null : "${currentFile!.fdPath}"}, isShowUi: $isShowUi, isPlay: $isPlay, isVideoCompleted: $isVideoCompleted, hasPrev: $hasPrev, hasNext: $hasNext, isShowTimeline: $isShowTimeline, hasShownTimeline: $hasShownTimeline, hasRequestExit: $hasRequestExit}";
+    return "_State {hasInit: $hasInit, page: $page, nextPage: $nextPage, shouldAnimateNextPage: $shouldAnimateNextPage, remoteFiles: [length: ${remoteFiles.length}], localFiles: [length: ${localFiles.length}], collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, files: [length: ${files.length}], currentFile: $currentFile, isShowUi: $isShowUi, isPlay: $isPlay, isVideoCompleted: $isVideoCompleted, hasPrev: $hasPrev, hasNext: $hasNext, isShowTimeline: $isShowTimeline, hasShownTimeline: $hasShownTimeline, hasRequestExit: $hasRequestExit}";
   }
 }
 

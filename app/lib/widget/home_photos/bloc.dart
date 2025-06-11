@@ -6,6 +6,7 @@ class _Bloc extends Bloc<_Event, _State>
   _Bloc(
     this._c, {
     required this.account,
+    required this.anyFilesController,
     required this.filesController,
     required this.prefController,
     required this.accountPrefController,
@@ -222,6 +223,11 @@ class _Bloc extends Bloc<_Event, _State>
         localFilesController.timelineStream,
         onData: (data) => state.copyWith(localFiles: data.data.values.toList()),
       ),
+      forEach(
+        emit,
+        anyFilesController.errorStream,
+        onData: (data) => state.copyWith(error: data),
+      ),
     ]);
   }
 
@@ -253,7 +259,33 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetSelectedItems(_SetSelectedItems ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(selectedItems: ev.items));
+    final canArchive = ev.items.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.archive),
+    );
+    final canDownload = ev.items.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.download),
+    );
+    final canDelete = ev.items.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.delete),
+    );
+    // TODO let collection to make this decision
+    final canAddToCollection =
+        ev.items.whereType<_NextcloudFileItem>().isNotEmpty;
+    emit(
+      state.copyWith(
+        selectedItems: ev.items,
+        selectedCanArchive: canArchive,
+        selectedCanDownload: canDownload,
+        selectedCanDelete: canDelete,
+        selectedCanAddToCollection: canAddToCollection,
+      ),
+    );
   }
 
   void _onAddSelectedItemsToCollection(
@@ -264,7 +296,10 @@ class _Bloc extends Bloc<_Event, _State>
     final selected = state.selectedItems;
     _clearSelection(emit);
     final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+        selected
+            .whereType<_NextcloudFileItem>()
+            .map((e) => e.remoteFile)
+            .toList();
     if (selectedFiles.isNotEmpty) {
       final targetController = collectionsController.stream.value
           .itemsControllerByCollection(ev.collection);
@@ -281,7 +316,10 @@ class _Bloc extends Bloc<_Event, _State>
     final selected = state.selectedItems;
     _clearSelection(emit);
     final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+        selected
+            .whereType<_NextcloudFileItem>()
+            .map((e) => e.remoteFile)
+            .toList();
     if (selectedFiles.isNotEmpty) {
       filesController.updateProperty(
         selectedFiles,
@@ -298,7 +336,7 @@ class _Bloc extends Bloc<_Event, _State>
     final selectedFiles =
         selected.whereType<_FileItem>().map((e) => e.file).toList();
     if (selectedFiles.isNotEmpty) {
-      filesController.remove(
+      anyFilesController.remove(
         selectedFiles,
         errorBuilder: (fileIds) => _RemoveFailedError(fileIds.length),
       );
@@ -313,7 +351,10 @@ class _Bloc extends Bloc<_Event, _State>
     final selected = state.selectedItems;
     _clearSelection(emit);
     final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+        selected
+            .whereType<_NextcloudFileItem>()
+            .map((e) => e.remoteFile)
+            .toList();
     if (selectedFiles.isNotEmpty) {
       unawaited(DownloadHandler(_c).downloadFiles(account, selectedFiles));
     }
@@ -869,6 +910,7 @@ class _Bloc extends Bloc<_Event, _State>
 
   final DiContainer _c;
   final Account account;
+  final AnyFilesController anyFilesController;
   final FilesController filesController;
   final PrefController prefController;
   final AccountPrefController accountPrefController;
@@ -942,7 +984,7 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
         items.addAll(
           fileGroups[d]
                   ?.map(
-                    (f) => _buildSingleItem(
+                    (f) => _buildSingleRemoteItem(
                       arg.account,
                       f,
                     )?.let((e) => (f.fdDateTime, e)),
@@ -987,11 +1029,11 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
   return _ItemTransformerResult(items: transformed, dates: dates);
 }
 
-_Item? _buildSingleItem(Account account, FileDescriptor file) {
+_Item? _buildSingleRemoteItem(Account account, FileDescriptor file) {
   if (file_util.isSupportedImageFormat(file)) {
-    return _PhotoItem(file: file, account: account);
+    return _NextcloudPhotoItem(remoteFile: file, account: account);
   } else if (file_util.isSupportedVideoFormat(file)) {
-    return _VideoItem(file: file, account: account);
+    return _NextcloudVideoItem(remoteFile: file, account: account);
   } else {
     _$__NpLog.log.shout(
       "[_buildSingleItem] Unsupported file format: ${file.fdMime}",
@@ -1001,7 +1043,7 @@ _Item? _buildSingleItem(Account account, FileDescriptor file) {
 }
 
 _Item _buildSingleLocalItem(LocalFile file) {
-  return _LocalFileItem(file: file);
+  return _LocalFileItem(localFile: file);
 }
 
 class _ItemMeasurement {

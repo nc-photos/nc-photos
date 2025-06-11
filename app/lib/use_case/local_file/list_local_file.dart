@@ -1,12 +1,21 @@
-import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/local_file.dart';
+import 'package:nc_photos/entity/local_file/repo.dart';
 import 'package:np_datetime/np_datetime.dart';
 
 class ListLocalFile {
-  const ListLocalFile(this._c);
+  const ListLocalFile(this.localFileRepo);
 
-  Future<List<LocalFile>> call({TimeRange? timeRange}) =>
-      _c.localFileRepo.getFiles(timeRange: timeRange);
+  Future<List<LocalFile>> call({
+    TimeRange? timeRange,
+    bool? isAscending,
+    int? offset,
+    int? limit,
+  }) => localFileRepo.getFiles(
+    timeRange: timeRange,
+    isAscending: isAscending,
+    offset: offset,
+    limit: limit,
+  );
 
-  final DiContainer _c;
+  final LocalFileRepo localFileRepo;
 }

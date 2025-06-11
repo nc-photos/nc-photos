@@ -23,11 +23,11 @@ class _ContentBodyState extends State<_ContentBody> {
               return;
             }
             final pageCount =
-                context.bloc.allFilesCount - state.removedFileIds.length;
+                context.bloc.allFilesCount - state.removedAfIds.length;
             if (pageCount <= 1) {
               // removing the only item, pop view
               Navigator.of(context).pop();
-            } else if (file.fdId == state.currentFile?.fdId) {
+            } else if (file.id == state.currentFile?.id) {
               // removing current page
               if (state.index >= pageCount - 1) {
                 // removing the last item, go back
@@ -81,26 +81,25 @@ class _ContentBodyState extends State<_ContentBody> {
               buildWhen:
                   (previous, current) =>
                       previous.isZoomed != current.isZoomed ||
-                      previous.removedFileIds != current.removedFileIds,
+                      previous.removedAfIds != current.removedAfIds,
               builder:
                   (context, state) => HorizontalPageViewer(
                     key: _key,
                     pageCount:
-                        context.bloc.allFilesCount -
-                        state.removedFileIds.length,
+                        context.bloc.allFilesCount - state.removedAfIds.length,
                     pageBuilder:
                         (context, i) => _BlocSelector(
-                          selector: (state) => state.pageFileIdMap[i],
+                          selector: (state) => state.pageAfIdMap[i],
                           builder:
-                              (context, fileId) =>
-                                  fileId == null
+                              (context, afId) =>
+                                  afId == null
                                       ? const Center(
                                         child:
                                             AppIntermediateCircularProgressIndicator(),
                                       )
                                       : _PageView(
-                                        key: Key("Viewer-$fileId"),
-                                        fileId: fileId,
+                                        key: Key("Viewer-$afId"),
+                                        afId: afId,
                                         pageHeight:
                                             MediaQuery.of(context).size.height,
                                       ),
@@ -149,12 +148,12 @@ class _ContentBodyState extends State<_ContentBody> {
 }
 
 class _PageView extends StatefulWidget {
-  const _PageView({super.key, required this.fileId, required this.pageHeight});
+  const _PageView({super.key, required this.afId, required this.pageHeight});
 
   @override
   State<StatefulWidget> createState() => _PageViewState();
 
-  final int fileId;
+  final String afId;
   final double pageHeight;
 }
 
@@ -167,14 +166,14 @@ class _PageViewState extends State<_PageView> {
       initialScrollOffset:
           context.state.isShowDetailPane && !context.state.isClosingDetailPane
               ? _calcDetailPaneOpenedScrollPosition(
-                context.state.fileStates[widget.fileId],
+                context.state.fileStates[widget.afId],
                 widget.pageHeight,
               )
               : 0,
     );
     if (context.state.isShowDetailPane && !context.state.isClosingDetailPane) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        final pageState = context.state.fileStates[widget.fileId];
+        final pageState = context.state.fileStates[widget.afId];
         if (mounted && pageState?.itemHeight != null) {
           _hasInitDetailPane = true;
           context.addEvent(const _OpenDetailPane(false));
@@ -212,7 +211,7 @@ class _PageViewState extends State<_PageView> {
             if (state.openDetailPaneRequest.value.shouldAnimate) {
               _scrollController.animateTo(
                 _calcDetailPaneOpenedScrollPosition(
-                  context.state.fileStates[widget.fileId],
+                  context.state.fileStates[widget.afId],
                   widget.pageHeight,
                 ),
                 duration: k.animationDurationNormal,
@@ -221,7 +220,7 @@ class _PageViewState extends State<_PageView> {
             } else {
               _scrollController.jumpTo(
                 _calcDetailPaneOpenedScrollPosition(
-                  context.state.fileStates[widget.fileId],
+                  context.state.fileStates[widget.afId],
                   widget.pageHeight,
                 ),
               );
@@ -239,7 +238,7 @@ class _PageViewState extends State<_PageView> {
           },
         ),
         _BlocListenerT(
-          selector: (state) => state.fileStates[widget.fileId]?.itemHeight,
+          selector: (state) => state.fileStates[widget.afId]?.itemHeight,
           listener: (context, itemHeight) {
             if (itemHeight != null && !_hasInitDetailPane) {
               if (context.state.isShowDetailPane &&
@@ -252,7 +251,7 @@ class _PageViewState extends State<_PageView> {
         ),
       ],
       child: _BlocSelector(
-        selector: (state) => state.mergedFileIdFileMap[widget.fileId],
+        selector: (state) => state.mergedAfIdFileMap[widget.afId],
         builder: (context, file) {
           if (file == null) {
             return const Center(
@@ -283,8 +282,8 @@ class _PageViewState extends State<_PageView> {
                               _BlocBuilder(
                                 buildWhen:
                                     (previous, current) =>
-                                        previous.fileStates[widget.fileId] !=
-                                            current.fileStates[widget.fileId] ||
+                                        previous.fileStates[widget.afId] !=
+                                            current.fileStates[widget.afId] ||
                                         previous.isShowAppBar !=
                                             current.isShowAppBar ||
                                         previous.isDetailPaneActive !=
@@ -294,7 +293,7 @@ class _PageViewState extends State<_PageView> {
                                       file: file,
                                       shouldPlayLivePhoto:
                                           state
-                                              .fileStates[widget.fileId]
+                                              .fileStates[widget.afId]
                                               ?.shouldPlayLivePhoto ??
                                           false,
                                       canZoom: !state.isDetailPaneActive,
@@ -305,7 +304,7 @@ class _PageViewState extends State<_PageView> {
                                       onContentHeightChanged: (contentHeight) {
                                         context.addEvent(
                                           _SetFileContentHeight(
-                                            widget.fileId,
+                                            widget.afId,
                                             contentHeight,
                                           ),
                                         );
@@ -324,17 +323,17 @@ class _PageViewState extends State<_PageView> {
                                       },
                                       onLoadFailure: () {
                                         if (state
-                                                .fileStates[widget.fileId]
+                                                .fileStates[widget.afId]
                                                 ?.shouldPlayLivePhoto ==
                                             true) {
                                           context.addEvent(
-                                            _PauseLivePhoto(widget.fileId),
+                                            _PauseLivePhoto(widget.afId),
                                           );
                                         }
                                       },
                                     ),
                               ),
-                              _DetailPaneContainer(fileId: widget.fileId),
+                              _DetailPaneContainer(afId: widget.afId),
                             ],
                           ),
                         ),
@@ -362,7 +361,7 @@ class _PageViewState extends State<_PageView> {
         context.addEvent(const _DetailPaneClosed());
       } else if (scrollPos.pixels <
           _calcDetailPaneOpenedScrollPosition(
-                context.state.fileStates[widget.fileId],
+                context.state.fileStates[widget.afId],
                 widget.pageHeight,
               ) -
               1) {

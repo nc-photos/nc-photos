@@ -6,15 +6,17 @@ import 'package:np_common/object_util.dart';
 import 'package:np_datetime/np_datetime.dart';
 
 class MediaStoreQueryResult {
-  const MediaStoreQueryResult(
-    this.id,
-    this.uri,
-    this.displayName,
-    this.path,
-    this.dateModified,
-    this.mimeType,
-    this.dateTaken,
-  );
+  const MediaStoreQueryResult({
+    required this.id,
+    required this.uri,
+    required this.displayName,
+    required this.path,
+    required this.dateModified,
+    required this.mimeType,
+    required this.dateTaken,
+    required this.width,
+    required this.height,
+  });
 
   final int id;
   final String uri;
@@ -23,10 +25,18 @@ class MediaStoreQueryResult {
   final int dateModified;
   final String? mimeType;
   final int? dateTaken;
+  final int? width;
+  final int? height;
 }
 
 class MediaStoreDeleteRequestResultEvent {
   const MediaStoreDeleteRequestResultEvent(this.resultCode);
+
+  final int resultCode;
+}
+
+class MediaStoreTrashRequestResultEvent {
+  const MediaStoreTrashRequestResultEvent(this.resultCode);
 
   final int resultCode;
 }
@@ -95,13 +105,15 @@ class MediaStore {
           .cast<Map>()
           .map(
             (e) => MediaStoreQueryResult(
-              e["id"],
-              e["uri"],
-              e["displayName"],
-              e["path"],
-              e["dateModified"],
-              e["mimeType"],
-              e["dateTaken"],
+              id: e["id"],
+              uri: e["uri"],
+              displayName: e["displayName"],
+              path: e["path"],
+              dateModified: e["dateModified"],
+              mimeType: e["mimeType"],
+              dateTaken: e["dateTaken"],
+              width: e["width"],
+              height: e["height"],
             ),
           )
           .toList();
@@ -115,11 +127,16 @@ class MediaStore {
   }
 
   static Future<List<MediaStoreQueryResult>> queryFiles2({
+    List<int>? fileIds,
     TimeRange? timeRange,
+    bool? isAscending,
+    int? offset,
+    int? limit,
   }) async {
     try {
       final List results = await _methodChannel
           .invokeMethod("queryFiles2", <String, dynamic>{
+            "fileIds": fileIds,
             "timeRangeBeg": timeRange?.from?.millisecondsSinceEpoch,
             "isTimeRangeBegInclusive": timeRange?.let(
               (e) => e.fromBound == TimeRangeBound.inclusive,
@@ -128,18 +145,23 @@ class MediaStore {
             "isTimeRangeEndInclusive": timeRange?.let(
               (e) => e.toBound == TimeRangeBound.inclusive,
             ),
+            "isAscending": isAscending,
+            "offset": offset,
+            "limit": limit,
           });
       return results
           .cast<Map>()
           .map(
             (e) => MediaStoreQueryResult(
-              e["id"],
-              e["uri"],
-              e["displayName"],
-              e["path"],
-              e["dateModified"],
-              e["mimeType"],
-              e["dateTaken"],
+              id: e["id"],
+              uri: e["uri"],
+              displayName: e["displayName"],
+              path: e["path"],
+              dateModified: e["dateModified"],
+              mimeType: e["mimeType"],
+              dateTaken: e["dateTaken"],
+              width: e["width"],
+              height: e["height"],
             ),
           )
           .toList();
@@ -155,6 +177,13 @@ class MediaStore {
   static Future<List<String>?> deleteFiles(List<String> uris) async {
     return (await _methodChannel.invokeMethod<List>(
       "deleteFiles",
+      <String, dynamic>{"uris": uris},
+    ))?.cast<String>();
+  }
+
+  static Future<List<String>?> trashFiles(List<String> uris) async {
+    return (await _methodChannel.invokeMethod<List>(
+      "trashFiles",
       <String, dynamic>{"uris": uris},
     ))?.cast<String>();
   }
@@ -178,6 +207,29 @@ class MediaStore {
     }
   }
 
+  static Future<List<({int fileId, int timestamp})>>
+  getFileIdWithTimestamps() async {
+    try {
+      return (await _methodChannel.invokeMethod<List>(
+            "getFileIdWithTimestamps",
+          ))!
+          .cast<Map>()
+          .map(
+            (e) => (
+              fileId: e["fileId"] as int,
+              timestamp: e["timestamp"] as int,
+            ),
+          )
+          .toList();
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   static Stream get stream => _eventStream;
 
   static final _eventStream = _eventChannel.receiveBroadcastStream().map((
@@ -187,6 +239,9 @@ class MediaStore {
       switch (event["event"]) {
         case _eventDeleteRequestResult:
           return MediaStoreDeleteRequestResultEvent(event["resultCode"]);
+
+        case _eventTrashRequestResult:
+          return MediaStoreTrashRequestResultEvent(event["resultCode"]);
 
         default:
           _log.shout("[_eventStream] Unknown event: ${event["event"]}");
@@ -201,6 +256,7 @@ class MediaStore {
 
   static const _exceptionCodePermissionError = "permissionError";
   static const _eventDeleteRequestResult = "DeleteRequestResult";
+  static const _eventTrashRequestResult = "TrashRequestResult";
 
   static final _log = Logger("media_store.MediaStore");
 }

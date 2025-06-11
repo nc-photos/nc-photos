@@ -11,6 +11,7 @@ import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
+import 'package:np_common/size.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_log/np_log.dart';
 
@@ -21,9 +22,29 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   const LocalFileMediaStoreDataSource();
 
   @override
-  Future<List<LocalFile>> getFiles({TimeRange? timeRange}) async {
-    _log.info("[getFiles] timeRange: $timeRange");
-    final results = await MediaStore.queryFiles2(timeRange: timeRange);
+  Future<List<LocalFile>> getFiles({
+    List<String>? fileIds,
+    TimeRange? timeRange,
+    bool? isAscending,
+    int? offset,
+    int? limit,
+  }) async {
+    _log.info(
+      "[getFiles] "
+      "fileIds: ${fileIds?.toReadableString(truncate: 10)}, "
+      "timeRange: $timeRange, "
+      "isAscending: $isAscending, "
+      "offset: $offset, "
+      "limit: $limit",
+    );
+    // TODO partition
+    final results = await MediaStore.queryFiles2(
+      fileIds: fileIds?.map(int.parse).toList(),
+      timeRange: timeRange,
+      isAscending: isAscending,
+      offset: offset,
+      limit: limit,
+    );
     return results.map(_toLocalFile).toList();
   }
 
@@ -54,6 +75,24 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   @override
+  Future<void> trashFiles(
+    List<LocalFile> files, {
+    LocalFileOnFailureListener? onFailure,
+  }) async {
+    _log.info("[trashFiles] ${files.map((f) => f.logTag).toReadableString()}");
+    final uriFiles = _filterUriFiles(files, (f) {
+      onFailure?.call(f, ArgumentError("File not supported"), null);
+    });
+    if (AndroidInfo().sdkInt >= AndroidVersion.R) {
+      await _trashFiles30(uriFiles, onFailure);
+    } else {
+      for (final f in uriFiles) {
+        onFailure?.call(f, UnsupportedError("Require Android 11+"), null);
+      }
+    }
+  }
+
+  @override
   shareFiles(
     List<LocalFile> files, {
     LocalFileOnFailureListener? onFailure,
@@ -80,6 +119,20 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
     _log.info("[getFilesSummary]");
     final results = await MediaStore.getFilesSummary();
     return LocalFilesSummary(items: results);
+  }
+
+  @override
+  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps() async {
+    _log.info("[getFileIdWithTimestamps]");
+    final results = await MediaStore.getFileIdWithTimestamps();
+    return results
+        .map(
+          (e) => LocalFileIdWithTimestamp(
+            fileId: "${e.fileId}",
+            timestamp: e.timestamp,
+          ),
+        )
+        .toList();
   }
 
   Future<void> _deleteFiles30(
@@ -119,6 +172,26 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
     }
   }
 
+  Future<void> _trashFiles30(
+    List<LocalUriFile> files,
+    LocalFileOnFailureListener? onFailure,
+  ) async {
+    assert(AndroidInfo().sdkInt >= AndroidVersion.R);
+    int? resultCode;
+    final resultFuture = MediaStore.stream
+        .whereType<MediaStoreTrashRequestResultEvent>()
+        .first
+        .then((ev) => resultCode = ev.resultCode);
+    await MediaStore.trashFiles(files.map((f) => f.uri).toList());
+    await resultFuture;
+    if (resultCode != android.resultOk) {
+      _log.warning("[_trashFiles30] result != OK: $resultCode");
+      for (final f in files) {
+        onFailure?.call(f, null, null);
+      }
+    }
+  }
+
   List<LocalUriFile> _filterUriFiles(
     List<LocalFile> files, [
     void Function(LocalFile)? nonUriFileCallback,
@@ -139,18 +212,25 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
         .toList();
   }
 
-  static LocalFile _toLocalFile(MediaStoreQueryResult r) => LocalUriFile(
-    id: "${r.id}",
-    uri: r.uri,
-    displayName: r.displayName,
-    path: r.path,
-    lastModified: DateTime.fromMillisecondsSinceEpoch(
-      r.dateModified,
-      isUtc: true,
-    ),
-    mime: r.mimeType,
-    dateTaken: r.dateTaken?.let(
-      (e) => DateTime.fromMillisecondsSinceEpoch(e, isUtc: true),
-    ),
-  );
+  static LocalFile _toLocalFile(MediaStoreQueryResult r) {
+    SizeInt? size;
+    if (r.width != null && r.height != null) {
+      size = SizeInt(r.width!, r.height!);
+    }
+    return LocalUriFile(
+      id: "${r.id}",
+      uri: r.uri,
+      displayName: r.displayName,
+      path: r.path,
+      lastModified: DateTime.fromMillisecondsSinceEpoch(
+        r.dateModified,
+        isUtc: true,
+      ),
+      mime: r.mimeType,
+      dateTaken: r.dateTaken?.let(
+        (e) => DateTime.fromMillisecondsSinceEpoch(e, isUtc: true),
+      ),
+      size: size,
+    );
+  }
 }

@@ -25,7 +25,9 @@ class _SelectionAppBar extends StatelessWidget {
     return _BlocBuilder(
       buildWhen:
           (previous, current) =>
-              previous.selectedItems != current.selectedItems,
+              previous.selectedItems != current.selectedItems ||
+              previous.selectedCanAddToCollection !=
+                  current.selectedCanAddToCollection,
       builder:
           (context, state) => SelectionAppBar(
             count: state.selectedItems.length,
@@ -38,11 +40,12 @@ class _SelectionAppBar extends StatelessWidget {
                 tooltip: L10n.global().shareTooltip,
                 onPressed: () => _onSharePressed(context),
               ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                tooltip: L10n.global().addItemToCollectionTooltip,
-                onPressed: () => _onAddPressed(context),
-              ),
+              if (state.selectedCanAddToCollection)
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  tooltip: L10n.global().addItemToCollectionTooltip,
+                  onPressed: () => _onAddPressed(context),
+                ),
               const _SelectionAppBarMenu(),
             ],
           ),
@@ -61,10 +64,11 @@ class _SelectionAppBar extends StatelessWidget {
 
   Future<void> _onSharePressed(BuildContext context) async {
     final bloc = context.read<_Bloc>();
+    // TODO should allow sharing local files
     final selected =
         bloc.state.selectedItems
-            .whereType<_FileItem>()
-            .map((e) => e.file)
+            .whereType<_NextcloudFileItem>()
+            .map((e) => e.remoteFile)
             .toList();
     if (selected.isEmpty) {
       SnackBarManager().showSnackBar(
@@ -92,36 +96,53 @@ class _SelectionAppBarMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return PopupMenuButton<_SelectionMenuOption>(
-      tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-      itemBuilder:
-          (context) => [
-            PopupMenuItem(
-              value: _SelectionMenuOption.download,
-              child: Text(L10n.global().downloadTooltip),
-            ),
-            PopupMenuItem(
-              value: _SelectionMenuOption.archive,
-              child: Text(L10n.global().archiveTooltip),
-            ),
-            PopupMenuItem(
-              value: _SelectionMenuOption.delete,
-              child: Text(L10n.global().deleteTooltip),
-            ),
-          ],
-      onSelected: (option) {
-        switch (option) {
-          case _SelectionMenuOption.archive:
-            context.addEvent(const _ArchiveSelectedItems());
-            break;
-          case _SelectionMenuOption.delete:
-            context.addEvent(const _DeleteSelectedItems());
-            break;
-          case _SelectionMenuOption.download:
-            context.addEvent(const _DownloadSelectedItems());
-            break;
-        }
-      },
+    return _BlocBuilder(
+      buildWhen:
+          (previous, current) =>
+              previous.selectedCanArchive != current.selectedCanArchive ||
+              previous.selectedCanDownload != current.selectedCanDownload ||
+              previous.selectedCanDelete != current.selectedCanDelete,
+      builder:
+          (context, state) =>
+              state.selectedCanDownload ||
+                      state.selectedCanArchive ||
+                      state.selectedCanDelete
+                  ? PopupMenuButton<_SelectionMenuOption>(
+                    tooltip:
+                        MaterialLocalizations.of(context).moreButtonTooltip,
+                    itemBuilder:
+                        (context) => [
+                          if (state.selectedCanDownload)
+                            PopupMenuItem(
+                              value: _SelectionMenuOption.download,
+                              child: Text(L10n.global().downloadTooltip),
+                            ),
+                          if (state.selectedCanArchive)
+                            PopupMenuItem(
+                              value: _SelectionMenuOption.archive,
+                              child: Text(L10n.global().archiveTooltip),
+                            ),
+                          if (state.selectedCanDelete)
+                            PopupMenuItem(
+                              value: _SelectionMenuOption.delete,
+                              child: Text(L10n.global().deleteTooltip),
+                            ),
+                        ],
+                    onSelected: (option) {
+                      switch (option) {
+                        case _SelectionMenuOption.archive:
+                          context.addEvent(const _ArchiveSelectedItems());
+                          break;
+                        case _SelectionMenuOption.delete:
+                          context.addEvent(const _DeleteSelectedItems());
+                          break;
+                        case _SelectionMenuOption.download:
+                          context.addEvent(const _DownloadSelectedItems());
+                          break;
+                      }
+                    },
+                  )
+                  : const SizedBox.shrink(),
     );
   }
 }

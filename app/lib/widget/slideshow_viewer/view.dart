@@ -301,7 +301,7 @@ class _PageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector<FileDescriptor?>(
+    return _BlocSelector(
       selector: (state) => state.files[itemIndex],
       builder: (context, file) {
         if (file == null) {
@@ -312,14 +312,14 @@ class _PageView extends StatelessWidget {
             ),
           );
         }
-        if (file_util.isSupportedImageFormat(file)) {
+        if (file_util.isSupportedImageMime(file.mime ?? "")) {
           return _ImagePageView(
             file: file,
             onLoaded: () {
               context.addEvent(_PreloadSidePages(page));
             },
           );
-        } else if (file_util.isSupportedVideoFormat(file)) {
+        } else if (file_util.isSupportedVideoMime(file.mime ?? "")) {
           return _VideoPageView(
             file: file,
             onCompleted: () {
@@ -327,7 +327,7 @@ class _PageView extends StatelessWidget {
             },
           );
         } else {
-          _log.shout("[build] Unknown file format: ${file.fdMime}");
+          _log.shout("[build] Unknown file format: ${file.mime}");
           return const SizedBox.shrink();
         }
       },
@@ -343,15 +343,17 @@ class _ImagePageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return RemoteImageViewer(
-      account: context.bloc.account,
+    return FileContentView(
       file: file,
+      shouldPlayLivePhoto: false,
       canZoom: false,
+      canLoop: false,
+      isPlayControlVisible: false,
       onLoaded: onLoaded,
     );
   }
 
-  final FileDescriptor file;
+  final AnyFile file;
   final VoidCallback? onLoaded;
 }
 
@@ -379,7 +381,7 @@ class _VideoPageView extends StatelessWidget {
     );
   }
 
-  final FileDescriptor file;
+  final AnyFile file;
   final VoidCallback? onCompleted;
 }
 

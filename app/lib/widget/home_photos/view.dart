@@ -123,16 +123,20 @@ class _ContentListBody extends StatelessWidget {
                     },
                     onItemTap: (context, section, index, item) {
                       if (item is _FileItem) {
-                        final fileDate =
-                            item.file.fdDateTime.toLocal().toDate();
-                        final summary = context.state.filesSummary.items;
+                        final fileDate = item.file.dateTime.toLocal().toDate();
+                        final summary = [
+                          ...context.state.filesSummary.items.entries.map(
+                            (e) => (e.key, e.value.count),
+                          ),
+                          ...context.state.localFilesSummary.items.entries.map(
+                            (e) => (e.key, e.value),
+                          ),
+                        ];
                         var count = 0;
                         for (final e
-                            in summary.entries
-                                .sortedBy((e) => e.key)
-                                .reversed) {
-                          if (e.key.isAfter(fileDate)) {
-                            count += e.value.count;
+                            in summary.sortedBy((e) => e.$1).reversed) {
+                          if (e.$1.isAfter(fileDate)) {
+                            count += e.$2;
                           } else {
                             break;
                           }
@@ -144,17 +148,8 @@ class _ContentListBody extends StatelessWidget {
                           arguments: TimelineViewerArguments(
                             initialFile: item.file,
                             initialIndex: count,
-                            allFilesCount:
-                                context.state.filesSummary.items.values
-                                    .map((e) => e.count)
-                                    .sum,
+                            allFilesCount: summary.map((e) => e.$2).sum,
                           ),
-                        );
-                      } else if (item is _LocalFileItem) {
-                        Navigator.pushNamed(
-                          context,
-                          LocalFileViewer.routeName,
-                          arguments: LocalFileViewerArguments([item.file], 0),
                         );
                       }
                     },
@@ -225,11 +220,9 @@ class _ContentListItemViewState extends State<_ContentListItemView> {
     final item = widget.item;
     Date? date;
     if (item is _FileItem) {
-      date = item.file.fdDateTime.toLocal().toDate();
+      date = item.file.dateTime.toLocal().toDate();
     } else if (item is _SummaryFileItem) {
       date = item.date;
-    } else if (item is _LocalFileItem) {
-      date = item.file.bestDateTime.toLocal().toDate();
     }
     return date;
   }

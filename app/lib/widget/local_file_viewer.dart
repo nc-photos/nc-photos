@@ -182,7 +182,7 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
     return FractionallySizedBox(
       widthFactor: 1 / _viewportFraction,
       child: FileContentView(
-        file: widget.streamFiles[index],
+        file: widget.streamFiles[index].toAnyFile(),
         shouldPlayLivePhoto: false,
         isPlayControlVisible: false,
         onZoomChanged: (isZoomed) {

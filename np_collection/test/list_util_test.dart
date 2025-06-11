@@ -17,6 +17,14 @@ void main() {
       test("repeated elements 2", _diffRepeatedElements2);
       test("mix", _diffMix);
     });
+
+    group("mergeSortedLists", () {
+      test("distinct", _mergeSortedListsDistinct);
+      test("equal", _mergeSortedListsEqual);
+      test("trailing a", _mergeSortedListsTrailingA);
+      test("trailing b", _mergeSortedListsTrailingB);
+      test("equal2", _mergeSortedListsEqual2);
+    });
   });
 }
 
@@ -150,4 +158,122 @@ void _diffMix() {
   final diff = getDiff([2, 3, 7, 10, 11, 12], [1, 3, 4, 8, 13, 14]);
   expect(diff.onlyInB, [1, 4, 8, 13, 14]);
   expect(diff.onlyInA, [2, 7, 10, 11, 12]);
+}
+
+void _mergeSortedListsDistinct() {
+  final a = [1, 3, 4, 7];
+  final b = [2, 5, 6, 8];
+  expect(mergeSortedLists(a, b, (a, b) => a.compareTo(b)), [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+  ]);
+}
+
+class _MergeSortedListsEqualObj
+    implements Comparable<_MergeSortedListsEqualObj> {
+  const _MergeSortedListsEqualObj(this.from, this.value);
+
+  @override
+  int compareTo(_MergeSortedListsEqualObj other) {
+    return value.compareTo(other.value);
+  }
+
+  @override
+  String toString() => "$from$value";
+
+  final String from;
+  final int value;
+}
+
+void _mergeSortedListsEqual() {
+  final a = [
+    const _MergeSortedListsEqualObj("A", 1),
+    const _MergeSortedListsEqualObj("A", 3),
+    const _MergeSortedListsEqualObj("A", 4),
+  ];
+  final b = [
+    const _MergeSortedListsEqualObj("B", 2),
+    const _MergeSortedListsEqualObj("B", 3),
+    const _MergeSortedListsEqualObj("B", 5),
+  ];
+  expect(mergeSortedLists(a, b, (a, b) => a.compareTo(b)), [
+    const _MergeSortedListsEqualObj("A", 1),
+    const _MergeSortedListsEqualObj("B", 2),
+    const _MergeSortedListsEqualObj("A", 3),
+    const _MergeSortedListsEqualObj("B", 3),
+    const _MergeSortedListsEqualObj("A", 4),
+    const _MergeSortedListsEqualObj("B", 5),
+  ]);
+}
+
+/// Merge list with different size where a.length > b.length
+///
+/// a: [2, 3, 4]
+/// b: [1]
+/// Expect: [1, 2, 3, 4]
+void _mergeSortedListsTrailingA() {
+  final a = [2, 3, 4];
+  final b = [1];
+  expect(mergeSortedLists(a, b, (a, b) => a.compareTo(b)), [1, 2, 3, 4]);
+}
+
+/// Merge list with different size where b.length > a.length
+///
+/// a: [1]
+/// b: [2, 3, 4]
+/// Expect: [1, 2, 3, 4]
+void _mergeSortedListsTrailingB() {
+  final a = [1];
+  final b = [2, 3, 4];
+  expect(mergeSortedLists(a, b, (a, b) => a.compareTo(b)), [1, 2, 3, 4]);
+}
+
+class _MergeSortedListsEqual2Obj
+    implements Comparable<_MergeSortedListsEqual2Obj> {
+  const _MergeSortedListsEqual2Obj(this.from, this.value);
+
+  @override
+  int compareTo(_MergeSortedListsEqual2Obj other) {
+    var a = value.compareTo(other.value);
+    if (a == 0) {
+      a = other.from.compareTo(from);
+    }
+    return a;
+  }
+
+  @override
+  String toString() => "$from$value";
+
+  final String from;
+  final int value;
+}
+
+void _mergeSortedListsEqual2() {
+  final a = [
+    const _MergeSortedListsEqual2Obj("A", 4),
+    const _MergeSortedListsEqual2Obj("A", 3),
+    const _MergeSortedListsEqual2Obj("A", 1),
+  ];
+  final b = [
+    const _MergeSortedListsEqual2Obj("B", 5),
+    const _MergeSortedListsEqual2Obj("B", 3),
+    const _MergeSortedListsEqual2Obj("B", 2),
+  ];
+  expect(
+    mergeSortedLists(a.reversed, b.reversed, (a, b) => a.compareTo(b)).reversed,
+    [
+      const _MergeSortedListsEqual2Obj("B", 5),
+      const _MergeSortedListsEqual2Obj("A", 4),
+      const _MergeSortedListsEqual2Obj("A", 3),
+      const _MergeSortedListsEqual2Obj("B", 3),
+      const _MergeSortedListsEqual2Obj("B", 2),
+      const _MergeSortedListsEqual2Obj("A", 1),
+    ],
+  );
 }

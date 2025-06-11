@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/flutter_util.dart';
 import 'package:nc_photos/k.dart' as k;
@@ -56,7 +57,7 @@ class CollectionViewer extends StatelessWidget {
     return Viewer(
       contentProvider: _CollectionViewerContentProvider(files),
       allFilesCount: files.length,
-      initialFile: files[initialIndex],
+      initialFile: files[initialIndex].toAnyFile(),
       initialIndex: initialIndex,
       collectionId: collectionId,
     );
@@ -71,7 +72,8 @@ class CollectionViewer extends StatelessWidget {
 
 @npLog
 class _CollectionViewerContentProvider implements ViewerContentProvider {
-  const _CollectionViewerContentProvider(this.files);
+  _CollectionViewerContentProvider(List<FileDescriptor> files)
+    : files = files.map((e) => e.toAnyFile()).toList();
 
   @override
   Future<ViewerContentProviderResult> getFiles(
@@ -91,24 +93,24 @@ class _CollectionViewerContentProvider implements ViewerContentProvider {
   }
 
   @override
-  Future<FileDescriptor> getFile(int page, int fileId) async {
+  Future<AnyFile> getFile(int page, String afId) async {
     return files[page];
   }
 
   @override
-  void notifyFileRemoved(int page, FileDescriptor file) {
-    if (files[page].fdId != file.fdId) {
+  void notifyFileRemoved(int page, AnyFile file) {
+    if (files[page].id != file.id) {
       _log.warning(
-        "[notifyFileRemoved] Removed file does not match record, page: $page, expected: ${files[page].fdId}, actual: ${file.fdId}",
+        "[notifyFileRemoved] Removed file does not match record, page: $page, expected: ${files[page].id}, actual: ${file.id}",
       );
     }
     files.removeAt(page);
   }
 
   @override
-  Future<List<int>> listFileIds() async {
-    return files.map((e) => e.fdId).toList();
+  Future<List<String>> listAfIds() async {
+    return files.map((e) => e.id).toList();
   }
 
-  final List<FileDescriptor> files;
+  final List<AnyFile> files;
 }

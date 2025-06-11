@@ -10,6 +10,7 @@ import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception_util.dart' as exception_util;
 import 'package:nc_photos/k.dart' as k;
@@ -273,7 +274,7 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
 
   Widget _buildVideoView(BuildContext context, int index) {
     return FileContentView(
-      file: widget.streamFiles[index],
+      file: widget.streamFiles[index].toAnyFile(),
       shouldPlayLivePhoto: false,
       isPlayControlVisible: _isShowVideoControl,
       onZoomChanged: (isZoomed) {

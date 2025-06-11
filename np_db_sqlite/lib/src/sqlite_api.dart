@@ -345,7 +345,7 @@ class NpDbSqlite implements NpDb {
         account: ByAccount.db(account),
         isFavorite: true,
       );
-      final from = sqlObjs.sorted(sorter);
+      final from = sqlObjs.map((e) => e.fileId).sorted(sorter);
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info(
@@ -540,7 +540,7 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<int>> getFileIds({
+  Future<List<({int fileId, int timestamp})>> getFileIdWithTimestamps({
     required DbAccount account,
     List<String>? includeRelativeRoots,
     List<String>? includeRelativeDirs,
@@ -550,7 +550,7 @@ class NpDbSqlite implements NpDb {
   }) async {
     final stopwatch = Stopwatch()..start();
     try {
-      return await _db.use((db) async {
+      final dbObj = await _db.use((db) async {
         return await db.queryFileIds(
           account: ByAccount.db(account),
           includeRelativeRoots: includeRelativeRoots,
@@ -558,10 +558,16 @@ class NpDbSqlite implements NpDb {
           excludeRelativeRoots: excludeRelativeRoots,
           isArchived: isArchived,
           mimes: mimes,
+          requestTimestamp: true,
         );
       });
+      return dbObj
+          .map((e) => (fileId: e.fileId, timestamp: e.timestamp!))
+          .toList();
     } finally {
-      _log.fine("[getFileIds] Elapsed: ${stopwatch.elapsedMilliseconds}ms");
+      _log.fine(
+        "[getFileIdWithTimestamps] Elapsed: ${stopwatch.elapsedMilliseconds}ms",
+      );
     }
   }
 

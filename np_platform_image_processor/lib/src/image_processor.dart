@@ -77,7 +77,7 @@ class ImageProcessor {
   static Stream<ImageProcessorEvent> get stream => EventHandler.stream;
 
   static Future<void> zeroDce(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
@@ -85,7 +85,7 @@ class ImageProcessor {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("zeroDce", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,
@@ -95,7 +95,7 @@ class ImageProcessor {
   });
 
   static Future<void> deepLab3Portrait(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
@@ -103,7 +103,7 @@ class ImageProcessor {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("deepLab3Portrait", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,
@@ -113,14 +113,14 @@ class ImageProcessor {
   });
 
   static Future<void> esrgan(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight, {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("esrgan", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,
@@ -129,7 +129,7 @@ class ImageProcessor {
   });
 
   static Future<void> arbitraryStyleTransfer(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
@@ -138,7 +138,7 @@ class ImageProcessor {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("arbitraryStyleTransfer", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,
@@ -149,7 +149,7 @@ class ImageProcessor {
   });
 
   static Future<void> deepLab3ColorPop(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
@@ -157,7 +157,7 @@ class ImageProcessor {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("deepLab3ColorPop", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,
@@ -167,14 +167,14 @@ class ImageProcessor {
   });
 
   static Future<void> neurOp(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight, {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("neurOp", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,
@@ -183,7 +183,7 @@ class ImageProcessor {
   });
 
   static Future<void> filter(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
@@ -191,7 +191,7 @@ class ImageProcessor {
     Map<String, String>? headers,
     required bool isSaveToServer,
   }) => _methodChannel.invokeMethod("filter", <String, dynamic>{
-    "fileUrl": fileUrl,
+    "fileUri": fileUri.toString(),
     "headers": headers,
     "filename": filename,
     "maxWidth": maxWidth,

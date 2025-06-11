@@ -5,16 +5,18 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
-import 'package:nc_photos/db/entity_converter.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/flutter_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
-import 'package:nc_photos/use_case/file/list_file_id.dart';
-import 'package:nc_photos/use_case/find_file_descriptor.dart';
+import 'package:nc_photos/use_case/any_file/find_any_file.dart';
+import 'package:nc_photos/use_case/any_file/list_any_file_id_with_timestamp.dart';
+import 'package:nc_photos/use_case/file/list_file.dart';
+import 'package:nc_photos/use_case/local_file/list_local_file.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_datetime/np_datetime.dart';
@@ -29,7 +31,7 @@ class TimelineViewerArguments {
     required this.allFilesCount,
   });
 
-  final FileDescriptor initialFile;
+  final AnyFile initialFile;
   final int initialIndex;
   final int allFilesCount;
 }
@@ -68,6 +70,7 @@ class TimelineViewer extends StatelessWidget {
     return Viewer(
       contentProvider: _TimelineViewerContentProvider(
         KiwiContainer().resolve(),
+        anyFilesController: accountController.anyFilesController,
         account: accountController.account,
         shareDirPath: file_util.unstripPath(
           accountController.account,
@@ -80,7 +83,7 @@ class TimelineViewer extends StatelessWidget {
     );
   }
 
-  final FileDescriptor initialFile;
+  final AnyFile initialFile;
   final int initialIndex;
   final int allFilesCount;
 }
@@ -89,6 +92,7 @@ class TimelineViewer extends StatelessWidget {
 class _TimelineViewerContentProvider implements ViewerContentProvider {
   const _TimelineViewerContentProvider(
     this.c, {
+    required this.anyFilesController,
     required this.account,
     required this.shareDirPath,
   });
@@ -99,77 +103,108 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     int count,
   ) async {
     _log.info("[getFiles] at: ${at.pageIndex}, count: $count");
-    final files = await c.npDb.getFileDescriptors(
-      account: account.toDb(),
-      // need this because this arg expect empty string for root instead of "."
-      includeRelativeRoots:
-          account.roots
-              .map(
-                (e) =>
-                    File(
-                      path: file_util.unstripPath(account, e),
-                    ).strippedPathWithEmpty,
-              )
-              .toList(),
-      includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
-      excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
-      isArchived: false,
-      mimes: file_util.supportedFormatMimes,
-      timeRange:
-          count < 0
-              ? TimeRange(from: at.originalFile.fdDateTime)
-              : TimeRange(
-                to: at.originalFile.fdDateTime,
-                toBound: TimeRangeBound.inclusive,
-              ),
-      isAscending: count < 0,
-      limit: count.abs(),
-    );
+    // we don't know how many files will come from remote vs local, so we need
+    // to query them both. Luckily, count is likely to be small here :D
+    final (remote, local) =
+        await (_getRemoteFiles(at, count), _getLocalFiles(at, count)).wait;
+    if (remote.isEmpty && local.isEmpty) {
+      return const ViewerContentProviderResult(files: []);
+    }
+    final files = _mergeSortedFileList(remote, local, count < 0);
     // because more than 1 photos may share the same date time, we need to
     // manually filter out those before us
-    final pos = files.indexWhere((e) => e.fileId == at.originalFile.fdId);
+    final pos = files.indexWhere((e) => e.id == at.originalFile.id);
     if (pos == -1) {
       // ???
       _log.severe("[getFiles] No results");
       return const ViewerContentProviderResult(files: []);
     }
-    final results =
-        files
-            .pySlice(pos + 1)
-            .map(
-              (e) => DbFileDescriptorConverter.fromDb(
-                account.userId.toString(),
-                e,
-              ),
-            )
-            .toList();
-    if (results.isEmpty) {
-      return const ViewerContentProviderResult(files: []);
-    }
+    final results = files.pySlice(pos + 1);
     return ViewerContentProviderResult(files: results);
   }
 
   @override
-  Future<FileDescriptor> getFile(int page, int fileId) async {
-    final results = await FindFileDescriptor(c)(account, [fileId]);
+  Future<AnyFile> getFile(int page, String afId) async {
+    final results = await FindAnyFile(c)(account, [afId]);
     return results.first;
   }
 
   @override
-  void notifyFileRemoved(int page, FileDescriptor file) {
+  void notifyFileRemoved(int page, AnyFile file) {
     // we always query the latest data from db
   }
 
   @override
-  Future<List<int>> listFileIds() async {
-    return await ListFileId(fileRepo: c.fileRepo2)(
+  Future<List<String>> listAfIds() async {
+    final results = await ListAnyFileIdWithTimestamp(
+      fileRepo: c.fileRepo2,
+      localFileRepo: c.localFileRepo,
+    )(account, shareDirPath, isArchived: false);
+    return results.map((e) => e.afId).toList();
+  }
+
+  Future<List<AnyFile>> _getRemoteFiles(
+    ViewerPositionInfo at,
+    int count,
+  ) async {
+    final raw = await ListFile(c)(
       account,
       shareDirPath,
       isArchived: false,
+      timeRange:
+          count < 0
+              ? TimeRange(from: at.originalFile.dateTime)
+              : TimeRange(
+                to: at.originalFile.dateTime,
+                toBound: TimeRangeBound.inclusive,
+              ),
+      isAscending: count < 0,
+      limit: count.abs(),
     );
+    return raw.map((e) => e.toAnyFile()).toList();
+  }
+
+  Future<List<AnyFile>> _getLocalFiles(ViewerPositionInfo at, int count) async {
+    final raw = await ListLocalFile(c.localFileRepo)(
+      timeRange:
+          count < 0
+              ? TimeRange(from: at.originalFile.dateTime)
+              : TimeRange(
+                to: at.originalFile.dateTime,
+                toBound: TimeRangeBound.inclusive,
+              ),
+      isAscending: count < 0,
+      limit: count.abs(),
+    );
+    return raw.map((e) => e.toAnyFile()).toList();
+  }
+
+  List<AnyFile> _mergeSortedFileList(
+    List<AnyFile> a,
+    List<AnyFile> b,
+    bool isAscending,
+  ) {
+    if (isAscending) {
+      return mergeSortedLists(a, b, (a, b) {
+        var diff = a.dateTime.compareTo(b.dateTime);
+        if (diff == 0) {
+          diff = a.id.compareTo(b.id);
+        }
+        return diff;
+      });
+    } else {
+      return mergeSortedLists(a.reversed, b.reversed, (a, b) {
+        var diff = a.dateTime.compareTo(b.dateTime);
+        if (diff == 0) {
+          diff = b.id.compareTo(a.id);
+        }
+        return diff;
+      }).reversed.toList();
+    }
   }
 
   final DiContainer c;
+  final AnyFilesController anyFilesController;
   final Account account;
   final String shareDirPath;
 }

@@ -1,8 +1,8 @@
-import 'package:nc_photos/entity/any_file.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 
 LivePhotoType? getLivePhotoTypeFromFile(AnyFile file) {
-  final filenameL = file.afName.toLowerCase();
+  final filenameL = file.name.toLowerCase();
   if (filenameL.startsWith("pxl_") && filenameL.endsWith(".mp.jpg")) {
     return LivePhotoType.googleMp;
   } else if (filenameL.startsWith("pxl_") &&

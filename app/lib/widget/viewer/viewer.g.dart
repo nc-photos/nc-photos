@@ -13,7 +13,7 @@ part of 'viewer.dart';
 // **************************************************************************
 
 abstract class $ViewerPositionInfoCopyWithWorker {
-  ViewerPositionInfo call({int? pageIndex, FileDescriptor? originalFile});
+  ViewerPositionInfo call({int? pageIndex, AnyFile? originalFile});
 }
 
 class _$ViewerPositionInfoCopyWithWorkerImpl
@@ -24,7 +24,7 @@ class _$ViewerPositionInfoCopyWithWorkerImpl
   ViewerPositionInfo call({dynamic pageIndex, dynamic originalFile}) {
     return ViewerPositionInfo(
       pageIndex: pageIndex as int? ?? that.pageIndex,
-      originalFile: originalFile as FileDescriptor? ?? that.originalFile,
+      originalFile: originalFile as AnyFile? ?? that.originalFile,
     );
   }
 
@@ -39,16 +39,17 @@ extension $ViewerPositionInfoCopyWith on ViewerPositionInfo {
 
 abstract class $_StateCopyWithWorker {
   _State call({
-    Map<int, int>? pageFileIdMap,
-    Map<int, FileDescriptor>? fileIdFileMap,
-    Map<int, FileDescriptor>? mergedFileIdFileMap,
-    Map<int, _PageState>? fileStates,
+    Map<int, String>? pageAfIdMap,
+    List<FileDescriptor>? remoteFiles,
+    List<LocalFile>? localFiles,
+    Map<String, AnyFile>? mergedAfIdFileMap,
+    Map<String, _PageState>? fileStates,
     int? index,
-    FileDescriptor? currentFile,
+    AnyFile? currentFile,
     _PageState? currentFileState,
     Collection? collection,
     CollectionItemsController? collectionItemsController,
-    Map<int, CollectionFileItem>? collectionItems,
+    Map<String, CollectionFileItem>? collectionItems,
     bool? isShowDetailPane,
     bool? isClosingDetailPane,
     bool? isDetailPaneActive,
@@ -59,8 +60,8 @@ abstract class $_StateCopyWithWorker {
     bool? isShowAppBar,
     List<ViewerAppBarButtonType>? appBarButtons,
     List<ViewerAppBarButtonType>? bottomAppBarButtons,
-    Unique<FileDescriptor?>? pendingRemoveFile,
-    List<int>? removedFileIds,
+    Unique<AnyFile?>? pendingRemoveFile,
+    List<String>? removedAfIds,
     Unique<ImageEditorArguments?>? imageEditorRequest,
     Unique<ImageEnhancerArguments?>? imageEnhancerRequest,
     Unique<_ShareRequest?>? shareRequest,
@@ -77,9 +78,10 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
 
   @override
   _State call({
-    dynamic pageFileIdMap,
-    dynamic fileIdFileMap,
-    dynamic mergedFileIdFileMap,
+    dynamic pageAfIdMap,
+    dynamic remoteFiles,
+    dynamic localFiles,
+    dynamic mergedAfIdFileMap,
     dynamic fileStates,
     dynamic index,
     dynamic currentFile = copyWithNull,
@@ -98,7 +100,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic appBarButtons,
     dynamic bottomAppBarButtons,
     dynamic pendingRemoveFile,
-    dynamic removedFileIds,
+    dynamic removedAfIds,
     dynamic imageEditorRequest,
     dynamic imageEnhancerRequest,
     dynamic shareRequest,
@@ -109,18 +111,17 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic error = copyWithNull,
   }) {
     return _State(
-      pageFileIdMap: pageFileIdMap as Map<int, int>? ?? that.pageFileIdMap,
-      fileIdFileMap:
-          fileIdFileMap as Map<int, FileDescriptor>? ?? that.fileIdFileMap,
-      mergedFileIdFileMap:
-          mergedFileIdFileMap as Map<int, FileDescriptor>? ??
-          that.mergedFileIdFileMap,
-      fileStates: fileStates as Map<int, _PageState>? ?? that.fileStates,
+      pageAfIdMap: pageAfIdMap as Map<int, String>? ?? that.pageAfIdMap,
+      remoteFiles: remoteFiles as List<FileDescriptor>? ?? that.remoteFiles,
+      localFiles: localFiles as List<LocalFile>? ?? that.localFiles,
+      mergedAfIdFileMap:
+          mergedAfIdFileMap as Map<String, AnyFile>? ?? that.mergedAfIdFileMap,
+      fileStates: fileStates as Map<String, _PageState>? ?? that.fileStates,
       index: index as int? ?? that.index,
       currentFile:
           currentFile == copyWithNull
               ? that.currentFile
-              : currentFile as FileDescriptor?,
+              : currentFile as AnyFile?,
       currentFileState:
           currentFileState == copyWithNull
               ? that.currentFileState
@@ -136,7 +137,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       collectionItems:
           collectionItems == copyWithNull
               ? that.collectionItems
-              : collectionItems as Map<int, CollectionFileItem>?,
+              : collectionItems as Map<String, CollectionFileItem>?,
       isShowDetailPane: isShowDetailPane as bool? ?? that.isShowDetailPane,
       isClosingDetailPane:
           isClosingDetailPane as bool? ?? that.isClosingDetailPane,
@@ -155,9 +156,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           bottomAppBarButtons as List<ViewerAppBarButtonType>? ??
           that.bottomAppBarButtons,
       pendingRemoveFile:
-          pendingRemoveFile as Unique<FileDescriptor?>? ??
-          that.pendingRemoveFile,
-      removedFileIds: removedFileIds as List<int>? ?? that.removedFileIds,
+          pendingRemoveFile as Unique<AnyFile?>? ?? that.pendingRemoveFile,
+      removedAfIds: removedAfIds as List<String>? ?? that.removedAfIds,
       imageEditorRequest:
           imageEditorRequest as Unique<ImageEditorArguments?>? ??
           that.imageEditorRequest,
@@ -268,14 +268,14 @@ extension _$_ViewerContentControllerNpLog on _ViewerContentController {
 extension _$ViewerContentProviderResultToString on ViewerContentProviderResult {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "ViewerContentProviderResult {files: ${files.map((e) => e.fdId).toReadableString()}}";
+    return "ViewerContentProviderResult {files: ${files.map((e) => e.id).toReadableString()}}";
   }
 }
 
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {pageFileIdMap: {length: ${pageFileIdMap.length}}, fileIdFileMap: {length: ${fileIdFileMap.length}}, mergedFileIdFileMap: {length: ${mergedFileIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: ${currentFile == null ? null : "${currentFile!.fdPath}"}, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedFileIds: [length: ${removedFileIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, isBusy: $isBusy, error: $error}";
+    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, remoteFiles: [length: ${remoteFiles.length}], localFiles: [length: ${localFiles.length}], mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, isBusy: $isBusy, error: $error}";
   }
 }
 
@@ -303,7 +303,7 @@ extension _$_SetIndexToString on _SetIndex {
 extension _$_JumpToLastSlideshowToString on _JumpToLastSlideshow {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_JumpToLastSlideshow {index: $index, fileId: $fileId}";
+    return "_JumpToLastSlideshow {index: $index, afId: $afId}";
   }
 }
 
@@ -373,77 +373,77 @@ extension _$_SetBottomAppBarButtonsToString on _SetBottomAppBarButtons {
 extension _$_PauseLivePhotoToString on _PauseLivePhoto {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_PauseLivePhoto {fileId: $fileId}";
+    return "_PauseLivePhoto {afId: $afId}";
   }
 }
 
 extension _$_PlayLivePhotoToString on _PlayLivePhoto {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_PlayLivePhoto {fileId: $fileId}";
+    return "_PlayLivePhoto {afId: $afId}";
   }
 }
 
 extension _$_UnfavoriteToString on _Unfavorite {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Unfavorite {fileId: $fileId}";
+    return "_Unfavorite {afId: $afId}";
   }
 }
 
 extension _$_FavoriteToString on _Favorite {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Favorite {fileId: $fileId}";
+    return "_Favorite {afId: $afId}";
   }
 }
 
 extension _$_UnarchiveToString on _Unarchive {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Unarchive {fileId: $fileId}";
+    return "_Unarchive {afId: $afId}";
   }
 }
 
 extension _$_ArchiveToString on _Archive {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Archive {fileId: $fileId}";
+    return "_Archive {afId: $afId}";
   }
 }
 
 extension _$_ShareToString on _Share {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Share {fileId: $fileId}";
+    return "_Share {afId: $afId}";
   }
 }
 
 extension _$_EditToString on _Edit {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Edit {fileId: $fileId}";
+    return "_Edit {afId: $afId}";
   }
 }
 
 extension _$_EnhanceToString on _Enhance {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Enhance {fileId: $fileId}";
+    return "_Enhance {afId: $afId}";
   }
 }
 
 extension _$_DownloadToString on _Download {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Download {fileId: $fileId}";
+    return "_Download {afId: $afId}";
   }
 }
 
 extension _$_DeleteToString on _Delete {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_Delete {fileId: $fileId}";
+    return "_Delete {afId: $afId}";
   }
 }
 
@@ -457,7 +457,7 @@ extension _$_RemoveFromCollectionToString on _RemoveFromCollection {
 extension _$_StartSlideshowToString on _StartSlideshow {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_StartSlideshow {fileId: $fileId}";
+    return "_StartSlideshow {afId: $afId}";
   }
 }
 
@@ -471,7 +471,7 @@ extension _$_StartSlideshowResultToString on _StartSlideshowResult {
 extension _$_SetAsToString on _SetAs {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetAs {fileId: $fileId}";
+    return "_SetAs {afId: $afId}";
   }
 }
 
@@ -520,7 +520,7 @@ extension _$_SetDetailPaneActiveToString on _SetDetailPaneActive {
 extension _$_SetFileContentHeightToString on _SetFileContentHeight {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetFileContentHeight {fileId: $fileId, value: ${value.toStringAsFixed(3)}}";
+    return "_SetFileContentHeight {afId: $afId, value: ${value.toStringAsFixed(3)}}";
   }
 }
 
@@ -534,7 +534,7 @@ extension _$_SetIsZoomedToString on _SetIsZoomed {
 extension _$_RemoveFileToString on _RemoveFile {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_RemoveFile {file: ${file.fdPath}}";
+    return "_RemoveFile {file: $file}";
   }
 }
 
