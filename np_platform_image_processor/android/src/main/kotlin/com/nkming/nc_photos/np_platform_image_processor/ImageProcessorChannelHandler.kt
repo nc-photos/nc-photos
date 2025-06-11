@@ -47,7 +47,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"zeroDce" -> {
 				try {
 					zeroDce(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -63,7 +63,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"deepLab3Portrait" -> {
 				try {
 					deepLab3Portrait(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -79,7 +79,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"esrgan" -> {
 				try {
 					esrgan(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -94,7 +94,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"arbitraryStyleTransfer" -> {
 				try {
 					arbitraryStyleTransfer(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -111,7 +111,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"deepLab3ColorPop" -> {
 				try {
 					deepLab3ColorPop(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -127,7 +127,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"neurOp" -> {
 				try {
 					neurOp(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -142,7 +142,7 @@ internal class ImageProcessorChannelHandler(context: Context) :
 			"filter" -> {
 				try {
 					filter(
-						call.argument("fileUrl")!!, call.argument("headers"),
+						call.argument("fileUri")!!, call.argument("headers"),
 						call.argument("filename")!!,
 						call.argument("maxWidth")!!,
 						call.argument("maxHeight")!!,
@@ -184,37 +184,37 @@ internal class ImageProcessorChannelHandler(context: Context) :
 	}
 
 	private fun zeroDce(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean, iteration: Int,
 		result: MethodChannel.Result
-	) = method(fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+	) = method(fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 		ImageProcessorService.METHOD_ZERO_DCE, result, onIntent = {
 			it.putExtra(ImageProcessorService.EXTRA_ITERATION, iteration)
 		})
 
 	private fun deepLab3Portrait(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean, radius: Int,
 		result: MethodChannel.Result
-	) = method(fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+	) = method(fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 		ImageProcessorService.METHOD_DEEP_LAP_PORTRAIT, result, onIntent = {
 			it.putExtra(ImageProcessorService.EXTRA_RADIUS, radius)
 		})
 
 	private fun esrgan(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean,
 		result: MethodChannel.Result
 	) = method(
-		fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+		fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 		ImageProcessorService.METHOD_ESRGAN, result
 	)
 
 	private fun arbitraryStyleTransfer(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean,
 		styleUri: String, weight: Float, result: MethodChannel.Result
-	) = method(fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+	) = method(fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 		ImageProcessorService.METHOD_ARBITRARY_STYLE_TRANSFER, result,
 		onIntent = {
 			it.putExtra(
@@ -224,32 +224,32 @@ internal class ImageProcessorChannelHandler(context: Context) :
 		})
 
 	private fun deepLab3ColorPop(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean, weight: Float,
 		result: MethodChannel.Result
-	) = method(fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+	) = method(fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 		ImageProcessorService.METHOD_DEEP_LAP_COLOR_POP, result, onIntent = {
 			it.putExtra(ImageProcessorService.EXTRA_WEIGHT, weight)
 		})
 
 	private fun neurOp(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean,
 		result: MethodChannel.Result
 	) = method(
-		fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+		fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 		ImageProcessorService.METHOD_NEUR_OP, result
 	)
 
 	private fun filter(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean,
 		filters: List<Map<String, Any>>, result: MethodChannel.Result
 	) {
 		// convert to serializable
 		val l = arrayListOf<Serializable>()
 		filters.mapTo(l, { HashMap(it) })
-		method(fileUrl, headers, filename, maxWidth, maxHeight, isSaveToServer,
+		method(fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
 			ImageProcessorService.METHOD_FILTER, result, onIntent = {
 				it.putExtra(ImageProcessorService.EXTRA_FILTERS, l)
 			})
@@ -267,13 +267,13 @@ internal class ImageProcessorChannelHandler(context: Context) :
 	}
 
 	private fun method(
-		fileUrl: String, headers: Map<String, String>?, filename: String,
+		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean, method: String,
 		result: MethodChannel.Result, onIntent: ((Intent) -> Unit)? = null
 	) {
 		val intent = Intent(context, ImageProcessorService::class.java).apply {
 			putExtra(ImageProcessorService.EXTRA_METHOD, method)
-			putExtra(ImageProcessorService.EXTRA_FILE_URL, fileUrl)
+			putExtra(ImageProcessorService.EXTRA_FILE_URI, Uri.parse(fileUri))
 			putExtra(ImageProcessorService.EXTRA_HEADERS,
 				headers?.let { HashMap(it) })
 			putExtra(ImageProcessorService.EXTRA_FILENAME, filename)

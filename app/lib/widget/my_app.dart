@@ -88,19 +88,6 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(
           create: (_) => SecurePrefController(_c.securePref),
         ),
-        RepositoryProvider(
-          create: (context) => AccountController(
-            prefController: context.read(),
-          ),
-        ),
-        RepositoryProvider<NpDb>(
-          create: (_) => _c.npDb,
-        ),
-        RepositoryProvider<TrustedCertController>(
-          create: (_) => TrustedCertController(
-            manager: SelfSignedCertManager(),
-          ),
-        ),
         RepositoryProvider<LocalFilesController>(
           create: (_) {
             if (getRawPlatform() == NpPlatform.android) {
@@ -110,6 +97,20 @@ class MyApp extends StatelessWidget {
             }
             return DummyLocalFilesController();
           },
+        ),
+        RepositoryProvider(
+          create: (context) => AccountController(
+            prefController: context.read(),
+            localFilesController: context.read(),
+          ),
+        ),
+        RepositoryProvider<NpDb>(
+          create: (_) => _c.npDb,
+        ),
+        RepositoryProvider<TrustedCertController>(
+          create: (_) => TrustedCertController(
+            manager: SelfSignedCertManager(),
+          ),
         ),
       ],
       child: BlocProvider(

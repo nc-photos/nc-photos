@@ -17,9 +17,19 @@ import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
-import com.nkming.nc_photos.np_android_core.*
-import com.nkming.nc_photos.np_platform_image_processor.processor.*
+import com.nkming.nc_photos.np_android_core.asType
+import com.nkming.nc_photos.np_android_core.getIntOrNull
+import com.nkming.nc_photos.np_android_core.getPendingIntentFlagImmutable
+import com.nkming.nc_photos.np_android_core.logD
+import com.nkming.nc_photos.np_android_core.logE
+import com.nkming.nc_photos.np_android_core.logI
+import com.nkming.nc_photos.np_android_core.logW
+import com.nkming.nc_photos.np_android_core.measureTime
+import com.nkming.nc_photos.np_android_core.use
+import com.nkming.nc_photos.np_platform_image_processor.processor.LosslessRotator
+import com.nkming.nc_photos.np_platform_image_processor.processor.Orientation
 import java.io.File
 import java.io.Serializable
 import java.net.HttpURLConnection
@@ -35,7 +45,7 @@ internal class ImageProcessorService : Service() {
 		const val METHOD_DEEP_LAP_COLOR_POP = "DeepLab3ColorPop"
 		const val METHOD_NEUR_OP = "NeurOp"
 		const val METHOD_FILTER = "Filter"
-		const val EXTRA_FILE_URL = "fileUrl"
+		const val EXTRA_FILE_URI = "fileUri"
 		const val EXTRA_HEADERS = "headers"
 		const val EXTRA_FILENAME = "filename"
 		const val EXTRA_MAX_WIDTH = "maxWidth"
@@ -109,7 +119,7 @@ internal class ImageProcessorService : Service() {
 
 	private fun onNewImage(intent: Intent, startId: Int) {
 		assert(intent.hasExtra(EXTRA_METHOD))
-		assert(intent.hasExtra(EXTRA_FILE_URL))
+		assert(intent.hasExtra(EXTRA_FILE_URI))
 
 		val method = intent.getStringExtra(EXTRA_METHOD)
 		when (method) {
@@ -136,7 +146,7 @@ internal class ImageProcessorService : Service() {
 				addCommand(
 					ImageProcessorDummyCommand(
 						ImageProcessorImageCommand.Params(
-							startId, "null", null, "", 0, 0, false
+							startId, Uri.EMPTY, null, "", 0, 0, false
 						)
 					)
 				)
@@ -196,7 +206,7 @@ internal class ImageProcessorService : Service() {
 			.asType<ArrayList<Serializable>>()
 			.map { ImageFilter.fromJson(it.asType<HashMap<String, Any>>()) }
 
-		val fileUrl = extras.getString(EXTRA_FILE_URL)!!
+		val fileUri = extras.getParcelable<Uri>(EXTRA_FILE_URI)!!
 
 		@Suppress("Unchecked_cast") val headers =
 			extras.getSerializable(EXTRA_HEADERS) as HashMap<String, String>?
@@ -207,7 +217,7 @@ internal class ImageProcessorService : Service() {
 		addCommand(
 			ImageProcessorFilterCommand(
 				ImageProcessorImageCommand.Params(
-					startId, fileUrl, headers, filename, maxWidth, maxHeight,
+					startId, fileUri, headers, filename, maxWidth, maxHeight,
 					isSaveToServer
 				), filters
 			)
@@ -225,7 +235,7 @@ internal class ImageProcessorService : Service() {
 		startId: Int, extras: Bundle,
 		builder: (ImageProcessorImageCommand.Params) -> ImageProcessorImageCommand
 	) {
-		val fileUrl = extras.getString(EXTRA_FILE_URL)!!
+		val fileUri = extras.getParcelable<Uri>(EXTRA_FILE_URI)!!
 
 		@Suppress("Unchecked_cast") val headers =
 			extras.getSerializable(EXTRA_HEADERS) as HashMap<String, String>?
@@ -236,7 +246,7 @@ internal class ImageProcessorService : Service() {
 		addCommand(
 			builder(
 				ImageProcessorImageCommand.Params(
-					startId, fileUrl, headers, filename, maxWidth, maxHeight,
+					startId, fileUri, headers, filename, maxWidth, maxHeight,
 					isSaveToServer
 				)
 			)
@@ -409,7 +419,8 @@ internal class ImageProcessorService : Service() {
 			}
 			if (notificationManager.areNotificationsEnabled()) {
 				notificationManager.notify(
-					RESULT_NOTIFICATION_ID, buildResultNotification(event.result)
+					RESULT_NOTIFICATION_ID,
+					buildResultNotification(event.result)
 				)
 			}
 		} else if (event is ImageProcessorFailedEvent) {
@@ -583,7 +594,7 @@ private open class ImageProcessorCommandTask(context: Context) :
 	}
 
 	private fun handleCommand(cmd: ImageProcessorImageCommand): Uri {
-		val file = downloadFile(cmd.fileUrl, cmd.headers)
+		val uri = localizeUri(cmd.fileUri, cmd.headers)
 		handleCancel()
 
 		// special case for lossless rotation
@@ -591,9 +602,7 @@ private open class ImageProcessorCommandTask(context: Context) :
 			if (shouldTryLosslessRotate(cmd, cmd.filename)) {
 				val filter = cmd.filters.first() as Orientation
 				try {
-					return loselessRotate(
-						filter.degree, file, cmd.filename, cmd
-					)
+					return loselessRotate(filter.degree, uri, cmd.filename, cmd)
 				} catch (e: Throwable) {
 					logE(
 						TAG,
@@ -604,16 +613,11 @@ private open class ImageProcessorCommandTask(context: Context) :
 			}
 		}
 
-		return try {
-			val fileUri = Uri.fromFile(file)
-			val output = measureTime(TAG, "[handleCommand] Elapsed time", {
-				cmd.apply(context, fileUri)
-			})
-			handleCancel()
-			saveBitmap(output, cmd.filename, file, cmd)
-		} finally {
-			file.delete()
-		}
+		val output = measureTime(TAG, "[handleCommand] Elapsed time", {
+			cmd.apply(context, uri)
+		})
+		handleCancel()
+		return saveBitmap(output, cmd.filename, uri, cmd)
 	}
 
 	private fun shouldTryLosslessRotate(
@@ -639,16 +643,18 @@ private open class ImageProcessorCommandTask(context: Context) :
 	}
 
 	private fun loselessRotate(
-		degree: Int, srcFile: File, outFilename: String,
+		degree: Int, uri: Uri, outFilename: String,
 		cmd: ImageProcessorImageCommand
 	): Uri {
 		logI(TAG, "[loselessRotate] $outFilename")
 		val outFile = File.createTempFile("out", null, getTempDir(context))
 		try {
-			srcFile.copyTo(outFile, overwrite = true)
-			val iExif = ExifInterface(srcFile)
+			outFile.outputStream().use {
+				context.contentResolver.openInputStream(uri)!!.copyTo(it)
+			}
+			val iExif =
+				ExifInterface(context.contentResolver.openInputStream(uri)!!)
 			val oExif = ExifInterface(outFile)
-			copyExif(iExif, oExif)
 			LosslessRotator()(degree, iExif, oExif)
 			oExif.saveAttributes()
 
@@ -660,11 +666,23 @@ private open class ImageProcessorCommandTask(context: Context) :
 		}
 	}
 
-	private fun downloadFile(
-		fileUrl: String, headers: Map<String, String>?
-	): File {
-		logI(TAG, "[downloadFile] $fileUrl")
-		return (URL(fileUrl).openConnection() as HttpURLConnection).apply {
+	/**
+	 * Ensure a Uri is backed by local storage
+	 */
+	private fun localizeUri(uri: Uri, httpHeaders: Map<String, String>?): Uri {
+		logI(TAG, "[localizeUri] $uri")
+		return if (uri.scheme?.startsWith("http") == true) {
+			// remote file
+			downloadFile(uri, httpHeaders)
+		} else {
+			uri
+		}
+	}
+
+	private fun downloadFile(uri: Uri, headers: Map<String, String>?): Uri {
+		logI(TAG, "[downloadFile] $uri")
+		val url = URL(uri.toString())
+		return (url.openConnection() as HttpURLConnection).apply {
 			requestMethod = "GET"
 			instanceFollowRedirects = true
 			connectTimeout = 8000
@@ -676,10 +694,11 @@ private open class ImageProcessorCommandTask(context: Context) :
 			val responseCode = it.responseCode
 			if (responseCode / 100 == 2) {
 				val file = File.createTempFile("img", null, getTempDir(context))
+				file.deleteOnExit()
 				file.outputStream().use { oStream ->
 					it.inputStream.copyTo(oStream)
 				}
-				file
+				file.toUri()
 			} else {
 				logE(
 					TAG,
@@ -693,7 +712,7 @@ private open class ImageProcessorCommandTask(context: Context) :
 	}
 
 	private fun saveBitmap(
-		bitmap: Bitmap, filename: String, srcFile: File,
+		bitmap: Bitmap, filename: String, srcUri: Uri,
 		cmd: ImageProcessorImageCommand
 	): Uri {
 		logI(TAG, "[saveBitmap] $filename")
@@ -705,7 +724,9 @@ private open class ImageProcessorCommandTask(context: Context) :
 
 			// then copy the EXIF tags
 			try {
-				val iExif = ExifInterface(srcFile)
+				val iExif = ExifInterface(
+					context.contentResolver.openInputStream(srcUri)!!
+				)
 				val oExif = ExifInterface(outFile)
 				copyExif(iExif, oExif)
 				oExif.saveAttributes()
