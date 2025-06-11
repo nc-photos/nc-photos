@@ -5,9 +5,11 @@ class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
   _Bloc({
     required this.account,
+    required this.anyFilesController,
     required this.filesController,
+    required this.localFilesController,
     required this.collectionsController,
-    required this.fileIds,
+    required this.afIds,
     required this.startIndex,
     required this.collectionId,
     required this.config,
@@ -53,7 +55,8 @@ class _Bloc extends Bloc<_Event, _State>
       stream
           .distinct(
             (a, b) =>
-                identical(a.rawFiles, b.rawFiles) &&
+                identical(a.remoteFiles, b.remoteFiles) &&
+                identical(a.localFiles, b.localFiles) &&
                 identical(a.collectionItems, b.collectionItems),
           )
           .listen((event) {
@@ -78,28 +81,28 @@ class _Bloc extends Bloc<_Event, _State>
   /// Convert the page index to the corresponding item index
   int convertPageToFileIndex(int pageIndex) {
     if (config.isShuffle) {
-      final i = pageIndex ~/ fileIds.length;
+      final i = pageIndex ~/ afIds.length;
       if (!_shuffledIndex.containsKey(i)) {
-        final index = [for (var i = 0; i < fileIds.length; ++i) i];
+        final index = [for (var i = 0; i < afIds.length; ++i) i];
         _shuffledIndex[i] = index..shuffle();
       }
-      return _shuffledIndex[i]![pageIndex % fileIds.length];
+      return _shuffledIndex[i]![pageIndex % afIds.length];
     } else {
-      return _shuffledIndex[0]![pageIndex % fileIds.length];
+      return _shuffledIndex[0]![pageIndex % afIds.length];
     }
   }
 
-  FileDescriptor? getFileByPageIndex(int pageIndex) =>
+  AnyFile? getFileByPageIndex(int pageIndex) =>
       state.files[convertPageToFileIndex(pageIndex)];
 
   Future<void> _onInit(_Init ev, Emitter<_State> emit) async {
     _log.info(ev);
     // TODO remove this and only query when the file is going to be displayed
     // needed for now because some pages (e.g., search) haven't yet migrated
-    await filesController.queryByFileId(fileIds);
+    await anyFilesController.queryByAfId(afIds);
 
     final parsedConfig = _parseConfig(
-      fileIds: fileIds,
+      afIds: afIds,
       startIndex: startIndex,
       config: config,
     );
@@ -119,11 +122,18 @@ class _Bloc extends Bloc<_Event, _State>
     }
     unawaited(_prepareNextPage());
 
-    await forEach(
-      emit,
-      filesController.stream,
-      onData: (data) => state.copyWith(rawFiles: data.dataMap),
-    );
+    await Future.wait([
+      forEach(
+        emit,
+        filesController.stream,
+        onData: (data) => state.copyWith(remoteFiles: data.data),
+      ),
+      forEach(
+        emit,
+        localFilesController.stream,
+        onData: (data) => state.copyWith(localFiles: data.data),
+      ),
+    ]);
   }
 
   void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
@@ -138,20 +148,25 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onMergeFiles(_MergeFiles ev, _Emitter emit) {
     _log.info(ev);
-    final Map<int, FileDescriptor> merged;
-    if (collectionId == null) {
-      // not collection, nothing to merge
-      merged = state.rawFiles;
-    } else {
-      if (state.collectionItems == null) {
-        // collection not ready
-        return;
-      }
-      merged = state.rawFiles.addedAll(
-        state.collectionItems!.map((key, value) => MapEntry(key, value.file)),
-      );
+    if (collectionId != null && state.collectionItems == null) {
+      // collection not ready
+      return;
     }
-    final files = fileIds.map((e) => merged[e]).toList();
+    final merged = {
+      ...state.remoteFiles
+          .map((e) => e.toAnyFile())
+          .map((e) => MapEntry(e.id, e))
+          .toMap(),
+      ...state.localFiles
+          .map((e) => e.toAnyFile())
+          .map((e) => MapEntry(e.id, e))
+          .toMap(),
+      if (collectionId != null)
+        ...state.collectionItems!.map(
+          (_, e) => e.file.toAnyFile().let((f) => MapEntry(f.id, f)),
+        ),
+    };
+    final files = afIds.map((e) => merged[e]).toList();
     emit(state.copyWith(files: files));
     if (state.hasInit) {
       emit(
@@ -183,14 +198,22 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info("[_onPreloadSidePages] Pre-loading nearby images");
     if (ev.center > 0) {
       final prevFile = getFileByPageIndex(ev.center - 1);
-      if (prevFile != null && file_util.isSupportedImageFormat(prevFile)) {
-        RemoteImageViewer.preloadImage(account, prevFile);
+      if (prevFile != null &&
+          file_util.isSupportedImageMime(prevFile.mime ?? "")) {
+        AnyFilePresenterFactory.imageViewer(
+          prevFile,
+          account: account,
+        ).preloadImage();
       }
     }
     if (pageCount == null || ev.center + 1 < pageCount!) {
       final nextFile = getFileByPageIndex(ev.center + 1);
-      if (nextFile != null && file_util.isSupportedImageFormat(nextFile)) {
-        RemoteImageViewer.preloadImage(account, nextFile);
+      if (nextFile != null &&
+          file_util.isSupportedImageMime(nextFile.mime ?? "")) {
+        AnyFilePresenterFactory.imageViewer(
+          nextFile,
+          account: account,
+        ).preloadImage();
       }
     }
   }
@@ -212,7 +235,10 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetPlay(_SetPlay ev, Emitter<_State> emit) {
     _log.info(ev);
-    if (state.currentFile?.let(file_util.isSupportedVideoFormat) == true) {
+    if (state.currentFile?.let(
+          (e) => file_util.isSupportedVideoMime(e.mime ?? ""),
+        ) ==
+        true) {
       // only start the countdown if the video completed
       if (state.isVideoCompleted) {
         _pageChangeTimer?.cancel();
@@ -278,18 +304,18 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   static ({List<int> shuffled, int initial, int? count}) _parseConfig({
-    required List<int> fileIds,
+    required List<String> afIds,
     required int startIndex,
     required SlideshowConfig config,
   }) {
-    final index = [for (var i = 0; i < fileIds.length; ++i) i];
-    final count = config.isRepeat ? null : fileIds.length;
+    final index = [for (var i = 0; i < afIds.length; ++i) i];
+    final count = config.isRepeat ? null : afIds.length;
     if (config.isShuffle) {
       return (shuffled: index..shuffle(), initial: 0, count: count);
     } else if (config.isReverse) {
       return (
         shuffled: index.reversed.toList(),
-        initial: fileIds.length - 1 - startIndex,
+        initial: afIds.length - 1 - startIndex,
         count: count,
       );
     } else {
@@ -298,7 +324,10 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _prepareNextPage() async {
-    if (state.currentFile?.let(file_util.isSupportedVideoFormat) == true) {
+    if (state.currentFile?.let(
+          (e) => file_util.isSupportedVideoMime(e.mime ?? ""),
+        ) ==
+        true) {
       // for videos, we need to wait until it's ended
       return;
     }
@@ -338,9 +367,11 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   final Account account;
+  final AnyFilesController anyFilesController;
   final FilesController filesController;
+  final LocalFilesController localFilesController;
   final CollectionsController collectionsController;
-  final List<int> fileIds;
+  final List<String> afIds;
   final int startIndex;
   final String? collectionId;
   final SlideshowConfig config;

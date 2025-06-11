@@ -61,7 +61,7 @@ class PhotoListImageItem extends PhotoListFileItem {
     previewUrl: previewUrl,
     mime: file.fdMime,
     isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
-    heroKey: flutter_util.getImageHeroTag(file),
+    heroKey: flutter_util.HeroTag.fromFile(file),
   );
 
   final Account account;
@@ -208,7 +208,7 @@ class PhotoListImage extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final bool isFavorite;
   // if not null, the image will be contained by a Hero widget
-  final String? heroKey;
+  final Object? heroKey;
 }
 
 class PhotoListVideo extends StatelessWidget {
@@ -375,23 +375,26 @@ class PhotoListLocalImage extends StatelessWidget {
               // arbitrary size here
               constraints: BoxConstraints.tight(const Size(128, 128)),
               color: Theme.of(context).listPlaceholderBackgroundColor,
-              child: Image(
-                image: ResizeImage.resizeIfNeeded(
-                  k.photoThumbSize,
-                  null,
-                  provider,
+              child: Hero(
+                tag: flutter_util.HeroTag.fromLocalFile(file),
+                child: Image(
+                  image: ResizeImage.resizeIfNeeded(
+                    k.photoThumbSize,
+                    null,
+                    provider,
+                  ),
+                  filterQuality: FilterQuality.high,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, e, stackTrace) {
+                    return Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Theme.of(context).listPlaceholderForegroundColor,
+                      ),
+                    );
+                  },
                 ),
-                filterQuality: FilterQuality.high,
-                fit: BoxFit.cover,
-                errorBuilder: (context, e, stackTrace) {
-                  return Center(
-                    child: Icon(
-                      Icons.image_not_supported,
-                      size: 64,
-                      color: Theme.of(context).listPlaceholderForegroundColor,
-                    ),
-                  );
-                },
               ),
             ),
             Container(

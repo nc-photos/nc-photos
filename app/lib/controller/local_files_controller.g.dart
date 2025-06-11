@@ -65,11 +65,29 @@ extension $LocalFilesSummaryStreamEventCopyWith
 // NpLogGenerator
 // **************************************************************************
 
-extension _$LocalFilesControllerNpLog on LocalFilesController {
+extension _$LocalFilesControllerImplNpLog on LocalFilesControllerImpl {
   // ignore: unused_element
   Logger get _log => log;
 
   static final log = Logger(
-    "controller.local_files_controller.LocalFilesController",
+    "controller.local_files_controller.LocalFilesControllerImpl",
   );
+}
+
+// **************************************************************************
+// ToStringGenerator
+// **************************************************************************
+
+extension _$TrashLocalFileFailureErrorToString on TrashLocalFileFailureError {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "TrashLocalFileFailureError {files: [length: ${files.length}]}";
+  }
+}
+
+extension _$LocalFileRemoveFailureErrorToString on LocalFileRemoveFailureError {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "LocalFileRemoveFailureError {files: [length: ${files.length}]}";
+  }
 }

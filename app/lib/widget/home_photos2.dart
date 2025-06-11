@@ -16,6 +16,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
@@ -27,6 +28,8 @@ import 'package:nc_photos/controller/sync_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/download_handler.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/content_provider/memory.dart';
 import 'package:nc_photos/entity/file.dart';
@@ -52,7 +55,6 @@ import 'package:nc_photos/widget/double_tap_exit_container/double_tap_exit_conta
 import 'package:nc_photos/widget/file_sharer_dialog.dart';
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/home_app_bar.dart';
-import 'package:nc_photos/widget/local_file_viewer.dart';
 import 'package:nc_photos/widget/navigation_bar_blur_filter.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
@@ -95,6 +97,7 @@ class HomePhotos2 extends StatelessWidget {
           (_) => _Bloc(
             KiwiContainer().resolve(),
             account: accountController.account,
+            anyFilesController: accountController.anyFilesController,
             filesController: accountController.filesController,
             prefController: context.read(),
             accountPrefController: accountController.accountPrefController,

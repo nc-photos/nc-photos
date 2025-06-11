@@ -18,7 +18,6 @@ import com.nkming.nc_photos.np_android_core.PermissionException
 import com.nkming.nc_photos.np_android_core.PermissionUtil
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
-import com.nkming.nc_photos.np_android_core.measureTime
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
@@ -27,9 +26,11 @@ import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.launch
 import java.io.File
-import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
 import java.util.Date
-import java.util.Locale
 
 /*
  * Save downloaded item on device
@@ -76,6 +77,12 @@ internal class MediaStoreChannelHandler(context: Context) :
 		if (requestCode == K.MEDIA_STORE_DELETE_REQUEST_CODE) {
 			eventSink?.success(buildMap {
 				put("event", "DeleteRequestResult")
+				put("resultCode", resultCode)
+			})
+			return true
+		} else if (requestCode == K.MEDIA_STORE_TRASH_REQUEST_CODE) {
+			eventSink?.success(buildMap {
+				put("event", "TrashRequestResult")
 				put("resultCode", resultCode)
 			})
 			return true
@@ -126,24 +133,35 @@ internal class MediaStoreChannelHandler(context: Context) :
 			"queryFiles2" -> {
 				try {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-						val timeRangeBeg = call.argument<Long>("timeRangeBeg")
-							?.let { Date(it) }
-						val isTimeRangeBegInclusive = call.argument<Boolean>("isTimeRangeBegInclusive")
-						val timeRangeEnd = call.argument<Long>("timeRangeEnd")
-							?.let { Date(it) }
-						val isTimeRangeEndInclusive = call.argument<Boolean>("isTimeRangeEndInclusive")
+						val timeRangeBeg =
+							call.argument<Number>("timeRangeBeg")?.toLong()
+								?.let { Date(it) }
+						val isTimeRangeBegInclusive =
+							call.argument<Boolean>("isTimeRangeBegInclusive")
+						val timeRangeEnd =
+							call.argument<Number>("timeRangeEnd")?.toLong()
+								?.let { Date(it) }
+						val isTimeRangeEndInclusive =
+							call.argument<Boolean>("isTimeRangeEndInclusive")
 						queryFiles2(
+							fileIds = call.argument<List<Number>>("fileIds")
+								?.map { it.toLong() },
 							timeRangeBeg = timeRangeBeg,
 							isTimeRangeBegInclusive = isTimeRangeBegInclusive,
 							timeRangeEnd = timeRangeEnd,
 							isTimeRangeEndInclusive = isTimeRangeEndInclusive,
+							isAscending = call.argument("isAscending") ?: false,
+							offset = call.argument<Number>("offset")?.toInt(),
+							limit = call.argument<Number>("limit")?.toInt(),
 							result = result
 						)
 					} else {
 						result.success(listOf<Map<String, Any>>())
 					}
 				} catch (e: Throwable) {
-					result.error("systemException", e.message, null)
+					result.error(
+						"systemException", e.message, e.stackTraceToString()
+					)
 				}
 			}
 
@@ -152,6 +170,22 @@ internal class MediaStoreChannelHandler(context: Context) :
 					deleteFiles(call.argument("uris")!!, result)
 				} catch (e: Throwable) {
 					result.error("systemException", e.message, null)
+				}
+			}
+
+			"trashFiles" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						trashFiles(call.argument("uris")!!, result)
+					} else {
+						result.error(
+							"systemException", "Require Android 11+", null
+						)
+					}
+				} catch (e: Throwable) {
+					result.error(
+						"systemException", e.message, e.stackTraceToString()
+					)
 				}
 			}
 
@@ -167,12 +201,26 @@ internal class MediaStoreChannelHandler(context: Context) :
 				}
 			}
 
+			"getFileIdWithTimestamps" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						getFileIdWithTimestamps(result)
+					} else {
+						result.success(listOf<Map<String, Any>>())
+					}
+				} catch (e: Throwable) {
+					result.error("systemException", e.message, null)
+				}
+			}
+
 			else -> result.notImplemented()
 		}
 	}
 
 	private fun saveFileToDownload(
-		content: ByteArray, filename: String, subDir: String?,
+		content: ByteArray,
+		filename: String,
+		subDir: String?,
 		result: MethodChannel.Result
 	) {
 		try {
@@ -187,7 +235,9 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	private fun copyFileToDownload(
-		fromFile: String, filename: String?, subDir: String?,
+		fromFile: String,
+		filename: String?,
+		subDir: String?,
 		result: MethodChannel.Result
 	) {
 		try {
@@ -215,8 +265,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 			pathColumnName = MediaStore.Images.Media.RELATIVE_PATH
 			pathArg = "${relativePath}/%"
 		} else {
-			@Suppress("Deprecation") pathColumnName =
-				MediaStore.Images.Media.DATA
+			pathColumnName = MediaStore.Images.Media.DATA
 			pathArg = "%/${relativePath}/%"
 		}
 		val projection = arrayOf(
@@ -283,10 +332,14 @@ internal class MediaStoreChannelHandler(context: Context) :
 
 	@RequiresApi(Build.VERSION_CODES.R)
 	private fun queryFiles2(
+		fileIds: List<Long>? = null,
 		timeRangeBeg: Date? = null,
 		isTimeRangeBegInclusive: Boolean? = null,
 		timeRangeEnd: Date? = null,
 		isTimeRangeEndInclusive: Boolean? = null,
+		isAscending: Boolean,
+		offset: Int?,
+		limit: Int?,
 		result: MethodChannel.Result
 	) {
 		if (!PermissionUtil.hasReadMedia(context)) {
@@ -295,25 +348,31 @@ internal class MediaStoreChannelHandler(context: Context) :
 			return
 		}
 
-		val whereArgs = mutableListOf<String>()
+		val wheres = mutableListOf<String>()
+		val whereArgs = arrayListOf<String>()
+		if (fileIds != null) {
+			val args = List(fileIds.size) { "?" }.joinToString(",")
+			wheres.add("${MediaStore.Images.ImageColumns._ID} IN (${args})")
+			whereArgs.addAll(fileIds.map { it.toString() })
+		}
 		if (timeRangeBeg != null) {
 			if (isTimeRangeBegInclusive == false) {
-				whereArgs.add(
+				wheres.add(
 					"${MediaStore.Images.ImageColumns.DATE_TAKEN} > ${timeRangeBeg.time}"
 				)
 			} else {
-				whereArgs.add(
+				wheres.add(
 					"${MediaStore.Images.ImageColumns.DATE_TAKEN} >= ${timeRangeBeg.time}"
 				)
 			}
 		}
 		if (timeRangeEnd != null) {
 			if (isTimeRangeEndInclusive == true) {
-				whereArgs.add(
+				wheres.add(
 					"${MediaStore.Images.ImageColumns.DATE_TAKEN} <= ${timeRangeEnd.time}"
 				)
 			} else {
-				whereArgs.add(
+				wheres.add(
 					"${MediaStore.Images.ImageColumns.DATE_TAKEN} < ${timeRangeEnd.time}"
 				)
 			}
@@ -329,24 +388,33 @@ internal class MediaStoreChannelHandler(context: Context) :
 					MediaStore.Images.ImageColumns.DATE_TAKEN,
 					MediaStore.Images.ImageColumns.DISPLAY_NAME,
 					MediaStore.Images.ImageColumns.RELATIVE_PATH,
+					MediaStore.Images.ImageColumns.WIDTH,
+					MediaStore.Images.ImageColumns.HEIGHT,
 				),
 				Bundle().apply {
-					if (whereArgs.isNotEmpty()) {
+					if (wheres.isNotEmpty()) {
 						putString(
 							ContentResolver.QUERY_ARG_SQL_SELECTION,
-							whereArgs.joinToString(" AND "),
+							wheres.joinToString(" AND "),
 						)
 					}
-					putStringArray(
-						ContentResolver.QUERY_ARG_SORT_COLUMNS,
-						arrayOf(
-							MediaStore.Images.ImageColumns.DATE_TAKEN
-						),
+					if (whereArgs.isNotEmpty()) {
+						putStringArrayList(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs
+						)
+					}
+					val order = if (isAscending) "ASC" else "DESC"
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+						"${MediaStore.Images.ImageColumns.DATE_TAKEN} $order, ${MediaStore.Images.ImageColumns._ID} $order"
 					)
-					putInt(
-						ContentResolver.QUERY_ARG_SORT_DIRECTION,
-						ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
-					)
+					if (offset != null) {
+						putInt(ContentResolver.QUERY_ARG_OFFSET, offset)
+					}
+					if (limit != null) {
+						putInt(ContentResolver.QUERY_ARG_LIMIT, limit)
+					}
 				},
 				null,
 			)?.use {
@@ -370,29 +438,48 @@ internal class MediaStoreChannelHandler(context: Context) :
 					val relativePathColumn = it.getColumnIndexOrThrow(
 						MediaStore.Images.ImageColumns.RELATIVE_PATH
 					)
+					val widthColumn = it.getColumnIndexOrThrow(
+						MediaStore.Images.ImageColumns.WIDTH
+					)
+					val heightColumn = it.getColumnIndexOrThrow(
+						MediaStore.Images.ImageColumns.HEIGHT
+					)
 					do {
-						val id = it.getLong(idColumn)
-						val contentUri = ContentUris.withAppendedId(
-							MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
-						)
-						val displayName = it.getString(displayNameColumn)
-						val relativePath = "${
-							it.getString(relativePathColumn).trimEnd('/')
-						}/$displayName"
-						products.add(buildMap {
-							put("id", id)
-							put("uri", contentUri.toString())
-							put("displayName", it.getString(displayNameColumn))
-							put("path", relativePath)
-							put(
-								"dateModified",
-								it.getLong(dateModifiedColumn) * 1000
+						try {
+							val id = it.getLong(idColumn)
+							val contentUri = ContentUris.withAppendedId(
+								MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
 							)
-							put("mimeType", it.getString(mimeTypeColumn))
-							it.getLongOrNull(dateTakenColumn)?.let { v ->
-								put("dateTaken", v)
-							}
-						})
+							val displayName = it.getString(displayNameColumn)
+							val relativePath = "${
+								it.getString(relativePathColumn).trimEnd('/')
+							}/$displayName"
+							products.add(buildMap {
+								put("id", id)
+								put("uri", contentUri.toString())
+								put(
+									"displayName",
+									it.getString(displayNameColumn)
+								)
+								put("path", relativePath)
+								put(
+									"dateModified",
+									it.getLong(dateModifiedColumn) * 1000
+								)
+								put("mimeType", it.getString(mimeTypeColumn))
+								it.getLongOrNull(dateTakenColumn)?.let { v ->
+									put("dateTaken", v)
+								}
+								if (!it.isNull(widthColumn) &&
+									!it.isNull(heightColumn)
+								) {
+									put("width", it.getInt(widthColumn))
+									put("height", it.getInt(heightColumn))
+								}
+							})
+						} catch (e: Throwable) {
+							logE(TAG, "Failed to read row", e)
+						}
 					} while (it.moveToNext())
 				}
 				result.success(products)
@@ -429,6 +516,19 @@ internal class MediaStoreChannelHandler(context: Context) :
 			}
 			result.success(failed)
 		}
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun trashFiles(uris: List<String>, result: MethodChannel.Result) {
+		val urisTyped = uris.map(Uri::parse)
+		val pi = MediaStore.createTrashRequest(
+			context.contentResolver, urisTyped, true
+		)
+		activity!!.startIntentSenderForResult(
+			pi.intentSender, K.MEDIA_STORE_TRASH_REQUEST_CODE, null, 0, 0,
+			0
+		)
+		result.success(null)
 	}
 
 	@RequiresApi(Build.VERSION_CODES.R)
@@ -481,8 +581,14 @@ internal class MediaStoreChannelHandler(context: Context) :
 							if (thisDateCount > 0) {
 								dateCount[thisDateBeg] = thisDateCount
 							}
-							thisDateBeg = time / 86400000 * 86400000
-							thisDateEnd = thisDateBeg + 86400000
+							val thisDate = ZonedDateTime.ofInstant(
+								Instant.ofEpochMilli(time),
+								ZoneId.systemDefault()
+							)
+							thisDateBeg = thisDate.truncatedTo(ChronoUnit.DAYS)
+								.toInstant().toEpochMilli()
+							thisDateEnd = thisDate.truncatedTo(ChronoUnit.DAYS)
+								.plusDays(1).toInstant().toEpochMilli()
 							thisDateCount = 1
 						}
 					} while (it.moveToNext())
@@ -492,6 +598,64 @@ internal class MediaStoreChannelHandler(context: Context) :
 				}
 			}
 			result.success(dateCount)
+		}
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun getFileIdWithTimestamps(result: MethodChannel.Result) {
+		if (!PermissionUtil.hasReadMedia(context)) {
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
+			result.error("permissionError", "Permission not granted", null)
+			return
+		}
+
+		val results = mutableListOf<Map<String, Any>>()
+		doWork {
+			context.contentResolver.query(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				arrayOf(
+					MediaStore.Images.ImageColumns._ID,
+					MediaStore.Images.ImageColumns.DATE_TAKEN,
+				),
+				Bundle().apply {
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SELECTION,
+						"${MediaStore.Images.ImageColumns.DATE_TAKEN} IS NOT NULL",
+					)
+					putStringArray(
+						ContentResolver.QUERY_ARG_SORT_COLUMNS,
+						arrayOf(
+							MediaStore.Images.ImageColumns.DATE_TAKEN,
+							MediaStore.Images.ImageColumns._ID
+						),
+					)
+					putInt(
+						ContentResolver.QUERY_ARG_SORT_DIRECTION,
+						ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
+					)
+				},
+				null,
+			)?.use {
+				if (it.moveToFirst()) {
+					val idColumn = it.getColumnIndexOrThrow(
+						MediaStore.Images.ImageColumns._ID
+					)
+					val dateColumn = it.getColumnIndexOrThrow(
+						MediaStore.Images.ImageColumns.DATE_TAKEN
+					)
+					do {
+						val id = it.getLong(idColumn)
+						val timestamp = it.getLong(dateColumn)
+						results.add(
+							mapOf(
+								"fileId" to id,
+								"timestamp" to timestamp,
+							)
+						)
+					} while (it.moveToNext())
+				}
+			}
+			result.success(results)
 		}
 	}
 

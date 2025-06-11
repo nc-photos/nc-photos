@@ -56,6 +56,13 @@ class CountFileGroupsByDateResult {
   final Map<Date, int> dateCount;
 }
 
+class QueryFileIdResult {
+  const QueryFileIdResult(this.fileId, {this.timestamp});
+
+  final int fileId;
+  final int? timestamp;
+}
+
 extension SqliteDbFileExtension on SqliteDb {
   /// Return files located inside [dir]
   Future<List<CompleteFile>> queryFilesByDirKey({
@@ -170,7 +177,7 @@ extension SqliteDbFileExtension on SqliteDb {
     return _mapCompleteFile(query);
   }
 
-  Future<List<int>> queryFileIds({
+  Future<List<QueryFileIdResult>> queryFileIds({
     required ByAccount account,
     List<String>? includeRelativeRoots,
     List<String>? includeRelativeDirs,
@@ -179,6 +186,7 @@ extension SqliteDbFileExtension on SqliteDb {
     bool? isArchived,
     List<String>? mimes,
     int? limit,
+    bool? requestTimestamp,
   }) async {
     _log.info(
       "[queryFileIds] "
@@ -209,7 +217,13 @@ extension SqliteDbFileExtension on SqliteDb {
 
     final query = _queryFiles().let((q) {
       q
-        ..setQueryMode(FilesQueryMode.expression, expressions: [files.fileId])
+        ..setQueryMode(
+          FilesQueryMode.expression,
+          expressions: [
+            files.fileId,
+            if (requestTimestamp == true) accountFiles.bestDateTime,
+          ],
+        )
         ..setAccount(account);
       if (includeRelativeRoots != null) {
         if (includeRelativeRoots.none((p) => p.isEmpty)) {
@@ -254,7 +268,17 @@ extension SqliteDbFileExtension on SqliteDb {
     if (limit != null) {
       query.limit(limit);
     }
-    return query.map((r) => r.read(files.fileId)!).get();
+    return query
+        .map(
+          (r) => QueryFileIdResult(
+            r.read(files.fileId)!,
+            timestamp:
+                requestTimestamp == true
+                    ? r.read(accountFiles.bestDateTime)!.millisecondsSinceEpoch
+                    : null,
+          ),
+        )
+        .get();
   }
 
   Future<void> updateFileByFileId({

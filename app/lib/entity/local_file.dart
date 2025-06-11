@@ -1,10 +1,11 @@
 import 'package:equatable/equatable.dart';
-import 'package:nc_photos/entity/any_file.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:np_common/size.dart';
 import 'package:to_string/to_string.dart';
 
 part 'local_file.g.dart';
 
-abstract class LocalFile with EquatableMixin implements AnyFile {
+abstract class LocalFile with EquatableMixin {
   const LocalFile();
 
   /// Compare the identity of two local files
@@ -23,10 +24,15 @@ abstract class LocalFile with EquatableMixin implements AnyFile {
   DateTime get lastModified;
   String? get mime;
   DateTime? get dateTaken;
+  SizeInt? get size;
 }
 
 extension LocalFileExtension on LocalFile {
   DateTime get bestDateTime => dateTaken ?? lastModified;
+
+  AnyFile toAnyFile() {
+    return AnyFile(provider: AnyFileLocalProvider(file: this));
+  }
 }
 
 /// A local file represented by its content uri on Android
@@ -40,6 +46,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
     required this.lastModified,
     this.mime,
     this.dateTaken,
+    this.size,
   });
 
   @override
@@ -58,18 +65,6 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   String toString() => _$toString();
 
   @override
-  String get afId => id;
-
-  @override
-  String get afName => filename;
-
-  @override
-  String? get afMime => mime;
-
-  @override
-  DateTime get afDateTime => dateTaken ?? lastModified;
-
-  @override
   String get logTag => path;
 
   @override
@@ -84,6 +79,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
     lastModified,
     mime,
     dateTaken,
+    size,
   ];
 
   @override
@@ -99,6 +95,8 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   final String? mime;
   @override
   final DateTime? dateTaken;
+  @override
+  final SizeInt? size;
 }
 
 typedef LocalFileOnFailureListener =

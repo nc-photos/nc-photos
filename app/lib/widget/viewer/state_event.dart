@@ -4,9 +4,10 @@ part of 'viewer.dart';
 @toString
 class _State {
   const _State({
-    required this.pageFileIdMap,
-    required this.fileIdFileMap,
-    required this.mergedFileIdFileMap,
+    required this.pageAfIdMap,
+    required this.remoteFiles,
+    required this.localFiles,
+    required this.mergedAfIdFileMap,
     required this.fileStates,
     required this.index,
     required this.currentFile,
@@ -25,7 +26,7 @@ class _State {
     required this.appBarButtons,
     required this.bottomAppBarButtons,
     required this.pendingRemoveFile,
-    required this.removedFileIds,
+    required this.removedAfIds,
     required this.imageEditorRequest,
     required this.imageEnhancerRequest,
     required this.shareRequest,
@@ -38,13 +39,14 @@ class _State {
 
   factory _State.init({
     required int initialIndex,
-    required FileDescriptor initialFile,
+    required AnyFile initialFile,
     required List<ViewerAppBarButtonType> appBarButtons,
     required List<ViewerAppBarButtonType> bottomAppBarButtons,
   }) => _State(
-    pageFileIdMap: const {},
-    fileIdFileMap: const {},
-    mergedFileIdFileMap: const {},
+    pageAfIdMap: const {},
+    remoteFiles: const [],
+    localFiles: const [],
+    mergedAfIdFileMap: const {},
     fileStates: const {},
     index: initialIndex,
     currentFile: initialFile,
@@ -59,7 +61,7 @@ class _State {
     appBarButtons: appBarButtons,
     bottomAppBarButtons: bottomAppBarButtons,
     pendingRemoveFile: Unique(null),
-    removedFileIds: const [],
+    removedAfIds: const [],
     imageEditorRequest: Unique(null),
     imageEnhancerRequest: Unique(null),
     shareRequest: Unique(null),
@@ -74,16 +76,17 @@ class _State {
 
   bool get canOpenDetailPane => !isZoomed;
 
-  final Map<int, int> pageFileIdMap;
-  final Map<int, FileDescriptor> fileIdFileMap;
-  final Map<int, FileDescriptor> mergedFileIdFileMap;
-  final Map<int, _PageState> fileStates;
+  final Map<int, String> pageAfIdMap;
+  final List<FileDescriptor> remoteFiles;
+  final List<LocalFile> localFiles;
+  final Map<String, AnyFile> mergedAfIdFileMap;
+  final Map<String, _PageState> fileStates;
   final int index;
-  final FileDescriptor? currentFile;
+  final AnyFile? currentFile;
   final _PageState? currentFileState;
   final Collection? collection;
   final CollectionItemsController? collectionItemsController;
-  final Map<int, CollectionFileItem>? collectionItems;
+  final Map<String, CollectionFileItem>? collectionItems;
   final bool isShowDetailPane;
   final bool isClosingDetailPane;
   final bool isDetailPaneActive;
@@ -96,8 +99,8 @@ class _State {
   final List<ViewerAppBarButtonType> appBarButtons;
   final List<ViewerAppBarButtonType> bottomAppBarButtons;
 
-  final Unique<FileDescriptor?> pendingRemoveFile;
-  final List<int> removedFileIds;
+  final Unique<AnyFile?> pendingRemoveFile;
+  final List<String> removedAfIds;
 
   final Unique<ImageEditorArguments?> imageEditorRequest;
   final Unique<ImageEnhancerArguments?> imageEnhancerRequest;
@@ -157,13 +160,13 @@ class _SetIndex implements _Event {
 
 @toString
 class _JumpToLastSlideshow implements _Event {
-  const _JumpToLastSlideshow({required this.index, required this.fileId});
+  const _JumpToLastSlideshow({required this.index, required this.afId});
 
   @override
   String toString() => _$toString();
 
   final int index;
-  final int fileId;
+  final String afId;
 }
 
 @toString
@@ -205,7 +208,7 @@ class _NewPageContent implements _Event {
   @override
   String toString() => _$toString();
 
-  final Map<int, FileDescriptor> value;
+  final Map<int, AnyFile> value;
 }
 
 @toString
@@ -254,112 +257,112 @@ class _SetBottomAppBarButtons implements _Event {
 
 @toString
 class _PauseLivePhoto implements _Event {
-  const _PauseLivePhoto(this.fileId);
+  const _PauseLivePhoto(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _PlayLivePhoto implements _Event {
-  const _PlayLivePhoto(this.fileId);
+  const _PlayLivePhoto(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Unfavorite implements _Event {
-  const _Unfavorite(this.fileId);
+  const _Unfavorite(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Favorite implements _Event {
-  const _Favorite(this.fileId);
+  const _Favorite(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Unarchive implements _Event {
-  const _Unarchive(this.fileId);
+  const _Unarchive(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Archive implements _Event {
-  const _Archive(this.fileId);
+  const _Archive(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Share implements _Event {
-  const _Share(this.fileId);
+  const _Share(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Edit implements _Event {
-  const _Edit(this.fileId);
+  const _Edit(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Enhance implements _Event {
-  const _Enhance(this.fileId);
+  const _Enhance(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Download implements _Event {
-  const _Download(this.fileId);
+  const _Download(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
 class _Delete implements _Event {
-  const _Delete(this.fileId);
+  const _Delete(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
@@ -374,12 +377,12 @@ class _RemoveFromCollection implements _Event {
 
 @toString
 class _StartSlideshow implements _Event {
-  const _StartSlideshow(this.fileId);
+  const _StartSlideshow(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
@@ -395,12 +398,12 @@ class _StartSlideshowResult implements _Event {
 
 @toString
 class _SetAs implements _Event {
-  const _SetAs(this.fileId);
+  const _SetAs(this.afId);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
 }
 
 @toString
@@ -455,12 +458,12 @@ class _SetDetailPaneActive implements _Event {
 
 @toString
 class _SetFileContentHeight implements _Event {
-  const _SetFileContentHeight(this.fileId, this.value);
+  const _SetFileContentHeight(this.afId, this.value);
 
   @override
   String toString() => _$toString();
 
-  final int fileId;
+  final String afId;
   final double value;
 }
 
@@ -481,7 +484,7 @@ class _RemoveFile implements _Event {
   @override
   String toString() => _$toString();
 
-  final FileDescriptor file;
+  final AnyFile file;
 }
 
 @toString

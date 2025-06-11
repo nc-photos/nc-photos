@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/json_util.dart' as json_util;
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
@@ -73,7 +73,7 @@ class TagRepo {
   Future<List<Tag>> list(Account account) => dataSrc.list(account);
 
   /// See [TagDataSource.listByFile]
-  Future<List<Tag>> listByFile(Account account, File file) =>
+  Future<List<Tag>> listByFile(Account account, FileDescriptor file) =>
       dataSrc.listByFile(account, file);
 
   final TagDataSource dataSrc;
@@ -84,5 +84,5 @@ abstract class TagDataSource {
   Future<List<Tag>> list(Account account);
 
   /// List all tags associated with [file]
-  Future<List<Tag>> listByFile(Account account, File file);
+  Future<List<Tag>> listByFile(Account account, FileDescriptor file);
 }

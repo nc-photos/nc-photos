@@ -1,9 +1,9 @@
 part of 'viewer.dart';
 
 class _DetailPaneContainer extends StatelessWidget {
-  const _DetailPaneContainer({required this.fileId});
+  const _DetailPaneContainer({required this.afId});
 
-  final int fileId;
+  final String afId;
 
   @override
   Widget build(BuildContext context) {
@@ -12,7 +12,7 @@ class _DetailPaneContainer extends StatelessWidget {
           (previous, current) =>
               previous.isShowDetailPane != current.isShowDetailPane ||
               previous.isZoomed != current.isZoomed ||
-              previous.fileStates[fileId] != current.fileStates[fileId],
+              previous.fileStates[afId] != current.fileStates[afId],
       builder:
           (context, state) => IgnorePointer(
             ignoring: !state.isShowDetailPane,
@@ -43,7 +43,7 @@ class _DetailPaneContainer extends StatelessWidget {
                           ),
                           margin: EdgeInsets.only(
                             top: _calcDetailPaneOffset(
-                              state.fileStates[fileId],
+                              state.fileStates[afId],
                               MediaQuery.of(context).size.height,
                             ),
                           ),
@@ -52,7 +52,7 @@ class _DetailPaneContainer extends StatelessWidget {
                           // photos will slow down severely
                           child: Visibility(
                             visible: state.isShowDetailPane,
-                            child: _DetailPane(fileId: fileId),
+                            child: _DetailPane(afId: afId),
                           ),
                         ),
                   ),
@@ -65,27 +65,25 @@ class _DetailPaneContainer extends StatelessWidget {
 }
 
 class _DetailPane extends StatelessWidget {
-  const _DetailPane({required this.fileId});
+  const _DetailPane({required this.afId});
 
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
       buildWhen:
           (previous, current) =>
-              previous.mergedFileIdFileMap[fileId] !=
-                  current.mergedFileIdFileMap[fileId] ||
+              previous.mergedAfIdFileMap[afId] !=
+                  current.mergedAfIdFileMap[afId] ||
               previous.collection != current.collection ||
-              previous.collectionItems?[fileId] !=
-                  current.collectionItems?[fileId],
+              previous.collectionItems?[afId] != current.collectionItems?[afId],
       builder: (context, state) {
-        final file = state.mergedFileIdFileMap[fileId];
+        final file = state.mergedAfIdFileMap[afId];
         final collection = state.collection;
-        final collectionItem = state.collectionItems?[fileId];
+        final collectionItem = state.collectionItems?[afId];
         return file == null
             ? const SizedBox.shrink()
-            : ViewerDetailPane(
-              account: context.bloc.account,
-              fd: file,
+            : ViewerDetailPane2(
+              file: file,
               fromCollection:
                   collection != null && collectionItem != null
                       ? ViewerSingleCollectionData(collection, collectionItem)
@@ -94,21 +92,21 @@ class _DetailPane extends StatelessWidget {
                 context.addEvent(_RemoveFromCollection(collectionItem!));
               },
               onArchivePressed: (_) {
-                context.addEvent(_Archive(fileId));
+                context.addEvent(_Archive(afId));
               },
               onUnarchivePressed: (_) {
-                context.addEvent(_Unarchive(fileId));
+                context.addEvent(_Unarchive(afId));
               },
               onSlideshowPressed: () {
-                context.addEvent(_StartSlideshow(fileId));
+                context.addEvent(_StartSlideshow(afId));
               },
               onDeletePressed: (_) {
-                context.addEvent(_Delete(fileId));
+                context.addEvent(_Delete(afId));
               },
             );
       },
     );
   }
 
-  final int fileId;
+  final String afId;
 }

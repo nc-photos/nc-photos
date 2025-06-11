@@ -39,6 +39,10 @@ abstract class $_StateCopyWithWorker {
     double? minimapYRatio,
     Date? scrollDate,
     bool? hasMissingVideoPreview,
+    bool? selectedCanArchive,
+    bool? selectedCanDownload,
+    bool? selectedCanDelete,
+    bool? selectedCanAddToCollection,
     ExceptionEvent? error,
   });
 }
@@ -73,6 +77,10 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic minimapYRatio,
     dynamic scrollDate = copyWithNull,
     dynamic hasMissingVideoPreview,
+    dynamic selectedCanArchive,
+    dynamic selectedCanDownload,
+    dynamic selectedCanDelete,
+    dynamic selectedCanAddToCollection,
     dynamic error = copyWithNull,
   }) {
     return _State(
@@ -119,6 +127,14 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           scrollDate == copyWithNull ? that.scrollDate : scrollDate as Date?,
       hasMissingVideoPreview:
           hasMissingVideoPreview as bool? ?? that.hasMissingVideoPreview,
+      selectedCanArchive:
+          selectedCanArchive as bool? ?? that.selectedCanArchive,
+      selectedCanDownload:
+          selectedCanDownload as bool? ?? that.selectedCanDownload,
+      selectedCanDelete: selectedCanDelete as bool? ?? that.selectedCanDelete,
+      selectedCanAddToCollection:
+          selectedCanAddToCollection as bool? ??
+          that.selectedCanAddToCollection,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }
@@ -198,7 +214,7 @@ extension _$_ContentListBodyNpLog on _ContentListBody {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {files: [length: ${files.length}], isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, filesSummary: $filesSummary, localFiles: [length: ${localFiles.length}], localFilesSummary: $localFilesSummary, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, error: $error}";
+    return "_State {files: [length: ${files.length}], isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, filesSummary: $filesSummary, localFiles: [length: ${localFiles.length}], localFilesSummary: $localFilesSummary, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, error: $error}";
   }
 }
 

@@ -26,7 +26,7 @@ class LocalImageViewer extends StatefulWidget {
   });
 
   @override
-  createState() => _LocalImageViewerState();
+  State<StatefulWidget> createState() => _LocalImageViewerState();
 
   final LocalFile file;
   final bool canZoom;
@@ -39,7 +39,7 @@ class LocalImageViewer extends StatefulWidget {
 @npLog
 class _LocalImageViewerState extends State<LocalImageViewer> {
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     final ImageProvider provider;
     if (widget.file is LocalUriFile) {
       provider = ContentUriImage((widget.file as LocalUriFile).uri);
@@ -52,15 +52,18 @@ class _LocalImageViewerState extends State<LocalImageViewer> {
       onHeightChanged: widget.onHeightChanged,
       onZoomStarted: widget.onZoomStarted,
       onZoomEnded: widget.onZoomEnded,
-      child: Image(
-        image: provider,
-        fit: BoxFit.contain,
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _onItemLoaded();
-          });
-          return child;
-        },
+      child: Hero(
+        tag: flutter_util.HeroTag.fromLocalFile(widget.file),
+        child: Image(
+          image: provider,
+          fit: BoxFit.contain,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              _onItemLoaded();
+            });
+            return child;
+          },
+        ),
       ),
     );
   }
@@ -137,7 +140,7 @@ class _RemoteImageViewerState extends State<RemoteImageViewer> {
           Opacity(
             opacity: !_isHeroDone || !_isLoaded ? 1 : 0,
             child: Hero(
-              tag: flutter_util.getImageHeroTag(widget.file),
+              tag: flutter_util.HeroTag.fromFile(widget.file),
               flightShuttleBuilder: (
                 flightContext,
                 animation,
