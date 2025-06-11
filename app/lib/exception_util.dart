@@ -78,3 +78,11 @@ String toUserString(Object? exception) {
   }
   return (exception?.toString() ?? "Unknown error", null);
 }
+
+(Object, StackTrace) firstErrorOf2(ParallelWaitError e) {
+  if (e.errors.$1 != null) {
+    return (e.errors.$1!, e.errors.$1!.stackTrace);
+  } else {
+    return (e.errors.$2!, e.errors.$2!.stackTrace);
+  }
+}
