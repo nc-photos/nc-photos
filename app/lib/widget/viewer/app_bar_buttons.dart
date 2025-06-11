@@ -33,7 +33,7 @@ class _AppBarLivePhotoButton extends StatelessWidget {
             return IconButton(
               icon: const Icon(Icons.motion_photos_pause_outlined),
               onPressed: () {
-                context.state.currentFile?.fdId
+                context.state.currentFile?.id
                     .let((id) => context.addEvent(_PauseLivePhoto(id)));
               },
             );
@@ -41,7 +41,7 @@ class _AppBarLivePhotoButton extends StatelessWidget {
             return IconButton(
               icon: const PngIcon(icMotionPhotosPlay24dp),
               onPressed: () {
-                context.state.currentFile?.fdId
+                context.state.currentFile?.id
                     .let((id) => context.addEvent(_PlayLivePhoto(id)));
               },
             );
@@ -61,23 +61,24 @@ class _AppBarFavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.currentFile,
-      builder: (context, currentFile) => currentFile?.fdIsFavorite == true
-          ? IconButton(
-              icon: const Icon(Icons.star),
-              tooltip: L10n.global().unfavoriteTooltip,
-              onPressed: () {
-                context.state.currentFile?.fdId
-                    .let((id) => context.addEvent(_Unfavorite(id)));
-              },
-            )
-          : IconButton(
-              icon: const Icon(Icons.star_border),
-              tooltip: L10n.global().favoriteTooltip,
-              onPressed: () {
-                context.state.currentFile?.fdId
-                    .let((id) => context.addEvent(_Favorite(id)));
-              },
-            ),
+      builder: (context, currentFile) =>
+          (currentFile?.provider as FavoritableAnyFile?)?.isFavorite == true
+              ? IconButton(
+                  icon: const Icon(Icons.star),
+                  tooltip: L10n.global().unfavoriteTooltip,
+                  onPressed: () {
+                    context.state.currentFile?.id
+                        .let((id) => context.addEvent(_Unfavorite(id)));
+                  },
+                )
+              : IconButton(
+                  icon: const Icon(Icons.star_border),
+                  tooltip: L10n.global().favoriteTooltip,
+                  onPressed: () {
+                    context.state.currentFile?.id
+                        .let((id) => context.addEvent(_Favorite(id)));
+                  },
+                ),
     );
   }
 }
@@ -91,8 +92,7 @@ class _AppBarShareButton extends StatelessWidget {
       icon: const Icon(Icons.share_outlined),
       tooltip: L10n.global().shareTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
-            .let((id) => context.addEvent(_Share(id)));
+        context.state.currentFile?.id.let((id) => context.addEvent(_Share(id)));
       },
     );
   }
@@ -107,8 +107,7 @@ class _AppBarEditButton extends StatelessWidget {
       icon: const Icon(Icons.tune_outlined),
       tooltip: L10n.global().editTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
-            .let((id) => context.addEvent(_Edit(id)));
+        context.state.currentFile?.id.let((id) => context.addEvent(_Edit(id)));
       },
     );
   }
@@ -123,7 +122,7 @@ class _AppBarEnhanceButton extends StatelessWidget {
       icon: const Icon(Icons.auto_fix_high_outlined),
       tooltip: L10n.global().enhanceTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
+        context.state.currentFile?.id
             .let((id) => context.addEvent(_Enhance(id)));
       },
     );
@@ -139,7 +138,7 @@ class _AppBarDownloadButton extends StatelessWidget {
       icon: const Icon(Icons.download_outlined),
       tooltip: L10n.global().downloadTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
+        context.state.currentFile?.id
             .let((id) => context.addEvent(_Download(id)));
       },
     );
@@ -155,7 +154,7 @@ class _AppBarDeleteButton extends StatelessWidget {
       icon: const Icon(Icons.delete_outlined),
       tooltip: L10n.global().deleteTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
+        context.state.currentFile?.id
             .let((id) => context.addEvent(_Delete(id)));
       },
     );
@@ -171,7 +170,7 @@ class _AppBarUnarchiveButton extends StatelessWidget {
       icon: const Icon(Icons.unarchive_outlined),
       tooltip: L10n.global().unarchiveTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
+        context.state.currentFile?.id
             .let((id) => context.addEvent(_Unarchive(id)));
       },
     );
@@ -187,7 +186,7 @@ class _AppBarArchiveButton extends StatelessWidget {
       icon: const Icon(Icons.archive_outlined),
       tooltip: L10n.global().archiveTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
+        context.state.currentFile?.id
             .let((id) => context.addEvent(_Archive(id)));
       },
     );
@@ -203,7 +202,7 @@ class _AppBarSlideshowButton extends StatelessWidget {
       icon: const Icon(Icons.slideshow_outlined),
       tooltip: L10n.global().slideshowTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
+        context.state.currentFile?.id
             .let((id) => context.addEvent(_StartSlideshow(id)));
       },
     );
@@ -219,8 +218,7 @@ class _AppBarSetAsButton extends StatelessWidget {
       icon: const Icon(Icons.launch),
       tooltip: L10n.global().setAsTooltip,
       onPressed: () {
-        context.state.currentFile?.fdId
-            .let((id) => context.addEvent(_SetAs(id)));
+        context.state.currentFile?.id.let((id) => context.addEvent(_SetAs(id)));
       },
     );
   }

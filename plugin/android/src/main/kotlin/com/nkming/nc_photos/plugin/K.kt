@@ -6,6 +6,7 @@ internal interface K {
 		const val DOWNLOAD_NOTIFICATION_ID_MAX = 2000
 
 		const val MEDIA_STORE_DELETE_REQUEST_CODE = 11012
+		const val MEDIA_STORE_TRASH_REQUEST_CODE = 11013
 
 		const val LIB_ID = "com.nkming.nc_photos.plugin"
 

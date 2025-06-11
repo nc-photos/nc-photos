@@ -18,7 +18,7 @@ abstract class ImageProcessorImageCommand(
 ) : ImageProcessorCommand {
 	class Params(
 		val startId: Int,
-		val fileUrl: String,
+		val fileUri: Uri,
 		val headers: Map<String, String>?,
 		val filename: String,
 		val maxWidth: Int,
@@ -31,8 +31,8 @@ abstract class ImageProcessorImageCommand(
 
 	val startId: Int
 		get() = params.startId
-	val fileUrl: String
-		get() = params.fileUrl
+	val fileUri: Uri
+		get() = params.fileUri
 	val headers: Map<String, String>?
 		get() = params.headers
 	val filename: String

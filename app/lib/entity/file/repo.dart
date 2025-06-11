@@ -8,6 +8,16 @@ import 'package:np_log/np_log.dart';
 
 part 'repo.g.dart';
 
+class FileIdWithTimestamp {
+  const FileIdWithTimestamp({
+    required this.fileId,
+    required this.timestamp,
+  });
+
+  final int fileId;
+  final int timestamp;
+}
+
 abstract class FileRepo2 {
   /// Query all files belonging to [account]
   ///
@@ -22,9 +32,15 @@ abstract class FileRepo2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
+    int? offset,
+    int? limit,
   });
 
-  Future<List<int>> getFileIds(
+  /// Query all file ids belonging to [account] with the corresponding timestamp
+  ///
+  /// Returned files are sorted by time in descending order
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
@@ -54,17 +70,28 @@ class BasicFileRepo implements FileRepo2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
+    int? offset,
+    int? limit,
   }) =>
-      dataSrc.getFileDescriptors(account, shareDirPath,
-          timeRange: timeRange, isArchived: isArchived);
+      dataSrc.getFileDescriptors(
+        account,
+        shareDirPath,
+        timeRange: timeRange,
+        isArchived: isArchived,
+        isAscending: isAscending,
+        offset: offset,
+        limit: limit,
+      );
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) =>
-      dataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
+      dataSrc.getFileIdWithTimestamps(account, shareDirPath,
+          isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -104,17 +131,28 @@ class CachedFileRepo implements FileRepo2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
+    int? offset,
+    int? limit,
   }) =>
-      cacheDataSrc.getFileDescriptors(account, shareDirPath,
-          timeRange: timeRange, isArchived: isArchived);
+      cacheDataSrc.getFileDescriptors(
+        account,
+        shareDirPath,
+        timeRange: timeRange,
+        isArchived: isArchived,
+        isAscending: isAscending,
+        offset: offset,
+        limit: limit,
+      );
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) =>
-      cacheDataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
+      cacheDataSrc.getFileIdWithTimestamps(account, shareDirPath,
+          isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -173,9 +211,12 @@ abstract class FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
+    int? offset,
+    int? limit,
   });
 
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,

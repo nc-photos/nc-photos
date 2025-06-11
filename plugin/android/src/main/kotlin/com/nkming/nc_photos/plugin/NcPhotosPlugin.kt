@@ -107,6 +107,12 @@ class NcPhotosPlugin : FlutterPlugin, ActivityAware,
 					)
 				}
 
+				K.MEDIA_STORE_TRASH_REQUEST_CODE -> {
+					mediaStoreChannelHandler.onActivityResult(
+						requestCode, resultCode, data
+					)
+				}
+
 				else -> false
 			}
 		} catch (e: Throwable) {
