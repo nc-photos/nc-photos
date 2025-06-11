@@ -43,12 +43,16 @@ class EnhancedFileServerPersister : EnhancedFilePersister {
 	}
 
 	override fun persist(cmd: ImageProcessorImageCommand, file: File): Uri {
-		val ext = cmd.fileUrl.substringAfterLast('.', "")
+		if (cmd.fileUri.scheme?.startsWith("http") != true) {
+			throw UnsupportedOperationException()
+		}
+		val fileUrl = cmd.fileUri.toString().trimEnd('/')
+		val ext = fileUrl.substringAfterLast('.', "")
 		val url = if (ext.contains('/')) {
 			// no ext
-			"${cmd.fileUrl}_${getSuffix(cmd)}.jpg"
+			"${fileUrl}_${getSuffix(cmd)}.jpg"
 		} else {
-			"${cmd.fileUrl.substringBeforeLast('.', "")}_${getSuffix(cmd)}.jpg"
+			"${fileUrl.substringBeforeLast('.', "")}_${getSuffix(cmd)}.jpg"
 		}
 		logI(TAG, "[persist] Persist file to server: $url")
 		(URL(url).openConnection() as HttpURLConnection).apply {
@@ -91,6 +95,8 @@ class EnhancedFileServerPersisterWithFallback(context: Context) :
 	override fun persist(cmd: ImageProcessorImageCommand, file: File): Uri {
 		try {
 			return server.persist(cmd, file)
+		} catch (e: UnsupportedOperationException) {
+			logI(TAG, "[persist] Switch to fallback for local files")
 		} catch (e: Throwable) {
 			logW(
 				TAG,

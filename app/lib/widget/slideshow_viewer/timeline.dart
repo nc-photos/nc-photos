@@ -88,12 +88,9 @@ class _TimelineItem extends StatelessWidget {
               ? Theme.of(context).colorScheme.secondaryContainer
               : Colors.transparent,
           child: file != null
-              ? PhotoListImage(
-                  account: context.bloc.account,
-                  previewUrl: NetworkRectThumbnail.imageUrlForFile(
-                      context.bloc.account, file!),
-                  mime: file!.fdMime,
-                )
+              ? AnyFilePresenterFactory.photoListImage(file!,
+                      account: context.bloc.account)
+                  .buildWidget()
               : AspectRatio(
                   aspectRatio: 1,
                   child: Container(
@@ -123,6 +120,6 @@ class _TimelineItem extends StatelessWidget {
   }
 
   final int index;
-  final FileDescriptor? file;
+  final AnyFile? file;
   final bool isSelected;
 }

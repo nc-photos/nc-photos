@@ -461,7 +461,7 @@ abstract class NpDb {
     List<String>? mimes,
   });
 
-  Future<List<int>> getFileIds({
+  Future<List<({int fileId, int timestamp})>> getFileIdWithTimestamps({
     required DbAccount account,
     List<String>? includeRelativeRoots,
     List<String>? includeRelativeDirs,

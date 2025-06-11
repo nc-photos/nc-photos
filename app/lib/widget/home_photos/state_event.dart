@@ -29,6 +29,10 @@ class _State {
     required this.minimapYRatio,
     this.scrollDate,
     required this.hasMissingVideoPreview,
+    required this.selectedCanArchive,
+    required this.selectedCanDownload,
+    required this.selectedCanDelete,
+    required this.selectedCanAddToCollection,
     this.error,
   });
 
@@ -53,6 +57,10 @@ class _State {
         localFilesSummary: const LocalFilesSummary(items: {}),
         minimapYRatio: 1,
         hasMissingVideoPreview: false,
+        selectedCanArchive: false,
+        selectedCanDownload: false,
+        selectedCanDelete: false,
+        selectedCanAddToCollection: false,
       );
 
   @override
@@ -88,6 +96,11 @@ class _State {
   final Date? scrollDate;
 
   final bool hasMissingVideoPreview;
+
+  final bool selectedCanArchive;
+  final bool selectedCanDownload;
+  final bool selectedCanDelete;
+  final bool selectedCanAddToCollection;
 
   final ExceptionEvent? error;
 }

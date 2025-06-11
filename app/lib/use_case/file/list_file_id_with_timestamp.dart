@@ -1,17 +1,17 @@
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/file/repo.dart';
 
-class ListFileId {
-  const ListFileId({
+class ListFileIdWithTimestamp {
+  const ListFileIdWithTimestamp({
     required this.fileRepo,
   });
 
-  Future<List<int>> call(
+  Future<List<FileIdWithTimestamp>> call(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) =>
-      fileRepo.getFileIds(
+      fileRepo.getFileIdWithTimestamps(
         account,
         shareDirPath,
         isArchived: isArchived,

@@ -1,6 +1,6 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
-import 'package:nc_photos/entity/any_file.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/type.dart';
 import 'package:np_string/np_string.dart';
@@ -22,7 +22,7 @@ int compareFileDescriptorDateTimeDescending(
 
 @genCopyWith
 @toString
-class FileDescriptor with EquatableMixin implements AnyFile {
+class FileDescriptor with EquatableMixin {
   const FileDescriptor({
     required this.fdPath,
     required this.fdId,
@@ -65,18 +65,6 @@ class FileDescriptor with EquatableMixin implements AnyFile {
         fdDateTime,
       ];
 
-  @override
-  String get afId => "$fdId";
-
-  @override
-  String get afName => filename;
-
-  @override
-  String? get afMime => fdMime;
-
-  @override
-  DateTime get afDateTime => fdDateTime;
-
   final String fdPath;
   final int fdId;
   final String? fdMime;
@@ -84,6 +72,8 @@ class FileDescriptor with EquatableMixin implements AnyFile {
   final bool fdIsFavorite;
   final DateTime fdDateTime;
 }
+
+typedef RemoteFile = FileDescriptor;
 
 extension FileDescriptorExtension on FileDescriptor {
   /// Return the path of this file with the DAV part stripped
@@ -155,6 +145,10 @@ extension FileDescriptorExtension on FileDescriptor {
     } else {
       return copyWith(fdPath: newPath);
     }
+  }
+
+  AnyFile toAnyFile() {
+    return AnyFile(provider: AnyFileNextcloudProvider(file: this));
   }
 }
 
