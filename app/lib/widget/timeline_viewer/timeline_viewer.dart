@@ -11,6 +11,7 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
+import 'package:nc_photos/exception_util.dart';
 import 'package:nc_photos/flutter_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/use_case/any_file/find_any_file.dart';
@@ -105,8 +106,18 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     _log.info("[getFiles] at: ${at.pageIndex}, count: $count");
     // we don't know how many files will come from remote vs local, so we need
     // to query them both. Luckily, count is likely to be small here :D
-    final (remote, local) =
-        await (_getRemoteFiles(at, count), _getLocalFiles(at, count)).wait;
+    final List<AnyFile> remote;
+    final List<AnyFile> local;
+    try {
+      (remote, local) =
+          await (_getRemoteFiles(at, count), _getLocalFiles(at, count)).wait;
+    } on ParallelWaitError catch (pe) {
+      _log.severe(
+        "[getFiles] Exceptions, 1: ${pe.errors.$1}, 2: ${pe.errors.$2}",
+      );
+      final (e, stackTrace) = firstErrorOf2(pe);
+      Error.throwWithStackTrace(e, stackTrace);
+    }
     if (remote.isEmpty && local.isEmpty) {
       return const ViewerContentProviderResult(files: []);
     }

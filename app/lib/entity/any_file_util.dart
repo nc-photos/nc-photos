@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/exception_util.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/try_or_null.dart';
 import 'package:np_log/np_log.dart';
@@ -55,10 +56,18 @@ Future<(T, U)> handleAnyFileIdByType<T, U>(
           })
           .nonNulls
           .toList();
-  return await (
-    Future.value(nextcloudHandler(nextcloudIds)),
-    Future.value(localHandler(localIds)),
-  ).wait;
+  try {
+    return await (
+      Future.value(nextcloudHandler(nextcloudIds)),
+      Future.value(localHandler(localIds)),
+    ).wait;
+  } on ParallelWaitError catch (pe) {
+    _$__NpLog.log.severe(
+      "[handleAnyFileIdByType] Exceptions, 1: ${pe.errors.$1}, 2: ${pe.errors.$2}",
+    );
+    final (e, stackTrace) = firstErrorOf2(pe);
+    Error.throwWithStackTrace(e, stackTrace);
+  }
 }
 
 @npLog
