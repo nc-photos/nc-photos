@@ -133,23 +133,35 @@ class FilesController {
       var hasChange = false;
       for (final r in account.roots) {
         final dirPath = file_util.unstripPath(account, r);
-        hasChange |= await SyncDir(_c)(
-          account,
-          dirPath,
-          onProgressUpdate: (value) {
-            final merged = progress.progress + progress.step * value.progress;
-            onProgressUpdate?.call(Progress(merged, value.text));
-          },
-        );
-        isShareDirIncluded |=
-            file_util.isOrUnderDirPath(shareDir.path, dirPath);
+        try {
+          hasChange |= await SyncDir(_c)(
+            account,
+            dirPath,
+            onProgressUpdate: (value) {
+              final merged = progress.progress + progress.step * value.progress;
+              onProgressUpdate?.call(Progress(merged, value.text));
+            },
+          );
+          isShareDirIncluded |=
+              file_util.isOrUnderDirPath(shareDir.path, dirPath);
+        } catch (e, stackTrace) {
+          _log.severe(
+              "[syncRemote] Failed while SyncDir: $dirPath", e, stackTrace);
+          _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
+        }
         progress.next();
       }
 
       if (!isShareDirIncluded) {
         _log.info("[syncRemote] Explicitly scanning share folder");
-        hasChange |=
-            await SyncDir(_c)(account, shareDir.path, isRecursive: false);
+        try {
+          hasChange |=
+              await SyncDir(_c)(account, shareDir.path, isRecursive: false);
+        } catch (e, stackTrace) {
+          _log.severe("[syncRemote] Failed while SyncDir: ${shareDir.path}", e,
+              stackTrace);
+          _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
+        }
       }
       if (hasChange) {
         // load the synced content to stream

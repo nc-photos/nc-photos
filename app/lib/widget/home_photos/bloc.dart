@@ -178,6 +178,11 @@ class _Bloc extends Bloc<_Event, _State>
           );
         },
       ),
+      forEach(
+        emit,
+        filesController.errorStream,
+        onData: (data) => state.copyWith(error: data),
+      ),
     ]);
   }
 
