@@ -5,12 +5,24 @@ class _ContentList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector<int>(
-      selector: (state) => state.zoom,
-      builder: (context, zoom) => _ContentListBody(
-        maxCrossAxisExtent: photo_list_util.getThumbSize(zoom).toDouble(),
-        isNeedVisibilityInfo: true,
-      ),
+    return _BlocBuilder(
+      buildWhen: (previous, current) =>
+          previous.zoom != current.zoom ||
+          previous.viewWidth != current.viewWidth,
+      builder: (context, state) {
+        if (state.viewWidth == null) {
+          return const SliverFillRemaining();
+        }
+        final measurement = _measureItem(
+          state.viewWidth!,
+          photo_list_util.getThumbSize(state.zoom).toDouble(),
+        );
+        return _ContentListBody(
+          itemPerRow: measurement.itemPerRow,
+          itemSize: measurement.itemSize,
+          isNeedVisibilityInfo: true,
+        );
+      },
     );
   }
 }
@@ -21,10 +33,12 @@ class _ScalingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) => previous.scale != current.scale,
+      buildWhen: (previous, current) =>
+          previous.scale != current.scale ||
+          previous.viewWidth != current.viewWidth,
       builder: (context, state) {
-        if (state.scale == null) {
-          return const SizedBox.shrink();
+        if (state.viewWidth == null || state.scale == null) {
+          return const SliverFillRemaining();
         }
         int nextZoom;
         if (state.scale! > 1) {
@@ -33,8 +47,13 @@ class _ScalingList extends StatelessWidget {
           nextZoom = state.zoom - 1;
         }
         nextZoom = nextZoom.clamp(-1, 2);
+        final measurement = _measureItem(
+          state.viewWidth!,
+          photo_list_util.getThumbSize(nextZoom).toDouble(),
+        );
         return _ContentListBody(
-          maxCrossAxisExtent: photo_list_util.getThumbSize(nextZoom).toDouble(),
+          itemPerRow: measurement.itemPerRow,
+          itemSize: measurement.itemSize,
           isNeedVisibilityInfo: false,
         );
       },
@@ -45,7 +64,8 @@ class _ScalingList extends StatelessWidget {
 @npLog
 class _ContentListBody extends StatelessWidget {
   const _ContentListBody({
-    required this.maxCrossAxisExtent,
+    required this.itemPerRow,
+    required this.itemSize,
     required this.isNeedVisibilityInfo,
   });
 
@@ -54,66 +74,80 @@ class _ContentListBody extends StatelessWidget {
     return _BlocBuilder(
       buildWhen: (previous, current) =>
           previous.transformedItems != current.transformedItems ||
-          previous.selectedItems != current.selectedItems,
-      builder: (context, state) => SelectableSectionList<_Item>(
-        sections: state.transformedItems
-            .map((e) => SelectableSection(
-                  header: e.first,
-                  items: e.sublist(1),
-                ))
-            .toList(),
-        selectedItems: state.selectedItems,
-        sectionHeaderBuilder: (context, section, item) =>
-            item.buildWidget(context),
-        itemBuilder: (context, section, index, item) {
-          final w = item.buildWidget(context);
-          if (isNeedVisibilityInfo) {
-            return _ContentListItemView(
-              key: Key("${_log.fullName}.${item.id}"),
-              item: item,
-              child: w,
-            );
-          } else {
-            return w;
-          }
-        },
-        maxCrossAxisExtent: maxCrossAxisExtent,
-        onSelectionChange: (_, selected) {
-          context.addEvent(_SetSelectedItems(items: selected.cast()));
-        },
-        onItemTap: (context, section, index, item) {
-          if (item is! _FileItem) {
-            // ?
-            return;
-          }
-          final fileDate = item.file.fdDateTime.toLocal().toDate();
-          final summary = context.state.filesSummary.items;
-          var count = 0;
-          for (final e in summary.entries.sortedBy((e) => e.key).reversed) {
-            if (e.key.isAfter(fileDate)) {
-              count += e.value.count;
-            } else {
-              break;
-            }
-          }
-          count += index;
+          previous.selectedItems != current.selectedItems ||
+          (previous.itemPerRow == null) != (current.itemPerRow == null) ||
+          (previous.itemSize == null) != (current.itemSize == null),
+      builder: (context, state) =>
+          state.itemPerRow == null || state.itemSize == null
+              ? const SliverToBoxAdapter(
+                  child: SizedBox.shrink(),
+                )
+              : SelectableSectionList<_Item>(
+                  sections: state.transformedItems
+                      .map((e) => SelectableSection(
+                            header: e.first,
+                            items: e.sublist(1),
+                          ))
+                      .toList(),
+                  selectedItems: state.selectedItems,
+                  sectionHeaderBuilder: (context, section, item) =>
+                      item.buildWidget(context),
+                  itemBuilder: (context, section, index, item) {
+                    final w = item.buildWidget(context);
+                    if (isNeedVisibilityInfo) {
+                      return _ContentListItemView(
+                        key: Key("${_log.fullName}.${item.id}"),
+                        item: item,
+                        child: w,
+                      );
+                    } else {
+                      return w;
+                    }
+                  },
+                  extentOptimizer: SelectableSectionListExtentOptimizer(
+                    itemPerRow: itemPerRow,
+                    titleExtentBuilder: (_) =>
+                        AppDimension.of(context).timelineDateItemHeight,
+                    itemExtentBuilder: (_) => itemSize,
+                  ),
+                  onSelectionChange: (_, selected) {
+                    context.addEvent(_SetSelectedItems(items: selected.cast()));
+                  },
+                  onItemTap: (context, section, index, item) {
+                    if (item is! _FileItem) {
+                      // ?
+                      return;
+                    }
+                    final fileDate = item.file.fdDateTime.toLocal().toDate();
+                    final summary = context.state.filesSummary.items;
+                    var count = 0;
+                    for (final e
+                        in summary.entries.sortedBy((e) => e.key).reversed) {
+                      if (e.key.isAfter(fileDate)) {
+                        count += e.value.count;
+                      } else {
+                        break;
+                      }
+                    }
+                    count += index;
 
-          Navigator.of(context).pushNamed(
-            TimelineViewer.routeName,
-            arguments: TimelineViewerArguments(
-              initialFile: item.file,
-              initialIndex: count,
-              allFilesCount: context.state.filesSummary.items.values
-                  .map((e) => e.count)
-                  .sum,
-            ),
-          );
-        },
-      ),
+                    Navigator.of(context).pushNamed(
+                      TimelineViewer.routeName,
+                      arguments: TimelineViewerArguments(
+                        initialFile: item.file,
+                        initialIndex: count,
+                        allFilesCount: context.state.filesSummary.items.values
+                            .map((e) => e.count)
+                            .sum,
+                      ),
+                    );
+                  },
+                ),
     );
   }
 
-  final double maxCrossAxisExtent;
+  final int itemPerRow;
+  final double itemSize;
   final bool isNeedVisibilityInfo;
 }
 

@@ -128,6 +128,15 @@ extension IterableExtension<T> on Iterable<T> {
       await fn(l);
     }
   }
+
+  Iterable<T> separated(T Function(int index) separatorBuilder) sync* {
+    for (final e in indexed) {
+      yield e.$2;
+      if (e.$1 < length - 1) {
+        yield separatorBuilder(e.$1);
+      }
+    }
+  }
 }
 
 extension IterableFlattenExtension<T> on Iterable<Iterable<T>> {
