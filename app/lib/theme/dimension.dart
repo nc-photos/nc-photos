@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 class AppDimension extends ThemeExtension<AppDimension> {
   const AppDimension({
     required this.homeBottomAppBarHeight,
+    required this.timelineDateItemHeight,
   });
 
   static AppDimension of(BuildContext context) =>
@@ -13,10 +14,13 @@ class AppDimension extends ThemeExtension<AppDimension> {
   @override
   AppDimension copyWith({
     double? homeBottomAppBarHeight,
+    double? timelineDateItemHeight,
   }) =>
       AppDimension(
         homeBottomAppBarHeight:
             homeBottomAppBarHeight ?? this.homeBottomAppBarHeight,
+        timelineDateItemHeight:
+            timelineDateItemHeight ?? this.timelineDateItemHeight,
       );
 
   @override
@@ -27,8 +31,11 @@ class AppDimension extends ThemeExtension<AppDimension> {
     return AppDimension(
       homeBottomAppBarHeight:
           lerpDouble(homeBottomAppBarHeight, other.homeBottomAppBarHeight, t)!,
+      timelineDateItemHeight:
+          lerpDouble(timelineDateItemHeight, other.timelineDateItemHeight, t)!,
     );
   }
 
   final double homeBottomAppBarHeight;
+  final double timelineDateItemHeight;
 }

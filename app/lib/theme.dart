@@ -290,6 +290,7 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
       ),
       const AppDimension(
         homeBottomAppBarHeight: 68,
+        timelineDateItemHeight: 32,
       ),
     ],
   );

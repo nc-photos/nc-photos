@@ -101,7 +101,7 @@ class _DateItem extends _Item {
   @override
   Widget buildWidget(BuildContext context) {
     return SizedBox(
-      height: 32,
+      height: AppDimension.of(context).timelineDateItemHeight,
       child: PhotoListDate(
         date: date,
         isMonthOnly: isMonthOnly,
