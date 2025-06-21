@@ -17,9 +17,6 @@ import 'package:path/path.dart' as path_lib;
 
 part 'dir_picker.g.dart';
 
-// Compatibility with flutter 3.22
-typedef WidgetState = MaterialState;
-
 class DirPicker extends StatefulWidget {
   const DirPicker({
     super.key,

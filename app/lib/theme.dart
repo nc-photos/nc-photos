@@ -10,10 +10,6 @@ import 'package:np_ui/np_ui.dart';
 
 const defaultSeedColor = Color(0xFF2196F3);
 
-// Compatibility with flutter 3.22
-typedef WidgetStateProperty = MaterialStateProperty;
-typedef WidgetState = MaterialState;
-
 extension ThemeExtension on ThemeData {
   double get widthLimitedContentMaxWidth => 550.0;
 

@@ -30,9 +30,6 @@ part 'changelog/changelog_730.dart';
 part 'changelog/changelog_740.dart';
 part 'changelog/changelog_750.dart';
 
-// Compatibility with flutter 3.22
-typedef WidgetStateProperty = MaterialStateProperty;
-
 class ChangelogArguments {
   const ChangelogArguments(this.fromVersion);
 
