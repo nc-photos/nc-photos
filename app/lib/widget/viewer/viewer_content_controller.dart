@@ -41,13 +41,12 @@ class _ViewerContentController {
       _isQueryingBackward = true;
       final from = _pageContentMap.entries.first.let(
           (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value));
-      final count = min(from.pageIndex, _fileCountPerQuery);
-      if (count == 0) {
+      if (from.pageIndex == 0) {
         _log.severe(
             "[_getBackwardContent] Trying to query beyond max count, contentBegin: ${from.pageIndex}");
         return const {};
       }
-      final results = await contentProvider.getFiles(from, -count);
+      final results = await contentProvider.getFiles(from, -_fileCountPerQuery);
       final resultMap = results.files
           .mapIndexed((i, e) => MapEntry(from.pageIndex - 1 - i, e))
           .toMap();
