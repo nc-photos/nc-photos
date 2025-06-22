@@ -650,6 +650,17 @@
     "errorServerNoCert"
   ],
 
+  "ja": [
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
+  ],
+
   "nl": [
     "deleteSelectedProcessingNotification",
     "deleteSelectedFailureNotification",
