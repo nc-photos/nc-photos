@@ -108,33 +108,35 @@ class _DateItem extends _Item {
   final bool isMonthOnly;
 }
 
-class _LocalFileItem extends _FileItem {
+abstract class _LocalFileItem extends _FileItem {
   _LocalFileItem({required this.localFile})
     : super(file: localFile.toAnyFile());
 
-  @override
-  String get id => "localfile-${file.id}";
+  final LocalFile localFile;
+}
 
-  @override
-  bool get isSelectable => true;
+class _LocalPhotoItem extends _LocalFileItem {
+  _LocalPhotoItem({required super.localFile});
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
 
   @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      (other is _LocalFileItem && file.compareIdentity(other.file));
-
-  @override
-  int get hashCode => file.identityHashCode;
-
-  @override
   Widget buildWidget(BuildContext context) {
     return PhotoListLocalImage(file: localFile);
   }
+}
 
-  final LocalFile localFile;
+class _LocalVideoItem extends _LocalFileItem {
+  _LocalVideoItem({required super.localFile});
+
+  @override
+  StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return PhotoListLocalVideo(file: localFile);
+  }
 }
 
 class _ItemTransformerArgument {
