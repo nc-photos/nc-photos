@@ -898,7 +898,9 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
     if (arg.localSummary.items.containsKey(d)) {
       if (localFileGroups.containsKey(d)) {
         items.addAll(localFileGroups[d]
-                ?.map((f) => (f.bestDateTime, _buildSingleLocalItem(f))) ??
+                ?.map((f) =>
+                    _buildSingleLocalItem(f)?.let((e) => (f.bestDateTime, e)))
+                .nonNulls ??
             []);
       } else {
         final count = arg.localSummary.items[d]!;
@@ -940,8 +942,16 @@ _Item? _buildSingleRemoteItem(Account account, FileDescriptor file) {
   }
 }
 
-_Item _buildSingleLocalItem(LocalFile file) {
-  return _LocalFileItem(localFile: file);
+_Item? _buildSingleLocalItem(LocalFile file) {
+  if (file_util.isSupportedImageMime(file.mime ?? "")) {
+    return _LocalPhotoItem(localFile: file);
+  } else if (file_util.isSupportedVideoMime(file.mime ?? "")) {
+    return _LocalVideoItem(localFile: file);
+  } else {
+    _$__NpLog.log
+        .shout("[_buildSingleLocalItem] Unsupported file format: ${file.mime}");
+    return null;
+  }
 }
 
 class _ItemMeasurement {

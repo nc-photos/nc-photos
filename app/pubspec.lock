@@ -1972,8 +1972,8 @@ packages:
     dependency: "direct overridden"
     description:
       path: "packages/video_player/video_player_android"
-      ref: "video_player-v2.8.6-nc-photos-2"
-      resolved-ref: "0df18c0a90238a11d23d766fb296916f4fc3cb5c"
+      ref: "video_player-v2.8.6-nc-photos-3"
+      resolved-ref: "1100a0e141fa5edc53f133481dc80b086d323238"
       url: "https://github.com/nc-photos/packages.git"
     source: git
     version: "2.4.12"
