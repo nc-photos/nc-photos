@@ -9,6 +9,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
+import android.util.Size
 import androidx.annotation.RequiresApi
 import androidx.core.database.getLongOrNull
 import androidx.lifecycle.LifecycleOwner
@@ -16,8 +17,10 @@ import androidx.lifecycle.lifecycleScope
 import com.nkming.nc_photos.np_android_core.MediaStoreUtil
 import com.nkming.nc_photos.np_android_core.PermissionException
 import com.nkming.nc_photos.np_android_core.PermissionUtil
+import com.nkming.nc_photos.np_android_core.Rgba8Image
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
+import com.nkming.nc_photos.np_android_core.use
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
@@ -213,6 +216,23 @@ internal class MediaStoreChannelHandler(context: Context) :
 				}
 			}
 
+			"getVideoThumbnail" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+						getVideoThumbnail(
+							call.argument("uri")!!,
+							call.argument("width")!!,
+							call.argument("height")!!,
+							result
+						)
+					} else {
+						result.error("systemException", "not implemented", null)
+					}
+				} catch (e: Throwable) {
+					result.error("systemException", e.message, null)
+				}
+			}
+
 			else -> result.notImplemented()
 		}
 	}
@@ -350,46 +370,53 @@ internal class MediaStoreChannelHandler(context: Context) :
 
 		val wheres = mutableListOf<String>()
 		val whereArgs = arrayListOf<String>()
+		wheres.add(
+			"(" +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+					" OR " +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+					")"
+		)
 		if (fileIds != null) {
 			val args = List(fileIds.size) { "?" }.joinToString(",")
-			wheres.add("${MediaStore.Images.ImageColumns._ID} IN (${args})")
+			wheres.add("${MediaStore.MediaColumns._ID} IN (${args})")
 			whereArgs.addAll(fileIds.map { it.toString() })
 		}
 		if (timeRangeBeg != null) {
 			if (isTimeRangeBegInclusive == false) {
 				wheres.add(
-					"${MediaStore.Images.ImageColumns.DATE_TAKEN} > ${timeRangeBeg.time}"
+					"${MediaStore.MediaColumns.DATE_TAKEN} > ${timeRangeBeg.time}"
 				)
 			} else {
 				wheres.add(
-					"${MediaStore.Images.ImageColumns.DATE_TAKEN} >= ${timeRangeBeg.time}"
+					"${MediaStore.MediaColumns.DATE_TAKEN} >= ${timeRangeBeg.time}"
 				)
 			}
 		}
 		if (timeRangeEnd != null) {
 			if (isTimeRangeEndInclusive == true) {
 				wheres.add(
-					"${MediaStore.Images.ImageColumns.DATE_TAKEN} <= ${timeRangeEnd.time}"
+					"${MediaStore.MediaColumns.DATE_TAKEN} <= ${timeRangeEnd.time}"
 				)
 			} else {
 				wheres.add(
-					"${MediaStore.Images.ImageColumns.DATE_TAKEN} < ${timeRangeEnd.time}"
+					"${MediaStore.MediaColumns.DATE_TAKEN} < ${timeRangeEnd.time}"
 				)
 			}
 		}
 
 		doWork {
 			context.contentResolver.query(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				MediaStore.Files.getContentUri("external"),
 				arrayOf(
-					MediaStore.Images.ImageColumns._ID,
-					MediaStore.Images.ImageColumns.DATE_MODIFIED,
-					MediaStore.Images.ImageColumns.MIME_TYPE,
-					MediaStore.Images.ImageColumns.DATE_TAKEN,
-					MediaStore.Images.ImageColumns.DISPLAY_NAME,
-					MediaStore.Images.ImageColumns.RELATIVE_PATH,
-					MediaStore.Images.ImageColumns.WIDTH,
-					MediaStore.Images.ImageColumns.HEIGHT,
+					MediaStore.MediaColumns._ID,
+					MediaStore.MediaColumns.DATE_MODIFIED,
+					MediaStore.MediaColumns.MIME_TYPE,
+					MediaStore.MediaColumns.DATE_TAKEN,
+					MediaStore.MediaColumns.DISPLAY_NAME,
+					MediaStore.MediaColumns.RELATIVE_PATH,
+					MediaStore.MediaColumns.WIDTH,
+					MediaStore.MediaColumns.HEIGHT,
 				),
 				Bundle().apply {
 					if (wheres.isNotEmpty()) {
@@ -407,7 +434,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 					val order = if (isAscending) "ASC" else "DESC"
 					putString(
 						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
-						"${MediaStore.Images.ImageColumns.DATE_TAKEN} $order, ${MediaStore.Images.ImageColumns._ID} $order"
+						"${MediaStore.MediaColumns.DATE_TAKEN} $order, ${MediaStore.MediaColumns._ID} $order"
 					)
 					if (offset != null) {
 						putInt(ContentResolver.QUERY_ARG_OFFSET, offset)
@@ -421,34 +448,34 @@ internal class MediaStoreChannelHandler(context: Context) :
 				val products = mutableListOf<Map<String, Any>>()
 				if (it.moveToFirst()) {
 					val idColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns._ID
+						MediaStore.MediaColumns._ID
 					)
 					val dateModifiedColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.DATE_MODIFIED
+						MediaStore.MediaColumns.DATE_MODIFIED
 					)
 					val mimeTypeColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.MIME_TYPE
+						MediaStore.MediaColumns.MIME_TYPE
 					)
 					val dateTakenColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.DATE_TAKEN
+						MediaStore.MediaColumns.DATE_TAKEN
 					)
 					val displayNameColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.DISPLAY_NAME
+						MediaStore.MediaColumns.DISPLAY_NAME
 					)
 					val relativePathColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.RELATIVE_PATH
+						MediaStore.MediaColumns.RELATIVE_PATH
 					)
 					val widthColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.WIDTH
+						MediaStore.MediaColumns.WIDTH
 					)
 					val heightColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.HEIGHT
+						MediaStore.MediaColumns.HEIGHT
 					)
 					do {
 						try {
 							val id = it.getLong(idColumn)
 							val contentUri = ContentUris.withAppendedId(
-								MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
+								MediaStore.Files.getContentUri("external"), id
 							)
 							val displayName = it.getString(displayNameColumn)
 							val relativePath = "${
@@ -545,19 +572,24 @@ internal class MediaStoreChannelHandler(context: Context) :
 			var thisDateEnd = 0L
 			var thisDateCount = 0
 			context.contentResolver.query(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				MediaStore.Files.getContentUri("external"),
 				arrayOf(
-					MediaStore.Images.ImageColumns.DATE_TAKEN,
+					MediaStore.MediaColumns.DATE_TAKEN,
 				),
 				Bundle().apply {
 					putString(
 						ContentResolver.QUERY_ARG_SQL_SELECTION,
-						"${MediaStore.Images.ImageColumns.DATE_TAKEN} IS NOT NULL",
+						"(" +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+								" OR " +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+								") AND " +
+								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
 					)
 					putStringArray(
 						ContentResolver.QUERY_ARG_SORT_COLUMNS,
 						arrayOf(
-							MediaStore.Images.ImageColumns.DATE_TAKEN
+							MediaStore.MediaColumns.DATE_TAKEN
 						),
 					)
 					putInt(
@@ -569,7 +601,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 			)?.use {
 				if (it.moveToFirst()) {
 					val dateColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.DATE_TAKEN
+						MediaStore.MediaColumns.DATE_TAKEN
 					)
 					do {
 						val time = it.getLong(dateColumn)
@@ -657,6 +689,20 @@ internal class MediaStoreChannelHandler(context: Context) :
 			}
 			result.success(results)
 		}
+	}
+
+	@RequiresApi(Build.VERSION_CODES.Q)
+	private fun getVideoThumbnail(
+		uriStr: String,
+		width: Int,
+		height: Int,
+		result: MethodChannel.Result
+	) {
+		val uri = Uri.parse(uriStr)
+		val thumb = context.contentResolver.loadThumbnail(
+			uri, Size(width, height), null
+		).use { Rgba8Image.fromBitmap(it) }
+		result.success(thumb.toJson())
 	}
 
 	private fun inputToUri(fromFile: String): Uri {

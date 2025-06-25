@@ -16,6 +16,8 @@ dependencies:
     path: ../np_common
   np_datetime:
     path: ../np_datetime
+  np_platform_raw_image:
+    path: ../np_platform_raw_image
 
 dev_dependencies:
   dart_style: 3.0.1

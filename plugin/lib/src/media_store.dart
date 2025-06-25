@@ -3,7 +3,9 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos_plugin/src/exception.dart';
 import 'package:nc_photos_plugin/src/k.dart' as k;
 import 'package:np_common/object_util.dart';
+import 'package:np_common/size.dart';
 import 'package:np_datetime/np_datetime.dart';
+import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 
 class MediaStoreQueryResult {
   const MediaStoreQueryResult({
@@ -228,6 +230,18 @@ class MediaStore {
         rethrow;
       }
     }
+  }
+
+  static Future<Rgba8Image> getVideoThumbnail(String uri, SizeInt size) async {
+    final Map json = await _methodChannel.invokeMethod(
+      "getVideoThumbnail",
+      {
+        "uri": uri,
+        "width": size.width,
+        "height": size.height,
+      },
+    );
+    return Rgba8Image.fromJson(json.cast());
   }
 
   static Stream get stream => _eventStream;

@@ -32,6 +32,7 @@ interface PermissionUtil {
 				request(
 					activity,
 					Manifest.permission.READ_MEDIA_IMAGES,
+					Manifest.permission.READ_MEDIA_VIDEO,
 					Manifest.permission.ACCESS_MEDIA_LOCATION
 				)
 			} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -97,6 +98,8 @@ interface PermissionUtil {
 		private fun hasReadExternalStorage33(context: Context): Boolean {
 			return ContextCompat.checkSelfPermission(
 				context, Manifest.permission.READ_MEDIA_IMAGES
+			) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+				context, Manifest.permission.READ_MEDIA_VIDEO
 			) == PackageManager.PERMISSION_GRANTED
 		}
 
@@ -108,7 +111,9 @@ interface PermissionUtil {
 
 		@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 		private fun requestReadExternalStorage33(activity: Activity) = request(
-			activity, Manifest.permission.READ_MEDIA_IMAGES
+			activity,
+			Manifest.permission.READ_MEDIA_IMAGES,
+			Manifest.permission.READ_MEDIA_VIDEO
 		)
 
 		private fun requestReadExternalStorage0(activity: Activity) = request(

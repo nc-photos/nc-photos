@@ -9,9 +9,11 @@ import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
+import 'package:nc_photos/mobile/android/video_uri_thumbnail_image_provider.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/selectable_item_stream_list_mixin.dart';
+import 'package:np_common/size.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:to_string/to_string.dart';
 
@@ -405,6 +407,81 @@ class PhotoListLocalImage extends StatelessWidget {
               child: const Icon(Icons.cloud_off, size: 20, color: Colors.white),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  final LocalFile file;
+}
+
+class PhotoListLocalVideo extends StatelessWidget {
+  const PhotoListLocalVideo({super.key, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    final ImageProvider provider;
+    if (file is LocalUriFile) {
+      provider = VideoUriThumbnailImage(
+        (file as LocalUriFile).uri,
+        sizeHint: SizeInt.square(k.photoThumbSize),
+      );
+    } else {
+      throw ArgumentError("Invalid file");
+    }
+
+    return IconTheme(
+      data: const IconThemeData(color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: FittedBox(
+          clipBehavior: Clip.hardEdge,
+          fit: BoxFit.cover,
+          child: Stack(
+            children: [
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                color: Theme.of(context).listPlaceholderBackgroundColor,
+                child: Hero(
+                  tag: flutter_util.HeroTag.fromLocalFile(file),
+                  child: Image(
+                    image: ResizeImage.resizeIfNeeded(
+                      k.photoThumbSize,
+                      null,
+                      provider,
+                    ),
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, e, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 64,
+                          color:
+                              Theme.of(context).listPlaceholderForegroundColor,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                alignment: AlignmentDirectional.bottomEnd,
+                padding: const EdgeInsets.all(8),
+                child: const Icon(Icons.cloud_off, size: 20),
+              ),
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                alignment: AlignmentDirectional.topEnd,
+                padding: const EdgeInsets.all(8),
+                child: const Icon(Icons.play_circle_outlined, size: 22),
+              ),
+            ],
+          ),
         ),
       ),
     );
