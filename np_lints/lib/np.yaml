@@ -4,6 +4,7 @@ analyzer:
   errors:
     unrelated_type_equality_checks: error
     constant_pattern_never_matches_value_type: error
+    collection_methods_unrelated_type: error
 
 linter:
   rules:
