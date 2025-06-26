@@ -315,7 +315,7 @@ class _SliverSectionGridView extends StatelessWidget {
                   aspectRatio: childAspectRatio,
                   child: i < thisRowCount
                       ? itemBuilder(context, section, firstItemIndex + i)
-                      : const SizedBox(),
+                      : const SizedBox.shrink(),
                 ),
               ),
             ).separated((_) => SizedBox(width: crossAxisSpacing)).toList(),
@@ -324,8 +324,7 @@ class _SliverSectionGridView extends StatelessWidget {
       },
       itemExtentBuilder: (index, dimensions) {
         if (index >= rowCount) {
-          // TODO flutter bug, remove after upgrading flutter
-          return 1;
+          return null;
         }
         final (section, row) =
             _listIndexToSectionAndRow(sectionRowCounts, index);
