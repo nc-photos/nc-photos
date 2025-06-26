@@ -37,7 +37,6 @@ class AnyFileLocalVideoPlayerControllerPresenter
     LivePhotoType? livePhotoType,
   }) {
     _log.fine("[_buildVideoControllerWithContentUri] URI: ${file.uri}");
-    // TODO video player is broken due to our custom DataSource class in native
     return VideoPlayerController.contentUri(
       Uri.parse(file.uri),
       livePhotoType: livePhotoType,
