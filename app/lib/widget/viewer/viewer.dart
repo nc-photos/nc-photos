@@ -49,7 +49,6 @@ import 'package:nc_photos/widget/png_icon.dart';
 import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/slideshow_dialog.dart';
 import 'package:nc_photos/widget/slideshow_viewer.dart';
-import 'package:nc_photos/widget/viewer_detail_pane.dart';
 import 'package:nc_photos/widget/viewer_detail_pane/viewer_detail_pane.dart';
 import 'package:nc_photos/widget/viewer_mixin.dart';
 import 'package:np_collection/np_collection.dart';

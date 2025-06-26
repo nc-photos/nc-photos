@@ -82,7 +82,7 @@ class _DetailPane extends StatelessWidget {
         final collectionItem = state.collectionItems?[afId];
         return file == null
             ? const SizedBox.shrink()
-            : ViewerDetailPane2(
+            : ViewerDetailPane(
               file: file,
               fromCollection:
                   collection != null && collectionItem != null

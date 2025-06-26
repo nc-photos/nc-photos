@@ -18,6 +18,7 @@ import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception_event.dart';
@@ -30,7 +31,6 @@ import 'package:nc_photos/widget/about_geocoding_dialog.dart';
 import 'package:nc_photos/widget/handler/add_selection_to_collection_handler.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
-import 'package:nc_photos/widget/viewer_detail_pane.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/size.dart';
@@ -50,8 +50,15 @@ part 'type.dart';
 part 'view.dart';
 part 'viewer_detail_pane.g.dart';
 
-class ViewerDetailPane2 extends StatelessWidget {
-  const ViewerDetailPane2({
+class ViewerSingleCollectionData {
+  const ViewerSingleCollectionData(this.collection, this.item);
+
+  final Collection collection;
+  final CollectionItem item;
+}
+
+class ViewerDetailPane extends StatelessWidget {
+  const ViewerDetailPane({
     super.key,
     required this.file,
     this.fromCollection,
