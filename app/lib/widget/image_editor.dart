@@ -128,7 +128,7 @@ class _ImageEditorState extends State<ImageEditor> {
   Widget _buildContent(BuildContext context) {
     return PopScope(
       canPop: false,
-      onPopInvoked: (didPop) {
+      onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           _onBackButton(context);
         }

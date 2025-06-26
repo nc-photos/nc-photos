@@ -133,7 +133,7 @@ class _WrappedHomeCollectionsState extends State<_WrappedHomeCollections>
               )
             : PopScope(
                 canPop: false,
-                onPopInvoked: (_) {
+                onPopInvokedWithResult: (didPop, result) {
                   context.addEvent(const _SetSelectedItems(items: {}));
                 },
                 child: _BodyView(key: _bodyKey),

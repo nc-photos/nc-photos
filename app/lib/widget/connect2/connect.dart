@@ -91,7 +91,7 @@ class _WrappedConnect extends StatelessWidget {
         ),
       ),
       child: PopScope(
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           if (didPop) {
             context.bloc.login
               ..interrupt()

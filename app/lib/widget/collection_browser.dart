@@ -161,7 +161,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
           previous.selectedItems.isEmpty != current.selectedItems.isEmpty,
       builder: (context, state) => PopScope(
         canPop: !state.isEditMode && state.selectedItems.isEmpty,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           if (state.isEditMode) {
             _bloc.add(const _CancelEdit());
           } else if (state.selectedItems.isNotEmpty) {

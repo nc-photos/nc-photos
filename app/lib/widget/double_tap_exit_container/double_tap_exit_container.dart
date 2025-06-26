@@ -48,7 +48,7 @@ class _WrappedDoubleTapExitContainer extends StatelessWidget {
           previous.canPop != current.canPop,
       builder: (context, state) => PopScope(
         canPop: !state.isDoubleTapExit || state.canPop,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           context.addEvent(_OnPopInvoked(didPop));
         },
         child: child,

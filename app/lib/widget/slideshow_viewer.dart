@@ -153,7 +153,7 @@ class _WrappedSlideshowViewerState extends State<_WrappedSlideshowViewer>
           child: Scaffold(
             body: PopScope(
               canPop: false,
-              onPopInvoked: (_) {
+              onPopInvokedWithResult: (didPop, result) {
                 context.addEvent(const _RequestExit());
               },
               child: _BlocSelector<bool>(

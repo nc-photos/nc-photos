@@ -77,7 +77,7 @@ class _WrappedViewerAppBarSettingsState
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (didPop, result) {
         final prefController = context.bloc.prefController;
         final from = widget.isBottom
             ? prefController.viewerBottomAppBarButtonsValue

@@ -188,7 +188,7 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
                 )
               : PopScope(
                   canPop: false,
-                  onPopInvoked: (_) {
+                  onPopInvokedWithResult: (didPop, result) {
                     context.addEvent(const _SetSelectedItems(items: {}));
                   },
                   child: _BodyView(key: _bodyKey),

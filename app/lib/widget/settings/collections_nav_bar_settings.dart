@@ -56,7 +56,7 @@ class _WrappedCollectionsNavBarSettingsState
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (didPop, result) {
         final prefController = context.bloc.prefController;
         final from = prefController.homeCollectionsNavBarButtonsValue;
         final to = context.state.buttons;
