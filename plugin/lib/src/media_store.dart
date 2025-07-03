@@ -18,6 +18,7 @@ class MediaStoreQueryResult {
     required this.dateTaken,
     required this.width,
     required this.height,
+    required this.size,
   });
 
   final int id;
@@ -29,6 +30,7 @@ class MediaStoreQueryResult {
   final int? dateTaken;
   final int? width;
   final int? height;
+  final int size;
 }
 
 class MediaStoreDeleteRequestResultEvent {
@@ -110,6 +112,7 @@ class MediaStore {
                 dateTaken: e["dateTaken"],
                 width: e["width"],
                 height: e["height"],
+                size: e["size"],
               ))
           .toList();
     } on PlatformException catch (e) {
@@ -154,6 +157,7 @@ class MediaStore {
                 dateTaken: e["dateTaken"],
                 width: e["width"],
                 height: e["height"],
+                size: e["size"],
               ))
           .toList();
     } on PlatformException catch (e) {

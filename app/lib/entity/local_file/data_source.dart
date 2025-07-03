@@ -216,6 +216,7 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
       dateTaken: r.dateTaken
           ?.let((e) => DateTime.fromMillisecondsSinceEpoch(e, isUtc: true)),
       size: size,
+      byteSize: r.size,
     );
   }
 }
