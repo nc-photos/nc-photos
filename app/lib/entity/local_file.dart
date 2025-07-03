@@ -26,6 +26,7 @@ abstract class LocalFile with EquatableMixin {
   DateTime? get dateTaken;
   SizeInt? get size;
   String? get path;
+  int get byteSize;
 }
 
 extension LocalFileExtension on LocalFile {
@@ -48,6 +49,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
     this.mime,
     this.dateTaken,
     this.size,
+    required this.byteSize,
   });
 
   @override
@@ -99,6 +101,8 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   final DateTime? dateTaken;
   @override
   final SizeInt? size;
+  @override
+  final int byteSize;
 }
 
 typedef LocalFileOnFailureListener =

@@ -292,7 +292,9 @@ internal class MediaStoreChannelHandler(context: Context) :
 			MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_MODIFIED,
 			MediaStore.Images.Media.MIME_TYPE,
 			MediaStore.Images.Media.DATE_TAKEN,
-			MediaStore.Images.Media.DISPLAY_NAME, pathColumnName
+			MediaStore.Images.Media.DISPLAY_NAME,
+			MediaStore.Images.Media.SIZE,
+			pathColumnName
 		)
 		val selection = StringBuilder().apply {
 			append("${MediaStore.Images.Media.MIME_TYPE} LIKE ?")
@@ -312,6 +314,8 @@ internal class MediaStoreChannelHandler(context: Context) :
 				it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
 			val displayNameColumn =
 				it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+			val sizeColumn =
+				it.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)
 			val pathColumn = it.getColumnIndexOrThrow(pathColumnName)
 			val products = mutableListOf<Map<String, Any>>()
 			while (it.moveToNext()) {
@@ -320,6 +324,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 				val mimeType = it.getString(mimeTypeColumn)
 				val dateTaken = it.getLongOrNull(dateTakenColumn)
 				val displayName = it.getString(displayNameColumn)
+				val size = it.getLong(sizeColumn)
 				val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 					// RELATIVE_PATH
 					"${it.getString(pathColumn).trimEnd('/')}/$displayName"
@@ -338,6 +343,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 					put("dateModified", dateModified * 1000)
 					put("mimeType", mimeType)
 					if (dateTaken != null) put("dateTaken", dateTaken)
+					put("size", size)
 				})
 				// logD(
 				// 	TAG,
@@ -417,6 +423,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 					MediaStore.MediaColumns.RELATIVE_PATH,
 					MediaStore.MediaColumns.WIDTH,
 					MediaStore.MediaColumns.HEIGHT,
+					MediaStore.MediaColumns.SIZE,
 				),
 				Bundle().apply {
 					if (wheres.isNotEmpty()) {
@@ -471,6 +478,9 @@ internal class MediaStoreChannelHandler(context: Context) :
 					val heightColumn = it.getColumnIndexOrThrow(
 						MediaStore.MediaColumns.HEIGHT
 					)
+					val sizeColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.SIZE
+					)
 					do {
 						try {
 							val id = it.getLong(idColumn)
@@ -503,6 +513,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 									put("width", it.getInt(widthColumn))
 									put("height", it.getInt(heightColumn))
 								}
+								put("size", it.getLong(sizeColumn))
 							})
 						} catch (e: Throwable) {
 							logE(TAG, "Failed to read row", e)
