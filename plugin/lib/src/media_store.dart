@@ -18,6 +18,7 @@ class MediaStoreQueryResult {
     required this.dateTaken,
     required this.width,
     required this.height,
+    required this.size,
   });
 
   final int id;
@@ -29,6 +30,7 @@ class MediaStoreQueryResult {
   final int? dateTaken;
   final int? width;
   final int? height;
+  final int size;
 }
 
 class MediaStoreDeleteRequestResultEvent {
@@ -116,6 +118,7 @@ class MediaStore {
               dateTaken: e["dateTaken"],
               width: e["width"],
               height: e["height"],
+              size: e["size"],
             ),
           )
           .toList();
@@ -164,6 +167,7 @@ class MediaStore {
               dateTaken: e["dateTaken"],
               width: e["width"],
               height: e["height"],
+              size: e["size"],
             ),
           )
           .toList();
@@ -233,14 +237,11 @@ class MediaStore {
   }
 
   static Future<Rgba8Image> getVideoThumbnail(String uri, SizeInt size) async {
-    final Map json = await _methodChannel.invokeMethod(
-      "getVideoThumbnail",
-      {
-        "uri": uri,
-        "width": size.width,
-        "height": size.height,
-      },
-    );
+    final Map json = await _methodChannel.invokeMethod("getVideoThumbnail", {
+      "uri": uri,
+      "width": size.width,
+      "height": size.height,
+    });
     return Rgba8Image.fromJson(json.cast());
   }
 

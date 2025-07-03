@@ -46,7 +46,7 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   Future<SizeInt?> get size => Future.value(_provider.file.size);
 
   @override
-  Future<int?> get byteSize => Future.value(null);
+  Future<int?> get byteSize => Future.value(_provider.file.byteSize);
 
   @override
   Future<String?> get make => Future.value(null);
