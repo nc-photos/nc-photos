@@ -282,11 +282,33 @@ class _NameItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: const ListTileCenterLeading(child: Icon(Icons.image_outlined)),
-      title: Text(path_lib.basenameWithoutExtension(context.bloc.file.name)),
-      subtitle: context.bloc.file.displayPath?.let(Text.new),
+    return _BlocSelector(
+      selector: (state) => state.size,
+      builder:
+          (context, size) => ListTile(
+            leading: const ListTileCenterLeading(
+              child: Icon(Icons.image_outlined),
+            ),
+            title: Text(
+              path_lib.basenameWithoutExtension(context.bloc.file.name),
+            ),
+            subtitle: size?.let((e) => Text(_buildSizeSubtitle(e))),
+          ),
     );
+  }
+
+  static String _buildSizeSubtitle(SizeInt size) {
+    var sizeSubStr = "";
+    const space = "    ";
+
+    final pixelCount = size.width * size.height;
+    if (pixelCount >= 500000) {
+      final mpCount = pixelCount / 1000000.0;
+      sizeSubStr += L10n.global().megapixelCount(mpCount.toStringAsFixed(1));
+      sizeSubStr += space;
+    }
+    sizeSubStr += "${size.width} x ${size.height}";
+    return sizeSubStr;
   }
 }
 
@@ -381,61 +403,31 @@ class _SizeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.size != current.size ||
-              previous.byteSize != current.byteSize,
-      builder: (context, state) {
-        if (state.size != null) {
-          return ListTile(
-            leading: const ListTileCenterLeading(
-              child: Icon(Icons.aspect_ratio),
-            ),
-            title: Text("${state.size!.width} x ${state.size!.height}"),
-            subtitle: Text(_buildSizeSubtitle(state.size!, state.byteSize)),
-          );
-        } else if (state.byteSize != null) {
-          return ListTile(
-            leading: const Icon(Icons.aspect_ratio),
-            title: Text(_byteSizeToString(state.byteSize!)),
-          );
-        } else {
-          return const SizedBox.shrink();
+    return _BlocSelector(
+      selector: (state) => state.byteSize,
+      builder: (context, byteSize) {
+        final IconData icon;
+        String title;
+        switch (context.bloc.file.provider) {
+          case AnyFileNextcloudProvider _:
+            icon = Icons.cloud_outlined;
+            title = L10n.global().fileOnCloud;
+            break;
+          case AnyFileLocalProvider _:
+            icon = Icons.phone_android_outlined;
+            title = L10n.global().fileOnDevice;
+            break;
         }
+        if (byteSize != null) {
+          title += " (${_byteSizeToString(byteSize)})";
+        }
+        return ListTile(
+          leading: ListTileCenterLeading(child: Icon(icon)),
+          title: Text(title),
+          subtitle: context.bloc.file.displayPath?.let(Text.new),
+        );
       },
     );
-  }
-
-  static String _buildSizeSubtitle(SizeInt size, int? byteSize) {
-    var sizeSubStr = "";
-    const space = "    ";
-
-    final pixelCount = size.width * size.height;
-    if (pixelCount >= 500000) {
-      final mpCount = pixelCount / 1000000.0;
-      sizeSubStr += L10n.global().megapixelCount(mpCount.toStringAsFixed(1));
-      sizeSubStr += space;
-    }
-    if (byteSize != null) {
-      sizeSubStr += _byteSizeToString(byteSize);
-    }
-    return sizeSubStr;
-  }
-
-  static String _byteSizeToString(int byteSize) {
-    const units = ["B", "KB", "MB", "GB"];
-    var remain = byteSize.toDouble();
-    int i = 0;
-    while (i < units.length) {
-      final next = remain / 1024;
-      if (next < 1) {
-        break;
-      }
-      remain = next;
-      ++i;
-    }
-    return "${remain.toStringAsFixed(2)}${units[i]}";
   }
 }
 
@@ -596,4 +588,19 @@ class _GpsItemState extends State<_GpsItem> {
 
   Timer? _timer;
   var _shouldBlockGpsMap = true;
+}
+
+String _byteSizeToString(int byteSize) {
+  const units = ["B", "KB", "MB", "GB"];
+  var remain = byteSize.toDouble();
+  int i = 0;
+  while (i < units.length) {
+    final next = remain / 1024;
+    if (next < 1) {
+      break;
+    }
+    remain = next;
+    ++i;
+  }
+  return "${remain.toStringAsFixed(2)}${units[i]}";
 }

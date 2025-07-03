@@ -279,6 +279,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -298,6 +300,8 @@
     "settingsFallbackClientExifConfirmDialogText",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -321,6 +325,8 @@
     "customizeButtonsUnsupportedWarning",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -492,6 +498,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -503,6 +511,8 @@
     "settingsFallbackClientExifConfirmDialogText",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -567,6 +577,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -578,6 +590,8 @@
     "settingsFallbackClientExifConfirmDialogText",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -647,6 +661,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -658,6 +674,8 @@
     "settingsFallbackClientExifConfirmDialogText",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -1057,6 +1075,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1133,6 +1153,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -1215,6 +1237,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -1279,6 +1303,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -1290,12 +1316,16 @@
     "settingsFallbackClientExifConfirmDialogText",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
   "tr": [
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -1391,6 +1421,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ],
 
@@ -1578,6 +1610,8 @@
     "fileNotFound",
     "signInViaNextcloudLoginFlowV2",
     "signInViaUsernamePassword",
+    "fileOnDevice",
+    "fileOnCloud",
     "errorServerNoCert"
   ]
 }
