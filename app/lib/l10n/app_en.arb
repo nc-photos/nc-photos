@@ -1537,6 +1537,14 @@
 	"fileNotFound": "File not found",
 	"signInViaNextcloudLoginFlowV2": "via Nextcloud Login Flow v2",
 	"signInViaUsernamePassword": "via username and password",
+	"fileOnDevice": "On device",
+	"@fileOnDevice": {
+		"description": "Local files on your device"
+	},
+	"fileOnCloud": "On cloud",
+	"@fileOnCloud": {
+		"description": "Filed uploaded to your Nextcloud server"
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
