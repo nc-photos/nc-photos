@@ -27,7 +27,7 @@ class AnyFileLocalProvider implements AnyFileProvider {
   DateTime get bestDateTime => file.bestDateTime;
 
   @override
-  String? get displayPath => null;
+  String? get displayPath => file.path;
 
   @override
   String get logTag => file.logTag;

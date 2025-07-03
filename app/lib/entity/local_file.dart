@@ -25,6 +25,7 @@ abstract class LocalFile with EquatableMixin {
   String? get mime;
   DateTime? get dateTaken;
   SizeInt? get size;
+  String? get path;
 }
 
 extension LocalFileExtension on LocalFile {
@@ -88,6 +89,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   final String displayName;
 
   /// [path] could be a relative path or an absolute path
+  @override
   final String path;
   @override
   final DateTime lastModified;
