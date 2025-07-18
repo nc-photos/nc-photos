@@ -13,6 +13,7 @@ import 'package:nc_photos/widget/selectable_item_list.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 export 'package:nc_photos/widget/selectable_item_list.dart'
     show SelectableItemMetadata;
@@ -293,7 +294,7 @@ class _SliverSectionGridView extends StatelessWidget {
         (i) => (sectionItemCounts[i] / extentOptimizer!.itemPerRow).ceil());
     final rowCount = sectionCount + sectionRowCounts.sum;
 
-    return SliverVariedExtentList.builder(
+    return SuperSliverList.builder(
       itemCount: rowCount,
       itemBuilder: (context, index) {
         final (section, row) =
@@ -322,9 +323,9 @@ class _SliverSectionGridView extends StatelessWidget {
           );
         }
       },
-      itemExtentBuilder: (index, dimensions) {
-        if (index >= rowCount) {
-          return null;
+      extentEstimation: (index, crossAxisExtent) {
+        if (index == null) {
+          return 0;
         }
         final (section, row) =
             _listIndexToSectionAndRow(sectionRowCounts, index);

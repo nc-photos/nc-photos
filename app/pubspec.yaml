@@ -160,6 +160,7 @@ dependencies:
   shared_preferences_platform_interface: any
   sliver_tools: ^0.2.12
   smooth_corner: ^1.1.0
+  super_sliver_list: ^0.4.1
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
