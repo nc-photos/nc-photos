@@ -111,7 +111,7 @@ class _MinimapBackground extends StatelessWidget {
                 end: Alignment.center,
                 colors: Theme.of(context)
                     .colorScheme
-                    .background
+                    .surface
                     .let((c) => [c.withOpacity(0), c.withOpacity(.6)]),
               ),
             ),

@@ -139,7 +139,7 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: Container(
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                         child: Material(
                           type: MaterialType.transparency,
                           child: _BlocBuilder(

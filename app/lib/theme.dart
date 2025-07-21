@@ -106,8 +106,7 @@ ThemeData buildDarkTheme(BuildContext context, [ColorScheme? dynamicScheme]) {
   );
   if (context.read<PrefController>().isUseBlackInDarkTheme.value) {
     return _applyColorScheme(colorScheme.copyWith(
-      background: Colors.black,
-      surface: Colors.grey[900],
+      surface: Colors.black,
     ));
   } else {
     return _applyColorScheme(colorScheme);
@@ -129,7 +128,7 @@ ColorScheme _getColorScheme(
   }
   return SeedColorScheme.fromSeeds(
     brightness: brightness,
-    tones: FlexTones.oneHue(brightness),
+    tones: FlexTones.material(brightness),
     primaryKey: primary,
     secondaryKey: secondary,
   );
@@ -140,11 +139,6 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     useMaterial3: true,
     brightness: colorScheme.brightness,
     colorScheme: colorScheme,
-    scaffoldBackgroundColor: colorScheme.background,
-    appBarTheme: AppBarTheme(
-      backgroundColor: colorScheme.background,
-      foregroundColor: colorScheme.onSurface,
-    ),
     listTileTheme: ListTileThemeData(
       iconColor: colorScheme.onSurfaceVariant,
     ),
@@ -177,44 +171,6 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
         }
       }),
       checkColor: WidgetStateProperty.all(colorScheme.onPrimary),
-    ),
-    // remove after checkbox supports m3
-    // see: https://m3.material.io/components/switch/specs
-    // the color here is slightly modified to work better with the M2 switch
-    switchTheme: SwitchThemeData(
-      trackColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) {
-          if (states.contains(WidgetState.selected)) {
-            return colorScheme.onSurface.withOpacity(.12);
-          } else {
-            return colorScheme.surfaceVariant.withOpacity(.12);
-          }
-        } else {
-          if (states.contains(WidgetState.selected)) {
-            // return colorScheme.primary;
-            return colorScheme.secondary;
-          } else {
-            return colorScheme.surfaceVariant;
-          }
-        }
-      }),
-      thumbColor: WidgetStateProperty.resolveWith((states) {
-        if (states.contains(WidgetState.disabled)) {
-          if (states.contains(WidgetState.selected)) {
-            // return colorScheme.surface;
-            return colorScheme.onSurface.withOpacity(.38);
-          } else {
-            return colorScheme.onSurface.withOpacity(.38);
-          }
-        } else {
-          if (states.contains(WidgetState.selected)) {
-            // return colorScheme.onPrimary;
-            return colorScheme.onSecondary;
-          } else {
-            return colorScheme.outline;
-          }
-        }
-      }),
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: colorScheme.inverseSurface,

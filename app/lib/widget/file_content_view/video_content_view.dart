@@ -139,7 +139,7 @@ class _VideoPlayerViewState extends State<_VideoPlayerView>
                                     Theme.of(context).colorScheme.surface,
                                 bufferedColor: Theme.of(context)
                                     .colorScheme
-                                    .surfaceVariant,
+                                    .surfaceContainerHighest,
                                 playedColor:
                                     Theme.of(context).colorScheme.primary,
                               ),

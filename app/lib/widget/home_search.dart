@@ -323,7 +323,7 @@ class _HomeSearchState extends State<HomeSearch>
     return Align(
       alignment: Alignment.topCenter,
       child: ColoredBox(
-        color: Theme.of(context).colorScheme.background,
+        color: Theme.of(context).colorScheme.surface,
         child: SingleChildScrollView(
           child: HomeSearchSuggestion(
             account: widget.account,

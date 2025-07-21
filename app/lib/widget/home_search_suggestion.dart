@@ -62,8 +62,8 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
           data: Theme.of(context).run((t) {
             return t.copyWith(
               listTileTheme: ListTileThemeData(
-                iconColor: t.colorScheme.onBackground,
-                textColor: t.colorScheme.onBackground,
+                iconColor: t.colorScheme.onSurface,
+                textColor: t.colorScheme.onSurface,
               ),
             );
           }),

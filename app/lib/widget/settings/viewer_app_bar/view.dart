@@ -293,7 +293,7 @@ class _DraggingButton extends StatelessWidget {
       child: Container(
         width: 48,
         height: 48,
-        color: Theme.of(context).colorScheme.surfaceVariant,
+        color: Theme.of(context).colorScheme.surfaceContainerHighest,
         child: child,
       ),
     );

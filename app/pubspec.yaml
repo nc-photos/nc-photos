@@ -64,7 +64,7 @@ dependencies:
   dynamic_color: ^1.7.0
   equatable: ^2.0.5
   event_bus: ^2.0.0
-  flex_seed_scheme: ^1.5.0
+  flex_seed_scheme: ^2.0.0
   fluttertoast: ^8.2.5
   flutter_background_service:
     git:
