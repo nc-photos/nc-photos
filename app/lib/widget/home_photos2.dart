@@ -99,6 +99,8 @@ class HomePhotos2 extends StatelessWidget {
         personsController: accountController.personsController,
         metadataController: accountController.metadataController,
         serverController: accountController.serverController,
+        bottomAppBarHeight: AppDimension.of(context).homeBottomAppBarHeight,
+        draggableThumbSize: AppDimension.of(context).timelineDraggableThumbSize,
       ),
       child: const _WrappedHomePhotos(),
     );
@@ -352,7 +354,8 @@ class _BodyState extends State<_Body> {
                           Theme.of(context).colorScheme.secondaryContainer,
                       foregroundColor:
                           Theme.of(context).colorScheme.onSecondaryContainer,
-                      heightScrollThumb: 60,
+                      heightScrollThumb:
+                          AppDimension.of(context).timelineDraggableThumbSize,
                       onScrollBegin: () {
                         context.bloc.add(const _StartScrolling());
                       },

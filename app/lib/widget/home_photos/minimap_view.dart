@@ -9,7 +9,9 @@ class _MinimapView extends StatelessWidget {
     return _BlocBuilder(
       buildWhen: (previous, current) =>
           previous.minimapItems != current.minimapItems ||
-          previous.minimapYRatio != current.minimapYRatio,
+          previous.minimapYRatio != current.minimapYRatio ||
+          previous.viewHeight != current.viewHeight ||
+          previous.viewOverlayPadding != current.viewOverlayPadding,
       builder: (context, state) {
         if (state.minimapItems == null) {
           return const SizedBox.shrink();
@@ -25,7 +27,13 @@ class _MinimapView extends StatelessWidget {
                 fit: StackFit.expand,
                 children: [
                   ...state.minimapItems!.expand3((e, prev, next) {
-                    var top = e.logicalY * state.minimapYRatio;
+                    final contentHeight =
+                        state.viewHeight! - state.viewOverlayPadding!;
+                    var top = e.logicalY < contentHeight
+                        ? 0.0
+                        : (e.logicalY - contentHeight) * state.minimapYRatio;
+                    top +=
+                        AppDimension.of(context).timelineDraggableThumbSize / 2;
                     try {
                       if (prevDate == null) {
                         prevDate = e.date;
@@ -138,11 +146,9 @@ class _MinimapItem {
     required this.date,
     required this.logicalY,
     required this.logicalHeight,
-    this.padding = 0,
   });
 
   final Date date;
   final double logicalY;
   final double logicalHeight;
-  final double padding;
 }

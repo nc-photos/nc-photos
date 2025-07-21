@@ -6,6 +6,7 @@ class AppDimension extends ThemeExtension<AppDimension> {
   const AppDimension({
     required this.homeBottomAppBarHeight,
     required this.timelineDateItemHeight,
+    required this.timelineDraggableThumbSize,
   });
 
   static AppDimension of(BuildContext context) =>
@@ -15,12 +16,15 @@ class AppDimension extends ThemeExtension<AppDimension> {
   AppDimension copyWith({
     double? homeBottomAppBarHeight,
     double? timelineDateItemHeight,
+    double? timelineDraggableThumbSize,
   }) =>
       AppDimension(
         homeBottomAppBarHeight:
             homeBottomAppBarHeight ?? this.homeBottomAppBarHeight,
         timelineDateItemHeight:
             timelineDateItemHeight ?? this.timelineDateItemHeight,
+        timelineDraggableThumbSize:
+            timelineDraggableThumbSize ?? this.timelineDraggableThumbSize,
       );
 
   @override
@@ -33,9 +37,12 @@ class AppDimension extends ThemeExtension<AppDimension> {
           lerpDouble(homeBottomAppBarHeight, other.homeBottomAppBarHeight, t)!,
       timelineDateItemHeight:
           lerpDouble(timelineDateItemHeight, other.timelineDateItemHeight, t)!,
+      timelineDraggableThumbSize: lerpDouble(
+          timelineDraggableThumbSize, other.timelineDraggableThumbSize, t)!,
     );
   }
 
   final double homeBottomAppBarHeight;
   final double timelineDateItemHeight;
+  final double timelineDraggableThumbSize;
 }

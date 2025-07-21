@@ -14,6 +14,8 @@ class _Bloc extends Bloc<_Event, _State>
     required this.personsController,
     required this.metadataController,
     required this.serverController,
+    required this.bottomAppBarHeight,
+    required this.draggableThumbSize,
   }) : super(_State.init(
           zoom: prefController.homePhotosZoomLevelValue,
           isEnableMemoryCollection:
@@ -367,10 +369,13 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     if (state.itemSize == null ||
         state.itemPerRow == null ||
-        state.viewHeight == null) {
+        state.viewHeight == null ||
+        state.viewOverlayPadding == null) {
       _log.warning("[_onTransformMinimap] Layout measurements not ready");
       return;
     }
+    // valid content height, this is also the minimap height
+    final contentHeight = state.viewHeight! - state.viewOverlayPadding!;
     final maker = prefController.homePhotosZoomLevelValue >= 0
         ? _makeMinimapItems
         : _makeMonthGroupMinimapItems;
@@ -378,13 +383,17 @@ class _Bloc extends Bloc<_Event, _State>
       filesSummary: state.filesSummary,
       itemSize: state.itemSize!,
       itemPerRow: state.itemPerRow!,
-      viewHeight: state.viewHeight! - state.viewOverlayPadding!,
+      viewHeight: contentHeight,
     );
-    final totalHeight =
-        minimapItems.map((e) => e.logicalHeight + e.padding).sum;
-    final ratio = state.viewHeight! / totalHeight;
+    var totalHeight =
+        minimapItems.map((e) => e.logicalHeight).sum + bottomAppBarHeight;
+    if (state.isEnableMemoryCollection && state.memoryCollections.isNotEmpty) {
+      totalHeight += _MemoryCollectionItemView.height;
+    }
+    final ratio =
+        (contentHeight - draggableThumbSize) / (totalHeight - contentHeight);
     _log.info(
-        "[_onTransformMinimap] view height: ${state.viewHeight!}, logical height: $totalHeight");
+        "[_onTransformMinimap] content height: $contentHeight, logical height: $totalHeight");
     emit(state.copyWith(
       minimapItems: minimapItems,
       minimapYRatio: ratio,
@@ -670,8 +679,6 @@ class _Bloc extends Bloc<_Event, _State>
         date: currentMonth,
         logicalY: currentMonthY,
         logicalHeight: h,
-        // we need to take screen(view) height into account
-        padding: viewHeight,
       ));
     }
     return results;
@@ -719,8 +726,6 @@ class _Bloc extends Bloc<_Event, _State>
         date: currentMonth,
         logicalY: currentMonthY,
         logicalHeight: currentMonthHeight,
-        // we need to take screen(view) height into account
-        padding: viewHeight,
       ));
     }
     return results;
@@ -736,6 +741,8 @@ class _Bloc extends Bloc<_Event, _State>
   final PersonsController personsController;
   final MetadataController metadataController;
   final ServerController serverController;
+  final double bottomAppBarHeight;
+  final double draggableThumbSize;
 
   final _itemTransformerQueue =
       ComputeQueue<_ItemTransformerArgument, _ItemTransformerResult>();
