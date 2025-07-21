@@ -78,8 +78,7 @@ class _Bloc extends Bloc<_Event, _State>
       add(_TransformItems(event.files, event.filesSummary));
     }));
     _subscriptions.add(stream
-        .distinctBy(
-            (e) => e.visibleDates.map((d) => d.date).sortedBySelf().lastOrNull)
+        .distinctBy((e) => e.visibleDates.map((d) => d.date).sortedBySelf())
         .listen((event) {
       _onVisibleDatesUpdated();
     }));
