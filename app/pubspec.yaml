@@ -33,7 +33,7 @@ dependencies:
       url: https://github.com/nc-photos/plus_plugins.git
       ref: android_intent_plus-v3.1.1-nc-photos-2
       path: packages/android_intent_plus
-  battery_plus: ^4.0.1
+  battery_plus: ^6.2.2
   bloc_concurrency: ^0.2.5
   cached_network_image:
     git:

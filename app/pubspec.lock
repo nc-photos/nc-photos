@@ -54,18 +54,18 @@ packages:
     dependency: "direct main"
     description:
       name: battery_plus
-      sha256: ae3f2094e58d93e5b760ef308a39918ea98f12da4d79e7ffd0b7fcca891ffd6a
+      sha256: fb794c34cee2e4ea31005fb17ff15e1d904951ec7f15eedead741021870ee834
       url: "https://pub.dev"
     source: hosted
-    version: "4.0.1"
+    version: "6.2.2"
   battery_plus_platform_interface:
     dependency: transitive
     description:
       name: battery_plus_platform_interface
-      sha256: "19fd8418a81aeb2dea8fb7026b1fdf56b6c6d319baf8d703fa0d13c1d5c7ba2f"
+      sha256: e8342c0f32de4b1dfd0223114b6785e48e579bfc398da9471c9179b907fa4910
       url: "https://pub.dev"
     source: hosted
-    version: "1.2.2"
+    version: "2.0.1"
   bloc:
     dependency: transitive
     description:
@@ -2054,10 +2054,10 @@ packages:
     dependency: transitive
     description:
       name: web
-      sha256: "97da13628db363c635202ad97068d47c5b8aa555808e7a9411963c533b449b27"
+      sha256: "868d88a33d8a87b18ffc05f9f030ba328ffefba92d6c127917a2ba740f9cfe4a"
       url: "https://pub.dev"
     source: hosted
-    version: "0.5.1"
+    version: "1.1.1"
   web_socket:
     dependency: transitive
     description:
