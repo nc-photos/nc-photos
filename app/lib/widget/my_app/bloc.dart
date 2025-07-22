@@ -37,11 +37,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         prefController.isUseBlackInDarkThemeChange,
         onData: (data) => state.copyWith(isUseBlackInDarkTheme: data),
       ),
-      emit.forEachIgnoreError<Color?>(
+      emit.forEachIgnoreError<ColorInt?>(
         prefController.seedColorChange,
         onData: (data) => state.copyWith(seedColor: data?.value),
       ),
-      emit.forEachIgnoreError<Color?>(
+      emit.forEachIgnoreError<ColorInt?>(
         prefController.secondarySeedColorChange,
         onData: (data) => state.copyWith(secondarySeedColor: data?.value),
       ),

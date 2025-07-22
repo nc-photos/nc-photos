@@ -15,9 +15,11 @@ import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
+import 'package:np_common/color.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
 part 'theme/bloc.dart';
@@ -199,7 +201,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
               trailing: _BlocSelector<int?>(
                 selector: (state) => state.seedColor,
                 builder: (context, seedColor) => _SeedColorPickerItem(
-                  seedColor: seedColor?.run(Color.new),
+                  seedColor: seedColor?.run(ColorInt.new),
                   onSelected: () => _onPrimaryTap(this.context),
                 ),
               ),
@@ -217,7 +219,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
                       _onSecondaryTap(this.context);
                     } else {
                       context.addEvent(_SetThemeColor(
-                          context.state.seedColor?.let(Color.new), null));
+                          context.state.seedColor?.let(ColorInt.new), null));
                     }
                   },
                 ),
@@ -225,7 +227,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
               trailing: _BlocSelector<int?>(
                 selector: (state) => state.secondarySeedColor,
                 builder: (context, secondarySeedColor) => _SeedColorPickerItem(
-                  seedColor: secondarySeedColor?.run(Color.new),
+                  seedColor: secondarySeedColor?.run(ColorInt.new),
                   onSelected: () => _onSecondaryTap(this.context),
                 ),
               ),
@@ -239,25 +241,25 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
             ),
             Wrap(
               children: const [
-                _PresetItem(primary: Color(0xFFF44336)),
-                _PresetItem(primary: Color(0xFF9C27B0)),
-                _PresetItem(primary: Color(0xFF2196F3)),
-                _PresetItem(primary: Color(0xFF4CAF50)),
-                _PresetItem(primary: Color(0xFFFFC107)),
+                _PresetItem(primary: ColorInt(0xFFF44336)),
+                _PresetItem(primary: ColorInt(0xFF9C27B0)),
+                _PresetItem(primary: ColorInt(0xFF2196F3)),
+                _PresetItem(primary: ColorInt(0xFF4CAF50)),
+                _PresetItem(primary: ColorInt(0xFFFFC107)),
                 _PresetItem(
                   emoji: "\u{1f349}",
-                  primary: Color(0xFF009736),
-                  secondary: Color(0xFFEE2A35),
+                  primary: ColorInt(0xFF009736),
+                  secondary: ColorInt(0xFFEE2A35),
                 ),
                 _PresetItem(
                   emoji: "\u{1f33d}",
-                  primary: Color(0xFFFFC107),
-                  secondary: Color(0xFF4CAF50),
+                  primary: ColorInt(0xFFFFC107),
+                  secondary: ColorInt(0xFF4CAF50),
                 ),
                 _PresetItem(
                   emoji: "\u{1f38f}",
-                  primary: Color(0xFF2196F3),
-                  secondary: Color(0xFFF44336),
+                  primary: ColorInt(0xFF2196F3),
+                  secondary: ColorInt(0xFFF44336),
                 ),
               ]
                   .map((e) => _PresetItemView(
@@ -290,7 +292,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
       _isVisible = false;
     });
     try {
-      final color = await showDialog<Color>(
+      final color = await showDialog<ColorInt>(
         context: context,
         builder: (_) => _SeedColorCustomPicker(
           initialColor:
@@ -302,7 +304,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
         return;
       }
       context.addEvent(_SetThemeColor(
-          color, context.state.secondarySeedColor?.let(Color.new)));
+          color, context.state.secondarySeedColor?.let(ColorInt.new)));
     } finally {
       if (mounted) {
         setState(() {
@@ -317,7 +319,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
       _isVisible = false;
     });
     try {
-      final color = await showDialog<Color>(
+      final color = await showDialog<ColorInt>(
         context: context,
         builder: (_) => _SeedColorCustomPicker(
           initialColor: context.bloc.prefController.secondarySeedColorValue ??
@@ -330,7 +332,8 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
       }
       // enabling secondary automatically enable primary color
       context.addEvent(_SetThemeColor(
-          context.state.seedColor?.let(Color.new) ?? defaultSeedColor, color));
+          context.state.seedColor?.let(ColorInt.new) ?? defaultSeedColor,
+          color));
     } finally {
       if (mounted) {
         setState(() {
@@ -342,8 +345,8 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
 
   Future<void> _onPresetSelected(
     BuildContext context, {
-    required Color? primary,
-    Color? secondary,
+    required ColorInt? primary,
+    ColorInt? secondary,
   }) async {
     context.addEvent(_SetThemeColor(primary, secondary));
     Navigator.of(context).pop();
@@ -365,7 +368,7 @@ class _SeedColorCustomPicker extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _SeedColorCustomPickerState();
 
-  final Color initialColor;
+  final ColorInt initialColor;
 }
 
 class _SeedColorCustomPickerState extends State<_SeedColorCustomPicker> {
@@ -412,7 +415,7 @@ class _SeedColorPickerItem extends StatelessWidget {
             ? Icon(
                 Icons.circle,
                 size: _size * .9,
-                color: seedColor,
+                color: seedColor?.toColor(),
               )
             : const Icon(Icons.edit_outlined),
       ),
@@ -428,7 +431,7 @@ class _SeedColorPickerItem extends StatelessWidget {
     }
   }
 
-  final Color? seedColor;
+  final ColorInt? seedColor;
   final VoidCallback? onSelected;
 
   static const _size = 48.0;
@@ -463,7 +466,7 @@ class _PresetItemView extends StatelessWidget {
             : Icon(
                 Icons.circle,
                 size: _size * .9,
-                color: item.primary,
+                color: item.primary.toColor(),
               ),
       ),
     );
@@ -492,8 +495,8 @@ class _PresetItem {
   });
 
   final String? emoji;
-  final Color primary;
-  final Color? secondary;
+  final ColorInt primary;
+  final ColorInt? secondary;
 }
 
 /// Based on the original HueRingPicker
@@ -511,8 +514,8 @@ class _HueRingPicker extends StatefulWidget {
     this.pickerAreaBorderRadius = const BorderRadius.all(Radius.zero),
   });
 
-  final Color pickerColor;
-  final ValueChanged<Color> onColorChanged;
+  final ColorInt pickerColor;
+  final ValueChanged<ColorInt> onColorChanged;
   final double colorPickerHeight;
   final double hueRingStrokeWidth;
   final bool displayThumbColor;
@@ -527,19 +530,19 @@ class _HueRingPickerState extends State<_HueRingPicker> {
 
   @override
   void initState() {
-    currentHsvColor = HSVColor.fromColor(widget.pickerColor);
+    currentHsvColor = HSVColor.fromColor(widget.pickerColor.toColor());
     super.initState();
   }
 
   @override
   void didUpdateWidget(_HueRingPicker oldWidget) {
     super.didUpdateWidget(oldWidget);
-    currentHsvColor = HSVColor.fromColor(widget.pickerColor);
+    currentHsvColor = HSVColor.fromColor(widget.pickerColor.toColor());
   }
 
   void onColorChanging(HSVColor color) {
     setState(() => currentHsvColor = color.withSaturation(1).withValue(1));
-    widget.onColorChanged(currentHsvColor.toColor());
+    widget.onColorChanged(currentHsvColor.toColor().toColorInt());
   }
 
   @override

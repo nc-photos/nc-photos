@@ -146,17 +146,17 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isUseBlackInDarkTheme.distinct().skip(1);
   bool get isUseBlackInDarkThemeValue => _isUseBlackInDarkThemeController.value;
 // _seedColorController
-  ValueStream<Color?> get seedColor => _seedColorController.stream;
-  Stream<Color?> get seedColorNew => seedColor.skip(1);
-  Stream<Color?> get seedColorChange => seedColor.distinct().skip(1);
-  Color? get seedColorValue => _seedColorController.value;
+  ValueStream<ColorInt?> get seedColor => _seedColorController.stream;
+  Stream<ColorInt?> get seedColorNew => seedColor.skip(1);
+  Stream<ColorInt?> get seedColorChange => seedColor.distinct().skip(1);
+  ColorInt? get seedColorValue => _seedColorController.value;
 // _secondarySeedColorController
-  ValueStream<Color?> get secondarySeedColor =>
+  ValueStream<ColorInt?> get secondarySeedColor =>
       _secondarySeedColorController.stream;
-  Stream<Color?> get secondarySeedColorNew => secondarySeedColor.skip(1);
-  Stream<Color?> get secondarySeedColorChange =>
+  Stream<ColorInt?> get secondarySeedColorNew => secondarySeedColor.skip(1);
+  Stream<ColorInt?> get secondarySeedColorChange =>
       secondarySeedColor.distinct().skip(1);
-  Color? get secondarySeedColorValue => _secondarySeedColorController.value;
+  ColorInt? get secondarySeedColorValue => _secondarySeedColorController.value;
 // _isDontShowVideoPreviewHintController
   ValueStream<bool> get isDontShowVideoPreviewHint =>
       _isDontShowVideoPreviewHintController.stream;

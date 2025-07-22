@@ -63,6 +63,6 @@ class _SetThemeColor extends _Event {
   @override
   String toString() => _$toString();
 
-  final Color? primary;
-  final Color? secondary;
+  final ColorInt? primary;
+  final ColorInt? secondary;
 }

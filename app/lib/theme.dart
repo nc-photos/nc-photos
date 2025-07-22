@@ -6,9 +6,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/theme/dimension.dart';
+import 'package:np_common/color.dart';
 import 'package:np_ui/np_ui.dart';
 
-const defaultSeedColor = Color(0xFF2196F3);
+const defaultSeedColor = ColorInt(0xFF2196F3);
 
 extension ThemeExtension on ThemeData {
   double get widthLimitedContentMaxWidth => 550.0;
@@ -116,7 +117,7 @@ ThemeData buildDarkTheme(BuildContext context, [ColorScheme? dynamicScheme]) {
 ColorScheme _getColorScheme(
     BuildContext context, ColorScheme? dynamicScheme, Brightness brightness) {
   var primary = context.read<PrefController>().seedColorValue;
-  Color? secondary;
+  ColorInt? secondary;
   if (primary == null) {
     if (dynamicScheme != null) {
       return dynamicScheme;
@@ -129,8 +130,8 @@ ColorScheme _getColorScheme(
   return SeedColorScheme.fromSeeds(
     brightness: brightness,
     tones: FlexTones.material(brightness),
-    primaryKey: primary,
-    secondaryKey: secondary,
+    primaryKey: primary.toColor(),
+    secondaryKey: secondary?.toColor(),
   );
 }
 

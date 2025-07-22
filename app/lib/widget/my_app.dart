@@ -57,6 +57,7 @@ import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';

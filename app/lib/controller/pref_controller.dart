@@ -2,7 +2,6 @@
 
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/collection/util.dart';
@@ -14,6 +13,7 @@ import 'package:nc_photos/protected_page_handler.dart';
 import 'package:nc_photos/widget/home_collections.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_codegen/np_codegen.dart';
+import 'package:np_common/color.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/size.dart';
 import 'package:np_common/type.dart';
@@ -154,7 +154,7 @@ class PrefController {
         value: value,
       );
 
-  Future<bool> setSeedColor(Color? value) => _setOrRemove<Color>(
+  Future<bool> setSeedColor(ColorInt? value) => _setOrRemove<ColorInt>(
         controller: _seedColorController,
         setter: (pref, value) => pref.setSeedColor(value.withAlpha(0xFF).value),
         remover: (pref) => pref.setSeedColor(null),
@@ -162,7 +162,7 @@ class PrefController {
         defaultValue: null,
       );
 
-  Future<bool> setSecondarySeedColor(Color? value) => _setOrRemove<Color>(
+  Future<bool> setSecondarySeedColor(ColorInt? value) => _setOrRemove<ColorInt>(
         controller: _secondarySeedColorController,
         setter: (pref, value) =>
             pref.setSecondarySeedColor(value.withAlpha(0xFF).value),
@@ -388,12 +388,12 @@ class PrefController {
   @npSubjectAccessor
   late final _isUseBlackInDarkThemeController =
       BehaviorSubject.seeded(pref.isUseBlackInDarkThemeOr(false));
-  @NpSubjectAccessor(type: "Color?")
+  @npSubjectAccessor
   late final _seedColorController =
-      BehaviorSubject<Color?>.seeded(pref.getSeedColor()?.let(Color.new));
-  @NpSubjectAccessor(type: "Color?")
-  late final _secondarySeedColorController = BehaviorSubject<Color?>.seeded(
-      pref.getSecondarySeedColor()?.let(Color.new));
+      BehaviorSubject<ColorInt?>.seeded(pref.getSeedColor()?.let(ColorInt.new));
+  @npSubjectAccessor
+  late final _secondarySeedColorController = BehaviorSubject<ColorInt?>.seeded(
+      pref.getSecondarySeedColor()?.let(ColorInt.new));
   @npSubjectAccessor
   late final _isDontShowVideoPreviewHintController =
       BehaviorSubject.seeded(pref.isDontShowVideoPreviewHintOr(false));
