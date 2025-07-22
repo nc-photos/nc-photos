@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
@@ -84,11 +83,10 @@ class ListAlbum2 {
       }
     }
     if (isRemoteGood) {
-      yield* _c.albumRepo2
-          .getAlbums(account, albumFiles.whereNotNull().toList());
+      yield* _c.albumRepo2.getAlbums(account, albumFiles.nonNulls.toList());
     } else {
       yield* _c.albumRepo2Local
-          .getAlbums(account, albumFiles.whereNotNull().toList());
+          .getAlbums(account, albumFiles.nonNulls.toList());
     }
   }
 

@@ -201,10 +201,6 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
               case _SelectionAppBarMenuOption.delete:
                 _onSelectionAppBarDeletePressed(context);
                 break;
-
-              default:
-                _log.shout("[_buildSelectionAppBar] Unknown option: $option");
-                break;
             }
           },
         )
@@ -240,10 +236,6 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
             switch (option) {
               case _AppBarMenuOption.empty:
                 _onEmptyTrashPressed(context);
-                break;
-
-              default:
-                _log.shout("[_buildNormalAppBar] Unknown option: $option");
                 break;
             }
           },

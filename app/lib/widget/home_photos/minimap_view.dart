@@ -81,7 +81,7 @@ class _MinimapView extends StatelessWidget {
                     } finally {
                       prevDate = e.date;
                     }
-                  }).whereNotNull(),
+                  }).nonNulls,
                 ],
               ),
             ),

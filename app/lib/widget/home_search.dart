@@ -422,9 +422,6 @@ class _HomeSearchState extends State<HomeSearch>
       case _SelectionMenuOption.download:
         _onSelectionDownloadPressed();
         break;
-      default:
-        _log.shout("[_onSelectionMenuSelected] Unknown option: $option");
-        break;
     }
   }
 

@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
-import 'package:collection/collection.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
@@ -44,7 +43,7 @@ class AlbumRemoteDataSource2 implements AlbumDataSource2 {
         return null;
       }
     }));
-    return results.whereNotNull().toList();
+    return results.nonNulls.toList();
   }
 
   @override
@@ -160,7 +159,7 @@ class AlbumSqliteDbDataSource2 implements AlbumDataSource2 {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 

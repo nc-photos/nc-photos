@@ -163,9 +163,6 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
       case _AppBarMenuOption.delete:
         _onDeletePressed(context);
         break;
-      default:
-        _log.shout("[_onMenuSelected] Unknown option: $option");
-        break;
     }
   }
 

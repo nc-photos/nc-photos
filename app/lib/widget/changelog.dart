@@ -274,7 +274,7 @@ List<Widget> _buildChangelog540(BuildContext context) {
 class _ChangelogBanner extends StatelessWidget {
   const _ChangelogBanner({
     required this.title,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.action,
   });
 

@@ -14,7 +14,7 @@ extension PrefExtension on Pref {
           }
           return true;
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 

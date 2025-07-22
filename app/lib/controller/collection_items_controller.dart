@@ -171,7 +171,7 @@ class CollectionItemsController {
             return null;
           }
         }))
-            .whereNotNull()
+            .nonNulls
             .toList();
         _dataStreamController.addWithValue((value) => value.copyWith(
               items: finalize,
@@ -378,7 +378,7 @@ class CollectionItemsController {
               return e;
             }
           })
-          .whereNotNull()
+          .nonNulls
           .toList();
       _dataStreamController.addWithValue((value) => value.copyWith(
             items: newItems,

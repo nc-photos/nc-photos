@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/entity_converter.dart';
@@ -82,7 +81,7 @@ class FaceRecognitionPersonSqliteDbDataSource
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 

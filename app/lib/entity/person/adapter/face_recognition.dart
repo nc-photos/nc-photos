@@ -34,7 +34,7 @@ class PersonFaceRecognitionAdapter implements PersonAdapter {
             final f = found.firstWhereOrNull((e) => e.fdId == i.fileId);
             return f?.run(BasicPersonFace.new);
           })
-          .whereNotNull()
+          .nonNulls
           .toList();
     });
   }

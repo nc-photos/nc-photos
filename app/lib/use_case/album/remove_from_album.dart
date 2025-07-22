@@ -58,7 +58,7 @@ class RemoveFromAlbum {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
     final provider = album.provider as AlbumStaticProvider;
     final newItems = provider.items

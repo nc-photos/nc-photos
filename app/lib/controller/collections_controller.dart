@@ -226,7 +226,7 @@ class CollectionsController {
           return Future.value(e);
         }
       });
-      _updateCollection(c, newItems?.whereNotNull().toList());
+      _updateCollection(c, newItems?.nonNulls.toList());
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
     }

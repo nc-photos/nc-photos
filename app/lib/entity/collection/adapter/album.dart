@@ -113,7 +113,7 @@ class CollectionAlbumAdapter implements CollectionAdapter {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList());
     final newAlbum = await EditAlbum(_c)(
       account,

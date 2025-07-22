@@ -501,13 +501,13 @@ class _HueRingPicker extends StatefulWidget {
   const _HueRingPicker({
     required this.pickerColor,
     required this.onColorChanged,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.colorPickerHeight = 250.0,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.hueRingStrokeWidth = 20.0,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.displayThumbColor = true,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.pickerAreaBorderRadius = const BorderRadius.all(Radius.zero),
   });
 

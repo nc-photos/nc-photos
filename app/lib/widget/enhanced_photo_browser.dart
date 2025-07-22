@@ -268,9 +268,6 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
       case _SelectionMenuOption.delete:
         _onSelectionDeletePressed(context);
         break;
-      default:
-        _log.shout("[_onSelectionMenuSelected] Unknown option: $option");
-        break;
     }
   }
 

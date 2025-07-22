@@ -92,7 +92,7 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
         return null;
       }
     }));
-    return results.whereNotNull().toMap();
+    return results.nonNulls.toMap();
   }
 
   @override
@@ -125,7 +125,7 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 
@@ -148,7 +148,7 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 
@@ -179,7 +179,7 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toMap();
   }
 
@@ -210,7 +210,7 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toMap();
   }
 

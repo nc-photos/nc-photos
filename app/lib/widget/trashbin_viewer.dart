@@ -151,10 +151,6 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
                       case _AppBarMenuOption.delete:
                         _onDeletePressed(context);
                         break;
-
-                      default:
-                        _log.shout("[_buildAppBar] Unknown option: $option");
-                        break;
                     }
                   },
                 ),

@@ -114,9 +114,6 @@ class _SelectionAppBarMenu extends StatelessWidget {
           case _SelectionMenuOption.download:
             context.addEvent(const _DownloadSelectedItems());
             break;
-          default:
-            _log.shout("[build] Unknown option: $option");
-            break;
         }
       },
     );

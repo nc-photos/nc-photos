@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/album.dart';
@@ -64,7 +63,7 @@ class ListAlbum {
         albumFiles[i] = null;
       }
     }
-    yield* _c.albumRepo.getAll(account, albumFiles.whereNotNull().toList());
+    yield* _c.albumRepo.getAll(account, albumFiles.nonNulls.toList());
   }
 
   final DiContainer _c;

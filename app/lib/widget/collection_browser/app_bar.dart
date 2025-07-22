@@ -265,9 +265,6 @@ class _SelectionAppBar extends StatelessWidget {
       case _SelectionMenuOption.delete:
         context.read<_Bloc>().add(const _DeleteSelectedItems());
         break;
-      default:
-        _log.shout("[_onSelectionMenuSelected] Unknown option: $option");
-        break;
     }
   }
 

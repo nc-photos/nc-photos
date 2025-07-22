@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
@@ -141,7 +140,7 @@ class ListSharing {
         return null;
       }
     });
-    return (await Future.wait(futures)).whereNotNull().toList();
+    return (await Future.wait(futures)).nonNulls.toList();
   }
 
   Future<List<ListSharingData>> _querySharesWithMe(
@@ -187,7 +186,7 @@ class ListSharing {
         }
       }
     });
-    return (await Future.wait(futures)).whereNotNull().toList();
+    return (await Future.wait(futures)).nonNulls.toList();
   }
 
   Future<ListSharingData?> _querySharedAlbum(

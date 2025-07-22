@@ -235,7 +235,7 @@ class _SelectableItemListState<T extends SelectableItemMetadata>
         "[_remapSelected] Mapping ${widget.selectedItems.length} items to new list");
     final newSelected = widget.selectedItems
         .map((from) => widget.items.firstWhereOrNull((to) => from == to))
-        .whereNotNull()
+        .nonNulls
         .toSet();
     if (newSelected.length != widget.selectedItems.length) {
       _log.warning(

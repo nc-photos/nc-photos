@@ -166,7 +166,7 @@ class NcAlbumSqliteDbDataSource implements NcAlbumCacheDataSource {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 
@@ -201,7 +201,7 @@ class NcAlbumSqliteDbDataSource implements NcAlbumCacheDataSource {
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 

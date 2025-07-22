@@ -69,7 +69,7 @@ class CollectionExporter {
                 return null;
               }
             })
-            .whereNotNull()
+            .nonNulls
             .toList(),
         latestItemTime: collection.lastModified,
       ),

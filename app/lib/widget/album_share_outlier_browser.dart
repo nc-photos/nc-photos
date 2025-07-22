@@ -149,10 +149,6 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
               case _MenuOption.fixAll:
                 _onFixAllPressed(context);
                 break;
-
-              default:
-                _log.shout("[_buildAppBar] Unknown option: $option");
-                break;
             }
           },
         ),

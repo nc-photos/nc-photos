@@ -164,7 +164,6 @@ class DirPickerState extends State<DirPicker> {
           break;
 
         case _PickState.notPicked:
-        default:
           iconData = widget.isMultipleSelections
               ? Icons.check_box_outline_blank
               : Icons.radio_button_unchecked;

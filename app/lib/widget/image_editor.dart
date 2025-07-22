@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kiwi/kiwi.dart';
@@ -314,7 +313,7 @@ class _ImageEditorState extends State<ImageEditor> {
   List<ImageFilter> _buildFilterList() {
     return [
       if (_cropFilter != null) _cropFilter!.toImageFilter()!,
-      ..._transformFilters.map((f) => f.toImageFilter()).whereNotNull(),
+      ..._transformFilters.map((f) => f.toImageFilter()).nonNulls,
       ..._colorFilters.map((f) => f.toImageFilter()),
     ];
   }

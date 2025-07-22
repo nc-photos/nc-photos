@@ -286,8 +286,6 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
         return Icons.link_outlined;
       case ShareType.talk:
         return Icons.sms_outlined;
-      default:
-        return null;
     }
   }
 

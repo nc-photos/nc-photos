@@ -201,8 +201,8 @@ extension SqliteDbExtension on SqliteDb {
         ..setAccount(account);
       return q.build();
     });
-    final fileIds = keys.map((k) => k.fileId).whereNotNull();
-    final relativePaths = keys.map((k) => k.relativePath).whereNotNull();
+    final fileIds = keys.map((k) => k.fileId).nonNulls;
+    final relativePaths = keys.map((k) => k.relativePath).nonNulls;
     query.where(files.fileId.isIn(fileIds) |
         accountFiles.relativePath.isIn(relativePaths));
     return query

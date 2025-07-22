@@ -89,7 +89,7 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
         await MediaStore.deleteFiles(files.map((f) => f.uri).toList());
     final failedFilesIt = failedUris!
         .map((uri) => files.firstWhereOrNull((f) => f.uri == uri))
-        .whereNotNull();
+        .nonNulls;
     for (final f in failedFilesIt) {
       onFailure?.call(f, null, null);
     }
