@@ -37,7 +37,7 @@ class _TimelineState extends State<_Timeline> {
       ],
       child: Container(
         width: _Timeline.width,
-        color: Colors.black.withOpacity(.65),
+        color: Colors.black.withValues(alpha: .65),
         child: NotificationListener<UserScrollNotification>(
           onNotification: (notification) {
             _lastInteraction = clock.now();

@@ -109,10 +109,8 @@ class _MinimapBackground extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.centerLeft,
                 end: Alignment.center,
-                colors: Theme.of(context)
-                    .colorScheme
-                    .surface
-                    .let((c) => [c.withOpacity(0), c.withOpacity(.6)]),
+                colors: Theme.of(context).colorScheme.surface.let(
+                    (c) => [c.withValues(alpha: 0), c.withValues(alpha: .6)]),
               ),
             ),
           ),

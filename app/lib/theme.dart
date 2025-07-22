@@ -15,13 +15,13 @@ extension ThemeExtension on ThemeData {
   double get widthLimitedContentMaxWidth => 550.0;
 
   Color get listPlaceholderBackgroundColor =>
-      colorScheme.primaryContainer.withOpacity(.6);
+      colorScheme.primaryContainer.withValues(alpha: .6);
 
   Color get listPlaceholderForegroundColor =>
-      colorScheme.onPrimaryContainer.withOpacity(.7);
+      colorScheme.onPrimaryContainer.withValues(alpha: .7);
 
   Color get homeNavigationBarBackgroundColor =>
-      elevate(colorScheme.surface, 2).withOpacity(.55);
+      elevate(colorScheme.surface, 2).withValues(alpha: .55);
 
   Color get onDarkSurface {
     return brightness == Brightness.light
@@ -40,15 +40,15 @@ extension ThemeExtension on ThemeData {
   LinearGradient get photoGridShimmerGradient {
     final Color color;
     if (brightness == Brightness.light) {
-      color = Colors.white.withOpacity(.85);
+      color = Colors.white.withValues(alpha: .85);
     } else {
-      color = Colors.white.withOpacity(.25);
+      color = Colors.white.withValues(alpha: .25);
     }
     return LinearGradient(
       colors: [
-        listPlaceholderBackgroundColor.withOpacity(0),
+        listPlaceholderBackgroundColor.withValues(alpha: 0),
         color,
-        listPlaceholderBackgroundColor.withOpacity(0),
+        listPlaceholderBackgroundColor.withValues(alpha: 0),
       ],
       stops: const [0.1, 0.3, 0.4],
       begin: const Alignment(-1.0, -0.3),
@@ -191,21 +191,21 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
         backgroundColor:
             WidgetStateProperty.all(colorScheme.secondaryContainer),
         foregroundColor: WidgetStateProperty.all(colorScheme.secondary),
-        overlayColor:
-            WidgetStateProperty.all(colorScheme.secondary.withOpacity(.1)),
+        overlayColor: WidgetStateProperty.all(
+            colorScheme.secondary.withValues(alpha: .1)),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStateProperty.all(colorScheme.secondary),
-        overlayColor:
-            WidgetStateProperty.all(colorScheme.secondary.withOpacity(.1)),
+        overlayColor: WidgetStateProperty.all(
+            colorScheme.secondary.withValues(alpha: .1)),
       ),
     ),
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: colorScheme.secondary,
       selectionHandleColor: colorScheme.secondary,
-      selectionColor: colorScheme.secondary.withOpacity(.4),
+      selectionColor: colorScheme.secondary.withValues(alpha: .4),
     ),
     inputDecorationTheme: InputDecorationTheme(
       focusedBorder: UnderlineInputBorder(
@@ -225,13 +225,13 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
       M3(
         checkbox: M3Checkbox(
           disabled: M3CheckboxDisabled(
-            container: colorScheme.onSurface.withOpacity(.38),
+            container: colorScheme.onSurface.withValues(alpha: .38),
           ),
         ),
         filterChip: M3FilterChip(
           disabled: M3FilterChipDisabled(
-            containerSelected: colorScheme.onSurface.withOpacity(.12),
-            labelText: colorScheme.onSurface.withOpacity(.38),
+            containerSelected: colorScheme.onSurface.withValues(alpha: .12),
+            labelText: colorScheme.onSurface.withValues(alpha: .38),
           ),
         ),
         listTile: M3ListTile(

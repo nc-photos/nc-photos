@@ -209,7 +209,7 @@ class _PlaceHolderView extends StatelessWidget {
             return child;
           },
         ).build(),
-        ColoredBox(color: Colors.black.withOpacity(.7)),
+        ColoredBox(color: Colors.black.withValues(alpha: .7)),
         const Center(child: _ProgressIndicator()),
       ],
     );

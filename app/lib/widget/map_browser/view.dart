@@ -98,13 +98,13 @@ class _OsmMarker extends StatelessWidget {
           borderRadius: BorderRadius.circular(size / 2),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(.3),
+              color: Colors.black.withValues(alpha: .3),
               blurRadius: 2,
               offset: const Offset(1, 1),
             ),
           ],
           border: Border.all(
-            color: Colors.white.withOpacity(.75),
+            color: Colors.white.withValues(alpha: .75),
             width: 2,
           ),
           color: color,

@@ -45,7 +45,7 @@ class Selectable extends StatelessWidget {
                         : Theme.of(context)
                             .colorScheme
                             .secondaryContainer
-                            .withOpacity(0),
+                            .withValues(alpha: 0),
                     width: isSelected ? 4 : 0,
                   ),
                   curve: Curves.easeInOut,

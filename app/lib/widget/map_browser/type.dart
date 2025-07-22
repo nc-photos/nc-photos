@@ -239,7 +239,7 @@ class _GoogleMarkerBitmapBuilder {
 
   void _drawBorder(Canvas canvas) {
     final outlinePaint = Paint()
-      ..color = Color.alphaBlend(Colors.white.withOpacity(.75), color)
+      ..color = Color.alphaBlend(Colors.white.withValues(alpha: .75), color)
       ..strokeWidth = size * .04
       ..style = PaintingStyle.stroke;
     canvas.drawCircle(
