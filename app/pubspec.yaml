@@ -159,7 +159,7 @@ dependencies:
   shared_preferences: ^2.2.3
   shared_preferences_platform_interface: any
   sliver_tools: ^0.2.12
-  smooth_corner: ^1.1.0
+  smooth_corner: ^1.1.1
   super_sliver_list: ^0.4.1
   to_string:
     git:
@@ -179,21 +179,18 @@ dependency_overrides:
   video_player:
     git:
       url: https://github.com/nc-photos/packages.git
-      ref: video_player-v2.8.6-nc-photos-2
+      ref: video_player-v2.8.7-nc-photos-1
       path: packages/video_player/video_player
   video_player_android:
     git:
       url: https://github.com/nc-photos/packages.git
-      ref: video_player-v2.8.6-nc-photos-2
+      ref: video_player-v2.8.7-nc-photos-1
       path: packages/video_player/video_player_android
   video_player_platform_interface:
     git:
       url: https://github.com/nc-photos/packages.git
-      ref: video_player-v2.8.6-nc-photos-2
+      ref: video_player-v2.8.7-nc-photos-1
       path: packages/video_player/video_player_platform_interface
-  # fix google_maps_cluster_manager
-  google_maps_flutter_android: 2.7.0
-  google_maps_flutter_platform_interface: 2.5.0
 
 dev_dependencies:
   test: ^1.22.1
