@@ -120,7 +120,10 @@ ColorScheme _getColorScheme(
   ColorInt? secondary;
   if (primary == null) {
     if (dynamicScheme != null) {
-      return dynamicScheme;
+      // dynamic scheme is currently bugged with broken colors
+      // return dynamicScheme;
+      primary = dynamicScheme.primary.toColorInt();
+      secondary = dynamicScheme.secondary.toColorInt();
     } else {
       primary = defaultSeedColor;
     }
@@ -146,9 +149,6 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     iconTheme: IconThemeData(
       color: colorScheme.onSurfaceVariant,
     ),
-    // remove after dialog supports m3
-    dialogBackgroundColor:
-        Color.lerp(colorScheme.surface, colorScheme.surfaceTint, 0.11),
     popupMenuTheme: PopupMenuThemeData(
       // remove after menu supports m3
       color: Color.lerp(colorScheme.surface, colorScheme.surfaceTint, 0.08),
