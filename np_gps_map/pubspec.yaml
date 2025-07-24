@@ -15,7 +15,10 @@ dependencies:
   flutter_map: ^6.1.0
   flutter_map_marker_cluster: ^1.3.6
   google_maps_flutter: 2.5.3
-  google_maps_cluster_manager: 3.1.0
+  google_maps_cluster_manager:
+    git:
+      url: https://github.com/bpillon/google_maps_cluster_manager.git
+      ref: 7ab2a6363f70cbc775a84fb09a0abcf0d546cdae
   latlong2: any
   np_async:
     path: ../np_async
@@ -26,10 +29,6 @@ dependencies:
   np_platform_util:
     path: ../np_platform_util
   rxdart: ^0.27.7
-
-dependency_overrides:
-  google_maps_flutter_android: 2.7.0
-  google_maps_flutter_platform_interface: 2.5.0
 
 dev_dependencies:
   np_lints:
