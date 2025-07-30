@@ -29,12 +29,7 @@ IntColumn Function() integer() => () => IntColumn();
 TextColumn Function() text() => () => TextColumn();
 """);
     final expected = _genExpected(r"""
-enum TestSort {
-  test1Asc,
-  test1Desc,
-  test2Asc,
-  test2Desc,
-}
+enum TestSort { test1Asc, test1Desc, test2Asc, test2Desc }
 
 extension TestSortIterableExtension on Iterable<TestSort> {
   Iterable<OrderingTerm> toOrderingItem(Database db) {
@@ -66,7 +61,8 @@ $src
 }
 
 String _genExpected(String src) {
-  return """// GENERATED CODE - DO NOT MODIFY BY HAND
+  return """// dart format width=80
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'test.dart';
 

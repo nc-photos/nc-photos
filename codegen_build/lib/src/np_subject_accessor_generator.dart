@@ -33,17 +33,21 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
       results
         ..add("// ${f.fullname}")
         ..add(
-            "ValueStream<${f.typeStr}> get ${f.name} => ${f.fullname}.stream;")
+          "ValueStream<${f.typeStr}> get ${f.name} => ${f.fullname}.stream;",
+        )
         ..add("Stream<${f.typeStr}> get ${f.name}New => ${f.name}.skip(1);")
         ..add(
-            "Stream<${f.typeStr}> get ${f.name}Change => ${f.name}.distinct().skip(1);")
+          "Stream<${f.typeStr}> get ${f.name}Change => ${f.name}.distinct().skip(1);",
+        )
         ..add("${f.typeStr} get ${f.name}Value => ${f.fullname}.value;");
     }
     return results.join("\n");
   }
 
   Future<List<_FieldMeta>> _getFields(
-      Resolver resolver, ClassElement clazz) async {
+    Resolver resolver,
+    ClassElement clazz,
+  ) async {
     const typeChecker = TypeChecker.fromRuntime(NpSubjectAccessor);
     final data = <_FieldMeta>[];
     for (final f in clazz.fields.where(typeChecker.hasAnnotationOf)) {
@@ -51,11 +55,13 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
       // final type = annotation.getField("type")!.toTypeValue()!;
       final parseName = _parseName(f);
       final parseType = await _parseTypeString(resolver, f);
-      data.add(_FieldMeta(
-        name: parseName.name,
-        fullname: parseName.fullname,
-        typeStr: parseType.typeStr,
-      ));
+      data.add(
+        _FieldMeta(
+          name: parseName.name,
+          fullname: parseName.fullname,
+          typeStr: parseType.typeStr,
+        ),
+      );
     }
     return data;
   }
@@ -72,29 +78,33 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
   }
 
   Future<_TypeParseResult> _parseTypeString(
-      Resolver resolver, FieldElement field) async {
+    Resolver resolver,
+    FieldElement field,
+  ) async {
     String? typeStr;
-    if (const TypeChecker.fromRuntime(NpSubjectAccessor)
-        .hasAnnotationOf(field)) {
-      final annotation = const TypeChecker.fromRuntime(NpSubjectAccessor)
-          .annotationsOf(field)
-          .first;
+    if (const TypeChecker.fromRuntime(
+      NpSubjectAccessor,
+    ).hasAnnotationOf(field)) {
+      final annotation =
+          const TypeChecker.fromRuntime(
+            NpSubjectAccessor,
+          ).annotationsOf(field).first;
       final type = annotation.getField("type")?.toStringValue();
       typeStr = type;
     }
 
     if (typeStr == null) {
       final astNode = await resolver.astNodeFor(field, resolve: true);
-      typeStr = (astNode! as VariableDeclaration)
-          .initializer!
-          .staticType!
-          .getDisplayString(withNullability: true);
+      typeStr =
+          (astNode! as VariableDeclaration).initializer!.staticType!
+              .getDisplayString();
       if (typeStr.startsWith("BehaviorSubject<")) {
         typeStr = typeStr.substring(16, typeStr.length - 1);
       }
       if (typeStr == "InvalidType") {
         throw UnsupportedError(
-            "Type can't be parsed, please specify the type in annotation: ${field.name}");
+          "Type can't be parsed, please specify the type in annotation: ${field.name}",
+        );
       }
     }
     return _TypeParseResult(typeStr: typeStr);
@@ -102,19 +112,14 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
 }
 
 class _NameParseResult {
-  const _NameParseResult({
-    required this.name,
-    required this.fullname,
-  });
+  const _NameParseResult({required this.name, required this.fullname});
 
   final String name;
   final String fullname;
 }
 
 class _TypeParseResult {
-  const _TypeParseResult({
-    required this.typeStr,
-  });
+  const _TypeParseResult({required this.typeStr});
 
   final String typeStr;
 }
