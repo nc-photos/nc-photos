@@ -5,18 +5,23 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: "0b2f2bd91ba804e53a61d757b986f89f1f9eaed5b11e4b2f5a2468d86d6c9fc7"
+      sha256: "16e298750b6d0af7ce8a3ba7c18c69c3785d11b15ec83f6dcd0ad2a0009b3cab"
       url: "https://pub.dev"
     source: hosted
-    version: "67.0.0"
+    version: "76.0.0"
+  _macros:
+    dependency: transitive
+    description: dart
+    source: sdk
+    version: "0.3.3"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "37577842a27e4338429a1cbc32679d508836510b056f1eedf0c8d20e39c1383d"
+      sha256: "1f14db053a8c23e260789e9b0980fa27f2680dd640932cae5e1137cce0e46e1e"
       url: "https://pub.dev"
     source: hosted
-    version: "6.4.1"
+    version: "6.11.0"
   android_intent_plus:
     dependency: "direct main"
     description:
@@ -265,20 +270,20 @@ packages:
     dependency: "direct main"
     description:
       path: copy_with
-      ref: "copy_with-1.4.0"
-      resolved-ref: d3f1ebe063b95ebc6971f26f1214c3a7f67eeb18
+      ref: "copy_with-2.0.0"
+      resolved-ref: d7b65a9e3bf1a5f6b002d932a743610e38fde7d5
       url: "https://github.com/nkming2/dart-copy-with.git"
     source: git
-    version: "1.4.0"
+    version: "2.0.0"
   copy_with_build:
     dependency: "direct dev"
     description:
       path: copy_with_build
-      ref: "copy_with_build-1.8.1"
-      resolved-ref: a3325f494f5b8632c8de3a72418d3fd274710c2d
+      ref: "copy_with_build-2.0.0"
+      resolved-ref: d7b65a9e3bf1a5f6b002d932a743610e38fde7d5
       url: "https://github.com/nkming2/dart-copy-with.git"
     source: git
-    version: "1.8.1"
+    version: "2.0.0"
   coverage:
     dependency: transitive
     description:
@@ -323,10 +328,10 @@ packages:
     dependency: transitive
     description:
       name: dart_style
-      sha256: "99e066ce75c89d6b29903d788a7bb9369cf754f7b24bf70bf4b6d6d6b26853b9"
+      sha256: "7306ab8a2359a48d22310ad823521d723acfed60ee1f7e37388e8986853b6820"
       url: "https://pub.dev"
     source: hosted
-    version: "2.3.6"
+    version: "2.3.8"
   dbus:
     dependency: transitive
     description:
@@ -1004,6 +1009,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  macros:
+    dependency: transitive
+    description:
+      name: macros
+      sha256: "1d9e801cd66f7ea3663c45fc708450db1fa57f988142c64289142c9b7ee80656"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.3-main.0"
   matcher:
     dependency: transitive
     description:
@@ -1717,10 +1730,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: "14658ba5f669685cd3d63701d01b31ea748310f7ab854e471962670abcf57832"
+      sha256: "35c8150ece9e8c8d263337a265153c3329667640850b9304861faea59fc98f6b"
       url: "https://pub.dev"
     source: hosted
-    version: "1.5.0"
+    version: "2.0.0"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -1877,20 +1890,20 @@ packages:
     dependency: "direct main"
     description:
       path: to_string
-      ref: "to_string-1.1.0"
-      resolved-ref: "27ba6541e780aed73da4242065636ae605095aae"
+      ref: "to_string-2.0.0"
+      resolved-ref: a8d5f3c200e0435914f10bbdb6ffa07f4f548b83
       url: "https://github.com/nkming2/dart-to-string.git"
     source: git
-    version: "1.1.0"
+    version: "2.0.0"
   to_string_build:
     dependency: "direct dev"
     description:
       path: to_string_build
-      ref: "to_string_build-1.1.1"
-      resolved-ref: "53ef0c7c1e804cc5e15fa48f282ae393cc19006c"
+      ref: "to_string_build-2.0.0"
+      resolved-ref: a8d5f3c200e0435914f10bbdb6ffa07f4f548b83
       url: "https://github.com/nkming2/dart-to-string.git"
     source: git
-    version: "1.1.1"
+    version: "2.0.0"
   typed_data:
     dependency: transitive
     description:
