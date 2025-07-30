@@ -11,5 +11,6 @@ extension _$FaceRecognitionPersonParserNpLog on FaceRecognitionPersonParser {
   Logger get _log => log;
 
   static final log = Logger(
-      "src.entity.face_recognition_person_parser.FaceRecognitionPersonParser");
+    "src.entity.face_recognition_person_parser.FaceRecognitionPersonParser",
+  );
 }
