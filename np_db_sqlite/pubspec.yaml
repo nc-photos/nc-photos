@@ -16,7 +16,7 @@ dependencies:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with
       ref: copy_with-2.0.0
-  drift: 2.15.0
+  drift: 2.23.1
   flutter:
     sdk: flutter
   http: ^1.1.2
@@ -61,7 +61,7 @@ dev_dependencies:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
       ref: copy_with_build-2.0.0
-  drift_dev: 2.15.0
+  drift_dev: 2.23.0
   np_codegen_build:
     path: ../codegen_build
   np_lints:

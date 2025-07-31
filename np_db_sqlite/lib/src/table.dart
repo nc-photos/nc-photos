@@ -123,6 +123,7 @@ class Trashes extends Table {
 class DirFiles extends Table {
   IntColumn get dir =>
       integer().references(Files, #rowId, onDelete: KeyAction.cascade)();
+  @ReferenceName("child")
   IntColumn get child =>
       integer().references(Files, #rowId, onDelete: KeyAction.cascade)();
 

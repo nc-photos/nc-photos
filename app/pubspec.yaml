@@ -202,7 +202,7 @@ dev_dependencies:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
       ref: copy_with_build-2.0.0
-  drift: 2.15.0
+  drift: 2.23.1
   flutter_test:
     sdk: flutter
   # integration_test:
