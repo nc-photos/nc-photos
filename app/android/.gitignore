@@ -12,3 +12,4 @@ key.properties
 
 /app/src/debug
 /app/src/profile
+/app/.cxx
