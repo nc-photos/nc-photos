@@ -187,7 +187,9 @@ internal class NotificationChannelHandler(context: Context) :
 
 		val id = notificationId ?: getNextNotificationId()
 		with(NotificationManagerCompat.from(_context)) {
-			notify(id, builder.build())
+			if (areNotificationsEnabled()) {
+				notify(id, builder.build())
+			}
 		}
 		result.success(id)
 	}
@@ -235,7 +237,9 @@ internal class NotificationChannelHandler(context: Context) :
 		)
 
 		with(NotificationManagerCompat.from(_context)) {
-			notify(id, builder.build())
+			if (areNotificationsEnabled()) {
+				notify(id, builder.build())
+			}
 		}
 		result.success(id)
 	}
@@ -283,7 +287,9 @@ internal class NotificationChannelHandler(context: Context) :
 
 		val id = getNextNotificationId()
 		with(NotificationManagerCompat.from(_context)) {
-			notify(id, builder.build())
+			if (areNotificationsEnabled()) {
+				notify(id, builder.build())
+			}
 		}
 		result.success(id)
 	}

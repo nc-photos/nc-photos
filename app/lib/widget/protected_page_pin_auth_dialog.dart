@@ -9,9 +9,9 @@ import 'package:nc_photos/animation_util.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/unique.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:to_string/to_string.dart';
 

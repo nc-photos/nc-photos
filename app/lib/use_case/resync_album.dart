@@ -7,7 +7,7 @@ import 'package:nc_photos/entity/album.dart';
 import 'package:nc_photos/entity/album/item.dart';
 import 'package:nc_photos/entity/album/provider.dart';
 import 'package:nc_photos/use_case/find_file_descriptor.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'resync_album.g.dart';
 

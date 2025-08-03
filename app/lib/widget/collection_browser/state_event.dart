@@ -5,7 +5,7 @@ part of '../collection_browser.dart';
 class _State {
   const _State({
     required this.collection,
-    this.coverUrl,
+    this.cover,
     required this.items,
     required this.rawItems,
     this.itemsWhitelist,
@@ -33,12 +33,12 @@ class _State {
 
   factory _State.init({
     required Collection collection,
-    required String? coverUrl,
+    required CollectionCoverResult? cover,
     required int zoom,
   }) {
     return _State(
       collection: collection,
-      coverUrl: coverUrl,
+      cover: cover,
       items: const [],
       rawItems: const [],
       isLoading: false,
@@ -62,7 +62,7 @@ class _State {
   String get currentEditName => editName ?? collection.name;
 
   final Collection collection;
-  final String? coverUrl;
+  final CollectionCoverResult? cover;
   final List<CollectionItem> items;
   final List<CollectionItem> rawItems;
   final Set<int>? itemsWhitelist;

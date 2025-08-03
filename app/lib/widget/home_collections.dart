@@ -1,7 +1,5 @@
 import 'dart:async';
 
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -23,7 +21,6 @@ import 'package:nc_photos/entity/collection/util.dart' as collection_util;
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/exception_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
@@ -45,7 +42,7 @@ import 'package:nc_photos/widget/selectable_item_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/sharing_browser.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
@@ -129,25 +126,28 @@ class _WrappedHomeCollectionsState extends State<_WrappedHomeCollections>
       child: _BlocSelector(
         selector: (state) => state.selectedItems.isEmpty,
         builder: (context, isSelectedEmpty) => isSelectedEmpty
-            ? const DoubleTapExitContainer(
-                child: _BodyView(),
+            ? DoubleTapExitContainer(
+                child: _BodyView(
+                  key: _bodyKey,
+                ),
               )
             : PopScope(
                 canPop: false,
-                onPopInvoked: (_) {
+                onPopInvokedWithResult: (didPop, result) {
                   context.addEvent(const _SetSelectedItems(items: {}));
                 },
-                child: const _BodyView(),
+                child: _BodyView(key: _bodyKey),
               ),
       ),
     );
   }
 
   late final _Bloc _bloc = context.read();
+  final _bodyKey = GlobalKey();
 }
 
 class _BodyView extends StatelessWidget {
-  const _BodyView();
+  const _BodyView({super.key});
 
   @override
   Widget build(BuildContext context) {

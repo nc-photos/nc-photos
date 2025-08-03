@@ -6,10 +6,10 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/exception_event.dart';
-import 'package:nc_photos/size.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_common/size.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 

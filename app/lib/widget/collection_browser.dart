@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:collection';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:clock/clock.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +10,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/asset.dart' as asset;
 import 'package:nc_photos/bloc_util.dart';
@@ -36,10 +33,10 @@ import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/exception_event.dart';
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/gps_map_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
@@ -48,6 +45,7 @@ import 'package:nc_photos/widget/album_share_outlier_browser.dart';
 import 'package:nc_photos/widget/app_bar_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/collection_picker.dart';
+import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/draggable_item_list.dart';
 import 'package:nc_photos/widget/export_collection_dialog.dart';
 import 'package:nc_photos/widget/file_sharer_dialog.dart';
@@ -63,14 +61,14 @@ import 'package:nc_photos/widget/share_collection_dialog.dart';
 import 'package:nc_photos/widget/shared_album_info_dialog.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
-import 'package:nc_photos/widget/viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_common/size.dart';
 import 'package:np_common/unique.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_gps_map/np_gps_map.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
@@ -163,7 +161,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
           previous.selectedItems.isEmpty != current.selectedItems.isEmpty,
       builder: (context, state) => PopScope(
         canPop: !state.isEditMode && state.selectedItems.isEmpty,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           if (state.isEditMode) {
             _bloc.add(const _CancelEdit());
           } else if (state.selectedItems.isNotEmpty) {

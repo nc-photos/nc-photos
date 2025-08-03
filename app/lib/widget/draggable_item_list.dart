@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/widget/draggable.dart' as my;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'draggable_item_list.g.dart';

@@ -8,8 +8,8 @@ import 'package:nc_photos/mobile/share.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_log/np_log.dart';
 
 part 'data_source.g.dart';
 

@@ -270,7 +270,6 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
@@ -278,6 +277,8 @@
     "placePickerTitle",
     "albumAddMapTooltip",
     "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -285,33 +286,19 @@
     "errorWrongPassword",
     "errorServerError",
     "errorAlbumDowngrade",
-    "errorNoStoragePermission"
+    "errorNoStoragePermission",
+    "errorServerNoCert"
   ],
 
   "cs": [
-    "settingsExifSupportTitle2",
     "settingsFallbackClientExifTitle",
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
-    "settingsViewerCustomizeAppBarTitle",
-    "settingsViewerCustomizeBottomAppBarTitle",
-    "settingsCollectionsCustomizeNavigationBarTitle",
-    "exifSupportNextcloud28Notes",
-    "exifSupportConfirmationDialogTitle2",
-    "createCollectionDialogAlbumLabel2",
-    "createCollectionDialogAlbumDescription2",
-    "createCollectionDialogNextcloudAlbumLabel2",
-    "createCollectionDialogNextcloudAlbumDescription2",
-    "alternativeSignIn",
-    "livePhotoTooltip",
-    "dragAndDropRearrangeButtons",
-    "customizeCollectionsNavBarDescription",
-    "customizeButtonsUnsupportedWarning",
-    "placePickerTitle",
-    "albumAddMapTooltip",
-    "fileNotFound"
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "de": [
@@ -331,7 +318,10 @@
     "createCollectionDialogNextcloudAlbumDescription2",
     "livePhotoTooltip",
     "customizeCollectionsNavBarDescription",
-    "customizeButtonsUnsupportedWarning"
+    "customizeButtonsUnsupportedWarning",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "el": [
@@ -493,14 +483,16 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "es": [
@@ -508,7 +500,10 @@
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText"
+    "settingsFallbackClientExifConfirmDialogText",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "fi": [
@@ -563,14 +558,16 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "fr": [
@@ -578,7 +575,10 @@
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText"
+    "settingsFallbackClientExifConfirmDialogText",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "it": [
@@ -638,14 +638,27 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
+  ],
+
+  "ja": [
+    "settingsFallbackClientExifTitle",
+    "settingsFallbackClientExifTrueText",
+    "settingsFallbackClientExifFalseText",
+    "settingsFallbackClientExifConfirmDialogTitle",
+    "settingsFallbackClientExifConfirmDialogText",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "nl": [
@@ -1035,7 +1048,6 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
@@ -1043,6 +1055,8 @@
     "placePickerTitle",
     "albumAddMapTooltip",
     "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1050,7 +1064,8 @@
     "errorWrongPassword",
     "errorServerError",
     "errorAlbumDowngrade",
-    "errorNoStoragePermission"
+    "errorNoStoragePermission",
+    "errorServerNoCert"
   ],
 
   "pl": [
@@ -1109,14 +1124,16 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "pt": [
@@ -1189,14 +1206,16 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "ru": [
@@ -1251,14 +1270,16 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "sk": [
@@ -1266,15 +1287,16 @@
     "settingsFallbackClientExifTrueText",
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText"
+    "settingsFallbackClientExifConfirmDialogText",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "tr": [
-    "settingsFallbackClientExifTitle",
-    "settingsFallbackClientExifTrueText",
-    "settingsFallbackClientExifFalseText",
-    "settingsFallbackClientExifConfirmDialogTitle",
-    "settingsFallbackClientExifConfirmDialogText"
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "zh": [
@@ -1360,14 +1382,16 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ],
 
   "zh_Hant": [
@@ -1545,13 +1569,15 @@
     "homeTabMapBrowser",
     "mapBrowserSetDefaultDateRangeButton",
     "todayText",
-    "alternativeSignIn",
     "livePhotoTooltip",
     "dragAndDropRearrangeButtons",
     "customizeCollectionsNavBarDescription",
     "customizeButtonsUnsupportedWarning",
     "placePickerTitle",
     "albumAddMapTooltip",
-    "fileNotFound"
+    "fileNotFound",
+    "signInViaNextcloudLoginFlowV2",
+    "signInViaUsernamePassword",
+    "errorServerNoCert"
   ]
 }

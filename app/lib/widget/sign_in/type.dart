@@ -32,3 +32,8 @@ class _ConnectArg {
   final String? username;
   final String? password;
 }
+
+enum _SignInMethod {
+  serverFlowV2,
+  usernamePassword,
+}

@@ -7,30 +7,40 @@ class _State {
     required this.shouldPlayLivePhoto,
     required this.canZoom,
     required this.canPlay,
+    required this.canLoop,
     required this.isPlayControlVisible,
     required this.isLoaded,
     required this.isZoomed,
     required this.isPlaying,
-    required this.isLivePhotoLoadFailed,
+    required this.videoAspectRatio,
+    required this.videoDuration,
+    required this.videoIsLooping,
+    required this.videoVolume,
     this.contentHeight,
     this.error,
+    this.loadError,
   });
 
   factory _State.init({
     required bool shouldPlayLivePhoto,
     required bool canZoom,
     required bool canPlay,
+    required bool canLoop,
     required bool isPlayControlVisible,
   }) =>
       _State(
         shouldPlayLivePhoto: shouldPlayLivePhoto,
         canZoom: canZoom,
         canPlay: canPlay,
+        canLoop: canLoop,
         isPlayControlVisible: isPlayControlVisible,
         isLoaded: false,
         isZoomed: false,
         isPlaying: false,
-        isLivePhotoLoadFailed: Unique(false),
+        videoAspectRatio: 1,
+        videoDuration: Duration.zero,
+        videoIsLooping: false,
+        videoVolume: 0,
       );
 
   @override
@@ -39,17 +49,32 @@ class _State {
   final bool shouldPlayLivePhoto;
   final bool canZoom;
   final bool canPlay;
+  final bool canLoop;
   final bool isPlayControlVisible;
   final bool isLoaded;
   final bool isZoomed;
   final bool isPlaying;
-  final Unique<bool> isLivePhotoLoadFailed;
   final double? contentHeight;
 
-  final ExceptionEvent? error;
+  // video player
+  final double videoAspectRatio;
+  final Duration videoDuration;
+  final bool videoIsLooping;
+  final double videoVolume;
+
+  final ({Object error, StackTrace? stackTrace})? error;
+  final ({Object error, StackTrace? stackTrace})? loadError;
 }
 
 abstract class _Event {}
+
+@toString
+class _Init implements _Event {
+  const _Init();
+
+  @override
+  String toString() => _$toString();
+}
 
 @toString
 class _SetShouldPlayLivePhoto implements _Event {
@@ -82,6 +107,16 @@ class _SetCanPlay implements _Event {
 }
 
 @toString
+class _SetCanLoop implements _Event {
+  const _SetCanLoop(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
+}
+
+@toString
 class _SetIsPlayControlVisible implements _Event {
   const _SetIsPlayControlVisible(this.value);
 
@@ -97,6 +132,20 @@ class _SetLoaded implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _SetVideoMetadata implements _Event {
+  const _SetVideoMetadata({
+    required this.aspectRatio,
+    required this.duration,
+  });
+
+  @override
+  String toString() => _$toString();
+
+  final double aspectRatio;
+  final Duration duration;
 }
 
 @toString
@@ -120,27 +169,48 @@ class _SetIsZoomed implements _Event {
 }
 
 @toString
-class _SetPlaying implements _Event {
-  const _SetPlaying();
+class _ToggleVideoPlay implements _Event {
+  const _ToggleVideoPlay();
 
   @override
   String toString() => _$toString();
 }
 
 @toString
-class _SetPause implements _Event {
-  const _SetPause();
+class _ToggleVideoLoop implements _Event {
+  const _ToggleVideoLoop();
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _ToggleVideoMute implements _Event {
+  const _ToggleVideoMute();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _UpdateVideoPlayerValue implements _Event {
+  const _UpdateVideoPlayerValue(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final VideoPlayerValue value;
 }
 
 @toString
 class _SetLivePhotoLoadFailed implements _Event {
-  const _SetLivePhotoLoadFailed();
+  const _SetLivePhotoLoadFailed(this.error, [this.stackTrace]);
 
   @override
   String toString() => _$toString();
+
+  final Object error;
+  final StackTrace? stackTrace;
 }
 
 @toString

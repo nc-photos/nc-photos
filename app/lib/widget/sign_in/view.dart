@@ -158,6 +158,15 @@ class _SignInBody extends StatelessWidget {
                 ),
           ),
           const SizedBox(height: 16),
+          _BlocSelector(
+            selector: (state) => state.method,
+            builder: (context, method) => FilledButton.tonal(
+              onPressed: () {
+                _onSignInMethodPressed(context);
+              },
+              child: Text(method.toOptionString()),
+            ),
+          ),
           const Row(
             children: [
               SizedBox(
@@ -174,37 +183,37 @@ class _SignInBody extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 8),
-          Stack(
-            children: [
-              _BlocSelector(
-                selector: (state) => state.isAltMode,
-                builder: (context, isAltMode) => ExpandableContainer(
-                  isShow: isAltMode,
-                  child: const _LegacySignInForm(),
-                ),
-              ),
-              _BlocSelector(
-                selector: (state) => state.isAltMode,
-                builder: (context, isAltMode) => Visibility(
-                  visible: !isAltMode,
-                  child: InkWell(
-                    onTap: () {
-                      context.addEvent(const _SetAltMode(true));
-                    },
-                    child: Text(
-                      L10n.global().alternativeSignIn,
-                      style: const TextStyle(
-                        decoration: TextDecoration.underline,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+          _BlocSelector(
+            selector: (state) => state.method,
+            builder: (context, method) => ExpandableContainer(
+              isShow: method == _SignInMethod.usernamePassword,
+              child: const _UsernamePasswordForm(),
+            ),
           ),
         ],
       ),
     );
+  }
+
+  Future<void> _onSignInMethodPressed(BuildContext context) async {
+    final pageContext = context;
+    final result = await showDialog<_SignInMethod>(
+      context: context,
+      builder: (context) => FancyOptionPicker(
+        items: _SignInMethod.values
+            .map((e) => FancyOptionPickerItem(
+                label: e.toOptionString(),
+                isSelected: pageContext.state.method == e,
+                onSelect: () {
+                  Navigator.of(context).pop(e);
+                }))
+            .toList(),
+      ),
+    );
+    if (result == null || !context.mounted) {
+      return;
+    }
+    context.addEvent(_SetSignInMethod(result));
   }
 }
 
@@ -258,8 +267,8 @@ class _ServerUrlInput extends StatelessWidget {
   }
 }
 
-class _LegacySignInForm extends StatelessWidget {
-  const _LegacySignInForm();
+class _UsernamePasswordForm extends StatelessWidget {
+  const _UsernamePasswordForm();
 
   @override
   Widget build(BuildContext context) {
@@ -272,7 +281,7 @@ class _LegacySignInForm extends StatelessWidget {
           ),
           keyboardType: TextInputType.text,
           validator: (value) {
-            if (!context.state.isAltMode) {
+            if (context.state.method != _SignInMethod.usernamePassword) {
               return null;
             }
             if (value!.trim().isEmpty) {
@@ -307,7 +316,7 @@ class _LegacySignInForm extends StatelessWidget {
             keyboardType: TextInputType.text,
             obscureText: shouldObscurePassword,
             validator: (value) {
-              if (!context.state.isAltMode) {
+              if (context.state.method != _SignInMethod.usernamePassword) {
                 return null;
               }
               if (value!.trim().isEmpty) {
@@ -322,5 +331,16 @@ class _LegacySignInForm extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+extension on _SignInMethod {
+  String toOptionString() {
+    switch (this) {
+      case _SignInMethod.serverFlowV2:
+        return L10n.global().signInViaNextcloudLoginFlowV2;
+      case _SignInMethod.usernamePassword:
+        return L10n.global().signInViaUsernamePassword;
+    }
   }
 }

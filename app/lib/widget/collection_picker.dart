@@ -1,5 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,13 +16,12 @@ import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection/util.dart' as collection_util;
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/app_bar_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/collection_grid_item.dart';
 import 'package:nc_photos/widget/new_collection_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'collection_picker.g.dart';
@@ -170,6 +167,7 @@ class _ItemView extends StatelessWidget {
           cover: _CollectionCover(
             account: account,
             url: item.coverUrl,
+            mime: item.coverMime,
           ),
           title: item.name,
         ),
@@ -195,6 +193,7 @@ class _CollectionCover extends StatelessWidget {
   const _CollectionCover({
     required this.account,
     required this.url,
+    required this.mime,
   });
 
   @override
@@ -208,21 +207,16 @@ class _CollectionCover extends StatelessWidget {
             ? FittedBox(
                 clipBehavior: Clip.hardEdge,
                 fit: BoxFit.cover,
-                child: CachedNetworkImage(
-                  cacheManager: CoverCacheManager.inst,
+                child: CachedNetworkImageBuilder(
+                  type: CachedNetworkImageType.cover,
                   imageUrl: url!,
-                  httpHeaders: {
-                    "Authorization":
-                        AuthUtil.fromAccount(account).toHeaderValue(),
-                  },
-                  fadeInDuration: const Duration(),
-                  filterQuality: FilterQuality.high,
+                  mime: mime,
+                  account: account,
                   errorWidget: (context, url, error) {
                     // just leave it empty
                     return Container();
                   },
-                  imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-                ),
+                ).build(),
               )
             : Icon(
                 Icons.panorama,
@@ -235,6 +229,7 @@ class _CollectionCover extends StatelessWidget {
 
   final Account account;
   final String? url;
+  final String? mime;
 }
 
 @npLog

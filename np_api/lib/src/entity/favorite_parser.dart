@@ -68,7 +68,7 @@ class _PropParser {
 }
 
 List<Favorite> _parseFavoritesIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return FavoriteParser()._parse(xml);
 }

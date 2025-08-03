@@ -11,8 +11,9 @@ import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/use_case/ls_single_file.dart';
-import 'package:nc_photos/widget/viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
+import 'package:nc_photos/widget/viewer/viewer.dart';
+import 'package:np_log/np_log.dart';
 
 part 'result_viewer.g.dart';
 
@@ -77,9 +78,10 @@ class _ResultViewerState extends State<ResultViewer> {
         ),
       );
     } else {
-      return Viewer(
-        fileIds: [_file!.fdId],
-        startIndex: 0,
+      return CollectionViewer(
+        files: [_file!],
+        initialIndex: 0,
+        collectionId: null,
       );
     }
   }

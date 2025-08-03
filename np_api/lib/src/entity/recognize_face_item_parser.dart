@@ -151,7 +151,7 @@ class _PropParser {
 }
 
 List<RecognizeFaceItem> _parseRecognizeFaceItemsIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return RecognizeFaceItemParser()._parse(xml);
 }

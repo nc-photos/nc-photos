@@ -6,7 +6,7 @@ import 'package:nc_photos/controller/metadata_controller.dart';
 import 'package:nc_photos/event/native_event.dart';
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/stream_extension.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_platform_message_relay/np_platform_message_relay.dart';
 

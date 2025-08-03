@@ -17,7 +17,7 @@ class _GridButton extends StatelessWidget {
             width: 48,
             height: 48,
             alignment: Alignment.center,
-            color: Theme.of(context).colorScheme.surfaceVariant,
+            color: Theme.of(context).colorScheme.surfaceContainerHighest,
             child: icon,
           ),
         ),

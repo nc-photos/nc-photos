@@ -1,7 +1,19 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 // ignore: implementation_imports
 import 'package:flutter_cache_manager/src/cache_store.dart';
+import 'package:logging/logging.dart';
+import 'package:nc_photos/account.dart';
+import 'package:nc_photos/jxl_util.dart';
+import 'package:nc_photos/k.dart' as k;
+import 'package:nc_photos/np_api_util.dart';
+import 'package:np_common/size.dart';
 import 'package:np_http/np_http.dart';
+import 'package:np_log/np_log.dart';
+
+part 'cache_manager_util.g.dart';
 
 class CancelableGetFile {
   CancelableGetFile(this.store);
@@ -79,4 +91,96 @@ class CoverCacheManager {
       fileService: HttpFileService(httpClient: getHttpClient()),
     ),
   );
+}
+
+/// Cache manager for original files to support extra image formats
+///
+/// Currently used for jxl files
+class ExtraFormatCacheManager {
+  static const key = "extraFormatCache";
+  static CacheManager inst = CacheManager(
+    Config(
+      key,
+      stalePeriod: const Duration(days: 30),
+      maxNrOfCacheObjects: 8000,
+      fileService: HttpFileService(httpClient: getHttpClient()),
+    ),
+  );
+}
+
+enum CachedNetworkImageType {
+  thumbnail,
+  largeImage,
+  cover,
+}
+
+@npLog
+class CachedNetworkImageBuilder {
+  const CachedNetworkImageBuilder({
+    required this.type,
+    required this.imageUrl,
+    this.mime,
+    required this.account,
+    this.fit,
+    this.imageBuilder,
+    this.errorWidget,
+  });
+
+  CachedNetworkImage build() {
+    // _log.finer("[build] $mime, $imageUrl");
+    return CachedNetworkImage(
+      fit: fit,
+      cacheManager: getCacheManager(type, mime),
+      imageUrl: imageUrl,
+      httpHeaders: {
+        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+      },
+      fadeInDuration: const Duration(),
+      filterQuality: FilterQuality.high,
+      imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+      imageBuilder: imageBuilder,
+      errorWidget: errorWidget,
+      customDecoder: (raw, decoder) {
+        if (isJxl(raw)) {
+          _log.fine("[build] Using experimental jxl codec: $imageUrl");
+          return jxlImageCodec(raw, resize: _boundingBox);
+        } else {
+          return decoder(raw);
+        }
+      },
+      compareKey: type.name,
+    );
+  }
+
+  SizeInt get _boundingBox => switch (type) {
+        CachedNetworkImageType.thumbnail => SizeInt.square(k.photoThumbSize),
+        CachedNetworkImageType.largeImage => SizeInt.square(k.photoLargeSize),
+        CachedNetworkImageType.cover => SizeInt.square(k.coverSize),
+      };
+
+  final CachedNetworkImageType type;
+  final String imageUrl;
+  final String? mime;
+  final Account account;
+  final BoxFit? fit;
+  final ImageWidgetBuilder? imageBuilder;
+  final LoadingErrorWidgetBuilder? errorWidget;
+}
+
+CacheManager getCacheManager(CachedNetworkImageType type, String? mime) {
+  if (mime == "image/jxl") {
+    return ExtraFormatCacheManager.inst;
+  } else {
+    return switch (type) {
+      CachedNetworkImageType.thumbnail => ThumbnailCacheManager.inst,
+      CachedNetworkImageType.largeImage => LargeImageCacheManager.inst,
+      CachedNetworkImageType.cover => CoverCacheManager.inst,
+    };
+  }
+}
+
+Future<FileInfo?> getFileFromCache(
+    CachedNetworkImageType type, String imageUrl, String? mime) async {
+  final cacheManager = getCacheManager(CachedNetworkImageType.largeImage, mime);
+  return await cacheManager.getFileFromCache(imageUrl);
 }

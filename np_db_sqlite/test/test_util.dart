@@ -114,6 +114,7 @@ class FilesBuilder {
                 height: 480,
                 exif: null,
                 exifDateTimeOriginal: null,
+                src: 0,
               )
             : imageData.obj,
         location: location,

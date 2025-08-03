@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_message_relay/src/k.dart' as k;
 
 part 'message_relay.g.dart';

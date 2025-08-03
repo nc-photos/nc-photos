@@ -2,7 +2,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'zoomable_viewer.g.dart';
 

@@ -10,8 +10,8 @@ import 'package:nc_photos/use_case/list_share.dart';
 import 'package:nc_photos/use_case/remove.dart';
 import 'package:nc_photos/use_case/remove_share.dart';
 import 'package:nc_photos/use_case/update_album.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_log/np_log.dart';
 
 part 'remove_album.g.dart';
 

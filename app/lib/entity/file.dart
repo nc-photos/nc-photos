@@ -9,10 +9,10 @@ import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/json_util.dart' as json_util;
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:to_string/to_string.dart';
 
@@ -85,6 +85,16 @@ class ImageLocation with EquatableMixin {
   static const appVersion = 1;
 }
 
+enum MetadataSrc {
+  // must not modify the order
+  legacy,
+  nextcloud,
+  exiv2,
+  ;
+
+  factory MetadataSrc.fromValue(int value) => MetadataSrc.values[value];
+}
+
 /// Immutable object that hold metadata of a [File]
 @npLog
 @ToString(ignoreNull: true)
@@ -95,6 +105,7 @@ class Metadata with EquatableMixin {
     this.imageWidth,
     this.imageHeight,
     this.exif,
+    required this.src,
   }) : lastUpdated = (lastUpdated ?? clock.now()).toUtc();
 
   @override
@@ -122,6 +133,7 @@ class Metadata with EquatableMixin {
     required MetadataUpgraderV1? upgraderV1,
     required MetadataUpgraderV2? upgraderV2,
     required MetadataUpgraderV3? upgraderV3,
+    required MetadataUpgraderV4? upgraderV4,
   }) {
     final jsonVersion = json["version"];
     JsonObj? result = json;
@@ -146,6 +158,13 @@ class Metadata with EquatableMixin {
         return null;
       }
     }
+    if (jsonVersion < 5) {
+      result = upgraderV4?.call(result);
+      if (result == null) {
+        _log.info("[fromJson] Version $jsonVersion not compatible");
+        return null;
+      }
+    }
     return Metadata(
       lastUpdated: result["lastUpdated"] == null
           ? null
@@ -156,6 +175,7 @@ class Metadata with EquatableMixin {
       exif: result["exif"] == null
           ? null
           : Exif.fromJson(result["exif"].cast<String, dynamic>()),
+      src: MetadataSrc.fromValue(result["src"]),
     );
   }
 
@@ -167,6 +187,7 @@ class Metadata with EquatableMixin {
       if (imageWidth != null) "imageWidth": imageWidth,
       if (imageHeight != null) "imageHeight": imageHeight,
       if (exif != null) "exif": exif!.toJson(),
+      "src": src.index,
     };
   }
 
@@ -184,6 +205,7 @@ class Metadata with EquatableMixin {
       imageWidth: imageWidth ?? this.imageWidth,
       imageHeight: imageHeight ?? this.imageHeight,
       exif: exif ?? this.exif,
+      src: src,
     );
   }
 
@@ -221,6 +243,7 @@ class Metadata with EquatableMixin {
               key == "UserComment" ||
               key == "ImageDescription"))
           : null,
+      src: MetadataSrc.nextcloud,
     );
   }
 
@@ -228,12 +251,13 @@ class Metadata with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  get props => [
+  List<Object?> get props => [
         lastUpdated,
         fileEtag,
         imageWidth,
         imageHeight,
         // exif is handled separately, see [equals]
+        src,
       ];
 
   final DateTime lastUpdated;
@@ -243,9 +267,10 @@ class Metadata with EquatableMixin {
   final int? imageWidth;
   final int? imageHeight;
   final Exif? exif;
+  final MetadataSrc src;
 
   /// versioning of this class, use to upgrade old persisted metadata
-  static const version = 4;
+  static const version = 5;
 
   static final _log = _$MetadataNpLog.log;
 }
@@ -339,6 +364,29 @@ class MetadataUpgraderV3 implements MetadataUpgrader {
   final String? logFilePath;
 }
 
+/// Upgrade v4 Metadata to v5
+@npLog
+class MetadataUpgraderV4 implements MetadataUpgrader {
+  const MetadataUpgraderV4({
+    required this.fileContentType,
+    this.logFilePath,
+  });
+
+  @override
+  JsonObj? call(JsonObj json) {
+    if (!json.containsKey("src")) {
+      _log.fine("[call] Upgrade v4 metadata for file: $logFilePath");
+      json["src"] = MetadataSrc.legacy.index;
+    }
+    return json;
+  }
+
+  final String? fileContentType;
+
+  /// File path for logging only
+  final String? logFilePath;
+}
+
 @ToString(ignoreNull: true)
 class File with EquatableMixin implements FileDescriptor {
   File({
@@ -411,6 +459,10 @@ class File with EquatableMixin implements FileDescriptor {
                 logFilePath: json["path"],
               ),
               upgraderV3: MetadataUpgraderV3(
+                fileContentType: json["contentType"],
+                logFilePath: json["path"],
+              ),
+              upgraderV4: MetadataUpgraderV4(
                 fileContentType: json["contentType"],
                 logFilePath: json["path"],
               ),

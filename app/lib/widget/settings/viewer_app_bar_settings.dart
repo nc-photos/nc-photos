@@ -15,9 +15,9 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/draggable.dart' as my;
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
-import 'package:nc_photos/widget/viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 
@@ -77,7 +77,7 @@ class _WrappedViewerAppBarSettingsState
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (didPop, result) {
         final prefController = context.bloc.prefController;
         final from = widget.isBottom
             ? prefController.viewerBottomAppBarButtonsValue

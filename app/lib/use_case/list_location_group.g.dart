@@ -20,7 +20,7 @@ extension _$ListLocationGroupNpLog on ListLocationGroup {
 extension _$LocationGroupToString on LocationGroup {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "LocationGroup {place: $place, countryCode: $countryCode, count: $count, latestFileId: $latestFileId, latestDateTime: $latestDateTime}";
+    return "LocationGroup {place: $place, countryCode: $countryCode, count: $count, latestFileId: $latestFileId, latestDateTime: $latestDateTime, latestFileMime: $latestFileMime, latestFileRelativePath: $latestFileRelativePath}";
   }
 }
 

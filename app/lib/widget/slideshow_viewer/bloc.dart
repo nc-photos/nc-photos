@@ -86,6 +86,7 @@ class _Bloc extends Bloc<_Event, _State>
 
   Future<void> _onInit(_Init ev, Emitter<_State> emit) async {
     _log.info(ev);
+    // TODO remove this and only query when the file is going to be displayed
     // needed for now because some pages (e.g., search) haven't yet migrated
     await filesController.queryByFileId(fileIds);
 

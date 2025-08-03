@@ -1,10 +1,10 @@
 import 'package:clock/clock.dart';
-import 'package:exifdart/exifdart.dart' hide Metadata;
 import 'package:flutter/foundation.dart';
 import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_string/np_string.dart';
 import 'package:test/test.dart';
 
@@ -37,13 +37,15 @@ void main() {
     test("lastModified a==b", () {
       final a = File(
         path: "remote.php/dav/files/admin/test1.jpg",
+        fileId: 1,
         lastModified: DateTime.utc(2021),
       );
       final b = File(
         path: "remote.php/dav/files/admin/test2.jpg",
+        fileId: 2,
         lastModified: DateTime.utc(2021),
       );
-      expect(compareFileDateTimeDescending(a, b), lessThan(0));
+      expect(compareFileDateTimeDescending(a, b), greaterThan(0));
     });
 
     test("exif a>b", () {
@@ -53,6 +55,7 @@ void main() {
           exif: Exif({
             "DateTimeOriginal": "2021:01:02 03:04:05",
           }),
+          src: MetadataSrc.legacy,
         ),
       );
       final b = File(
@@ -61,6 +64,7 @@ void main() {
           exif: Exif({
             "DateTimeOriginal": "2020:01:02 03:04:05",
           }),
+          src: MetadataSrc.legacy,
         ),
       );
       expect(compareFileDateTimeDescending(a, b), lessThan(0));
@@ -73,6 +77,7 @@ void main() {
           exif: Exif({
             "DateTimeOriginal": "2020:01:02 03:04:05",
           }),
+          src: MetadataSrc.legacy,
         ),
       );
       final b = File(
@@ -81,6 +86,7 @@ void main() {
           exif: Exif({
             "DateTimeOriginal": "2021:01:02 03:04:05",
           }),
+          src: MetadataSrc.legacy,
         ),
       );
       expect(compareFileDateTimeDescending(a, b), greaterThan(0));
@@ -89,21 +95,25 @@ void main() {
     test("exif a==b", () {
       final a = File(
         path: "remote.php/dav/files/admin/test1.jpg",
+        fileId: 1,
         metadata: Metadata(
           exif: Exif({
             "DateTimeOriginal": "2021:01:02 03:04:05",
           }),
+          src: MetadataSrc.legacy,
         ),
       );
       final b = File(
         path: "remote.php/dav/files/admin/test2.jpg",
+        fileId: 2,
         metadata: Metadata(
           exif: Exif({
             "DateTimeOriginal": "2021:01:02 03:04:05",
           }),
+          src: MetadataSrc.legacy,
         ),
       );
-      expect(compareFileDateTimeDescending(a, b), lessThan(0));
+      expect(compareFileDateTimeDescending(a, b), greaterThan(0));
     });
   });
 
@@ -113,11 +123,20 @@ void main() {
         final json = <String, dynamic>{
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
+          "src": 0,
         };
         expect(
-            Metadata.fromJson(json,
-                upgraderV1: null, upgraderV2: null, upgraderV3: null),
-            Metadata(lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901)));
+            Metadata.fromJson(
+              json,
+              upgraderV1: null,
+              upgraderV2: null,
+              upgraderV3: null,
+              upgraderV4: null,
+            ),
+            Metadata(
+              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+              src: MetadataSrc.legacy,
+            ));
       });
 
       test("fileEtag", () {
@@ -125,13 +144,20 @@ void main() {
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
           "fileEtag": "8a3e0799b6f0711c23cc2d93950eceb5",
+          "src": 0,
         };
         expect(
-            Metadata.fromJson(json,
-                upgraderV1: null, upgraderV2: null, upgraderV3: null),
+            Metadata.fromJson(
+              json,
+              upgraderV1: null,
+              upgraderV2: null,
+              upgraderV3: null,
+              upgraderV4: null,
+            ),
             Metadata(
               lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
               fileEtag: "8a3e0799b6f0711c23cc2d93950eceb5",
+              src: MetadataSrc.legacy,
             ));
       });
 
@@ -140,13 +166,20 @@ void main() {
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
           "imageWidth": 1024,
+          "src": 0,
         };
         expect(
-            Metadata.fromJson(json,
-                upgraderV1: null, upgraderV2: null, upgraderV3: null),
+            Metadata.fromJson(
+              json,
+              upgraderV1: null,
+              upgraderV2: null,
+              upgraderV3: null,
+              upgraderV4: null,
+            ),
             Metadata(
               lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
               imageWidth: 1024,
+              src: MetadataSrc.legacy,
             ));
       });
 
@@ -155,13 +188,20 @@ void main() {
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
           "imageHeight": 768,
+          "src": 0,
         };
         expect(
-            Metadata.fromJson(json,
-                upgraderV1: null, upgraderV2: null, upgraderV3: null),
+            Metadata.fromJson(
+              json,
+              upgraderV1: null,
+              upgraderV2: null,
+              upgraderV3: null,
+              upgraderV4: null,
+            ),
             Metadata(
               lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
               imageHeight: 768,
+              src: MetadataSrc.legacy,
             ));
       });
 
@@ -172,26 +212,36 @@ void main() {
           "exif": <String, dynamic>{
             "Make": "dummy",
           },
+          "src": 0,
         };
         expect(
-            Metadata.fromJson(json,
-                upgraderV1: null, upgraderV2: null, upgraderV3: null),
+            Metadata.fromJson(
+              json,
+              upgraderV1: null,
+              upgraderV2: null,
+              upgraderV3: null,
+              upgraderV4: null,
+            ),
             Metadata(
               lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
               exif: Exif({
                 "Make": "dummy",
               }),
+              src: MetadataSrc.legacy,
             ));
       });
     });
 
     group("toJson", () {
       test("lastUpdated", () {
-        final metadata =
-            Metadata(lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901));
+        final metadata = Metadata(
+          lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+          src: MetadataSrc.legacy,
+        );
         expect(metadata.toJson(), <String, dynamic>{
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
+          "src": 0,
         });
       });
 
@@ -199,11 +249,13 @@ void main() {
         final metadata = Metadata(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           fileEtag: "8a3e0799b6f0711c23cc2d93950eceb5",
+          src: MetadataSrc.legacy,
         );
         expect(metadata.toJson(), <String, dynamic>{
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
           "fileEtag": "8a3e0799b6f0711c23cc2d93950eceb5",
+          "src": 0,
         });
       });
 
@@ -211,11 +263,13 @@ void main() {
         final metadata = Metadata(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           imageWidth: 1024,
+          src: MetadataSrc.legacy,
         );
         expect(metadata.toJson(), <String, dynamic>{
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
           "imageWidth": 1024,
+          "src": 0,
         });
       });
 
@@ -223,11 +277,13 @@ void main() {
         final metadata = Metadata(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           imageHeight: 768,
+          src: MetadataSrc.legacy,
         );
         expect(metadata.toJson(), <String, dynamic>{
           "version": Metadata.version,
           "lastUpdated": "2020-01-02T03:04:05.678901Z",
           "imageHeight": 768,
+          "src": 0,
         });
       });
 
@@ -237,6 +293,7 @@ void main() {
           exif: Exif({
             "Make": "dummy",
           }),
+          src: MetadataSrc.legacy,
         );
         expect(metadata.toJson(), <String, dynamic>{
           "version": Metadata.version,
@@ -244,6 +301,7 @@ void main() {
           "exif": <String, dynamic>{
             "Make": "dummy",
           },
+          "src": 0,
         });
       });
     });
@@ -546,6 +604,7 @@ void main() {
           "metadata": <String, dynamic>{
             "version": Metadata.version,
             "lastUpdated": "2020-01-02T03:04:05.678901Z",
+            "src": 0,
           },
         };
         final file = File.fromJson(json);
@@ -555,6 +614,7 @@ void main() {
               path: "",
               metadata: Metadata(
                 lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+                src: MetadataSrc.legacy,
               ),
             ));
       });
@@ -705,12 +765,14 @@ void main() {
             path: "remote.php/dav/files/admin/test.jpg",
             metadata: Metadata(
               lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+              src: MetadataSrc.legacy,
             ));
         expect(file.toJson(), <String, dynamic>{
           "path": "remote.php/dav/files/admin/test.jpg",
           "metadata": <String, dynamic>{
             "version": Metadata.version,
             "lastUpdated": "2020-01-02T03:04:05.678901Z",
+            "src": MetadataSrc.legacy.index,
           },
         });
       });
@@ -1057,7 +1119,7 @@ void main() {
       });
 
       test("metadata", () {
-        final metadata = Metadata();
+        final metadata = Metadata(src: MetadataSrc.legacy);
         final file = src.copyWith(metadata: OrNull(metadata));
         expect(
             file,
@@ -1096,7 +1158,7 @@ void main() {
           trashbinFilename: "test.jpg",
           trashbinOriginalLocation: "Photos/test.jpg",
           trashbinDeletionTime: DateTime.utc(2022, 1, 2, 3, 4, 5),
-          metadata: Metadata(),
+          metadata: Metadata(src: MetadataSrc.legacy),
           isArchived: true,
           overrideDateTime: DateTime.utc(2021, 1, 2, 3, 4, 5),
         );
@@ -1244,6 +1306,7 @@ void _fromApiSize() {
         Metadata(
           imageWidth: 1234,
           imageHeight: 5678,
+          src: MetadataSrc.nextcloud,
         ),
       );
     },
@@ -1266,11 +1329,19 @@ void _fromApiGpsPlace1() {
   expect(
     actual?.exif,
     _MetadataGpsMatcher(Exif({
-      "GPSLatitude": [Rational(40, 1), Rational(44, 1), Rational(5799, 100)],
+      "GPSLatitude": [
+        const Rational(40, 1),
+        const Rational(44, 1),
+        const Rational(5799, 100),
+      ],
       "GPSLatitudeRef": "N",
-      "GPSLongitude": [Rational(73, 1), Rational(58, 1), Rational(500, 100)],
+      "GPSLongitude": [
+        const Rational(73, 1),
+        const Rational(58, 1),
+        const Rational(500, 100),
+      ],
       "GPSLongitudeRef": "W",
-      "GPSAltitude": Rational(1234567, 100000),
+      "GPSAltitude": const Rational(1234567, 100000),
       "GPSAltitudeRef": 0,
     })),
   );
@@ -1292,11 +1363,19 @@ void _fromApiGpsPlace2() {
   expect(
     actual?.exif,
     _MetadataGpsMatcher(Exif({
-      "GPSLatitude": [Rational(37, 1), Rational(41, 1), Rational(2019, 100)],
+      "GPSLatitude": [
+        const Rational(37, 1),
+        const Rational(41, 1),
+        const Rational(2019, 100),
+      ],
       "GPSLatitudeRef": "S",
-      "GPSLongitude": [Rational(178, 1), Rational(32, 1), Rational(5330, 100)],
+      "GPSLongitude": [
+        const Rational(178, 1),
+        const Rational(32, 1),
+        const Rational(5330, 100),
+      ],
       "GPSLongitudeRef": "E",
-      "GPSAltitude": Rational(1234567, 100000),
+      "GPSAltitude": const Rational(1234567, 100000),
       "GPSAltitudeRef": 1,
     })),
   );

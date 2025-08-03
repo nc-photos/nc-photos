@@ -6,8 +6,8 @@ import 'dart:typed_data';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/mobile/android/self_signed_cert.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:path_provider/path_provider.dart';
@@ -35,14 +35,16 @@ class SelfSignedCertManager {
         host.toLowerCase() == info.host.toLowerCase());
   }
 
-  String getLastBadCertHost() => _latestBadCert.host;
+  bool get hasBadCert => _latestBadCert != null;
+
+  String getLastBadCertHost() => _latestBadCert!.host;
 
   String getLastBadCertFingerprint() =>
-      _sha1BytesToString(_latestBadCert.cert.sha1);
+      _sha1BytesToString(_latestBadCert!.cert.sha1);
 
   /// Whitelist the last bad cert
   Future<CertInfo> whitelistLastBadCert() async {
-    final info = await _writeCert(_latestBadCert.host, _latestBadCert.cert);
+    final info = await _writeCert(_latestBadCert!.host, _latestBadCert!.cert);
     _whitelist.add(info);
     unawaited(SelfSignedCert.reload());
     return info;
@@ -125,7 +127,7 @@ class SelfSignedCertManager {
       final certInfo = CertInfo.fromX509Certificate(host, cert);
       await siteF.writeAsString(jsonEncode(certInfo.toJson()), flush: true);
       _log.info(
-          "[_persistBadCert] Persisted cert at '${certF.path}' for host '${_latestBadCert.host}'");
+          "[_writeCert] Persisted cert at '${certF.path}' for host '${_latestBadCert?.host}'");
       return certInfo;
     }
   }
@@ -140,7 +142,7 @@ class SelfSignedCertManager {
     }
   }
 
-  late _BadCertInfo _latestBadCert;
+  _BadCertInfo? _latestBadCert;
   var _whitelist = <CertInfo>[];
 
   static final _inst = SelfSignedCertManager._();

@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:np_api/src/entity/entity.dart';
 import 'package:np_api/src/util.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 
 part 'face_recognition_face_parser.g.dart';
 
@@ -36,7 +36,7 @@ class FaceRecognitionFaceParser {
 }
 
 List<FaceRecognitionFace> _parseFacesIsolate(String response) {
-  initLog();
+  initMyLog();
   final json = (jsonDecode(response) as Map).cast<String, dynamic>();
   return FaceRecognitionFaceParser()._parse(json);
 }

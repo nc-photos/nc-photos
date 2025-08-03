@@ -4,8 +4,8 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/recognize_face.dart';
 import 'package:nc_photos/entity/recognize_face_item.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 
 part 'repo.g.dart';
 

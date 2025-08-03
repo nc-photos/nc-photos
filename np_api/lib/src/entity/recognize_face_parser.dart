@@ -29,7 +29,7 @@ class RecognizeFaceParser extends XmlResponseParser {
 }
 
 List<RecognizeFace> _parseRecognizeFacesIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return RecognizeFaceParser()._parse(xml);
 }

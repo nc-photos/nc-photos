@@ -4,7 +4,6 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:np_async/np_async.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
@@ -17,6 +16,7 @@ import 'package:np_db_sqlite/src/database_extension.dart';
 import 'package:np_db_sqlite/src/isolate_util.dart';
 import 'package:np_db_sqlite/src/table.dart';
 import 'package:np_db_sqlite/src/util.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
 part 'sqlite_api.g.dart';
@@ -475,6 +475,7 @@ class NpDbSqlite implements NpDb {
     bool? isArchived,
     List<String>? mimes,
     TimeRange? timeRange,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) async {
@@ -491,6 +492,7 @@ class NpDbSqlite implements NpDb {
         isArchived: isArchived,
         mimes: mimes,
         timeRange: timeRange,
+        isAscending: isAscending,
         offset: offset,
         limit: limit,
       );
@@ -546,6 +548,32 @@ class NpDbSqlite implements NpDb {
       (memories[r.bestDateTime.year] ??= <DbFileDescriptor>[]).add(r);
     }
     return DbFilesMemory(memories: memories);
+  }
+
+  @override
+  Future<List<int>> getFileIds({
+    required DbAccount account,
+    List<String>? includeRelativeRoots,
+    List<String>? includeRelativeDirs,
+    List<String>? excludeRelativeRoots,
+    bool? isArchived,
+    List<String>? mimes,
+  }) async {
+    final stopwatch = Stopwatch()..start();
+    try {
+      return await _db.use((db) async {
+        return await db.queryFileIds(
+          account: ByAccount.db(account),
+          includeRelativeRoots: includeRelativeRoots,
+          includeRelativeDirs: includeRelativeDirs,
+          excludeRelativeRoots: excludeRelativeRoots,
+          isArchived: isArchived,
+          mimes: mimes,
+        );
+      });
+    } finally {
+      _log.fine("[getFileIds] Elapsed: ${stopwatch.elapsedMilliseconds}ms");
+    }
   }
 
   @override
@@ -642,6 +670,8 @@ class NpDbSqlite implements NpDb {
           lat: e.lat,
           lng: e.lng,
           fileId: e.fileId,
+          fileRelativePath: e.fileRelativePath,
+          mime: e.mime,
         ));
   }
 
@@ -1001,6 +1031,13 @@ class NpDbSqlite implements NpDb {
       void Function(int current, int count)? onProgress) async {
     await _db.use((db) async {
       await db.migrateV55(onProgress);
+    });
+  }
+
+  @override
+  Future<void> migrateV75() async {
+    await _db.use((db) async {
+      await db.migrateV75();
     });
   }
 

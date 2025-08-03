@@ -30,7 +30,7 @@ import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/widget/album_dir_picker.dart';
 import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/tag_picker_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'new_collection_dialog.g.dart';

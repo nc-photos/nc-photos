@@ -5,7 +5,7 @@ import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/pref/provider/memory.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'pref.g.dart';
 part 'pref/extension.dart';

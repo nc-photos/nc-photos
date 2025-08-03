@@ -17,7 +17,7 @@ import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/nc_album.dart';
 import 'package:nc_photos/use_case/find_file.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'exporter.g.dart';
 

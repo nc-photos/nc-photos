@@ -119,9 +119,11 @@ class FilesBuilder {
         ownerDisplayName: ownerDisplayName,
         metadata: metadata == null
             ? Metadata(
-                lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
+                lastUpdated: lastModified ??
+                    DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
                 imageWidth: 640,
                 imageHeight: 480,
+                src: MetadataSrc.legacy,
               )
             : metadata.obj,
         location: location,

@@ -45,7 +45,7 @@ class Collection with EquatableMixin {
   List<CollectionShare> get shares => contentProvider.shares;
 
   /// See [CollectionContentProvider.getCoverUrl]
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
@@ -98,6 +98,22 @@ enum CollectionCapability {
   deleteItem,
 }
 
+class CollectionCoverResult with EquatableMixin {
+  const CollectionCoverResult({
+    required this.url,
+    required this.mime,
+  });
+
+  @override
+  List<Object?> get props => [
+        url,
+        mime,
+      ];
+
+  final String url;
+  final String? mime;
+}
+
 /// Provide the actual content of a collection
 abstract class CollectionContentProvider with EquatableMixin {
   const CollectionContentProvider();
@@ -135,7 +151,7 @@ abstract class CollectionContentProvider with EquatableMixin {
   /// free to ignore them if it's not supported
   ///
   /// [isKeepAspectRatio] is only a hint and implementations may ignore it
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,

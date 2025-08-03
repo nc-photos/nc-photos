@@ -3,8 +3,8 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_log/np_log.dart';
 
 part 'find_file_descriptor.g.dart';
 
@@ -21,7 +21,8 @@ class FindFileDescriptor {
     List<int> fileIds, {
     void Function(int fileId)? onFileNotFound,
   }) async {
-    _log.info("[call] fileIds: ${fileIds.toReadableString()}");
+    _log.info(
+        "[call] fileIds: (length: ${fileIds.length}) ${fileIds.toReadableString(truncate: 10)}...");
     final dbResults = await _c.npDb.getFileDescriptors(
       account: account.toDb(),
       fileIds: fileIds,

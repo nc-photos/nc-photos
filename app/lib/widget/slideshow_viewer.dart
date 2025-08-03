@@ -18,17 +18,17 @@ import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/disposable.dart';
+import 'package:nc_photos/widget/file_content_view.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:nc_photos/widget/image_viewer.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
 import 'package:nc_photos/widget/slideshow_dialog.dart';
-import 'package:nc_photos/widget/video_viewer.dart';
 import 'package:nc_photos/widget/viewer_mixin.dart';
 import 'package:nc_photos/widget/wakelock_util.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
@@ -153,7 +153,7 @@ class _WrappedSlideshowViewerState extends State<_WrappedSlideshowViewer>
           child: Scaffold(
             body: PopScope(
               canPop: false,
-              onPopInvoked: (_) {
+              onPopInvokedWithResult: (didPop, result) {
                 context.addEvent(const _RequestExit());
               },
               child: _BlocSelector<bool>(

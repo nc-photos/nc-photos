@@ -16,8 +16,8 @@ import 'package:nc_photos/entity/tag.dart';
 import 'package:nc_photos/entity/tagged_file.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:np_api/np_api.dart' as api;
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 
 part 'entity_converter.g.dart';
@@ -75,15 +75,23 @@ class ApiFileConverter {
                   fileContentType: file.contentType,
                   logFilePath: file.href,
                 ),
+                upgraderV4: MetadataUpgraderV4(
+                  fileContentType: file.contentType,
+                  logFilePath: file.href,
+                ),
               ));
     }
   }
 
   static File fromApi(api.File file) {
+    final mime = file.contentType == "application/octet-stream" &&
+            file.href.toLowerCase().endsWith(".jxl")
+        ? "image/jxl"
+        : file.contentType;
     return File(
       path: _hrefToPath(file.href),
       contentLength: file.contentLength,
-      contentType: file.contentType,
+      contentType: mime,
       etag: file.etag,
       lastModified: file.lastModified,
       isCollection: file.isCollection,

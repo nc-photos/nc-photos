@@ -47,7 +47,7 @@ class _PhotoItem extends _FileItem {
     return PhotoListImage(
       account: account,
       previewUrl: _previewUrl,
-      isGif: file.fdMime == "image/gif",
+      mime: file.fdMime,
       isFavorite: file.fdIsFavorite,
       heroKey: flutter_util.getImageHeroTag(file),
     );
@@ -71,6 +71,7 @@ class _VideoItem extends _FileItem {
     return PhotoListVideo(
       account: account,
       previewUrl: _previewUrl,
+      mime: file.fdMime,
       isFavorite: file.fdIsFavorite,
       onError: () {
         context.addEvent(const _TripMissingVideoPreview());
@@ -100,7 +101,7 @@ class _DateItem extends _Item {
   @override
   Widget buildWidget(BuildContext context) {
     return SizedBox(
-      height: 32,
+      height: AppDimension.of(context).timelineDateItemHeight,
       child: PhotoListDate(
         date: date,
         isMonthOnly: isMonthOnly,

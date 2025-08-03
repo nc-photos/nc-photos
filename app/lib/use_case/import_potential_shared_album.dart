@@ -6,7 +6,7 @@ import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/use_case/list_potential_shared_album.dart';
 import 'package:nc_photos/use_case/move.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'import_potential_shared_album.g.dart';
 

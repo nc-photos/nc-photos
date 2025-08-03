@@ -17,11 +17,11 @@ import 'package:nc_photos/use_case/get_file_binary.dart';
 import 'package:nc_photos/use_case/load_metadata.dart';
 import 'package:nc_photos/use_case/update_property.dart';
 import 'package:nc_photos/use_case/wifi_ensurer.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_geocoder/np_geocoder.dart';
+import 'package:np_log/np_log.dart';
 import 'package:path/path.dart';
 
 part 'sync_by_app.dart';

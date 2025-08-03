@@ -11,11 +11,11 @@ import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:np_async/np_async.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 
 part 'data_source2.g.dart';
 
@@ -33,6 +33,15 @@ class FileRemoteDataSource implements FileDataSource2 {
     int? limit,
   }) {
     throw UnsupportedError("getFileDescriptors not supported");
+  }
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) {
+    throw UnsupportedError("getFileIds not supported");
   }
 
   @override
@@ -123,6 +132,27 @@ class FileNpDbDataSource implements FileDataSource2 {
       isArchived: isArchived,
       offset: offset,
       limit: limit,
+    );
+  }
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) async {
+    _log.info("[getFileIds] $account");
+    return await db.getFileIds(
+      account: account.toDb(),
+      // need this because this arg expect empty string for root instead of "."
+      includeRelativeRoots: account.roots
+          .map((e) => File(path: file_util.unstripPath(account, e))
+              .strippedPathWithEmpty)
+          .toList(),
+      includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
+      excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
+      mimes: file_util.supportedFormatMimes,
+      isArchived: isArchived,
     );
   }
 

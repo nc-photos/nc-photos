@@ -1,10 +1,10 @@
+#include <algorithm>
 #include <cmath>
 #include <cstdint>
 #include <cstring>
 #include <vector>
 
 #include "../log.h"
-#include "../math_util.h"
 #include "hslhsv.h"
 
 using namespace core;
@@ -50,7 +50,7 @@ vector<uint8_t> Brightness::apply(const uint8_t *rgba8, const size_t width,
   for (size_t i = 0; i < width * height; ++i) {
     const auto p = i * 4;
     auto hsv = filter::rgb8ToHsv(rgba8 + p);
-    hsv[2] = clamp(0.f, hsv[2] * mul, 1.f);
+    hsv[2] = clamp(hsv[2] * mul, 0.f, 1.f);
     const auto &newRgb = filter::hsvToRgb8(hsv.data());
     memcpy(output.data() + p, newRgb.data(), 3);
     output[p + 3] = rgba8[p + 3];

@@ -16,7 +16,7 @@ class _Bloc extends Bloc<_Event, _State>
             .any((e) => e.collection.compareIdentity(collection)),
         super(_State.init(
           collection: collection,
-          coverUrl: _getCoverUrl(collection),
+          cover: _getCover(collection),
           zoom: prefController.albumBrowserZoomLevelValue,
         )) {
     _initItemController(collection);
@@ -592,23 +592,25 @@ class _Bloc extends Bloc<_Event, _State>
     return results;
   }
 
-  String? _getCoverUrlByItems() {
+  CollectionCoverResult? _getCoverByItems() {
     try {
       final firstFile =
           state.transformedItems.whereType<_FileItem>().first.file;
-      return api_util.getFilePreviewUrlByFileId(
-        account,
-        firstFile.fdId,
-        width: k.coverSize,
-        height: k.coverSize,
-        isKeepAspectRatio: false,
+      return CollectionCoverResult(
+        url: getStaticViewUrlForImageFile(
+          account,
+          firstFile,
+          size: const SizeInt(k.coverSize, k.coverSize),
+          isKeepAspectRatio: false,
+        ),
+        mime: firstFile.fdMime,
       );
     } catch (_) {
       return null;
     }
   }
 
-  static String? _getCoverUrl(Collection collection) {
+  static CollectionCoverResult? _getCover(Collection collection) {
     try {
       return collection.contentProvider.getCoverUrl(k.coverSize, k.coverSize);
     } catch (_) {
@@ -617,10 +619,10 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _updateCover(Emitter<_State> emit) {
-    var coverUrl = _getCoverUrl(state.collection);
-    coverUrl ??= _getCoverUrlByItems();
-    if (coverUrl != state.coverUrl) {
-      emit(state.copyWith(coverUrl: coverUrl));
+    var cover = _getCover(state.collection);
+    cover ??= _getCoverByItems();
+    if (cover != state.cover) {
+      emit(state.copyWith(cover: cover));
     }
   }
 

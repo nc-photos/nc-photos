@@ -4,7 +4,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/event/event.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'delete_local.g.dart';
 

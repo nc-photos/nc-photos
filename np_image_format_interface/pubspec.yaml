@@ -1,0 +1,33 @@
+name: np_image_format_interface
+description: A starting point for Dart libraries or applications.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+publish_to: none
+
+environment:
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  np_common:
+    path: ../np_common
+  np_platform_raw_image:
+    path: ../np_platform_raw_image
+  to_string:
+    git:
+      url: https://github.com/nkming2/dart-to-string.git
+      ref: to_string-1.1.0
+      path: to_string
+
+dev_dependencies:
+  analyzer: ^6.2.0
+  build_runner: ^2.4.9
+  np_lints:
+    path: ../np_lints
+  to_string_build:
+    git:
+      url: https://github.com/nkming2/dart-to-string.git
+      ref: to_string_build-1.1.1
+      path: to_string_build

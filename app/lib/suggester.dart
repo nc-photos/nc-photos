@@ -1,6 +1,5 @@
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';

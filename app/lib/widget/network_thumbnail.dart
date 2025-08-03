@@ -1,13 +1,9 @@
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/np_api_util.dart';
-import 'package:nc_photos/widget/cached_network_image_mod.dart' as mod;
+import 'package:nc_photos/file_view_util.dart';
 import 'package:np_common/object_util.dart';
 
 /// A square thumbnail widget for a file
@@ -16,54 +12,35 @@ class NetworkRectThumbnail extends StatelessWidget {
     super.key,
     required this.account,
     required this.imageUrl,
+    required this.mime,
     this.dimension,
     required this.errorBuilder,
     this.onSize,
   });
 
-  static String imageUrlForFile(Account account, FileDescriptor file) =>
-      api_util.getFilePreviewUrl(
-        account,
-        file,
-        width: k.photoThumbSize,
-        height: k.photoThumbSize,
-        isKeepAspectRatio: true,
-      );
-
-  static String imageUrlForFileId(Account account, int fileId) =>
-      api_util.getFilePreviewUrlByFileId(
-        account,
-        fileId,
-        width: k.photoThumbSize,
-        height: k.photoThumbSize,
-        isKeepAspectRatio: true,
-      );
+  static String imageUrlForFile(Account account, FileDescriptor file) {
+    return getThumbnailUrlForImageFile(account, file);
+  }
 
   @override
   Widget build(BuildContext context) {
     final child = FittedBox(
       clipBehavior: Clip.hardEdge,
       fit: BoxFit.cover,
-      child: mod.CachedNetworkImage(
-        cacheManager: ThumbnailCacheManager.inst,
+      child: CachedNetworkImageBuilder(
+        type: CachedNetworkImageType.thumbnail,
         imageUrl: imageUrl,
-        httpHeaders: {
-          "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-        },
-        fadeInDuration: const Duration(),
-        filterQuality: FilterQuality.high,
-        imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
+        mime: mime,
+        account: account,
+        imageBuilder: (_, child, __) => _SizeObserver(
+          onSize: onSize,
+          child: child,
+        ),
         errorWidget: (context, __, ___) => SizedBox.square(
           dimension: dimension,
           child: errorBuilder(context),
         ),
-        imageBuilder: (_, child, __) {
-          return _SizeObserver(
-            onSize: onSize,
-            child: child,
-          );
-        },
-      ),
+      ).build(),
     );
     if (dimension != null) {
       return SizedBox.square(
@@ -80,6 +57,7 @@ class NetworkRectThumbnail extends StatelessWidget {
 
   final Account account;
   final String imageUrl;
+  final String? mime;
   final double? dimension;
   final Widget Function(BuildContext context) errorBuilder;
   final ValueChanged<Size>? onSize;

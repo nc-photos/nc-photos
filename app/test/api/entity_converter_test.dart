@@ -81,6 +81,7 @@ Future<void> _filesMetadata() async {
         fileEtag: "8950e39a034e369237d9285e2d815a50",
         imageWidth: 3000,
         imageHeight: 2000,
+        src: MetadataSrc.legacy,
       ),
     ),
   );
@@ -196,6 +197,7 @@ Future<void> _filesMultiple() async {
           imageWidth: 500,
           imageHeight: 500,
           lastUpdated: DateTime.utc(2021, 1, 2, 3, 4, 5, 678),
+          src: MetadataSrc.legacy,
         ),
       ),
     ],

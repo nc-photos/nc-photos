@@ -8,7 +8,7 @@ import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/navigation_manager.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'remove_selection_handler.g.dart';
 

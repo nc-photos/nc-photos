@@ -4,7 +4,6 @@ import 'package:clock/clock.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/type.dart';
 import 'package:np_log/np_log.dart';
@@ -105,6 +104,23 @@ class Account with EquatableMixin {
 
 extension AccountExtension on Account {
   String get url => "$scheme://$address";
+
+  Uri get uri {
+    final pos = address.trimAny("/").indexOf("/");
+    final String authority, path;
+    if (pos == -1) {
+      authority = address;
+      path = "";
+    } else {
+      authority = address.substring(0, pos);
+      path = address.substring(pos);
+    }
+    if (scheme == "http") {
+      return Uri.http(authority, path);
+    } else {
+      return Uri.https(authority, path);
+    }
+  }
 
   /// Compare the server identity of two Accounts
   ///

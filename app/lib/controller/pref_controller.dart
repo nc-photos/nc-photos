@@ -11,13 +11,14 @@ import 'package:nc_photos/json_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/language_util.dart';
 import 'package:nc_photos/protected_page_handler.dart';
-import 'package:nc_photos/size.dart';
 import 'package:nc_photos/widget/home_collections.dart';
-import 'package:nc_photos/widget/viewer.dart';
+import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
+import 'package:np_common/size.dart';
 import 'package:np_common/type.dart';
 import 'package:np_gps_map/np_gps_map.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -280,6 +281,18 @@ class PrefController {
         value: value,
       );
 
+  Future<bool> setVideoPlayerMute(bool value) => _set<bool>(
+        controller: _isVideoPlayerMuteController,
+        setter: (pref, value) => pref.setVideoPlayerMute(value),
+        value: value,
+      );
+
+  Future<bool> setVideoPlayerLoop(bool value) => _set<bool>(
+        controller: _isVideoPlayerLoopController,
+        setter: (pref, value) => pref.setVideoPlayerLoop(value),
+        value: value,
+      );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -435,7 +448,13 @@ class PrefController {
           _homeCollectionsNavBarButtonsDefault);
   @npSubjectAccessor
   late final _isFallbackClientExifController =
-      BehaviorSubject.seeded(pref.isFallbackClientExif() ?? false);
+      BehaviorSubject.seeded(pref.isFallbackClientExif() ?? true);
+  @npSubjectAccessor
+  late final _isVideoPlayerMuteController =
+      BehaviorSubject.seeded(pref.isVideoPlayerMute() ?? false);
+  @npSubjectAccessor
+  late final _isVideoPlayerLoopController =
+      BehaviorSubject.seeded(pref.isVideoPlayerLoop() ?? false);
 }
 
 extension PrefControllerExtension on PrefController {

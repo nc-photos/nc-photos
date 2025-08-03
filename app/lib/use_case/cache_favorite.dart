@@ -2,8 +2,8 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 
 part 'cache_favorite.g.dart';
 

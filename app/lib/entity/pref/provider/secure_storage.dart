@@ -3,8 +3,8 @@ import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/entity/pref.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
+import 'package:np_log/np_log.dart';
 
 part 'secure_storage.g.dart';
 

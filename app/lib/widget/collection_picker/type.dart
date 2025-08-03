@@ -2,18 +2,34 @@ part of '../collection_picker.dart';
 
 @npLog
 class _Item {
-  _Item(this.collection) {
+  const _Item._({
+    required this.collection,
+    required this.coverUrl,
+    required this.coverMime,
+  });
+
+  factory _Item.fromCollection(Collection collection) {
     try {
-      _coverUrl = collection.getCoverUrl(k.coverSize, k.coverSize);
+      final result = collection.getCoverUrl(k.coverSize, k.coverSize);
+      return _Item._(
+        collection: collection,
+        coverUrl: result?.url,
+        coverMime: result?.mime,
+      );
     } catch (e, stackTrace) {
-      _log.warning("[_CollectionItem] Failed while getCoverUrl", e, stackTrace);
+      _$_ItemNpLog.log
+          .warning("[fromCollection] Failed while getCoverUrl", e, stackTrace);
+      return _Item._(
+        collection: collection,
+        coverUrl: null,
+        coverMime: null,
+      );
     }
   }
 
   String get name => collection.name;
 
-  String? get coverUrl => _coverUrl;
-
   final Collection collection;
-  String? _coverUrl;
+  final String? coverUrl;
+  final String? coverMime;
 }

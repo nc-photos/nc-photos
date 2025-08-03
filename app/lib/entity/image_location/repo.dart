@@ -1,8 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_datetime/np_datetime.dart';
+import 'package:np_log/np_log.dart';
 
 part 'repo.g.dart';
 
@@ -11,6 +11,8 @@ class ImageLatLng with EquatableMixin {
     required this.latitude,
     required this.longitude,
     required this.fileId,
+    required this.fileRelativePath,
+    required this.mime,
   });
 
   @override
@@ -18,11 +20,15 @@ class ImageLatLng with EquatableMixin {
         latitude,
         longitude,
         fileId,
+        fileRelativePath,
+        mime,
       ];
 
   final double latitude;
   final double longitude;
   final int fileId;
+  final String fileRelativePath;
+  final String? mime;
 }
 
 abstract class ImageLocationRepo {

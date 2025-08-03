@@ -3,7 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/url_launcher_util.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 
 part 'changelog.g.dart';
@@ -27,9 +27,9 @@ part 'changelog/changelog_700.dart';
 part 'changelog/changelog_710.dart';
 part 'changelog/changelog_720.dart';
 part 'changelog/changelog_730.dart';
-
-// Compatibility with flutter 3.22
-typedef WidgetStateProperty = MaterialStateProperty;
+part 'changelog/changelog_740.dart';
+part 'changelog/changelog_750.dart';
+part 'changelog/changelog_760.dart';
 
 class ChangelogArguments {
   const ChangelogArguments(this.fromVersion);
@@ -368,6 +368,9 @@ Widget _subBulletPoint(Widget child) => Row(
     );
 
 final _changelogs = <int, List<Widget> Function(BuildContext)>{
+  760: (_) => const [_Changelog760()],
+  750: (_) => const [_Changelog750()],
+  740: (_) => const [_Changelog740()],
   730: (_) => const [_Changelog730()],
   720: (_) => const [_Changelog720()],
   710: (_) => const [_Changelog710()],

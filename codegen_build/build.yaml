@@ -1,7 +1,7 @@
 builders:
-  np_log_build:
+  np_codegen_build:
     import: "package:np_codegen_build/builder.dart"
-    builder_factories: ["driftTableSortBuilder", "npLogBuilder", "npSubjectAccessorBuilder"]
+    builder_factories: ["driftTableSortBuilder", "npSubjectAccessorBuilder"]
     # The `partId` argument to `SharedPartBuilder` is "some_cool_builder"
     build_extensions: {".dart": [".np_codegen.g.part"]}
     auto_apply: dependents

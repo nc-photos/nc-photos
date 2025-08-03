@@ -17,7 +17,7 @@ import 'package:nc_photos/use_case/remove_share.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/empty_list_indicator.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:np_ui/np_ui.dart';
 
@@ -264,6 +264,7 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
       return NetworkRectThumbnail(
         account: widget.account,
         imageUrl: NetworkRectThumbnail.imageUrlForFile(widget.account, file),
+        mime: file.fdMime,
         dimension: 56,
         errorBuilder: (_) => const Icon(Icons.image_not_supported, size: 32),
       );

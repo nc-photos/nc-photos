@@ -21,13 +21,13 @@ import 'package:nc_photos/use_case/list_archived_file.dart';
 import 'package:nc_photos/use_case/remove.dart';
 import 'package:nc_photos/use_case/sync_dir.dart';
 import 'package:nc_photos/use_case/update_property.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/lazy.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:to_string/to_string.dart';
 
@@ -133,23 +133,35 @@ class FilesController {
       var hasChange = false;
       for (final r in account.roots) {
         final dirPath = file_util.unstripPath(account, r);
-        hasChange |= await SyncDir(_c)(
-          account,
-          dirPath,
-          onProgressUpdate: (value) {
-            final merged = progress.progress + progress.step * value.progress;
-            onProgressUpdate?.call(Progress(merged, value.text));
-          },
-        );
-        isShareDirIncluded |=
-            file_util.isOrUnderDirPath(shareDir.path, dirPath);
+        try {
+          hasChange |= await SyncDir(_c)(
+            account,
+            dirPath,
+            onProgressUpdate: (value) {
+              final merged = progress.progress + progress.step * value.progress;
+              onProgressUpdate?.call(Progress(merged, value.text));
+            },
+          );
+          isShareDirIncluded |=
+              file_util.isOrUnderDirPath(shareDir.path, dirPath);
+        } catch (e, stackTrace) {
+          _log.severe(
+              "[syncRemote] Failed while SyncDir: $dirPath", e, stackTrace);
+          _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
+        }
         progress.next();
       }
 
       if (!isShareDirIncluded) {
         _log.info("[syncRemote] Explicitly scanning share folder");
-        hasChange |=
-            await SyncDir(_c)(account, shareDir.path, isRecursive: false);
+        try {
+          hasChange |=
+              await SyncDir(_c)(account, shareDir.path, isRecursive: false);
+        } catch (e, stackTrace) {
+          _log.severe("[syncRemote] Failed while SyncDir: ${shareDir.path}", e,
+              stackTrace);
+          _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
+        }
       }
       if (hasChange) {
         // load the synced content to stream
@@ -167,7 +179,6 @@ class FilesController {
   /// Update files property and return number of files updated
   Future<void> updateProperty(
     List<FileDescriptor> files, {
-    OrNull<Metadata>? metadata,
     OrNull<bool>? isArchived,
     OrNull<DateTime>? overrideDateTime,
     bool? isFavorite,
@@ -187,7 +198,6 @@ class FilesController {
         final result = _mockUpdateProperty(
           src: _dataStreamController.value.files,
           files: files,
-          metadata: metadata,
           isArchived: isArchived,
           overrideDateTime: overrideDateTime,
           isFavorite: isFavorite,
@@ -238,7 +248,6 @@ class FilesController {
         final result = _mockUpdateProperty(
           src: _timelineStreamController.value.data,
           files: files,
-          metadata: metadata,
           isArchived: isArchived,
           overrideDateTime: overrideDateTime,
           isFavorite: isFavorite,
@@ -256,7 +265,6 @@ class FilesController {
         await UpdateProperty(fileRepo: _c.fileRepo2)(
           account,
           f,
-          metadata: metadata,
           isArchived: isArchived,
           overrideDateTime: overrideDateTime,
           favorite: isFavorite,
@@ -441,6 +449,9 @@ class FilesController {
       final interests = fileIds
           .where((e) => !_dataStreamController.value.files.containsKey(e))
           .toList();
+      if (interests.isEmpty) {
+        return;
+      }
       final files = await FindFileDescriptor(_c)(
         account,
         interests,

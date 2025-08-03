@@ -26,7 +26,7 @@ import 'package:nc_photos/widget/settings/photos_settings.dart';
 import 'package:nc_photos/widget/settings/settings_list_caption.dart';
 import 'package:nc_photos/widget/settings/theme_settings.dart';
 import 'package:nc_photos/widget/settings/viewer_settings.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'settings.g.dart';
 

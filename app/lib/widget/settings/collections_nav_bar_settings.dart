@@ -15,8 +15,8 @@ import 'package:nc_photos/widget/draggable.dart' as my;
 import 'package:nc_photos/widget/fade_out_list.dart';
 import 'package:nc_photos/widget/home_collections.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'collections_nav_bar/bloc.dart';
@@ -56,7 +56,7 @@ class _WrappedCollectionsNavBarSettingsState
   Widget build(BuildContext context) {
     return PopScope(
       canPop: true,
-      onPopInvoked: (_) {
+      onPopInvokedWithResult: (didPop, result) {
         final prefController = context.bloc.prefController;
         final from = prefController.homeCollectionsNavBarButtonsValue;
         final to = context.state.buttons;

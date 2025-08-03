@@ -86,13 +86,13 @@ Future<void> _loaderOutdatedCache() async {
   addTearDown(() => c.sqliteDb.close());
   final dbFiles = [
     files[0].copyWith(etag: const OrNull("a")),
-    ...files.slice(1),
+    ...files.pySlice(1),
   ];
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, dbFiles);
     await util.insertDirRelation(
-        c.sqliteDb, account, dbFiles[0], dbFiles.slice(1, 3));
+        c.sqliteDb, account, dbFiles[0], dbFiles.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, dbFiles[2], [dbFiles[3]]);
   });
 
@@ -101,7 +101,7 @@ Future<void> _loaderOutdatedCache() async {
   final loader = FileCacheLoader(c, cacheSrc: cacheSrc, remoteSrc: remoteSrc);
   expect(
     (await loader(account, files[0]))?.toSet(),
-    dbFiles.slice(0, 3).toSet(),
+    dbFiles.pySlice(0, 3).toSet(),
   );
   expect(loader.isGood, false);
 }
@@ -127,7 +127,7 @@ Future<void> _loaderQueryRemoteSameEtag() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
@@ -137,7 +137,7 @@ Future<void> _loaderQueryRemoteSameEtag() async {
   expect(
     (await loader(account, files[0].copyWith(etag: const OrNull(null))))
         ?.toSet(),
-    files.slice(0, 3).toSet(),
+    files.pySlice(0, 3).toSet(),
   );
   expect(loader.isGood, true);
 }
@@ -161,13 +161,13 @@ Future<void> _loaderQueryRemoteDiffEtag() async {
   addTearDown(() => c.sqliteDb.close());
   final dbFiles = [
     files[0].copyWith(etag: const OrNull("a")),
-    ...files.slice(1),
+    ...files.pySlice(1),
   ];
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, dbFiles);
     await util.insertDirRelation(
-        c.sqliteDb, account, dbFiles[0], dbFiles.slice(1, 3));
+        c.sqliteDb, account, dbFiles[0], dbFiles.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, dbFiles[2], [dbFiles[3]]);
   });
 
@@ -177,7 +177,7 @@ Future<void> _loaderQueryRemoteDiffEtag() async {
   expect(
     (await loader(account, files[0].copyWith(etag: const OrNull(null))))
         ?.toSet(),
-    dbFiles.slice(0, 3).toSet(),
+    dbFiles.pySlice(0, 3).toSet(),
   );
   expect(loader.isGood, false);
 }
@@ -201,12 +201,12 @@ Future<void> _updaterIdentical() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
   final updater = FileSqliteCacheUpdater(c.npDb);
-  await updater(account, files[0], remote: files.slice(0, 3));
+  await updater(account, files[0], remote: files.pySlice(0, 3));
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
     files.toSet(),
@@ -236,12 +236,12 @@ Future<void> _updaterNewFile() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
   final updater = FileSqliteCacheUpdater(c.npDb);
-  await updater(account, files[0], remote: [...files.slice(0, 3), newFile]);
+  await updater(account, files[0], remote: [...files.pySlice(0, 3), newFile]);
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
     {...files, newFile},
@@ -267,7 +267,7 @@ Future<void> _updaterDeleteFile() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
@@ -275,7 +275,7 @@ Future<void> _updaterDeleteFile() async {
   await updater(account, files[0], remote: [files[0], files[2]]);
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
-    {files[0], ...files.slice(2)},
+    {files[0], ...files.pySlice(2)},
   );
 }
 
@@ -301,20 +301,20 @@ Future<void> _updaterDeleteDir() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
   final updater = FileSqliteCacheUpdater(c.npDb);
-  await updater(account, files[0], remote: files.slice(0, 2));
+  await updater(account, files[0], remote: files.pySlice(0, 2));
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
-    files.slice(0, 2).toSet(),
+    files.pySlice(0, 2).toSet(),
   );
   expect(
     await util.listSqliteDbDirs(c.sqliteDb),
     {
-      files[0]: files.slice(0, 2).toSet(),
+      files[0]: files.pySlice(0, 2).toSet(),
     },
   );
 }
@@ -339,16 +339,16 @@ Future<void> _updaterUpdateFile() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
   final updater = FileSqliteCacheUpdater(c.npDb);
   await updater(account, files[0],
-      remote: [files[0], newFile, ...files.slice(2)]);
+      remote: [files[0], newFile, ...files.pySlice(2)]);
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
-    {files[0], newFile, ...files.slice(2)},
+    {files[0], newFile, ...files.pySlice(2)},
   );
 }
 
@@ -378,7 +378,7 @@ Future<void> _updaterNewSharedFile() async {
     await c.sqliteDb.insertAccounts([user1Account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
@@ -415,7 +415,7 @@ Future<void> _updaterNewSharedDir() async {
     await c.sqliteDb.insertAccounts([user1Account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
@@ -453,7 +453,7 @@ Future<void> _updaterDeleteSharedFile() async {
     await c.sqliteDb.insertAccounts([user1Account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
 
     await util.insertFiles(c.sqliteDb, user1Account, user1Files);
@@ -496,7 +496,7 @@ Future<void> _updaterDeleteSharedDir() async {
     await c.sqliteDb.insertAccounts([user1Account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
 
     await util.insertFiles(c.sqliteDb, user1Account, user1Files);
@@ -537,12 +537,12 @@ Future<void> _updaterTooManyFiles() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
-    await util.insertDirRelation(c.sqliteDb, account, files[2], files.slice(3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
+    await util.insertDirRelation(c.sqliteDb, account, files[2], files.pySlice(3));
   });
 
   final updater = FileSqliteCacheUpdater(c.npDb);
-  await updater(account, files[2], remote: [...files.slice(2), ...newFiles]);
+  await updater(account, files[2], remote: [...files.pySlice(2), ...newFiles]);
   // we are testing to make sure the above function won't throw, so nothing to
   // expect here
 }
@@ -566,7 +566,7 @@ Future<void> _updaterMovedFileToFront() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[1], []);
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
@@ -586,10 +586,10 @@ Future<void> _updaterMovedFileToFront() async {
   );
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
-    {...files.slice(0, 3), movedFile},
+    {...files.pySlice(0, 3), movedFile},
   );
   final dirResult = await util.listSqliteDbDirs(c.sqliteDb);
-  expect(dirResult[files[0]], {...files.slice(0, 3)});
+  expect(dirResult[files[0]], {...files.pySlice(0, 3)});
   expect(dirResult[files[1]], {files[1], movedFile});
   expect(dirResult[files[2]], {files[2]});
 }
@@ -613,7 +613,7 @@ Future<void> _updaterMovedFileToBehind() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[1], [files[3]]);
     await util.insertDirRelation(c.sqliteDb, account, files[2], []);
   });
@@ -633,10 +633,10 @@ Future<void> _updaterMovedFileToBehind() async {
   );
   expect(
     await util.listSqliteDbFiles(c.sqliteDb),
-    {...files.slice(0, 3), movedFile},
+    {...files.pySlice(0, 3), movedFile},
   );
   final dirResult = await util.listSqliteDbDirs(c.sqliteDb);
-  expect(dirResult[files[0]], {...files.slice(0, 3)});
+  expect(dirResult[files[0]], {...files.pySlice(0, 3)});
   expect(dirResult[files[1]], {files[1]});
   expect(dirResult[files[2]], {files[2], movedFile});
 }

@@ -1,12 +1,9 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/di_container.dart';
@@ -14,14 +11,14 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/entity/share/data_source.dart';
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/remove.dart';
 import 'package:nc_photos/use_case/remove_share.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:path/path.dart' as path_lib;
 
 part 'shared_file_viewer.g.dart';
@@ -78,13 +75,6 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
   }
 
   Widget _buildContent(BuildContext context) {
-    final previewUrl = api_util.getFilePreviewUrl(
-      widget.account,
-      widget.file,
-      width: k.photoLargeSize,
-      height: k.photoLargeSize,
-      isKeepAspectRatio: true,
-    );
     return CustomScrollView(
       slivers: [
         SliverAppBar(
@@ -99,21 +89,17 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
                 alignment: Alignment.center,
                 fit: BoxFit.cover,
                 clipBehavior: Clip.hardEdge,
-                child: CachedNetworkImage(
-                  cacheManager: LargeImageCacheManager.inst,
-                  imageUrl: previewUrl,
-                  httpHeaders: {
-                    "Authorization":
-                        AuthUtil.fromAccount(widget.account).toHeaderValue(),
-                  },
-                  fadeInDuration: const Duration(),
-                  filterQuality: FilterQuality.high,
+                child: CachedNetworkImageBuilder(
+                  type: CachedNetworkImageType.largeImage,
+                  imageUrl:
+                      getViewerUrlForImageFile(widget.account, widget.file),
+                  mime: widget.file.fdMime,
+                  account: widget.account,
                   errorWidget: (context, url, error) {
                     // just leave it empty
                     return Container();
                   },
-                  imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-                ),
+                ).build(),
               ),
             ),
           ),

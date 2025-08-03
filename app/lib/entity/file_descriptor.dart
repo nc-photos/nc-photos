@@ -15,7 +15,7 @@ int compareFileDescriptorDateTimeDescending(
     return tmp;
   } else {
     // compare file name if files are modified at the same time
-    return x.fdPath.compareTo(y.fdPath);
+    return y.fdId.compareTo(x.fdId);
   }
 }
 

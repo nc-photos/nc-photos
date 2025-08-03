@@ -169,6 +169,7 @@ abstract class DbFileConverter {
             height: s.imageHeight,
             exif: s.exif?.toJson(),
             exifDateTimeOriginal: s.exif?.dateTimeOriginal,
+            src: s.src.index,
           )),
       location: src.location?.let((s) => DbLocation(
             version: s.version,
@@ -215,6 +216,7 @@ abstract class DbMetadataConverter {
       imageWidth: src.width,
       imageHeight: src.height,
       exif: src.exif?.let(Exif.fromJson),
+      src: src.src?.let(MetadataSrc.fromValue) ?? MetadataSrc.legacy,
     );
   }
 
@@ -226,6 +228,7 @@ abstract class DbMetadataConverter {
       height: src.imageHeight,
       exif: src.exif?.toJson(),
       exifDateTimeOriginal: src.exif?.dateTimeOriginal,
+      src: src.src.index,
     );
   }
 }
@@ -272,6 +275,8 @@ abstract class DbLocationGroupConverter {
       src.count,
       src.latestFileId,
       src.latestDateTime,
+      src.latestFileMime,
+      src.latestFileRelativePath,
     );
   }
 }
@@ -282,6 +287,8 @@ abstract class DbImageLatLngConverter {
       latitude: src.lat,
       longitude: src.lng,
       fileId: src.fileId,
+      fileRelativePath: src.fileRelativePath,
+      mime: src.mime,
     );
   }
 }

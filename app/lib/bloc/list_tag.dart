@@ -7,7 +7,7 @@ import 'package:nc_photos/bloc/bloc_util.dart' as bloc_util;
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/tag.dart';
 import 'package:nc_photos/use_case/list_tag.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'list_tag.g.dart';

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/exception_util.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'snack_bar_manager.g.dart';
 

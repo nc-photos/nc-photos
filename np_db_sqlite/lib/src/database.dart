@@ -1,8 +1,8 @@
 import 'package:drift/drift.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db_sqlite/src/table.dart';
 import 'package:np_db_sqlite/src/util.dart';
+import 'package:np_log/np_log.dart';
 
 part 'database.g.dart';
 
@@ -37,10 +37,10 @@ class SqliteDb extends _$SqliteDb {
   static late final SqliteDb inst;
 
   @override
-  get schemaVersion => 7;
+  int get schemaVersion => 8;
 
   @override
-  get migration => MigrationStrategy(
+  MigrationStrategy get migration => MigrationStrategy(
         onCreate: (m) async {
           await customStatement("PRAGMA journal_mode=WAL;");
           await m.createAll();
@@ -105,6 +105,9 @@ class SqliteDb extends _$SqliteDb {
                     ncAlbums.isOwned: const Constant(true),
                   },
                 ));
+              }
+              if (from < 8) {
+                await m.addColumn(images, images.src);
               }
             });
           } catch (e, stackTrace) {

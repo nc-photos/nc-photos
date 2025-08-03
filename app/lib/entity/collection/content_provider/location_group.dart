@@ -1,10 +1,13 @@
 import 'package:equatable/equatable.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/util.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
+import 'package:np_common/size.dart';
 
 class CollectionLocationGroupProvider
     with EquatableMixin
@@ -38,17 +41,27 @@ class CollectionLocationGroupProvider
   List<CollectionShare> get shares => [];
 
   @override
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
   }) {
-    return api_util.getFilePreviewUrlByFileId(
-      account,
-      location.latestFileId,
-      width: width,
-      height: height,
-      isKeepAspectRatio: isKeepAspectRatio ?? false,
+    return CollectionCoverResult(
+      url: getStaticViewUrlForImageFile(
+        account,
+        FileDescriptor(
+          fdPath:
+              file_util.unstripPath(account, location.latestFileRelativePath),
+          fdId: location.latestFileId,
+          fdMime: location.latestFileMime,
+          fdIsArchived: false,
+          fdIsFavorite: false,
+          fdDateTime: location.latestDateTime,
+        ),
+        size: SizeInt(width, height),
+        isKeepAspectRatio: isKeepAspectRatio ?? false,
+      ),
+      mime: location.latestFileMime,
     );
   }
 

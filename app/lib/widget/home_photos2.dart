@@ -57,14 +57,14 @@ import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
 import 'package:nc_photos/widget/selectable_section_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
-import 'package:nc_photos/widget/viewer.dart';
+import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:np_async/np_async.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 import 'package:visibility_detector/visibility_detector.dart';
@@ -99,6 +99,8 @@ class HomePhotos2 extends StatelessWidget {
         personsController: accountController.personsController,
         metadataController: accountController.metadataController,
         serverController: accountController.serverController,
+        bottomAppBarHeight: AppDimension.of(context).homeBottomAppBarHeight,
+        draggableThumbSize: AppDimension.of(context).timelineDraggableThumbSize,
       ),
       child: const _WrappedHomePhotos(),
     );
@@ -188,7 +190,7 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
                 )
               : PopScope(
                   canPop: false,
-                  onPopInvoked: (_) {
+                  onPopInvokedWithResult: (didPop, result) {
                     context.addEvent(const _SetSelectedItems(items: {}));
                   },
                   child: _BodyView(key: _bodyKey),
@@ -352,7 +354,8 @@ class _BodyState extends State<_Body> {
                           Theme.of(context).colorScheme.secondaryContainer,
                       foregroundColor:
                           Theme.of(context).colorScheme.onSecondaryContainer,
-                      heightScrollThumb: 60,
+                      heightScrollThumb:
+                          AppDimension.of(context).timelineDraggableThumbSize,
                       onScrollBegin: () {
                         context.bloc.add(const _StartScrolling());
                       },

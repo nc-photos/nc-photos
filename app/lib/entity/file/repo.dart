@@ -2,9 +2,9 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_datetime/np_datetime.dart';
+import 'package:np_log/np_log.dart';
 
 part 'repo.g.dart';
 
@@ -21,6 +21,12 @@ abstract class FileRepo2 {
     Account account,
     String shareDirPath, {
     TimeRange? timeRange,
+    bool? isArchived,
+  });
+
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
     bool? isArchived,
   });
 
@@ -51,6 +57,14 @@ class BasicFileRepo implements FileRepo2 {
   }) =>
       dataSrc.getFileDescriptors(account, shareDirPath,
           timeRange: timeRange, isArchived: isArchived);
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) =>
+      dataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -93,6 +107,14 @@ class CachedFileRepo implements FileRepo2 {
   }) =>
       cacheDataSrc.getFileDescriptors(account, shareDirPath,
           timeRange: timeRange, isArchived: isArchived);
+
+  @override
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
+    bool? isArchived,
+  }) =>
+      cacheDataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -150,6 +172,12 @@ abstract class FileDataSource2 {
     Account account,
     String shareDirPath, {
     TimeRange? timeRange,
+    bool? isArchived,
+  });
+
+  Future<List<int>> getFileIds(
+    Account account,
+    String shareDirPath, {
     bool? isArchived,
   });
 

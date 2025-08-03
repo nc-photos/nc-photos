@@ -34,8 +34,8 @@ import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/share_link_multiple_files_dialog.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 

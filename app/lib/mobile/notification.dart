@@ -1,7 +1,7 @@
 import 'package:logging/logging.dart';
 import 'package:nc_photos/platform/notification.dart' as itf;
 import 'package:nc_photos_plugin/nc_photos_plugin.dart' as plugin;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'notification.g.dart';
 

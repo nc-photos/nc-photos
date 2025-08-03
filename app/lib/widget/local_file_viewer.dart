@@ -12,7 +12,7 @@ import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.da
 import 'package:nc_photos/widget/handler/delete_local_selection_handler.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:nc_photos/widget/image_viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'local_file_viewer.g.dart';
 

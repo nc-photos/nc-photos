@@ -4,8 +4,8 @@ import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/nc_album.dart';
 import 'package:nc_photos/use_case/copy.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 
 part 'add_file_to_nc_album.g.dart';
 

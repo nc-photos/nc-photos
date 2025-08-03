@@ -53,7 +53,7 @@ Future<void> _getFileDescriptors() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
   });
 
@@ -90,7 +90,7 @@ Future<void> _getFileDescriptorsMultipleAccount() async {
     await c.sqliteDb.insertAccounts([user1Account.toDb()]);
     await util.insertFiles(c.sqliteDb, account, files);
     await util.insertDirRelation(
-        c.sqliteDb, account, files[0], files.slice(1, 3));
+        c.sqliteDb, account, files[0], files.pySlice(1, 3));
     await util.insertDirRelation(c.sqliteDb, account, files[2], [files[3]]);
     await util.insertFiles(c.sqliteDb, user1Account, user1Files);
     await util.insertDirRelation(
@@ -351,6 +351,7 @@ Future<void> _updateMetadata() async {
     metadata: OrNull(Metadata(
       lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
       imageWidth: 123,
+      src: MetadataSrc.legacy,
     )),
   );
   final c = DiContainer(
@@ -371,6 +372,7 @@ Future<void> _updateMetadata() async {
       lastUpdated: DateTime.utc(2021, 1, 2, 3, 4, 5),
       imageWidth: 321,
       imageHeight: 123,
+      src: MetadataSrc.legacy,
     )),
   );
   final expectFile = files[1].copyWith(
@@ -378,6 +380,7 @@ Future<void> _updateMetadata() async {
       lastUpdated: DateTime.utc(2021, 1, 2, 3, 4, 5),
       imageWidth: 321,
       imageHeight: 123,
+      src: MetadataSrc.legacy,
     )),
   );
   expect(
@@ -412,12 +415,14 @@ Future<void> _updateAddMetadata() async {
     metadata: OrNull(Metadata(
       lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
       imageWidth: 123,
+      src: MetadataSrc.legacy,
     )),
   );
   final expectFile = files[1].copyWith(
     metadata: OrNull(Metadata(
       lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
       imageWidth: 123,
+      src: MetadataSrc.legacy,
     )),
   );
   expect(
@@ -439,6 +444,7 @@ Future<void> _updateDeleteMetadata() async {
     metadata: OrNull(Metadata(
       lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
       imageWidth: 123,
+      src: MetadataSrc.legacy,
     )),
   );
   final c = DiContainer(

@@ -13,10 +13,10 @@ import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/use_case/person/sync_person.dart';
 import 'package:nc_photos/use_case/sync_favorite.dart';
 import 'package:nc_photos/use_case/sync_tag.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/type.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 

@@ -4,15 +4,22 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'list_location_group.g.dart';
 
 @toString
 class LocationGroup with EquatableMixin {
-  const LocationGroup(this.place, this.countryCode, this.count,
-      this.latestFileId, this.latestDateTime);
+  const LocationGroup(
+    this.place,
+    this.countryCode,
+    this.count,
+    this.latestFileId,
+    this.latestDateTime,
+    this.latestFileMime,
+    this.latestFileRelativePath,
+  );
 
   @override
   String toString() => _$toString();
@@ -24,6 +31,8 @@ class LocationGroup with EquatableMixin {
         count,
         latestFileId,
         latestDateTime,
+        latestFileMime,
+        latestFileRelativePath,
       ];
 
   final String place;
@@ -31,6 +40,8 @@ class LocationGroup with EquatableMixin {
   final int count;
   final int latestFileId;
   final DateTime latestDateTime;
+  final String? latestFileMime;
+  final String latestFileRelativePath;
 }
 
 @toString

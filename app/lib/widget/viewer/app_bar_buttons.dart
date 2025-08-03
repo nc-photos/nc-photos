@@ -1,4 +1,4 @@
-part of '../viewer.dart';
+part of 'viewer.dart';
 
 enum ViewerAppBarButtonType {
   // the order must not be changed

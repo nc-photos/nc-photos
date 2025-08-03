@@ -29,8 +29,8 @@ import 'package:nc_photos/widget/home.dart';
 import 'package:nc_photos/widget/settings.dart';
 import 'package:nc_photos/widget/settings/account_settings.dart';
 import 'package:nc_photos/widget/sign_in.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'account_picker_dialog.g.dart';
@@ -139,7 +139,7 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                     ClipRRect(
                       borderRadius: BorderRadius.circular(24),
                       child: Container(
-                        color: Theme.of(context).colorScheme.background,
+                        color: Theme.of(context).colorScheme.surface,
                         child: Material(
                           type: MaterialType.transparency,
                           child: _BlocBuilder(

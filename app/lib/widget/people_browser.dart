@@ -20,7 +20,7 @@ import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/collection_list_item.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/person_thumbnail.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'people_browser.g.dart';
@@ -198,6 +198,7 @@ class _ItemView extends StatelessWidget {
         builder: (context, constraints) => PersonThumbnail(
           account: account,
           coverUrl: item.coverUrl,
+          coverMime: item.coverMime,
           person: item.person,
           dimension: constraints.maxWidth,
         ),

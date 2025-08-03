@@ -3,12 +3,12 @@ import 'dart:io' as io;
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/src/entity.dart';
 import 'package:np_db_sqlite/np_db_sqlite.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'api.g.dart';
@@ -92,6 +92,8 @@ class DbLocationGroup with EquatableMixin {
     required this.count,
     required this.latestFileId,
     required this.latestDateTime,
+    required this.latestFileMime,
+    required this.latestFileRelativePath,
   });
 
   @override
@@ -104,6 +106,8 @@ class DbLocationGroup with EquatableMixin {
         count,
         latestFileId,
         latestDateTime,
+        latestFileMime,
+        latestFileRelativePath,
       ];
 
   final String place;
@@ -111,6 +115,8 @@ class DbLocationGroup with EquatableMixin {
   final int count;
   final int latestFileId;
   final DateTime latestDateTime;
+  final String? latestFileMime;
+  final String latestFileRelativePath;
 }
 
 @toString
@@ -137,6 +143,8 @@ class DbImageLatLng with EquatableMixin {
     required this.lat,
     required this.lng,
     required this.fileId,
+    required this.fileRelativePath,
+    required this.mime,
   });
 
   @override
@@ -147,11 +155,15 @@ class DbImageLatLng with EquatableMixin {
         lat,
         lng,
         fileId,
+        fileRelativePath,
+        mime,
       ];
 
   final double lat;
   final double lng;
   final int fileId;
+  final String fileRelativePath;
+  final String? mime;
 }
 
 @genCopyWith
@@ -419,6 +431,7 @@ abstract class NpDb {
     bool? isArchived,
     List<String>? mimes,
     TimeRange? timeRange,
+    bool? isAscending,
     int? offset,
     int? limit,
   });
@@ -445,6 +458,15 @@ abstract class NpDb {
     required int radius,
     List<String>? includeRelativeRoots,
     List<String>? excludeRelativeRoots,
+    List<String>? mimes,
+  });
+
+  Future<List<int>> getFileIds({
+    required DbAccount account,
+    List<String>? includeRelativeRoots,
+    List<String>? includeRelativeDirs,
+    List<String>? excludeRelativeRoots,
+    bool? isArchived,
     List<String>? mimes,
   });
 
@@ -553,6 +575,9 @@ abstract class NpDb {
 
   /// Migrate to app v55
   Future<void> migrateV55(void Function(int current, int count)? onProgress);
+
+  /// Migrate to app v75
+  Future<void> migrateV75();
 
   /// Run vacuum statement on a database backed by sqlite
   ///

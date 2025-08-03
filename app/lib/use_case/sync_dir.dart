@@ -10,7 +10,7 @@ import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/progress_util.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/use_case/ls_single_file.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'sync_dir.g.dart';
 

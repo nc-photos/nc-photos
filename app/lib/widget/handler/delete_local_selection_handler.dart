@@ -8,7 +8,7 @@ import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/delete_local.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 
 part 'delete_local_selection_handler.g.dart';
 

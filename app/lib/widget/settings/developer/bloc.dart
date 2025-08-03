@@ -35,6 +35,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     await ThumbnailCacheManager.inst.emptyCache();
     await LargeImageCacheManager.inst.emptyCache();
     await CoverCacheManager.inst.emptyCache();
+    await ExtraFormatCacheManager.inst.emptyCache();
     emit(state.copyWith(message: StateMessage("Finished successfully")));
   }
 

@@ -7,7 +7,7 @@ import 'package:native_device_orientation/native_device_orientation.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/throttler.dart';
 import 'package:nc_photos/widget/disposable.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:screen_brightness/screen_brightness.dart';
 

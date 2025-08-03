@@ -1,4 +1,4 @@
-part of '../viewer.dart';
+part of 'viewer.dart';
 
 class _AppBar extends StatelessWidget {
   const _AppBar();

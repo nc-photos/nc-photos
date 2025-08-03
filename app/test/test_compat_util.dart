@@ -188,6 +188,7 @@ class _SqliteFileConverter {
           imageWidth: obj.width,
           imageHeight: obj.height,
           exif: obj.exifRaw?.let((e) => Exif.fromJson(jsonDecode(e))),
+          src: obj.src?.let(MetadataSrc.fromValue) ?? MetadataSrc.legacy,
         ));
     final location = f.imageLocation?.let((obj) => ImageLocation(
           version: obj.version,
@@ -254,6 +255,7 @@ class _SqliteFileConverter {
           height: sql.Value(m.imageHeight),
           exifRaw: sql.Value(m.exif?.toJson().let((j) => jsonEncode(j))),
           dateTimeOriginal: sql.Value(m.exif?.dateTimeOriginal),
+          src: sql.Value(m.src.index),
         ));
     final dbImageLocation =
         file.location?.let((l) => compat.ImageLocationsCompanion.insert(

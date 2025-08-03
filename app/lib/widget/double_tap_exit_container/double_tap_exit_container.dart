@@ -9,7 +9,7 @@ import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'bloc.dart';
@@ -48,7 +48,7 @@ class _WrappedDoubleTapExitContainer extends StatelessWidget {
           previous.canPop != current.canPop,
       builder: (context, state) => PopScope(
         canPop: !state.isDoubleTapExit || state.canPop,
-        onPopInvoked: (didPop) {
+        onPopInvokedWithResult: (didPop, result) {
           context.addEvent(_OnPopInvoked(didPop));
         },
         child: child,

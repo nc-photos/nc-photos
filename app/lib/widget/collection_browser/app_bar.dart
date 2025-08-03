@@ -155,31 +155,25 @@ class _AppBarCover extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) => previous.coverUrl != current.coverUrl,
+      buildWhen: (previous, current) => previous.cover != current.cover,
       builder: (context, state) {
-        if (state.coverUrl != null) {
+        if (state.cover?.url != null) {
           return Opacity(
             opacity:
                 Theme.of(context).brightness == Brightness.light ? 0.25 : 0.35,
             child: FittedBox(
               clipBehavior: Clip.hardEdge,
               fit: BoxFit.cover,
-              child: CachedNetworkImage(
-                cacheManager: CoverCacheManager.inst,
-                imageUrl: state.coverUrl!,
-                httpHeaders: {
-                  "Authorization":
-                      AuthUtil.fromAccount(context.read<_Bloc>().account)
-                          .toHeaderValue(),
-                },
-                fadeInDuration: const Duration(),
-                filterQuality: FilterQuality.high,
+              child: CachedNetworkImageBuilder(
+                type: CachedNetworkImageType.cover,
+                imageUrl: state.cover!.url,
+                mime: state.cover!.mime,
+                account: context.bloc.account,
                 errorWidget: (context, url, error) {
                   // just leave it empty
                   return Container();
                 },
-                imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
-              ),
+              ).build(),
             ),
           );
         } else {

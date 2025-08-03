@@ -61,7 +61,7 @@ class CollectionNcAlbumProvider
       .toList();
 
   @override
-  String? getCoverUrl(
+  CollectionCoverResult? getCoverUrl(
     int width,
     int height, {
     bool? isKeepAspectRatio,
@@ -69,11 +69,14 @@ class CollectionNcAlbumProvider
     if (album.lastPhoto == null) {
       return null;
     } else {
-      return api_util.getPhotosApiFilePreviewUrlByFileId(
-        account,
-        album.lastPhoto!,
-        width: width,
-        height: height,
+      return CollectionCoverResult(
+        url: api_util.getPhotosApiFilePreviewUrlByFileId(
+          account,
+          album.lastPhoto!,
+          width: width,
+          height: height,
+        ),
+        mime: null,
       );
     }
   }

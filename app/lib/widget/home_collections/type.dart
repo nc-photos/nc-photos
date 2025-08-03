@@ -9,14 +9,31 @@ enum _ItemType {
 
 @npLog
 class _Item implements SelectableItemMetadata {
-  _Item(this.collection)
-      : isShared = collection.shares.isNotEmpty || !collection.isOwned {
-    try {
-      _coverUrl = collection.getCoverUrl(k.coverSize, k.coverSize);
-    } catch (e, stackTrace) {
-      _log.warning("[_CollectionItem] Failed while getCoverUrl", e, stackTrace);
-    }
+  _Item._({
+    required this.collection,
+    required this.coverUrl,
+    required this.coverMime,
+  }) : isShared = collection.shares.isNotEmpty || !collection.isOwned {
     _initType();
+  }
+
+  factory _Item.fromCollection(Collection collection) {
+    try {
+      final result = collection.getCoverUrl(k.coverSize, k.coverSize);
+      return _Item._(
+        collection: collection,
+        coverUrl: result?.url,
+        coverMime: result?.mime,
+      );
+    } catch (e, stackTrace) {
+      _$_ItemNpLog.log
+          .warning("[fromCollection] Failed while getCoverUrl", e, stackTrace);
+      return _Item._(
+        collection: collection,
+        coverUrl: null,
+        coverMime: null,
+      );
+    }
   }
 
   @override
@@ -42,8 +59,6 @@ class _Item implements SelectableItemMetadata {
     }
   }
 
-  String? get coverUrl => _coverUrl;
-
   _ItemType get itemType => _itemType;
 
   void _initType() {
@@ -67,8 +82,9 @@ class _Item implements SelectableItemMetadata {
   }
 
   final Collection collection;
+  final String? coverUrl;
+  final String? coverMime;
   final bool isShared;
 
-  String? _coverUrl;
   late _ItemType _itemType;
 }

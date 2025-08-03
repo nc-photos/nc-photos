@@ -10,7 +10,7 @@ import 'package:nc_photos/protected_page_handler.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/widget/protected_page_password_auth_dialog.dart';
 import 'package:nc_photos/widget/protected_page_pin_auth_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';

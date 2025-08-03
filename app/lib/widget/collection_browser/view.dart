@@ -71,15 +71,14 @@ class _ContentListBody extends StatelessWidget {
                   .where((e) => e is! _FileItem)
                   .length;
           Navigator.of(context).pushNamed(
-            Viewer.routeName,
-            arguments: ViewerArguments(
+            CollectionViewer.routeName,
+            arguments: CollectionViewerArguments(
               state.transformedItems
                   .whereType<_FileItem>()
-                  .map((e) => e.file.fdId)
+                  .map((e) => e.file)
                   .toList(),
               actualIndex,
-              collectionId:
-                  context.bloc.isAdHocCollection ? null : state.collection.id,
+              context.bloc.isAdHocCollection ? null : state.collection.id,
             ),
           );
         },

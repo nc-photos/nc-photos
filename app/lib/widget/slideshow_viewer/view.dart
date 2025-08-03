@@ -349,20 +349,22 @@ class _VideoPageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return VideoViewer(
-      account: context.bloc.account,
+    return FileContentView(
       file: file,
+      shouldPlayLivePhoto: false,
+      canZoom: false,
+      canLoop: false,
+      isPlayControlVisible: false,
       onLoadFailure: () {
         // error, next
         Future.delayed(const Duration(seconds: 2), onCompleted);
       },
-      onPause: () {
-        // video ended
-        Future.delayed(const Duration(seconds: 2), onCompleted);
+      onVideoPlayingChanged: (isPlaying) {
+        if (!isPlaying) {
+          // video ended
+          Future.delayed(const Duration(seconds: 2), onCompleted);
+        }
       },
-      isControlVisible: false,
-      canLoop: false,
-      canZoom: false,
     );
   }
 

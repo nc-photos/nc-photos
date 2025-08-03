@@ -11,5 +11,4 @@
 	<string name="download_progress_notification_untitled_text">Downloading</string>
 	<string name="log_save_successful_notification_title">Logs saved successfully</string>
 	<string name="log_save_successful_notification_text">Tap to view your saved logs</string>
-	<string name="attach_data_chooser_title">Set as</string>
 </resources>

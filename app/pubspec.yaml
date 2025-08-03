@@ -15,11 +15,11 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.73.0+7300
+version: 1.76.1+7610
 
 environment:
-  sdk: ">=3.3.0 <4.0.0"
-  flutter: ">=3.19.0"
+  sdk: ">=3.5.0 <4.0.0"
+  flutter: ">=3.24.0"
 
 dependencies:
   flutter:
@@ -31,16 +31,24 @@ dependencies:
   android_intent_plus:
     git:
       url: https://github.com/nc-photos/plus_plugins.git
-      ref: android_intent_plus-v3.1.1-nc-photos-1
+      ref: android_intent_plus-v3.1.1-nc-photos-2
       path: packages/android_intent_plus
   battery_plus: ^4.0.1
   bloc_concurrency: ^0.2.5
-  cached_network_image: ^3.3.1
-  cached_network_image_platform_interface: any
+  cached_network_image:
+    git:
+      url: https://github.com/nc-photos/flutter_cached_network_image.git
+      ref: v3.3.1-nc-photos-2
+      path: cached_network_image
+  cached_network_image_platform_interface:
+    git:
+      url: https://github.com/nc-photos/flutter_cached_network_image.git
+      ref: v3.3.1-nc-photos-2
+      path: cached_network_image_platform_interface
   circular_reveal_animation: ^2.0.1
   clock: ^1.1.1
   collection: ^1.18.0
-  connectivity_plus: ^3.0.6
+  connectivity_plus: ^4.0.2
   copy_with:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
@@ -56,16 +64,12 @@ dependencies:
   dynamic_color: ^1.7.0
   equatable: ^2.0.5
   event_bus: ^2.0.0
-  exifdart:
-    git:
-      url: https://github.com/nc-photos/exifdart.git
-      ref: 1.3.0
-  flex_seed_scheme: ^1.5.0
+  flex_seed_scheme: ^2.0.0
   fluttertoast: ^8.2.5
   flutter_background_service:
     git:
       url: https://github.com/nc-photos/flutter_background_service.git
-      ref: v0.2.6-nc-photos-3
+      ref: v0.2.6-nc-photos-4
   flutter_bloc: ^8.1.5
   flutter_cache_manager: any
   flutter_colorpicker: ^1.1.0
@@ -75,7 +79,7 @@ dependencies:
     git:
       url: https://github.com/nc-photos/flutter_staggered_grid_view.git
       ref: v0.4.0-nc-photos-2
-  flutter_typeahead: ^4.0.0
+  flutter_typeahead: ^5.2.0
   google_maps_flutter: 2.5.3
   http: ^1.1.2
   image_size_getter:
@@ -83,7 +87,7 @@ dependencies:
       url: https://github.com/nc-photos/dart_image_size_getter.git
       ref: 1.0.0-nc-photos-2
       path: library
-  intl: 0.18.1
+  intl: any
   kiwi: ^4.1.0
   local_auth: ^2.2.0
   logging: ^1.2.0
@@ -107,6 +111,10 @@ dependencies:
     path: ../np_datetime
   np_db:
     path: ../np_db
+  np_exiv2:
+    path: ../np_exiv2
+  np_exiv2_lib:
+    path: ../np_exiv2_lib
   np_geocoder:
     path: ../np_geocoder
   np_gps_map:
@@ -115,8 +123,12 @@ dependencies:
     path: ../np_http
   np_log:
     path: ../np_log
+  np_login_flow:
+    path: ../np_login_flow
   np_math:
     path: ../np_math
+  np_platform_image_format_jxl:
+    path: ../np_platform_image_format_jxl
   np_platform_image_processor:
     path: ../np_platform_image_processor
   np_platform_lock:
@@ -148,6 +160,7 @@ dependencies:
   shared_preferences_platform_interface: any
   sliver_tools: ^0.2.12
   smooth_corner: ^1.1.0
+  super_sliver_list: ^0.4.1
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
@@ -202,6 +215,8 @@ dev_dependencies:
     path: ../np_db_sqlite
   np_lints:
     path: ../np_lints
+  np_log_build:
+    path: ../np_log_build
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git

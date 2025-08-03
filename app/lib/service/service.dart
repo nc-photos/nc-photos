@@ -20,7 +20,7 @@ import 'package:nc_photos/use_case/sync_metadata/sync_metadata.dart';
 import 'package:nc_photos/use_case/wifi_ensurer.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_async/np_async.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_message_relay/np_platform_message_relay.dart';
 
 part 'config.dart';

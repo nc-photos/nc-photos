@@ -6,8 +6,8 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/stream_util.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_gps_map/np_gps_map.dart';
+import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
 part 'bloc.dart';

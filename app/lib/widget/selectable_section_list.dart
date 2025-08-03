@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
@@ -9,9 +10,10 @@ import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/widget/selectable.dart';
 import 'package:nc_photos/widget/selectable_item_list.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:super_sliver_list/super_sliver_list.dart';
 
 export 'package:nc_photos/widget/selectable_item_list.dart'
     show SelectableItemMetadata;
@@ -28,6 +30,18 @@ class SelectableSection<T extends SelectableItemMetadata> {
   final List<T> items;
 }
 
+class SelectableSectionListExtentOptimizer {
+  const SelectableSectionListExtentOptimizer({
+    required this.itemPerRow,
+    required this.titleExtentBuilder,
+    required this.itemExtentBuilder,
+  });
+
+  final int itemPerRow;
+  final double Function(int section) titleExtentBuilder;
+  final double Function(int section) itemExtentBuilder;
+}
+
 class SelectableSectionList<T extends SelectableItemMetadata>
     extends StatefulWidget {
   const SelectableSectionList({
@@ -36,15 +50,16 @@ class SelectableSectionList<T extends SelectableItemMetadata>
     this.selectedItems = const {},
     required this.sectionHeaderBuilder,
     required this.itemBuilder,
-    required this.maxCrossAxisExtent,
+    this.maxCrossAxisExtent,
     this.childAspectRatio = 1,
     this.mainAxisSpacing = 0,
     this.crossAxisSpacing = 0,
+    this.extentOptimizer,
     this.childBorderRadius,
     this.indicatorAlignment = Alignment.topLeft,
     this.onItemTap,
     this.onSelectionChange,
-  });
+  }) : assert(maxCrossAxisExtent != null || extentOptimizer != null);
 
   @override
   State<StatefulWidget> createState() => _SelectableSectionListState<T>();
@@ -56,10 +71,15 @@ class SelectableSectionList<T extends SelectableItemMetadata>
   final Widget Function(
       BuildContext context, int section, int index, T metadata) itemBuilder;
 
-  final double maxCrossAxisExtent;
+  /// The maximum extent of tiles in the cross axis. Required if
+  /// [extentOptimizer] is null
+  final double? maxCrossAxisExtent;
   final double childAspectRatio;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
+
+  // Optimize scrolling performance by providing a fixed extent for items
+  final SelectableSectionListExtentOptimizer? extentOptimizer;
 
   final BorderRadius? childBorderRadius;
   final Alignment indicatorAlignment;
@@ -87,6 +107,7 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
       childAspectRatio: widget.childAspectRatio,
       mainAxisSpacing: widget.mainAxisSpacing,
       crossAxisSpacing: widget.crossAxisSpacing,
+      extentOptimizer: widget.extentOptimizer,
     );
   }
 
@@ -222,14 +243,23 @@ class _SliverSectionGridView extends StatelessWidget {
     required this.sectionTitleBuilder,
     required this.itemCount,
     required this.itemBuilder,
-    required this.maxCrossAxisExtent,
+    this.maxCrossAxisExtent,
     this.childAspectRatio = 1,
     this.mainAxisSpacing = 0,
     this.crossAxisSpacing = 0,
+    this.extentOptimizer,
   });
 
   @override
   Widget build(BuildContext context) {
+    if (extentOptimizer == null) {
+      return _unoptimizedBuild(context);
+    } else {
+      return _optimizedBuild(context);
+    }
+  }
+
+  Widget _unoptimizedBuild(BuildContext context) {
     return SliverList.builder(
       itemCount: sectionCount * 2,
       itemBuilder: (context, index) {
@@ -241,7 +271,7 @@ class _SliverSectionGridView extends StatelessWidget {
             padding: EdgeInsets.zero,
             physics: const NeverScrollableScrollPhysics(),
             gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: maxCrossAxisExtent,
+              maxCrossAxisExtent: maxCrossAxisExtent!,
               childAspectRatio: childAspectRatio,
               mainAxisSpacing: mainAxisSpacing,
               crossAxisSpacing: crossAxisSpacing,
@@ -258,15 +288,83 @@ class _SliverSectionGridView extends StatelessWidget {
     );
   }
 
+  Widget _optimizedBuild(BuildContext context) {
+    final sectionItemCounts = List.generate(sectionCount, itemCount);
+    final sectionRowCounts = List.generate(sectionCount,
+        (i) => (sectionItemCounts[i] / extentOptimizer!.itemPerRow).ceil());
+    final rowCount = sectionCount + sectionRowCounts.sum;
+
+    return SuperSliverList.builder(
+      itemCount: rowCount,
+      itemBuilder: (context, index) {
+        final (section, row) =
+            _listIndexToSectionAndRow(sectionRowCounts, index);
+        if (row == 0) {
+          // section title
+          return sectionTitleBuilder(context, section);
+        } else {
+          // item
+          final firstItemIndex = (row - 1) * extentOptimizer!.itemPerRow;
+          final thisRowCount = math.min(
+              sectionItemCounts[section] - firstItemIndex,
+              extentOptimizer!.itemPerRow);
+          return Row(
+            children: List<Widget>.generate(
+              extentOptimizer!.itemPerRow,
+              (i) => Expanded(
+                child: AspectRatio(
+                  aspectRatio: childAspectRatio,
+                  child: i < thisRowCount
+                      ? itemBuilder(context, section, firstItemIndex + i)
+                      : const SizedBox.shrink(),
+                ),
+              ),
+            ).separated((_) => SizedBox(width: crossAxisSpacing)).toList(),
+          );
+        }
+      },
+      extentEstimation: (index, crossAxisExtent) {
+        if (index == null) {
+          return 0;
+        }
+        final (section, row) =
+            _listIndexToSectionAndRow(sectionRowCounts, index);
+        if (row == 0) {
+          return extentOptimizer!.titleExtentBuilder(section);
+        } else {
+          return extentOptimizer!.itemExtentBuilder(section);
+        }
+      },
+    );
+  }
+
+  (int section, int row) _listIndexToSectionAndRow(
+      List<int> sectionRowCounts, int index) {
+    var remain = index;
+    var i = 0;
+    while (true) {
+      final thisCount = sectionRowCounts[i] + 1;
+      if (remain - thisCount < 0) {
+        // this section
+        return (i, remain);
+      } else {
+        remain -= thisCount;
+        ++i;
+      }
+    }
+  }
+
   final int sectionCount;
   final Widget Function(BuildContext context, int section) sectionTitleBuilder;
   final int Function(int section) itemCount;
   final Widget Function(BuildContext context, int section, int index)
       itemBuilder;
-  final double maxCrossAxisExtent;
+  final double? maxCrossAxisExtent;
   final double childAspectRatio;
   final double mainAxisSpacing;
   final double crossAxisSpacing;
+
+  final SelectableSectionListExtentOptimizer? extentOptimizer;
 }
 
 class _SectionPosition with EquatableMixin {

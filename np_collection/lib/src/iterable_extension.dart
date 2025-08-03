@@ -12,7 +12,14 @@ extension IterableExtension<T> on Iterable<T> {
 
   /// Return a string representation of this iterable by joining the result of
   /// toString for each items
-  String toReadableString() => "[${join(', ')}]";
+  String toReadableString({
+    int truncate = -1,
+  }) {
+    return switch (truncate) {
+      <= 0 => "[${join(', ')}]",
+      _ => "[${take(truncate).join(', ')},...]",
+    };
+  }
 
   Iterable<({int i, T e})> withIndex() => mapIndexed((i, e) => (i: i, e: e));
 
@@ -119,6 +126,15 @@ extension IterableExtension<T> on Iterable<T> {
     final sublists = partition(this, size);
     for (final l in sublists) {
       await fn(l);
+    }
+  }
+
+  Iterable<T> separated(T Function(int index) separatorBuilder) sync* {
+    for (final e in indexed) {
+      yield e.$2;
+      if (e.$1 < length - 1) {
+        yield separatorBuilder(e.$1);
+      }
     }
   }
 }

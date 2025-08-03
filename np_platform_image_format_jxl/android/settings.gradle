@@ -1,0 +1,2 @@
+rootProject.name = 'np_platform_image_format_jxl'
+includeBuild '../../np_android_core'

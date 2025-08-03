@@ -9,8 +9,8 @@ import 'package:nc_photos/entity/album/sort_provider.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/use_case/update_album.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_log/np_log.dart';
 
 part 'edit_album.g.dart';
 

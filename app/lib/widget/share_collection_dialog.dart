@@ -23,7 +23,7 @@ import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/suggester.dart';
 import 'package:nc_photos/toast.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:to_string/to_string.dart';
 
@@ -169,27 +169,29 @@ class _ShareeInputViewState extends State<_ShareeInputView> {
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 40),
         child: TypeAheadField<Sharee>(
-          textFieldConfiguration: TextFieldConfiguration(
-            controller: _textController,
-            decoration: InputDecoration(
-              hintText: L10n.global().addUserInputHint,
-            ),
-          ),
+          controller: _textController,
           suggestionsCallback: _onSearch,
           itemBuilder: (context, suggestion) => ListTile(
             title: Text(suggestion.label),
             subtitle: Text(suggestion.shareWith.toString()),
           ),
-          onSuggestionSelected: _onSuggestionSelected,
+          onSelected: _onSuggestionSelected,
           hideOnEmpty: true,
           hideOnLoading: true,
           autoFlipDirection: true,
+          builder: (context, controller, focusNode) => TextField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: InputDecoration(
+              hintText: L10n.global().addUserInputHint,
+            ),
+          ),
         ),
       ),
     );
   }
 
-  Iterable<Sharee> _onSearch(String pattern) {
+  List<Sharee> _onSearch(String pattern) {
     _lastPattern = pattern;
     final suggester = _bloc.state.shareeSuggester;
     return suggester?.search(pattern.toCi()) ?? [];

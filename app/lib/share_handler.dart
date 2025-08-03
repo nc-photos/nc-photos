@@ -29,7 +29,7 @@ import 'package:nc_photos/use_case/share_local.dart';
 import 'package:nc_photos/widget/share_link_multiple_files_dialog.dart';
 import 'package:nc_photos/widget/share_method_dialog.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
 part 'share_handler.g.dart';

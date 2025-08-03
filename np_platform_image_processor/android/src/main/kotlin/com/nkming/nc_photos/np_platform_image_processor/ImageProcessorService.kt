@@ -343,9 +343,11 @@ internal class ImageProcessorService : Service() {
 
 	@SuppressLint("StaticFieldLeak")
 	private fun runCommand(cmd: ImageProcessorImageCommand) {
-		notificationManager.notify(
-			NOTIFICATION_ID, buildNotification(cmd.filename)
-		)
+		if (notificationManager.areNotificationsEnabled()) {
+			notificationManager.notify(
+				NOTIFICATION_ID, buildNotification(cmd.filename)
+			)
+		}
 		cmdTask = object : ImageProcessorCommandTask(applicationContext) {
 			override fun onPostExecute(result: MessageEvent) {
 				notifyResult(result, cmd.isSaveToServer)
@@ -369,9 +371,11 @@ internal class ImageProcessorService : Service() {
 	private fun runCommand(
 		@Suppress("UNUSED_PARAMETER") cmd: ImageProcessorGracePeriodCommand
 	) {
-		notificationManager.notify(
-			NOTIFICATION_ID, buildGracePeriodNotification()
-		)
+		if (notificationManager.areNotificationsEnabled()) {
+			notificationManager.notify(
+				NOTIFICATION_ID, buildGracePeriodNotification()
+			)
+		}
 		@Suppress("Deprecation") cmdTask =
 			object : AsyncTask<Unit, Unit, Unit>(), AsyncTaskCancellable {
 				override fun doInBackground(vararg params: Unit?) {
@@ -403,14 +407,18 @@ internal class ImageProcessorService : Service() {
 					ImageProcessorUploadSuccessEvent()
 				)
 			}
-			notificationManager.notify(
-				RESULT_NOTIFICATION_ID, buildResultNotification(event.result)
-			)
+			if (notificationManager.areNotificationsEnabled()) {
+				notificationManager.notify(
+					RESULT_NOTIFICATION_ID, buildResultNotification(event.result)
+				)
+			}
 		} else if (event is ImageProcessorFailedEvent) {
-			notificationManager.notify(
-				RESULT_FAILED_NOTIFICATION_ID,
-				buildResultFailedNotification(event.exception)
-			)
+			if (notificationManager.areNotificationsEnabled()) {
+				notificationManager.notify(
+					RESULT_FAILED_NOTIFICATION_ID,
+					buildResultFailedNotification(event.exception)
+				)
+			}
 		}
 	}
 
@@ -440,138 +448,6 @@ internal class ImageProcessorService : Service() {
 		}
 	}
 }
-
-private interface ImageProcessorCommand
-
-private abstract class ImageProcessorImageCommand(
-	val params: Params,
-) : ImageProcessorCommand {
-	class Params(
-		val startId: Int,
-		val fileUrl: String,
-		val headers: Map<String, String>?,
-		val filename: String,
-		val maxWidth: Int,
-		val maxHeight: Int,
-		val isSaveToServer: Boolean,
-	)
-
-	abstract fun apply(context: Context, fileUri: Uri): Bitmap
-	abstract fun isEnhanceCommand(): Boolean
-
-	val startId: Int
-		get() = params.startId
-	val fileUrl: String
-		get() = params.fileUrl
-	val headers: Map<String, String>?
-		get() = params.headers
-	val filename: String
-		get() = params.filename
-	val maxWidth: Int
-		get() = params.maxWidth
-	val maxHeight: Int
-		get() = params.maxHeight
-	val isSaveToServer: Boolean
-		get() = params.isSaveToServer
-}
-
-private class ImageProcessorDummyCommand(
-	params: Params,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		throw UnsupportedOperationException()
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorZeroDceCommand(
-	params: Params,
-	val iteration: Int?,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return ZeroDce(context, maxWidth, maxHeight, iteration ?: 8).infer(
-			fileUri
-		)
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorDeepLapPortraitCommand(
-	params: Params,
-	val radius: Int?,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return DeepLab3Portrait(
-			context, maxWidth, maxHeight, radius ?: 16
-		).infer(fileUri)
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorEsrganCommand(
-	params: Params,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return Esrgan(context, maxWidth, maxHeight).infer(fileUri)
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorArbitraryStyleTransferCommand(
-	params: Params,
-	val styleUri: Uri,
-	val weight: Float,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return ArbitraryStyleTransfer(
-			context, maxWidth, maxHeight, styleUri, weight
-		).infer(fileUri)
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorDeepLapColorPopCommand(
-	params: Params,
-	val weight: Float,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return DeepLab3ColorPop(context, maxWidth, maxHeight, weight).infer(
-			fileUri
-		)
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorNeurOpCommand(
-	params: Params,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return NeurOp(context, maxWidth, maxHeight).infer(fileUri)
-	}
-
-	override fun isEnhanceCommand() = true
-}
-
-private class ImageProcessorFilterCommand(
-	params: Params,
-	val filters: List<ImageFilter>,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return ImageFilterProcessor(
-			context, maxWidth, maxHeight, filters
-		).apply(fileUri)
-	}
-
-	override fun isEnhanceCommand() = false
-}
-
-private class ImageProcessorGracePeriodCommand : ImageProcessorCommand
 
 @Suppress("Deprecation")
 private open class ImageProcessorCommandTask(context: Context) :
@@ -887,97 +763,4 @@ private fun getTempDir(context: Context): File {
 		f.mkdirs()
 	}
 	return f
-}
-
-private interface EnhancedFilePersister {
-	fun persist(cmd: ImageProcessorImageCommand, file: File): Uri
-}
-
-private class EnhancedFileDevicePersister(context: Context) :
-	EnhancedFilePersister {
-	override fun persist(cmd: ImageProcessorImageCommand, file: File): Uri {
-		val uri = MediaStoreUtil.copyFileToDownload(
-			context, Uri.fromFile(file), cmd.filename,
-			"Photos (for Nextcloud)/${getSubDir(cmd)}"
-		)
-		return uri
-	}
-
-	private fun getSubDir(cmd: ImageProcessorImageCommand): String {
-		return if (!cmd.isEnhanceCommand()) {
-			"Edited Photos"
-		} else {
-			"Enhanced Photos"
-		}
-	}
-
-	val context = context
-}
-
-private class EnhancedFileServerPersister : EnhancedFilePersister {
-	companion object {
-		const val TAG = "EnhancedFileServerPersister"
-	}
-
-	override fun persist(cmd: ImageProcessorImageCommand, file: File): Uri {
-		val ext = cmd.fileUrl.substringAfterLast('.', "")
-		val url = if (ext.contains('/')) {
-			// no ext
-			"${cmd.fileUrl}_${getSuffix(cmd)}.jpg"
-		} else {
-			"${cmd.fileUrl.substringBeforeLast('.', "")}_${getSuffix(cmd)}.jpg"
-		}
-		logI(TAG, "[persist] Persist file to server: $url")
-		(URL(url).openConnection() as HttpURLConnection).apply {
-			requestMethod = "PUT"
-			instanceFollowRedirects = true
-			connectTimeout = 8000
-			for (entry in (cmd.headers ?: mapOf()).entries) {
-				setRequestProperty(entry.key, entry.value)
-			}
-		}.use {
-			file.inputStream()
-				.use { iStream -> iStream.copyTo(it.outputStream) }
-			val responseCode = it.responseCode
-			if (responseCode / 100 != 2) {
-				logE(TAG, "[persist] Failed uploading file: HTTP$responseCode")
-				throw HttpException(
-					responseCode, "Failed uploading file (HTTP$responseCode)"
-				)
-			}
-		}
-		return Uri.parse(url)
-	}
-
-	private fun getSuffix(cmd: ImageProcessorImageCommand): String {
-		val epoch = System.currentTimeMillis() / 1000
-		return if (!cmd.isEnhanceCommand()) {
-			"edited_$epoch"
-		} else {
-			"enhanced_$epoch"
-		}
-	}
-}
-
-private class EnhancedFileServerPersisterWithFallback(context: Context) :
-	EnhancedFilePersister {
-	companion object {
-		const val TAG = "EnhancedFileServerPersisterWithFallback"
-	}
-
-	override fun persist(cmd: ImageProcessorImageCommand, file: File): Uri {
-		try {
-			return server.persist(cmd, file)
-		} catch (e: Throwable) {
-			logW(
-				TAG,
-				"[persist] Failed while persisting to server, switch to fallback",
-				e
-			)
-		}
-		return fallback.persist(cmd, file)
-	}
-
-	private val server = EnhancedFileServerPersister()
-	private val fallback = EnhancedFileDevicePersister(context)
 }

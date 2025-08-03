@@ -5,8 +5,8 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/type.dart';
+import 'package:np_log/np_log.dart';
 
 part 'request_public_link.g.dart';
 

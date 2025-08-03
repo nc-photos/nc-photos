@@ -99,3 +99,22 @@ mixin BlocForEachMixin<E, S> implements Bloc<E, S> {
 
   final _forEaches = <_BlocForEachObj>[];
 }
+
+mixin BlocErrorCatcher<E, S> implements Bloc<E, S> {
+  @override
+  void onError(Object error, StackTrace stackTrace) {
+    // we need this to prevent onError being triggered recursively
+    if (!isClosed && !_isHandlingError) {
+      _isHandlingError = true;
+      try {
+        handleBlocError(error, stackTrace);
+      } catch (_) {}
+      _isHandlingError = false;
+    }
+  }
+
+  @protected
+  void handleBlocError(Object error, StackTrace stackTrace) {}
+
+  var _isHandlingError = false;
+}

@@ -150,6 +150,7 @@ abstract class FileConverter {
           height: Value(m.height),
           exifRaw: Value(m.exif?.let((j) => jsonEncode(j))),
           dateTimeOriginal: Value(m.exifDateTimeOriginal),
+          src: Value(m.src),
         ));
     final sqlImageLocation =
         file.location?.let((l) => ImageLocationsCompanion.insert(
@@ -183,6 +184,7 @@ abstract class ImageConverter {
       exif:
           src.exifRaw?.let((e) => jsonDecode(e) as Map).cast<String, dynamic>(),
       exifDateTimeOriginal: src.dateTimeOriginal,
+      src: src.src,
     );
   }
 }
@@ -209,6 +211,8 @@ abstract class ImageLocationGroupConverter {
       count: src.count,
       latestFileId: src.latestFileId,
       latestDateTime: src.latestDateTime,
+      latestFileMime: src.latestFileMime,
+      latestFileRelativePath: src.latestFileRelativePath,
     );
   }
 }

@@ -1,18 +1,16 @@
 import 'dart:async';
 
-import 'package:cached_network_image_platform_interface/cached_network_image_platform_interface.dart';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:nc_photos/k.dart' as k;
+import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/request_public_link.dart';
-import 'package:nc_photos/widget/cached_network_image_mod.dart' as mod;
-import 'package:np_codegen/np_codegen.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
@@ -37,7 +35,7 @@ class LivePhotoViewer extends StatefulWidget {
   final Account account;
   final FileDescriptor file;
   final VoidCallback? onLoaded;
-  final VoidCallback? onLoadFailure;
+  final void Function(Object? error, StackTrace? stackTrace)? onLoadFailure;
   final ValueChanged<double>? onHeightChanged;
   final bool canPlay;
   final LivePhotoType? livePhotoType;
@@ -52,10 +50,10 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
       if (mounted) {
         _initController(url);
       }
-    }).onError((e, stacktrace) {
-      _log.shout("[initState] Failed while _getVideoUrl", e, stacktrace);
+    }).onError((e, stackTrace) {
+      _log.shout("[initState] Failed while _getVideoUrl", e, stackTrace);
       SnackBarManager().showSnackBarForException(e);
-      widget.onLoadFailure?.call();
+      widget.onLoadFailure?.call(e, stackTrace);
     });
 
     _lifecycleListener = AppLifecycleListener(onShow: () {
@@ -119,7 +117,7 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     } catch (e, stackTrace) {
       _log.shout("[_initController] Failed while initialize", e, stackTrace);
       SnackBarManager().showSnackBarForException(e);
-      widget.onLoadFailure?.call();
+      widget.onLoadFailure?.call(e, stackTrace);
     }
   }
 
@@ -200,27 +198,17 @@ class _PlaceHolderView extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        mod.CachedNetworkImage(
+        CachedNetworkImageBuilder(
+          type: CachedNetworkImageType.largeImage,
+          imageUrl: getViewerUrlForImageFile(account, file),
+          mime: file.fdMime,
+          account: account,
           fit: BoxFit.contain,
-          cacheManager: LargeImageCacheManager.inst,
-          imageUrl: api_util.getFilePreviewUrl(
-            account,
-            file,
-            width: k.photoLargeSize,
-            height: k.photoLargeSize,
-            isKeepAspectRatio: true,
-          ),
-          httpHeaders: {
-            "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-          },
-          fadeInDuration: const Duration(),
-          filterQuality: FilterQuality.high,
-          imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
           imageBuilder: (context, child, imageProvider) {
             const SizeChangedLayoutNotification().dispatch(context);
             return child;
           },
-        ),
+        ).build(),
         ColoredBox(color: Colors.black.withOpacity(.7)),
         const Center(child: _ProgressIndicator()),
       ],

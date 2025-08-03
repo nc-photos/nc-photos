@@ -28,9 +28,9 @@ import 'package:nc_photos/widget/empty_list_indicator.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/shared_file_viewer.dart';
-import 'package:np_codegen/np_codegen.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
@@ -290,6 +290,7 @@ class _FileTile extends StatelessWidget {
               account: account,
               imageUrl:
                   NetworkRectThumbnail.imageUrlForFile(account, item.file),
+              mime: item.file.fdMime,
               dimension: _leadingSize,
               errorBuilder: (_) => const Icon(Icons.folder, size: 32),
             ),
@@ -330,6 +331,7 @@ class _AlbumTile extends StatelessWidget {
           : NetworkRectThumbnail(
               account: account,
               imageUrl: NetworkRectThumbnail.imageUrlForFile(account, cover),
+              mime: cover.fdMime,
               dimension: _leadingSize,
               errorBuilder: (_) => const Icon(Icons.photo_album, size: 32),
             ),

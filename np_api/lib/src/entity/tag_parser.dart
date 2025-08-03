@@ -96,7 +96,7 @@ class _PropParser {
 }
 
 List<Tag> _parseTagsIsolate(String response) {
-  initLog();
+  initMyLog();
   final xml = XmlDocument.parse(response);
   return TagParser()._parse(xml);
 }
