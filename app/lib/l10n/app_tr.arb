@@ -1591,5 +1591,11 @@
 		"description": "Add a map that display between photos to an album"
 	},
 	"fileNotFound": "Dosya bulunamadı",
-	"dontShowAgain": "Tekrar gösterme"
+	"signInViaNextcloudLoginFlowV2": "Nextcloud Flow v2 aracılığıyla giriş yap",
+	"signInViaUsernamePassword": "Kullanıcı adı ve şifreyle giriş yap",
+	"dontShowAgain": "Tekrar gösterme",
+	"errorServerNoCert": "Sunucu sertifikası bulunamadı. Bunun yerine HTTP denemek ister misiniz?",
+	"@errorServerNoCert": {
+		"description": "No cert to establish HTTPS connection"
+	}
 }
