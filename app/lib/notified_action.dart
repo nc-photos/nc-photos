@@ -35,17 +35,21 @@ class NotifiedListAction<T> {
       }
     }
     if (failedItems.isEmpty) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(successText),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(successText),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     } else {
       final failureText = getFailureText?.call(failedItems);
       if (failureText?.isNotEmpty == true) {
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(failureText!),
-          duration: k.snackBarDurationNormal,
-        ));
+        SnackBarManager().showSnackBar(
+          SnackBar(
+            content: Text(failureText!),
+            duration: k.snackBarDurationNormal,
+          ),
+        );
       }
     }
     return list.length - failedItems.length;

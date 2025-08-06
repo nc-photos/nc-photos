@@ -14,8 +14,8 @@ part 'import_potential_shared_album.g.dart';
 @npLog
 class ImportPotentialSharedAlbum {
   ImportPotentialSharedAlbum(this._c)
-      : assert(require(_c)),
-        assert(Move.require(_c));
+    : assert(require(_c)),
+      assert(Move.require(_c));
 
   static bool require(DiContainer c) =>
       DiContainer.has(c, DiType.albumRepo) &&
@@ -24,8 +24,10 @@ class ImportPotentialSharedAlbum {
   Future<List<Album>> call(Account account, String shareFolder) async {
     _log.info("[call] $account");
     final products = <Album>[];
-    final files =
-        await ListPotentialSharedAlbum(_c.fileRepo)(account, shareFolder);
+    final files = await ListPotentialSharedAlbum(_c.fileRepo)(
+      account,
+      shareFolder,
+    );
     for (final f in files) {
       // check if the file is actually an album
       try {

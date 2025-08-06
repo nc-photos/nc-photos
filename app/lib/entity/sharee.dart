@@ -31,13 +31,7 @@ class Sharee with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  get props => [
-        type,
-        label,
-        shareType,
-        shareWith,
-        shareWithDisplayNameUnique,
-      ];
+  get props => [type, label, shareType, shareWith, shareWithDisplayNameUnique];
 
   final ShareeType type;
   final String label;

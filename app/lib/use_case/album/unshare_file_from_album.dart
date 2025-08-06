@@ -20,8 +20,8 @@ part 'unshare_file_from_album.g.dart';
 @npLog
 class UnshareFileFromAlbum {
   UnshareFileFromAlbum(this._c)
-      : assert(require(_c)),
-        assert(ListAlbum.require(_c));
+    : assert(require(_c)),
+      assert(ListAlbum.require(_c));
 
   static bool require(DiContainer c) => DiContainer.has(c, DiType.shareRepo);
 
@@ -37,15 +37,19 @@ class UnshareFileFromAlbum {
     ErrorWithValueHandler<Share>? onUnshareFileFailed,
   }) async {
     _log.info(
-        "[call] Unshare ${files.length} files from album '${album.name}' with ${unshareWith.length} users");
+      "[call] Unshare ${files.length} files from album '${album.name}' with ${unshareWith.length} users",
+    );
     // list albums with shares identical to any element in [unshareWith]
-    final otherAlbums = await ListAlbum(_c)(account)
-        .whereType<Album>()
-        .where((a) =>
-            !a.albumFile!.compareServerIdentity(album.albumFile!) &&
-            a.provider is AlbumStaticProvider &&
-            a.shares?.any((s) => unshareWith.contains(s.userId)) == true)
-        .toList();
+    final otherAlbums =
+        await ListAlbum(_c)(account)
+            .whereType<Album>()
+            .where(
+              (a) =>
+                  !a.albumFile!.compareServerIdentity(album.albumFile!) &&
+                  a.provider is AlbumStaticProvider &&
+                  a.shares?.any((s) => unshareWith.contains(s.userId)) == true,
+            )
+            .toList();
 
     // look for shares that are exclusive to this album
     final exclusiveShares = <Share>[];
@@ -53,10 +57,14 @@ class UnshareFileFromAlbum {
       try {
         final shares = await ListShare(_c)(account, f);
         exclusiveShares.addAll(
-            shares.where((element) => unshareWith.contains(element.shareWith)));
+          shares.where((element) => unshareWith.contains(element.shareWith)),
+        );
       } catch (e, stackTrace) {
-        _log.severe("[call] Failed while ListShare: '${logFilename(f.fdPath)}'",
-            e, stackTrace);
+        _log.severe(
+          "[call] Failed while ListShare: '${logFilename(f.fdPath)}'",
+          e,
+          stackTrace,
+        );
       }
     }
     _log.fine("[call] Pre-filter shares: $exclusiveShares");
@@ -67,15 +75,16 @@ class UnshareFileFromAlbum {
       if (sharesOfInterest == null || sharesOfInterest.isEmpty) {
         continue;
       }
-      final albumFiles = AlbumStaticProvider.of(a)
-          .items
-          .whereType<AlbumFileItem>()
-          .map((e) => e.file)
-          .toList();
+      final albumFiles =
+          AlbumStaticProvider.of(
+            a,
+          ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
       // remove files shared as part of this other shared album
-      exclusiveShares.removeWhere((s) =>
-          sharesOfInterest.any((i) => i.userId == s.shareWith) &&
-          albumFiles.any((f) => f.fdId == s.itemSource));
+      exclusiveShares.removeWhere(
+        (s) =>
+            sharesOfInterest.any((i) => i.userId == s.shareWith) &&
+            albumFiles.any((f) => f.fdId == s.itemSource),
+      );
     }
     _log.fine("[call] Post-filter shares: $exclusiveShares");
 
@@ -83,14 +92,20 @@ class UnshareFileFromAlbum {
     await _unshare(account, exclusiveShares, onUnshareFileFailed);
   }
 
-  Future<void> _unshare(Account account, List<Share> shares,
-      ErrorWithValueHandler<Share>? onUnshareFileFailed) async {
+  Future<void> _unshare(
+    Account account,
+    List<Share> shares,
+    ErrorWithValueHandler<Share>? onUnshareFileFailed,
+  ) async {
     for (final s in shares) {
       try {
         await RemoveShare(_c.shareRepo)(account, s);
       } catch (e, stackTrace) {
         _log.severe(
-            "[_unshare] Failed while RemoveShare: ${s.path}", e, stackTrace);
+          "[_unshare] Failed while RemoveShare: ${s.path}",
+          e,
+          stackTrace,
+        );
         onUnshareFileFailed?.call(s, e, stackTrace);
       }
     }

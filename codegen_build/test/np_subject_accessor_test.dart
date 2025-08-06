@@ -106,8 +106,11 @@ Future<void> _resolveCompilationUnit(String filePath) async {
   final files =
       Directory(p.dirname(filePath)).listSync().whereType<File>().toList();
 
-  final fileMap = Map<String, String>.fromEntries(files.map(
-      (f) => MapEntry('a|lib/${p.basename(f.path)}', f.readAsStringSync())));
+  final fileMap = Map<String, String>.fromEntries(
+    files.map(
+      (f) => MapEntry('a|lib/${p.basename(f.path)}', f.readAsStringSync()),
+    ),
+  );
 
   await resolveSources(fileMap, (item) async {
     return await item.libraryFor(assetId);

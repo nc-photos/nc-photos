@@ -92,13 +92,13 @@ class RemoteImageViewer extends StatefulWidget {
   createState() => _RemoteImageViewerState();
 
   static void preloadImage(Account account, FileDescriptor file) {
-    final cacheManager =
-        getCacheManager(CachedNetworkImageType.largeImage, file.fdMime);
+    final cacheManager = getCacheManager(
+      CachedNetworkImageType.largeImage,
+      file.fdMime,
+    );
     cacheManager.getFileStream(
       getViewerUrlForImageFile(account, file),
-      headers: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
+      headers: {"Authorization": AuthUtil.fromAccount(account).toHeaderValue()},
     );
   }
 
@@ -138,8 +138,13 @@ class _RemoteImageViewerState extends State<RemoteImageViewer> {
             opacity: !_isHeroDone || !_isLoaded ? 1 : 0,
             child: Hero(
               tag: flutter_util.getImageHeroTag(widget.file),
-              flightShuttleBuilder: (flightContext, animation, flightDirection,
-                  fromHeroContext, toHeroContext) {
+              flightShuttleBuilder: (
+                flightContext,
+                animation,
+                flightDirection,
+                fromHeroContext,
+                toHeroContext,
+              ) {
                 _isHeroDone = false;
                 animation.addStatusListener(_animationListener);
                 return flutter_util.defaultHeroFlightShuttleBuilder(
@@ -150,10 +155,7 @@ class _RemoteImageViewerState extends State<RemoteImageViewer> {
                   toHeroContext,
                 );
               },
-              child: _PreviewImage(
-                account: widget.account,
-                file: widget.file,
-              ),
+              child: _PreviewImage(account: widget.account, file: widget.file),
             ),
           ),
           if (_isHeroDone)
@@ -249,10 +251,7 @@ class _ImageViewerState extends State<_ImageViewer>
 }
 
 class _PreviewImage extends StatelessWidget {
-  const _PreviewImage({
-    required this.account,
-    required this.file,
-  });
+  const _PreviewImage({required this.account, required this.file});
 
   @override
   Widget build(BuildContext context) {

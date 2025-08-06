@@ -37,8 +37,8 @@ class CollectionAdHocProvider
 
   @override
   List<CollectionCapability> get capabilities => [
-        CollectionCapability.deleteItem,
-      ];
+    CollectionCapability.deleteItem,
+  ];
 
   @override
   CollectionItemSort get itemSort => CollectionItemSort.dateDescending;
@@ -52,15 +52,17 @@ class CollectionAdHocProvider
     int height, {
     bool? isKeepAspectRatio,
   }) {
-    return cover?.let((cover) => CollectionCoverResult(
-          url: getStaticViewUrlForImageFile(
-            account,
-            cover,
-            size: SizeInt(width, height),
-            isKeepAspectRatio: isKeepAspectRatio ?? false,
-          ),
-          mime: cover.fdMime,
-        ));
+    return cover?.let(
+      (cover) => CollectionCoverResult(
+        url: getStaticViewUrlForImageFile(
+          account,
+          cover,
+          size: SizeInt(width, height),
+          isKeepAspectRatio: isKeepAspectRatio ?? false,
+        ),
+        mime: cover.fdMime,
+      ),
+    );
   }
 
   @override

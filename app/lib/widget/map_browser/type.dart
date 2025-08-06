@@ -9,11 +9,11 @@ class _DataPoint extends DataPoint {
   });
 
   factory _DataPoint.fromImageLatLng(ImageLatLng src) => _DataPoint(
-        position: MapCoord(src.latitude, src.longitude),
-        fileId: src.fileId,
-        fileRelativePath: src.fileRelativePath,
-        mime: src.mime,
-      );
+    position: MapCoord(src.latitude, src.longitude),
+    fileId: src.fileId,
+    fileRelativePath: src.fileRelativePath,
+    mime: src.mime,
+  );
 
   final int fileId;
   final String fileRelativePath;
@@ -60,10 +60,7 @@ class _MarkerBuilder {
 }
 
 class _OsmMarkerBuilder extends _MarkerBuilder {
-  _OsmMarkerBuilder(
-    super.context, {
-    required this.account,
-  });
+  _OsmMarkerBuilder(super.context, {required this.account});
 
   Widget build(List<_DataPoint> dataPoints) {
     final text = _getMarkerCountString(dataPoints.length);
@@ -95,10 +92,7 @@ class _OsmMarkerBuilder extends _MarkerBuilder {
 
 @npLog
 class _GoogleMarkerBuilder extends _MarkerBuilder {
-  _GoogleMarkerBuilder(
-    super.context, {
-    required this.account,
-  });
+  _GoogleMarkerBuilder(super.context, {required this.account});
 
   Future<BitmapDescriptor> build(List<_DataPoint> dataPoints) async {
     final size = MediaQuery.sizeOf(context);
@@ -117,8 +111,10 @@ class _GoogleMarkerBuilder extends _MarkerBuilder {
       final url = getThumbnailUrlForImageFile(
         account,
         FileDescriptor(
-          fdPath:
-              file_util.unstripPath(account, dataPoints.first.fileRelativePath),
+          fdPath: file_util.unstripPath(
+            account,
+            dataPoints.first.fileRelativePath,
+          ),
           fdId: dataPoints.first.fileId,
           fdMime: dataPoints.first.mime,
           fdIsArchived: false,
@@ -127,7 +123,9 @@ class _GoogleMarkerBuilder extends _MarkerBuilder {
         ),
       );
       final cacheManager = getCacheManager(
-          CachedNetworkImageType.thumbnail, dataPoints.first.mime);
+        CachedNetworkImageType.thumbnail,
+        dataPoints.first.mime,
+      );
       final fileInfo = await cacheManager.getSingleFile(
         url,
         headers: {
@@ -137,9 +135,10 @@ class _GoogleMarkerBuilder extends _MarkerBuilder {
       return fileInfo.absolute.path;
     } catch (e, stackTrace) {
       _log.severe(
-          "[_getImagePath] Failed to get file path for fileId: ${dataPoints.first.fileId}",
-          e,
-          stackTrace);
+        "[_getImagePath] Failed to get file path for fileId: ${dataPoints.first.fileId}",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }
@@ -181,8 +180,10 @@ class _GoogleMarkerBitmapBuilder {
     _drawText(canvas);
     _drawBorder(canvas);
 
-    final img =
-        await pictureRecorder.endRecording().toImage(size.ceil(), size.ceil());
+    final img = await pictureRecorder.endRecording().toImage(
+      size.ceil(),
+      size.ceil(),
+    );
     final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
     return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
@@ -198,8 +199,12 @@ class _GoogleMarkerBitmapBuilder {
 
   Future<void> _drawImage(Canvas canvas) async {
     try {
-      final rect =
-          Rect.fromLTRB(0, 0, size - _shadowPadding, size - _shadowPadding);
+      final rect = Rect.fromLTRB(
+        0,
+        0,
+        size - _shadowPadding,
+        size - _shadowPadding,
+      );
       final imageData = await File(imagePath!).readAsBytes();
       final codec = await _getImageCodec(
         imageData,
@@ -215,7 +220,10 @@ class _GoogleMarkerBitmapBuilder {
       );
     } catch (e, stackTrace) {
       _log.severe(
-          "[_drawImage] Failed to draw image: $imagePath", e, stackTrace);
+        "[_drawImage] Failed to draw image: $imagePath",
+        e,
+        stackTrace,
+      );
     }
   }
 
@@ -238,10 +246,11 @@ class _GoogleMarkerBitmapBuilder {
   }
 
   void _drawBorder(Canvas canvas) {
-    final outlinePaint = Paint()
-      ..color = Color.alphaBlend(Colors.white.withValues(alpha: .75), color)
-      ..strokeWidth = size * .04
-      ..style = PaintingStyle.stroke;
+    final outlinePaint =
+        Paint()
+          ..color = Color.alphaBlend(Colors.white.withValues(alpha: .75), color)
+          ..strokeWidth = size * .04
+          ..style = PaintingStyle.stroke;
     canvas.drawCircle(
       Offset(size / 2 - _shadowPaddingHalf, size / 2 - _shadowPaddingHalf),
       size / 2 - _shadowPaddingHalf - (size * .04 / 2),
@@ -250,9 +259,9 @@ class _GoogleMarkerBitmapBuilder {
   }
 
   Path _makeBackgroundPath() {
-    return Path()
-      ..addOval(
-          Rect.fromLTWH(0, 0, size - _shadowPadding, size - _shadowPadding));
+    return Path()..addOval(
+      Rect.fromLTWH(0, 0, size - _shadowPadding, size - _shadowPadding),
+    );
   }
 
   Future<Codec> _getImageCodec(Uint8List imageData, {SizeInt? resize}) async {
@@ -281,8 +290,7 @@ enum _DateRangeType {
   thisMonth,
   prevMonth,
   thisYear,
-  custom,
-  ;
+  custom;
 
   static _DateRangeType fromPref(PrefMapDefaultRangeType value) {
     switch (value) {

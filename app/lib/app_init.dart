@@ -120,8 +120,11 @@ Future<void> _initAccountPrefs() async {
     try {
       AccountPref.setGlobalInstance(a, await pref_util.loadAccountPref(a));
     } catch (e, stackTrace) {
-      _log.shout("[_initAccountPrefs] Failed reading pref for account: $a", e,
-          stackTrace);
+      _log.shout(
+        "[_initAccountPrefs] Failed reading pref for account: $a",
+        e,
+        stackTrace,
+      );
     }
   }
 }
@@ -145,8 +148,11 @@ Future<void> _initSelfSignedCertManager() async {
   try {
     return SelfSignedCertManager().init();
   } catch (e, stackTrace) {
-    _log.shout("[_initSelfSignedCertManager] Failed to load self signed certs",
-        e, stackTrace);
+    _log.shout(
+      "[_initSelfSignedCertManager] Failed to load self signed certs",
+      e,
+      stackTrace,
+    );
   }
 }
 
@@ -160,14 +166,18 @@ Future<void> _initDiContainer(InitIsolateType isolateType) async {
   c.albumRepoRemote = AlbumRepo(AlbumRemoteDataSource());
   c.albumRepoLocal = AlbumRepo(AlbumSqliteDbDataSource(c));
   c.albumRepo2 = CachedAlbumRepo2(
-      const AlbumRemoteDataSource2(), AlbumSqliteDbDataSource2(c.npDb));
+    const AlbumRemoteDataSource2(),
+    AlbumSqliteDbDataSource2(c.npDb),
+  );
   c.albumRepo2Remote = const BasicAlbumRepo2(AlbumRemoteDataSource2());
   c.albumRepo2Local = BasicAlbumRepo2(AlbumSqliteDbDataSource2(c.npDb));
   c.fileRepo = FileRepo(FileCachedDataSource(c));
   c.fileRepoRemote = const FileRepo(FileWebdavDataSource());
   c.fileRepoLocal = FileRepo(FileSqliteDbDataSource(c));
-  c.fileRepo2 =
-      CachedFileRepo(const FileRemoteDataSource(), FileNpDbDataSource(c.npDb));
+  c.fileRepo2 = CachedFileRepo(
+    const FileRemoteDataSource(),
+    FileNpDbDataSource(c.npDb),
+  );
   c.fileRepo2Remote = const BasicFileRepo(FileRemoteDataSource());
   c.fileRepo2Local = BasicFileRepo(FileNpDbDataSource(c.npDb));
   c.shareRepo = ShareRepo(ShareRemoteDataSource());
@@ -179,23 +189,32 @@ Future<void> _initDiContainer(InitIsolateType isolateType) async {
   c.taggedFileRepo = const TaggedFileRepo(TaggedFileRemoteDataSource());
   c.searchRepo = SearchRepo(SearchSqliteDbDataSource(c));
   c.ncAlbumRepo = CachedNcAlbumRepo(
-      const NcAlbumRemoteDataSource(), NcAlbumSqliteDbDataSource(c.npDb));
+    const NcAlbumRemoteDataSource(),
+    NcAlbumSqliteDbDataSource(c.npDb),
+  );
   c.ncAlbumRepoRemote = const BasicNcAlbumRepo(NcAlbumRemoteDataSource());
   c.ncAlbumRepoLocal = BasicNcAlbumRepo(NcAlbumSqliteDbDataSource(c.npDb));
   c.faceRecognitionPersonRepo = const BasicFaceRecognitionPersonRepo(
-      FaceRecognitionPersonRemoteDataSource());
+    FaceRecognitionPersonRemoteDataSource(),
+  );
   c.faceRecognitionPersonRepoRemote = const BasicFaceRecognitionPersonRepo(
-      FaceRecognitionPersonRemoteDataSource());
+    FaceRecognitionPersonRemoteDataSource(),
+  );
   c.faceRecognitionPersonRepoLocal = BasicFaceRecognitionPersonRepo(
-      FaceRecognitionPersonSqliteDbDataSource(c.npDb));
-  c.recognizeFaceRepo =
-      const BasicRecognizeFaceRepo(RecognizeFaceRemoteDataSource());
-  c.recognizeFaceRepoRemote =
-      const BasicRecognizeFaceRepo(RecognizeFaceRemoteDataSource());
-  c.recognizeFaceRepoLocal =
-      BasicRecognizeFaceRepo(RecognizeFaceSqliteDbDataSource(c.npDb));
-  c.imageLocationRepo =
-      BasicImageLocationRepo(ImageLocationNpDbDataSource(c.npDb));
+    FaceRecognitionPersonSqliteDbDataSource(c.npDb),
+  );
+  c.recognizeFaceRepo = const BasicRecognizeFaceRepo(
+    RecognizeFaceRemoteDataSource(),
+  );
+  c.recognizeFaceRepoRemote = const BasicRecognizeFaceRepo(
+    RecognizeFaceRemoteDataSource(),
+  );
+  c.recognizeFaceRepoLocal = BasicRecognizeFaceRepo(
+    RecognizeFaceSqliteDbDataSource(c.npDb),
+  );
+  c.imageLocationRepo = BasicImageLocationRepo(
+    ImageLocationNpDbDataSource(c.npDb),
+  );
 
   c.touchManager = TouchManager(c);
 

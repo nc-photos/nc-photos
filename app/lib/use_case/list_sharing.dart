@@ -38,9 +38,7 @@ class ListSharing {
   Stream<List<ListSharingData>> call(Account account) async* {
     final sharedAlbumFiles = await Ls(_c.fileRepo)(
       account,
-      File(
-        path: remote_storage_util.getRemoteAlbumsDir(account),
-      ),
+      File(path: remote_storage_util.getRemoteAlbumsDir(account)),
     );
 
     final controller = StreamController<List<ListSharingData>>();
@@ -50,10 +48,7 @@ class ListSharing {
     var isWithMeDone = false;
 
     void notify() {
-      controller.add([
-        ...byMe,
-        ...withMe,
-      ]);
+      controller.add([...byMe, ...withMe]);
     }
 
     void onDone() {
@@ -62,43 +57,52 @@ class ListSharing {
       }
     }
 
-    unawaited(_querySharesByMe(account, sharedAlbumFiles).then((value) {
-      byMe = value;
-      notify();
-    }).catchError((e, stackTrace) {
-      controller.addError(e, stackTrace);
-    }).whenComplete(() {
-      isByMeDone = true;
-      onDone();
-    }));
-    unawaited(_querySharesWithMe(account, sharedAlbumFiles).then((value) {
-      withMe = value;
-      notify();
-    }).catchError((e, stackTrace) {
-      controller.addError(e, stackTrace);
-    }).whenComplete(() {
-      isWithMeDone = true;
-      onDone();
-    }));
+    unawaited(
+      _querySharesByMe(account, sharedAlbumFiles)
+          .then((value) {
+            byMe = value;
+            notify();
+          })
+          .catchError((e, stackTrace) {
+            controller.addError(e, stackTrace);
+          })
+          .whenComplete(() {
+            isByMeDone = true;
+            onDone();
+          }),
+    );
+    unawaited(
+      _querySharesWithMe(account, sharedAlbumFiles)
+          .then((value) {
+            withMe = value;
+            notify();
+          })
+          .catchError((e, stackTrace) {
+            controller.addError(e, stackTrace);
+          })
+          .whenComplete(() {
+            isWithMeDone = true;
+            onDone();
+          }),
+    );
     yield* controller.stream;
   }
 
   Future<List<ListSharingData>> _querySharesByMe(
-      Account account, List<File> sharedAlbumFiles) async {
+    Account account,
+    List<File> sharedAlbumFiles,
+  ) async {
     final shares = await _c.shareRepo.listAll(account);
     final futures = shares.map((s) async {
       final webdavPath = file_util.unstripPath(account, s.path);
       // include link share dirs
       if (s.itemType == ShareItemType.folder) {
-        if (webdavPath
-            .startsWith(remote_storage_util.getRemoteLinkSharesDir(account))) {
+        if (webdavPath.startsWith(
+          remote_storage_util.getRemoteLinkSharesDir(account),
+        )) {
           return ListSharingFileData(
             s,
-            File(
-              path: webdavPath,
-              fileId: s.itemSource,
-              isCollection: true,
-            ),
+            File(path: webdavPath, fileId: s.itemSource, isCollection: true),
           );
         }
       }
@@ -106,14 +110,16 @@ class ListSharing {
       if (path_lib.dirname(webdavPath) ==
           remote_storage_util.getRemoteAlbumsDir(account)) {
         try {
-          final file = sharedAlbumFiles
-              .firstWhere((element) => element.fileId == s.itemSource);
+          final file = sharedAlbumFiles.firstWhere(
+            (element) => element.fileId == s.itemSource,
+          );
           return await _querySharedAlbum(account, s, file);
         } catch (e, stackTrace) {
           _log.severe(
-              "[_querySharesWithMe] Shared album not found: ${s.itemSource}",
-              e,
-              stackTrace);
+            "[_querySharesWithMe] Shared album not found: ${s.itemSource}",
+            e,
+            stackTrace,
+          );
           return null;
         }
       }
@@ -125,8 +131,9 @@ class ListSharing {
       if (s.url == null) {
         return null;
       }
-      if (account.roots
-          .every((r) => r.isNotEmpty && !s.path.startsWith("$r/"))) {
+      if (account.roots.every(
+        (r) => r.isNotEmpty && !s.path.startsWith("$r/"),
+      )) {
         // ignore files not under root dirs
         return null;
       }
@@ -135,8 +142,11 @@ class ListSharing {
         final file = (await FindFile(_c)(account, [s.itemSource])).first;
         return ListSharingFileData(s, file);
       } catch (e, stackTrace) {
-        _log.severe("[_querySharesByMe] File not found: ${s.itemSource}", e,
-            stackTrace);
+        _log.severe(
+          "[_querySharesByMe] File not found: ${s.itemSource}",
+          e,
+          stackTrace,
+        );
         return null;
       }
     });
@@ -144,12 +154,12 @@ class ListSharing {
   }
 
   Future<List<ListSharingData>> _querySharesWithMe(
-      Account account, List<File> sharedAlbumFiles) async {
+    Account account,
+    List<File> sharedAlbumFiles,
+  ) async {
     final pendingSharedAlbumFiles = await Ls(_c.fileRepo)(
       account,
-      File(
-        path: remote_storage_util.getRemotePendingSharedAlbumsDir(account),
-      ),
+      File(path: remote_storage_util.getRemotePendingSharedAlbumsDir(account)),
     );
 
     final shares = await _c.shareRepo.reverseListAll(account);
@@ -159,14 +169,16 @@ class ListSharing {
       if (path_lib.dirname(webdavPath) ==
           remote_storage_util.getRemotePendingSharedAlbumsDir(account)) {
         try {
-          final file = pendingSharedAlbumFiles
-              .firstWhere((element) => element.fileId == s.itemSource);
+          final file = pendingSharedAlbumFiles.firstWhere(
+            (element) => element.fileId == s.itemSource,
+          );
           return await _querySharedAlbum(account, s, file);
         } catch (e, stackTrace) {
           _log.severe(
-              "[_querySharesWithMe] Pending shared album not found: ${s.itemSource}",
-              e,
-              stackTrace);
+            "[_querySharesWithMe] Pending shared album not found: ${s.itemSource}",
+            e,
+            stackTrace,
+          );
           return null;
         }
       }
@@ -174,14 +186,16 @@ class ListSharing {
       if (path_lib.dirname(webdavPath) ==
           remote_storage_util.getRemoteAlbumsDir(account)) {
         try {
-          final file = sharedAlbumFiles
-              .firstWhere((element) => element.fileId == s.itemSource);
+          final file = sharedAlbumFiles.firstWhere(
+            (element) => element.fileId == s.itemSource,
+          );
           return await _querySharedAlbum(account, s, file);
         } catch (e, stackTrace) {
           _log.severe(
-              "[_querySharesWithMe] Shared album not found: ${s.itemSource}",
-              e,
-              stackTrace);
+            "[_querySharesWithMe] Shared album not found: ${s.itemSource}",
+            e,
+            stackTrace,
+          );
           return null;
         }
       }
@@ -190,13 +204,19 @@ class ListSharing {
   }
 
   Future<ListSharingData?> _querySharedAlbum(
-      Account account, Share share, File albumFile) async {
+    Account account,
+    Share share,
+    File albumFile,
+  ) async {
     try {
       final album = await _c.albumRepo.get(account, albumFile);
       return ListSharingAlbumData(share, album);
     } catch (e, stackTrace) {
       _log.shout(
-          "[_querySharedAlbum] Failed while getting album", e, stackTrace);
+        "[_querySharedAlbum] Failed while getting album",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }

@@ -44,22 +44,23 @@ class _TimelineState extends State<_Timeline> {
             return false;
           },
           child: ScrollConfiguration(
-            behavior: ScrollConfiguration.of(context).copyWith(
-              scrollbars: false,
-              overscroll: false,
-            ),
+            behavior: ScrollConfiguration.of(
+              context,
+            ).copyWith(scrollbars: false, overscroll: false),
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               controller: _controller,
               itemCount: context.bloc.pageCount,
-              itemBuilder: (context, i) => _BlocSelector<int>(
-                selector: (state) => state.page,
-                builder: (context, page) => _TimelineItem(
-                  index: i,
-                  file: context.bloc.getFileByPageIndex(i),
-                  isSelected: i == page,
-                ),
-              ),
+              itemBuilder:
+                  (context, i) => _BlocSelector<int>(
+                    selector: (state) => state.page,
+                    builder:
+                        (context, page) => _TimelineItem(
+                          index: i,
+                          file: context.bloc.getFileByPageIndex(i),
+                          isSelected: i == page,
+                        ),
+                  ),
             ),
           ),
         ),
@@ -84,28 +85,32 @@ class _TimelineItem extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(8),
-          color: isSelected
-              ? Theme.of(context).colorScheme.secondaryContainer
-              : Colors.transparent,
-          child: file != null
-              ? PhotoListImage(
-                  account: context.bloc.account,
-                  previewUrl: NetworkRectThumbnail.imageUrlForFile(
-                      context.bloc.account, file!),
-                  mime: file!.fdMime,
-                )
-              : AspectRatio(
-                  aspectRatio: 1,
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      L10n.global().fileNotFound,
-                      style: Theme.of(context).textTheme.bodySmall,
-                      textAlign: TextAlign.center,
+          color:
+              isSelected
+                  ? Theme.of(context).colorScheme.secondaryContainer
+                  : Colors.transparent,
+          child:
+              file != null
+                  ? PhotoListImage(
+                    account: context.bloc.account,
+                    previewUrl: NetworkRectThumbnail.imageUrlForFile(
+                      context.bloc.account,
+                      file!,
+                    ),
+                    mime: file!.fdMime,
+                  )
+                  : AspectRatio(
+                    aspectRatio: 1,
+                    child: Container(
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(4),
+                      child: Text(
+                        L10n.global().fileNotFound,
+                        style: Theme.of(context).textTheme.bodySmall,
+                        textAlign: TextAlign.center,
+                      ),
                     ),
                   ),
-                ),
         ),
         if (!isSelected)
           Positioned.fill(

@@ -35,10 +35,12 @@ class WhitelistLastBadCertDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text(L10n.global().whitelistCertDialogTitle),
-      content: Text(L10n.global().whitelistCertDialogContent(
-        SelfSignedCertManager().getLastBadCertHost(),
-        SelfSignedCertManager().getLastBadCertFingerprint(),
-      )),
+      content: Text(
+        L10n.global().whitelistCertDialogContent(
+          SelfSignedCertManager().getLastBadCertHost(),
+          SelfSignedCertManager().getLastBadCertFingerprint(),
+        ),
+      ),
       actions: [
         TextButton(
           onPressed: () {

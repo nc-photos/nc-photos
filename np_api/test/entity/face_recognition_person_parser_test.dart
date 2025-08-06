@@ -33,15 +33,7 @@ Future<void> _persons() async {
 """;
   final results = await FaceRecognitionPersonParser().parse(json);
   expect(results, const [
-    FaceRecognitionPerson(
-      name: "Random Person",
-      thumbFaceId: 1,
-      count: 3,
-    ),
-    FaceRecognitionPerson(
-      name: "Random Cat",
-      thumbFaceId: 10,
-      count: 4,
-    ),
+    FaceRecognitionPerson(name: "Random Person", thumbFaceId: 1, count: 3),
+    FaceRecognitionPerson(name: "Random Cat", thumbFaceId: 10, count: 4),
   ]);
 }

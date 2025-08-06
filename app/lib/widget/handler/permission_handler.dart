@@ -20,10 +20,12 @@ class PermissionHandler {
         ]);
         if (results[Permission.WRITE_EXTERNAL_STORAGE] !=
             PermissionRequestResult.granted) {
-          SnackBarManager().showSnackBar(SnackBar(
-            content: Text(L10n.global().errorNoStoragePermission),
-            duration: k.snackBarDurationNormal,
-          ));
+          SnackBarManager().showSnackBar(
+            SnackBar(
+              content: Text(L10n.global().errorNoStoragePermission),
+              duration: k.snackBarDurationNormal,
+            ),
+          );
           return false;
         } else {
           return true;

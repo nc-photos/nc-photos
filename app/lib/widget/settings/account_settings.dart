@@ -40,14 +40,10 @@ part 'account_settings.g.dart';
 typedef _BlocListener = BlocListener<_Bloc, _State>;
 typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
 
-enum AccountSettingsOption {
-  personProvider,
-}
+enum AccountSettingsOption { personProvider }
 
 class AccountSettingsArguments {
-  const AccountSettingsArguments({
-    this.highlight,
-  });
+  const AccountSettingsArguments({this.highlight});
 
   final AccountSettingsOption? highlight;
 }
@@ -56,34 +52,30 @@ class AccountSettings extends StatelessWidget {
   static const routeName = "/settings/account";
 
   static Route buildRoute(
-          AccountSettingsArguments? args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (_) => AccountSettings.fromArgs(args),
-        settings: settings,
-      );
+    AccountSettingsArguments? args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (_) => AccountSettings.fromArgs(args),
+    settings: settings,
+  );
 
-  const AccountSettings({
-    super.key,
-    this.highlight,
-  });
+  const AccountSettings({super.key, this.highlight});
 
   AccountSettings.fromArgs(AccountSettingsArguments? args, {Key? key})
-      : this(
-          key: key,
-          highlight: args?.highlight,
-        );
+    : this(key: key, highlight: args?.highlight);
 
   @override
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (_) => _Bloc(
-        account: accountController.account,
-        prefController: context.read(),
-        accountPrefController: accountController.accountPrefController,
-        npDb: KiwiContainer().resolve<DiContainer>().npDb,
-        highlight: highlight,
-      ),
+      create:
+          (_) => _Bloc(
+            account: accountController.account,
+            prefController: context.read(),
+            accountPrefController: accountController.accountPrefController,
+            npDb: KiwiContainer().resolve<DiContainer>().npDb,
+            highlight: highlight,
+          ),
       child: const _WrappedAccountSettings(),
     );
   }
@@ -137,20 +129,27 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
             listener: (context, state) {
               if (state.error != null && isPageVisible()) {
                 if (state.error is _AccountConflictError) {
-                  SnackBarManager().showSnackBar(SnackBar(
-                    content: Text(
-                        L10n.global().editAccountConflictFailureNotification),
-                    duration: k.snackBarDurationNormal,
-                  ));
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        L10n.global().editAccountConflictFailureNotification,
+                      ),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
                 } else if (state.error is _WritePrefError) {
-                  SnackBarManager().showSnackBar(SnackBar(
-                    content:
-                        Text(L10n.global().writePreferenceFailureNotification),
-                    duration: k.snackBarDurationNormal,
-                  ));
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        L10n.global().writePreferenceFailureNotification,
+                      ),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
                 } else {
-                  SnackBarManager()
-                      .showSnackBarForException(state.error!.error);
+                  SnackBarManager().showSnackBarForException(
+                    state.error!.error,
+                  );
                 }
               }
             },
@@ -158,80 +157,99 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
         ],
         child: _BlocSelector<bool>(
           selector: (state) => state.shouldReload,
-          builder: (_, shouldReload) => PopScope(
-            canPop: !shouldReload,
-            child: CustomScrollView(
-              slivers: [
-                SliverAppBar(
-                  pinned: true,
-                  title: Text(L10n.global().settingsAccountTitle),
-                  leading:
-                      shouldReload ? const _DoneButton() : const BackButton(),
-                ),
-                SliverList(
-                  delegate: SliverChildListDelegate(
-                    [
-                      _BlocSelector<String?>(
-                        selector: (state) => state.label,
-                        builder: (context, state) => ListTile(
-                          title: Text(L10n.global().settingsAccountLabelTitle),
-                          subtitle: Text(state ??
-                              L10n.global().settingsAccountLabelDescription),
-                          onTap: () => _onLabelPressed(context),
-                        ),
-                      ),
-                      _BlocSelector<Account>(
-                        selector: (state) => state.account,
-                        builder: (context, state) => ListTile(
-                          title:
-                              Text(L10n.global().settingsIncludedFoldersTitle),
-                          subtitle:
-                              Text(state.roots.map((e) => "/$e").join("; ")),
-                          onTap: () => _onIncludedFoldersPressed(context),
-                        ),
-                      ),
-                      _BlocSelector<String>(
-                        selector: (state) => state.shareFolder,
-                        builder: (context, state) => ListTile(
-                          title: Text(L10n.global().settingsShareFolderTitle),
-                          subtitle: Text("/$state"),
-                          onTap: () => _onShareFolderPressed(context),
-                        ),
-                      ),
-                      SettingsListCaption(
-                        label: L10n.global().settingsServerAppSectionTitle,
-                      ),
-                      _BlocSelector<PersonProvider>(
-                        selector: (state) => state.personProvider,
-                        builder: (context, state) {
-                          if (_bloc.highlight ==
-                              AccountSettingsOption.personProvider) {
-                            return AnimatedBuilder(
-                              animation: _highlightAnimation,
-                              builder: (context, child) => ListTile(
+          builder:
+              (_, shouldReload) => PopScope(
+                canPop: !shouldReload,
+                child: CustomScrollView(
+                  slivers: [
+                    SliverAppBar(
+                      pinned: true,
+                      title: Text(L10n.global().settingsAccountTitle),
+                      leading:
+                          shouldReload
+                              ? const _DoneButton()
+                              : const BackButton(),
+                    ),
+                    SliverList(
+                      delegate: SliverChildListDelegate([
+                        _BlocSelector<String?>(
+                          selector: (state) => state.label,
+                          builder:
+                              (context, state) => ListTile(
                                 title: Text(
-                                    L10n.global().settingsPersonProviderTitle),
+                                  L10n.global().settingsAccountLabelTitle,
+                                ),
+                                subtitle: Text(
+                                  state ??
+                                      L10n.global()
+                                          .settingsAccountLabelDescription,
+                                ),
+                                onTap: () => _onLabelPressed(context),
+                              ),
+                        ),
+                        _BlocSelector<Account>(
+                          selector: (state) => state.account,
+                          builder:
+                              (context, state) => ListTile(
+                                title: Text(
+                                  L10n.global().settingsIncludedFoldersTitle,
+                                ),
+                                subtitle: Text(
+                                  state.roots.map((e) => "/$e").join("; "),
+                                ),
+                                onTap: () => _onIncludedFoldersPressed(context),
+                              ),
+                        ),
+                        _BlocSelector<String>(
+                          selector: (state) => state.shareFolder,
+                          builder:
+                              (context, state) => ListTile(
+                                title: Text(
+                                  L10n.global().settingsShareFolderTitle,
+                                ),
+                                subtitle: Text("/$state"),
+                                onTap: () => _onShareFolderPressed(context),
+                              ),
+                        ),
+                        SettingsListCaption(
+                          label: L10n.global().settingsServerAppSectionTitle,
+                        ),
+                        _BlocSelector<PersonProvider>(
+                          selector: (state) => state.personProvider,
+                          builder: (context, state) {
+                            if (_bloc.highlight ==
+                                AccountSettingsOption.personProvider) {
+                              return AnimatedBuilder(
+                                animation: _highlightAnimation,
+                                builder:
+                                    (context, child) => ListTile(
+                                      title: Text(
+                                        L10n.global()
+                                            .settingsPersonProviderTitle,
+                                      ),
+                                      subtitle: Text(state.toUserString()),
+                                      onTap:
+                                          () =>
+                                              _onPersonProviderPressed(context),
+                                      tileColor: _highlightAnimation.value,
+                                    ),
+                              );
+                            } else {
+                              return ListTile(
+                                title: Text(
+                                  L10n.global().settingsPersonProviderTitle,
+                                ),
                                 subtitle: Text(state.toUserString()),
                                 onTap: () => _onPersonProviderPressed(context),
-                                tileColor: _highlightAnimation.value,
-                              ),
-                            );
-                          } else {
-                            return ListTile(
-                              title: Text(
-                                  L10n.global().settingsPersonProviderTitle),
-                              subtitle: Text(state.toUserString()),
-                              onTap: () => _onPersonProviderPressed(context),
-                            );
-                          }
-                        },
-                      ),
-                    ],
-                  ),
+                              );
+                            }
+                          },
+                        ),
+                      ]),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
         ),
       ),
     );
@@ -240,11 +258,12 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
   Future<void> _onLabelPressed(BuildContext context) async {
     final result = await showDialog<String>(
       context: context,
-      builder: (context) => SimpleInputDialog(
-        titleText: L10n.global().settingsAccountLabelTitle,
-        buttonText: MaterialLocalizations.of(context).okButtonLabel,
-        initialText: _bloc.state.label ?? "",
-      ),
+      builder:
+          (context) => SimpleInputDialog(
+            titleText: L10n.global().settingsAccountLabelTitle,
+            buttonText: MaterialLocalizations.of(context).okButtonLabel,
+            initialText: _bloc.state.label ?? "",
+          ),
     );
     if (!context.mounted || result == null) {
       return;
@@ -271,10 +290,11 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
   Future<void> _onShareFolderPressed(BuildContext context) async {
     final result = await showDialog<String>(
       context: context,
-      builder: (_) => _ShareFolderDialog(
-        account: _bloc.state.account,
-        initialValue: _bloc.state.shareFolder,
-      ),
+      builder:
+          (_) => _ShareFolderDialog(
+            account: _bloc.state.account,
+            initialValue: _bloc.state.shareFolder,
+          ),
     );
     if (!context.mounted || result == null) {
       return;
@@ -285,9 +305,9 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
   Future<void> _onPersonProviderPressed(BuildContext context) async {
     final result = await showDialog<PersonProvider>(
       context: context,
-      builder: (_) => _PersonProviderDialog(
-        initialValue: _bloc.state.personProvider,
-      ),
+      builder:
+          (_) =>
+              _PersonProviderDialog(initialValue: _bloc.state.personProvider),
     );
     if (!context.mounted || result == null) {
       return;
@@ -329,10 +349,7 @@ class _DoneButton extends StatelessWidget {
 }
 
 class _ShareFolderDialog extends StatefulWidget {
-  const _ShareFolderDialog({
-    required this.account,
-    required this.initialValue,
-  });
+  const _ShareFolderDialog({required this.account, required this.initialValue});
 
   @override
   State<StatefulWidget> createState() => _ShareFolderDialogState();
@@ -391,25 +408,22 @@ class _ShareFolderDialogState extends State<_ShareFolderDialog> {
   }
 
   final _formKey = GlobalKey<FormState>();
-  late final _controller =
-      TextEditingController(text: "/${widget.initialValue}");
+  late final _controller = TextEditingController(
+    text: "/${widget.initialValue}",
+  );
   late String _path = widget.initialValue;
 }
 
 @npLog
 class _PersonProviderDialog extends StatelessWidget {
-  const _PersonProviderDialog({
-    required this.initialValue,
-  });
+  const _PersonProviderDialog({required this.initialValue});
 
   @override
   Widget build(BuildContext context) {
     return FancyOptionPicker(
       title: Row(
         children: [
-          Expanded(
-            child: Text(L10n.global().settingsPersonProviderTitle),
-          ),
+          Expanded(child: Text(L10n.global().settingsPersonProviderTitle)),
           IconButton(
             onPressed: () {
               launch(help_util.peopleUrl);
@@ -419,16 +433,21 @@ class _PersonProviderDialog extends StatelessWidget {
           ),
         ],
       ),
-      items: PersonProvider.values
-          .map((provider) => FancyOptionPickerItem(
-                label: provider.toUserString(),
-                isSelected: provider == initialValue,
-                onSelect: () {
-                  _log.info("[build] Set provider: ${provider.toUserString()}");
-                  Navigator.of(context).pop(provider);
-                },
-              ))
-          .toList(),
+      items:
+          PersonProvider.values
+              .map(
+                (provider) => FancyOptionPickerItem(
+                  label: provider.toUserString(),
+                  isSelected: provider == initialValue,
+                  onSelect: () {
+                    _log.info(
+                      "[build] Set provider: ${provider.toUserString()}",
+                    );
+                    Navigator.of(context).pop(provider);
+                  },
+                ),
+              )
+              .toList(),
     );
   }
 

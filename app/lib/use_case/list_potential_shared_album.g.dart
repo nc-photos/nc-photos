@@ -10,6 +10,7 @@ extension _$ListPotentialSharedAlbumNpLog on ListPotentialSharedAlbum {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("use_case.list_potential_shared_album.ListPotentialSharedAlbum");
+  static final log = Logger(
+    "use_case.list_potential_shared_album.ListPotentialSharedAlbum",
+  );
 }

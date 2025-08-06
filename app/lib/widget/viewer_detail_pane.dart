@@ -100,7 +100,8 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
     _initFile();
 
     _buttonScrollController.addListener(
-        () => _updateButtonScroll(_buttonScrollController.position));
+      () => _updateButtonScroll(_buttonScrollController.position),
+    );
     _ensureUpdateButtonScroll();
   }
 
@@ -137,30 +138,37 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
     }
 
     // postpone loading map to improve responsiveness
-    unawaited(Future.delayed(const Duration(milliseconds: 750)).then((_) {
-      if (mounted) {
-        setState(() {
-          _shouldBlockGpsMap = false;
-        });
-      }
-    }));
+    unawaited(
+      Future.delayed(const Duration(milliseconds: 750)).then((_) {
+        if (mounted) {
+          setState(() {
+            _shouldBlockGpsMap = false;
+          });
+        }
+      }),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY,
-            Localizations.localeOf(context).languageCode)
-        .format(_dateTime);
-    final timeStr = DateFormat(DateFormat.HOUR_MINUTE,
-            Localizations.localeOf(context).languageCode)
-        .format(_dateTime);
+    final dateStr = DateFormat(
+      DateFormat.YEAR_ABBR_MONTH_DAY,
+      Localizations.localeOf(context).languageCode,
+    ).format(_dateTime);
+    final timeStr = DateFormat(
+      DateFormat.HOUR_MINUTE,
+      Localizations.localeOf(context).languageCode,
+    ).format(_dateTime);
     final bool isShowDelete;
     if (widget.fromCollection != null) {
-      final collectionAdapter = CollectionAdapter.of(KiwiContainer().resolve(),
-          widget.account, widget.fromCollection!.collection);
+      final collectionAdapter = CollectionAdapter.of(
+        KiwiContainer().resolve(),
+        widget.account,
+        widget.fromCollection!.collection,
+      );
       isShowDelete =
           collectionAdapter.isPermitted(CollectionCapability.deleteItem) &&
-              collectionAdapter.isItemDeletable(widget.fromCollection!.item);
+          collectionAdapter.isItemDeletable(widget.fromCollection!.item);
     } else {
       isShowDelete = false;
     }
@@ -204,8 +212,9 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
                         _DetailPaneButton(
                           icon: Icons.remove_outlined,
                           label: L10n.global().removeFromAlbumTooltip,
-                          onPressed: () =>
-                              widget.onRemoveFromCollectionPressed(context),
+                          onPressed:
+                              () =>
+                                  widget.onRemoveFromCollectionPressed(context),
                         ),
                       if (_canSetCover)
                         _DetailPaneButton(
@@ -269,12 +278,11 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
             if (!_file!.isOwned(widget.account.userId))
               ListTile(
                 leading: const ListTileCenterLeading(
-                  child: Icon(
-                    Icons.share_outlined,
-                  ),
+                  child: Icon(Icons.share_outlined),
                 ),
-                title:
-                    Text(_file!.ownerDisplayName ?? _file!.ownerId!.toString()),
+                title: Text(
+                  _file!.ownerDisplayName ?? _file!.ownerId!.toString(),
+                ),
                 subtitle: Text(L10n.global().fileSharedByDescription),
               ),
             if (_tags.isNotEmpty)
@@ -285,17 +293,18 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _tags.length,
-                    itemBuilder: (context, index) => FilterChip(
-                      elevation: 1,
-                      pressElevation: 1,
-                      showCheckmark: false,
-                      visualDensity: VisualDensity.compact,
-                      selected: true,
-                      label: Text(_tags[index]),
-                      onSelected: (_) {},
-                    ),
-                    separatorBuilder: (context, index) =>
-                        const SizedBox(width: 8),
+                    itemBuilder:
+                        (context, index) => FilterChip(
+                          elevation: 1,
+                          pressElevation: 1,
+                          showCheckmark: false,
+                          visualDensity: VisualDensity.compact,
+                          selected: true,
+                          label: Text(_tags[index]),
+                          onSelected: (_) {},
+                        ),
+                    separatorBuilder:
+                        (context, index) => const SizedBox(width: 8),
                   ),
                 ),
               ),
@@ -314,7 +323,8 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
                   child: Icon(Icons.aspect_ratio),
                 ),
                 title: Text(
-                    "${_file!.metadata!.imageWidth} x ${_file!.metadata!.imageHeight}"),
+                  "${_file!.metadata!.imageWidth} x ${_file!.metadata!.imageHeight}",
+                ),
                 subtitle: Text(_buildSizeSubtitle()),
               )
             else
@@ -328,8 +338,9 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
                   child: Icon(Icons.camera_outlined),
                 ),
                 title: Text(_model!),
-                subtitle: _buildCameraSubtitle()
-                    .run((s) => s.isNotEmpty ? Text(s) : null),
+                subtitle: _buildCameraSubtitle().run(
+                  (s) => s.isNotEmpty ? Text(s) : null,
+                ),
               ),
             if (_location?.name != null)
               ListTile(
@@ -355,14 +366,15 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
                   height: 256,
                   child: ValueStreamBuilder<GpsMapProvider>(
                     stream: context.read<PrefController>().gpsMapProvider,
-                    builder: (context, gpsMapProvider) => StaticMap(
-                      providerHint: gpsMapProvider.requireData,
-                      location: CameraPosition(center: _gps!, zoom: 16),
-                      onTap: () => launchExternalMap(CameraPosition(
-                        center: _gps!,
-                        zoom: 16,
-                      )),
-                    ),
+                    builder:
+                        (context, gpsMapProvider) => StaticMap(
+                          providerHint: gpsMapProvider.requireData,
+                          location: CameraPosition(center: _gps!, zoom: 16),
+                          onTap:
+                              () => launchExternalMap(
+                                CameraPosition(center: _gps!, zoom: 16),
+                              ),
+                        ),
                   ),
                 ),
               ),
@@ -449,8 +461,9 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
       cameraSubStr += space;
     }
     if (_focalLength != null) {
-      cameraSubStr += L10n.global()
-          .millimeterCountSymbol(_focalLength!.toStringAsFixedTruncated(2));
+      cameraSubStr += L10n.global().millimeterCountSymbol(
+        _focalLength!.toStringAsFixedTruncated(2),
+      );
       cameraSubStr += space;
     }
     if (_isoSpeedRatings != null) {
@@ -464,19 +477,25 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
     assert(_file != null);
     assert(widget.fromCollection != null);
     _log.info(
-        "[_onSetAlbumCoverPressed] Set '${widget.fd.fdPath}' as album cover for '${widget.fromCollection!.collection.name}'");
+      "[_onSetAlbumCoverPressed] Set '${widget.fd.fdPath}' as album cover for '${widget.fromCollection!.collection.name}'",
+    );
     try {
       await context.read<AccountController>().collectionsController.edit(
-            widget.fromCollection!.collection,
-            cover: OrNull(_file!),
-          );
+        widget.fromCollection!.collection,
+        cover: OrNull(_file!),
+      );
     } catch (e, stackTrace) {
-      _log.shout("[_onSetAlbumCoverPressed] Failed while updating album", e,
-          stackTrace);
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().setCollectionCoverFailureNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      _log.shout(
+        "[_onSetAlbumCoverPressed] Failed while updating album",
+        e,
+        stackTrace,
+      );
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().setCollectionCoverFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
   }
 
@@ -498,33 +517,40 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
   void _onDateTimeTap(BuildContext context) {
     assert(_file != null);
     showDialog(
-      context: context,
-      builder: (context) => PhotoDateTimeEditDialog(initialDateTime: _dateTime),
-    ).then((value) async {
-      if (value == null || value is! DateTime) {
-        return;
-      }
-      try {
-        await UpdateProperty(fileRepo: _c.fileRepo2)
-            .updateOverrideDateTime(widget.account, _file!, value);
-        if (mounted) {
-          setState(() {
-            _dateTime = value;
-          });
-        }
-      } catch (e, stacktrace) {
-        _log.shout(
-            "[_onDateTimeTap] Failed while updateOverrideDateTime: ${logFilename(widget.fd.fdPath)}",
-            e,
-            stacktrace);
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(L10n.global().updateDateTimeFailureNotification),
-          duration: k.snackBarDurationNormal,
-        ));
-      }
-    }).catchError((e, stacktrace) {
-      _log.shout("[_onDateTimeTap] Failed while showDialog", e, stacktrace);
-    });
+          context: context,
+          builder:
+              (context) => PhotoDateTimeEditDialog(initialDateTime: _dateTime),
+        )
+        .then((value) async {
+          if (value == null || value is! DateTime) {
+            return;
+          }
+          try {
+            await UpdateProperty(
+              fileRepo: _c.fileRepo2,
+            ).updateOverrideDateTime(widget.account, _file!, value);
+            if (mounted) {
+              setState(() {
+                _dateTime = value;
+              });
+            }
+          } catch (e, stacktrace) {
+            _log.shout(
+              "[_onDateTimeTap] Failed while updateOverrideDateTime: ${logFilename(widget.fd.fdPath)}",
+              e,
+              stacktrace,
+            );
+            SnackBarManager().showSnackBar(
+              SnackBar(
+                content: Text(L10n.global().updateDateTimeFailureNotification),
+                duration: k.snackBarDurationNormal,
+              ),
+            );
+          }
+        })
+        .catchError((e, stacktrace) {
+          _log.shout("[_onDateTimeTap] Failed while showDialog", e, stacktrace);
+        });
   }
 
   bool _updateButtonScroll(ScrollPosition pos) {
@@ -590,14 +616,24 @@ class _ViewerDetailPaneState extends State<ViewerDetailPane> {
 
   var _shouldBlockGpsMap = true;
 
-  late final bool _canRemoveFromAlbum = widget.fromCollection?.run((d) =>
-          CollectionAdapter.of(_c, widget.account, d.collection)
-              .isItemRemovable(widget.fromCollection!.item)) ??
+  late final bool _canRemoveFromAlbum =
+      widget.fromCollection?.run(
+        (d) => CollectionAdapter.of(
+          _c,
+          widget.account,
+          d.collection,
+        ).isItemRemovable(widget.fromCollection!.item),
+      ) ??
       false;
 
-  late final bool _canSetCover = widget.fromCollection?.run((d) =>
-          CollectionAdapter.of(_c, widget.account, d.collection)
-              .isPermitted(CollectionCapability.manualCover)) ??
+  late final bool _canSetCover =
+      widget.fromCollection?.run(
+        (d) => CollectionAdapter.of(
+          _c,
+          widget.account,
+          d.collection,
+        ).isPermitted(CollectionCapability.manualCover),
+      ) ??
       false;
 
   late final _buttonScrollController = ScrollController();

@@ -16,10 +16,7 @@ part 'image_editor_persist_option_dialog.g.dart';
 
 @npLog
 class ImageEditorPersistOptionDialog extends StatelessWidget {
-  const ImageEditorPersistOptionDialog({
-    super.key,
-    required this.isFromEditor,
-  });
+  const ImageEditorPersistOptionDialog({super.key, required this.isFromEditor});
 
   @override
   build(BuildContext context) {
@@ -63,14 +60,18 @@ class ImageEditorPersistOptionDialog extends StatelessWidget {
       _onOptionSelected(context, true);
 
   Future<void> _onOptionSelected(
-      BuildContext context, bool isSaveEditResultToServer) async {
+    BuildContext context,
+    bool isSaveEditResultToServer,
+  ) async {
     final c = KiwiContainer().resolve<DiContainer>();
     if (!await c.pref.setSaveEditResultToServer(isSaveEditResultToServer)) {
       _log.severe("[_onDevicePressed] Failed writing pref");
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().writePreferenceFailureNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().writePreferenceFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       return;
     }
 

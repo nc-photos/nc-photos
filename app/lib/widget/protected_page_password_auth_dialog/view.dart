@@ -51,9 +51,10 @@ class _PasswordInputState extends State<_PasswordInput> {
               _isVisible = !_isVisible;
             });
           },
-          icon: _isVisible
-              ? const Icon(Icons.visibility_outlined)
-              : const Icon(Icons.visibility_off_outlined),
+          icon:
+              _isVisible
+                  ? const Icon(Icons.visibility_outlined)
+                  : const Icon(Icons.visibility_off_outlined),
         ),
       ),
       onSubmitted: (value) {
@@ -96,8 +97,11 @@ class _ErrorNoticeState extends State<_ErrorNotice>
         }
       },
       child: SlideTransition(
-        position: _controller.drive(Animatable<Offset>.fromCallback(
-            (t) => Offset(tremblingTransform(3, t) * .05, 0))),
+        position: _controller.drive(
+          Animatable<Offset>.fromCallback(
+            (t) => Offset(tremblingTransform(3, t) * .05, 0),
+          ),
+        ),
         child: Text(
           widget.text,
           style: Theme.of(context).textStyleColored(

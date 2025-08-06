@@ -14,10 +14,8 @@ part 'item.g.dart';
 @npLog
 @toString
 abstract class AlbumItem with EquatableMixin {
-  AlbumItem({
-    required this.addedBy,
-    required DateTime addedAt,
-  }) : addedAt = addedAt.toUtc();
+  AlbumItem({required this.addedBy, required DateTime addedAt})
+    : addedAt = addedAt.toUtc();
 
   factory AlbumItem.fromJson(JsonObj json) {
     final addedBy = CiString(json["addedBy"]);
@@ -27,13 +25,22 @@ abstract class AlbumItem with EquatableMixin {
     switch (type) {
       case AlbumFileItem._type:
         return AlbumFileItem.fromJson(
-            content.cast<String, dynamic>(), addedBy, addedAt);
+          content.cast<String, dynamic>(),
+          addedBy,
+          addedAt,
+        );
       case AlbumLabelItem._type:
         return AlbumLabelItem.fromJson(
-            content.cast<String, dynamic>(), addedBy, addedAt);
+          content.cast<String, dynamic>(),
+          addedBy,
+          addedAt,
+        );
       case AlbumMapItem._type:
         return AlbumMapItem.fromJson(
-            content.cast<String, dynamic>(), addedBy, addedAt);
+          content.cast<String, dynamic>(),
+          addedBy,
+          addedAt,
+        );
       default:
         _log.shout("[fromJson] Unknown type: $type");
         throw ArgumentError.value(type, "type");
@@ -69,10 +76,7 @@ abstract class AlbumItem with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        addedBy,
-        addedAt,
-      ];
+  List<Object?> get props => [addedBy, addedAt];
 
   final CiString addedBy;
   final DateTime addedAt;
@@ -91,7 +95,10 @@ class AlbumFileItem extends AlbumItem {
   });
 
   factory AlbumFileItem.fromJson(
-      JsonObj json, CiString addedBy, DateTime addedAt) {
+    JsonObj json,
+    CiString addedBy,
+    DateTime addedAt,
+  ) {
     return AlbumFileItem(
       addedBy: addedBy,
       addedAt: addedAt,
@@ -105,10 +112,7 @@ class AlbumFileItem extends AlbumItem {
 
   @override
   JsonObj toContentJson() {
-    return {
-      "file": file.toFdJson(),
-      "ownerId": ownerId.raw,
-    };
+    return {"file": file.toFdJson(), "ownerId": ownerId.raw};
   }
 
   @override
@@ -119,11 +123,7 @@ class AlbumFileItem extends AlbumItem {
       addedAt == other.addedAt;
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        file,
-        ownerId,
-      ];
+  List<Object?> get props => [...super.props, file, ownerId];
 
   final FileDescriptor file;
   final CiString ownerId;
@@ -140,7 +140,10 @@ class AlbumLabelItem extends AlbumItem {
   });
 
   factory AlbumLabelItem.fromJson(
-      JsonObj json, CiString addedBy, DateTime addedAt) {
+    JsonObj json,
+    CiString addedBy,
+    DateTime addedAt,
+  ) {
     return AlbumLabelItem(
       addedBy: addedBy,
       addedAt: addedAt,
@@ -153,9 +156,7 @@ class AlbumLabelItem extends AlbumItem {
 
   @override
   JsonObj toContentJson() {
-    return {
-      "text": text,
-    };
+    return {"text": text};
   }
 
   @override
@@ -178,10 +179,7 @@ class AlbumLabelItem extends AlbumItem {
   }
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        text,
-      ];
+  List<Object?> get props => [...super.props, text];
 
   final String text;
 
@@ -197,7 +195,10 @@ class AlbumMapItem extends AlbumItem {
   });
 
   factory AlbumMapItem.fromJson(
-      JsonObj json, CiString addedBy, DateTime addedAt) {
+    JsonObj json,
+    CiString addedBy,
+    DateTime addedAt,
+  ) {
     return AlbumMapItem(
       addedBy: addedBy,
       addedAt: addedAt,
@@ -210,9 +211,7 @@ class AlbumMapItem extends AlbumItem {
 
   @override
   JsonObj toContentJson() {
-    return {
-      "location": location.toJson(),
-    };
+    return {"location": location.toJson()};
   }
 
   @override
@@ -235,10 +234,7 @@ class AlbumMapItem extends AlbumItem {
   }
 
   @override
-  List<Object?> get props => [
-        ...super.props,
-        location,
-      ];
+  List<Object?> get props => [...super.props, location];
 
   final CameraPosition location;
 

@@ -17,10 +17,13 @@ class ShareLocal {
     LocalFileOnFailureListener? onFailure,
   }) async {
     var count = files.length;
-    await _c.localFileRepo.shareFiles(files, onFailure: (f, e, stackTrace) {
-      --count;
-      onFailure?.call(f, e, stackTrace);
-    });
+    await _c.localFileRepo.shareFiles(
+      files,
+      onFailure: (f, e, stackTrace) {
+        --count;
+        onFailure?.call(f, e, stackTrace);
+      },
+    );
     _log.info("[call] Shared $count files successfully");
   }
 

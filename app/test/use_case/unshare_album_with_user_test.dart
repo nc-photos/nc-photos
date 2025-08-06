@@ -24,10 +24,11 @@ void main() {
 /// share (admin -> user1) for the album json deleted
 Future<void> _unshareWithoutFile() async {
   final account = util.buildAccount();
-  final album = (util.AlbumBuilder()
-        ..addShare("user1")
-        ..addShare("user2"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addShare("user1")
+            ..addShare("user2"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -40,14 +41,17 @@ Future<void> _unshareWithoutFile() async {
   );
   addTearDown(() => c.sqliteDb.close());
 
-  await UnshareAlbumWithUser(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(albumFile.path), "user1".toCi());
-  expect(c.albumMemoryRepo.findAlbumByPath(albumFile.path).shares,
-      [util.buildAlbumShare(userId: "user2")]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [util.buildShare(id: "1", file: albumFile, shareWith: "user2")],
+  await UnshareAlbumWithUser(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    "user1".toCi(),
   );
+  expect(c.albumMemoryRepo.findAlbumByPath(albumFile.path).shares, [
+    util.buildAlbumShare(userId: "user2"),
+  ]);
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+  ]);
 }
 
 /// Unshare an album with a user (user1)
@@ -59,11 +63,12 @@ Future<void> _unshareWithFile() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0])
-        ..addShare("user1")
-        ..addShare("user2"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0])
+            ..addShare("user1")
+            ..addShare("user2"))
+          .build();
   final file1 = files[0];
   final albumFile = album.albumFile!;
   final c = DiContainer(
@@ -79,17 +84,18 @@ Future<void> _unshareWithFile() async {
   );
   addTearDown(() => c.sqliteDb.close());
 
-  await UnshareAlbumWithUser(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(albumFile.path), "user1".toCi());
-  expect(c.albumMemoryRepo.findAlbumByPath(albumFile.path).shares,
-      [util.buildAlbumShare(userId: "user2")]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
-      util.buildShare(id: "3", file: file1, shareWith: "user2"),
-    ],
+  await UnshareAlbumWithUser(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    "user1".toCi(),
   );
+  expect(c.albumMemoryRepo.findAlbumByPath(albumFile.path).shares, [
+    util.buildAlbumShare(userId: "user2"),
+  ]);
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+    util.buildShare(id: "3", file: file1, shareWith: "user2"),
+  ]);
 }
 
 /// Unshare an album with a user (user1), where some files are not owned by us
@@ -101,16 +107,18 @@ Future<void> _unshareWithFile() async {
 /// shares (user2 -> user1) created by other unchanged
 Future<void> _unshareWithFileNotOwned() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("user2/test2.jpg", ownerId: "user2"))
-      .build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0])
-        ..addFileItem(files[1], addedBy: "user2")
-        ..addShare("user1")
-        ..addShare("user2"))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 1)
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("user2/test2.jpg", ownerId: "user2"))
+          .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0])
+            ..addFileItem(files[1], addedBy: "user2")
+            ..addShare("user1")
+            ..addShare("user2"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -121,27 +129,44 @@ Future<void> _unshareWithFileNotOwned() async {
       util.buildShare(id: "2", file: files[0], shareWith: "user1"),
       util.buildShare(id: "3", file: files[0], shareWith: "user2"),
       util.buildShare(
-          id: "4", uidOwner: "user2", file: files[1], shareWith: "admin"),
+        id: "4",
+        uidOwner: "user2",
+        file: files[1],
+        shareWith: "admin",
+      ),
       util.buildShare(
-          id: "5", uidOwner: "user2", file: files[1], shareWith: "user1"),
+        id: "5",
+        uidOwner: "user2",
+        file: files[1],
+        shareWith: "user1",
+      ),
     ]),
     npDb: util.buildTestDb(),
   );
   addTearDown(() => c.sqliteDb.close());
 
-  await UnshareAlbumWithUser(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(albumFile.path), "user1".toCi());
-  expect(c.albumMemoryRepo.findAlbumByPath(albumFile.path).shares,
-      [util.buildAlbumShare(userId: "user2")]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
-      util.buildShare(id: "3", file: files[0], shareWith: "user2"),
-      util.buildShare(
-          id: "4", uidOwner: "user2", file: files[1], shareWith: "admin"),
-      util.buildShare(
-          id: "5", uidOwner: "user2", file: files[1], shareWith: "user1"),
-    ],
+  await UnshareAlbumWithUser(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    "user1".toCi(),
   );
+  expect(c.albumMemoryRepo.findAlbumByPath(albumFile.path).shares, [
+    util.buildAlbumShare(userId: "user2"),
+  ]);
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+    util.buildShare(id: "3", file: files[0], shareWith: "user2"),
+    util.buildShare(
+      id: "4",
+      uidOwner: "user2",
+      file: files[1],
+      shareWith: "admin",
+    ),
+    util.buildShare(
+      id: "5",
+      uidOwner: "user2",
+      file: files[1],
+      shareWith: "user1",
+    ),
+  ]);
 }

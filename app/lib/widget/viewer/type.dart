@@ -13,9 +13,7 @@ class _ShareRequest {
 }
 
 class _StartSlideshowRequest {
-  const _StartSlideshowRequest({
-    required this.fileId,
-  });
+  const _StartSlideshowRequest({required this.fileId});
 
   final int fileId;
 }
@@ -35,10 +33,7 @@ class _SlideshowRequest {
 }
 
 class _SetAsRequest {
-  const _SetAsRequest({
-    required this.account,
-    required this.file,
-  });
+  const _SetAsRequest({required this.account, required this.file});
 
   final Account account;
   final FileDescriptor file;

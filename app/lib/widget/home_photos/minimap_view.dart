@@ -7,11 +7,12 @@ class _MinimapView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.minimapItems != current.minimapItems ||
-          previous.minimapYRatio != current.minimapYRatio ||
-          previous.viewHeight != current.viewHeight ||
-          previous.viewOverlayPadding != current.viewOverlayPadding,
+      buildWhen:
+          (previous, current) =>
+              previous.minimapItems != current.minimapItems ||
+              previous.minimapYRatio != current.minimapYRatio ||
+              previous.viewHeight != current.viewHeight ||
+              previous.viewOverlayPadding != current.viewOverlayPadding,
       builder: (context, state) {
         if (state.minimapItems == null) {
           return const SizedBox.shrink();
@@ -29,9 +30,11 @@ class _MinimapView extends StatelessWidget {
                   ...state.minimapItems!.expand3((e, prev, next) {
                     final contentHeight =
                         state.viewHeight! - state.viewOverlayPadding!;
-                    var top = e.logicalY < contentHeight
-                        ? 0.0
-                        : (e.logicalY - contentHeight) * state.minimapYRatio;
+                    var top =
+                        e.logicalY < contentHeight
+                            ? 0.0
+                            : (e.logicalY - contentHeight) *
+                                state.minimapYRatio;
                     top +=
                         AppDimension.of(context).timelineDraggableThumbSize / 2;
                     try {
@@ -55,11 +58,12 @@ class _MinimapView extends StatelessWidget {
                               text,
                               style: TextStyle(
                                 fontSize: 12,
-                                foreground: Paint()
-                                  ..style = PaintingStyle.stroke
-                                  ..strokeWidth = 4
-                                  ..color =
-                                      Theme.of(context).colorScheme.surface,
+                                foreground:
+                                    Paint()
+                                      ..style = PaintingStyle.stroke
+                                      ..strokeWidth = 4
+                                      ..color =
+                                          Theme.of(context).colorScheme.surface,
                               ),
                             ),
                           ),
@@ -110,7 +114,8 @@ class _MinimapBackground extends StatelessWidget {
                 begin: Alignment.centerLeft,
                 end: Alignment.center,
                 colors: Theme.of(context).colorScheme.surface.let(
-                    (c) => [c.withValues(alpha: 0), c.withValues(alpha: .6)]),
+                  (c) => [c.withValues(alpha: 0), c.withValues(alpha: .6)],
+                ),
               ),
             ),
           ),
@@ -121,9 +126,7 @@ class _MinimapBackground extends StatelessWidget {
 }
 
 class _MinimapPadding extends StatelessWidget {
-  const _MinimapPadding({
-    required this.child,
-  });
+  const _MinimapPadding({required this.child});
 
   @override
   Widget build(BuildContext context) {

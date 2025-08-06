@@ -13,34 +13,38 @@ part of 'share_collection_dialog.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {Collection? collection,
-      List<CollectionShare>? processingShares,
-      List<Sharee>? sharees,
-      Suggester<Sharee>? shareeSuggester,
-      ExceptionEvent? error});
+  _State call({
+    Collection? collection,
+    List<CollectionShare>? processingShares,
+    List<Sharee>? sharees,
+    Suggester<Sharee>? shareeSuggester,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic collection,
-      dynamic processingShares,
-      dynamic sharees = copyWithNull,
-      dynamic shareeSuggester = copyWithNull,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic collection,
+    dynamic processingShares,
+    dynamic sharees = copyWithNull,
+    dynamic shareeSuggester = copyWithNull,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        collection: collection as Collection? ?? that.collection,
-        processingShares:
-            processingShares as List<CollectionShare>? ?? that.processingShares,
-        sharees:
-            sharees == copyWithNull ? that.sharees : sharees as List<Sharee>?,
-        shareeSuggester: shareeSuggester == copyWithNull
-            ? that.shareeSuggester
-            : shareeSuggester as Suggester<Sharee>?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      collection: collection as Collection? ?? that.collection,
+      processingShares:
+          processingShares as List<CollectionShare>? ?? that.processingShares,
+      sharees:
+          sharees == copyWithNull ? that.sharees : sharees as List<Sharee>?,
+      shareeSuggester:
+          shareeSuggester == copyWithNull
+              ? that.shareeSuggester
+              : shareeSuggester as Suggester<Sharee>?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

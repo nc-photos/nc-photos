@@ -10,7 +10,9 @@ class Search {
   static bool require(DiContainer c) => DiContainer.has(c, DiType.searchRepo);
 
   Future<List<FileDescriptor>> call(
-      Account account, SearchCriteria criteria) async {
+    Account account,
+    SearchCriteria criteria,
+  ) async {
     final files = await _c.searchRepo.list(account, criteria);
     return files.where((f) => file_util.isSupportedFormat(f)).toList();
   }

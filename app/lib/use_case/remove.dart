@@ -45,8 +45,11 @@ class Remove {
         ++count;
         KiwiContainer().resolve<EventBus>().fire(FileRemovedEvent(account, f));
       } catch (e, stackTrace) {
-        _log.severe("[call] Failed while remove: ${logFilename(f.fdPath)}", e,
-            stackTrace);
+        _log.severe(
+          "[call] Failed while remove: ${logFilename(f.fdPath)}",
+          e,
+          stackTrace,
+        );
         onError?.call(i, f, e, stackTrace);
       }
     }
@@ -55,7 +58,9 @@ class Remove {
 
   // TODO: move to CollectionsController
   Future<void> _cleanUpAlbums(
-      Account account, List<FileDescriptor> removes) async {
+    Account account,
+    List<FileDescriptor> removes,
+  ) async {
     final albums = await ListAlbum(_c)(account).whereType<Album>().toList();
     // figure out which files need to be unshared with whom
     final unshares = <FileDescriptorServerIdentityComparator, Set<CiString>>{};
@@ -63,30 +68,43 @@ class Remove {
     for (final a in albums.where((a) => a.provider is AlbumStaticProvider)) {
       try {
         final provider = AlbumStaticProvider.of(a);
-        final itemsToRemove = provider.items
-            .whereType<AlbumFileItem>()
-            .where((i) =>
-                (i.ownerId == account.userId || i.addedBy == account.userId) &&
-                removes.any((r) => r.compareServerIdentity(i.file)))
-            .toList();
+        final itemsToRemove =
+            provider.items
+                .whereType<AlbumFileItem>()
+                .where(
+                  (i) =>
+                      (i.ownerId == account.userId ||
+                          i.addedBy == account.userId) &&
+                      removes.any((r) => r.compareServerIdentity(i.file)),
+                )
+                .toList();
         if (itemsToRemove.isEmpty) {
           continue;
         }
         for (final i in itemsToRemove) {
           final key = FileDescriptorServerIdentityComparator(i.file);
-          final value = (a.shares?.map((s) => s.userId).toList() ?? [])
-            ..add(a.albumFile!.ownerId!)
-            ..remove(account.userId);
+          final value =
+              (a.shares?.map((s) => s.userId).toList() ?? [])
+                ..add(a.albumFile!.ownerId!)
+                ..remove(account.userId);
           (unshares[key] ??= <CiString>{}).addAll(value);
         }
         _log.fine(
-            "[_cleanUpAlbums] Removing from album '${a.name}': ${itemsToRemove.map((e) => e.file.fdPath).toReadableString()}");
+          "[_cleanUpAlbums] Removing from album '${a.name}': ${itemsToRemove.map((e) => e.file.fdPath).toReadableString()}",
+        );
         // skip unsharing as we'll handle it ourselves
-        await RemoveFromAlbum(_c)(account, a, itemsToRemove,
-            shouldUnshare: false);
+        await RemoveFromAlbum(_c)(
+          account,
+          a,
+          itemsToRemove,
+          shouldUnshare: false,
+        );
       } catch (e, stacktrace) {
         _log.shout(
-            "[_cleanUpAlbums] Failed while updating album", e, stacktrace);
+          "[_cleanUpAlbums] Failed while updating album",
+          e,
+          stacktrace,
+        );
         // continue to next album
       }
     }
@@ -99,7 +117,10 @@ class Remove {
             await RemoveShare(_c.shareRepo)(account, s);
           } catch (e, stackTrace) {
             _log.severe(
-                "[_cleanUpAlbums] Failed while RemoveShare: $s", e, stackTrace);
+              "[_cleanUpAlbums] Failed while RemoveShare: $s",
+              e,
+              stackTrace,
+            );
           }
         }
       } catch (e, stackTrace) {

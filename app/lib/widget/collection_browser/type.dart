@@ -27,10 +27,7 @@ abstract class _ActualItem extends _Item {
 }
 
 abstract class _FileItem extends _ActualItem {
-  const _FileItem({
-    required super.original,
-    required this.file,
-  });
+  const _FileItem({required super.original, required this.file});
 
   @override
   bool operator ==(Object other) =>
@@ -123,12 +120,11 @@ class _LabelItem extends _ActualItem {
   Widget buildWidget(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.isEditMode,
-      builder: (context, isEditMode) => isEditMode
-          ? _EditLabelView(
-              text: text,
-              onEditPressed: onEditPressed,
-            )
-          : _LabelView(text: text),
+      builder:
+          (context, isEditMode) =>
+              isEditMode
+                  ? _EditLabelView(text: text, onEditPressed: onEditPressed)
+                  : _LabelView(text: text),
     );
   }
 
@@ -167,17 +163,19 @@ class _MapItem extends _ActualItem {
   Widget buildWidget(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.isEditMode,
-      builder: (context, isEditMode) => isEditMode
-          ? _EditMapView(
-              location: location,
-              onEditPressed: onEditPressed,
-            )
-          : _MapView(
-              location: location,
-              onTap: () {
-                launchExternalMap(location);
-              },
-            ),
+      builder:
+          (context, isEditMode) =>
+              isEditMode
+                  ? _EditMapView(
+                    location: location,
+                    onEditPressed: onEditPressed,
+                  )
+                  : _MapView(
+                    location: location,
+                    onTap: () {
+                      launchExternalMap(location);
+                    },
+                  ),
     );
   }
 
@@ -199,9 +197,7 @@ class _MapItem extends _ActualItem {
 }
 
 class _DateItem extends _Item {
-  const _DateItem({
-    required this.date,
-  });
+  const _DateItem({required this.date});
 
   @override
   bool get isSelectable => false;
@@ -214,18 +210,14 @@ class _DateItem extends _Item {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return PhotoListDate(
-      date: date,
-    );
+    return PhotoListDate(date: date);
   }
 
   final Date date;
 }
 
 class _PlacePickerRequest {
-  const _PlacePickerRequest({
-    this.initialPosition,
-  });
+  const _PlacePickerRequest({this.initialPosition});
 
   final MapCoord? initialPosition;
 }

@@ -25,8 +25,8 @@ class Account with EquatableMixin {
     required this.username2,
     required this.password,
     required List<String> roots,
-  })  : address = address.trimRightAny("/"),
-        roots = roots.map((e) => e.trimRightAny("/")).toList() {
+  }) : address = address.trimRightAny("/"),
+       roots = roots.map((e) => e.trimRightAny("/")).toList() {
     if (scheme != "http" && scheme != "https") {
       throw const FormatException("scheme is neither http or https");
     }
@@ -66,15 +66,15 @@ class Account with EquatableMixin {
   }
 
   JsonObj toJson() => {
-        "version": version,
-        "id": id,
-        "scheme": scheme,
-        "address": address,
-        "userId": userId.toString(),
-        "username2": username2,
-        "password": password,
-        "roots": roots,
-      };
+    "version": version,
+    "id": id,
+    "scheme": scheme,
+    "address": address,
+    "userId": userId.toString(),
+    "username2": username2,
+    "password": password,
+    "roots": roots,
+  };
 
   @override
   get props => [id, scheme, address, userId, username2, password, roots];
@@ -140,9 +140,7 @@ abstract class AccountUpgrader {
 
 @npLog
 class AccountUpgraderV1 implements AccountUpgrader {
-  const AccountUpgraderV1({
-    this.logAccountId,
-  });
+  const AccountUpgraderV1({this.logAccountId});
 
   @override
   call(JsonObj json) {

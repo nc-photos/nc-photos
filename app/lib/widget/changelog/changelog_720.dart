@@ -12,7 +12,8 @@ class _Changelog720 extends StatelessWidget {
         _subSection("Changes"),
         _bulletGroup(
           const Text(
-              "\"Album\" and \"Nextcloud album\" are renamed to \"Client side album\" and \"Server side album\""),
+            "\"Album\" and \"Nextcloud album\" are renamed to \"Client side album\" and \"Server side album\"",
+          ),
           [
             Align(
               alignment: AlignmentDirectional.centerStart,
@@ -31,15 +32,19 @@ class _Changelog720 extends StatelessWidget {
           ],
         ),
         _bulletGroup(
-            const Text("Client side album now supports adding an inline map")),
+          const Text("Client side album now supports adding an inline map"),
+        ),
         _bulletGroup(
           const Text(
-              "On Nextcloud 28+, app will now read metadata from the server instead of extracting it ourselves"),
+            "On Nextcloud 28+, app will now read metadata from the server instead of extracting it ourselves",
+          ),
           [
             const Text(
-                "Image formats not yet supported by Nextcloud will continue to use the client side method"),
+              "Image formats not yet supported by Nextcloud will continue to use the client side method",
+            ),
             const Text(
-                "Geolocation is done on client side so the background service will continue to run"),
+              "Geolocation is done on client side so the background service will continue to run",
+            ),
           ],
         ),
         _bulletGroup(const Text("Updated French, Turkish")),

@@ -21,20 +21,27 @@ class ScanDir {
       final items = await Ls(fileRepo)(account, root);
       yield items
           .where(
-              (f) => f.isCollection != true && file_util.isSupportedFormat(f))
+            (f) => f.isCollection != true && file_util.isSupportedFormat(f),
+          )
           .toList();
-      for (final i in items.where((element) =>
-          element.isCollection == true &&
-          !element.path
-              .endsWith(remote_storage_util.getRemoteStorageDir(account)))) {
+      for (final i in items.where(
+        (element) =>
+            element.isCollection == true &&
+            !element.path.endsWith(
+              remote_storage_util.getRemoteStorageDir(account),
+            ),
+      )) {
         yield* this(account, i);
       }
     } on CacheNotFoundException catch (e, stackTrace) {
       _log.info("[call] Cache not found");
       yield ExceptionEvent(e, stackTrace);
     } catch (e, stackTrace) {
-      _log.severe("[call] Failed while listing dir: ${logFilename(root.path)}",
-          e, stackTrace);
+      _log.severe(
+        "[call] Failed while listing dir: ${logFilename(root.path)}",
+        e,
+        stackTrace,
+      );
       // for some reason exception thrown here can't be caught outside
       // rethrow;
       yield ExceptionEvent(e, stackTrace);

@@ -13,40 +13,41 @@ part of 'nc_album.dart';
 // **************************************************************************
 
 abstract class $NcAlbumCopyWithWorker {
-  NcAlbum call(
-      {String? path,
-      int? lastPhoto,
-      int? nbItems,
-      String? location,
-      DateTime? dateStart,
-      DateTime? dateEnd,
-      List<NcAlbumCollaborator>? collaborators});
+  NcAlbum call({
+    String? path,
+    int? lastPhoto,
+    int? nbItems,
+    String? location,
+    DateTime? dateStart,
+    DateTime? dateEnd,
+    List<NcAlbumCollaborator>? collaborators,
+  });
 }
 
 class _$NcAlbumCopyWithWorkerImpl implements $NcAlbumCopyWithWorker {
   _$NcAlbumCopyWithWorkerImpl(this.that);
 
   @override
-  NcAlbum call(
-      {dynamic path,
-      dynamic lastPhoto = copyWithNull,
-      dynamic nbItems,
-      dynamic location = copyWithNull,
-      dynamic dateStart = copyWithNull,
-      dynamic dateEnd = copyWithNull,
-      dynamic collaborators}) {
+  NcAlbum call({
+    dynamic path,
+    dynamic lastPhoto = copyWithNull,
+    dynamic nbItems,
+    dynamic location = copyWithNull,
+    dynamic dateStart = copyWithNull,
+    dynamic dateEnd = copyWithNull,
+    dynamic collaborators,
+  }) {
     return NcAlbum(
-        path: path as String? ?? that.path,
-        lastPhoto:
-            lastPhoto == copyWithNull ? that.lastPhoto : lastPhoto as int?,
-        nbItems: nbItems as int? ?? that.nbItems,
-        location:
-            location == copyWithNull ? that.location : location as String?,
-        dateStart:
-            dateStart == copyWithNull ? that.dateStart : dateStart as DateTime?,
-        dateEnd: dateEnd == copyWithNull ? that.dateEnd : dateEnd as DateTime?,
-        collaborators:
-            collaborators as List<NcAlbumCollaborator>? ?? that.collaborators);
+      path: path as String? ?? that.path,
+      lastPhoto: lastPhoto == copyWithNull ? that.lastPhoto : lastPhoto as int?,
+      nbItems: nbItems as int? ?? that.nbItems,
+      location: location == copyWithNull ? that.location : location as String?,
+      dateStart:
+          dateStart == copyWithNull ? that.dateStart : dateStart as DateTime?,
+      dateEnd: dateEnd == copyWithNull ? that.dateEnd : dateEnd as DateTime?,
+      collaborators:
+          collaborators as List<NcAlbumCollaborator>? ?? that.collaborators,
+    );
   }
 
   final NcAlbum that;

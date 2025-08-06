@@ -37,22 +37,17 @@ class AlbumImporter extends StatefulWidget {
   static const routeName = "/album-importer";
 
   static Route buildRoute(
-          AlbumImporterArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => AlbumImporter.fromArgs(args),
-        settings: settings,
-      );
+    AlbumImporterArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => AlbumImporter.fromArgs(args),
+    settings: settings,
+  );
 
-  const AlbumImporter({
-    super.key,
-    required this.account,
-  });
+  const AlbumImporter({super.key, required this.account});
 
   AlbumImporter.fromArgs(AlbumImporterArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-        );
+    : this(key: key, account: args.account);
 
   @override
   createState() => _AlbumImporterState();
@@ -85,9 +80,9 @@ class _AlbumImporterState extends State<AlbumImporter> {
         listener: (context, state) => _onStateChange(context, state),
         child:
             BlocBuilder<ListImportableAlbumBloc, ListImportableAlbumBlocState>(
-          bloc: _bloc,
-          builder: (context, state) => _buildContent(context, state),
-        ),
+              bloc: _bloc,
+              builder: (context, state) => _buildContent(context, state),
+            ),
       ),
     );
   }
@@ -95,15 +90,20 @@ class _AlbumImporterState extends State<AlbumImporter> {
   void _initBloc() {
     _log.info("[_initBloc] Initialize bloc");
     _bloc = ListImportableAlbumBloc(KiwiContainer().resolve<DiContainer>());
-    _bloc.add(ListImportableAlbumBlocQuery(
+    _bloc.add(
+      ListImportableAlbumBlocQuery(
         widget.account,
         widget.account.roots
             .map((e) => File(path: file_util.unstripPath(widget.account, e)))
-            .toList()));
+            .toList(),
+      ),
+    );
   }
 
   Widget _buildContent(
-      BuildContext context, ListImportableAlbumBlocState state) {
+    BuildContext context,
+    ListImportableAlbumBlocState state,
+  ) {
     return SafeArea(
       child: Column(
         children: [
@@ -119,9 +119,7 @@ class _AlbumImporterState extends State<AlbumImporter> {
                 const SizedBox(height: 8),
                 Align(
                   alignment: AlignmentDirectional.topStart,
-                  child: Text(
-                    L10n.global().albumImporterSubHeaderText,
-                  ),
+                  child: Text(L10n.global().albumImporterSubHeaderText),
                 ),
               ],
             ),
@@ -150,8 +148,9 @@ class _AlbumImporterState extends State<AlbumImporter> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child:
-                      Text(MaterialLocalizations.of(context).cancelButtonLabel),
+                  child: Text(
+                    MaterialLocalizations.of(context).cancelButtonLabel,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: () => _onImportPressed(context),
@@ -167,8 +166,8 @@ class _AlbumImporterState extends State<AlbumImporter> {
 
   Widget _buildList(BuildContext context, ListImportableAlbumBlocState state) {
     return ListView.separated(
-      itemBuilder: (context, index) =>
-          _buildItem(context, _backingFiles[index]),
+      itemBuilder:
+          (context, index) => _buildItem(context, _backingFiles[index]),
       separatorBuilder: (context, index) => const Divider(),
       itemCount: _backingFiles.length,
     );
@@ -191,8 +190,9 @@ class _AlbumImporterState extends State<AlbumImporter> {
       leading: IconButton(
         icon: AnimatedSwitcher(
           duration: k.animationDurationShort,
-          transitionBuilder: (child, animation) =>
-              ScaleTransition(scale: animation, child: child),
+          transitionBuilder:
+              (child, animation) =>
+                  ScaleTransition(scale: animation, child: child),
           child: Icon(
             isPicked ? Icons.check_box : Icons.check_box_outline_blank,
             key: ValueKey(isPicked),
@@ -207,7 +207,9 @@ class _AlbumImporterState extends State<AlbumImporter> {
   }
 
   void _onStateChange(
-      BuildContext context, ListImportableAlbumBlocState state) {
+    BuildContext context,
+    ListImportableAlbumBlocState state,
+  ) {
     if (state is ListImportableAlbumBlocSuccess ||
         state is ListImportableAlbumBlocLoading) {
       _transformItems(state.items);
@@ -221,8 +223,9 @@ class _AlbumImporterState extends State<AlbumImporter> {
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (context) =>
-            ProcessingDialog(text: L10n.global().albumImporterProgressText),
+        builder:
+            (context) =>
+                ProcessingDialog(text: L10n.global().albumImporterProgressText),
       ),
     );
     try {
@@ -241,9 +244,7 @@ class _AlbumImporterState extends State<AlbumImporter> {
       try {
         var album = Album(
           name: p.filename,
-          provider: AlbumDirProvider(
-            dirs: [p],
-          ),
+          provider: AlbumDirProvider(dirs: [p]),
           coverProvider: const AlbumAutoCoverProvider(),
           sortProvider: const AlbumTimeSortProvider(isAscending: false),
         );
@@ -251,22 +252,29 @@ class _AlbumImporterState extends State<AlbumImporter> {
 
         final items = await PreProcessAlbum(_c)(widget.account, album);
         album = await UpdateAlbumWithActualItems(null)(
-            widget.account, album, items);
+          widget.account,
+          album,
+          items,
+        );
 
         await CreateAlbum(_c.albumRepo)(widget.account, album);
       } catch (e, stacktrace) {
         _log.shout(
-            "[_createAllAlbums] Failed creating dir album", e, stacktrace);
+          "[_createAllAlbums] Failed creating dir album",
+          e,
+          stacktrace,
+        );
         SnackBarManager().showSnackBarForException(e);
       }
     }
   }
 
   void _transformItems(List<ListImportableAlbumBlocItem> items) {
-    _backingFiles = items
-        .sorted((a, b) => b.photoCount - a.photoCount)
-        .map((e) => e.file)
-        .toList();
+    _backingFiles =
+        items
+            .sorted((a, b) => b.photoCount - a.photoCount)
+            .map((e) => e.file)
+            .toList();
   }
 
   late final DiContainer _c;

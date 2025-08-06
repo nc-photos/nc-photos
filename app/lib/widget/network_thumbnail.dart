@@ -27,31 +27,25 @@ class NetworkRectThumbnail extends StatelessWidget {
     final child = FittedBox(
       clipBehavior: Clip.hardEdge,
       fit: BoxFit.cover,
-      child: CachedNetworkImageBuilder(
-        type: CachedNetworkImageType.thumbnail,
-        imageUrl: imageUrl,
-        mime: mime,
-        account: account,
-        imageBuilder: (_, child, __) => _SizeObserver(
-          onSize: onSize,
-          child: child,
-        ),
-        errorWidget: (context, __, ___) => SizedBox.square(
-          dimension: dimension,
-          child: errorBuilder(context),
-        ),
-      ).build(),
+      child:
+          CachedNetworkImageBuilder(
+            type: CachedNetworkImageType.thumbnail,
+            imageUrl: imageUrl,
+            mime: mime,
+            account: account,
+            imageBuilder:
+                (_, child, __) => _SizeObserver(onSize: onSize, child: child),
+            errorWidget:
+                (context, __, ___) => SizedBox.square(
+                  dimension: dimension,
+                  child: errorBuilder(context),
+                ),
+          ).build(),
     );
     if (dimension != null) {
-      return SizedBox.square(
-        dimension: dimension,
-        child: child,
-      );
+      return SizedBox.square(dimension: dimension, child: child);
     } else {
-      return AspectRatio(
-        aspectRatio: 1,
-        child: child,
-      );
+      return AspectRatio(aspectRatio: 1, child: child);
     }
   }
 
@@ -64,10 +58,7 @@ class NetworkRectThumbnail extends StatelessWidget {
 }
 
 class _SizeObserver extends SingleChildRenderObjectWidget {
-  const _SizeObserver({
-    super.child,
-    this.onSize,
-  });
+  const _SizeObserver({super.child, this.onSize});
 
   @override
   RenderObject createRenderObject(BuildContext context) {

@@ -70,7 +70,10 @@ class ListPerson {
     } catch (e, stackTrace) {
       // not installed?
       _log.severe(
-          "[_withRecognize] Failed while ListRecognizeFace", e, stackTrace);
+        "[_withRecognize] Failed while ListRecognizeFace",
+        e,
+        stackTrace,
+      );
     }
   }
 

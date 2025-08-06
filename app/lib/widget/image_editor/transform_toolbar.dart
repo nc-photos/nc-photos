@@ -3,10 +3,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/widget/image_editor/toolbar_button.dart';
 import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 
-enum TransformToolType {
-  crop,
-  orientation,
-}
+enum TransformToolType { crop, orientation }
 
 abstract class TransformArguments {
   ImageFilter? toImageFilter();
@@ -42,12 +39,8 @@ class _TransformToolbarState extends State<TransformToolbar> {
   }
 
   @override
-  build(BuildContext context) => Column(
-        children: [
-          _buildFilterOption(context),
-          _buildFilterBar(context),
-        ],
-      );
+  build(BuildContext context) =>
+      Column(children: [_buildFilterOption(context), _buildFilterBar(context)]);
 
   Widget _buildFilterOption(BuildContext context) {
     Widget? child;
@@ -200,7 +193,9 @@ class _TransformToolbarState extends State<TransformToolbar> {
   void _onCropPressed() =>
       _onFilterPressed(TransformToolType.crop, const _DummyCropArguments());
   void _onOrientationPressed() => _onFilterPressed(
-      TransformToolType.orientation, const _OrientationArguments(0));
+    TransformToolType.orientation,
+    const _OrientationArguments(0),
+  );
 
   void _onOrientationOptionPressed(int value) {
     setState(() {
@@ -260,9 +255,10 @@ class _OrientationButton extends StatelessWidget {
             onTap: onPressed,
             child: Container(
               decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : null,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.secondaryContainer
+                        : null,
                 // borderRadius: const BorderRadius.all(Radius.circular(24)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -271,9 +267,10 @@ class _OrientationButton extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: isSelected
-                      ? Theme.of(context).colorScheme.onSecondaryContainer
-                      : Theme.of(context).colorScheme.onSurface,
+                  color:
+                      isSelected
+                          ? Theme.of(context).colorScheme.onSecondaryContainer
+                          : Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),

@@ -10,9 +10,7 @@ class _State {
     required this.isDone,
   });
 
-  factory _State.init() => const _State(
-        isDone: false,
-      );
+  factory _State.init() => const _State(isDone: false);
 
   @override
   String toString() => _$toString();

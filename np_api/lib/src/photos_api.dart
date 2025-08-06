@@ -102,31 +102,36 @@ class _ApiPhotosAlbumsAlike {
     final builder = XmlBuilder();
     builder
       ..processing("xml", "version=\"1.0\"")
-      ..element("d:propfind", namespaces: namespaces, nest: () {
-        builder.element("d:prop", nest: () {
-          if (lastPhoto != null) {
-            builder.element("nc:last-photo");
-          }
-          if (nbItems != null) {
-            builder.element("nc:nbItems");
-          }
-          if (location != null) {
-            builder.element("nc:location");
-          }
-          if (dateRange != null) {
-            builder.element("nc:dateRange");
-          }
-          if (collaborators != null) {
-            builder.element("nc:collaborators");
-          }
-        });
-      });
+      ..element(
+        "d:propfind",
+        namespaces: namespaces,
+        nest: () {
+          builder.element(
+            "d:prop",
+            nest: () {
+              if (lastPhoto != null) {
+                builder.element("nc:last-photo");
+              }
+              if (nbItems != null) {
+                builder.element("nc:nbItems");
+              }
+              if (location != null) {
+                builder.element("nc:location");
+              }
+              if (dateRange != null) {
+                builder.element("nc:dateRange");
+              }
+              if (collaborators != null) {
+                builder.element("nc:collaborators");
+              }
+            },
+          );
+        },
+      );
     return await api.request(
       "PROPFIND",
       endpoint,
-      header: {
-        "Content-Type": "application/xml",
-      },
+      header: {"Content-Type": "application/xml"},
       body: builder.buildDocument().toXmlString(),
     );
   }
@@ -156,15 +161,17 @@ class ApiPhotosAlbum {
   }) async {
     final endpoint = "${ApiPhotos.path}/${photos.userId}/albums/$albumId";
     try {
-      final bool hasDavNs = (getcontentlength != null ||
-          getcontenttype != null ||
-          getetag != null ||
-          getlastmodified != null ||
-          resourcetype != null);
-      final bool hasNcNs = (faceDetections != null ||
-          fileMetadataSize != null ||
-          hasPreview != null ||
-          realpath != null);
+      final bool hasDavNs =
+          (getcontentlength != null ||
+              getcontenttype != null ||
+              getetag != null ||
+              getlastmodified != null ||
+              resourcetype != null);
+      final bool hasNcNs =
+          (faceDetections != null ||
+              fileMetadataSize != null ||
+              hasPreview != null ||
+              realpath != null);
       final bool hasOcNs =
           (favorite != null || fileid != null || permissions != null);
       if (!hasDavNs && !hasOcNs && !hasNcNs) {
@@ -180,52 +187,57 @@ class ApiPhotosAlbum {
       final builder = XmlBuilder();
       builder
         ..processing("xml", "version=\"1.0\"")
-        ..element("d:propfind", namespaces: namespaces, nest: () {
-          builder.element("d:prop", nest: () {
-            if (getcontentlength != null) {
-              builder.element("d:getcontentlength");
-            }
-            if (getcontenttype != null) {
-              builder.element("d:getcontenttype");
-            }
-            if (getetag != null) {
-              builder.element("d:getetag");
-            }
-            if (getlastmodified != null) {
-              builder.element("d:getlastmodified");
-            }
-            if (resourcetype != null) {
-              builder.element("d:resourcetype");
-            }
-            if (faceDetections != null) {
-              builder.element("nc:face-detections");
-            }
-            if (fileMetadataSize != null) {
-              builder.element("nc:file-metadata-size");
-            }
-            if (hasPreview != null) {
-              builder.element("nc:has-preview");
-            }
-            if (realpath != null) {
-              builder.element("nc:realpath");
-            }
-            if (favorite != null) {
-              builder.element("oc:favorite");
-            }
-            if (fileid != null) {
-              builder.element("oc:fileid");
-            }
-            if (permissions != null) {
-              builder.element("oc:permissions");
-            }
-          });
-        });
+        ..element(
+          "d:propfind",
+          namespaces: namespaces,
+          nest: () {
+            builder.element(
+              "d:prop",
+              nest: () {
+                if (getcontentlength != null) {
+                  builder.element("d:getcontentlength");
+                }
+                if (getcontenttype != null) {
+                  builder.element("d:getcontenttype");
+                }
+                if (getetag != null) {
+                  builder.element("d:getetag");
+                }
+                if (getlastmodified != null) {
+                  builder.element("d:getlastmodified");
+                }
+                if (resourcetype != null) {
+                  builder.element("d:resourcetype");
+                }
+                if (faceDetections != null) {
+                  builder.element("nc:face-detections");
+                }
+                if (fileMetadataSize != null) {
+                  builder.element("nc:file-metadata-size");
+                }
+                if (hasPreview != null) {
+                  builder.element("nc:has-preview");
+                }
+                if (realpath != null) {
+                  builder.element("nc:realpath");
+                }
+                if (favorite != null) {
+                  builder.element("oc:favorite");
+                }
+                if (fileid != null) {
+                  builder.element("oc:fileid");
+                }
+                if (permissions != null) {
+                  builder.element("oc:permissions");
+                }
+              },
+            );
+          },
+        );
       return await api.request(
         "PROPFIND",
         endpoint,
-        header: {
-          "Content-Type": "application/xml",
-        },
+        header: {"Content-Type": "application/xml"},
         body: builder.buildDocument().toXmlString(),
       );
     } catch (e) {

@@ -44,19 +44,14 @@ abstract class FilesStreamEvent {
 
 @genCopyWith
 class FilesSummaryStreamEvent {
-  const FilesSummaryStreamEvent({
-    required this.summary,
-  });
+  const FilesSummaryStreamEvent({required this.summary});
 
   final DbFilesSummary summary;
 }
 
 @genCopyWith
 class TimelineStreamEvent {
-  const TimelineStreamEvent({
-    required this.data,
-    required this.isDummy,
-  });
+  const TimelineStreamEvent({required this.data, required this.isDummy});
 
   final Map<int, FileDescriptor> data;
   final bool isDummy;
@@ -69,10 +64,12 @@ class FilesController {
     required this.account,
     required this.accountPrefController,
   }) {
-    _subscriptions.add(accountPrefController.shareFolderChange.listen((event) {
-      // sync remote if share folder is modified
-      syncRemote();
-    }));
+    _subscriptions.add(
+      accountPrefController.shareFolderChange.listen((event) {
+        // sync remote if share folder is modified
+        syncRemote();
+      }),
+    );
   }
 
   void dispose() {
@@ -124,7 +121,9 @@ class FilesController {
     try {
       final shareDir = File(
         path: file_util.unstripPath(
-            account, accountPrefController.shareFolderValue),
+          account,
+          accountPrefController.shareFolderValue,
+        ),
       );
       var isShareDirIncluded = false;
 
@@ -142,11 +141,16 @@ class FilesController {
               onProgressUpdate?.call(Progress(merged, value.text));
             },
           );
-          isShareDirIncluded |=
-              file_util.isOrUnderDirPath(shareDir.path, dirPath);
+          isShareDirIncluded |= file_util.isOrUnderDirPath(
+            shareDir.path,
+            dirPath,
+          );
         } catch (e, stackTrace) {
           _log.severe(
-              "[syncRemote] Failed while SyncDir: $dirPath", e, stackTrace);
+            "[syncRemote] Failed while SyncDir: $dirPath",
+            e,
+            stackTrace,
+          );
           _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
         }
         progress.next();
@@ -155,11 +159,17 @@ class FilesController {
       if (!isShareDirIncluded) {
         _log.info("[syncRemote] Explicitly scanning share folder");
         try {
-          hasChange |=
-              await SyncDir(_c)(account, shareDir.path, isRecursive: false);
+          hasChange |= await SyncDir(_c)(
+            account,
+            shareDir.path,
+            isRecursive: false,
+          );
         } catch (e, stackTrace) {
-          _log.severe("[syncRemote] Failed while SyncDir: ${shareDir.path}", e,
-              stackTrace);
+          _log.severe(
+            "[syncRemote] Failed while SyncDir: ${shareDir.path}",
+            e,
+            stackTrace,
+          );
           _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
         }
       }
@@ -167,9 +177,9 @@ class FilesController {
         // load the synced content to stream
         unawaited(_reload());
       } else {
-        _dataStreamController.addWithValue((value) => value.copyWith(
-              hasNext: false,
-            ));
+        _dataStreamController.addWithValue(
+          (value) => value.copyWith(hasNext: false),
+        );
       }
     } finally {
       _isSyncing = false;
@@ -272,9 +282,10 @@ class FilesController {
         );
       } catch (e, stackTrace) {
         _log.severe(
-            "[updateProperty] Failed while UpdateProperty: ${logFilename(f.fdPath)}",
-            e,
-            stackTrace);
+          "[updateProperty] Failed while UpdateProperty: ${logFilename(f.fdPath)}",
+          e,
+          stackTrace,
+        );
         failures.add(f);
         dataOutdated.remove(f.fdId);
         timelineOutdated.remove(f.fdId);
@@ -301,8 +312,9 @@ class FilesController {
         }
         return value.copyWith(data: next);
       });
-      errorBuilder(failures)
-          ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+      errorBuilder(
+        failures,
+      )?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
     }
 
     // TODO query outdated
@@ -361,9 +373,10 @@ class FilesController {
         files,
         onError: (index, value, error, stackTrace) {
           _log.severe(
-              "[remove] Failed while Remove: ${logFilename(value.fdPath)}",
-              error,
-              stackTrace);
+            "[remove] Failed while Remove: ${logFilename(value.fdPath)}",
+            error,
+            stackTrace,
+          );
           failures.add(value);
         },
       );
@@ -405,8 +418,9 @@ class FilesController {
         }
         return value.copyWith(data: next);
       });
-      errorBuilder(failures)
-          ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+      errorBuilder(
+        failures,
+      )?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
     }
   }
 
@@ -419,14 +433,15 @@ class FilesController {
     }
 
     // do async ops first
-    final fileExifFiles =
-        await fileExifs?.letFuture((e) async => await FindFileDescriptor(_c)(
-              account,
-              e,
-              onFileNotFound: (id) {
-                _log.warning("[applySyncResult] File id not found: $id");
-              },
-            ));
+    final fileExifFiles = await fileExifs?.letFuture(
+      (e) async => await FindFileDescriptor(_c)(
+        account,
+        e,
+        onFileNotFound: (id) {
+          _log.warning("[applySyncResult] File id not found: $id");
+        },
+      ),
+    );
 
     final dataNext = Map.of(_dataStreamController.value.files);
     final timelineNext = Map.of(_dataStreamController.value.files);
@@ -440,15 +455,17 @@ class FilesController {
       unawaited(_reloadSummary());
     }
     _dataStreamController.addWithValue((v) => v.copyWith(files: dataNext));
-    _timelineStreamController
-        .addWithValue((v) => v.copyWith(data: timelineNext));
+    _timelineStreamController.addWithValue(
+      (v) => v.copyWith(data: timelineNext),
+    );
   }
 
   Future<void> queryByFileId(List<int> fileIds) async {
     try {
-      final interests = fileIds
-          .where((e) => !_dataStreamController.value.files.containsKey(e))
-          .toList();
+      final interests =
+          fileIds
+              .where((e) => !_dataStreamController.value.files.containsKey(e))
+              .toList();
       if (interests.isEmpty) {
         return;
       }
@@ -460,9 +477,9 @@ class FilesController {
         },
       );
       final data = _toFileMap(files);
-      _dataStreamController.addWithValue((v) => v.copyWith(
-            files: v.files.addedAll(data),
-          ));
+      _dataStreamController.addWithValue(
+        (v) => v.copyWith(files: v.files.addedAll(data)),
+      );
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
     }
@@ -475,9 +492,9 @@ class FilesController {
         file_util.unstripPath(account, accountPrefController.shareFolderValue),
       );
       final data = _toFileMap(files);
-      _dataStreamController.addWithValue((v) => v.copyWith(
-            files: v.files.addedAll(data),
-          ));
+      _dataStreamController.addWithValue(
+        (v) => v.copyWith(files: v.files.addedAll(data)),
+      );
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
     }
@@ -491,13 +508,12 @@ class FilesController {
         timeRange: dateRange.toLocalTimeRange(),
       );
       final data = _toFileMap(files);
-      _timelineStreamController.addWithValue((v) => v.copyWith(
-            data: v.data.addedAll(data),
-            isDummy: false,
-          ));
-      _dataStreamController.addWithValue((v) => v.copyWith(
-            files: v.files.addedAll(data),
-          ));
+      _timelineStreamController.addWithValue(
+        (v) => v.copyWith(data: v.data.addedAll(data), isDummy: false),
+      );
+      _dataStreamController.addWithValue(
+        (v) => v.copyWith(files: v.files.addedAll(data)),
+      );
       _addTimelineDateRange(dateRange);
     } catch (e, stackTrace) {
       _timelineErrorStreamController.add(ExceptionEvent(e, stackTrace));
@@ -505,7 +521,9 @@ class FilesController {
   }
 
   void _applySyncFavoriteResult(
-      Map<int, FileDescriptor> next, DbSyncIdResult result) {
+    Map<int, FileDescriptor> next,
+    DbSyncIdResult result,
+  ) {
     for (final id in result.insert) {
       final f = next[id];
       if (f == null) {
@@ -531,7 +549,9 @@ class FilesController {
   }
 
   void _applySyncFileExifResult(
-      Map<int, FileDescriptor> next, List<FileDescriptor> results) {
+    Map<int, FileDescriptor> next,
+    List<FileDescriptor> results,
+  ) {
     for (final f in results) {
       next[f.fdId] = f;
     }
@@ -547,10 +567,9 @@ class FilesController {
         // file removed, can be ignored
       },
     );
-    _dataStreamController.add(_FilesStreamEvent(
-      files: _toFileMap(newFiles),
-      hasNext: false,
-    ));
+    _dataStreamController.add(
+      _FilesStreamEvent(files: _toFileMap(newFiles), hasNext: false),
+    );
     final diff = await _reloadSummary();
     final dropDates = [
       ...diff.onlyInThis.keys,
@@ -571,20 +590,24 @@ class FilesController {
   }
 
   Map<int, FileDescriptor> _toFileMap(List<FileDescriptor> results) {
-    return {
-      for (final f in results) f.fdId: f,
-    };
+    return {for (final f in results) f.fdId: f};
   }
 
   Future<DbFilesSummaryDiff> _reloadSummary() async {
-    final original = _summaryStreamController.valueOrNull?.summary ??
+    final original =
+        _summaryStreamController.valueOrNull?.summary ??
         const DbFilesSummary(items: {});
     final results = await _c.npDb.getFilesSummary(
       account: account.toDb(),
-      includeRelativeRoots: account.roots
-          .map((e) => File(path: file_util.unstripPath(account, e))
-              .strippedPathWithEmpty)
-          .toList(),
+      includeRelativeRoots:
+          account.roots
+              .map(
+                (e) =>
+                    File(
+                      path: file_util.unstripPath(account, e),
+                    ).strippedPathWithEmpty,
+              )
+              .toList(),
       includeRelativeDirs: [accountPrefController.shareFolderValue],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
@@ -653,9 +676,10 @@ class FilesController {
 
   void _addTimelineDateRange(DateRange dateRange) {
     // merge and sort the ranges
-    final sorted = List.of(_timelineQueriedRanges)
-      ..add(dateRange)
-      ..sort((a, b) => b.to!.compareTo(a.to!));
+    final sorted =
+        List.of(_timelineQueriedRanges)
+          ..add(dateRange)
+          ..sort((a, b) => b.to!.compareTo(a.to!));
     final results = <DateRange>[];
     for (final d in sorted) {
       if (results.isEmpty) {
@@ -676,10 +700,7 @@ class FilesController {
   final AccountPrefController accountPrefController;
 
   final _dataStreamController = BehaviorSubject.seeded(
-    _FilesStreamEvent(
-      files: const {},
-      hasNext: true,
-    ),
+    _FilesStreamEvent(files: const {}, hasNext: true),
   );
   final _dataErrorStreamController =
       StreamController<ExceptionEvent>.broadcast();
@@ -741,10 +762,7 @@ class _FilesStreamEvent implements FilesStreamEvent {
     this.dataLazy = dataLazy ?? (Lazy(() => files.values.toList()));
   }
 
-  _FilesStreamEvent copyWith({
-    Map<int, FileDescriptor>? files,
-    bool? hasNext,
-  }) {
+  _FilesStreamEvent copyWith({Map<int, FileDescriptor>? files, bool? hasNext}) {
     return _FilesStreamEvent(
       files: files ?? this.files,
       dataLazy: (files == null) ? dataLazy : null,

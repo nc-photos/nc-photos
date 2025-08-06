@@ -13,103 +13,107 @@ part of 'home_photos2.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<FileDescriptor>? files,
-      bool? isLoading,
-      List<List<_Item>>? transformedItems,
-      Set<_Item>? selectedItems,
-      DbFilesSummary? filesSummary,
-      Set<_VisibleDate>? visibleDates,
-      Set<Date>? queriedDates,
-      bool? isEnableMemoryCollection,
-      List<Collection>? memoryCollections,
-      Progress? syncProgress,
-      int? zoom,
-      double? scale,
-      int? finger,
-      double? viewWidth,
-      double? viewHeight,
-      double? viewOverlayPadding,
-      int? itemPerRow,
-      double? itemSize,
-      bool? isScrolling,
-      List<_MinimapItem>? minimapItems,
-      double? minimapYRatio,
-      Date? scrollDate,
-      bool? hasMissingVideoPreview,
-      ExceptionEvent? error});
+  _State call({
+    List<FileDescriptor>? files,
+    bool? isLoading,
+    List<List<_Item>>? transformedItems,
+    Set<_Item>? selectedItems,
+    DbFilesSummary? filesSummary,
+    Set<_VisibleDate>? visibleDates,
+    Set<Date>? queriedDates,
+    bool? isEnableMemoryCollection,
+    List<Collection>? memoryCollections,
+    Progress? syncProgress,
+    int? zoom,
+    double? scale,
+    int? finger,
+    double? viewWidth,
+    double? viewHeight,
+    double? viewOverlayPadding,
+    int? itemPerRow,
+    double? itemSize,
+    bool? isScrolling,
+    List<_MinimapItem>? minimapItems,
+    double? minimapYRatio,
+    Date? scrollDate,
+    bool? hasMissingVideoPreview,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic files,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic selectedItems,
-      dynamic filesSummary,
-      dynamic visibleDates,
-      dynamic queriedDates,
-      dynamic isEnableMemoryCollection,
-      dynamic memoryCollections,
-      dynamic syncProgress = copyWithNull,
-      dynamic zoom,
-      dynamic scale = copyWithNull,
-      dynamic finger,
-      dynamic viewWidth = copyWithNull,
-      dynamic viewHeight = copyWithNull,
-      dynamic viewOverlayPadding = copyWithNull,
-      dynamic itemPerRow = copyWithNull,
-      dynamic itemSize = copyWithNull,
-      dynamic isScrolling,
-      dynamic minimapItems = copyWithNull,
-      dynamic minimapYRatio,
-      dynamic scrollDate = copyWithNull,
-      dynamic hasMissingVideoPreview,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic files,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic selectedItems,
+    dynamic filesSummary,
+    dynamic visibleDates,
+    dynamic queriedDates,
+    dynamic isEnableMemoryCollection,
+    dynamic memoryCollections,
+    dynamic syncProgress = copyWithNull,
+    dynamic zoom,
+    dynamic scale = copyWithNull,
+    dynamic finger,
+    dynamic viewWidth = copyWithNull,
+    dynamic viewHeight = copyWithNull,
+    dynamic viewOverlayPadding = copyWithNull,
+    dynamic itemPerRow = copyWithNull,
+    dynamic itemSize = copyWithNull,
+    dynamic isScrolling,
+    dynamic minimapItems = copyWithNull,
+    dynamic minimapYRatio,
+    dynamic scrollDate = copyWithNull,
+    dynamic hasMissingVideoPreview,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        files: files as List<FileDescriptor>? ?? that.files,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<List<_Item>>? ?? that.transformedItems,
-        selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
-        filesSummary: filesSummary as DbFilesSummary? ?? that.filesSummary,
-        visibleDates: visibleDates as Set<_VisibleDate>? ?? that.visibleDates,
-        queriedDates: queriedDates as Set<Date>? ?? that.queriedDates,
-        isEnableMemoryCollection:
-            isEnableMemoryCollection as bool? ?? that.isEnableMemoryCollection,
-        memoryCollections:
-            memoryCollections as List<Collection>? ?? that.memoryCollections,
-        syncProgress: syncProgress == copyWithNull
-            ? that.syncProgress
-            : syncProgress as Progress?,
-        zoom: zoom as int? ?? that.zoom,
-        scale: scale == copyWithNull ? that.scale : scale as double?,
-        finger: finger as int? ?? that.finger,
-        viewWidth:
-            viewWidth == copyWithNull ? that.viewWidth : viewWidth as double?,
-        viewHeight: viewHeight == copyWithNull
-            ? that.viewHeight
-            : viewHeight as double?,
-        viewOverlayPadding: viewOverlayPadding == copyWithNull
-            ? that.viewOverlayPadding
-            : viewOverlayPadding as double?,
-        itemPerRow:
-            itemPerRow == copyWithNull ? that.itemPerRow : itemPerRow as int?,
-        itemSize:
-            itemSize == copyWithNull ? that.itemSize : itemSize as double?,
-        isScrolling: isScrolling as bool? ?? that.isScrolling,
-        minimapItems: minimapItems == copyWithNull
-            ? that.minimapItems
-            : minimapItems as List<_MinimapItem>?,
-        minimapYRatio: minimapYRatio as double? ?? that.minimapYRatio,
-        scrollDate:
-            scrollDate == copyWithNull ? that.scrollDate : scrollDate as Date?,
-        hasMissingVideoPreview:
-            hasMissingVideoPreview as bool? ?? that.hasMissingVideoPreview,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      files: files as List<FileDescriptor>? ?? that.files,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<List<_Item>>? ?? that.transformedItems,
+      selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
+      filesSummary: filesSummary as DbFilesSummary? ?? that.filesSummary,
+      visibleDates: visibleDates as Set<_VisibleDate>? ?? that.visibleDates,
+      queriedDates: queriedDates as Set<Date>? ?? that.queriedDates,
+      isEnableMemoryCollection:
+          isEnableMemoryCollection as bool? ?? that.isEnableMemoryCollection,
+      memoryCollections:
+          memoryCollections as List<Collection>? ?? that.memoryCollections,
+      syncProgress:
+          syncProgress == copyWithNull
+              ? that.syncProgress
+              : syncProgress as Progress?,
+      zoom: zoom as int? ?? that.zoom,
+      scale: scale == copyWithNull ? that.scale : scale as double?,
+      finger: finger as int? ?? that.finger,
+      viewWidth:
+          viewWidth == copyWithNull ? that.viewWidth : viewWidth as double?,
+      viewHeight:
+          viewHeight == copyWithNull ? that.viewHeight : viewHeight as double?,
+      viewOverlayPadding:
+          viewOverlayPadding == copyWithNull
+              ? that.viewOverlayPadding
+              : viewOverlayPadding as double?,
+      itemPerRow:
+          itemPerRow == copyWithNull ? that.itemPerRow : itemPerRow as int?,
+      itemSize: itemSize == copyWithNull ? that.itemSize : itemSize as double?,
+      isScrolling: isScrolling as bool? ?? that.isScrolling,
+      minimapItems:
+          minimapItems == copyWithNull
+              ? that.minimapItems
+              : minimapItems as List<_MinimapItem>?,
+      minimapYRatio: minimapYRatio as double? ?? that.minimapYRatio,
+      scrollDate:
+          scrollDate == copyWithNull ? that.scrollDate : scrollDate as Date?,
+      hasMissingVideoPreview:
+          hasMissingVideoPreview as bool? ?? that.hasMissingVideoPreview,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

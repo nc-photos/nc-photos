@@ -41,8 +41,8 @@ class CollectionListSmall extends StatelessWidget {
                 child: Text(
                   label,
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).onDarkSurface,
-                      ),
+                    color: Theme.of(context).onDarkSurface,
+                  ),
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -61,9 +61,7 @@ class CollectionListSmall extends StatelessWidget {
           Positioned.fill(
             child: Material(
               type: MaterialType.transparency,
-              child: InkWell(
-                onTap: onTap,
-              ),
+              child: InkWell(onTap: onTap),
             ),
           ),
         ],

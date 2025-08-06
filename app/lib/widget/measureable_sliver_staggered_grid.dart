@@ -12,24 +12,26 @@ class MeasurableSliverStaggeredGrid extends SliverStaggeredGrid {
     double mainAxisSpacing = 0,
     double crossAxisSpacing = 0,
   }) : super(
-          gridDelegate: SliverStaggeredGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: maxCrossAxisExtent,
-            mainAxisSpacing: mainAxisSpacing,
-            crossAxisSpacing: crossAxisSpacing,
-            staggeredTileBuilder: staggeredTileBuilder,
-            staggeredTileCount: itemCount,
-          ),
-          delegate: SliverChildBuilderDelegate(
-            itemBuilder,
-            childCount: itemCount,
-          ),
-        );
+         gridDelegate: SliverStaggeredGridDelegateWithMaxCrossAxisExtent(
+           maxCrossAxisExtent: maxCrossAxisExtent,
+           mainAxisSpacing: mainAxisSpacing,
+           crossAxisSpacing: crossAxisSpacing,
+           staggeredTileBuilder: staggeredTileBuilder,
+           staggeredTileCount: itemCount,
+         ),
+         delegate: SliverChildBuilderDelegate(
+           itemBuilder,
+           childCount: itemCount,
+         ),
+       );
 
   @override
   createRenderObject(BuildContext context) {
     final element = context as SliverVariableSizeBoxAdaptorElement;
     _renderObject = RenderMeasurableSliverStaggeredGrid(
-        childManager: element, gridDelegate: gridDelegate);
+      childManager: element,
+      gridDelegate: gridDelegate,
+    );
     return _renderObject!;
   }
 
@@ -60,7 +62,10 @@ class RenderMeasurableSliverStaggeredGrid extends RenderSliverStaggeredGrid
     // Iterate through all children
     for (var index = 0; true; index++) {
       var geometry = RenderSliverStaggeredGrid.getSliverStaggeredGeometry(
-          index, configuration, mainAxisOffsets);
+        index,
+        configuration,
+        mainAxisOffsets,
+      );
       if (geometry == null) {
         // There are either no children, or we are past the end of all our children.
         break;
@@ -70,8 +75,9 @@ class RenderMeasurableSliverStaggeredGrid extends RenderSliverStaggeredGrid
       RenderBox? child;
       if (!hasTrailingScrollOffset) {
         // Layout the child to compute its tailingScrollOffset.
-        final constraints =
-            BoxConstraints.tightFor(width: geometry.crossAxisExtent);
+        final constraints = BoxConstraints.tightFor(
+          width: geometry.crossAxisExtent,
+        );
         child = addAndLayoutChild(index, constraints, parentUsesSize: true);
         geometry = geometry.copyWith(mainAxisExtent: paintExtentOf(child!));
       }

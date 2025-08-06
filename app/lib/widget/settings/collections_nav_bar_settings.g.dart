@@ -13,8 +13,10 @@ part of 'collections_nav_bar_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<PrefHomeCollectionsNavButton>? buttons, ExceptionEvent? error});
+  _State call({
+    List<PrefHomeCollectionsNavButton>? buttons,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
@@ -23,8 +25,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic buttons, dynamic error = copyWithNull}) {
     return _State(
-        buttons: buttons as List<PrefHomeCollectionsNavButton>? ?? that.buttons,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      buttons: buttons as List<PrefHomeCollectionsNavButton>? ?? that.buttons,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -45,15 +48,17 @@ extension _$_WrappedCollectionsNavBarSettingsStateNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.settings.collections_nav_bar_settings._WrappedCollectionsNavBarSettingsState");
+    "widget.settings.collections_nav_bar_settings._WrappedCollectionsNavBarSettingsState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.collections_nav_bar_settings._Bloc");
+  static final log = Logger(
+    "widget.settings.collections_nav_bar_settings._Bloc",
+  );
 }
 
 // **************************************************************************

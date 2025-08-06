@@ -34,21 +34,20 @@ class SnackBarManager {
   ///
   /// If [canBeReplaced] is true, this snackbar will be dismissed by the next
   /// snack bar
-  void showSnackBar(
-    SnackBar snackBar, {
-    bool canBeReplaced = false,
-  }) {
+  void showSnackBar(SnackBar snackBar, {bool canBeReplaced = false}) {
     _add(_Item(snackBar, canBeReplaced));
     _ensureRunning();
   }
 
   void showSnackBarForException(Object? exception) {
     final (text, action) = exceptionToSnackBarData(exception);
-    showSnackBar(SnackBar(
-      content: Text(text),
-      action: action,
-      duration: k.snackBarDurationNormal,
-    ));
+    showSnackBar(
+      SnackBar(
+        content: Text(text),
+        action: action,
+        duration: k.snackBarDurationNormal,
+      ),
+    );
   }
 
   void _ensureRunning() {
@@ -104,7 +103,8 @@ class SnackBarManager {
 
 abstract class SnackBarHandler {
   ScaffoldFeatureController<SnackBar, SnackBarClosedReason>? showSnackBar(
-      SnackBar snackBar);
+    SnackBar snackBar,
+  );
 }
 
 class _Item {

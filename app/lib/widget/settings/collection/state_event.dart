@@ -3,10 +3,7 @@ part of '../collection_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.isBrowserShowDate,
-    this.error,
-  });
+  const _State({required this.isBrowserShowDate, this.error});
 
   @override
   String toString() => _$toString();

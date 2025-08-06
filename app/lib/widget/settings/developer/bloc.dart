@@ -2,9 +2,7 @@ part of '../developer_settings.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
-  _Bloc(DiContainer c)
-      : _c = c,
-        super(const _State()) {
+  _Bloc(DiContainer c) : _c = c, super(const _State()) {
     on<_ClearImageCache>(_onClearImageCache);
     on<_VacuumDb>(_onVacuumDb);
     on<_ExportDb>(_onExportDb);
@@ -30,7 +28,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _onClearImageCache(
-      _ClearImageCache ev, Emitter<_State> emit) async {
+    _ClearImageCache ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
     await ThumbnailCacheManager.inst.emptyCache();
     await LargeImageCacheManager.inst.emptyCache();
@@ -52,7 +52,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _onClearCertWhitelist(
-      _ClearCertWhitelist ev, Emitter<_State> emit) async {
+    _ClearCertWhitelist ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
     await SelfSignedCertManager().clearWhitelist();
     emit(state.copyWith(message: StateMessage("Finished successfully")));

@@ -31,10 +31,9 @@ class _MigrateAlbumFiles {
     try {
       // get files from the old location
       final ls = await Ls(fileRepo)(
-          account,
-          File(
-            path: _getAlbumFileRootCompat14(account),
-          ));
+        account,
+        File(path: _getAlbumFileRootCompat14(account)),
+      );
       final albumFiles =
           ls.where((element) => element.isCollection != true).toList();
       if (albumFiles.isEmpty) {
@@ -44,19 +43,29 @@ class _MigrateAlbumFiles {
       final intermediateDir =
           "${remote_storage_util.getRemoteAlbumsDir(account)}.tmp";
       _log.info("[call] Copy album files to '$intermediateDir'");
-      if (!ls.any((element) =>
-          element.isCollection == true && element.path == intermediateDir)) {
+      if (!ls.any(
+        (element) =>
+            element.isCollection == true && element.path == intermediateDir,
+      )) {
         await CreateDir(fileRepo)(account, intermediateDir);
       }
       for (final f in albumFiles) {
-        await fileRepo.copy(account, f, "$intermediateDir/${f.filename}",
-            shouldOverwrite: true);
+        await fileRepo.copy(
+          account,
+          f,
+          "$intermediateDir/${f.filename}",
+          shouldOverwrite: true,
+        );
       }
       // rename intermediate
-      await fileRepo.move(account, File(path: intermediateDir),
-          remote_storage_util.getRemoteAlbumsDir(account));
+      await fileRepo.move(
+        account,
+        File(path: intermediateDir),
+        remote_storage_util.getRemoteAlbumsDir(account),
+      );
       _log.info(
-          "[call] Album files moved to '${remote_storage_util.getRemoteAlbumsDir(account)}' successfully");
+        "[call] Album files moved to '${remote_storage_util.getRemoteAlbumsDir(account)}' successfully",
+      );
       // remove old files
       for (final f in albumFiles) {
         try {
@@ -69,8 +78,11 @@ class _MigrateAlbumFiles {
         // no albums
         return false;
       }
-      _log.shout("[call] Failed while migrating album files to new location", e,
-          stacktrace);
+      _log.shout(
+        "[call] Failed while migrating album files to new location",
+        e,
+        stacktrace,
+      );
       rethrow;
     }
   }

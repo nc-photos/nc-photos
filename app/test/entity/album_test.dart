@@ -28,9 +28,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -42,19 +40,18 @@ void main() {
           },
         };
         expect(
-            Album.fromJson(
-              json,
-              upgraderFactory: const _NullAlbumUpgraderFactory(),
-            ),
-            Album(
-              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-              name: "",
-              provider: AlbumStaticProvider(
-                items: [],
-              ),
-              coverProvider: const AlbumAutoCoverProvider(),
-              sortProvider: const AlbumNullSortProvider(),
-            ));
+          Album.fromJson(
+            json,
+            upgraderFactory: const _NullAlbumUpgraderFactory(),
+          ),
+          Album(
+            lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+            name: "",
+            provider: AlbumStaticProvider(items: []),
+            coverProvider: const AlbumAutoCoverProvider(),
+            sortProvider: const AlbumNullSortProvider(),
+          ),
+        );
       });
 
       test("name", () {
@@ -64,9 +61,7 @@ void main() {
           "name": "album",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -78,19 +73,18 @@ void main() {
           },
         };
         expect(
-            Album.fromJson(
-              json,
-              upgraderFactory: const _NullAlbumUpgraderFactory(),
-            ),
-            Album(
-              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-              name: "album",
-              provider: AlbumStaticProvider(
-                items: [],
-              ),
-              coverProvider: const AlbumAutoCoverProvider(),
-              sortProvider: const AlbumNullSortProvider(),
-            ));
+          Album.fromJson(
+            json,
+            upgraderFactory: const _NullAlbumUpgraderFactory(),
+          ),
+          Album(
+            lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+            name: "album",
+            provider: AlbumStaticProvider(items: []),
+            coverProvider: const AlbumAutoCoverProvider(),
+            sortProvider: const AlbumNullSortProvider(),
+          ),
+        );
       });
 
       group("AlbumStaticProvider", () {
@@ -106,9 +100,7 @@ void main() {
                 "items": [
                   <String, dynamic>{
                     "type": "label",
-                    "content": <String, dynamic>{
-                      "text": "Testing",
-                    },
+                    "content": <String, dynamic>{"text": "Testing"},
                     "addedBy": "admin",
                     "addedAt": "2020-01-02T03:04:05.678901Z",
                   },
@@ -125,25 +117,26 @@ void main() {
             },
           };
           expect(
-              Album.fromJson(
-                json,
-                upgraderFactory: const _NullAlbumUpgraderFactory(),
+            Album.fromJson(
+              json,
+              upgraderFactory: const _NullAlbumUpgraderFactory(),
+            ),
+            Album(
+              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+              name: "",
+              provider: AlbumStaticProvider(
+                items: [
+                  AlbumLabelItem(
+                    addedBy: "admin".toCi(),
+                    addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+                    text: "Testing",
+                  ),
+                ],
               ),
-              Album(
-                lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-                name: "",
-                provider: AlbumStaticProvider(
-                  items: [
-                    AlbumLabelItem(
-                      addedBy: "admin".toCi(),
-                      addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-                      text: "Testing",
-                    ),
-                  ],
-                ),
-                coverProvider: const AlbumAutoCoverProvider(),
-                sortProvider: const AlbumNullSortProvider(),
-              ));
+              coverProvider: const AlbumAutoCoverProvider(),
+              sortProvider: const AlbumNullSortProvider(),
+            ),
+          );
         });
       });
 
@@ -154,9 +147,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -184,9 +175,7 @@ void main() {
           Album(
             lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
             name: "",
-            provider: AlbumStaticProvider(
-              items: [],
-            ),
+            provider: AlbumStaticProvider(items: []),
             coverProvider: AlbumAutoCoverProvider(
               coverFile: FileDescriptor(
                 fdPath: "remote.php/dav/files/admin/test1.jpg",
@@ -209,9 +198,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -219,27 +206,22 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": true,
-            },
+            "content": <String, dynamic>{"isAscending": true},
           },
         };
         expect(
-            Album.fromJson(
-              json,
-              upgraderFactory: const _NullAlbumUpgraderFactory(),
-            ),
-            Album(
-              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-              name: "",
-              provider: AlbumStaticProvider(
-                items: [],
-              ),
-              coverProvider: const AlbumAutoCoverProvider(),
-              sortProvider: const AlbumTimeSortProvider(
-                isAscending: true,
-              ),
-            ));
+          Album.fromJson(
+            json,
+            upgraderFactory: const _NullAlbumUpgraderFactory(),
+          ),
+          Album(
+            lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+            name: "",
+            provider: AlbumStaticProvider(items: []),
+            coverProvider: const AlbumAutoCoverProvider(),
+            sortProvider: const AlbumTimeSortProvider(isAscending: true),
+          ),
+        );
       });
 
       test("AlbumFilenameSortProvider", () {
@@ -249,9 +231,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -259,27 +239,22 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "filename",
-            "content": <String, dynamic>{
-              "isAscending": true,
-            },
+            "content": <String, dynamic>{"isAscending": true},
           },
         };
         expect(
-            Album.fromJson(
-              json,
-              upgraderFactory: const _NullAlbumUpgraderFactory(),
-            ),
-            Album(
-              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-              name: "",
-              provider: AlbumStaticProvider(
-                items: [],
-              ),
-              coverProvider: const AlbumAutoCoverProvider(),
-              sortProvider: const AlbumFilenameSortProvider(
-                isAscending: true,
-              ),
-            ));
+          Album.fromJson(
+            json,
+            upgraderFactory: const _NullAlbumUpgraderFactory(),
+          ),
+          Album(
+            lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+            name: "",
+            provider: AlbumStaticProvider(items: []),
+            coverProvider: const AlbumAutoCoverProvider(),
+            sortProvider: const AlbumFilenameSortProvider(isAscending: true),
+          ),
+        );
       });
 
       test("shares", _fromJsonShares);
@@ -291,9 +266,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -308,20 +281,19 @@ void main() {
           },
         };
         expect(
-            Album.fromJson(
-              json,
-              upgraderFactory: const _NullAlbumUpgraderFactory(),
-            ),
-            Album(
-              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-              name: "",
-              provider: AlbumStaticProvider(
-                items: [],
-              ),
-              coverProvider: const AlbumAutoCoverProvider(),
-              sortProvider: const AlbumNullSortProvider(),
-              albumFile: File(path: "remote.php/dav/files/admin/test1.jpg"),
-            ));
+          Album.fromJson(
+            json,
+            upgraderFactory: const _NullAlbumUpgraderFactory(),
+          ),
+          Album(
+            lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+            name: "",
+            provider: AlbumStaticProvider(items: []),
+            coverProvider: const AlbumAutoCoverProvider(),
+            sortProvider: const AlbumNullSortProvider(),
+            albumFile: File(path: "remote.php/dav/files/admin/test1.jpg"),
+          ),
+        );
       });
     });
 
@@ -330,9 +302,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
           sortProvider: const AlbumNullSortProvider(),
         );
@@ -342,9 +312,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -361,9 +329,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "album",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
           sortProvider: const AlbumNullSortProvider(),
         );
@@ -373,9 +339,7 @@ void main() {
           "name": "album",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -416,9 +380,7 @@ void main() {
                 "items": [
                   <String, dynamic>{
                     "type": "label",
-                    "content": <String, dynamic>{
-                      "text": "Testing",
-                    },
+                    "content": <String, dynamic>{"text": "Testing"},
                     "addedBy": "admin",
                     "addedAt": "2020-01-02T03:04:05.678901Z",
                   },
@@ -441,9 +403,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: AlbumAutoCoverProvider(
             coverFile: FileDescriptor(
               fdPath: "remote.php/dav/files/admin/test1.jpg",
@@ -462,9 +422,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -490,13 +448,9 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
-          sortProvider: const AlbumTimeSortProvider(
-            isAscending: true,
-          ),
+          sortProvider: const AlbumTimeSortProvider(isAscending: true),
         );
         expect(album.toAppDbJson(), <String, dynamic>{
           "version": Album.version,
@@ -504,9 +458,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -514,9 +466,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": true,
-            },
+            "content": <String, dynamic>{"isAscending": true},
           },
         });
       });
@@ -525,13 +475,9 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
-          sortProvider: const AlbumFilenameSortProvider(
-            isAscending: true,
-          ),
+          sortProvider: const AlbumFilenameSortProvider(isAscending: true),
         );
         expect(album.toAppDbJson(), <String, dynamic>{
           "version": Album.version,
@@ -539,9 +485,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -549,9 +493,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "filename",
-            "content": <String, dynamic>{
-              "isAscending": true,
-            },
+            "content": <String, dynamic>{"isAscending": true},
           },
         });
       });
@@ -564,9 +506,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
           sortProvider: const AlbumNullSortProvider(),
         );
@@ -576,9 +516,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -595,9 +533,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "album",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
           sortProvider: const AlbumNullSortProvider(),
         );
@@ -607,9 +543,7 @@ void main() {
           "name": "album",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -650,9 +584,7 @@ void main() {
                 "items": [
                   <String, dynamic>{
                     "type": "label",
-                    "content": <String, dynamic>{
-                      "text": "Testing",
-                    },
+                    "content": <String, dynamic>{"text": "Testing"},
                     "addedBy": "admin",
                     "addedAt": "2020-01-02T03:04:05.678901Z",
                   },
@@ -675,9 +607,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: AlbumAutoCoverProvider(
             coverFile: FileDescriptor(
               fdPath: "remote.php/dav/files/admin/test1.jpg",
@@ -696,9 +626,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -724,13 +652,9 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
-          sortProvider: const AlbumTimeSortProvider(
-            isAscending: true,
-          ),
+          sortProvider: const AlbumTimeSortProvider(isAscending: true),
         );
         expect(album.toAppDbJson(), <String, dynamic>{
           "version": Album.version,
@@ -738,9 +662,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -748,9 +670,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": true,
-            },
+            "content": <String, dynamic>{"isAscending": true},
           },
         });
       });
@@ -759,13 +679,9 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
-          sortProvider: const AlbumFilenameSortProvider(
-            isAscending: true,
-          ),
+          sortProvider: const AlbumFilenameSortProvider(isAscending: true),
         );
         expect(album.toAppDbJson(), <String, dynamic>{
           "version": Album.version,
@@ -773,9 +689,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -783,9 +697,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "filename",
-            "content": <String, dynamic>{
-              "isAscending": true,
-            },
+            "content": <String, dynamic>{"isAscending": true},
           },
         });
       });
@@ -796,9 +708,7 @@ void main() {
         final album = Album(
           lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
           name: "",
-          provider: AlbumStaticProvider(
-            items: [],
-          ),
+          provider: AlbumStaticProvider(items: []),
           coverProvider: const AlbumAutoCoverProvider(),
           sortProvider: const AlbumNullSortProvider(),
           albumFile: File(path: "remote.php/dav/files/admin/test1.jpg"),
@@ -809,9 +719,7 @@ void main() {
           "name": "",
           "provider": <String, dynamic>{
             "type": "static",
-            "content": <String, dynamic>{
-              "items": [],
-            },
+            "content": <String, dynamic>{"items": []},
           },
           "coverProvider": <String, dynamic>{
             "type": "auto",
@@ -953,9 +861,7 @@ void main() {
         },
         "sortProvider": <String, dynamic>{
           "type": "time",
-          "content": <String, dynamic>{
-            "isAscending": false,
-          },
+          "content": <String, dynamic>{"isAscending": false},
         },
         "albumFile": <String, dynamic>{
           "path": "remote.php/dav/files/admin/test1.json",
@@ -974,9 +880,7 @@ void main() {
               "items": [
                 <String, dynamic>{
                   "type": "label",
-                  "content": <String, dynamic>{
-                    "text": "123",
-                  },
+                  "content": <String, dynamic>{"text": "123"},
                 },
               ],
             },
@@ -987,9 +891,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
           "albumFile": <String, dynamic>{
             "path": "remote.php/dav/files/admin/test1.json",
@@ -1004,9 +906,7 @@ void main() {
               "items": [
                 <String, dynamic>{
                   "type": "label",
-                  "content": <String, dynamic>{
-                    "text": "123",
-                  },
+                  "content": <String, dynamic>{"text": "123"},
                 },
               ],
             },
@@ -1017,9 +917,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
           "albumFile": <String, dynamic>{
             "path": "remote.php/dav/files/admin/test1.json",
@@ -1057,9 +955,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1089,9 +985,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1125,9 +1019,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1164,9 +1056,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1190,10 +1080,11 @@ void main() {
                         "metadata": <String, dynamic>{
                           "exif": <String, dynamic>{
                             // convert 2020-01-02T03:04:05Z to local time
-                            "DateTimeOriginal":
-                                DateFormat("yyyy:MM:dd HH:mm:ss").format(
-                                    DateTime.utc(2020, 1, 2, 3, 4, 5)
-                                        .toLocal()),
+                            "DateTimeOriginal": DateFormat(
+                              "yyyy:MM:dd HH:mm:ss",
+                            ).format(
+                              DateTime.utc(2020, 1, 2, 3, 4, 5).toLocal(),
+                            ),
                           },
                         },
                       },
@@ -1208,9 +1099,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1245,9 +1134,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1281,9 +1168,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1320,9 +1205,7 @@ void main() {
             },
             "sortProvider": <String, dynamic>{
               "type": "time",
-              "content": <String, dynamic>{
-                "isAscending": false,
-              },
+              "content": <String, dynamic>{"isAscending": false},
             },
             "albumFile": <String, dynamic>{
               "path": "remote.php/dav/files/admin/test1.json",
@@ -1360,9 +1243,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
           "albumFile": <String, dynamic>{
             "path": "remote.php/dav/files/admin/test1.json",
@@ -1395,9 +1276,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
           "albumFile": <String, dynamic>{
             "path": "remote.php/dav/files/admin/test1.json",
@@ -1431,9 +1310,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
           "albumFile": <String, dynamic>{
             "path": "remote.php/dav/files/admin/test1.json",
@@ -1465,9 +1342,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
           "albumFile": <String, dynamic>{
             "path": "remote.php/dav/files/admin/test1.json",
@@ -1500,9 +1375,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
         };
         expect(AlbumUpgraderV5(account).doJson(json), <String, dynamic>{
@@ -1531,9 +1404,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
         });
       });
@@ -1563,9 +1434,7 @@ void main() {
           },
           "sortProvider": <String, dynamic>{
             "type": "time",
-            "content": <String, dynamic>{
-              "isAscending": false,
-            },
+            "content": <String, dynamic>{"isAscending": false},
           },
         };
         final albumFile = File(
@@ -1573,38 +1442,37 @@ void main() {
           ownerId: "admin".toCi(),
         );
         expect(
-            AlbumUpgraderV5(account, albumFile: albumFile).doJson(json),
-            <String, dynamic>{
-              "version": 5,
-              "lastUpdated": "2020-01-02T03:04:05.678901Z",
-              "provider": <String, dynamic>{
-                "type": "static",
-                "content": <String, dynamic>{
-                  "items": [
-                    <String, dynamic>{
-                      "type": "file",
-                      "content": <String, dynamic>{
-                        "file": <String, dynamic>{
-                          "path": "remote.php/dav/files/admin/test1.jpg",
-                        },
+          AlbumUpgraderV5(account, albumFile: albumFile).doJson(json),
+          <String, dynamic>{
+            "version": 5,
+            "lastUpdated": "2020-01-02T03:04:05.678901Z",
+            "provider": <String, dynamic>{
+              "type": "static",
+              "content": <String, dynamic>{
+                "items": [
+                  <String, dynamic>{
+                    "type": "file",
+                    "content": <String, dynamic>{
+                      "file": <String, dynamic>{
+                        "path": "remote.php/dav/files/admin/test1.jpg",
                       },
-                      "addedBy": "admin",
-                      "addedAt": "2020-01-02T03:04:05.678901Z",
                     },
-                  ],
-                },
+                    "addedBy": "admin",
+                    "addedAt": "2020-01-02T03:04:05.678901Z",
+                  },
+                ],
               },
-              "coverProvider": <String, dynamic>{
-                "type": "auto",
-                "content": <String, dynamic>{},
-              },
-              "sortProvider": <String, dynamic>{
-                "type": "time",
-                "content": <String, dynamic>{
-                  "isAscending": false,
-                },
-              },
-            });
+            },
+            "coverProvider": <String, dynamic>{
+              "type": "auto",
+              "content": <String, dynamic>{},
+            },
+            "sortProvider": <String, dynamic>{
+              "type": "time",
+              "content": <String, dynamic>{"isAscending": false},
+            },
+          },
+        );
       });
     });
 
@@ -1715,10 +1583,7 @@ void _fromJsonStaticProviderFileItem() {
     },
   };
   expect(
-    Album.fromJson(
-      json,
-      upgraderFactory: const _NullAlbumUpgraderFactory(),
-    ),
+    Album.fromJson(json, upgraderFactory: const _NullAlbumUpgraderFactory()),
     Album(
       lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
       name: "",
@@ -1947,9 +1812,7 @@ void _fromJsonShares() {
     "name": "",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -1968,29 +1831,23 @@ void _fromJsonShares() {
     ],
   };
   expect(
-      Album.fromJson(
-        json,
-        upgraderFactory: const _NullAlbumUpgraderFactory(),
-      ),
-      Album(
-        lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
-        name: "",
-        provider: AlbumStaticProvider(
-          items: [],
-        ),
-        coverProvider: const AlbumAutoCoverProvider(),
-        sortProvider: const AlbumNullSortProvider(),
-        shares: [util.buildAlbumShare(userId: "admin")],
-      ));
+    Album.fromJson(json, upgraderFactory: const _NullAlbumUpgraderFactory()),
+    Album(
+      lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
+      name: "",
+      provider: AlbumStaticProvider(items: []),
+      coverProvider: const AlbumAutoCoverProvider(),
+      sortProvider: const AlbumNullSortProvider(),
+      shares: [util.buildAlbumShare(userId: "admin")],
+    ),
+  );
 }
 
 void _toRemoteJsonShares() {
   final album = Album(
     lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
     name: "",
-    provider: AlbumStaticProvider(
-      items: [],
-    ),
+    provider: AlbumStaticProvider(items: []),
     coverProvider: const AlbumAutoCoverProvider(),
     sortProvider: const AlbumNullSortProvider(),
     shares: [util.buildAlbumShare(userId: "admin")],
@@ -2001,9 +1858,7 @@ void _toRemoteJsonShares() {
     "name": "",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -2027,9 +1882,7 @@ void _toAppDbJsonShares() {
   final album = Album(
     lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
     name: "",
-    provider: AlbumStaticProvider(
-      items: [],
-    ),
+    provider: AlbumStaticProvider(items: []),
     coverProvider: const AlbumAutoCoverProvider(),
     sortProvider: const AlbumNullSortProvider(),
     shares: [util.buildAlbumShare(userId: "admin")],
@@ -2040,9 +1893,7 @@ void _toAppDbJsonShares() {
     "name": "",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",

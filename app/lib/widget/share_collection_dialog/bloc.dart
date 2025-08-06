@@ -7,10 +7,8 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     required this.account,
     required this.collectionsController,
     required Collection collection,
-  })  : _c = container,
-        super(_State.init(
-          collection: collection,
-        )) {
+  }) : _c = container,
+       super(_State.init(collection: collection)) {
     on<_UpdateCollection>(_onUpdateCollection);
     on<_LoadSharee>(_onLoadSharee);
     on<_RefreshSuggester>(_onRefreshSuggester);
@@ -27,18 +25,21 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
     on<_SetError>(_onSetError);
 
-    _subscriptions.add(collectionsController.stream.listen(
-      (event) {
-        final c = event.data
-            .firstWhere((d) => state.collection.compareIdentity(d.collection));
+    _subscriptions.add(
+      collectionsController.stream.listen((event) {
+        final c = event.data.firstWhere(
+          (d) => state.collection.compareIdentity(d.collection),
+        );
         if (!identical(c, state.collection)) {
           add(_UpdateCollection(c.collection));
         }
-      },
-    ));
-    _subscriptions.add(collectionsController.errorStream.listen((ev) {
-      add(_SetError(ev.error, ev.stackTrace));
-    }));
+      }),
+    );
+    _subscriptions.add(
+      collectionsController.errorStream.listen((ev) {
+        add(_SetError(ev.error, ev.stackTrace));
+      }),
+    );
   }
 
   @override
@@ -89,21 +90,28 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onRefreshSuggester(_RefreshSuggester ev, Emitter<_State> emit) {
     _log.info(ev);
-    final searchable = state.sharees
-            ?.where((s) =>
-                !state.collection.shares.any((e) => e.userId == s.shareWith))
-            .where((s) =>
-                !state.processingShares.any((e) => e.userId == s.shareWith))
+    final searchable =
+        state.sharees
+            ?.where(
+              (s) =>
+                  !state.collection.shares.any((e) => e.userId == s.shareWith),
+            )
+            .where(
+              (s) =>
+                  !state.processingShares.any((e) => e.userId == s.shareWith),
+            )
             .where((s) => s.shareWith != account.userId)
             .toList() ??
         [];
-    emit(state.copyWith(
-      shareeSuggester: Suggester<Sharee>(
-        items: searchable,
-        itemToKeywords: (item) => [item.shareWith, item.label.toCi()],
-        maxResult: 10,
+    emit(
+      state.copyWith(
+        shareeSuggester: Suggester<Sharee>(
+          items: searchable,
+          itemToKeywords: (item) => [item.shareWith, item.label.toCi()],
+          maxResult: 10,
+        ),
       ),
-    ));
+    );
   }
 
   Future<void> _onShare(_Share ev, Emitter<_State> emit) async {
@@ -113,42 +121,47 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       _log.fine("[_onShare] Already shared with sharee: ${ev.sharee}");
       return;
     }
-    emit(state.copyWith(
-      processingShares: [
-        ...state.processingShares,
-        CollectionShare(
-          userId: ev.sharee.shareWith,
-          username: ev.sharee.label,
-        ),
-      ],
-    ));
+    emit(
+      state.copyWith(
+        processingShares: [
+          ...state.processingShares,
+          CollectionShare(
+            userId: ev.sharee.shareWith,
+            username: ev.sharee.label,
+          ),
+        ],
+      ),
+    );
     try {
       await collectionsController.share(state.collection, ev.sharee);
     } finally {
-      emit(state.copyWith(
-        processingShares: state.processingShares
-            .where((s) => s.userId != ev.sharee.shareWith)
-            .toList(),
-      ));
+      emit(
+        state.copyWith(
+          processingShares:
+              state.processingShares
+                  .where((s) => s.userId != ev.sharee.shareWith)
+                  .toList(),
+        ),
+      );
     }
   }
 
   Future<void> _onUnshare(_Unshare ev, Emitter<_State> emit) async {
     _log.info(ev);
-    emit(state.copyWith(
-      processingShares: [
-        ...state.processingShares,
-        ev.share,
-      ],
-    ));
+    emit(
+      state.copyWith(processingShares: [...state.processingShares, ev.share]),
+    );
     try {
       await collectionsController.unshare(state.collection, ev.share);
     } finally {
-      emit(state.copyWith(
-        processingShares: state.processingShares
-            .where((s) => s.userId != ev.share.userId)
-            .toList(),
-      ));
+      emit(
+        state.copyWith(
+          processingShares:
+              state.processingShares
+                  .where((s) => s.userId != ev.share.userId)
+                  .toList(),
+        ),
+      );
     }
   }
 

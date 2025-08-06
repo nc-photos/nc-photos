@@ -3,11 +3,10 @@ part of '../collection_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State(
-          isBrowserShowDate: prefController.isAlbumBrowserShowDateValue,
-        )) {
+  _Bloc({required this.prefController})
+    : super(
+        _State(isBrowserShowDate: prefController.isAlbumBrowserShowDateValue),
+      ) {
     on<_Init>(_onInit);
     on<_SetBrowserShowDate>(_onSetBrowserShowDate);
   }

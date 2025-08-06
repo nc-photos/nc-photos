@@ -12,5 +12,6 @@ extension _$BasicFaceRecognitionPersonRepoNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "entity.face_recognition_person.repo.BasicFaceRecognitionPersonRepo");
+    "entity.face_recognition_person.repo.BasicFaceRecognitionPersonRepo",
+  );
 }

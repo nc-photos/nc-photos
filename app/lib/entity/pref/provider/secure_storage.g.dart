@@ -10,6 +10,7 @@ extension _$PrefSecureStorageProviderNpLog on PrefSecureStorageProvider {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.pref.provider.secure_storage.PrefSecureStorageProvider");
+  static final log = Logger(
+    "entity.pref.provider.secure_storage.PrefSecureStorageProvider",
+  );
 }

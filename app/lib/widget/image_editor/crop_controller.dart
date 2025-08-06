@@ -82,8 +82,11 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
             Opacity(
               opacity: .35,
               child: Image(
-                image: PixelImage(widget.image.pixel, widget.image.width,
-                    widget.image.height),
+                image: PixelImage(
+                  widget.image.pixel,
+                  widget.image.width,
+                  widget.image.height,
+                ),
                 fit: BoxFit.contain,
                 gaplessPlayback: true,
               ),
@@ -122,8 +125,11 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
                       : _size!.height - _bottom + _offsetY,
                 ),
                 child: Image(
-                  image: PixelImage(widget.image.pixel, widget.image.width,
-                      widget.image.height),
+                  image: PixelImage(
+                    widget.image.pixel,
+                    widget.image.width,
+                    widget.image.height,
+                  ),
                   fit: BoxFit.contain,
                   gaplessPlayback: true,
                 ),
@@ -436,10 +442,7 @@ class _TouchDot extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
-        border: Border.all(
-          color: Colors.white,
-          width: 2,
-        ),
+        border: Border.all(color: Colors.white, width: 2),
         color: Colors.white60,
       ),
     );

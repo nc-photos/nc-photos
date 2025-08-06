@@ -24,18 +24,16 @@ class LanguageSettings extends StatelessWidget {
   static const routeName = "/language-settings";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const LanguageSettings(),
-        settings: settings,
-      );
+    builder: (_) => const LanguageSettings(),
+    settings: settings,
+  );
 
   const LanguageSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(prefController: context.read()),
       child: const _WrappedLanguageSettings(),
     );
   }
@@ -72,15 +70,15 @@ class _WrappedLanguageSettingsState extends State<_WrappedLanguageSettings>
       child: Scaffold(
         appBar: AppBar(
           title: _BlocBuilder(
-            buildWhen: (previous, current) =>
-                previous.selected != current.selected,
-            builder: (context, state) =>
-                Text(L10n.global().settingsLanguageTitle),
+            buildWhen:
+                (previous, current) => previous.selected != current.selected,
+            builder:
+                (context, state) => Text(L10n.global().settingsLanguageTitle),
           ),
         ),
         body: _BlocBuilder(
-          buildWhen: (previous, current) =>
-              previous.selected != current.selected,
+          buildWhen:
+              (previous, current) => previous.selected != current.selected,
           builder: (context, state) {
             final langs = language_util.supportedLanguages.values.toList();
             return ListView.builder(

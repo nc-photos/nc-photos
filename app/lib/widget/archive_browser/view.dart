@@ -7,9 +7,10 @@ class _ContentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector<int>(
       selector: (state) => state.zoom,
-      builder: (context, zoom) => _ContentListBody(
-        maxCrossAxisExtent: photo_list_util.getThumbSize(zoom).toDouble(),
-      ),
+      builder:
+          (context, zoom) => _ContentListBody(
+            maxCrossAxisExtent: photo_list_util.getThumbSize(zoom).toDouble(),
+          ),
     );
   }
 }
@@ -42,47 +43,48 @@ class _ScalingList extends StatelessWidget {
 
 @npLog
 class _ContentListBody extends StatelessWidget {
-  const _ContentListBody({
-    required this.maxCrossAxisExtent,
-  });
+  const _ContentListBody({required this.maxCrossAxisExtent});
 
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.transformedItems != current.transformedItems ||
-          previous.selectedItems != current.selectedItems,
-      builder: (context, state) => SelectableItemList<_Item>(
-        maxCrossAxisExtent: maxCrossAxisExtent,
-        items: state.transformedItems,
-        itemBuilder: (context, _, item) => item.buildWidget(context),
-        staggeredTileBuilder: (_, item) => item.staggeredTile,
-        selectedItems: state.selectedItems,
-        onSelectionChange: (_, selected) {
-          context.addEvent(_SetSelectedItems(items: selected.cast()));
-        },
-        onItemTap: (context, index, _) {
-          if (state.transformedItems[index] is! _FileItem) {
-            return;
-          }
-          final actualIndex = index -
-              state.transformedItems
-                  .sublist(0, index)
-                  .where((e) => e is! _FileItem)
-                  .length;
-          Navigator.of(context).pushNamed(
-            CollectionViewer.routeName,
-            arguments: CollectionViewerArguments(
-              state.transformedItems
-                  .whereType<_FileItem>()
-                  .map((e) => e.file)
-                  .toList(),
-              actualIndex,
-              null,
-            ),
-          );
-        },
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.transformedItems != current.transformedItems ||
+              previous.selectedItems != current.selectedItems,
+      builder:
+          (context, state) => SelectableItemList<_Item>(
+            maxCrossAxisExtent: maxCrossAxisExtent,
+            items: state.transformedItems,
+            itemBuilder: (context, _, item) => item.buildWidget(context),
+            staggeredTileBuilder: (_, item) => item.staggeredTile,
+            selectedItems: state.selectedItems,
+            onSelectionChange: (_, selected) {
+              context.addEvent(_SetSelectedItems(items: selected.cast()));
+            },
+            onItemTap: (context, index, _) {
+              if (state.transformedItems[index] is! _FileItem) {
+                return;
+              }
+              final actualIndex =
+                  index -
+                  state.transformedItems
+                      .sublist(0, index)
+                      .where((e) => e is! _FileItem)
+                      .length;
+              Navigator.of(context).pushNamed(
+                CollectionViewer.routeName,
+                arguments: CollectionViewerArguments(
+                  state.transformedItems
+                      .whereType<_FileItem>()
+                      .map((e) => e.file)
+                      .toList(),
+                  actualIndex,
+                  null,
+                ),
+              );
+            },
+          ),
     );
   }
 

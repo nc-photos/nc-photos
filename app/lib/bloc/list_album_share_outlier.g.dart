@@ -10,8 +10,9 @@ extension _$ListAlbumShareOutlierBlocNpLog on ListAlbumShareOutlierBloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("bloc.list_album_share_outlier.ListAlbumShareOutlierBloc");
+  static final log = Logger(
+    "bloc.list_album_share_outlier.ListAlbumShareOutlierBloc",
+  );
 }
 
 // **************************************************************************

@@ -66,9 +66,8 @@ abstract class PhotoListItemGrouper {
 }
 
 class PhotoListFileDateGrouper implements PhotoListItemGrouper {
-  PhotoListFileDateGrouper({
-    required this.isMonthOnly,
-  }) : helper = DateGroupHelper(isMonthOnly: isMonthOnly);
+  PhotoListFileDateGrouper({required this.isMonthOnly})
+    : helper = DateGroupHelper(isMonthOnly: isMonthOnly);
 
   @override
   onFile(FileDescriptor file) => helper
@@ -92,7 +91,8 @@ int photoListFilenameSorter(FileDescriptor a, FileDescriptor b) =>
     compareNatural(b.filename, a.filename);
 
 PhotoListItemBuilderResult buildPhotoListItem(
-    PhotoListItemBuilderArguments arg) {
+  PhotoListItemBuilderArguments arg,
+) {
   app_init.initLog();
   return _PhotoListItemBuilder(
     isArchived: arg.isArchived,
@@ -134,12 +134,18 @@ class _PhotoListItemBuilder {
   }
 
   PhotoListItemBuilderResult _fromSortedItems(
-      Account account, List<FileDescriptor> files) {
+    Account account,
+    List<FileDescriptor> files,
+  ) {
     final today = Date.today();
-    final memoryAlbumHelper = smartAlbumConfig != null
-        ? MemoryCollectionHelper(account,
-            today: today, dayRange: smartAlbumConfig!.memoriesDayRange)
-        : null;
+    final memoryAlbumHelper =
+        smartAlbumConfig != null
+            ? MemoryCollectionHelper(
+              account,
+              today: today,
+              dayRange: smartAlbumConfig!.memoriesDayRange,
+            )
+            : null;
     final listItems = <SelectableItem>[];
     for (int i = 0; i < files.length; ++i) {
       final f = files[i];
@@ -150,8 +156,9 @@ class _PhotoListItemBuilder {
         listItems.add(item);
       }
     }
-    final smartAlbums = memoryAlbumHelper
-        ?.build((year) => L10n.of(locale).memoryAlbumName(today.year - year));
+    final smartAlbums = memoryAlbumHelper?.build(
+      (year) => L10n.of(locale).memoryAlbumName(today.year - year),
+    );
     return PhotoListItemBuilderResult(
       files,
       listItems,

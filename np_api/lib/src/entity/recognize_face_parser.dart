@@ -16,15 +16,16 @@ class RecognizeFaceParser extends XmlResponseParser {
     String? href;
 
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("href",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "href",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         href = Uri.decodeComponent(child.innerText);
       }
     }
 
-    return RecognizeFace(
-      href: href!,
-    );
+    return RecognizeFace(href: href!);
   }
 }
 

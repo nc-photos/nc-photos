@@ -7,57 +7,62 @@ class _AppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final isTitleCentered = getRawPlatform() == NpPlatform.iOs;
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.isDetailPaneActive != current.isDetailPaneActive ||
-          previous.isZoomed != current.isZoomed ||
-          previous.currentFile != current.currentFile ||
-          previous.collection != current.collection ||
-          previous.appBarButtons != current.appBarButtons,
-      builder: (context, state) => AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: _BlocBuilder(
-          buildWhen: (previous, current) =>
+      buildWhen:
+          (previous, current) =>
               previous.isDetailPaneActive != current.isDetailPaneActive ||
-              previous.currentFile != current.currentFile,
-          builder: (context, state) =>
-              !state.isDetailPaneActive && state.currentFile != null
-                  ? _AppBarTitle(
-                      file: state.currentFile!,
-                      isCentered: isTitleCentered,
-                    )
-                  : const SizedBox.shrink(),
-        ),
-        titleSpacing: 0,
-        centerTitle: isTitleCentered,
-        actions: !state.isDetailPaneActive && state.canOpenDetailPane
-            ? [
-                ...state.appBarButtons
-                    .map((e) => _buildAppBarButton(
-                          e,
-                          currentFile: state.currentFile,
-                          collection: state.collection,
-                        ))
-                    .nonNulls,
-                IconButton(
-                  icon: const Icon(Icons.more_vert),
-                  tooltip: L10n.global().detailsTooltip,
-                  onPressed: () {
-                    context.addEvent(const _OpenDetailPane(true));
-                  },
-                ),
-              ]
-            : null,
-      ),
+              previous.isZoomed != current.isZoomed ||
+              previous.currentFile != current.currentFile ||
+              previous.collection != current.collection ||
+              previous.appBarButtons != current.appBarButtons,
+      builder:
+          (context, state) => AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            title: _BlocBuilder(
+              buildWhen:
+                  (previous, current) =>
+                      previous.isDetailPaneActive !=
+                          current.isDetailPaneActive ||
+                      previous.currentFile != current.currentFile,
+              builder:
+                  (context, state) =>
+                      !state.isDetailPaneActive && state.currentFile != null
+                          ? _AppBarTitle(
+                            file: state.currentFile!,
+                            isCentered: isTitleCentered,
+                          )
+                          : const SizedBox.shrink(),
+            ),
+            titleSpacing: 0,
+            centerTitle: isTitleCentered,
+            actions:
+                !state.isDetailPaneActive && state.canOpenDetailPane
+                    ? [
+                      ...state.appBarButtons
+                          .map(
+                            (e) => _buildAppBarButton(
+                              e,
+                              currentFile: state.currentFile,
+                              collection: state.collection,
+                            ),
+                          )
+                          .nonNulls,
+                      IconButton(
+                        icon: const Icon(Icons.more_vert),
+                        tooltip: L10n.global().detailsTooltip,
+                        onPressed: () {
+                          context.addEvent(const _OpenDetailPane(true));
+                        },
+                      ),
+                    ]
+                    : null,
+          ),
     );
   }
 }
 
 class _AppBarTitle extends StatelessWidget {
-  const _AppBarTitle({
-    required this.file,
-    required this.isCentered,
-  });
+  const _AppBarTitle({required this.file, required this.isCentered});
 
   @override
   Widget build(BuildContext context) {
@@ -99,33 +104,32 @@ class _BottomAppBar extends StatelessWidget {
         gradient: LinearGradient(
           begin: Alignment(0, -1),
           end: Alignment(0, 1),
-          colors: [
-            Color.fromARGB(0, 0, 0, 0),
-            Color.fromARGB(192, 0, 0, 0),
-          ],
+          colors: [Color.fromARGB(0, 0, 0, 0), Color.fromARGB(192, 0, 0, 0)],
         ),
       ),
       child: _BlocBuilder(
-        buildWhen: (previous, current) =>
-            previous.currentFile != current.currentFile ||
-            previous.collection != current.collection ||
-            previous.bottomAppBarButtons != current.bottomAppBarButtons,
-        builder: (context, state) => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          mainAxisSize: MainAxisSize.max,
-          children: state.bottomAppBarButtons
-              .map((e) => _buildAppBarButton(
-                    e,
-                    currentFile: state.currentFile,
-                    collection: state.collection,
-                  ))
-              .nonNulls
-              .map((e) => Expanded(
-                    flex: 1,
-                    child: e,
-                  ))
-              .toList(),
-        ),
+        buildWhen:
+            (previous, current) =>
+                previous.currentFile != current.currentFile ||
+                previous.collection != current.collection ||
+                previous.bottomAppBarButtons != current.bottomAppBarButtons,
+        builder:
+            (context, state) => Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              children:
+                  state.bottomAppBarButtons
+                      .map(
+                        (e) => _buildAppBarButton(
+                          e,
+                          currentFile: state.currentFile,
+                          collection: state.collection,
+                        ),
+                      )
+                      .nonNulls
+                      .map((e) => Expanded(flex: 1, child: e))
+                      .toList(),
+            ),
       ),
     );
   }

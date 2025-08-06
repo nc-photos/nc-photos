@@ -46,13 +46,14 @@ class ShareCollectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        container: KiwiContainer().resolve<DiContainer>(),
-        account: account,
-        collectionsController:
-            context.read<AccountController>().collectionsController,
-        collection: collection,
-      ),
+      create:
+          (context) => _Bloc(
+            container: KiwiContainer().resolve<DiContainer>(),
+            account: account,
+            collectionsController:
+                context.read<AccountController>().collectionsController,
+            collection: collection,
+          ),
       child: const _WrappedShareCollectionDialog(),
     );
   }
@@ -88,8 +89,9 @@ class _WrappedShareCollectionDialogState
                 final e = state.error!.error as CollectionPartialShareException;
                 AppToast.showToast(
                   context,
-                  msg: L10n.global()
-                      .shareAlbumSuccessWithErrorNotification(e.shareeName),
+                  msg: L10n.global().shareAlbumSuccessWithErrorNotification(
+                    e.shareeName,
+                  ),
                   duration: k.snackBarDurationNormal,
                 );
               } else if (state.error!.error
@@ -98,8 +100,9 @@ class _WrappedShareCollectionDialogState
                     state.error!.error as CollectionPartialUnshareException;
                 AppToast.showToast(
                   context,
-                  msg: L10n.global()
-                      .unshareAlbumSuccessWithErrorNotification(e.shareeName),
+                  msg: L10n.global().unshareAlbumSuccessWithErrorNotification(
+                    e.shareeName,
+                  ),
                   duration: k.snackBarDurationNormal,
                 );
               } else {
@@ -114,9 +117,10 @@ class _WrappedShareCollectionDialogState
         ),
       ],
       child: _BlocBuilder(
-        buildWhen: (previous, current) =>
-            previous.collection != current.collection ||
-            previous.processingShares != current.processingShares,
+        buildWhen:
+            (previous, current) =>
+                previous.collection != current.collection ||
+                previous.processingShares != current.processingShares,
         builder: (context, state) {
           final shares = {
             ...state.collection.shares,
@@ -125,13 +129,15 @@ class _WrappedShareCollectionDialogState
           return SimpleDialog(
             title: Text(L10n.global().shareAlbumDialogTitle),
             children: [
-              ...shares.map((s) => _ShareView(
-                    share: s,
-                    isProcessing: state.processingShares.contains(s),
-                    onPressed: () {
-                      _bloc.add(_Unshare(s));
-                    },
-                  )),
+              ...shares.map(
+                (s) => _ShareView(
+                  share: s,
+                  isProcessing: state.processingShares.contains(s),
+                  onPressed: () {
+                    _bloc.add(_Unshare(s));
+                  },
+                ),
+              ),
               const _ShareeInputView(),
             ],
           );
@@ -156,8 +162,9 @@ class _ShareeInputViewState extends State<_ShareeInputView> {
     return MultiBlocListener(
       listeners: [
         BlocListener<_Bloc, _State>(
-          listenWhen: (previous, current) =>
-              previous.shareeSuggester != current.shareeSuggester,
+          listenWhen:
+              (previous, current) =>
+                  previous.shareeSuggester != current.shareeSuggester,
           listener: (context, state) {
             // search again
             if (_lastPattern != null) {
@@ -171,21 +178,23 @@ class _ShareeInputViewState extends State<_ShareeInputView> {
         child: TypeAheadField<Sharee>(
           controller: _textController,
           suggestionsCallback: _onSearch,
-          itemBuilder: (context, suggestion) => ListTile(
-            title: Text(suggestion.label),
-            subtitle: Text(suggestion.shareWith.toString()),
-          ),
+          itemBuilder:
+              (context, suggestion) => ListTile(
+                title: Text(suggestion.label),
+                subtitle: Text(suggestion.shareWith.toString()),
+              ),
           onSelected: _onSuggestionSelected,
           hideOnEmpty: true,
           hideOnLoading: true,
           autoFlipDirection: true,
-          builder: (context, controller, focusNode) => TextField(
-            controller: controller,
-            focusNode: focusNode,
-            decoration: InputDecoration(
-              hintText: L10n.global().addUserInputHint,
-            ),
-          ),
+          builder:
+              (context, controller, focusNode) => TextField(
+                controller: controller,
+                focusNode: focusNode,
+                decoration: InputDecoration(
+                  hintText: L10n.global().addUserInputHint,
+                ),
+              ),
         ),
       ),
     );
@@ -228,10 +237,7 @@ class _ShareView extends StatelessWidget {
         ),
       );
     } else {
-      trailing = Checkbox(
-        value: true,
-        onChanged: (_) {},
-      );
+      trailing = Checkbox(value: true, onChanged: (_) {});
     }
     return SimpleDialogOption(
       onPressed: isProcessing ? null : onPressed,
@@ -239,9 +245,7 @@ class _ShareView extends StatelessWidget {
         title: Text(share.username),
         subtitle: Text(share.userId.toString()),
         // pass through the tap event
-        trailing: IgnorePointer(
-          child: trailing,
-        ),
+        trailing: IgnorePointer(child: trailing),
       ),
     );
   }

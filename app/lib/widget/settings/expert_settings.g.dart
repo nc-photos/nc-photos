@@ -20,13 +20,17 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isNewHttpEngine, dynamic lastSuccessful = copyWithNull}) {
+  _State call({
+    dynamic isNewHttpEngine,
+    dynamic lastSuccessful = copyWithNull,
+  }) {
     return _State(
-        isNewHttpEngine: isNewHttpEngine as bool? ?? that.isNewHttpEngine,
-        lastSuccessful: lastSuccessful == copyWithNull
-            ? that.lastSuccessful
-            : lastSuccessful as _Event?);
+      isNewHttpEngine: isNewHttpEngine as bool? ?? that.isNewHttpEngine,
+      lastSuccessful:
+          lastSuccessful == copyWithNull
+              ? that.lastSuccessful
+              : lastSuccessful as _Event?,
+    );
   }
 
   final _State that;
@@ -45,8 +49,9 @@ extension _$_WrappedExpertSettingsStateNpLog on _WrappedExpertSettingsState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.expert_settings._WrappedExpertSettingsState");
+  static final log = Logger(
+    "widget.settings.expert_settings._WrappedExpertSettingsState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

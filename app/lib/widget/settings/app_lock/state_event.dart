@@ -3,16 +3,10 @@ part of '../app_lock_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.appLockType,
-  });
+  const _State({required this.appLockType});
 
-  factory _State.init({
-    ProtectedPageAuthType? appLockType,
-  }) =>
-      _State(
-        appLockType: appLockType,
-      );
+  factory _State.init({ProtectedPageAuthType? appLockType}) =>
+      _State(appLockType: appLockType);
 
   @override
   String toString() => _$toString();

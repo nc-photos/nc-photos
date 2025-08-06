@@ -8,8 +8,9 @@ class ListFaceRecognitionFace {
 
   /// List all [FaceRecognitionFace]s belonging to [person]
   Stream<List<FaceRecognitionFace>> call(
-          Account account, FaceRecognitionPerson person) =>
-      _c.faceRecognitionPersonRepo.getFaces(account, person);
+    Account account,
+    FaceRecognitionPerson person,
+  ) => _c.faceRecognitionPersonRepo.getFaces(account, person);
 
   final DiContainer _c;
 }

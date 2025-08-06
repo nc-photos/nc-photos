@@ -3,13 +3,14 @@ part of '../enhancement_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State(
+  _Bloc({required this.prefController})
+    : super(
+        _State(
           isSaveEditResultToServer:
               prefController.isSaveEditResultToServerValue,
           maxSize: prefController.enhanceMaxSizeValue,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_SetSaveEditResultToServer>(_onSetSaveEditResultToServer);
     on<_SetMaxSize>(_onSetMaxSize);
@@ -43,7 +44,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _onSetSaveEditResultToServer(
-      _SetSaveEditResultToServer ev, Emitter<_State> emit) {
+    _SetSaveEditResultToServer ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     prefController.setSaveEditResultToServer(ev.value);
   }

@@ -27,11 +27,12 @@ class LocalFileViewer extends StatefulWidget {
   static const routeName = "/local-file-viewer";
 
   static Route buildRoute(
-          LocalFileViewerArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => LocalFileViewer.fromArgs(args),
-        settings: settings,
-      );
+    LocalFileViewerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => LocalFileViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const LocalFileViewer({
     super.key,
@@ -40,11 +41,11 @@ class LocalFileViewer extends StatefulWidget {
   });
 
   LocalFileViewer.fromArgs(LocalFileViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          streamFiles: args.streamFiles,
-          startIndex: args.startIndex,
-        );
+    : this(
+        key: key,
+        streamFiles: args.streamFiles,
+        startIndex: args.startIndex,
+      );
 
   @override
   createState() => _LocalFileViewerState();
@@ -64,11 +65,7 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.dark,
         ),
-        child: Scaffold(
-          body: Builder(
-            builder: _buildContent,
-          ),
-        ),
+        child: Scaffold(body: Builder(builder: _buildContent)),
       ),
     );
   }
@@ -135,12 +132,13 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
                 ),
                 PopupMenuButton<_AppBarMenuOption>(
                   tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: _AppBarMenuOption.delete,
-                      child: Text(L10n.global().deletePermanentlyTooltip),
-                    ),
-                  ],
+                  itemBuilder:
+                      (context) => [
+                        PopupMenuItem(
+                          value: _AppBarMenuOption.delete,
+                          child: Text(L10n.global().deletePermanentlyTooltip),
+                        ),
+                      ],
                   onSelected: (option) => _onMenuSelected(context, option),
                 ),
               ],
@@ -199,20 +197,20 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
   }
 
   Widget _buildImageView(BuildContext context, int index) => LocalImageViewer(
-        file: widget.streamFiles[index],
-        canZoom: true,
-        onLoaded: () => _onImageLoaded(index),
-        onZoomStarted: () {
-          setState(() {
-            _isZoomed = true;
-          });
-        },
-        onZoomEnded: () {
-          setState(() {
-            _isZoomed = false;
-          });
-        },
-      );
+    file: widget.streamFiles[index],
+    canZoom: true,
+    onLoaded: () => _onImageLoaded(index),
+    onZoomStarted: () {
+      setState(() {
+        _isZoomed = true;
+      });
+    },
+    onZoomEnded: () {
+      setState(() {
+        _isZoomed = false;
+      });
+    },
+  );
 
   void _onImageLoaded(int index) {
     if (_viewerController.currentPage == index &&
@@ -240,6 +238,4 @@ class _PageState {
   bool hasLoaded = false;
 }
 
-enum _AppBarMenuOption {
-  delete,
-}
+enum _AppBarMenuOption { delete }

@@ -11,10 +11,8 @@ import 'package:nc_photos/use_case/album/list_album2.dart';
 import 'package:nc_photos/use_case/nc_album/list_nc_album.dart';
 
 class ListCollection {
-  ListCollection(
-    this._c, {
-    required this.serverController,
-  }) : assert(require(_c));
+  ListCollection(this._c, {required this.serverController})
+    : assert(require(_c));
 
   static bool require(DiContainer c) =>
       DiContainer.has(c, DiType.albumRepo2) &&

@@ -15,11 +15,7 @@ class _Background extends StatelessWidget {
           left: -200,
           child: Opacity(
             opacity: .22,
-            child: Icon(
-              Icons.circle_outlined,
-              color: Colors.white,
-              size: 340,
-            ),
+            child: Icon(Icons.circle_outlined, color: Colors.white, size: 340),
           ),
         ),
         const Positioned(
@@ -28,11 +24,7 @@ class _Background extends StatelessWidget {
           right: 0,
           child: Opacity(
             opacity: .1,
-            child: Icon(
-              Icons.circle_outlined,
-              color: Colors.white,
-              size: 620,
-            ),
+            child: Icon(Icons.circle_outlined, color: Colors.white, size: 620),
           ),
         ),
         const Positioned(
@@ -40,11 +32,7 @@ class _Background extends StatelessWidget {
           right: -120,
           child: Opacity(
             opacity: .27,
-            child: Icon(
-              Icons.circle_outlined,
-              color: Colors.white,
-              size: 400,
-            ),
+            child: Icon(Icons.circle_outlined, color: Colors.white, size: 400),
           ),
         ),
       ],
@@ -97,14 +85,14 @@ class _BodyState extends State<_Body> {
             children: [
               const Expanded(
                 child: Center(
-                  child: SingleChildScrollView(
-                    child: _SignInBody(),
-                  ),
+                  child: SingleChildScrollView(child: _SignInBody()),
                 ),
               ),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -113,8 +101,9 @@ class _BodyState extends State<_Body> {
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: Text(MaterialLocalizations.of(context)
-                            .cancelButtonLabel),
+                        child: Text(
+                          MaterialLocalizations.of(context).cancelButtonLabel,
+                        ),
                       )
                     else
                       Container(),
@@ -153,42 +142,39 @@ class _SignInBody extends StatelessWidget {
           Text(
             L10n.global().signInHeaderText2,
             style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w100,
-                ),
+              color: Colors.white,
+              fontWeight: FontWeight.w100,
+            ),
           ),
           const SizedBox(height: 16),
           _BlocSelector(
             selector: (state) => state.method,
-            builder: (context, method) => FilledButton.tonal(
-              onPressed: () {
-                _onSignInMethodPressed(context);
-              },
-              child: Text(method.toOptionString()),
-            ),
+            builder:
+                (context, method) => FilledButton.tonal(
+                  onPressed: () {
+                    _onSignInMethodPressed(context);
+                  },
+                  child: Text(method.toOptionString()),
+                ),
           ),
           const Row(
             children: [
-              SizedBox(
-                width: 64,
-                child: _SchemeDropdown(),
-              ),
+              SizedBox(width: 64, child: _SchemeDropdown()),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 4),
                 child: Text("://"),
               ),
-              Expanded(
-                child: _ServerUrlInput(),
-              ),
+              Expanded(child: _ServerUrlInput()),
             ],
           ),
           const SizedBox(height: 8),
           _BlocSelector(
             selector: (state) => state.method,
-            builder: (context, method) => ExpandableContainer(
-              isShow: method == _SignInMethod.usernamePassword,
-              child: const _UsernamePasswordForm(),
-            ),
+            builder:
+                (context, method) => ExpandableContainer(
+                  isShow: method == _SignInMethod.usernamePassword,
+                  child: const _UsernamePasswordForm(),
+                ),
           ),
         ],
       ),
@@ -199,16 +185,21 @@ class _SignInBody extends StatelessWidget {
     final pageContext = context;
     final result = await showDialog<_SignInMethod>(
       context: context,
-      builder: (context) => FancyOptionPicker(
-        items: _SignInMethod.values
-            .map((e) => FancyOptionPickerItem(
-                label: e.toOptionString(),
-                isSelected: pageContext.state.method == e,
-                onSelect: () {
-                  Navigator.of(context).pop(e);
-                }))
-            .toList(),
-      ),
+      builder:
+          (context) => FancyOptionPicker(
+            items:
+                _SignInMethod.values
+                    .map(
+                      (e) => FancyOptionPickerItem(
+                        label: e.toOptionString(),
+                        isSelected: pageContext.state.method == e,
+                        onSelect: () {
+                          Navigator.of(context).pop(e);
+                        },
+                      ),
+                    )
+                    .toList(),
+          ),
     );
     if (result == null || !context.mounted) {
       return;
@@ -225,20 +216,24 @@ class _SchemeDropdown extends StatelessWidget {
     return DropdownButtonHideUnderline(
       child: _BlocSelector(
         selector: (state) => state.scheme,
-        builder: (context, scheme) => DropdownButtonFormField<_Scheme>(
-          value: scheme,
-          items: _Scheme.values
-              .map((e) => DropdownMenuItem<_Scheme>(
-                    value: e,
-                    child: Text(e.toValueString()),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            if (value != null) {
-              context.addEvent(_SetScheme(value));
-            }
-          },
-        ),
+        builder:
+            (context, scheme) => DropdownButtonFormField<_Scheme>(
+              value: scheme,
+              items:
+                  _Scheme.values
+                      .map(
+                        (e) => DropdownMenuItem<_Scheme>(
+                          value: e,
+                          child: Text(e.toValueString()),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (value) {
+                if (value != null) {
+                  context.addEvent(_SetScheme(value));
+                }
+              },
+            ),
       ),
     );
   }
@@ -296,38 +291,42 @@ class _UsernamePasswordForm extends StatelessWidget {
         const SizedBox(height: 8),
         _BlocSelector(
           selector: (state) => state.shouldObscurePassword,
-          builder: (context, shouldObscurePassword) => TextFormField(
-            decoration: InputDecoration(
-              hintText: L10n.global().passwordInputHint,
-              suffixIcon: shouldObscurePassword
-                  ? IconButton(
-                      icon: const Icon(Icons.visibility_off_outlined),
-                      onPressed: () {
-                        context.addEvent(const _SetObscurePassword(false));
-                      },
-                    )
-                  : IconButton(
-                      icon: const Icon(Icons.visibility_outlined),
-                      onPressed: () {
-                        context.addEvent(const _SetObscurePassword(true));
-                      },
-                    ),
-            ),
-            keyboardType: TextInputType.text,
-            obscureText: shouldObscurePassword,
-            validator: (value) {
-              if (context.state.method != _SignInMethod.usernamePassword) {
-                return null;
-              }
-              if (value!.trim().isEmpty) {
-                return L10n.global().passwordInputInvalidEmpty;
-              }
-              return null;
-            },
-            onChanged: (value) {
-              context.addEvent(_SetPassword(value));
-            },
-          ),
+          builder:
+              (context, shouldObscurePassword) => TextFormField(
+                decoration: InputDecoration(
+                  hintText: L10n.global().passwordInputHint,
+                  suffixIcon:
+                      shouldObscurePassword
+                          ? IconButton(
+                            icon: const Icon(Icons.visibility_off_outlined),
+                            onPressed: () {
+                              context.addEvent(
+                                const _SetObscurePassword(false),
+                              );
+                            },
+                          )
+                          : IconButton(
+                            icon: const Icon(Icons.visibility_outlined),
+                            onPressed: () {
+                              context.addEvent(const _SetObscurePassword(true));
+                            },
+                          ),
+                ),
+                keyboardType: TextInputType.text,
+                obscureText: shouldObscurePassword,
+                validator: (value) {
+                  if (context.state.method != _SignInMethod.usernamePassword) {
+                    return null;
+                  }
+                  if (value!.trim().isEmpty) {
+                    return L10n.global().passwordInputInvalidEmpty;
+                  }
+                  return null;
+                },
+                onChanged: (value) {
+                  context.addEvent(_SetPassword(value));
+                },
+              ),
         ),
       ],
     );

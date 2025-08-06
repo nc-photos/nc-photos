@@ -4,9 +4,7 @@ part of 'api.dart';
 class ApiOcsDavDirect {
   ApiOcsDavDirect(this._dav);
 
-  Future<Response> post({
-    required int fileId,
-  }) async {
+  Future<Response> post({required int fileId}) async {
     try {
       return await _dav._ocs._api.request(
         "POST",
@@ -15,9 +13,7 @@ class ApiOcsDavDirect {
           "OCS-APIRequest": "true",
           "Content-Type": "application/x-www-form-urlencoded",
         },
-        queryParameters: {
-          "format": "json",
-        },
+        queryParameters: {"format": "json"},
         body: "fileId=$fileId",
       );
     } catch (e) {

@@ -10,8 +10,8 @@ import 'package:np_gps_map/src/interactive_map.dart';
 import 'package:np_gps_map/src/type.dart';
 import 'package:rxdart/rxdart.dart';
 
-typedef OsmClusterBuilder = Widget Function(
-    BuildContext context, List<DataPoint> dataPoints);
+typedef OsmClusterBuilder =
+    Widget Function(BuildContext context, List<DataPoint> dataPoints);
 
 class OsmInteractiveMap extends StatefulWidget {
   const OsmInteractiveMap({
@@ -47,14 +47,18 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
       if (_parentController == null) {
         _parentController = _ParentController(_controller);
         widget.onMapCreated?.call(_parentController!);
-        _subscriptions.add(_controller.mapEventStream.listen((ev) {
-          _mapRotationRadSubject.add(ev.camera.rotationRad);
-          widget.onCameraMove?.call(CameraPosition(
-            center: ev.camera.center.toMapCoord(),
-            zoom: ev.camera.zoom,
-            rotation: (360 - ev.camera.rotation) % 360,
-          ));
-        }));
+        _subscriptions.add(
+          _controller.mapEventStream.listen((ev) {
+            _mapRotationRadSubject.add(ev.camera.rotationRad);
+            widget.onCameraMove?.call(
+              CameraPosition(
+                center: ev.camera.center.toMapCoord(),
+                zoom: ev.camera.zoom,
+                rotation: (360 - ev.camera.rotation) % 360,
+              ),
+            );
+          }),
+        );
       }
     });
   }
@@ -90,16 +94,23 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
         if (widget.dataPoints != null)
           MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
-              markers: widget.dataPoints!
-                  .map((e) => _OsmDataPoint(
-                        original: e,
-                        child: _buildMarker(context, [e]),
-                      ))
-                  .toList(),
-              builder: (context, markers) => _buildMarker(
-                context,
-                markers.cast<_OsmDataPoint>().map((e) => e.original).toList(),
-              ),
+              markers:
+                  widget.dataPoints!
+                      .map(
+                        (e) => _OsmDataPoint(
+                          original: e,
+                          child: _buildMarker(context, [e]),
+                        ),
+                      )
+                      .toList(),
+              builder:
+                  (context, markers) => _buildMarker(
+                    context,
+                    markers
+                        .cast<_OsmDataPoint>()
+                        .map((e) => e.original)
+                        .toList(),
+                  ),
               // need to be large enough to contain markers of all size
               size: const Size.square(_markerBoundingBoxSize),
               // disable all tap handlers from package
@@ -119,7 +130,11 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
           alignment: AlignmentDirectional.topStart,
           child: Padding(
             padding: EdgeInsets.fromLTRB(
-                8, MediaQuery.of(context).padding.top + 8, 8, 0),
+              8,
+              MediaQuery.of(context).padding.top + 8,
+              8,
+              0,
+            ),
             child: _CompassIcon(
               mapRotationRadSubject: _mapRotationRadSubject,
               onTap: () {
@@ -143,10 +158,11 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
         child: StreamBuilder(
           stream: _mapRotationRadSubject.stream,
           initialData: _mapRotationRadSubject.value,
-          builder: (context, snapshot) => Transform.rotate(
-            angle: -snapshot.requireData,
-            child: widget.clusterBuilder!(context, dataPoints),
-          ),
+          builder:
+              (context, snapshot) => Transform.rotate(
+                angle: -snapshot.requireData,
+                child: widget.clusterBuilder!(context, dataPoints),
+              ),
         ),
       );
     }
@@ -159,34 +175,35 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
 }
 
 class _CompassIcon extends StatelessWidget {
-  const _CompassIcon({
-    required this.mapRotationRadSubject,
-    this.onTap,
-  });
+  const _CompassIcon({required this.mapRotationRadSubject, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder(
       stream: mapRotationRadSubject.stream,
       initialData: mapRotationRadSubject.value,
-      builder: (context, snapshot) => Transform.rotate(
-        angle: snapshot.requireData,
-        child: GestureDetector(
-          onTap: () {
-            onTap?.call();
-          },
-          child: Opacity(
-            opacity: .8,
-            child: Image(
-              image: Theme.of(context).brightness == Brightness.light
-                  ? const AssetImage(
-                      "packages/np_gps_map/assets/map_compass.png")
-                  : const AssetImage(
-                      "packages/np_gps_map/assets/map_compass_dark.png"),
+      builder:
+          (context, snapshot) => Transform.rotate(
+            angle: snapshot.requireData,
+            child: GestureDetector(
+              onTap: () {
+                onTap?.call();
+              },
+              child: Opacity(
+                opacity: .8,
+                child: Image(
+                  image:
+                      Theme.of(context).brightness == Brightness.light
+                          ? const AssetImage(
+                            "packages/np_gps_map/assets/map_compass.png",
+                          )
+                          : const AssetImage(
+                            "packages/np_gps_map/assets/map_compass_dark.png",
+                          ),
+                ),
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -195,14 +212,12 @@ class _CompassIcon extends StatelessWidget {
 }
 
 class _OsmDataPoint extends Marker {
-  _OsmDataPoint({
-    required this.original,
-    required super.child,
-  }) : super(
-          point: original.position.toLatLng(),
-          width: _markerBoundingBoxSize,
-          height: _markerBoundingBoxSize,
-        );
+  _OsmDataPoint({required this.original, required super.child})
+    : super(
+        point: original.position.toLatLng(),
+        width: _markerBoundingBoxSize,
+        height: _markerBoundingBoxSize,
+      );
 
   final DataPoint original;
 }

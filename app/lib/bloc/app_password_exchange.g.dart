@@ -10,8 +10,9 @@ extension _$AppPasswordExchangeBlocNpLog on AppPasswordExchangeBloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("bloc.app_password_exchange.AppPasswordExchangeBloc");
+  static final log = Logger(
+    "bloc.app_password_exchange.AppPasswordExchangeBloc",
+  );
 }
 
 // **************************************************************************

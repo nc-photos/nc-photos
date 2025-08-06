@@ -54,11 +54,11 @@ $src""";
 }
 
 Future _buildTest(String src, String expected) => buildTest(
-      generators: [const NpLogGenerator()],
-      pkgName: _pkgName,
-      src: src,
-      expected: expected,
-    );
+  generators: [const NpLogGenerator()],
+  pkgName: _pkgName,
+  src: src,
+  expected: expected,
+);
 
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;

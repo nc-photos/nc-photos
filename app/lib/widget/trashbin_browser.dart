@@ -45,22 +45,17 @@ class TrashbinBrowser extends StatefulWidget {
   static const routeName = "/trashbin-browser";
 
   static Route buildRoute(
-          TrashbinBrowserArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => TrashbinBrowser.fromArgs(args),
-        settings: settings,
-      );
+    TrashbinBrowserArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => TrashbinBrowser.fromArgs(args),
+    settings: settings,
+  );
 
-  const TrashbinBrowser({
-    super.key,
-    required this.account,
-  });
+  const TrashbinBrowser({super.key, required this.account});
 
   TrashbinBrowser.fromArgs(TrashbinBrowserArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-        );
+    : this(key: key, account: args.account);
 
   @override
   createState() => _TrashbinBrowserState();
@@ -99,7 +94,10 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         context,
         TrashbinViewer.routeName,
         arguments: TrashbinViewerArguments(
-            widget.account, _backingFiles, fileItem.fileIndex),
+          widget.account,
+          _backingFiles,
+          fileItem.fileIndex,
+        ),
       );
     });
   }
@@ -128,10 +126,7 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         itemStreamListItems.isEmpty) {
       return Column(
         children: [
-          AppBar(
-            title: Text(L10n.global().albumTrashLabel),
-            elevation: 0,
-          ),
+          AppBar(title: Text(L10n.global().albumTrashLabel), elevation: 0),
           Expanded(
             child: EmptyListIndicator(
               icon: Icons.delete_outlined,
@@ -148,9 +143,7 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
             child: CustomScrollView(
               slivers: [
                 _buildAppBar(context),
-                buildItemStreamList(
-                  maxCrossAxisExtent: _thumbSize.toDouble(),
-                ),
+                buildItemStreamList(maxCrossAxisExtent: _thumbSize.toDouble()),
               ],
             ),
           ),
@@ -190,12 +183,13 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         ),
         PopupMenuButton<_SelectionAppBarMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: _SelectionAppBarMenuOption.delete,
-              child: Text(L10n.global().deletePermanentlyTooltip),
-            ),
-          ],
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: _SelectionAppBarMenuOption.delete,
+                  child: Text(L10n.global().deletePermanentlyTooltip),
+                ),
+              ],
           onSelected: (option) {
             switch (option) {
               case _SelectionAppBarMenuOption.delete:
@@ -203,7 +197,7 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
                 break;
             }
           },
-        )
+        ),
       ],
     );
   }
@@ -226,12 +220,13 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         ),
         PopupMenuButton<_AppBarMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: _AppBarMenuOption.empty,
-              child: Text(L10n.global().emptyTrashbinTooltip),
-            ),
-          ],
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: _AppBarMenuOption.empty,
+                  child: Text(L10n.global().emptyTrashbinTooltip),
+                ),
+              ],
           onSelected: (option) {
             switch (option) {
               case _AppBarMenuOption.empty:
@@ -262,62 +257,79 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
     unawaited(
       showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text(L10n.global().emptyTrashbinConfirmationDialogTitle),
-          content: Text(L10n.global().emptyTrashbinConfirmationDialogContent),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteFiles(_backingFiles);
-              },
-              child: Text(L10n.global().confirmButtonLabel),
+        builder:
+            (_) => AlertDialog(
+              title: Text(L10n.global().emptyTrashbinConfirmationDialogTitle),
+              content: Text(
+                L10n.global().emptyTrashbinConfirmationDialogContent,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _deleteFiles(_backingFiles);
+                  },
+                  child: Text(L10n.global().confirmButtonLabel),
+                ),
+              ],
             ),
-          ],
-        ),
       ),
     );
   }
 
   Future<void> _onSelectionAppBarRestorePressed() async {
-    SnackBarManager().showSnackBar(SnackBar(
-      content: Text(L10n.global()
-          .restoreSelectedProcessingNotification(selectedListItems.length)),
-      duration: k.snackBarDurationShort,
-    ));
-    final selection = selectedListItems
-        .whereType<PhotoListFileItem>()
-        .map((e) => e.file)
-        .toList();
+    SnackBarManager().showSnackBar(
+      SnackBar(
+        content: Text(
+          L10n.global().restoreSelectedProcessingNotification(
+            selectedListItems.length,
+          ),
+        ),
+        duration: k.snackBarDurationShort,
+      ),
+    );
+    final selection =
+        selectedListItems
+            .whereType<PhotoListFileItem>()
+            .map((e) => e.file)
+            .toList();
     setState(() {
       clearSelectedItems();
     });
     final c = KiwiContainer().resolve<DiContainer>();
-    final selectedFiles =
-        await InflateFileDescriptor(c)(widget.account, selection);
+    final selectedFiles = await InflateFileDescriptor(c)(
+      widget.account,
+      selection,
+    );
     final failures = <File>[];
     for (final f in selectedFiles) {
       try {
         await RestoreTrashbin(c)(widget.account, f);
       } catch (e, stacktrace) {
         _log.shout(
-            "[_onSelectionAppBarRestorePressed] Failed while restoring file: ${logFilename(f.path)}",
-            e,
-            stacktrace);
+          "[_onSelectionAppBarRestorePressed] Failed while restoring file: ${logFilename(f.path)}",
+          e,
+          stacktrace,
+        );
         failures.add(f);
       }
     }
     if (failures.isEmpty) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().restoreSelectedSuccessNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().restoreSelectedSuccessNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     } else {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(
-            L10n.global().restoreSelectedFailureNotification(failures.length)),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(
+            L10n.global().restoreSelectedFailureNotification(failures.length),
+          ),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
   }
 
@@ -325,20 +337,24 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
     unawaited(
       showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
-          content:
-              Text(L10n.global().deletePermanentlyConfirmationDialogContent),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteSelected();
-              },
-              child: Text(L10n.global().confirmButtonLabel),
+        builder:
+            (_) => AlertDialog(
+              title: Text(
+                L10n.global().deletePermanentlyConfirmationDialogTitle,
+              ),
+              content: Text(
+                L10n.global().deletePermanentlyConfirmationDialogContent,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _deleteSelected();
+                  },
+                  child: Text(L10n.global().confirmButtonLabel),
+                ),
+              ],
             ),
-          ],
-        ),
       ),
     );
   }
@@ -349,7 +365,8 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         widget.account,
         files,
         sorter: _fileSorter,
-        locale: language_util.getSelectedLocale() ??
+        locale:
+            language_util.getSelectedLocale() ??
             PlatformDispatcher.instance.locale,
       ),
       buildPhotoListItem,
@@ -365,10 +382,11 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
   }
 
   Future<void> _deleteSelected() async {
-    final selectedFiles = selectedListItems
-        .whereType<PhotoListFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selectedFiles =
+        selectedListItems
+            .whereType<PhotoListFileItem>()
+            .map((e) => e.file)
+            .toList();
     setState(() {
       clearSelectedItems();
     });
@@ -378,11 +396,7 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
   Future<void> _deleteFiles(List<FileDescriptor> files) async {
     await RemoveSelectionHandler(
       filesController: context.read<AccountController>().filesController,
-    )(
-      account: widget.account,
-      selection: files,
-      shouldCleanupAlbum: false,
-    );
+    )(account: widget.account, selection: files, shouldCleanupAlbum: false);
   }
 
   void _reqQuery() {
@@ -400,13 +414,9 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
   int get _thumbSize => photo_list_util.getThumbSize(_thumbZoomLevel);
 }
 
-enum _AppBarMenuOption {
-  empty,
-}
+enum _AppBarMenuOption { empty }
 
-enum _SelectionAppBarMenuOption {
-  delete,
-}
+enum _SelectionAppBarMenuOption { delete }
 
 int _fileSorter(FileDescriptor fdA, FileDescriptor fdB) {
   final a = fdA as File;

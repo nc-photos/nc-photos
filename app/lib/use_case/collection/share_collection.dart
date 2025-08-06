@@ -15,11 +15,11 @@ class ShareCollection {
     Collection collection,
     Sharee sharee, {
     required ValueChanged<Collection> onCollectionUpdated,
-  }) =>
-      CollectionAdapter.of(_c, account, collection).share(
-        sharee,
-        onCollectionUpdated: onCollectionUpdated,
-      );
+  }) => CollectionAdapter.of(
+    _c,
+    account,
+    collection,
+  ).share(sharee, onCollectionUpdated: onCollectionUpdated);
 
   final DiContainer _c;
 }

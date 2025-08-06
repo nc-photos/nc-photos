@@ -50,14 +50,16 @@ class ApiRecognizeFace {
   }) async {
     final endpoint = _path;
     try {
-      final bool hasDavNs = (getcontentlength != null ||
-          getcontenttype != null ||
-          getetag != null ||
-          getlastmodified != null);
-      final bool hasNcNs = (faceDetections != null ||
-          fileMetadataSize != null ||
-          hasPreview != null ||
-          realpath != null);
+      final bool hasDavNs =
+          (getcontentlength != null ||
+              getcontenttype != null ||
+              getetag != null ||
+              getlastmodified != null);
+      final bool hasNcNs =
+          (faceDetections != null ||
+              fileMetadataSize != null ||
+              hasPreview != null ||
+              realpath != null);
       final bool hasOcNs = (favorite != null || fileid != null);
       if (!hasDavNs && !hasOcNs && !hasNcNs) {
         // no body
@@ -72,40 +74,47 @@ class ApiRecognizeFace {
       final builder = XmlBuilder();
       builder
         ..processing("xml", "version=\"1.0\"")
-        ..element("d:propfind", namespaces: namespaces, nest: () {
-          builder.element("d:prop", nest: () {
-            if (getcontentlength != null) {
-              builder.element("d:getcontentlength");
-            }
-            if (getcontenttype != null) {
-              builder.element("d:getcontenttype");
-            }
-            if (getetag != null) {
-              builder.element("d:getetag");
-            }
-            if (getlastmodified != null) {
-              builder.element("d:getlastmodified");
-            }
-            if (faceDetections != null) {
-              builder.element("nc:face-detections");
-            }
-            if (fileMetadataSize != null) {
-              builder.element("nc:file-metadata-size");
-            }
-            if (hasPreview != null) {
-              builder.element("nc:has-preview");
-            }
-            if (realpath != null) {
-              builder.element("nc:realpath");
-            }
-            if (favorite != null) {
-              builder.element("oc:favorite");
-            }
-            if (fileid != null) {
-              builder.element("oc:fileid");
-            }
-          });
-        });
+        ..element(
+          "d:propfind",
+          namespaces: namespaces,
+          nest: () {
+            builder.element(
+              "d:prop",
+              nest: () {
+                if (getcontentlength != null) {
+                  builder.element("d:getcontentlength");
+                }
+                if (getcontenttype != null) {
+                  builder.element("d:getcontenttype");
+                }
+                if (getetag != null) {
+                  builder.element("d:getetag");
+                }
+                if (getlastmodified != null) {
+                  builder.element("d:getlastmodified");
+                }
+                if (faceDetections != null) {
+                  builder.element("nc:face-detections");
+                }
+                if (fileMetadataSize != null) {
+                  builder.element("nc:file-metadata-size");
+                }
+                if (hasPreview != null) {
+                  builder.element("nc:has-preview");
+                }
+                if (realpath != null) {
+                  builder.element("nc:realpath");
+                }
+                if (favorite != null) {
+                  builder.element("oc:favorite");
+                }
+                if (fileid != null) {
+                  builder.element("oc:fileid");
+                }
+              },
+            );
+          },
+        );
       return await api.request(
         "PROPFIND",
         endpoint,

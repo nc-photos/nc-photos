@@ -63,9 +63,9 @@ class ListTagBlocFailure extends ListTagBlocState {
 @npLog
 class ListTagBloc extends Bloc<ListTagBlocEvent, ListTagBlocState> {
   ListTagBloc(this._c)
-      : assert(require(_c)),
-        assert(ListTag.require(_c)),
-        super(const ListTagBlocInit()) {
+    : assert(require(_c)),
+      assert(ListTag.require(_c)),
+      super(const ListTagBlocInit()) {
     on<ListTagBlocEvent>(_onEvent);
   }
 
@@ -86,7 +86,9 @@ class ListTagBloc extends Bloc<ListTagBlocEvent, ListTagBlocState> {
   }
 
   Future<void> _onEvent(
-      ListTagBlocEvent event, Emitter<ListTagBlocState> emit) async {
+    ListTagBlocEvent event,
+    Emitter<ListTagBlocState> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is ListTagBlocQuery) {
       await _onEventQuery(event, emit);
@@ -94,7 +96,9 @@ class ListTagBloc extends Bloc<ListTagBlocEvent, ListTagBlocState> {
   }
 
   Future<void> _onEventQuery(
-      ListTagBlocQuery ev, Emitter<ListTagBlocState> emit) async {
+    ListTagBlocQuery ev,
+    Emitter<ListTagBlocState> emit,
+  ) async {
     try {
       emit(ListTagBlocLoading(ev.account, state.items));
       emit(ListTagBlocSuccess(ev.account, await _query(ev)));

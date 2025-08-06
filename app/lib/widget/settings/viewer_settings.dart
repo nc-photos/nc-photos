@@ -30,9 +30,7 @@ class ViewerSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(prefController: context.read()),
       child: const _WrappedViewerSettings(),
     );
   }
@@ -75,72 +73,74 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
               title: Text(L10n.global().settingsViewerTitle),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  if (getRawPlatform().isMobile)
-                    _BlocSelector<int>(
-                      selector: (state) => state.screenBrightness,
-                      builder: (context, state) {
-                        return SwitchListTile(
-                          title:
-                              Text(L10n.global().settingsScreenBrightnessTitle),
-                          subtitle: Text(L10n.global()
-                              .settingsScreenBrightnessDescription),
-                          value: state >= 0,
-                          onChanged: (value) =>
-                              _onScreenBrightnessChanged(context, value),
-                        );
-                      },
-                    ),
-                  if (getRawPlatform().isMobile)
-                    _BlocSelector<bool>(
-                      selector: (state) => state.isForceRotation,
-                      builder: (context, state) {
-                        return SwitchListTile(
-                          title: Text(L10n.global().settingsForceRotationTitle),
-                          subtitle: Text(
-                              L10n.global().settingsForceRotationDescription),
-                          value: state,
-                          onChanged: (value) {
-                            _bloc.add(_SetForceRotation(value));
-                          },
-                        );
-                      },
-                    ),
-                  _BlocSelector<GpsMapProvider>(
-                    selector: (state) => state.gpsMapProvider,
+              delegate: SliverChildListDelegate([
+                if (getRawPlatform().isMobile)
+                  _BlocSelector<int>(
+                    selector: (state) => state.screenBrightness,
                     builder: (context, state) {
-                      return ListTile(
-                        title: Text(L10n.global().settingsMapProviderTitle),
-                        subtitle: Text(state.toUserString()),
-                        onTap: () => _onMapProviderTap(context),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title:
-                        Text(L10n.global().settingsViewerCustomizeAppBarTitle),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const ViewerAppBarSettings(),
+                      return SwitchListTile(
+                        title: Text(
+                          L10n.global().settingsScreenBrightnessTitle,
                         ),
-                      );
-                    },
-                  ),
-                  ListTile(
-                    title: Text(
-                        L10n.global().settingsViewerCustomizeBottomAppBarTitle),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const ViewerBottomAppBarSettings(),
+                        subtitle: Text(
+                          L10n.global().settingsScreenBrightnessDescription,
                         ),
+                        value: state >= 0,
+                        onChanged:
+                            (value) =>
+                                _onScreenBrightnessChanged(context, value),
                       );
                     },
                   ),
-                ],
-              ),
+                if (getRawPlatform().isMobile)
+                  _BlocSelector<bool>(
+                    selector: (state) => state.isForceRotation,
+                    builder: (context, state) {
+                      return SwitchListTile(
+                        title: Text(L10n.global().settingsForceRotationTitle),
+                        subtitle: Text(
+                          L10n.global().settingsForceRotationDescription,
+                        ),
+                        value: state,
+                        onChanged: (value) {
+                          _bloc.add(_SetForceRotation(value));
+                        },
+                      );
+                    },
+                  ),
+                _BlocSelector<GpsMapProvider>(
+                  selector: (state) => state.gpsMapProvider,
+                  builder: (context, state) {
+                    return ListTile(
+                      title: Text(L10n.global().settingsMapProviderTitle),
+                      subtitle: Text(state.toUserString()),
+                      onTap: () => _onMapProviderTap(context),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text(L10n.global().settingsViewerCustomizeAppBarTitle),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ViewerAppBarSettings(),
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text(
+                    L10n.global().settingsViewerCustomizeBottomAppBarTitle,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const ViewerBottomAppBarSettings(),
+                      ),
+                    );
+                  },
+                ),
+              ]),
             ),
           ],
         ),
@@ -149,7 +149,9 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
   }
 
   Future<void> _onScreenBrightnessChanged(
-      BuildContext context, bool value) async {
+    BuildContext context,
+    bool value,
+  ) async {
     if (!value) {
       _bloc.add(const _SetScreenBrightness(-1));
       return;
@@ -168,19 +170,24 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
   Future<void> _onMapProviderTap(BuildContext context) async {
     final result = await showDialog<GpsMapProvider>(
       context: context,
-      builder: (context) => FancyOptionPicker(
-        items: GpsMapProvider.values
-            .map((provider) => FancyOptionPickerItem(
-                  label: provider.toUserString(),
-                  isSelected: provider == _bloc.state.gpsMapProvider,
-                  onSelect: () {
-                    _log.info(
-                        "[_onMapProviderTap] Set map provider: ${provider.toUserString()}");
-                    Navigator.of(context).pop(provider);
-                  },
-                ))
-            .toList(),
-      ),
+      builder:
+          (context) => FancyOptionPicker(
+            items:
+                GpsMapProvider.values
+                    .map(
+                      (provider) => FancyOptionPickerItem(
+                        label: provider.toUserString(),
+                        isSelected: provider == _bloc.state.gpsMapProvider,
+                        onSelect: () {
+                          _log.info(
+                            "[_onMapProviderTap] Set map provider: ${provider.toUserString()}",
+                          );
+                          Navigator.of(context).pop(provider);
+                        },
+                      ),
+                    )
+                    .toList(),
+          ),
     );
     if (!context.mounted ||
         result == null ||
@@ -194,9 +201,7 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
 }
 
 class _BrightnessDialog extends StatefulWidget {
-  const _BrightnessDialog({
-    required this.initialValue,
-  });
+  const _BrightnessDialog({required this.initialValue});
 
   @override
   State<StatefulWidget> createState() => _BrightnessDialogState();
@@ -243,7 +248,10 @@ class _BrightnessDialogState extends State<_BrightnessDialog> {
                       await ScreenBrightness().setScreenBrightness(value);
                     } catch (e, stackTrace) {
                       _log.severe(
-                          "Failed while setScreenBrightness", e, stackTrace);
+                        "Failed while setScreenBrightness",
+                        e,
+                        stackTrace,
+                      );
                     }
                   },
                 ),

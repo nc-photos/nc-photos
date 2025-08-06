@@ -61,14 +61,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   get filename => displayName;
 
   @override
-  get props => [
-        uri,
-        displayName,
-        path,
-        lastModified,
-        mime,
-        dateTaken,
-      ];
+  get props => [uri, displayName, path, lastModified, mime, dateTaken];
 
   final String uri;
   final String displayName;
@@ -83,8 +76,8 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   final DateTime? dateTaken;
 }
 
-typedef LocalFileOnFailureListener = void Function(
-    LocalFile file, Object? error, StackTrace? stackTrace);
+typedef LocalFileOnFailureListener =
+    void Function(LocalFile file, Object? error, StackTrace? stackTrace);
 
 class LocalFileRepo {
   const LocalFileRepo(this.dataSrc);
@@ -96,15 +89,13 @@ class LocalFileRepo {
   Future<void> deleteFiles(
     List<LocalFile> files, {
     LocalFileOnFailureListener? onFailure,
-  }) =>
-      dataSrc.deleteFiles(files, onFailure: onFailure);
+  }) => dataSrc.deleteFiles(files, onFailure: onFailure);
 
   /// See [LocalFileDataSource.shareFiles]
   Future<void> shareFiles(
     List<LocalFile> files, {
     LocalFileOnFailureListener? onFailure,
-  }) =>
-      dataSrc.shareFiles(files, onFailure: onFailure);
+  }) => dataSrc.shareFiles(files, onFailure: onFailure);
 
   final LocalFileDataSource dataSrc;
 }

@@ -10,6 +10,7 @@ extension _$PersonRecognizeAdapterNpLog on PersonRecognizeAdapter {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.person.adapter.recognize.PersonRecognizeAdapter");
+  static final log = Logger(
+    "entity.person.adapter.recognize.PersonRecognizeAdapter",
+  );
 }

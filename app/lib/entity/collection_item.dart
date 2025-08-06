@@ -9,9 +9,7 @@ abstract class CollectionItem {
 abstract class CollectionFileItem implements CollectionItem {
   const CollectionFileItem();
 
-  CollectionFileItem copyWith({
-    FileDescriptor? file,
-  });
+  CollectionFileItem copyWith({FileDescriptor? file});
 
   FileDescriptor get file;
 }

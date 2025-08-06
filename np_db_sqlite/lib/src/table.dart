@@ -17,8 +17,8 @@ class Accounts extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {server, userId},
-      ];
+    {server, userId},
+  ];
 }
 
 /// A file located on a server
@@ -40,8 +40,8 @@ class Files extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {server, fileId},
-      ];
+    {server, fileId},
+  ];
 }
 
 /// Account specific properties associated with a file
@@ -63,8 +63,8 @@ class AccountFiles extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {account, file},
-      ];
+    {account, file},
+  ];
 }
 
 /// An image file
@@ -148,8 +148,8 @@ class NcAlbums extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {account, relativePath},
-      ];
+    {account, relativePath},
+  ];
 }
 
 class NcAlbumItems extends Table {
@@ -170,15 +170,16 @@ class NcAlbumItems extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {parent, fileId},
-      ];
+    {parent, fileId},
+  ];
 }
 
 class Albums extends Table {
   IntColumn get rowId => integer().autoIncrement()();
-  IntColumn get file => integer()
-      .references(Files, #rowId, onDelete: KeyAction.cascade)
-      .unique()();
+  IntColumn get file =>
+      integer()
+          .references(Files, #rowId, onDelete: KeyAction.cascade)
+          .unique()();
   // store the etag of the file when the album is cached in the db
   TextColumn get fileEtag => text().nullable()();
   IntColumn get version => integer()();
@@ -222,8 +223,8 @@ class Tags extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {server, tagId},
-      ];
+    {server, tagId},
+  ];
 }
 
 class FaceRecognitionPersons extends Table {
@@ -236,8 +237,8 @@ class FaceRecognitionPersons extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {account, name},
-      ];
+    {account, name},
+  ];
 }
 
 class RecognizeFaces extends Table {
@@ -248,15 +249,19 @@ class RecognizeFaces extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {account, label},
-      ];
+    {account, label},
+  ];
 }
 
 @DriftTableSort("SqliteDb")
 class RecognizeFaceItems extends Table {
   IntColumn get rowId => integer().autoIncrement()();
-  IntColumn get parent => integer()
-      .references(RecognizeFaces, #rowId, onDelete: KeyAction.cascade)();
+  IntColumn get parent =>
+      integer().references(
+        RecognizeFaces,
+        #rowId,
+        onDelete: KeyAction.cascade,
+      )();
   TextColumn get relativePath => text()();
   IntColumn get fileId => integer()();
   IntColumn get contentLength => integer().nullable()();
@@ -273,8 +278,8 @@ class RecognizeFaceItems extends Table {
 
   @override
   List<Set<Column>> get uniqueKeys => [
-        {parent, fileId},
-      ];
+    {parent, fileId},
+  ];
 }
 
 class SqliteDateTimeConverter extends TypeConverter<DateTime, DateTime> {

@@ -6,19 +6,13 @@ part 'entity.g.dart';
 
 @toString
 class FaceRecognitionFace with EquatableMixin {
-  const FaceRecognitionFace({
-    required this.id,
-    required this.fileId,
-  });
+  const FaceRecognitionFace({required this.id, required this.fileId});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        id,
-        fileId,
-      ];
+  List<Object?> get props => [id, fileId];
 
   final int id;
   final int fileId;
@@ -36,11 +30,7 @@ class FaceRecognitionPerson with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        name,
-        thumbFaceId,
-        count,
-      ];
+  List<Object?> get props => [name, thumbFaceId, count];
 
   final String name;
   final int thumbFaceId;
@@ -49,19 +39,13 @@ class FaceRecognitionPerson with EquatableMixin {
 
 @toString
 class Favorite with EquatableMixin {
-  const Favorite({
-    required this.href,
-    required this.fileId,
-  });
+  const Favorite({required this.href, required this.fileId});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        href,
-        fileId,
-      ];
+  List<Object?> get props => [href, fileId];
 
   final String href;
   final int fileId;
@@ -96,26 +80,26 @@ class File with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        href,
-        lastModified,
-        etag,
-        contentType,
-        isCollection,
-        contentLength,
-        fileId,
-        favorite,
-        ownerId,
-        ownerDisplayName,
-        hasPreview,
-        trashbinFilename,
-        trashbinOriginalLocation,
-        trashbinDeletionTime,
-        metadataPhotosIfd0,
-        metadataPhotosExif,
-        metadataPhotosGps,
-        metadataPhotosSize,
-        customProperties,
-      ];
+    href,
+    lastModified,
+    etag,
+    contentType,
+    isCollection,
+    contentLength,
+    fileId,
+    favorite,
+    ownerId,
+    ownerDisplayName,
+    hasPreview,
+    trashbinFilename,
+    trashbinOriginalLocation,
+    trashbinDeletionTime,
+    metadataPhotosIfd0,
+    metadataPhotosExif,
+    metadataPhotosGps,
+    metadataPhotosSize,
+    customProperties,
+  ];
 
   final String href;
   final DateTime? lastModified;
@@ -153,8 +137,14 @@ class NcAlbum with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props =>
-      [href, lastPhoto, nbItems, location, dateRange, collaborators];
+  List<Object?> get props => [
+    href,
+    lastPhoto,
+    nbItems,
+    location,
+    dateRange,
+    collaborators,
+  ];
 
   final String href;
   final int? lastPhoto;
@@ -202,16 +192,16 @@ class NcAlbumItem with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        href,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        hasPreview,
-        favorite,
-        fileMetadataSize,
-      ];
+    href,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    favorite,
+    fileMetadataSize,
+  ];
 
   final String href;
   final int? fileId;
@@ -226,17 +216,13 @@ class NcAlbumItem with EquatableMixin {
 
 @toString
 class RecognizeFace with EquatableMixin {
-  const RecognizeFace({
-    required this.href,
-  });
+  const RecognizeFace({required this.href});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        href,
-      ];
+  List<Object?> get props => [href];
 
   final String href;
 }
@@ -262,18 +248,18 @@ class RecognizeFaceItem with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        href,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        faceDetections,
-        fileMetadataSize,
-        hasPreview,
-        realPath,
-        favorite,
-        fileId,
-      ];
+    href,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    faceDetections,
+    fileMetadataSize,
+    hasPreview,
+    realPath,
+    favorite,
+    fileId,
+  ];
 
   final String href;
   final int? contentLength;
@@ -311,20 +297,20 @@ class Share with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        id,
-        shareType,
-        stime,
-        uidOwner,
-        displaynameOwner,
-        uidFileOwner,
-        path,
-        itemType,
-        mimeType,
-        itemSource,
-        shareWith,
-        shareWithDisplayName,
-        url,
-      ];
+    id,
+    shareType,
+    stime,
+    uidOwner,
+    displaynameOwner,
+    uidFileOwner,
+    path,
+    itemType,
+    mimeType,
+    itemSource,
+    shareWith,
+    shareWithDisplayName,
+    url,
+  ];
 
   final String id;
   final int shareType;
@@ -356,12 +342,12 @@ class Sharee with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        type,
-        label,
-        shareType,
-        shareWith,
-        shareWithDisplayNameUnique,
-      ];
+    type,
+    label,
+    shareType,
+    shareWith,
+    shareWithDisplayNameUnique,
+  ];
 
   final String type;
   final String label;
@@ -382,11 +368,7 @@ class Status with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        version,
-        versionString,
-        productName,
-      ];
+  List<Object?> get props => [version, versionString, productName];
 
   final String version;
   final String versionString;
@@ -408,12 +390,12 @@ class Tag with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        href,
-        id,
-        displayName,
-        userVisible,
-        userAssignable,
-      ];
+    href,
+    id,
+    displayName,
+    userVisible,
+    userAssignable,
+  ];
 
   final String href;
   final int id;
@@ -424,19 +406,13 @@ class Tag with EquatableMixin {
 
 @toString
 class TaggedFile with EquatableMixin {
-  const TaggedFile({
-    required this.href,
-    required this.fileId,
-  });
+  const TaggedFile({required this.href, required this.fileId});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        href,
-        fileId,
-      ];
+  List<Object?> get props => [href, fileId];
 
   final String href;
   final int fileId;

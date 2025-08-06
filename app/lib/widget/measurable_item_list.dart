@@ -60,7 +60,8 @@ class _MeasurableItemListState extends State<MeasurableItemList>
         final orientation = MediaQuery.of(context).orientation;
         if (orientation != _prevOrientation) {
           _log.info(
-              "[didChangeMetrics] updateListHeight: orientation changed: $orientation");
+            "[didChangeMetrics] updateListHeight: orientation changed: $orientation",
+          );
           _prevOrientation = orientation;
           updateListHeight();
         }
@@ -72,40 +73,47 @@ class _MeasurableItemListState extends State<MeasurableItemList>
   build(BuildContext context) {
     // on mobile, LayoutBuilder conflicts with TextFields.
     // See https://github.com/flutter/flutter/issues/63919
-    return SliverLayoutBuilder(builder: (context, constraints) {
-      _prevListWidth ??= constraints.crossAxisExtent;
-      if (constraints.crossAxisExtent != _prevListWidth) {
-        _log.info("[build] updateListHeight: list viewport width changed");
-        WidgetsBinding.instance.addPostFrameCallback((_) => updateListHeight());
-        _prevListWidth = constraints.crossAxisExtent;
-      }
+    return SliverLayoutBuilder(
+      builder: (context, constraints) {
+        _prevListWidth ??= constraints.crossAxisExtent;
+        if (constraints.crossAxisExtent != _prevListWidth) {
+          _log.info("[build] updateListHeight: list viewport width changed");
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => updateListHeight(),
+          );
+          _prevListWidth = constraints.crossAxisExtent;
+        }
 
-      // need to rebuild grid after cell size changed
-      final cellSize = widget.maxCrossAxisExtent;
-      _prevCellSize ??= cellSize;
-      if (cellSize != _prevCellSize) {
-        _log.info("[build] updateListHeight: cell size changed");
-        WidgetsBinding.instance.addPostFrameCallback((_) => updateListHeight());
-        _prevCellSize = cellSize;
-      }
-      _gridKey = _GridKey("$_uniqueToken $cellSize");
-      return MeasurableSliverStaggeredGrid.extentBuilder(
-        key: _gridKey,
-        maxCrossAxisExtent: widget.maxCrossAxisExtent,
-        itemCount: widget.itemCount,
-        itemBuilder: widget.itemBuilder,
-        staggeredTileBuilder: widget.staggeredTileBuilder,
-        mainAxisSpacing: widget.mainAxisSpacing,
-      );
-    });
+        // need to rebuild grid after cell size changed
+        final cellSize = widget.maxCrossAxisExtent;
+        _prevCellSize ??= cellSize;
+        if (cellSize != _prevCellSize) {
+          _log.info("[build] updateListHeight: cell size changed");
+          WidgetsBinding.instance.addPostFrameCallback(
+            (_) => updateListHeight(),
+          );
+          _prevCellSize = cellSize;
+        }
+        _gridKey = _GridKey("$_uniqueToken $cellSize");
+        return MeasurableSliverStaggeredGrid.extentBuilder(
+          key: _gridKey,
+          maxCrossAxisExtent: widget.maxCrossAxisExtent,
+          itemCount: widget.itemCount,
+          itemBuilder: widget.itemBuilder,
+          staggeredTileBuilder: widget.staggeredTileBuilder,
+          mainAxisSpacing: widget.mainAxisSpacing,
+        );
+      },
+    );
   }
 
   @override
   updateListHeight() {
     double? newMaxExtent;
     try {
-      final renderObj = _gridKey.currentContext!.findRenderObject()
-          as RenderMeasurableSliverStaggeredGrid;
+      final renderObj =
+          _gridKey.currentContext!.findRenderObject()
+              as RenderMeasurableSliverStaggeredGrid;
       final maxExtent = renderObj.calculateExtent();
       _log.info("[updateListHeight] Max extent: $maxExtent");
       if (maxExtent == 0) {
@@ -115,8 +123,11 @@ class _MeasurableItemListState extends State<MeasurableItemList>
         newMaxExtent = maxExtent;
       }
     } catch (e, stacktrace) {
-      _log.shout("[updateListHeight] Failed while calculateMaxScrollExtent", e,
-          stacktrace);
+      _log.shout(
+        "[updateListHeight] Failed while calculateMaxScrollExtent",
+        e,
+        stacktrace,
+      );
       newMaxExtent = null;
     }
 

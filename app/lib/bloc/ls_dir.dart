@@ -36,10 +36,7 @@ class LsDirBlocItem with EquatableMixin {
   }
 
   @override
-  get props => [
-        file,
-        children,
-      ];
+  get props => [file, children];
 
   final File file;
   final bool isE2ee;
@@ -56,20 +53,12 @@ abstract class LsDirBlocEvent {
 
 @toString
 class LsDirBlocQuery extends LsDirBlocEvent {
-  const LsDirBlocQuery(
-    this.account,
-    this.root, {
-    this.depth = 1,
-  });
+  const LsDirBlocQuery(this.account, this.root, {this.depth = 1});
 
   @override
   String toString() => _$toString();
 
-  LsDirBlocQuery copyWith({
-    Account? account,
-    File? root,
-    int? depth,
-  }) {
+  LsDirBlocQuery copyWith({Account? account, File? root, int? depth}) {
     return LsDirBlocQuery(
       account ?? this.account,
       root ?? this.root,
@@ -90,11 +79,7 @@ abstract class LsDirBlocState with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  get props => [
-        account,
-        root,
-        items,
-      ];
+  get props => [account, root, items];
 
   final Account? account;
   final File root;
@@ -116,16 +101,17 @@ class LsDirBlocSuccess extends LsDirBlocState {
 @toString
 class LsDirBlocFailure extends LsDirBlocState {
   const LsDirBlocFailure(
-      super.account, super.root, super.items, this.exception);
+    super.account,
+    super.root,
+    super.items,
+    this.exception,
+  );
 
   @override
   String toString() => _$toString();
 
   @override
-  get props => [
-        ...super.props,
-        exception,
-      ];
+  get props => [...super.props, exception];
 
   final dynamic exception;
 }
@@ -133,15 +119,15 @@ class LsDirBlocFailure extends LsDirBlocState {
 /// A bloc that return all directories under a dir recursively
 @npLog
 class LsDirBloc extends Bloc<LsDirBlocEvent, LsDirBlocState> {
-  LsDirBloc(
-    this.fileRepo, {
-    this.isListMinimal = false,
-  }) : super(LsDirBlocInit()) {
+  LsDirBloc(this.fileRepo, {this.isListMinimal = false})
+    : super(LsDirBlocInit()) {
     on<LsDirBlocEvent>(_onEvent);
   }
 
   Future<void> _onEvent(
-      LsDirBlocEvent event, Emitter<LsDirBlocState> emit) async {
+    LsDirBlocEvent event,
+    Emitter<LsDirBlocState> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is LsDirBlocQuery) {
       await _onEventQuery(event, emit);
@@ -149,7 +135,9 @@ class LsDirBloc extends Bloc<LsDirBlocEvent, LsDirBlocState> {
   }
 
   Future<void> _onEventQuery(
-      LsDirBlocQuery ev, Emitter<LsDirBlocState> emit) async {
+    LsDirBlocQuery ev,
+    Emitter<LsDirBlocState> emit,
+  ) async {
     try {
       emit(LsDirBlocLoading(ev.account, ev.root, state.items));
       emit(LsDirBlocSuccess(ev.account, ev.root, await _query(ev)));
@@ -164,9 +152,11 @@ class LsDirBloc extends Bloc<LsDirBlocEvent, LsDirBlocState> {
     var files = _cache[ev.root.path];
     if (files == null) {
       final op = isListMinimal ? LsMinimal(fileRepo) : Ls(fileRepo);
-      files = (await op(ev.account, ev.root))
-          .where((f) => f.isCollection ?? false)
-          .toList();
+      files =
+          (await op(
+            ev.account,
+            ev.root,
+          )).where((f) => f.isCollection ?? false).toList();
       _cache[ev.root.path] = files;
     }
     final removes = <File>[];
@@ -181,7 +171,8 @@ class LsDirBloc extends Bloc<LsDirBlocEvent, LsDirBlocState> {
         if (e.response.statusCode == 404) {
           // this could happen when the server db contains dangling entries
           _log.warning(
-              "[call] HTTP404 error while listing dir: ${logFilename(f.path)}");
+            "[call] HTTP404 error while listing dir: ${logFilename(f.path)}",
+          );
           removes.add(f);
         } else if (f.isCollection == true && e.response.statusCode == 403) {
           // e2ee dir

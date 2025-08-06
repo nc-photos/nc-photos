@@ -19,22 +19,38 @@ class TagParser extends XmlResponseParser {
     bool? userAssignable;
 
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("href",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "href",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         href = Uri.decodeComponent(child.innerText);
-      } else if (child.matchQualifiedName("propstat",
-          prefix: "DAV:", namespaces: namespaces)) {
-        final status = child.children
-            .whereType<XmlElement>()
-            .firstWhere((element) => element.matchQualifiedName("status",
-                prefix: "DAV:", namespaces: namespaces))
-            .innerText;
+      } else if (child.matchQualifiedName(
+        "propstat",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
+        final status =
+            child.children
+                .whereType<XmlElement>()
+                .firstWhere(
+                  (element) => element.matchQualifiedName(
+                    "status",
+                    prefix: "DAV:",
+                    namespaces: namespaces,
+                  ),
+                )
+                .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
         final prop = child.children.whereType<XmlElement>().firstWhere(
-            (element) => element.matchQualifiedName("prop",
-                prefix: "DAV:", namespaces: namespaces));
+          (element) => element.matchQualifiedName(
+            "prop",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        );
         final propParser = _PropParser(namespaces: namespaces);
         propParser.parse(prop);
         id = propParser.id;
@@ -59,24 +75,34 @@ class TagParser extends XmlResponseParser {
 }
 
 class _PropParser {
-  _PropParser({
-    this.namespaces = const {},
-  });
+  _PropParser({this.namespaces = const {}});
 
   /// Parse <DAV:prop> element contents
   void parse(XmlElement element) {
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("id",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "id",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _id = int.parse(child.innerText);
-      } else if (child.matchQualifiedName("display-name",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "display-name",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _displayName = child.innerText;
-      } else if (child.matchQualifiedName("user-visible",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "user-visible",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _userVisible = child.innerText == "true";
-      } else if (child.matchQualifiedName("user-assignable",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "user-assignable",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _userAssignable = child.innerText == "true";
       }
     }

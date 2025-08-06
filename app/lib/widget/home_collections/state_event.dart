@@ -82,9 +82,7 @@ class _TransformItems implements _Event {
 /// Set the currently selected items
 @toString
 class _SetSelectedItems implements _Event {
-  const _SetSelectedItems({
-    required this.items,
-  });
+  const _SetSelectedItems({required this.items});
 
   @override
   String toString() => _$toString();

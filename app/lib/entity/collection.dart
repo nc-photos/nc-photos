@@ -11,10 +11,7 @@ part 'collection.g.dart';
 @genCopyWith
 @toString
 class Collection with EquatableMixin {
-  const Collection({
-    required this.name,
-    required this.contentProvider,
-  });
+  const Collection({required this.name, required this.contentProvider});
 
   @override
   String toString() => _$toString();
@@ -49,12 +46,11 @@ class Collection with EquatableMixin {
     int width,
     int height, {
     bool? isKeepAspectRatio,
-  }) =>
-      contentProvider.getCoverUrl(
-        width,
-        height,
-        isKeepAspectRatio: isKeepAspectRatio,
-      );
+  }) => contentProvider.getCoverUrl(
+    width,
+    height,
+    isKeepAspectRatio: isKeepAspectRatio,
+  );
 
   CollectionSorter getSorter() => CollectionSorter.fromSortType(itemSort);
 
@@ -68,10 +64,7 @@ class Collection with EquatableMixin {
   bool get isOwned => contentProvider.isOwned;
 
   @override
-  List<Object?> get props => [
-        name,
-        contentProvider,
-      ];
+  List<Object?> get props => [name, contentProvider];
 
   final String name;
   final CollectionContentProvider contentProvider;
@@ -99,16 +92,10 @@ enum CollectionCapability {
 }
 
 class CollectionCoverResult with EquatableMixin {
-  const CollectionCoverResult({
-    required this.url,
-    required this.mime,
-  });
+  const CollectionCoverResult({required this.url, required this.mime});
 
   @override
-  List<Object?> get props => [
-        url,
-        mime,
-      ];
+  List<Object?> get props => [url, mime];
 
   final String url;
   final String? mime;

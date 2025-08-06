@@ -13,20 +13,27 @@ part of 'trusted_cert_manager.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? isCertsReady, List<CertInfo>? certs, ExceptionEvent? error});
+  _State call({
+    bool? isCertsReady,
+    List<CertInfo>? certs,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isCertsReady, dynamic certs, dynamic error = copyWithNull}) {
+  _State call({
+    dynamic isCertsReady,
+    dynamic certs,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        isCertsReady: isCertsReady as bool? ?? that.isCertsReady,
-        certs: certs as List<CertInfo>? ?? that.certs,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isCertsReady: isCertsReady as bool? ?? that.isCertsReady,
+      certs: certs as List<CertInfo>? ?? that.certs,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -46,8 +53,9 @@ extension _$_WrappedTrustedCertManagerStateNpLog
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.trusted_cert_manager._WrappedTrustedCertManagerState");
+  static final log = Logger(
+    "widget.trusted_cert_manager._WrappedTrustedCertManagerState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

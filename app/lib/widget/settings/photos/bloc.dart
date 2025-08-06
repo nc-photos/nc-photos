@@ -3,13 +3,13 @@ part of '../photos_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-    required this.accountPrefController,
-  }) : super(_State(
+  _Bloc({required this.prefController, required this.accountPrefController})
+    : super(
+        _State(
           isEnableMemories: accountPrefController.isEnableMemoryAlbumValue,
           memoriesRange: prefController.memoriesRangeValue,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_SetEnableMemories>(_onSetEnableMemories);
     on<_SetMemoriesRange>(_onSetMemoriesRange);

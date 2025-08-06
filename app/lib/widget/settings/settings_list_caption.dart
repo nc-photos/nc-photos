@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:np_ui/np_ui.dart';
 
 class SettingsListCaption extends StatelessWidget {
-  const SettingsListCaption({
-    super.key,
-    required this.label,
-  });
+  const SettingsListCaption({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {

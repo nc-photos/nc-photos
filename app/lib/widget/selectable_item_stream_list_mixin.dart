@@ -41,7 +41,10 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
 
   @protected
   void onVisibilityChanged(
-      VisibilityInfo info, int index, SelectableItem item) {}
+    VisibilityInfo info,
+    int index,
+    SelectableItem item,
+  ) {}
 
   @protected
   Widget buildItemStreamListOuter(
@@ -79,13 +82,14 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         key: _listKey,
         maxCrossAxisExtent: maxCrossAxisExtent,
         itemCount: _items.length,
-        itemBuilder: (context, i) => _buildItem(
-          context,
-          i,
-          isEnableVisibilityCallback: isEnableVisibilityCallback,
-          childBorderRadius: childBorderRadius!,
-          indicatorAlignment: indicatorAlignment,
-        ),
+        itemBuilder:
+            (context, i) => _buildItem(
+              context,
+              i,
+              isEnableVisibilityCallback: isEnableVisibilityCallback,
+              childBorderRadius: childBorderRadius!,
+              indicatorAlignment: indicatorAlignment,
+            ),
         staggeredTileBuilder: (index) => _items[index].staggeredTile,
         mainAxisSpacing: mainAxisSpacing,
         onMaxExtentChanged: onMaxExtentChanged,
@@ -95,22 +99,20 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         key: ObjectKey(maxCrossAxisExtent),
         maxCrossAxisExtent: maxCrossAxisExtent,
         itemCount: _items.length,
-        itemBuilder: (context, i) => _buildItem(
-          context,
-          i,
-          isEnableVisibilityCallback: isEnableVisibilityCallback,
-          childBorderRadius: childBorderRadius!,
-          indicatorAlignment: indicatorAlignment,
-        ),
+        itemBuilder:
+            (context, i) => _buildItem(
+              context,
+              i,
+              isEnableVisibilityCallback: isEnableVisibilityCallback,
+              childBorderRadius: childBorderRadius!,
+              indicatorAlignment: indicatorAlignment,
+            ),
         staggeredTileBuilder: (index) => _items[index].staggeredTile,
         mainAxisSpacing: mainAxisSpacing,
       );
     }
     if (getRawPlatform() == NpPlatform.android) {
-      return WillPopScope(
-        onWillPop: onBackButtonPressed,
-        child: content,
-      );
+      return WillPopScope(onWillPop: onBackButtonPressed, child: content);
     } else {
       return content;
     }
@@ -148,11 +150,14 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
     } catch (_) {}
     _lastSelectPosition = newLastSelectPosition;
 
-    _$__NpLog.log
-        .info("[itemStreamListItems] updateListHeight: list item changed");
-    WidgetsBinding.instance.addPostFrameCallback((_) =>
-        (_listKey.currentState as MeasurableItemListState?)
-            ?.updateListHeight());
+    _$__NpLog.log.info(
+      "[itemStreamListItems] updateListHeight: list item changed",
+    );
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) =>
+          (_listKey.currentState as MeasurableItemListState?)
+              ?.updateListHeight(),
+    );
   }
 
   @protected
@@ -183,9 +188,10 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         childBorderRadius: childBorderRadius,
         indicatorAlignment: indicatorAlignment,
         onTap: () => _onItemTap(item, index),
-        onLongPress: isSelectionMode && getRawPlatform() == NpPlatform.web
-            ? null
-            : () => _onItemLongPress(item, index),
+        onLongPress:
+            isSelectionMode && getRawPlatform() == NpPlatform.web
+                ? null
+                : () => _onItemLongPress(item, index),
         child: content,
       );
     }
@@ -202,8 +208,9 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
   void _onItemTap(SelectableItem item, int index) {
     if (isSelectionMode) {
       if (!_items.containsIdentical(item)) {
-        _$__NpLog.log
-            .warning("[_onItemTap] Item not found in backing list, ignoring");
+        _$__NpLog.log.warning(
+          "[_onItemTap] Item not found in backing list, ignoring",
+        );
         return;
       }
       if (_selectedItems.contains(item)) {
@@ -216,10 +223,14 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         // select
         if (_isRangeSelectionMode && _lastSelectPosition != null) {
           setState(() {
-            _selectedItems.addAll(_items
-                .sublist(math.min(_lastSelectPosition!, index),
-                    math.max(_lastSelectPosition!, index) + 1)
-                .where((e) => e.isSelectable));
+            _selectedItems.addAll(
+              _items
+                  .sublist(
+                    math.min(_lastSelectPosition!, index),
+                    math.max(_lastSelectPosition!, index) + 1,
+                  )
+                  .where((e) => e.isSelectable),
+            );
             _lastSelectPosition = index;
           });
         } else {
@@ -239,7 +250,8 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
   void _onItemLongPress(SelectableItem item, int index) {
     if (!_items.containsIdentical(item)) {
       _$__NpLog.log.warning(
-          "[_onItemLongPress] Item not found in backing list, ignoring");
+        "[_onItemLongPress] Item not found in backing list, ignoring",
+      );
       return;
     }
     final wasSelectionMode = isSelectionMode;
@@ -247,10 +259,14 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         wasSelectionMode &&
         _lastSelectPosition != null) {
       setState(() {
-        _selectedItems.addAll(_items
-            .sublist(math.min(_lastSelectPosition!, index),
-                math.max(_lastSelectPosition!, index) + 1)
-            .where((e) => e.isSelectable));
+        _selectedItems.addAll(
+          _items
+              .sublist(
+                math.min(_lastSelectPosition!, index),
+                math.max(_lastSelectPosition!, index) + 1,
+              )
+              .where((e) => e.isSelectable),
+        );
         _lastSelectPosition = index;
       });
     } else {
@@ -265,9 +281,11 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
       if (!SessionStorage().hasShowRangeSelectNotification) {
         SnackBarManager().showSnackBar(
           SnackBar(
-            content: Text(getRawPlatform() == NpPlatform.web
-                ? L10n.global().webSelectRangeNotification
-                : L10n.global().mobileSelectRangeNotification),
+            content: Text(
+              getRawPlatform() == NpPlatform.web
+                  ? L10n.global().webSelectRangeNotification
+                  : L10n.global().mobileSelectRangeNotification,
+            ),
             duration: k.snackBarDurationNormal,
           ),
           canBeReplaced: true,
@@ -280,18 +298,19 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
   /// Map selected items to the new item list
   void _transformSelectedItems() {
     // TODO too slow!
-    final newSelectedItems = _selectedItems
-        .map((from) {
-          try {
-            return _items
-                .where((e) => e.isSelectable)
-                .firstWhere((to) => from == to);
-          } catch (_) {
-            return null;
-          }
-        })
-        .whereType<SelectableItem>()
-        .toList();
+    final newSelectedItems =
+        _selectedItems
+            .map((from) {
+              try {
+                return _items
+                    .where((e) => e.isSelectable)
+                    .firstWhere((to) => from == to);
+              } catch (_) {
+                return null;
+              }
+            })
+            .whereType<SelectableItem>()
+            .toList();
     _selectedItems
       ..clear()
       ..addAll(newSelectedItems);

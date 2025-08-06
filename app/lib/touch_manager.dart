@@ -50,7 +50,9 @@ class TouchManager {
     if (dir.strippedPathWithEmpty.isNotEmpty) {
       // check parent
       if (await checkTouchEtag(
-              account, File(path: path_lib.dirname(dir.path))) ==
+            account,
+            File(path: path_lib.dirname(dir.path)),
+          ) ==
           null) {
         // parent ok == child ok
         return null;
@@ -82,7 +84,8 @@ class TouchManager {
     _resultCache[cacheKey] = result;
     if (!isMatch) {
       _log.info(
-          "[checkTouchEtag] Remote and local etag differ, cache outdated: ${dir.strippedPath}");
+        "[checkTouchEtag] Remote and local etag differ, cache outdated: ${dir.strippedPath}",
+      );
     } else {
       _log.info("[checkTouchEtag] etags match: ${dir.strippedPath}");
     }
@@ -96,14 +99,14 @@ class TouchManager {
     // at least the app will update the cache in next run
     await setLocalEtag(account, dir, null);
     (_throttlers["${account.url}/${dir.path}"] ??= Throttler(
-      onTriggered: _triggerTouch,
-      logTag: "TouchManager._throttlers",
-    ))
+          onTriggered: _triggerTouch,
+          logTag: "TouchManager._throttlers",
+        ))
         .trigger(
-      maxResponceTime: const Duration(seconds: 20),
-      maxPendingCount: 20,
-      data: _ThrottlerData(account, dir),
-    );
+          maxResponceTime: const Duration(seconds: 20),
+          maxPendingCount: 20,
+          data: _ThrottlerData(account, dir),
+        );
   }
 
   Future<void> flushRemote() async {
@@ -143,8 +146,11 @@ class TouchManager {
     _log.info("[touchRemote] Touch remote dir '${dir.path}'");
     final path = _getRemoteEtagPath(account, dir);
     return PutFileBinary(_c.fileRepo)(
-        account, "$path/token.txt", const Utf8Encoder().convert(newToken()),
-        shouldCreateMissingDir: true);
+      account,
+      "$path/token.txt",
+      const Utf8Encoder().convert(newToken()),
+      shouldCreateMissingDir: true,
+    );
   }
 
   /// Return the corresponding touch etag for [dir] from remote source, or null

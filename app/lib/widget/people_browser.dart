@@ -36,9 +36,9 @@ class PeopleBrowser extends StatelessWidget {
   static const routeName = "/people-browser";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const PeopleBrowser(),
-        settings: settings,
-      );
+    builder: (_) => const PeopleBrowser(),
+    settings: settings,
+  );
 
   const PeopleBrowser({super.key});
 
@@ -46,10 +46,11 @@ class PeopleBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (_) => _Bloc(
-        account: accountController.account,
-        personsController: accountController.personsController,
-      ),
+      create:
+          (_) => _Bloc(
+            account: accountController.account,
+            personsController: accountController.personsController,
+          ),
       child: const _WrappedPeopleBrowser(),
     );
   }
@@ -76,8 +77,8 @@ class _WrappedPeopleBrowserState extends State<_WrappedPeopleBrowser>
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.persons != current.persons,
+          listenWhen:
+              (previous, current) => previous.persons != current.persons,
           listener: (context, state) {
             _bloc.add(_TransformItems(state.persons));
           },
@@ -104,11 +105,14 @@ class _WrappedPeopleBrowserState extends State<_WrappedPeopleBrowser>
                   const _AppBar(),
                   SliverToBoxAdapter(
                     child: _BlocBuilder(
-                      buildWhen: (previous, current) =>
-                          previous.isLoading != current.isLoading,
-                      builder: (context, state) => state.isLoading
-                          ? const LinearProgressIndicator()
-                          : const SizedBox(height: 4),
+                      buildWhen:
+                          (previous, current) =>
+                              previous.isLoading != current.isLoading,
+                      builder:
+                          (context, state) =>
+                              state.isLoading
+                                  ? const LinearProgressIndicator()
+                                  : const SizedBox(height: 4),
                     ),
                   ),
                   _ContentList(
@@ -118,7 +122,9 @@ class _WrappedPeopleBrowserState extends State<_WrappedPeopleBrowser>
                         CollectionBrowser.routeName,
                         arguments: CollectionBrowserArguments(
                           CollectionBuilder.byPerson(
-                              _bloc.account, item.person),
+                            _bloc.account,
+                            item.person,
+                          ),
                         ),
                       );
                     },
@@ -148,34 +154,35 @@ class _AppBar extends StatelessWidget {
 }
 
 class _ContentList extends StatelessWidget {
-  const _ContentList({
-    this.onTap,
-  });
+  const _ContentList({this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.transformedItems != current.transformedItems,
-      builder: (context, state) => SliverStaggeredGrid.extentBuilder(
-        maxCrossAxisExtent: 160,
-        mainAxisSpacing: 2,
-        crossAxisSpacing: 2,
-        itemCount: state.transformedItems.length,
-        itemBuilder: (context, index) {
-          final item = state.transformedItems[index];
-          return _ItemView(
-            account: context.read<_Bloc>().account,
-            item: item,
-            onTap: onTap == null
-                ? null
-                : () {
-                    onTap!.call(index, item);
-                  },
-          );
-        },
-        staggeredTileBuilder: (_) => const StaggeredTile.count(1, 1),
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.transformedItems != current.transformedItems,
+      builder:
+          (context, state) => SliverStaggeredGrid.extentBuilder(
+            maxCrossAxisExtent: 160,
+            mainAxisSpacing: 2,
+            crossAxisSpacing: 2,
+            itemCount: state.transformedItems.length,
+            itemBuilder: (context, index) {
+              final item = state.transformedItems[index];
+              return _ItemView(
+                account: context.read<_Bloc>().account,
+                item: item,
+                onTap:
+                    onTap == null
+                        ? null
+                        : () {
+                          onTap!.call(index, item);
+                        },
+              );
+            },
+            staggeredTileBuilder: (_) => const StaggeredTile.count(1, 1),
+          ),
     );
   }
 
@@ -183,11 +190,7 @@ class _ContentList extends StatelessWidget {
 }
 
 class _ItemView extends StatelessWidget {
-  const _ItemView({
-    required this.account,
-    required this.item,
-    this.onTap,
-  });
+  const _ItemView({required this.account, required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -195,13 +198,14 @@ class _ItemView extends StatelessWidget {
       label: item.name,
       onTap: onTap,
       child: LayoutBuilder(
-        builder: (context, constraints) => PersonThumbnail(
-          account: account,
-          coverUrl: item.coverUrl,
-          coverMime: item.coverMime,
-          person: item.person,
-          dimension: constraints.maxWidth,
-        ),
+        builder:
+            (context, constraints) => PersonThumbnail(
+              account: account,
+              coverUrl: item.coverUrl,
+              coverMime: item.coverMime,
+              person: item.person,
+              dimension: constraints.maxWidth,
+            ),
       ),
     );
   }

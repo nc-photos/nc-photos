@@ -25,18 +25,16 @@ class EnhancementSettings extends StatelessWidget {
   static const routeName = "/settings/enhancement";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const EnhancementSettings(),
-        settings: settings,
-      );
+    builder: (_) => const EnhancementSettings(),
+    settings: settings,
+  );
 
   const EnhancementSettings({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(prefController: context.read()),
       child: const _WrappedEnhancementSettings(),
     );
   }
@@ -79,39 +77,41 @@ class _WrappedEnhancementSettingsState
               title: Text(L10n.global().settingsImageEditTitle),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _BlocSelector<bool>(
-                    selector: (state) => state.isSaveEditResultToServer,
-                    builder: (context, state) {
-                      return SwitchListTile(
-                        title: Text(L10n.global()
-                            .settingsImageEditSaveResultsToServerTitle),
-                        subtitle: Text(state
+              delegate: SliverChildListDelegate([
+                _BlocSelector<bool>(
+                  selector: (state) => state.isSaveEditResultToServer,
+                  builder: (context, state) {
+                    return SwitchListTile(
+                      title: Text(
+                        L10n.global().settingsImageEditSaveResultsToServerTitle,
+                      ),
+                      subtitle: Text(
+                        state
                             ? L10n.global()
                                 .settingsImageEditSaveResultsToServerTrueDescription
                             : L10n.global()
-                                .settingsImageEditSaveResultsToServerFalseDescription),
-                        value: state,
-                        onChanged: (value) {
-                          _bloc.add(_SetSaveEditResultToServer(value));
-                        },
-                      );
-                    },
-                  ),
-                  _BlocSelector<SizeInt>(
-                    selector: (state) => state.maxSize,
-                    builder: (context, state) {
-                      return ListTile(
-                        title: Text(
-                            L10n.global().settingsEnhanceMaxResolutionTitle2),
-                        subtitle: Text("${state.width}x${state.height}"),
-                        onTap: () => _onMaxSizeTap(context, state),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                                .settingsImageEditSaveResultsToServerFalseDescription,
+                      ),
+                      value: state,
+                      onChanged: (value) {
+                        _bloc.add(_SetSaveEditResultToServer(value));
+                      },
+                    );
+                  },
+                ),
+                _BlocSelector<SizeInt>(
+                  selector: (state) => state.maxSize,
+                  builder: (context, state) {
+                    return ListTile(
+                      title: Text(
+                        L10n.global().settingsEnhanceMaxResolutionTitle2,
+                      ),
+                      subtitle: Text("${state.width}x${state.height}"),
+                      onTap: () => _onMaxSizeTap(context, state),
+                    );
+                  },
+                ),
+              ]),
             ),
           ],
         ),
@@ -124,33 +124,34 @@ class _WrappedEnhancementSettingsState
     var height = initialSize.height;
     final result = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(L10n.global().settingsEnhanceMaxResolutionTitle2),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(L10n.global().settingsEnhanceMaxResolutionDescription),
-            const SizedBox(height: 16),
-            _SizeSlider(
-              initialWidth: initialSize.width,
-              initialHeight: initialSize.height,
-              onChanged: (size) {
-                width = size.w;
-                height = size.h;
-              },
-            )
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text(MaterialLocalizations.of(context).okButtonLabel),
+      builder:
+          (_) => AlertDialog(
+            title: Text(L10n.global().settingsEnhanceMaxResolutionTitle2),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(L10n.global().settingsEnhanceMaxResolutionDescription),
+                const SizedBox(height: 16),
+                _SizeSlider(
+                  initialWidth: initialSize.width,
+                  initialHeight: initialSize.height,
+                  onChanged: (size) {
+                    width = size.w;
+                    height = size.h;
+                  },
+                ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     if (!context.mounted ||
         result != true ||
@@ -190,10 +191,7 @@ class _SizeSliderState extends State<_SizeSlider> {
   build(BuildContext context) {
     return Column(
       children: [
-        Align(
-          alignment: Alignment.center,
-          child: Text("${_width}x$_height"),
-        ),
+        Align(alignment: Alignment.center, child: Text("${_width}x$_height")),
         StatefulSlider(
           initialValue: resolutionToSliderValue(_width).toDouble(),
           min: -3,

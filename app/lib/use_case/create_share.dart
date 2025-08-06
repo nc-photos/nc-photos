@@ -15,11 +15,7 @@ class CreateUserShare {
 class CreateLinkShare {
   const CreateLinkShare(this.shareRepo);
 
-  Future<Share> call(
-    Account account,
-    File file, {
-    String? password,
-  }) =>
+  Future<Share> call(Account account, File file, {String? password}) =>
       shareRepo.createLink(account, file, password: password);
 
   final ShareRepo shareRepo;

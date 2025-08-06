@@ -81,9 +81,7 @@ String getFileUrl(Account account, FileDescriptor file) {
 
 Uri getFileUri(Account account, FileDescriptor file) {
   final serverUri = account.uri;
-  return serverUri.replace(
-    path: "${serverUri.path}/${file.fdPath}",
-  );
+  return serverUri.replace(path: "${serverUri.path}/${file.fdPath}");
 }
 
 String getWebdavRootUrlRelative(Account account) =>
@@ -93,11 +91,7 @@ String getTrashbinPath(Account account) =>
     "remote.php/dav/trashbin/${account.userId}/trash";
 
 /// Return the face image URL. See [getFacePreviewUrlRelative]
-String getFacePreviewUrl(
-  Account account,
-  int faceId, {
-  required int size,
-}) {
+String getFacePreviewUrl(Account account, int faceId, {required int size}) {
   return "${account.url}/"
       "${getFacePreviewUrlRelative(account, faceId, size: size)}";
 }
@@ -119,27 +113,26 @@ String getAccountAvatarUrlRelative(Account account, int size) =>
 
 /// Initiate a login with Nextcloud login flow v2: https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
 Future<InitiateLoginResponse> initiateLogin(Uri uri) async {
-  final response = await Api.fromBaseUrl(uri).request(
-    "POST",
-    "index.php/login/v2",
-    header: {
-      "User-Agent": "nc-photos",
-    },
-  );
+  final response = await Api.fromBaseUrl(
+    uri,
+  ).request("POST", "index.php/login/v2", header: {"User-Agent": "nc-photos"});
   if (response.isGood) {
     return InitiateLoginResponse.fromJsonString(response.body);
   } else {
     _log.severe(
-        "[initiateLogin] Failed while requesting app password: $response");
+      "[initiateLogin] Failed while requesting app password: $response",
+    );
     throw ApiException(
-        response: response,
-        message: "Server responded with an error: HTTP ${response.statusCode}");
+      response: response,
+      message: "Server responded with an error: HTTP ${response.statusCode}",
+    );
   }
 }
 
 /// Retrieve App Password after successful initiation of login with Nextcloud login flow v2: https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
 Future<AppPasswordResponse> _getAppPassword(
-    InitiateLoginPollOptions options) async {
+  InitiateLoginPollOptions options,
+) async {
   Uri baseUrl;
   if (options.endpoint.scheme == "http") {
     baseUrl = Uri.http(options.endpoint.authority);
@@ -147,46 +140,51 @@ Future<AppPasswordResponse> _getAppPassword(
     baseUrl = Uri.https(options.endpoint.authority);
   }
   final response = await Api.fromBaseUrl(baseUrl).request(
-      "POST", options.endpoint.pathSegments.join("/"),
-      header: {
-        "User-Agent": "nc-photos",
-        "Content-Type": "application/x-www-form-urlencoded"
-      },
-      body: "token=${options.token}");
+    "POST",
+    options.endpoint.pathSegments.join("/"),
+    header: {
+      "User-Agent": "nc-photos",
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: "token=${options.token}",
+  );
   if (response.statusCode == 200) {
     return AppPasswordSuccess.fromJsonString(response.body);
   } else if (response.statusCode == 404) {
     return AppPasswordPending();
   } else {
     _log.severe(
-        "[getAppPassword] Failed while requesting app password: $response");
+      "[getAppPassword] Failed while requesting app password: $response",
+    );
     throw ApiException(
-        response: response,
-        message: "Server responded with an error: HTTP ${response.statusCode}");
+      response: response,
+      message: "Server responded with an error: HTTP ${response.statusCode}",
+    );
   }
 }
 
 /// Polls the app password endpoint every 5 seconds as lang as the token is valid (currently fixed to 20 min)
 /// See https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
 Stream<Future<AppPasswordResponse>> pollAppPassword(
-    InitiateLoginPollOptions options) {
+  InitiateLoginPollOptions options,
+) {
   return Stream.periodic(
-          const Duration(seconds: 5), (_) => _getAppPassword(options))
-      .takeWhile((_) => options.isTokenValid());
+    const Duration(seconds: 5),
+    (_) => _getAppPassword(options),
+  ).takeWhile((_) => options.isTokenValid());
 }
 
 @toString
 class InitiateLoginResponse {
-  const InitiateLoginResponse({
-    required this.poll,
-    required this.login,
-  });
+  const InitiateLoginResponse({required this.poll, required this.login});
 
   factory InitiateLoginResponse.fromJsonString(String jsonString) {
     final json = jsonDecode(jsonString);
     return InitiateLoginResponse(
       poll: InitiateLoginPollOptions(
-          json['poll']['token'], json['poll']['endpoint']),
+        json['poll']['token'],
+        json['poll']['endpoint'],
+      ),
       login: json['login'],
     );
   }
@@ -201,8 +199,8 @@ class InitiateLoginResponse {
 @toString
 class InitiateLoginPollOptions {
   InitiateLoginPollOptions(this.token, String endpoint)
-      : endpoint = Uri.parse(endpoint),
-        _validUntil = clock.now().add(const Duration(minutes: 20));
+    : endpoint = Uri.parse(endpoint),
+      _validUntil = clock.now().add(const Duration(minutes: 20));
 
   @override
   String toString() => _$toString();

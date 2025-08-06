@@ -16,26 +16,28 @@ class CompatV25 {
 
   /// Migrate an album file to the new naming scheme
   static Future<File> migrateAlbumFile(
-          DiContainer c, Account account, File albumFile) =>
-      _MigrateAlbumFile(c)(account, albumFile);
+    DiContainer c,
+    Account account,
+    File albumFile,
+  ) => _MigrateAlbumFile(c)(account, albumFile);
 }
 
 @npLog
 class _MigrateAlbumFile {
-  _MigrateAlbumFile(this._c)
-      : assert(require(_c)),
-        assert(Move.require(_c));
+  _MigrateAlbumFile(this._c) : assert(require(_c)), assert(Move.require(_c));
 
   static bool require(DiContainer c) => true;
 
   Future<File> call(Account account, File albumFile) async {
     assert(CompatV25.isAlbumFileNeedMigration(albumFile));
-    final newPath = path_lib.dirname(albumFile.path) +
+    final newPath =
+        path_lib.dirname(albumFile.path) +
         "/" +
         path_lib.basenameWithoutExtension(albumFile.path) +
         ".nc_album.json";
     _log.info(
-        "[call] Migrate album file from '${albumFile.path}' to '$newPath'");
+      "[call] Migrate album file from '${albumFile.path}' to '$newPath'",
+    );
     await Move(_c)(account, albumFile, newPath);
     return albumFile.copyWith(path: newPath);
   }

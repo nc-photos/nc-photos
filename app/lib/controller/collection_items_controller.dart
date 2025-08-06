@@ -31,10 +31,7 @@ part 'collection_items_controller.g.dart';
 
 @genCopyWith
 class CollectionItemStreamData {
-  const CollectionItemStreamData({
-    required this.items,
-    required this.hasNext,
-  });
+  const CollectionItemStreamData({required this.items, required this.hasNext});
 
   final List<CollectionItem> items;
 
@@ -53,11 +50,13 @@ class CollectionItemsController {
     required this.onCollectionUpdated,
   }) {
     _countStreamController = BehaviorSubject.seeded(collection.count);
-    _subscriptions.add(_dataStreamController.stream.listen((event) {
-      if (!event.hasNext) {
-        _countStreamController.add(event.items.length);
-      }
-    }));
+    _subscriptions.add(
+      _dataStreamController.stream.listen((event) {
+        if (!event.hasNext) {
+          _countStreamController.add(event.items.length);
+        }
+      }),
+    );
 
     _subscriptions.add(filesController.stream.listen(_onFilesEvent));
   }
@@ -99,29 +98,35 @@ class CollectionItemsController {
     final isInited = _isDataStreamInited;
     final List<FileDescriptor> toAdd;
     if (isInited) {
-      toAdd = files
-          .where((a) => _dataStreamController.value.items
-              .whereType<CollectionFileItem>()
-              .every((b) => !a.compareServerIdentity(b.file)))
-          .toList();
+      toAdd =
+          files
+              .where(
+                (a) => _dataStreamController.value.items
+                    .whereType<CollectionFileItem>()
+                    .every((b) => !a.compareServerIdentity(b.file)),
+              )
+              .toList();
       _log.info("[addFiles] Adding ${toAdd.length} non duplicated files");
       if (toAdd.isEmpty) {
         return;
       }
-      _dataStreamController.addWithValue((value) => value.copyWith(
-            items: [
-              ...toAdd.map((f) => NewCollectionFileItem(f)),
-              ...value.items,
-            ],
-          ));
+      _dataStreamController.addWithValue(
+        (value) => value.copyWith(
+          items: [
+            ...toAdd.map((f) => NewCollectionFileItem(f)),
+            ...value.items,
+          ],
+        ),
+      );
     } else {
       toAdd = files;
       _log.info("[addFiles] Adding ${toAdd.length} files");
       if (toAdd.isEmpty) {
         return;
       }
-      _countStreamController
-          .addWithValue((value) => (value ?? 0) + files.length);
+      _countStreamController.addWithValue(
+        (value) => (value ?? 0) + files.length,
+      );
     }
 
     ExceptionEvent? error;
@@ -132,8 +137,11 @@ class CollectionItemsController {
         collection,
         toAdd,
         onError: (f, e, stackTrace) {
-          _log.severe("[addFiles] Exception: ${logFilename(f.strippedPath)}", e,
-              stackTrace);
+          _log.severe(
+            "[addFiles] Exception: ${logFilename(f.strippedPath)}",
+            e,
+            stackTrace,
+          );
           error ??= ExceptionEvent(e, stackTrace);
           failed.add(f);
         },
@@ -157,25 +165,30 @@ class CollectionItemsController {
           });
         }
         // convert intermediate items
-        finalize = (await finalize.asyncMap((e) async {
-          try {
-            if (e is NewCollectionFileItem) {
-              return await CollectionAdapter.of(_c, account, collection)
-                  .adaptToNewItem(e);
-            } else {
-              return e;
-            }
-          } catch (e, stackTrace) {
-            _log.severe("[addFiles] Item not found in resulting collection: $e",
-                e, stackTrace);
-            return null;
-          }
-        }))
-            .nonNulls
-            .toList();
-        _dataStreamController.addWithValue((value) => value.copyWith(
-              items: finalize,
-            ));
+        finalize =
+            (await finalize.asyncMap((e) async {
+              try {
+                if (e is NewCollectionFileItem) {
+                  return await CollectionAdapter.of(
+                    _c,
+                    account,
+                    collection,
+                  ).adaptToNewItem(e);
+                } else {
+                  return e;
+                }
+              } catch (e, stackTrace) {
+                _log.severe(
+                  "[addFiles] Item not found in resulting collection: $e",
+                  e,
+                  stackTrace,
+                );
+                return null;
+              }
+            })).nonNulls.toList();
+        _dataStreamController.addWithValue(
+          (value) => value.copyWith(items: finalize),
+        );
       } else if (isInited != _isDataStreamInited) {
         // stream loaded in between this op, reload
         unawaited(_load());
@@ -191,11 +204,14 @@ class CollectionItemsController {
   Future<void> removeItems(List<CollectionItem> items) async {
     final isInited = _isDataStreamInited;
     if (isInited) {
-      _dataStreamController.addWithValue((value) => value.copyWith(
-            items: value.items
-                .where((a) => !items.any((b) => identical(a, b)))
-                .toList(),
-          ));
+      _dataStreamController.addWithValue(
+        (value) => value.copyWith(
+          items:
+              value.items
+                  .where((a) => !items.any((b) => identical(a, b)))
+                  .toList(),
+        ),
+      );
     }
 
     ExceptionEvent? error;
@@ -219,9 +235,9 @@ class CollectionItemsController {
       if (isInited) {
         error?.also(_dataErrorStreamController.add);
         if (failed.isNotEmpty) {
-          _dataStreamController.addWithValue((value) => value.copyWith(
-                items: [...value.items, ...failed],
-              ));
+          _dataStreamController.addWithValue(
+            (value) => value.copyWith(items: [...value.items, ...failed]),
+          );
         }
       } else if (isInited != _isDataStreamInited) {
         // stream loaded in between this op, reload
@@ -251,9 +267,9 @@ class CollectionItemsController {
       if (toDeleteItem.isEmpty) {
         return;
       }
-      _dataStreamController.addWithValue((value) => value.copyWith(
-            items: retain,
-          ));
+      _dataStreamController.addWithValue(
+        (value) => value.copyWith(items: retain),
+      );
       toDelete = toDeleteItem.map((e) => e.file).toList();
     } else {
       toDelete = files;
@@ -266,8 +282,11 @@ class CollectionItemsController {
         account,
         toDelete,
         onError: (i, f, e, stackTrace) {
-          _log.severe("[deleteItems] Exception: ${logFilename(f.strippedPath)}",
-              e, stackTrace);
+          _log.severe(
+            "[deleteItems] Exception: ${logFilename(f.strippedPath)}",
+            e,
+            stackTrace,
+          );
           error ??= ExceptionEvent(e, stackTrace);
           if (isInited) {
             failed.add(toDeleteItem![i]);
@@ -278,9 +297,9 @@ class CollectionItemsController {
       if (isInited) {
         error?.also(_dataErrorStreamController.add);
         if (failed.isNotEmpty) {
-          _dataStreamController.addWithValue((value) => value.copyWith(
-                items: [...value.items, ...failed],
-              ));
+          _dataStreamController.addWithValue(
+            (value) => value.copyWith(items: [...value.items, ...failed]),
+          );
         }
       } else if (isInited != _isDataStreamInited) {
         // stream loaded in between this op, reload
@@ -302,44 +321,50 @@ class CollectionItemsController {
       try {
         await for (final r in ListCollectionItem(_c)(account, collection)) {
           items = r;
-          _dataStreamController.add(CollectionItemStreamData(
-            items: r,
-            hasNext: true,
-          ));
+          _dataStreamController.add(
+            CollectionItemStreamData(items: r, hasNext: true),
+          );
         }
       } catch (e, stackTrace) {
-        _log.severe("[_load] Failed while ListCollectionItem, try with local",
-            e, stackTrace);
+        _log.severe(
+          "[_load] Failed while ListCollectionItem, try with local",
+          e,
+          stackTrace,
+        );
         originalException = ExceptionEvent(e, stackTrace);
       }
       if (originalException != null) {
         // try again with local repos
         try {
-          await for (final r
-              in ListCollectionItem(_c.withLocalRepo())(account, collection)) {
+          await for (final r in ListCollectionItem(_c.withLocalRepo())(
+            account,
+            collection,
+          )) {
             items = r;
-            _dataStreamController.add(CollectionItemStreamData(
-              items: r,
-              hasNext: true,
-            ));
+            _dataStreamController.add(
+              CollectionItemStreamData(items: r, hasNext: true),
+            );
           }
         } catch (e, stackTrace) {
           _log.severe(
-              "[_load] Failed while ListCollectionItem with local repos",
-              e,
-              stackTrace);
+            "[_load] Failed while ListCollectionItem with local repos",
+            e,
+            stackTrace,
+          );
           originalException.throwMe();
         }
       }
       if (items != null) {
-        _dataStreamController.add(CollectionItemStreamData(
-          items: items,
-          hasNext: false,
-        ));
+        _dataStreamController.add(
+          CollectionItemStreamData(items: items, hasNext: false),
+        );
         if (originalException == null) {
           // only update if the data is queried from remote
-          final newCollection =
-              await UpdateCollectionPostLoad(_c)(account, collection, items);
+          final newCollection = await UpdateCollectionPostLoad(_c)(
+            account,
+            collection,
+            items,
+          );
           if (newCollection != null) {
             onCollectionUpdated(newCollection);
           }
@@ -357,32 +382,31 @@ class CollectionItemsController {
       return;
     }
     await _mutex.protect(() async {
-      final newItems = _dataStreamController.value.items
-          .map((e) {
-            if (e is CollectionFileItem) {
-              final file = ev.dataMap[e.file.fdId];
-              if (file == null) {
-                if (file_util.isNcAlbumFile(account, e.file)) {
-                  // file shared with us are not in our db
-                  return e;
+      final newItems =
+          _dataStreamController.value.items
+              .map((e) {
+                if (e is CollectionFileItem) {
+                  final file = ev.dataMap[e.file.fdId];
+                  if (file == null) {
+                    if (file_util.isNcAlbumFile(account, e.file)) {
+                      // file shared with us are not in our db
+                      return e;
+                    } else {
+                      // removed
+                      return null;
+                    }
+                  } else {
+                    return e.copyWith(file: file.replacePath(e.file.fdPath));
+                  }
                 } else {
-                  // removed
-                  return null;
+                  return e;
                 }
-              } else {
-                return e.copyWith(
-                  file: file.replacePath(e.file.fdPath),
-                );
-              }
-            } else {
-              return e;
-            }
-          })
-          .nonNulls
-          .toList();
-      _dataStreamController.addWithValue((value) => value.copyWith(
-            items: newItems,
-          ));
+              })
+              .nonNulls
+              .toList();
+      _dataStreamController.addWithValue(
+        (value) => value.copyWith(items: newItems),
+      );
     });
   }
 
@@ -394,10 +418,7 @@ class CollectionItemsController {
 
   var _isDataStreamInited = false;
   final _dataStreamController = BehaviorSubject.seeded(
-    const CollectionItemStreamData(
-      items: [],
-      hasNext: true,
-    ),
+    const CollectionItemStreamData(items: [], hasNext: true),
   );
   final _dataErrorStreamController =
       StreamController<ExceptionEvent>.broadcast();

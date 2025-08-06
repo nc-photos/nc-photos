@@ -10,6 +10,7 @@ extension _$RemoveCollectionsNpLog on RemoveCollections {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("use_case.collection.remove_collections.RemoveCollections");
+  static final log = Logger(
+    "use_case.collection.remove_collections.RemoveCollections",
+  );
 }

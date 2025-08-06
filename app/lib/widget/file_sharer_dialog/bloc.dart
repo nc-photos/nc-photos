@@ -6,8 +6,8 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     required DiContainer container,
     required this.account,
     required this.files,
-  })  : _c = container,
-        super(_State.init()) {
+  }) : _c = container,
+       super(_State.init()) {
     on<_SetMethod>(_onSetMethod);
     on<_SetResult>(_onSetResult);
     on<_SetPublicLinkDetails>(_onSetPublicLinkDetails);
@@ -22,17 +22,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   @override
   bool Function(dynamic, dynamic)? get shouldLog => (currentState, nextState) {
-        currentState = currentState as _State;
-        nextState = nextState as _State;
-        if (identical(currentState.fileState, nextState.fileState)) {
-          return true;
-        }
-        // don't log download progress
-        if (currentState.fileState?.progress != nextState.fileState?.progress) {
-          return false;
-        }
-        return true;
-      };
+    currentState = currentState as _State;
+    nextState = nextState as _State;
+    if (identical(currentState.fileState, nextState.fileState)) {
+      return true;
+    }
+    // don't log download progress
+    if (currentState.fileState?.progress != nextState.fileState?.progress) {
+      return false;
+    }
+    return true;
+  };
 
   @override
   void onError(Object error, StackTrace stackTrace) {
@@ -68,13 +68,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _onSetPublicLinkDetails(
-      _SetPublicLinkDetails ev, Emitter<_State> emit) {
+    _SetPublicLinkDetails ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     return _doShareLink(emit, albumName: ev.albumName, password: null);
   }
 
   Future<void> _onSetPasswordLinkDetails(
-      _SetPasswordLinkDetails ev, Emitter<_State> emit) {
+    _SetPasswordLinkDetails ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     return _doShareLink(emit, albumName: ev.albumName, password: ev.password);
   }
@@ -82,9 +86,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   void _onCancelFileDownload(_CancelFileDownload ev, Emitter<_State> emit) {
     _log.info(ev);
     state.fileState?.download?.cancel();
-    emit(state.copyWith(
-      fileState: state.fileState?.copyWith(shouldRun: false),
-    ));
+    emit(
+      state.copyWith(fileState: state.fileState?.copyWith(shouldRun: false)),
+    );
   }
 
   void _onSetError(_SetError ev, Emitter<_State> emit) {
@@ -94,31 +98,32 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _doShareFile(Emitter<_State> emit) async {
     assert(getRawPlatform() == NpPlatform.android);
-    emit(state.copyWith(
-      fileState: _FileState.init(count: files.length),
-    ));
+    emit(state.copyWith(fileState: _FileState.init(count: files.length)));
     final results = <({FileDescriptor file, dynamic result})>[];
     for (final (:i, e: f) in files.withIndex()) {
-      emit(state.copyWith(
-        fileState: state.fileState?.copyWith(
-          index: i,
-          progress: null,
+      emit(
+        state.copyWith(
+          fileState: state.fileState?.copyWith(index: i, progress: null),
         ),
-      ));
+      );
       try {
         final download = DownloadFile().build(
           account,
           f,
           shouldNotify: false,
           onProgress: (progress) {
-            emit(state.copyWith(
-              fileState: state.fileState?.copyWith(progress: progress),
-            ));
+            emit(
+              state.copyWith(
+                fileState: state.fileState?.copyWith(progress: progress),
+              ),
+            );
           },
         );
-        emit(state.copyWith(
-          fileState: state.fileState?.copyWith(download: download),
-        ));
+        emit(
+          state.copyWith(
+            fileState: state.fileState?.copyWith(download: download),
+          ),
+        );
         final result = await download();
         if (state.fileState?.shouldRun == false) {
           throw const JobCanceledException();
@@ -139,9 +144,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       }
     }
     if (results.isNotEmpty) {
-      final share = AndroidFileShare(results
-          .map((e) => AndroidFileShareFile(e.result as String, e.file.fdMime))
-          .toList());
+      final share = AndroidFileShare(
+        results
+            .map((e) => AndroidFileShareFile(e.result as String, e.file.fdMime))
+            .toList(),
+      );
       unawaited(share.share());
     }
     emit(state.copyWith(result: true));
@@ -149,14 +156,16 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _doSharePreview(Emitter<_State> emit) async {
     assert(getRawPlatform() == NpPlatform.android);
-    emit(state.copyWith(
-      previewState: _PreviewState(index: 0, count: files.length),
-    ));
+    emit(
+      state.copyWith(
+        previewState: _PreviewState(index: 0, count: files.length),
+      ),
+    );
     final results = <({FileDescriptor file, dynamic result})>[];
     for (final (:i, e: f) in files.withIndex()) {
-      emit(state.copyWith(
-        previewState: state.previewState?.copyWith(index: i),
-      ));
+      emit(
+        state.copyWith(previewState: state.previewState?.copyWith(index: i)),
+      );
       try {
         final dynamic uri;
         if (file_util.isSupportedImageFormat(f) && f.fdMime != "image/gif") {
@@ -167,14 +176,19 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         results.add((file: f, result: uri));
       } catch (e, stackTrace) {
         _log.shout(
-            "[_doSharePreview] Failed while DownloadPreview", e, stackTrace);
+          "[_doSharePreview] Failed while DownloadPreview",
+          e,
+          stackTrace,
+        );
         emit(state.copyWith(error: ExceptionEvent(e, stackTrace)));
       }
     }
     if (results.isNotEmpty) {
-      final share = AndroidFileShare(results
-          .map((e) => AndroidFileShareFile(e.result as String, e.file.fdMime))
-          .toList());
+      final share = AndroidFileShare(
+        results
+            .map((e) => AndroidFileShareFile(e.result as String, e.file.fdMime))
+            .toList(),
+      );
       unawaited(share.share());
     }
     emit(state.copyWith(result: true));
@@ -203,10 +217,13 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         final path = await _createDir(account, albumName!);
         final count = await _copyFilesToDir(account, files, path);
         if (count != files.length) {
-          emit(state.copyWith(
-            message: L10n.global()
-                .copyItemsFailureNotification(files.length - count),
-          ));
+          emit(
+            state.copyWith(
+              message: L10n.global().copyItemsFailureNotification(
+                files.length - count,
+              ),
+            ),
+          );
         }
         final dir = File(path: path, isCollection: true);
         fileToShare = dir;
@@ -222,7 +239,10 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _shareFileAsLink(
-      Account account, File file, String? password) async {
+    Account account,
+    File file,
+    String? password,
+  ) async {
     final share = await CreateLinkShare(_c.shareRepo)(
       account,
       file,
@@ -251,7 +271,10 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   /// Copy [files] to dir and return the copied count
   Future<int> _copyFilesToDir(
-      Account account, List<File> files, String dirPath) async {
+    Account account,
+    List<File> files,
+    String dirPath,
+  ) async {
     var count = 0;
     for (final f in files) {
       try {
@@ -259,7 +282,10 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         ++count;
       } catch (e, stackTrace) {
         _log.severe(
-            "[_copyFilesToDir] Failed while copying file: $f", e, stackTrace);
+          "[_copyFilesToDir] Failed while copying file: $f",
+          e,
+          stackTrace,
+        );
       }
     }
     return count;

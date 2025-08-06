@@ -11,7 +11,9 @@ class _Changelog650 extends StatelessWidget {
       children: [
         _subSection("Changes"),
         _bulletGroup(const Text("Various UI tweaks and bug fixes")),
-        _bulletGroup(const Text("Updated Catalan, Czech, Finnish, French, German, Polish")),
+        _bulletGroup(
+          const Text("Updated Catalan, Czech, Finnish, French, German, Polish"),
+        ),
         _sectionPadding(),
         _subSection("Contributors"),
         _bulletGroup(

@@ -45,7 +45,9 @@ Future<void> _removeAlbum() async {
   addTearDown(() => c.sqliteDb.close());
 
   await RemoveAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile1.path));
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile1.path),
+  );
   expect(c.fileMemoryRepo2.files, [albumFile2.toDescriptor()]);
 }
 
@@ -58,10 +60,11 @@ Future<void> _removeSharedAlbum() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0])
-        ..addShare("user1"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0])
+            ..addShare("user1"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -72,14 +75,14 @@ Future<void> _removeSharedAlbum() async {
       util.buildShare(id: "1", file: files[0], shareWith: "user1"),
     ]),
     npDb: util.buildTestDb(),
-    pref: Pref.scoped(PrefMemoryProvider({
-      "isLabEnableSharedAlbum": true,
-    })),
+    pref: Pref.scoped(PrefMemoryProvider({"isLabEnableSharedAlbum": true})),
   );
   addTearDown(() => c.sqliteDb.close());
 
   await RemoveAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path));
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+  );
   expect(c.fileMemoryRepo2.files, [files[0].toDescriptor()]);
   expect(c.shareMemoryRepo.shares, const []);
 }
@@ -115,18 +118,18 @@ Future<void> _removeSharedAlbumFileInOtherAlbum() async {
       util.buildShare(id: "2", file: albumFiles[1], shareWith: "user1"),
     ]),
     npDb: util.buildTestDb(),
-    pref: Pref.scoped(PrefMemoryProvider({
-      "isLabEnableSharedAlbum": true,
-    })),
+    pref: Pref.scoped(PrefMemoryProvider({"isLabEnableSharedAlbum": true})),
   );
   addTearDown(() => c.sqliteDb.close());
 
   await RemoveAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFiles[0].path));
-  expect(
-    c.fileMemoryRepo2.files,
-    [albumFiles[1].toDescriptor(), files[0].toDescriptor()],
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFiles[0].path),
   );
+  expect(c.fileMemoryRepo2.files, [
+    albumFiles[1].toDescriptor(),
+    files[0].toDescriptor(),
+  ]);
   expect(c.shareMemoryRepo.shares, [
     util.buildShare(id: "1", file: files[0], shareWith: "user1"),
     util.buildShare(id: "2", file: albumFiles[1], shareWith: "user1"),
@@ -146,10 +149,11 @@ Future<void> _removeSharedAlbumResyncedFile() async {
   final user1Files = [
     files[0].copyWith(path: "remote.php/dav/files/user1/share/test1.jpg"),
   ];
-  final album = (util.AlbumBuilder()
-        ..addFileItem(user1Files[0])
-        ..addShare("user1"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(user1Files[0])
+            ..addShare("user1"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -160,9 +164,7 @@ Future<void> _removeSharedAlbumResyncedFile() async {
       util.buildShare(id: "1", file: files[0], shareWith: "user1"),
     ]),
     npDb: util.buildTestDb(),
-    pref: Pref.scoped(PrefMemoryProvider({
-      "isLabEnableSharedAlbum": true,
-    })),
+    pref: Pref.scoped(PrefMemoryProvider({"isLabEnableSharedAlbum": true})),
   );
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
@@ -174,7 +176,9 @@ Future<void> _removeSharedAlbumResyncedFile() async {
   });
 
   await RemoveAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path));
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+  );
   expect(
     c.fileMemoryRepo2.files,
     [...files, ...user1Files].map((e) => e.toDescriptor()),

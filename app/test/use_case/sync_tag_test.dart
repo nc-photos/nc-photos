@@ -49,31 +49,28 @@ Future<void> _new() async {
   });
 
   await SyncTag(c)(account);
-  expect(
-    await _listSqliteDbTags(c.sqliteDb),
-    {
-      account.url: {
-        const DbTag(
-          id: 10,
-          displayName: "tag0",
-          userVisible: null,
-          userAssignable: null,
-        ),
-        const DbTag(
-          id: 11,
-          displayName: "tag1",
-          userVisible: null,
-          userAssignable: null,
-        ),
-        const DbTag(
-          id: 12,
-          displayName: "tag2",
-          userVisible: null,
-          userAssignable: null,
-        ),
-      },
+  expect(await _listSqliteDbTags(c.sqliteDb), {
+    account.url: {
+      const DbTag(
+        id: 10,
+        displayName: "tag0",
+        userVisible: null,
+        userAssignable: null,
+      ),
+      const DbTag(
+        id: 11,
+        displayName: "tag1",
+        userVisible: null,
+        userAssignable: null,
+      ),
+      const DbTag(
+        id: 12,
+        displayName: "tag2",
+        userVisible: null,
+        userAssignable: null,
+      ),
     },
-  );
+  });
 }
 
 /// Sync with remote where there are removed tags
@@ -87,9 +84,7 @@ Future<void> _remove() async {
   c.npDb = util.buildTestDb();
   addTearDown(() => c.sqliteDb.close());
   c.tagRepoRemote = MockTagMemoryRepo({
-    account.url: [
-      const Tag(id: 10, displayName: "tag0"),
-    ],
+    account.url: [const Tag(id: 10, displayName: "tag0")],
   });
   c.tagRepoLocal = TagRepo(TagSqliteDbDataSource(c.npDb));
   await c.sqliteDb.transaction(() async {
@@ -104,19 +99,16 @@ Future<void> _remove() async {
   });
 
   await SyncTag(c)(account);
-  expect(
-    await _listSqliteDbTags(c.sqliteDb),
-    {
-      account.url: {
-        const DbTag(
-          id: 10,
-          displayName: "tag0",
-          userVisible: null,
-          userAssignable: null,
-        ),
-      },
+  expect(await _listSqliteDbTags(c.sqliteDb), {
+    account.url: {
+      const DbTag(
+        id: 10,
+        displayName: "tag0",
+        userVisible: null,
+        userAssignable: null,
+      ),
     },
-  );
+  });
 }
 
 /// Sync with remote where there are updated tags (i.e, same id, different
@@ -148,34 +140,34 @@ Future<void> _update() async {
   });
 
   await SyncTag(c)(account);
-  expect(
-    await _listSqliteDbTags(c.sqliteDb),
-    {
-      account.url: {
-        const DbTag(
-          id: 10,
-          displayName: "tag0",
-          userVisible: null,
-          userAssignable: null,
-        ),
-        const DbTag(
-          id: 11,
-          displayName: "new tag1",
-          userVisible: null,
-          userAssignable: null,
-        ),
-      },
+  expect(await _listSqliteDbTags(c.sqliteDb), {
+    account.url: {
+      const DbTag(
+        id: 10,
+        displayName: "tag0",
+        userVisible: null,
+        userAssignable: null,
+      ),
+      const DbTag(
+        id: 11,
+        displayName: "new tag1",
+        userVisible: null,
+        userAssignable: null,
+      ),
     },
-  );
+  });
 }
 
 Future<Map<String, Set<DbTag>>> _listSqliteDbTags(compat.SqliteDb db) async {
   final query = db.select(db.tags).join([
     sql.innerJoin(db.servers, db.servers.rowId.equalsExp(db.tags.server)),
   ]);
-  final result = await query
-      .map((r) => (server: r.readTable(db.servers), tag: r.readTable(db.tags)))
-      .get();
+  final result =
+      await query
+          .map(
+            (r) => (server: r.readTable(db.servers), tag: r.readTable(db.tags)),
+          )
+          .get();
   final product = <String, Set<DbTag>>{};
   for (final r in result) {
     (product[r.server.address] ??= {}).add(compat.TagConverter.fromSql(r.tag));

@@ -6,9 +6,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     required this.accountController,
     required this.prefController,
     required this.db,
-  }) : super(_State.init(
-          accounts: prefController.accountsValue,
-        )) {
+  }) : super(_State.init(accounts: prefController.accountsValue)) {
     on<_ToggleDropdown>(_onToggleDropdown);
     on<_SwitchAccount>(_onSwitchAccount);
     on<_DeleteAccount>(_onDeleteAccount);
@@ -52,9 +50,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _onDeleteAccount(_DeleteAccount ev, Emitter<_State> emit) async {
     _log.info(ev);
-    emit(state.copyWith(
-      accounts: state.accounts.where((a) => a.id != ev.account.id).toList(),
-    ));
+    emit(
+      state.copyWith(
+        accounts: state.accounts.where((a) => a.id != ev.account.id).toList(),
+      ),
+    );
     try {
       await _prefLock.protect(() async {
         final accounts = prefController.accountsValue;
@@ -64,13 +64,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         final newAccountIndex = accounts.indexOf(currentAccount);
         if (newAccountIndex == -1) {
           throw StateError(
-              "Active account not found in resulting account list");
+            "Active account not found in resulting account list",
+          );
         }
         try {
           await AccountPref.of(ev.account).provider.clear();
         } catch (e, stackTrace) {
-          _log.shout("[_onDeleteAccount] Failed while removing account pref", e,
-              stackTrace);
+          _log.shout(
+            "[_onDeleteAccount] Failed while removing account pref",
+            e,
+            stackTrace,
+          );
         }
         await prefController.setAccounts(accounts);
         await prefController.setCurrentAccountIndex(newAccountIndex);
@@ -78,7 +82,8 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         // check if the same account (server + userId) still exists in known
         // accounts
         if (!accounts.any(
-            (a) => a.url == ev.account.url && a.userId == ev.account.userId)) {
+          (a) => a.url == ev.account.url && a.userId == ev.account.userId,
+        )) {
           // account removed, clear cache db
           unawaited(_removeAccountFromDb(ev.account));
         }
@@ -102,8 +107,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     try {
       await db.deleteAccount(account.toDb());
     } catch (e, stackTrace) {
-      _log.shout("[_removeAccountFromDb] Failed while removing account from db",
-          e, stackTrace);
+      _log.shout(
+        "[_removeAccountFromDb] Failed while removing account from db",
+        e,
+        stackTrace,
+      );
     }
   }
 

@@ -46,21 +46,25 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
   @override
   void initState() {
     super.initState();
-    _getVideoUrl().then((url) {
-      if (mounted) {
-        _initController(url);
-      }
-    }).onError((e, stackTrace) {
-      _log.shout("[initState] Failed while _getVideoUrl", e, stackTrace);
-      SnackBarManager().showSnackBarForException(e);
-      widget.onLoadFailure?.call(e, stackTrace);
-    });
+    _getVideoUrl()
+        .then((url) {
+          if (mounted) {
+            _initController(url);
+          }
+        })
+        .onError((e, stackTrace) {
+          _log.shout("[initState] Failed while _getVideoUrl", e, stackTrace);
+          SnackBarManager().showSnackBarForException(e);
+          widget.onLoadFailure?.call(e, stackTrace);
+        });
 
-    _lifecycleListener = AppLifecycleListener(onShow: () {
-      if (_controller.value.isInitialized) {
-        _controller.pause();
-      }
-    });
+    _lifecycleListener = AppLifecycleListener(
+      onShow: () {
+        if (_controller.value.isInitialized) {
+          _controller.pause();
+        }
+      },
+    );
   }
 
   @override
@@ -77,10 +81,7 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     if (_isControllerInitialized && _controller.value.isInitialized) {
       content = _buildPlayer(context);
     } else {
-      content = _PlaceHolderView(
-        account: widget.account,
-        file: widget.file,
-      );
+      content = _PlaceHolderView(account: widget.account, file: widget.file);
     }
 
     return Container(
@@ -141,16 +142,11 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
             child: AspectRatio(
               key: _key,
               aspectRatio: _controller.value.aspectRatio,
-              child: IgnorePointer(
-                child: VideoPlayer(_controller),
-              ),
+              child: IgnorePointer(child: VideoPlayer(_controller)),
             ),
           ),
           if (!_isLoaded) ...[
-            _PlaceHolderView(
-              account: widget.account,
-              file: widget.file,
-            ),
+            _PlaceHolderView(account: widget.account, file: widget.file),
           ],
         ],
       ),
@@ -188,10 +184,7 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
 }
 
 class _PlaceHolderView extends StatelessWidget {
-  const _PlaceHolderView({
-    required this.account,
-    required this.file,
-  });
+  const _PlaceHolderView({required this.account, required this.file});
 
   @override
   Widget build(BuildContext context) {
@@ -246,8 +239,9 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       alignment: Alignment.center,
       children: [
         RotationTransition(
-          turns: animationController
-              .drive(CurveTween(curve: Curves.easeInOutCubic)),
+          turns: animationController.drive(
+            CurveTween(curve: Curves.easeInOutCubic),
+          ),
           filterQuality: FilterQuality.high,
           child: Icon(
             Icons.motion_photos_on_outlined,

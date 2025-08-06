@@ -20,9 +20,7 @@ class ListPotentialSharedAlbum {
     final results = <File>[];
     final ls = await Ls(fileRepo)(
       account,
-      File(
-        path: file_util.unstripPath(account, shareFolder),
-      ),
+      File(path: file_util.unstripPath(account, shareFolder)),
     );
     for (final f in ls) {
       // check owner

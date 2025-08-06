@@ -29,11 +29,8 @@ extension ThemeExtension on ThemeData {
         : colorScheme.onSurface;
   }
 
-  ImageFilter get appBarBlurFilter => ImageFilter.blur(
-        sigmaX: 12,
-        sigmaY: 12,
-        tileMode: TileMode.mirror,
-      );
+  ImageFilter get appBarBlurFilter =>
+      ImageFilter.blur(sigmaX: 12, sigmaY: 12, tileMode: TileMode.mirror);
 
   Color get nextcloudBlue => const Color(0xFF0082C9);
 
@@ -59,10 +56,7 @@ extension ThemeExtension on ThemeData {
 }
 
 class DarkModeSwitchTheme extends StatelessWidget {
-  const DarkModeSwitchTheme({
-    super.key,
-    required this.child,
-  });
+  const DarkModeSwitchTheme({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -73,9 +67,7 @@ class DarkModeSwitchTheme extends StatelessWidget {
           trackColor: WidgetStateProperty.all(theme.colorScheme.surface),
           thumbColor: WidgetStateProperty.all(Colors.black87),
         ),
-        colorScheme: theme.colorScheme.copyWith(
-          outline: Colors.transparent,
-        ),
+        colorScheme: theme.colorScheme.copyWith(outline: Colors.transparent),
       ),
       child: child,
     );
@@ -106,16 +98,17 @@ ThemeData buildDarkTheme(BuildContext context, [ColorScheme? dynamicScheme]) {
     Brightness.dark,
   );
   if (context.read<PrefController>().isUseBlackInDarkTheme.value) {
-    return _applyColorScheme(colorScheme.copyWith(
-      surface: Colors.black,
-    ));
+    return _applyColorScheme(colorScheme.copyWith(surface: Colors.black));
   } else {
     return _applyColorScheme(colorScheme);
   }
 }
 
 ColorScheme _getColorScheme(
-    BuildContext context, ColorScheme? dynamicScheme, Brightness brightness) {
+  BuildContext context,
+  ColorScheme? dynamicScheme,
+  Brightness brightness,
+) {
   var primary = context.read<PrefController>().seedColorValue;
   ColorInt? secondary;
   if (primary == null) {
@@ -143,12 +136,8 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     useMaterial3: true,
     brightness: colorScheme.brightness,
     colorScheme: colorScheme,
-    listTileTheme: ListTileThemeData(
-      iconColor: colorScheme.onSurfaceVariant,
-    ),
-    iconTheme: IconThemeData(
-      color: colorScheme.onSurfaceVariant,
-    ),
+    listTileTheme: ListTileThemeData(iconColor: colorScheme.onSurfaceVariant),
+    iconTheme: IconThemeData(color: colorScheme.onSurfaceVariant),
     popupMenuTheme: PopupMenuThemeData(
       // remove after menu supports m3
       color: Color.lerp(colorScheme.surface, colorScheme.surfaceTint, 0.08),
@@ -175,9 +164,7 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: colorScheme.inverseSurface,
-      contentTextStyle: TextStyle(
-        color: colorScheme.onInverseSurface,
-      ),
+      contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
       actionTextColor: colorScheme.inversePrimary,
       behavior: SnackBarBehavior.floating,
     ),
@@ -188,18 +175,21 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all(colorScheme.secondaryContainer),
+        backgroundColor: WidgetStateProperty.all(
+          colorScheme.secondaryContainer,
+        ),
         foregroundColor: WidgetStateProperty.all(colorScheme.secondary),
         overlayColor: WidgetStateProperty.all(
-            colorScheme.secondary.withValues(alpha: .1)),
+          colorScheme.secondary.withValues(alpha: .1),
+        ),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStateProperty.all(colorScheme.secondary),
         overlayColor: WidgetStateProperty.all(
-            colorScheme.secondary.withValues(alpha: .1)),
+          colorScheme.secondary.withValues(alpha: .1),
+        ),
       ),
     ),
     textSelectionTheme: TextSelectionThemeData(
@@ -214,13 +204,15 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     ),
     chipTheme: ChipThemeData(
       selectedColor: Color.lerp(
-          colorScheme.secondaryContainer, colorScheme.surfaceTint, .14),
-      iconTheme: IconThemeData(
-        color: colorScheme.secondary,
+        colorScheme.secondaryContainer,
+        colorScheme.surfaceTint,
+        .14,
       ),
+      iconTheme: IconThemeData(color: colorScheme.secondary),
     ),
-    progressIndicatorTheme:
-        ProgressIndicatorThemeData(color: colorScheme.secondary),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: colorScheme.secondary,
+    ),
     extensions: [
       M3(
         checkbox: M3Checkbox(

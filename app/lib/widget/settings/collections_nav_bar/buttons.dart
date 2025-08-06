@@ -7,16 +7,20 @@ class _NewButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(L10n.global().customizeButtonsUnsupportedWarning),
-          duration: k.snackBarDurationNormal,
-        ));
+        SnackBarManager().showSnackBar(
+          SnackBar(
+            content: Text(L10n.global().customizeButtonsUnsupportedWarning),
+            duration: k.snackBarDurationNormal,
+          ),
+        );
       },
       onLongPress: () {
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(L10n.global().customizeButtonsUnsupportedWarning),
-          duration: k.snackBarDurationNormal,
-        ));
+        SnackBarManager().showSnackBar(
+          SnackBar(
+            content: Text(L10n.global().customizeButtonsUnsupportedWarning),
+            duration: k.snackBarDurationNormal,
+          ),
+        );
       },
       child: AbsorbPointer(
         absorbing: true,
@@ -33,10 +37,7 @@ class _NewButton extends StatelessWidget {
 }
 
 class _SharingButton extends StatelessWidget {
-  const _SharingButton({
-    required this.isMinimized,
-    this.onPressed,
-  });
+  const _SharingButton({required this.isMinimized, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -56,10 +57,7 @@ class _SharingButton extends StatelessWidget {
 }
 
 class _EditedButton extends StatelessWidget {
-  const _EditedButton({
-    required this.isMinimized,
-    this.onPressed,
-  });
+  const _EditedButton({required this.isMinimized, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -79,10 +77,7 @@ class _EditedButton extends StatelessWidget {
 }
 
 class _ArchiveButton extends StatelessWidget {
-  const _ArchiveButton({
-    required this.isMinimized,
-    this.onPressed,
-  });
+  const _ArchiveButton({required this.isMinimized, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -102,10 +97,7 @@ class _ArchiveButton extends StatelessWidget {
 }
 
 class _TrashButton extends StatelessWidget {
-  const _TrashButton({
-    required this.isMinimized,
-    this.onPressed,
-  });
+  const _TrashButton({required this.isMinimized, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -125,10 +117,7 @@ class _TrashButton extends StatelessWidget {
 }
 
 class _MapButton extends StatelessWidget {
-  const _MapButton({
-    required this.isMinimized,
-    this.onPressed,
-  });
+  const _MapButton({required this.isMinimized, this.onPressed});
 
   @override
   Widget build(BuildContext context) {

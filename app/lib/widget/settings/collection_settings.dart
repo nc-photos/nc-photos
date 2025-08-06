@@ -25,9 +25,7 @@ class CollectionSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(prefController: context.read()),
       child: const _WrappedAlbumSettings(),
     );
   }
@@ -70,35 +68,36 @@ class _WrappedAlbumSettingsState extends State<_WrappedAlbumSettings>
               title: Text(L10n.global().collectionsTooltip),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _BlocSelector<bool>(
-                    selector: (state) => state.isBrowserShowDate,
-                    builder: (context, state) {
-                      return SwitchListTile(
-                        title: Text(L10n.global().settingsShowDateInAlbumTitle),
-                        subtitle: Text(
-                            L10n.global().settingsShowDateInAlbumDescription),
-                        value: state,
-                        onChanged: (value) {
-                          _bloc.add(_SetBrowserShowDate(value));
-                        },
-                      );
-                    },
+              delegate: SliverChildListDelegate([
+                _BlocSelector<bool>(
+                  selector: (state) => state.isBrowserShowDate,
+                  builder: (context, state) {
+                    return SwitchListTile(
+                      title: Text(L10n.global().settingsShowDateInAlbumTitle),
+                      subtitle: Text(
+                        L10n.global().settingsShowDateInAlbumDescription,
+                      ),
+                      value: state,
+                      onChanged: (value) {
+                        _bloc.add(_SetBrowserShowDate(value));
+                      },
+                    );
+                  },
+                ),
+                ListTile(
+                  title: Text(
+                    L10n.global()
+                        .settingsCollectionsCustomizeNavigationBarTitle,
                   ),
-                  ListTile(
-                    title: Text(L10n.global()
-                        .settingsCollectionsCustomizeNavigationBarTitle),
-                    onTap: () {
-                      Navigator.of(context).push(
-                        MaterialPageRoute(
-                          builder: (_) => const CollectionsNavBarSettings(),
-                        ),
-                      );
-                    },
-                  ),
-                ],
-              ),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const CollectionsNavBarSettings(),
+                      ),
+                    );
+                  },
+                ),
+              ]),
             ),
           ],
         ),

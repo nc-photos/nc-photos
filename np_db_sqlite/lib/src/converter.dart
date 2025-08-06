@@ -42,13 +42,16 @@ abstract class AlbumConverter {
       sortProviderType: Value(src.sortProviderType),
       sortProviderContent: Value(jsonEncode(src.sortProviderContent)),
     );
-    final sqlShares = src.shares
-        .map((e) => AlbumSharesCompanion(
-              userId: Value(e.userId),
-              displayName: Value(e.displayName),
-              sharedAt: Value(e.sharedAt),
-            ))
-        .toList();
+    final sqlShares =
+        src.shares
+            .map(
+              (e) => AlbumSharesCompanion(
+                userId: Value(e.userId),
+                displayName: Value(e.displayName),
+                sharedAt: Value(e.sharedAt),
+              ),
+            )
+            .toList();
     return CompleteAlbumCompanion(sqlAlbum, src.fileId, sqlShares);
   }
 }
@@ -65,9 +68,7 @@ abstract class AlbumShareConverter {
 
 extension CompleteAlbumListExtension on List<CompleteAlbum> {
   Future<List<DbAlbum>> toDbAlbums() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertAlbum);
+    return map((e) => {"sqlObj": e}).computeAll(_covertAlbum);
   }
 }
 
@@ -81,7 +82,9 @@ abstract class FaceRecognitionPersonConverter {
   }
 
   static FaceRecognitionPersonsCompanion toSql(
-      Account account, DbFaceRecognitionPerson person) {
+    Account account,
+    DbFaceRecognitionPerson person,
+  ) {
     return FaceRecognitionPersonsCompanion(
       account: Value(account.rowId),
       name: Value(person.name),
@@ -93,9 +96,7 @@ abstract class FaceRecognitionPersonConverter {
 
 extension FaceRecognitionPersonListExtension on List<FaceRecognitionPerson> {
   Future<List<DbFaceRecognitionPerson>> toDbFaceRecognitionPersons() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertFaceRecognitionPerson);
+    return map((e) => {"sqlObj": e}).computeAll(_covertFaceRecognitionPerson);
   }
 }
 
@@ -143,34 +144,43 @@ abstract class FileConverter {
       overrideDateTime: Value(file.overrideDateTime),
       bestDateTime: Value(file.bestDateTime),
     );
-    final sqlImage = file.imageData?.let((m) => ImagesCompanion.insert(
-          lastUpdated: m.lastUpdated,
-          fileEtag: Value(m.fileEtag),
-          width: Value(m.width),
-          height: Value(m.height),
-          exifRaw: Value(m.exif?.let((j) => jsonEncode(j))),
-          dateTimeOriginal: Value(m.exifDateTimeOriginal),
-          src: Value(m.src),
-        ));
-    final sqlImageLocation =
-        file.location?.let((l) => ImageLocationsCompanion.insert(
-              version: l.version,
-              name: Value(l.name),
-              latitude: Value(l.latitude),
-              longitude: Value(l.longitude),
-              countryCode: Value(l.countryCode),
-              admin1: Value(l.admin1),
-              admin2: Value(l.admin2),
-            ));
-    final sqlTrash = file.trashData == null
-        ? null
-        : TrashesCompanion.insert(
-            filename: file.trashData!.filename,
-            originalLocation: file.trashData!.originalLocation,
-            deletionTime: file.trashData!.deletionTime,
-          );
+    final sqlImage = file.imageData?.let(
+      (m) => ImagesCompanion.insert(
+        lastUpdated: m.lastUpdated,
+        fileEtag: Value(m.fileEtag),
+        width: Value(m.width),
+        height: Value(m.height),
+        exifRaw: Value(m.exif?.let((j) => jsonEncode(j))),
+        dateTimeOriginal: Value(m.exifDateTimeOriginal),
+        src: Value(m.src),
+      ),
+    );
+    final sqlImageLocation = file.location?.let(
+      (l) => ImageLocationsCompanion.insert(
+        version: l.version,
+        name: Value(l.name),
+        latitude: Value(l.latitude),
+        longitude: Value(l.longitude),
+        countryCode: Value(l.countryCode),
+        admin1: Value(l.admin1),
+        admin2: Value(l.admin2),
+      ),
+    );
+    final sqlTrash =
+        file.trashData == null
+            ? null
+            : TrashesCompanion.insert(
+              filename: file.trashData!.filename,
+              originalLocation: file.trashData!.originalLocation,
+              deletionTime: file.trashData!.deletionTime,
+            );
     return CompleteFileCompanion(
-        sqlFile, sqlAccountFile, sqlImage, sqlImageLocation, sqlTrash);
+      sqlFile,
+      sqlAccountFile,
+      sqlImage,
+      sqlImageLocation,
+      sqlTrash,
+    );
   }
 }
 
@@ -235,17 +245,13 @@ abstract class TrashConverter {
 
 extension DbFileListExtension on List<DbFile> {
   Future<List<CompleteFileCompanion>> toSql() {
-    return map((e) => {
-          "dbObj": e,
-        }).computeAll(_covertDbFile);
+    return map((e) => {"dbObj": e}).computeAll(_covertDbFile);
   }
 }
 
 extension CompleteFileListExtension on List<CompleteFile> {
   Future<List<DbFile>> toDbFiles() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertFile);
+    return map((e) => {"sqlObj": e}).computeAll(_covertFile);
   }
 }
 
@@ -264,9 +270,7 @@ abstract class FileDescriptorConverter {
 
 extension FileDescriptorListExtension on List<FileDescriptor> {
   Future<List<DbFileDescriptor>> toDbFileDescriptors() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertFileDescriptor);
+    return map((e) => {"sqlObj": e}).computeAll(_covertFileDescriptor);
   }
 }
 
@@ -301,9 +305,7 @@ abstract class NcAlbumConverter {
 
 extension NcAlbumListExtension on List<NcAlbum> {
   Future<List<DbNcAlbum>> toDbNcAlbums() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertNcAlbum);
+    return map((e) => {"sqlObj": e}).computeAll(_covertNcAlbum);
   }
 }
 
@@ -342,9 +344,7 @@ abstract class NcAlbumItemConverter {
 
 extension NcAlbumItemListExtension on List<NcAlbumItem> {
   Future<List<DbNcAlbumItem>> toDbNcAlbumItems() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertNcAlbumItem);
+    return map((e) => {"sqlObj": e}).computeAll(_covertNcAlbumItem);
   }
 }
 
@@ -363,9 +363,7 @@ abstract class RecognizeFaceConverter {
 
 extension RecognizeFaceListExtension on List<RecognizeFace> {
   Future<List<DbRecognizeFace>> toDbRecognizeFaces() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertRecognizeFace);
+    return map((e) => {"sqlObj": e}).computeAll(_covertRecognizeFace);
   }
 }
 
@@ -388,7 +386,9 @@ abstract class RecognizeFaceItemConverter {
   }
 
   static RecognizeFaceItemsCompanion toSql(
-      RecognizeFace parent, DbRecognizeFaceItem src) {
+    RecognizeFace parent,
+    DbRecognizeFaceItem src,
+  ) {
     return RecognizeFaceItemsCompanion(
       parent: Value(parent.rowId),
       relativePath: Value(src.relativePath),
@@ -409,9 +409,7 @@ abstract class RecognizeFaceItemConverter {
 
 extension RecognizeFaceItemListExtension on List<RecognizeFaceItem> {
   Future<List<DbRecognizeFaceItem>> toDbRecognizeFaceItems() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertRecognizeFaceItem);
+    return map((e) => {"sqlObj": e}).computeAll(_covertRecognizeFaceItem);
   }
 }
 
@@ -438,9 +436,7 @@ abstract class TagConverter {
 
 extension TagListExtension on List<Tag> {
   Future<List<DbTag>> toDbTags() {
-    return map((e) => {
-          "sqlObj": e,
-        }).computeAll(_covertTag);
+    return map((e) => {"sqlObj": e}).computeAll(_covertTag);
   }
 }
 

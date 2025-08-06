@@ -13,27 +13,30 @@ part of 'metadata_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? isEnable,
-      bool? isWifiOnly,
-      bool? isFallback,
-      ExceptionEvent? error});
+  _State call({
+    bool? isEnable,
+    bool? isWifiOnly,
+    bool? isFallback,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isEnable,
-      dynamic isWifiOnly,
-      dynamic isFallback,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic isEnable,
+    dynamic isWifiOnly,
+    dynamic isFallback,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        isEnable: isEnable as bool? ?? that.isEnable,
-        isWifiOnly: isWifiOnly as bool? ?? that.isWifiOnly,
-        isFallback: isFallback as bool? ?? that.isFallback,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isEnable: isEnable as bool? ?? that.isEnable,
+      isWifiOnly: isWifiOnly as bool? ?? that.isWifiOnly,
+      isFallback: isFallback as bool? ?? that.isFallback,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

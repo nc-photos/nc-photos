@@ -15,14 +15,15 @@ class ZoomMenuButton extends StatelessWidget {
     return PopupMenuButton(
       icon: const Icon(Icons.photo_size_select_large),
       tooltip: L10n.global().zoomTooltip,
-      itemBuilder: (context) => [
-        _PopupMenuZoom(
-          initialValue: initialZoom,
-          minValue: minZoom,
-          maxValue: maxZoom,
-          onChanged: onZoomChanged,
-        ),
-      ],
+      itemBuilder:
+          (context) => [
+            _PopupMenuZoom(
+              initialValue: initialZoom,
+              minValue: minZoom,
+              maxValue: maxZoom,
+              onChanged: onZoomChanged,
+            ),
+          ],
     );
   }
 

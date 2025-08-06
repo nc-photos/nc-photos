@@ -30,28 +30,36 @@ class _Bloc extends Bloc<_Event, _State>
     on<_RequestExit>(_onRequestExit);
 
     if (collectionId != null) {
-      _subscriptions.add(collectionsController.stream.listen((event) {
-        for (final c in event.data) {
-          if (c.collection.id == collectionId) {
-            _collectionItemsSubscription?.cancel();
-            _collectionItemsSubscription = c.controller.stream.listen((event) {
-              add(_SetCollectionItems(event.items));
-            });
-            return;
+      _subscriptions.add(
+        collectionsController.stream.listen((event) {
+          for (final c in event.data) {
+            if (c.collection.id == collectionId) {
+              _collectionItemsSubscription?.cancel();
+              _collectionItemsSubscription = c.controller.stream.listen((
+                event,
+              ) {
+                add(_SetCollectionItems(event.items));
+              });
+              return;
+            }
           }
-        }
-        _log.warning("[_Bloc] Collection not found: $collectionId");
-        add(const _SetCollectionItems(null));
-        _collectionItemsSubscription?.cancel();
-      }));
+          _log.warning("[_Bloc] Collection not found: $collectionId");
+          add(const _SetCollectionItems(null));
+          _collectionItemsSubscription?.cancel();
+        }),
+      );
     }
-    _subscriptions.add(stream
-        .distinct((a, b) =>
-            identical(a.rawFiles, b.rawFiles) &&
-            identical(a.collectionItems, b.collectionItems))
-        .listen((event) {
-      add(const _MergeFiles());
-    }));
+    _subscriptions.add(
+      stream
+          .distinct(
+            (a, b) =>
+                identical(a.rawFiles, b.rawFiles) &&
+                identical(a.collectionItems, b.collectionItems),
+          )
+          .listen((event) {
+            add(const _MergeFiles());
+          }),
+    );
   }
 
   @override
@@ -98,34 +106,33 @@ class _Bloc extends Bloc<_Event, _State>
     _shuffledIndex = {0: parsedConfig.shuffled};
     initialPage = parsedConfig.initial;
     pageCount = parsedConfig.count;
-    emit(state.copyWith(
-      hasInit: true,
-      page: initialPage,
-      hasPrev: initialPage > 0,
-      hasNext: pageCount == null || initialPage < (pageCount! - 1),
-    ));
+    emit(
+      state.copyWith(
+        hasInit: true,
+        page: initialPage,
+        hasPrev: initialPage > 0,
+        hasNext: pageCount == null || initialPage < (pageCount! - 1),
+      ),
+    );
     if (state.files.isNotEmpty) {
-      emit(state.copyWith(
-        currentFile: getFileByPageIndex(initialPage),
-      ));
+      emit(state.copyWith(currentFile: getFileByPageIndex(initialPage)));
     }
     unawaited(_prepareNextPage());
 
     await forEach(
       emit,
       filesController.stream,
-      onData: (data) => state.copyWith(
-        rawFiles: data.dataMap,
-      ),
+      onData: (data) => state.copyWith(rawFiles: data.dataMap),
     );
   }
 
   void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
     _log.info(ev);
-    final itemMap = ev.value
-        ?.whereType<CollectionFileItem>()
-        .map((e) => MapEntry(e.file.fdId, e))
-        .toMap();
+    final itemMap =
+        ev.value
+            ?.whereType<CollectionFileItem>()
+            .map((e) => MapEntry(e.file.fdId, e))
+            .toMap();
     emit(state.copyWith(collectionItems: itemMap));
   }
 
@@ -140,15 +147,16 @@ class _Bloc extends Bloc<_Event, _State>
         // collection not ready
         return;
       }
-      merged = state.rawFiles.addedAll(state.collectionItems!
-          .map((key, value) => MapEntry(key, value.file)));
+      merged = state.rawFiles.addedAll(
+        state.collectionItems!.map((key, value) => MapEntry(key, value.file)),
+      );
     }
     final files = fileIds.map((e) => merged[e]).toList();
     emit(state.copyWith(files: files));
     if (state.hasInit) {
-      emit(state.copyWith(
-        currentFile: files[convertPageToFileIndex(state.page)],
-      ));
+      emit(
+        state.copyWith(currentFile: files[convertPageToFileIndex(state.page)]),
+      );
     }
   }
 
@@ -229,13 +237,15 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetCurrentPage(_SetCurrentPage ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      page: ev.value,
-      currentFile: getFileByPageIndex(ev.value),
-      isVideoCompleted: false,
-      hasPrev: ev.value > 0,
-      hasNext: pageCount == null || ev.value < (pageCount! - 1),
-    ));
+    emit(
+      state.copyWith(
+        page: ev.value,
+        currentFile: getFileByPageIndex(ev.value),
+        isVideoCompleted: false,
+        hasPrev: ev.value > 0,
+        hasNext: pageCount == null || ev.value < (pageCount! - 1),
+      ),
+    );
     if (state.isPlay) {
       _prepareNextPage();
     }
@@ -243,27 +253,23 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onNextPage(_NextPage ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      nextPage: ev.value,
-      shouldAnimateNextPage: true,
-    ));
+    emit(state.copyWith(nextPage: ev.value, shouldAnimateNextPage: true));
   }
 
   void _onToggleTimeline(_ToggleTimeline ev, Emitter<_State> emit) {
     _log.info(ev);
     final next = !state.isShowTimeline;
-    emit(state.copyWith(
-      isShowTimeline: next,
-      hasShownTimeline: state.hasShownTimeline || next,
-    ));
+    emit(
+      state.copyWith(
+        isShowTimeline: next,
+        hasShownTimeline: state.hasShownTimeline || next,
+      ),
+    );
   }
 
   void _onRequestPage(_RequestPage ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      nextPage: ev.value,
-      shouldAnimateNextPage: false,
-    ));
+    emit(state.copyWith(nextPage: ev.value, shouldAnimateNextPage: false));
   }
 
   void _onRequestExit(_RequestExit ev, Emitter<_State> emit) {
@@ -279,11 +285,7 @@ class _Bloc extends Bloc<_Event, _State>
     final index = [for (var i = 0; i < fileIds.length; ++i) i];
     final count = config.isRepeat ? null : fileIds.length;
     if (config.isShuffle) {
-      return (
-        shuffled: index..shuffle(),
-        initial: 0,
-        count: count,
-      );
+      return (shuffled: index..shuffle(), initial: 0, count: count);
     } else if (config.isReverse) {
       return (
         shuffled: index.reversed.toList(),
@@ -291,11 +293,7 @@ class _Bloc extends Bloc<_Event, _State>
         count: count,
       );
     } else {
-      return (
-        shuffled: index,
-        initial: startIndex,
-        count: count,
-      );
+      return (shuffled: index, initial: startIndex, count: count);
     }
   }
 

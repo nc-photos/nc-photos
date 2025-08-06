@@ -13,38 +13,43 @@ part of 'search_landing.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<Person>? persons,
-      bool? isPersonsLoading,
-      List<_PersonItem>? transformedPersonItems,
-      LocationGroupResult? places,
-      bool? isPlacesLoading,
-      List<_PlaceItem>? transformedPlaceItems,
-      ExceptionEvent? error});
+  _State call({
+    List<Person>? persons,
+    bool? isPersonsLoading,
+    List<_PersonItem>? transformedPersonItems,
+    LocationGroupResult? places,
+    bool? isPlacesLoading,
+    List<_PlaceItem>? transformedPlaceItems,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic persons,
-      dynamic isPersonsLoading,
-      dynamic transformedPersonItems,
-      dynamic places,
-      dynamic isPlacesLoading,
-      dynamic transformedPlaceItems,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic persons,
+    dynamic isPersonsLoading,
+    dynamic transformedPersonItems,
+    dynamic places,
+    dynamic isPlacesLoading,
+    dynamic transformedPlaceItems,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        persons: persons as List<Person>? ?? that.persons,
-        isPersonsLoading: isPersonsLoading as bool? ?? that.isPersonsLoading,
-        transformedPersonItems: transformedPersonItems as List<_PersonItem>? ??
-            that.transformedPersonItems,
-        places: places as LocationGroupResult? ?? that.places,
-        isPlacesLoading: isPlacesLoading as bool? ?? that.isPlacesLoading,
-        transformedPlaceItems: transformedPlaceItems as List<_PlaceItem>? ??
-            that.transformedPlaceItems,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      persons: persons as List<Person>? ?? that.persons,
+      isPersonsLoading: isPersonsLoading as bool? ?? that.isPersonsLoading,
+      transformedPersonItems:
+          transformedPersonItems as List<_PersonItem>? ??
+          that.transformedPersonItems,
+      places: places as LocationGroupResult? ?? that.places,
+      isPlacesLoading: isPlacesLoading as bool? ?? that.isPlacesLoading,
+      transformedPlaceItems:
+          transformedPlaceItems as List<_PlaceItem>? ??
+          that.transformedPlaceItems,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

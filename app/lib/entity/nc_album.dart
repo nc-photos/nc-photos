@@ -22,10 +22,7 @@ class NcAlbum with EquatableMixin {
     required this.collaborators,
   }) : path = path.trimAny("/");
 
-  static NcAlbum createNew({
-    required Account account,
-    required String name,
-  }) {
+  static NcAlbum createNew({required Account account, required String name}) {
     return NcAlbum(
       path: "${api.ApiPhotos.path}/${account.userId}/albums/$name",
       lastPhoto: null,
@@ -42,14 +39,14 @@ class NcAlbum with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        path,
-        lastPhoto,
-        nbItems,
-        location,
-        dateStart,
-        dateEnd,
-        collaborators,
-      ];
+    path,
+    lastPhoto,
+    nbItems,
+    location,
+    dateStart,
+    dateEnd,
+    collaborators,
+  ];
 
   final String path;
 
@@ -172,16 +169,12 @@ class NcAlbumCollaborator {
   });
 
   factory NcAlbumCollaborator.fromJson(JsonObj json) => NcAlbumCollaborator(
-        id: CiString(json["id"]),
-        label: json["label"],
-        type: json["type"],
-      );
+    id: CiString(json["id"]),
+    label: json["label"],
+    type: json["type"],
+  );
 
-  JsonObj toJson() => {
-        "id": id.raw,
-        "label": label,
-        "type": type,
-      };
+  JsonObj toJson() => {"id": id.raw, "label": label, "type": type};
 
   @override
   String toString() => _$toString();

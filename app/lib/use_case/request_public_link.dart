@@ -14,26 +14,26 @@ part 'request_public_link.g.dart';
 class RequestPublicLink {
   /// Request a temporary unique public link to [file]
   Future<String> call(Account account, FileDescriptor file) async {
-    final response = await ApiUtil.fromAccount(account)
-        .ocs()
-        .dav()
-        .direct()
-        .post(fileId: file.fdId);
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).ocs().dav().direct().post(fileId: file.fdId);
     if (!response.isGood) {
       _log.severe("[call] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
     final JsonObj json = jsonDecode(response.body)["ocs"];
     if (json["meta"]["statuscode"] != 200) {
       _log.shout(
-          "[call] Failed requesting server: ${jsonEncode(json["meta"])}");
+        "[call] Failed requesting server: ${jsonEncode(json["meta"])}",
+      );
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${json["meta"]["statuscode"]} ${json["meta"]["message"]}");
+        response: response,
+        message:
+            "Server responed with an error: HTTP ${json["meta"]["statuscode"]} ${json["meta"]["message"]}",
+      );
     }
     return json["data"]["url"];
   }

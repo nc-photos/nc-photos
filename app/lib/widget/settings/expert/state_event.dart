@@ -3,17 +3,10 @@ part of '../expert_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.isNewHttpEngine,
-    this.lastSuccessful,
-  });
+  const _State({required this.isNewHttpEngine, this.lastSuccessful});
 
-  factory _State.init({
-    required bool isNewHttpEngine,
-  }) {
-    return _State(
-      isNewHttpEngine: isNewHttpEngine,
-    );
+  factory _State.init({required bool isNewHttpEngine}) {
+    return _State(isNewHttpEngine: isNewHttpEngine);
   }
 
   @override

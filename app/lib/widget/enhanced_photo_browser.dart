@@ -43,22 +43,17 @@ class EnhancedPhotoBrowser extends StatefulWidget {
   static const routeName = "/enhanced-photo-browser";
 
   static Route buildRoute(
-          EnhancedPhotoBrowserArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => EnhancedPhotoBrowser.fromArgs(args),
-        settings: settings,
-      );
+    EnhancedPhotoBrowserArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => EnhancedPhotoBrowser.fromArgs(args),
+    settings: settings,
+  );
 
-  const EnhancedPhotoBrowser({
-    super.key,
-    required this.filename,
-  });
+  const EnhancedPhotoBrowser({super.key, required this.filename});
 
   EnhancedPhotoBrowser.fromArgs(EnhancedPhotoBrowserArguments args, {Key? key})
-      : this(
-          key: key,
-          filename: args.filename,
-        );
+    : this(key: key, filename: args.filename);
 
   @override
   createState() => _EnhancedPhotoBrowserState();
@@ -169,9 +164,7 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
             child: CustomScrollView(
               slivers: [
                 _buildAppBar(context),
-                buildItemStreamList(
-                  maxCrossAxisExtent: _thumbSize.toDouble(),
-                ),
+                buildItemStreamList(maxCrossAxisExtent: _thumbSize.toDouble()),
               ],
             ),
           ),
@@ -193,9 +186,8 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
     }
   }
 
-  Widget _buildNormalAppBar(BuildContext context) => SliverAppBar(
-        title: Text(L10n.global().collectionEditedPhotosLabel),
-      );
+  Widget _buildNormalAppBar(BuildContext context) =>
+      SliverAppBar(title: Text(L10n.global().collectionEditedPhotosLabel));
 
   Widget _buildSelectionAppBar(BuildContext context) {
     return SelectionAppBar(
@@ -215,12 +207,13 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
         ),
         PopupMenuButton<_SelectionMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: _SelectionMenuOption.delete,
-              child: Text(L10n.global().deletePermanentlyTooltip),
-            ),
-          ],
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: _SelectionMenuOption.delete,
+                  child: Text(L10n.global().deletePermanentlyTooltip),
+                ),
+              ],
           onSelected: (option) => _onSelectionMenuSelected(context, option),
         ),
       ],
@@ -236,21 +229,26 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
       _transformItems(state.files, isSuccess: true);
     } else if (state is ScanLocalDirBlocFailure) {
       _transformItems(state.files);
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(state.exception is PermissionException
-            ? L10n.global().errorNoStoragePermission
-            : exception_util.toUserString(state.exception)),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(
+            state.exception is PermissionException
+                ? L10n.global().errorNoStoragePermission
+                : exception_util.toUserString(state.exception),
+          ),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
   }
 
   Future<void> _onSelectionSharePressed(BuildContext context) async {
     final c = KiwiContainer().resolve<DiContainer>();
-    final selected = selectedListItems
-        .whereType<PhotoListLocalFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selected =
+        selectedListItems
+            .whereType<PhotoListLocalFileItem>()
+            .map((e) => e.file)
+            .toList();
     await ShareHandler(
       c,
       context: context,
@@ -263,7 +261,9 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
   }
 
   void _onSelectionMenuSelected(
-      BuildContext context, _SelectionMenuOption option) {
+    BuildContext context,
+    _SelectionMenuOption option,
+  ) {
     switch (option) {
       case _SelectionMenuOption.delete:
         _onSelectionDeletePressed(context);
@@ -274,57 +274,54 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
   Future<void> _onSelectionDeletePressed(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
-        content: Text(
-          L10n.global().deletePermanentlyLocalConfirmationDialogContent,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text(L10n.global().confirmButtonLabel),
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
+            content: Text(
+              L10n.global().deletePermanentlyLocalConfirmationDialogContent,
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(L10n.global().confirmButtonLabel),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     if (result != true) {
       return;
     }
 
-    final selectedFiles = selectedListItems
-        .whereType<PhotoListLocalFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selectedFiles =
+        selectedListItems
+            .whereType<PhotoListLocalFileItem>()
+            .map((e) => e.file)
+            .toList();
     setState(() {
       clearSelectedItems();
     });
     await const DeleteLocalSelectionHandler()(selectedFiles: selectedFiles);
   }
 
-  void _transformItems(
-    List<LocalFile> files, {
-    bool isSuccess = false,
-  }) {
-    _buildItemQueue.addJob(
-      _BuilderArguments(files),
-      _buildPhotoListItem,
-      (result) {
-        if (mounted) {
-          setState(() {
-            _backingFiles = result.backingFiles;
-            itemStreamListItems = result.listItems;
-          });
-          if (isSuccess && _isFirstRun) {
-            _isFirstRun = false;
-            if (widget.filename != null) {
-              _openInitialImage(widget.filename!);
-            }
+  void _transformItems(List<LocalFile> files, {bool isSuccess = false}) {
+    _buildItemQueue.addJob(_BuilderArguments(files), _buildPhotoListItem, (
+      result,
+    ) {
+      if (mounted) {
+        setState(() {
+          _backingFiles = result.backingFiles;
+          itemStreamListItems = result.listItems;
+        });
+        if (isSuccess && _isFirstRun) {
+          _isFirstRun = false;
+          if (widget.filename != null) {
+            _openInitialImage(widget.filename!);
           }
         }
-      },
-    );
+      }
+    });
   }
 
   void _openInitialImage(String filename) {
@@ -333,8 +330,11 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
       _log.severe("[openInitialImage] Filename not found: $filename");
       return;
     }
-    Navigator.pushNamed(context, LocalFileViewer.routeName,
-        arguments: LocalFileViewerArguments(_backingFiles, index));
+    Navigator.pushNamed(
+      context,
+      LocalFileViewer.routeName,
+      arguments: LocalFileViewerArguments(_backingFiles, index),
+    );
   }
 
   Future<bool> _ensurePermission() async {
@@ -361,10 +361,12 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
   }
 
   void _reqQuery() {
-    _bloc.add(const ScanLocalDirBlocQuery([
-      "Download/Photos (for Nextcloud)/Enhanced Photos",
-      "Download/Photos (for Nextcloud)/Edited Photos",
-    ]));
+    _bloc.add(
+      const ScanLocalDirBlocQuery([
+        "Download/Photos (for Nextcloud)/Enhanced Photos",
+        "Download/Photos (for Nextcloud)/Edited Photos",
+      ]),
+    );
   }
 
   final _bloc = ScanLocalDirBloc();
@@ -379,9 +381,7 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
   var _isNoPermission = false;
 }
 
-enum _SelectionMenuOption {
-  delete,
-}
+enum _SelectionMenuOption { delete }
 
 class _BuilderResult {
   const _BuilderResult(this.backingFiles, this.listItems);
@@ -409,8 +409,9 @@ class _Builder {
 
   List<LocalFile> _sortItems(List<LocalFile> files) {
     // we use last modified here to keep newly enhanced photo at the top
-    return files
-        .stableSorted((a, b) => b.lastModified.compareTo(a.lastModified));
+    return files.stableSorted(
+      (a, b) => b.lastModified.compareTo(a.lastModified),
+    );
   }
 
   _BuilderResult _fromSortedItems(List<LocalFile> files) {
@@ -429,10 +430,7 @@ class _Builder {
 
   SelectableItem? _buildListItem(int i, LocalFile file) {
     if (file_util.isSupportedImageMime(file.mime ?? "")) {
-      return PhotoListLocalImageItem(
-        fileIndex: i,
-        file: file,
-      );
+      return PhotoListLocalImageItem(fileIndex: i, file: file);
     } else {
       _log.shout("[_buildListItem] Unsupported file format: ${file.mime}");
       return null;

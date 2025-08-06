@@ -32,9 +32,7 @@ class ThemeSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(prefController: context.read()),
       child: const _WrappedThemeSettings(),
     );
   }
@@ -77,45 +75,48 @@ class _WrappedThemeSettingsState extends State<_WrappedThemeSettings>
               title: Text(L10n.global().settingsThemeTitle),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  const _SeedColorOption(),
-                  if (getRawPlatform() == NpPlatform.android &&
-                      AndroidInfo().sdkInt >= AndroidVersion.Q)
-                    _BlocSelector<bool>(
-                      selector: (state) => state.isFollowSystemTheme,
-                      builder: (_, isFollowSystemTheme) {
-                        return SwitchListTile(
-                          title: Text(
-                              L10n.global().settingsFollowSystemThemeTitle),
-                          value: isFollowSystemTheme,
-                          onChanged: (value) {
-                            _bloc.add(_SetFollowSystemTheme(value));
-                          },
-                        );
-                      },
-                    ),
+              delegate: SliverChildListDelegate([
+                const _SeedColorOption(),
+                if (getRawPlatform() == NpPlatform.android &&
+                    AndroidInfo().sdkInt >= AndroidVersion.Q)
                   _BlocSelector<bool>(
-                    selector: (state) => state.isUseBlackInDarkTheme,
-                    builder: (context, isUseBlackInDarkTheme) {
+                    selector: (state) => state.isFollowSystemTheme,
+                    builder: (_, isFollowSystemTheme) {
                       return SwitchListTile(
                         title: Text(
-                            L10n.global().settingsUseBlackInDarkThemeTitle),
-                        subtitle: Text(isUseBlackInDarkTheme
-                            ? L10n.global()
-                                .settingsUseBlackInDarkThemeTrueDescription
-                            : L10n.global()
-                                .settingsUseBlackInDarkThemeFalseDescription),
-                        value: isUseBlackInDarkTheme,
+                          L10n.global().settingsFollowSystemThemeTitle,
+                        ),
+                        value: isFollowSystemTheme,
                         onChanged: (value) {
-                          _bloc.add(_SetUseBlackInDarkTheme(
-                              value, Theme.of(context)));
+                          _bloc.add(_SetFollowSystemTheme(value));
                         },
                       );
                     },
                   ),
-                ],
-              ),
+                _BlocSelector<bool>(
+                  selector: (state) => state.isUseBlackInDarkTheme,
+                  builder: (context, isUseBlackInDarkTheme) {
+                    return SwitchListTile(
+                      title: Text(
+                        L10n.global().settingsUseBlackInDarkThemeTitle,
+                      ),
+                      subtitle: Text(
+                        isUseBlackInDarkTheme
+                            ? L10n.global()
+                                .settingsUseBlackInDarkThemeTrueDescription
+                            : L10n.global()
+                                .settingsUseBlackInDarkThemeFalseDescription,
+                      ),
+                      value: isUseBlackInDarkTheme,
+                      onChanged: (value) {
+                        _bloc.add(
+                          _SetUseBlackInDarkTheme(value, Theme.of(context)),
+                        );
+                      },
+                    );
+                  },
+                ),
+              ]),
             ),
           ],
         ),
@@ -132,25 +133,23 @@ class _SeedColorOption extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.seedColor != current.seedColor ||
-          previous.secondarySeedColor != current.secondarySeedColor,
+      buildWhen:
+          (previous, current) =>
+              previous.seedColor != current.seedColor ||
+              previous.secondarySeedColor != current.secondarySeedColor,
       builder: (context, state) {
         return ListTile(
           title: Text(L10n.global().settingsSeedColorTitle),
           subtitle: Text(
-              state.seedColor == null || SessionStorage().isSupportDynamicColor
-                  ? L10n.global().settingsSeedColorSystemColorDescription
-                  : L10n.global().settingsSeedColorDescription),
+            state.seedColor == null || SessionStorage().isSupportDynamicColor
+                ? L10n.global().settingsSeedColorSystemColorDescription
+                : L10n.global().settingsSeedColorDescription,
+          ),
           trailing: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
               if (state.seedColor != null)
-                Icon(
-                  Icons.circle,
-                  size: 32,
-                  color: Color(state.seedColor!),
-                ),
+                Icon(Icons.circle, size: 32, color: Color(state.seedColor!)),
               if (state.secondarySeedColor != null)
                 Icon(
                   Icons.circle,
@@ -169,10 +168,11 @@ class _SeedColorOption extends StatelessWidget {
     final parentContext = context;
     await showDialog(
       context: context,
-      builder: (context) => BlocProvider.value(
-        value: parentContext.read<_Bloc>(),
-        child: const _SeedColorPicker(),
-      ),
+      builder:
+          (context) => BlocProvider.value(
+            value: parentContext.read<_Bloc>(),
+            child: const _SeedColorPicker(),
+          ),
     );
   }
 }
@@ -200,10 +200,11 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
               leading: const SizedBox(width: 48),
               trailing: _BlocSelector<int?>(
                 selector: (state) => state.seedColor,
-                builder: (context, seedColor) => _SeedColorPickerItem(
-                  seedColor: seedColor?.run(ColorInt.new),
-                  onSelected: () => _onPrimaryTap(this.context),
-                ),
+                builder:
+                    (context, seedColor) => _SeedColorPickerItem(
+                      seedColor: seedColor?.run(ColorInt.new),
+                      onSelected: () => _onPrimaryTap(this.context),
+                    ),
               ),
               contentPadding: EdgeInsets.zero,
               onTap: () => _onPrimaryTap(context),
@@ -212,24 +213,30 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
               title: Text(L10n.global().settingsThemeSecondaryColor),
               leading: _BlocSelector<bool>(
                 selector: (state) => state.secondarySeedColor != null,
-                builder: (context, isSecondaryEnabled) => Checkbox(
-                  value: isSecondaryEnabled,
-                  onChanged: (value) {
-                    if (value == true) {
-                      _onSecondaryTap(this.context);
-                    } else {
-                      context.addEvent(_SetThemeColor(
-                          context.state.seedColor?.let(ColorInt.new), null));
-                    }
-                  },
-                ),
+                builder:
+                    (context, isSecondaryEnabled) => Checkbox(
+                      value: isSecondaryEnabled,
+                      onChanged: (value) {
+                        if (value == true) {
+                          _onSecondaryTap(this.context);
+                        } else {
+                          context.addEvent(
+                            _SetThemeColor(
+                              context.state.seedColor?.let(ColorInt.new),
+                              null,
+                            ),
+                          );
+                        }
+                      },
+                    ),
               ),
               trailing: _BlocSelector<int?>(
                 selector: (state) => state.secondarySeedColor,
-                builder: (context, secondarySeedColor) => _SeedColorPickerItem(
-                  seedColor: secondarySeedColor?.run(ColorInt.new),
-                  onSelected: () => _onSecondaryTap(this.context),
-                ),
+                builder:
+                    (context, secondarySeedColor) => _SeedColorPickerItem(
+                      seedColor: secondarySeedColor?.run(ColorInt.new),
+                      onSelected: () => _onSecondaryTap(this.context),
+                    ),
               ),
               contentPadding: EdgeInsets.zero,
               onTap: () => _onSecondaryTap(context),
@@ -240,49 +247,56 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
               style: Theme.of(context).textTheme.titleMedium,
             ),
             Wrap(
-              children: const [
-                _PresetItem(primary: ColorInt(0xFFF44336)),
-                _PresetItem(primary: ColorInt(0xFF9C27B0)),
-                _PresetItem(primary: ColorInt(0xFF2196F3)),
-                _PresetItem(primary: ColorInt(0xFF4CAF50)),
-                _PresetItem(primary: ColorInt(0xFFFFC107)),
-                _PresetItem(
-                  emoji: "\u{1f349}",
-                  primary: ColorInt(0xFF009736),
-                  secondary: ColorInt(0xFFEE2A35),
-                ),
-                _PresetItem(
-                  emoji: "\u{1f33d}",
-                  primary: ColorInt(0xFFFFC107),
-                  secondary: ColorInt(0xFF4CAF50),
-                ),
-                _PresetItem(
-                  emoji: "\u{1f38f}",
-                  primary: ColorInt(0xFF2196F3),
-                  secondary: ColorInt(0xFFF44336),
-                ),
-              ]
-                  .map((e) => _PresetItemView(
-                        item: e,
-                        onSelected: () => _onPresetSelected(
-                          context,
-                          primary: e.primary,
-                          secondary: e.secondary,
+              children:
+                  const [
+                        _PresetItem(primary: ColorInt(0xFFF44336)),
+                        _PresetItem(primary: ColorInt(0xFF9C27B0)),
+                        _PresetItem(primary: ColorInt(0xFF2196F3)),
+                        _PresetItem(primary: ColorInt(0xFF4CAF50)),
+                        _PresetItem(primary: ColorInt(0xFFFFC107)),
+                        _PresetItem(
+                          emoji: "\u{1f349}",
+                          primary: ColorInt(0xFF009736),
+                          secondary: ColorInt(0xFFEE2A35),
                         ),
-                      ))
-                  .toList(),
+                        _PresetItem(
+                          emoji: "\u{1f33d}",
+                          primary: ColorInt(0xFFFFC107),
+                          secondary: ColorInt(0xFF4CAF50),
+                        ),
+                        _PresetItem(
+                          emoji: "\u{1f38f}",
+                          primary: ColorInt(0xFF2196F3),
+                          secondary: ColorInt(0xFFF44336),
+                        ),
+                      ]
+                      .map(
+                        (e) => _PresetItemView(
+                          item: e,
+                          onSelected:
+                              () => _onPresetSelected(
+                                context,
+                                primary: e.primary,
+                                secondary: e.secondary,
+                              ),
+                        ),
+                      )
+                      .toList(),
             ),
           ],
         ),
-        actions: SessionStorage().isSupportDynamicColor
-            ? [
-                TextButton(
-                  onPressed: () => _onSystemColorSelected(context),
-                  child: Text(L10n.global()
-                      .settingsSeedColorPickerSystemColorButtonLabel),
-                ),
-              ]
-            : null,
+        actions:
+            SessionStorage().isSupportDynamicColor
+                ? [
+                  TextButton(
+                    onPressed: () => _onSystemColorSelected(context),
+                    child: Text(
+                      L10n.global()
+                          .settingsSeedColorPickerSystemColorButtonLabel,
+                    ),
+                  ),
+                ]
+                : null,
       ),
     );
   }
@@ -294,17 +308,23 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
     try {
       final color = await showDialog<ColorInt>(
         context: context,
-        builder: (_) => _SeedColorCustomPicker(
-          initialColor:
-              context.bloc.prefController.seedColorValue ?? defaultSeedColor,
-        ),
+        builder:
+            (_) => _SeedColorCustomPicker(
+              initialColor:
+                  context.bloc.prefController.seedColorValue ??
+                  defaultSeedColor,
+            ),
         barrierColor: Colors.transparent,
       );
       if (color == null) {
         return;
       }
-      context.addEvent(_SetThemeColor(
-          color, context.state.secondarySeedColor?.let(ColorInt.new)));
+      context.addEvent(
+        _SetThemeColor(
+          color,
+          context.state.secondarySeedColor?.let(ColorInt.new),
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -321,19 +341,24 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
     try {
       final color = await showDialog<ColorInt>(
         context: context,
-        builder: (_) => _SeedColorCustomPicker(
-          initialColor: context.bloc.prefController.secondarySeedColorValue ??
-              defaultSeedColor,
-        ),
+        builder:
+            (_) => _SeedColorCustomPicker(
+              initialColor:
+                  context.bloc.prefController.secondarySeedColorValue ??
+                  defaultSeedColor,
+            ),
         barrierColor: Colors.transparent,
       );
       if (color == null) {
         return;
       }
       // enabling secondary automatically enable primary color
-      context.addEvent(_SetThemeColor(
+      context.addEvent(
+        _SetThemeColor(
           context.state.seedColor?.let(ColorInt.new) ?? defaultSeedColor,
-          color));
+          color,
+        ),
+      );
     } finally {
       if (mounted) {
         setState(() {
@@ -361,9 +386,7 @@ class _SeedColorPickerState extends State<_SeedColorPicker> {
 }
 
 class _SeedColorCustomPicker extends StatefulWidget {
-  const _SeedColorCustomPicker({
-    required this.initialColor,
-  });
+  const _SeedColorCustomPicker({required this.initialColor});
 
   @override
   State<StatefulWidget> createState() => _SeedColorCustomPickerState();
@@ -401,23 +424,21 @@ class _SeedColorCustomPickerState extends State<_SeedColorCustomPicker> {
 }
 
 class _SeedColorPickerItem extends StatelessWidget {
-  const _SeedColorPickerItem({
-    required this.seedColor,
-    this.onSelected,
-  });
+  const _SeedColorPickerItem({required this.seedColor, this.onSelected});
 
   @override
   Widget build(BuildContext context) {
     final content = SizedBox.square(
       dimension: _size,
       child: Center(
-        child: seedColor != null
-            ? Icon(
-                Icons.circle,
-                size: _size * .9,
-                color: seedColor?.toColor(),
-              )
-            : const Icon(Icons.edit_outlined),
+        child:
+            seedColor != null
+                ? Icon(
+                  Icons.circle,
+                  size: _size * .9,
+                  color: seedColor?.toColor(),
+                )
+                : const Icon(Icons.edit_outlined),
       ),
     );
     if (onSelected != null) {
@@ -438,36 +459,34 @@ class _SeedColorPickerItem extends StatelessWidget {
 }
 
 class _PresetItemView extends StatelessWidget {
-  const _PresetItemView({
-    required this.item,
-    this.onSelected,
-  });
+  const _PresetItemView({required this.item, this.onSelected});
 
   @override
   Widget build(BuildContext context) {
     final content = SizedBox.square(
       dimension: _size,
       child: Center(
-        child: item.emoji != null
-            ? Stack(
-                alignment: Alignment.center,
-                children: [
-                  const Icon(
-                    Icons.circle,
-                    size: _size * .9,
-                    color: Colors.white,
-                  ),
-                  Text(
-                    item.emoji!,
-                    style: const TextStyle(fontSize: _size * .35),
-                  ),
-                ],
-              )
-            : Icon(
-                Icons.circle,
-                size: _size * .9,
-                color: item.primary.toColor(),
-              ),
+        child:
+            item.emoji != null
+                ? Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    const Icon(
+                      Icons.circle,
+                      size: _size * .9,
+                      color: Colors.white,
+                    ),
+                    Text(
+                      item.emoji!,
+                      style: const TextStyle(fontSize: _size * .35),
+                    ),
+                  ],
+                )
+                : Icon(
+                  Icons.circle,
+                  size: _size * .9,
+                  color: item.primary.toColor(),
+                ),
       ),
     );
     if (onSelected != null) {
@@ -488,11 +507,7 @@ class _PresetItemView extends StatelessWidget {
 }
 
 class _PresetItem {
-  const _PresetItem({
-    this.emoji,
-    required this.primary,
-    this.secondary,
-  });
+  const _PresetItem({this.emoji, required this.primary, this.secondary});
 
   final String? emoji;
   final ColorInt primary;
@@ -556,11 +571,7 @@ class _HueRingPickerState extends State<_HueRingPicker> {
             child: Stack(
               alignment: AlignmentDirectional.center,
               children: <Widget>[
-                ColorIndicator(
-                  currentHsvColor,
-                  width: 128,
-                  height: 128,
-                ),
+                ColorIndicator(currentHsvColor, width: 128, height: 128),
                 SizedBox(
                   width: widget.colorPickerHeight,
                   height: widget.colorPickerHeight,

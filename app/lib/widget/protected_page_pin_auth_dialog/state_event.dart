@@ -12,12 +12,12 @@ class _State {
   });
 
   factory _State.init() => _State(
-        input: "",
-        obsecuredInput: const [],
-        isAuthorized: false,
-        isPinError: Unique(null),
-        setupResult: null,
-      );
+    input: "",
+    obsecuredInput: const [],
+    isAuthorized: false,
+    isPinError: Unique(null),
+    setupResult: null,
+  );
 
   @override
   String toString() => _$toString();

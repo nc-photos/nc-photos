@@ -11,9 +11,13 @@ class XmlResponseParser {
     namespaces = _parseNamespaces(xml);
     final body = () {
       try {
-        return xml.children.whereType<XmlElement>().firstWhere((element) =>
-            element.matchQualifiedName("multistatus",
-                prefix: "DAV:", namespaces: namespaces));
+        return xml.children.whereType<XmlElement>().firstWhere(
+          (element) => element.matchQualifiedName(
+            "multistatus",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        );
       } catch (_) {
         _log.shout("[_parse] Missing element: multistatus");
         rethrow;
@@ -21,8 +25,13 @@ class XmlResponseParser {
     }();
     return body.children
         .whereType<XmlElement>()
-        .where((e) => e.matchQualifiedName("response",
-            prefix: "DAV:", namespaces: namespaces))
+        .where(
+          (e) => e.matchQualifiedName(
+            "response",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        )
         .map((e) {
           try {
             return mapper(e);
@@ -38,8 +47,9 @@ class XmlResponseParser {
   Map<String, String> _parseNamespaces(XmlDocument xml) {
     final namespaces = <String, String>{};
     final xmlContent = xml.descendants.whereType<XmlElement>().firstWhere(
-        (element) => !element.name.qualified.startsWith("?"),
-        orElse: () => XmlElement(XmlName.fromString("")));
+      (element) => !element.name.qualified.startsWith("?"),
+      orElse: () => XmlElement(XmlName.fromString("")),
+    );
     for (final a in xmlContent.attributes) {
       if (a.name.prefix == "xmlns") {
         namespaces[a.name.local] = a.value;

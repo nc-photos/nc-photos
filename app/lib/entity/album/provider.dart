@@ -48,10 +48,7 @@ abstract class AlbumProvider with EquatableMixin {
       }
     }
 
-    return {
-      "type": getType(),
-      "content": toContentJson(),
-    };
+    return {"type": getType(), "content": toContentJson()};
   }
 
   @protected
@@ -69,9 +66,8 @@ abstract class AlbumProvider with EquatableMixin {
 }
 
 abstract class AlbumProviderBase extends AlbumProvider {
-  AlbumProviderBase({
-    DateTime? latestItemTime,
-  }) : latestItemTime = latestItemTime?.toUtc();
+  AlbumProviderBase({DateTime? latestItemTime})
+    : latestItemTime = latestItemTime?.toUtc();
 
   @override
   toContentJson() {
@@ -82,14 +78,10 @@ abstract class AlbumProviderBase extends AlbumProvider {
   }
 
   @override
-  AlbumProviderBase copyWith({
-    OrNull<DateTime>? latestItemTime,
-  });
+  AlbumProviderBase copyWith({OrNull<DateTime>? latestItemTime});
 
   @override
-  get props => [
-        latestItemTime,
-      ];
+  get props => [latestItemTime];
 
   @override
   final DateTime? latestItemTime;
@@ -97,19 +89,19 @@ abstract class AlbumProviderBase extends AlbumProvider {
 
 @ToString(extraParams: r"{bool isDeep = false}")
 class AlbumStaticProvider extends AlbumProviderBase {
-  AlbumStaticProvider({
-    super.latestItemTime,
-    required List<AlbumItem> items,
-  }) : items = UnmodifiableListView(items);
+  AlbumStaticProvider({super.latestItemTime, required List<AlbumItem> items})
+    : items = UnmodifiableListView(items);
 
   factory AlbumStaticProvider.fromJson(JsonObj json) {
     return AlbumStaticProvider(
-      latestItemTime: json["latestItemTime"] == null
-          ? null
-          : DateTime.parse(json["latestItemTime"]),
-      items: (json["items"] as List)
-          .map((e) => AlbumItem.fromJson(e.cast<String, dynamic>()))
-          .toList(),
+      latestItemTime:
+          json["latestItemTime"] == null
+              ? null
+              : DateTime.parse(json["latestItemTime"]),
+      items:
+          (json["items"] as List)
+              .map((e) => AlbumItem.fromJson(e.cast<String, dynamic>()))
+              .toList(),
     );
   }
 
@@ -140,10 +132,7 @@ class AlbumStaticProvider extends AlbumProviderBase {
   }
 
   @override
-  get props => [
-        ...super.props,
-        items,
-      ];
+  get props => [...super.props, items];
 
   /// Immutable list of items. Modifying the list will result in an error
   @Format(r"${isDeep ? $?.toReadableString() : '[length: ${$?.length}]'}")
@@ -153,26 +142,23 @@ class AlbumStaticProvider extends AlbumProviderBase {
 }
 
 abstract class AlbumDynamicProvider extends AlbumProviderBase {
-  AlbumDynamicProvider({
-    super.latestItemTime,
-  });
+  AlbumDynamicProvider({super.latestItemTime});
 }
 
 @ToString(extraParams: r"{bool isDeep = false}")
 class AlbumDirProvider extends AlbumDynamicProvider {
-  AlbumDirProvider({
-    required this.dirs,
-    super.latestItemTime,
-  });
+  AlbumDirProvider({required this.dirs, super.latestItemTime});
 
   factory AlbumDirProvider.fromJson(JsonObj json) {
     return AlbumDirProvider(
-      latestItemTime: json["latestItemTime"] == null
-          ? null
-          : DateTime.parse(json["latestItemTime"]),
-      dirs: (json["dirs"] as List)
-          .map((e) => File.fromJson(e.cast<String, dynamic>()))
-          .toList(),
+      latestItemTime:
+          json["latestItemTime"] == null
+              ? null
+              : DateTime.parse(json["latestItemTime"]),
+      dirs:
+          (json["dirs"] as List)
+              .map((e) => File.fromJson(e.cast<String, dynamic>()))
+              .toList(),
     );
   }
 
@@ -200,10 +186,7 @@ class AlbumDirProvider extends AlbumDynamicProvider {
   }
 
   @override
-  get props => [
-        ...super.props,
-        dirs,
-      ];
+  get props => [...super.props, dirs];
 
   @Format(r"${$?.map((e) => e.path).toReadableString()}")
   final List<File> dirs;
@@ -213,45 +196,40 @@ class AlbumDirProvider extends AlbumDynamicProvider {
 
 @ToString(extraParams: r"{bool isDeep = false}")
 class AlbumTagProvider extends AlbumDynamicProvider {
-  AlbumTagProvider({
-    required this.tags,
-    super.latestItemTime,
-  });
+  AlbumTagProvider({required this.tags, super.latestItemTime});
 
   factory AlbumTagProvider.fromJson(JsonObj json) => AlbumTagProvider(
-        latestItemTime: json["latestItemTime"] == null
+    latestItemTime:
+        json["latestItemTime"] == null
             ? null
             : DateTime.parse(json["latestItemTime"]),
-        tags: (json["tags"] as List)
+    tags:
+        (json["tags"] as List)
             .map((e) => Tag.fromJson(e.cast<String, dynamic>()))
             .toList(),
-      );
+  );
 
   @override
   String toString({bool isDeep = false}) => _$toString(isDeep: isDeep);
 
   @override
   toContentJson() => {
-        ...super.toContentJson(),
-        "tags": tags.map((t) => t.toJson()).toList(),
-      };
+    ...super.toContentJson(),
+    "tags": tags.map((t) => t.toJson()).toList(),
+  };
 
   @override
   AlbumTagProvider copyWith({
     OrNull<DateTime>? latestItemTime,
     List<Tag>? tags,
-  }) =>
-      AlbumTagProvider(
-        latestItemTime:
-            latestItemTime == null ? this.latestItemTime : latestItemTime.obj,
-        tags: tags ?? List.of(this.tags),
-      );
+  }) => AlbumTagProvider(
+    latestItemTime:
+        latestItemTime == null ? this.latestItemTime : latestItemTime.obj,
+    tags: tags ?? List.of(this.tags),
+  );
 
   @override
-  get props => [
-        ...super.props,
-        tags,
-      ];
+  get props => [...super.props, tags];
 
   @Format(r"${$?.map((t) => t.displayName).toReadableString()}")
   final List<Tag> tags;

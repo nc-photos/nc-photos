@@ -16,18 +16,20 @@ class _Bloc extends Bloc<_Event, _State>
     required this.initialFile,
     required this.initialIndex,
     this.collectionId,
-  })  : contentController = _ViewerContentController(
-          contentProvider: contentProvider,
-          allFilesCount: allFilesCount,
-          initialFile: initialFile,
-          initialIndex: initialIndex,
-        ),
-        super(_State.init(
-          initialFile: initialFile,
-          initialIndex: initialIndex,
-          appBarButtons: prefController.viewerAppBarButtonsValue,
-          bottomAppBarButtons: prefController.viewerBottomAppBarButtonsValue,
-        )) {
+  }) : contentController = _ViewerContentController(
+         contentProvider: contentProvider,
+         allFilesCount: allFilesCount,
+         initialFile: initialFile,
+         initialIndex: initialIndex,
+       ),
+       super(
+         _State.init(
+           initialFile: initialFile,
+           initialIndex: initialIndex,
+           appBarButtons: prefController.viewerAppBarButtonsValue,
+           bottomAppBarButtons: prefController.viewerBottomAppBarButtonsValue,
+         ),
+       ) {
     on<_Init>(_onInit);
     on<_SetIndex>(_onSetIndex);
     on<_JumpToLastSlideshow>(_onJumpToLastSlideshow);
@@ -72,37 +74,48 @@ class _Bloc extends Bloc<_Event, _State>
     on<_SetError>(_onSetError);
 
     if (collectionId != null) {
-      _subscriptions.add(collectionsController.stream.listen((event) {
-        for (final c in event.data) {
-          if (c.collection.id == collectionId) {
-            add(_SetCollection(c.collection, c.controller));
-            _collectionItemsSubscription?.cancel();
-            _collectionItemsSubscription = c.controller.stream.listen((event) {
-              add(_SetCollectionItems(event.items));
-            });
-            return;
+      _subscriptions.add(
+        collectionsController.stream.listen((event) {
+          for (final c in event.data) {
+            if (c.collection.id == collectionId) {
+              add(_SetCollection(c.collection, c.controller));
+              _collectionItemsSubscription?.cancel();
+              _collectionItemsSubscription = c.controller.stream.listen((
+                event,
+              ) {
+                add(_SetCollectionItems(event.items));
+              });
+              return;
+            }
           }
-        }
-        _log.warning("[_Bloc] Collection not found: $collectionId");
-        add(const _SetCollection(null, null));
-        add(const _SetCollectionItems(null));
-        _collectionItemsSubscription?.cancel();
-      }));
+          _log.warning("[_Bloc] Collection not found: $collectionId");
+          add(const _SetCollection(null, null));
+          add(const _SetCollectionItems(null));
+          _collectionItemsSubscription?.cancel();
+        }),
+      );
     }
-    _subscriptions.add(prefController.viewerAppBarButtonsChange.listen((event) {
-      add(_SetAppBarButtons(event));
-    }));
-    _subscriptions
-        .add(prefController.viewerBottomAppBarButtonsChange.listen((event) {
-      add(_SetBottomAppBarButtons(event));
-    }));
-    _subscriptions.add(stream
-        .distinct((a, b) =>
-            identical(a.fileIdFileMap, b.fileIdFileMap) &&
-            identical(a.collectionItems, b.collectionItems))
-        .listen((event) {
-      add(const _MergeFiles());
-    }));
+    _subscriptions.add(
+      prefController.viewerAppBarButtonsChange.listen((event) {
+        add(_SetAppBarButtons(event));
+      }),
+    );
+    _subscriptions.add(
+      prefController.viewerBottomAppBarButtonsChange.listen((event) {
+        add(_SetBottomAppBarButtons(event));
+      }),
+    );
+    _subscriptions.add(
+      stream
+          .distinct(
+            (a, b) =>
+                identical(a.fileIdFileMap, b.fileIdFileMap) &&
+                identical(a.collectionItems, b.collectionItems),
+          )
+          .listen((event) {
+            add(const _MergeFiles());
+          }),
+    );
 
     add(_SetIndex(initialIndex));
   }
@@ -137,38 +150,41 @@ class _Bloc extends Bloc<_Event, _State>
       contentController.getForwardContent(),
       contentController.getBackwardContent(),
     ]);
-    emit(state.copyWith(
-      pageFileIdMap: {
-        ...results[0].map((k, v) => MapEntry(k, v.fdId)),
-        initialIndex: initialFile.fdId,
-        ...results[1].map((k, v) => MapEntry(k, v.fdId)),
-      },
-      fileIdFileMap: {
-        ...results[0].map((k, v) => MapEntry(v.fdId, v)),
-        ...results[1].map((k, v) => MapEntry(v.fdId, v)),
-        initialFile.fdId: initialFile,
-      },
-    ));
-    unawaited(filesController.queryByFileId([
-      ...results[0].values.map((e) => e.fdId),
-      ...results[1].values.map((e) => e.fdId),
-      initialFile.fdId,
-    ]));
+    emit(
+      state.copyWith(
+        pageFileIdMap: {
+          ...results[0].map((k, v) => MapEntry(k, v.fdId)),
+          initialIndex: initialFile.fdId,
+          ...results[1].map((k, v) => MapEntry(k, v.fdId)),
+        },
+        fileIdFileMap: {
+          ...results[0].map((k, v) => MapEntry(v.fdId, v)),
+          ...results[1].map((k, v) => MapEntry(v.fdId, v)),
+          initialFile.fdId: initialFile,
+        },
+      ),
+    );
+    unawaited(
+      filesController.queryByFileId([
+        ...results[0].values.map((e) => e.fdId),
+        ...results[1].values.map((e) => e.fdId),
+        initialFile.fdId,
+      ]),
+    );
 
     await Future.wait([
       forEach(
         emit,
         filesController.stream,
-        onData: (data) => state.copyWith(
-          fileIdFileMap: data.dataMap,
-        ),
+        onData: (data) => state.copyWith(fileIdFileMap: data.dataMap),
       ),
       forEach(
         emit,
         filesController.errorStream,
-        onData: (data) => state.copyWith(
-          error: ExceptionEvent(data.error, data.stackTrace),
-        ),
+        onData:
+            (data) => state.copyWith(
+              error: ExceptionEvent(data.error, data.stackTrace),
+            ),
       ),
     ]);
   }
@@ -191,24 +207,29 @@ class _Bloc extends Bloc<_Event, _State>
     }
     final fileId = state.pageFileIdMap[ev.index];
     if (fileId == null) {
-      emit(state.copyWith(
-        index: ev.index,
-        currentFile: null,
-        currentFileState: null,
-        isInitialLoad: false,
-      ));
+      emit(
+        state.copyWith(
+          index: ev.index,
+          currentFile: null,
+          currentFileState: null,
+          isInitialLoad: false,
+        ),
+      );
     } else {
       final fileState = state.fileStates[fileId] ?? _PageState.create();
       final file = state.mergedFileIdFileMap[fileId];
-      emit(state.copyWith(
-        index: ev.index,
-        currentFile: file,
-        fileStates: state.fileStates[fileId] == null
-            ? state.fileStates.addedAll({fileId: fileState})
-            : null,
-        currentFileState: fileState,
-        isInitialLoad: false,
-      ));
+      emit(
+        state.copyWith(
+          index: ev.index,
+          currentFile: file,
+          fileStates:
+              state.fileStates[fileId] == null
+                  ? state.fileStates.addedAll({fileId: fileState})
+                  : null,
+          currentFileState: fileState,
+          isInitialLoad: false,
+        ),
+      );
       if (file == null) {
         filesController.queryByFileId([fileId]);
       }
@@ -216,31 +237,39 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _onJumpToLastSlideshow(
-      _JumpToLastSlideshow ev, _Emitter emit) async {
+    _JumpToLastSlideshow ev,
+    _Emitter emit,
+  ) async {
     _log.info(ev);
     await contentController.fastJump(page: ev.index, fileId: ev.fileId);
-    emit(state.copyWith(
-      index: ev.index,
-      pageFileIdMap: state.pageFileIdMap.containsKey(ev.index)
-          ? null
-          : state.pageFileIdMap.addedAll({ev.index: ev.fileId}),
-    ));
+    emit(
+      state.copyWith(
+        index: ev.index,
+        pageFileIdMap:
+            state.pageFileIdMap.containsKey(ev.index)
+                ? null
+                : state.pageFileIdMap.addedAll({ev.index: ev.fileId}),
+      ),
+    );
   }
 
   void _onSetCollection(_SetCollection ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      collection: ev.collection,
-      collectionItemsController: ev.itemsController,
-    ));
+    emit(
+      state.copyWith(
+        collection: ev.collection,
+        collectionItemsController: ev.itemsController,
+      ),
+    );
   }
 
   void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
     _log.info(ev);
-    final itemMap = ev.value
-        ?.whereType<CollectionFileItem>()
-        .map((e) => MapEntry(e.file.fdId, e))
-        .toMap();
+    final itemMap =
+        ev.value
+            ?.whereType<CollectionFileItem>()
+            .map((e) => MapEntry(e.file.fdId, e))
+            .toMap();
     emit(state.copyWith(collectionItems: itemMap));
   }
 
@@ -255,8 +284,9 @@ class _Bloc extends Bloc<_Event, _State>
         // collection not ready
         return;
       }
-      merged = state.fileIdFileMap.addedAll(state.collectionItems!
-          .map((key, value) => MapEntry(key, value.file)));
+      merged = state.fileIdFileMap.addedAll(
+        state.collectionItems!.map((key, value) => MapEntry(key, value.file)),
+      );
     }
 
     var newState = state.copyWith(
@@ -267,9 +297,10 @@ class _Bloc extends Bloc<_Event, _State>
     if (state.currentFileState == null && fileId != null) {
       final fileState = state.fileStates[fileId] ?? _PageState.create();
       newState = newState.copyWith(
-        fileStates: state.fileStates[fileId] == null
-            ? state.fileStates.addedAll({fileId: fileState})
-            : null,
+        fileStates:
+            state.fileStates[fileId] == null
+                ? state.fileStates.addedAll({fileId: fileState})
+                : null,
         currentFileState: fileState,
       );
     }
@@ -278,12 +309,16 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onNewPageContent(_NewPageContent ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      pageFileIdMap: state.pageFileIdMap
-          .addedAll(ev.value.map((k, v) => MapEntry(k, v.fdId))),
-      fileIdFileMap: state.fileIdFileMap
-          .addedAll(ev.value.map((k, v) => MapEntry(v.fdId, v))),
-    ));
+    emit(
+      state.copyWith(
+        pageFileIdMap: state.pageFileIdMap.addedAll(
+          ev.value.map((k, v) => MapEntry(k, v.fdId)),
+        ),
+        fileIdFileMap: state.fileIdFileMap.addedAll(
+          ev.value.map((k, v) => MapEntry(v.fdId, v)),
+        ),
+      ),
+    );
     unawaited(filesController.queryByFileId(ev.value.keys.toList()));
   }
 
@@ -395,9 +430,11 @@ class _Bloc extends Bloc<_Event, _State>
       _log.severe("[_onEdit] file is null: ${ev.fileId}");
       return;
     }
-    emit(state.copyWith(
-      imageEditorRequest: Unique(ImageEditorArguments(account, f)),
-    ));
+    emit(
+      state.copyWith(
+        imageEditorRequest: Unique(ImageEditorArguments(account, f)),
+      ),
+    );
   }
 
   void _onEnhance(_Enhance ev, _Emitter emit) {
@@ -407,13 +444,17 @@ class _Bloc extends Bloc<_Event, _State>
       _log.severe("[_onEnhance] file is null: ${ev.fileId}");
       return;
     }
-    emit(state.copyWith(
-      imageEnhancerRequest: Unique(ImageEnhancerArguments(
-        account,
-        f,
-        prefController.isSaveEditResultToServerValue,
-      )),
-    ));
+    emit(
+      state.copyWith(
+        imageEnhancerRequest: Unique(
+          ImageEnhancerArguments(
+            account,
+            f,
+            prefController.isSaveEditResultToServerValue,
+          ),
+        ),
+      ),
+    );
   }
 
   void _onDownload(_Download ev, _Emitter emit) {
@@ -444,8 +485,11 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onRemoveFromCollection(_RemoveFromCollection ev, _Emitter emit) {
     _log.info(ev);
-    if (!CollectionAdapter.of(_c, account, state.collection!)
-        .isPermitted(CollectionCapability.manualItem)) {
+    if (!CollectionAdapter.of(
+      _c,
+      account,
+      state.collection!,
+    ).isPermitted(CollectionCapability.manualItem)) {
       throw UnsupportedError("Operation not supported by this collection");
     }
     state.collectionItemsController!.removeItems([ev.value]);
@@ -454,13 +498,19 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onStartSlideshow(_StartSlideshow ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      startSlideshowRequest: Unique(_StartSlideshowRequest(fileId: ev.fileId)),
-    ));
+    emit(
+      state.copyWith(
+        startSlideshowRequest: Unique(
+          _StartSlideshowRequest(fileId: ev.fileId),
+        ),
+      ),
+    );
   }
 
   Future<void> _onStartSlideshowResult(
-      _StartSlideshowResult ev, _Emitter emit) async {
+    _StartSlideshowResult ev,
+    _Emitter emit,
+  ) async {
     _log.info(ev);
     emit(state.copyWith(isBusy: true));
     try {
@@ -488,42 +538,34 @@ class _Bloc extends Bloc<_Event, _State>
       _log.severe("[_onSetAs] file is null: ${ev.fileId}");
       return;
     }
-    final req = _SetAsRequest(
-      account: account,
-      file: f,
-    );
+    final req = _SetAsRequest(account: account, file: f);
     emit(state.copyWith(setAsRequest: Unique(req)));
   }
 
   void _onOpenDetailPane(_OpenDetailPane ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      openDetailPaneRequest: Unique(_OpenDetailPaneRequest(ev.shouldAnimate)),
-    ));
+    emit(
+      state.copyWith(
+        openDetailPaneRequest: Unique(_OpenDetailPaneRequest(ev.shouldAnimate)),
+      ),
+    );
   }
 
   void _onCloseDetailPane(_CloseDetailPane ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      closeDetailPane: Unique(true),
-      isClosingDetailPane: true,
-    ));
+    emit(
+      state.copyWith(closeDetailPane: Unique(true), isClosingDetailPane: true),
+    );
   }
 
   void _onDetailPaneClosed(_DetailPaneClosed ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isShowDetailPane: false,
-      isClosingDetailPane: false,
-    ));
+    emit(state.copyWith(isShowDetailPane: false, isClosingDetailPane: false));
   }
 
   void _onShowDetailPane(_ShowDetailPane ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isShowDetailPane: true,
-      isDetailPaneActive: true,
-    ));
+    emit(state.copyWith(isShowDetailPane: true, isDetailPaneActive: true));
   }
 
   void _onSetDetailPaneInactive(_SetDetailPaneInactive ev, _Emitter emit) {
@@ -548,9 +590,10 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onRemoveFile(_RemoveFile ev, _Emitter emit) {
     _log.info(ev);
-    final removePage = state.pageFileIdMap.entries
-        .firstWhereOrNull((e) => e.value == ev.file.fdId)
-        ?.key;
+    final removePage =
+        state.pageFileIdMap.entries
+            .firstWhereOrNull((e) => e.value == ev.file.fdId)
+            ?.key;
     if (removePage == null) {
       _log.warning("[_onRemoveFile] File id not found: ${ev.file.fdId}");
       return;
@@ -564,18 +607,22 @@ class _Bloc extends Bloc<_Event, _State>
         nextPageFileIdMap[e.key - 1] = e.value;
       }
     }
-    final currentPage = state.pageFileIdMap.entries
-        .firstWhereOrNull((e) => e.value == state.currentFile?.fdId)
-        ?.key;
-    emit(state.copyWith(
-      removedFileIds: state.removedFileIds.added(ev.file.fdId),
-      // if removed file is found first, a page has been removed before us so we
-      // need to deduct index by 1
-      pageFileIdMap: nextPageFileIdMap,
-      index: currentPage == null || removePage <= currentPage
-          ? max(state.index - 1, 0)
-          : state.index,
-    ));
+    final currentPage =
+        state.pageFileIdMap.entries
+            .firstWhereOrNull((e) => e.value == state.currentFile?.fdId)
+            ?.key;
+    emit(
+      state.copyWith(
+        removedFileIds: state.removedFileIds.added(ev.file.fdId),
+        // if removed file is found first, a page has been removed before us so we
+        // need to deduct index by 1
+        pageFileIdMap: nextPageFileIdMap,
+        index:
+            currentPage == null || removePage <= currentPage
+                ? max(state.index - 1, 0)
+                : state.index,
+      ),
+    );
   }
 
   void _onSetError(_SetError ev, _Emitter emit) {
@@ -602,10 +649,7 @@ class _Bloc extends Bloc<_Event, _State>
     }
     newStates[fileId] = newState;
     if (fileId == state.currentFile?.fdId) {
-      emit(state.copyWith(
-        fileStates: newStates,
-        currentFileState: newState,
-      ));
+      emit(state.copyWith(fileStates: newStates, currentFileState: newState));
     } else {
       emit(state.copyWith(fileStates: newStates));
     }

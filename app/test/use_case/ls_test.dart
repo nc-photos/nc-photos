@@ -19,17 +19,20 @@ void main() {
 /// Expect: all files under root dir
 Future<void> _root() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg")
-        ..addDir("admin/dir")
-        ..addJpeg("admin/dir/test2.jpg"))
-      .build();
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg")
+            ..addDir("admin/dir")
+            ..addJpeg("admin/dir/test2.jpg"))
+          .build();
   final fileRepo = MockFileMemoryRepo(files);
 
   expect(
     await Ls(fileRepo)(
-        account, File(path: file_util.unstripPath(account, "."))),
+      account,
+      File(path: file_util.unstripPath(account, ".")),
+    ),
     files.pySlice(1, 3),
   );
 }
@@ -39,17 +42,20 @@ Future<void> _root() async {
 /// Expect: all files under the sub dir
 Future<void> _subDir() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg")
-        ..addDir("admin/dir")
-        ..addJpeg("admin/dir/test2.jpg"))
-      .build();
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg")
+            ..addDir("admin/dir")
+            ..addJpeg("admin/dir/test2.jpg"))
+          .build();
   final fileRepo = MockFileMemoryRepo(files);
 
   expect(
     await Ls(fileRepo)(
-        account, File(path: file_util.unstripPath(account, "dir"))),
+      account,
+      File(path: file_util.unstripPath(account, "dir")),
+    ),
     [files[3]],
   );
 }

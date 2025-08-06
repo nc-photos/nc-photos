@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 
 /// A progress indicator that looks like a cloud
 class CloudProgressIndicator extends StatefulWidget {
-  const CloudProgressIndicator({
-    super.key,
-    required this.size,
-    this.value,
-  });
+  const CloudProgressIndicator({super.key, required this.size, this.value});
 
   @override
   State<StatefulWidget> createState() => _CloudProgressIndicatorState();

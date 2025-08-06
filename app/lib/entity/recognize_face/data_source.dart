@@ -23,10 +23,10 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
   @override
   Future<List<RecognizeFace>> getFaces(Account account) async {
     _log.info("[getFaces] account: ${account.userId}");
-    final response = await ApiUtil.fromAccount(account)
-        .recognize(account.userId.raw)
-        .faces()
-        .propfind();
+    final response =
+        await ApiUtil.fromAccount(
+          account,
+        ).recognize(account.userId.raw).faces().propfind();
     if (!response.isGood) {
       _log.severe("[getFaces] Failed requesting server: $response");
       throw ApiException(
@@ -44,7 +44,9 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
 
   @override
   Future<List<RecognizeFaceItem>> getItems(
-      Account account, RecognizeFace face) async {
+    Account account,
+    RecognizeFace face,
+  ) async {
     _log.info("[getItems] account: ${account.userId}, face: ${face.label}");
     final response = await ApiUtil.fromAccount(account)
         .recognize(account.userId.raw)
@@ -82,16 +84,21 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
     List<RecognizeFace> faces, {
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async {
-    final results = await Future.wait(faces.map((f) async {
-      try {
-        return MapEntry(f, await getItems(account, f));
-      } catch (e, stackTrace) {
-        _log.severe("[getMultiFaceItems] Failed while querying face: $f", e,
-            stackTrace);
-        onError?.call(f, e, stackTrace);
-        return null;
-      }
-    }));
+    final results = await Future.wait(
+      faces.map((f) async {
+        try {
+          return MapEntry(f, await getItems(account, f));
+        } catch (e, stackTrace) {
+          _log.severe(
+            "[getMultiFaceItems] Failed while querying face: $f",
+            e,
+            stackTrace,
+          );
+          onError?.call(f, e, stackTrace);
+          return null;
+        }
+      }),
+    );
     return results.nonNulls.toMap();
   }
 
@@ -102,8 +109,9 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async {
     final results = await getMultiFaceItems(account, faces, onError: onError);
-    return results
-        .map((key, value) => MapEntry(key, maxBy(value, (e) => e.fileId)!));
+    return results.map(
+      (key, value) => MapEntry(key, maxBy(value, (e) => e.fileId)!),
+    );
   }
 }
 
@@ -121,7 +129,10 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return DbRecognizeFaceConverter.fromDb(f);
           } catch (e, stackTrace) {
             _log.severe(
-                "[getFaces] Failed while converting DB entry", e, stackTrace);
+              "[getFaces] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             return null;
           }
         })
@@ -131,7 +142,9 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
 
   @override
   Future<List<RecognizeFaceItem>> getItems(
-      Account account, RecognizeFace face) async {
+    Account account,
+    RecognizeFace face,
+  ) async {
     _log.info("[getItems] $face");
     final results = await db.getRecognizeFaceItemsByFaceLabel(
       account: account.toDb(),
@@ -141,10 +154,16 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
         .map((r) {
           try {
             return DbRecognizeFaceItemConverter.fromDb(
-                account.userId.toString(), face.label, r);
+              account.userId.toString(),
+              face.label,
+              r,
+            );
           } catch (e, stackTrace) {
             _log.severe(
-                "[getItems] Failed while converting DB entry", e, stackTrace);
+              "[getItems] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             return null;
           }
         })
@@ -169,13 +188,21 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return MapEntry(
               faces.firstWhere((f) => f.label == e.key),
               e.value
-                  .map((f) => DbRecognizeFaceItemConverter.fromDb(
-                      account.userId.toString(), e.key, f))
+                  .map(
+                    (f) => DbRecognizeFaceItemConverter.fromDb(
+                      account.userId.toString(),
+                      e.key,
+                      f,
+                    ),
+                  )
                   .toList(),
             );
           } catch (e, stackTrace) {
-            _log.severe("[getMultiFaceItems] Failed while converting DB entry",
-                e, stackTrace);
+            _log.severe(
+              "[getMultiFaceItems] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             return null;
           }
         })
@@ -200,13 +227,17 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
             return MapEntry(
               faces.firstWhere((f) => f.label == e.key),
               DbRecognizeFaceItemConverter.fromDb(
-                  account.userId.toString(), e.key, e.value),
+                account.userId.toString(),
+                e.key,
+                e.value,
+              ),
             );
           } catch (e, stackTrace) {
             _log.severe(
-                "[getMultiFaceLastItems] Failed while converting DB entry",
-                e,
-                stackTrace);
+              "[getMultiFaceLastItems] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             return null;
           }
         })

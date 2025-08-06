@@ -17,15 +17,14 @@ class AppDimension extends ThemeExtension<AppDimension> {
     double? homeBottomAppBarHeight,
     double? timelineDateItemHeight,
     double? timelineDraggableThumbSize,
-  }) =>
-      AppDimension(
-        homeBottomAppBarHeight:
-            homeBottomAppBarHeight ?? this.homeBottomAppBarHeight,
-        timelineDateItemHeight:
-            timelineDateItemHeight ?? this.timelineDateItemHeight,
-        timelineDraggableThumbSize:
-            timelineDraggableThumbSize ?? this.timelineDraggableThumbSize,
-      );
+  }) => AppDimension(
+    homeBottomAppBarHeight:
+        homeBottomAppBarHeight ?? this.homeBottomAppBarHeight,
+    timelineDateItemHeight:
+        timelineDateItemHeight ?? this.timelineDateItemHeight,
+    timelineDraggableThumbSize:
+        timelineDraggableThumbSize ?? this.timelineDraggableThumbSize,
+  );
 
   @override
   AppDimension lerp(ThemeExtension<AppDimension>? other, double t) {
@@ -37,8 +36,12 @@ class AppDimension extends ThemeExtension<AppDimension> {
           lerpDouble(homeBottomAppBarHeight, other.homeBottomAppBarHeight, t)!,
       timelineDateItemHeight:
           lerpDouble(timelineDateItemHeight, other.timelineDateItemHeight, t)!,
-      timelineDraggableThumbSize: lerpDouble(
-          timelineDraggableThumbSize, other.timelineDraggableThumbSize, t)!,
+      timelineDraggableThumbSize:
+          lerpDouble(
+            timelineDraggableThumbSize,
+            other.timelineDraggableThumbSize,
+            t,
+          )!,
     );
   }
 

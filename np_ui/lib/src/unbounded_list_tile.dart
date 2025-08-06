@@ -19,25 +19,22 @@ class UnboundedListTile extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          if (leading != null) ...[
-            leading!,
-            const SizedBox(width: 16),
-          ],
+          if (leading != null) ...[leading!, const SizedBox(width: 16)],
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DefaultTextStyle(
                   style: Theme.of(context).textTheme.bodyLarge!.copyWith(
-                        color: M3.of(context).listTile.enabled.headline,
-                      ),
+                    color: M3.of(context).listTile.enabled.headline,
+                  ),
                   child: title,
                 ),
                 if (subtitle != null)
                   DefaultTextStyle(
                     style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                          color: M3.of(context).listTile.enabled.supportingText,
-                        ),
+                      color: M3.of(context).listTile.enabled.supportingText,
+                    ),
                     child: subtitle!,
                   ),
               ],
@@ -48,10 +45,7 @@ class UnboundedListTile extends StatelessWidget {
       ),
     );
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        child: content,
-      );
+      return InkWell(onTap: onTap, child: content);
     } else {
       return content;
     }

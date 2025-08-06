@@ -6,8 +6,7 @@ enum HomeCollectionsNavBarButtonType {
   edited,
   archive,
   trash,
-  map,
-  ;
+  map;
 
   static HomeCollectionsNavBarButtonType fromValue(int value) =>
       HomeCollectionsNavBarButtonType.values[value];
@@ -39,18 +38,17 @@ class _NavigationBarState extends State<_NavigationBar> {
               child: _BlocSelector(
                 selector: (state) => state.navBarButtons,
                 builder: (context, navBarButtons) {
-                  final buttons = navBarButtons
-                      .map((e) => _buildButton(context, e))
-                      .nonNulls
-                      .toList();
+                  final buttons =
+                      navBarButtons
+                          .map((e) => _buildButton(context, e))
+                          .nonNulls
+                          .toList();
                   return ListView.separated(
                     controller: _scrollController,
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.only(left: 16),
                     itemCount: buttons.length,
-                    itemBuilder: (context, i) => Center(
-                      child: buttons[i],
-                    ),
+                    itemBuilder: (context, i) => Center(child: buttons[i]),
                     separatorBuilder: (context, _) => const SizedBox(width: 12),
                   );
                 },

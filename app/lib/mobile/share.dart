@@ -27,10 +27,7 @@ class AndroidFileShare implements itf.FileShare {
 }
 
 class AndroidTextShare extends itf.TextShare {
-  AndroidTextShare(
-    this.text, {
-    this.mimeType = "text/plain",
-  });
+  AndroidTextShare(this.text, {this.mimeType = "text/plain"});
 
   @override
   share() {

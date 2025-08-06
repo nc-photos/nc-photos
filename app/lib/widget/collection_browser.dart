@@ -91,38 +91,32 @@ class CollectionBrowser extends StatelessWidget {
   static const routeName = "/collection-browser";
 
   static Route buildRoute(
-          CollectionBrowserArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => CollectionBrowser.fromArgs(args),
-        settings: settings,
-      );
+    CollectionBrowserArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => CollectionBrowser.fromArgs(args),
+    settings: settings,
+  );
 
-  const CollectionBrowser({
-    super.key,
-    required this.collection,
-  });
+  const CollectionBrowser({super.key, required this.collection});
 
-  CollectionBrowser.fromArgs(
-    CollectionBrowserArguments args, {
-    Key? key,
-  }) : this(
-          key: key,
-          collection: args.collection,
-        );
+  CollectionBrowser.fromArgs(CollectionBrowserArguments args, {Key? key})
+    : this(key: key, collection: args.collection);
 
   @override
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (_) => _Bloc(
-        container: KiwiContainer().resolve(),
-        account: accountController.account,
-        prefController: context.read(),
-        collectionsController: accountController.collectionsController,
-        filesController: accountController.filesController,
-        db: context.read(),
-        collection: collection,
-      ),
+      create:
+          (_) => _Bloc(
+            container: KiwiContainer().resolve(),
+            account: accountController.account,
+            prefController: context.read(),
+            collectionsController: accountController.collectionsController,
+            filesController: accountController.filesController,
+            db: context.read(),
+            collection: collection,
+          ),
       child: const _WrappedCollectionBrowser(),
     );
   }
@@ -156,229 +150,265 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.isEditMode != current.isEditMode ||
-          previous.selectedItems.isEmpty != current.selectedItems.isEmpty,
-      builder: (context, state) => PopScope(
-        canPop: !state.isEditMode && state.selectedItems.isEmpty,
-        onPopInvokedWithResult: (didPop, result) {
-          if (state.isEditMode) {
-            _bloc.add(const _CancelEdit());
-          } else if (state.selectedItems.isNotEmpty) {
-            _bloc.add(const _SetSelectedItems(items: {}));
-          }
-        },
-        child: Scaffold(
-          body: MultiBlocListener(
-            listeners: [
-              _BlocListener(
-                listenWhen: (previous, current) =>
-                    previous.items != current.items,
-                listener: (context, state) {
-                  _bloc.add(_TransformItems(
-                    items: state.items,
-                  ));
-                },
-              ),
-              _BlocListener(
-                listenWhen: (previous, current) =>
-                    previous.editItems != current.editItems,
-                listener: (context, state) {
-                  if (state.editItems != null) {
-                    _bloc.add(_TransformEditItems(
-                      items: state.editItems!,
-                    ));
-                  }
-                },
-              ),
-              _BlocListener(
-                listenWhen: (previous, current) =>
-                    previous.importResult != current.importResult,
-                listener: (context, state) {
-                  if (state.importResult != null) {
-                    Navigator.of(context).pushReplacementNamed(
-                      CollectionBrowser.routeName,
-                      arguments:
-                          CollectionBrowserArguments(state.importResult!),
-                    );
-                  }
-                },
-              ),
-              _BlocListener(
-                listenWhen: (previous, current) =>
-                    previous.isEditMode != current.isEditMode,
-                listener: (context, state) {
-                  final c = KiwiContainer().resolve<DiContainer>();
-                  final bloc = context.read<_Bloc>();
-                  final canSort =
-                      CollectionAdapter.of(c, bloc.account, state.collection)
-                          .isPermitted(CollectionCapability.manualSort);
-                  if (canSort &&
-                      !SessionStorage().hasShowDragRearrangeNotification) {
-                    SnackBarManager().showSnackBar(SnackBar(
-                      content: Text(
-                          L10n.global().albumEditDragRearrangeNotification),
-                      duration: k.snackBarDurationNormal,
-                    ));
-                    SessionStorage().hasShowDragRearrangeNotification = true;
-                  }
-                },
-              ),
-              _BlocListenerT(
-                selector: (state) => state.placePickerRequest,
-                listener: (context, placePickerRequest) async {
-                  if (placePickerRequest.value != null) {
-                    final result =
-                        await Navigator.of(context).pushNamed<CameraPosition>(
-                      PlacePicker.routeName,
-                      arguments: PlacePickerArguments(
-                        initialPosition:
-                            placePickerRequest.value!.initialPosition,
-                        initialZoom:
-                            placePickerRequest.value!.initialPosition == null
-                                ? null
-                                : 15.5,
-                      ),
-                    );
-                    if (result == null) {
-                      return;
-                    }
-                    context.read<_Bloc>().add(_AddMapToCollection(result));
-                  }
-                },
-              ),
-              _BlocListenerT<ExceptionEvent?>(
-                selector: (state) => state.error,
-                listener: (context, error) {
-                  if (error != null && isPageVisible()) {
-                    if (error.error is _ArchiveFailedError) {
-                      SnackBarManager().showSnackBar(SnackBar(
-                        content: Text(L10n.global()
-                            .archiveSelectedFailureNotification(
-                                (error.error as _ArchiveFailedError).count)),
-                        duration: k.snackBarDurationNormal,
-                      ));
-                    } else if (error.error is _RemoveFailedError) {
-                      SnackBarManager().showSnackBar(SnackBar(
-                        content: Text(L10n.global()
-                            .deleteSelectedFailureNotification(
-                                (error.error as _RemoveFailedError).count)),
-                        duration: k.snackBarDurationNormal,
-                      ));
-                    } else {
-                      SnackBarManager().showSnackBarForException(error.error);
-                    }
-                  }
-                },
-              ),
-              _BlocListener(
-                listenWhen: (previous, current) =>
-                    previous.message != current.message,
-                listener: (context, state) {
-                  if (state.message != null && isPageVisible()) {
-                    SnackBarManager().showSnackBar(SnackBar(
-                      content: Text(state.message!),
-                      duration: k.snackBarDurationNormal,
-                    ));
-                  }
-                },
-              ),
-            ],
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                FingerListener(
-                  onPointerMove: (event) => _onPointerMove(context, event),
-                  onFingerChanged: (finger) {
-                    setState(() {
-                      _finger = finger;
-                    });
-                  },
-                  child: GestureDetector(
-                    onScaleStart: (_) {
-                      _bloc.add(const _StartScaling());
+      buildWhen:
+          (previous, current) =>
+              previous.isEditMode != current.isEditMode ||
+              previous.selectedItems.isEmpty != current.selectedItems.isEmpty,
+      builder:
+          (context, state) => PopScope(
+            canPop: !state.isEditMode && state.selectedItems.isEmpty,
+            onPopInvokedWithResult: (didPop, result) {
+              if (state.isEditMode) {
+                _bloc.add(const _CancelEdit());
+              } else if (state.selectedItems.isNotEmpty) {
+                _bloc.add(const _SetSelectedItems(items: {}));
+              }
+            },
+            child: Scaffold(
+              body: MultiBlocListener(
+                listeners: [
+                  _BlocListener(
+                    listenWhen:
+                        (previous, current) => previous.items != current.items,
+                    listener: (context, state) {
+                      _bloc.add(_TransformItems(items: state.items));
                     },
-                    onScaleUpdate: (details) {
-                      _bloc.add(_SetScale(details.scale));
-                    },
-                    onScaleEnd: (_) {
-                      _bloc.add(const _EndScaling());
-                    },
-                    child: CustomScrollView(
-                      controller: _scrollController,
-                      physics: _finger >= 2
-                          ? const NeverScrollableScrollPhysics()
-                          : null,
-                      slivers: [
-                        _BlocBuilder(
-                          buildWhen: (previous, current) =>
-                              previous.selectedItems.isEmpty !=
-                                  current.selectedItems.isEmpty ||
-                              previous.isEditMode != current.isEditMode,
-                          builder: (context, state) {
-                            if (state.isEditMode) {
-                              return const _EditAppBar();
-                            } else if (state.selectedItems.isNotEmpty) {
-                              return const _SelectionAppBar();
-                            } else {
-                              return const _AppBar();
-                            }
-                          },
-                        ),
-                        SliverToBoxAdapter(
-                          child: _BlocBuilder(
-                            buildWhen: (previous, current) =>
-                                previous.isLoading != current.isLoading,
-                            builder: (context, state) => state.isLoading
-                                ? const LinearProgressIndicator()
-                                : const SizedBox(height: 4),
-                          ),
-                        ),
-                        _BlocBuilder(
-                          buildWhen: (previous, current) =>
-                              previous.isEditMode != current.isEditMode ||
-                              previous.scale != current.scale,
-                          builder: (context, state) {
-                            if (!state.isEditMode) {
-                              return SliverTransitionedScale(
-                                scale: state.scale,
-                                baseSliver: const _ContentList(),
-                                overlaySliver: const _ScalingList(),
-                              );
-                            } else {
-                              if (context.bloc.isCollectionCapabilityPermitted(
-                                  CollectionCapability.manualSort)) {
-                                return const _EditContentList();
-                              } else {
-                                return const _UnmodifiableEditContentList();
-                              }
-                            }
-                          },
-                        ),
-                      ],
-                    ),
                   ),
+                  _BlocListener(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.editItems != current.editItems,
+                    listener: (context, state) {
+                      if (state.editItems != null) {
+                        _bloc.add(_TransformEditItems(items: state.editItems!));
+                      }
+                    },
+                  ),
+                  _BlocListener(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.importResult != current.importResult,
+                    listener: (context, state) {
+                      if (state.importResult != null) {
+                        Navigator.of(context).pushReplacementNamed(
+                          CollectionBrowser.routeName,
+                          arguments: CollectionBrowserArguments(
+                            state.importResult!,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  _BlocListener(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.isEditMode != current.isEditMode,
+                    listener: (context, state) {
+                      final c = KiwiContainer().resolve<DiContainer>();
+                      final bloc = context.read<_Bloc>();
+                      final canSort = CollectionAdapter.of(
+                        c,
+                        bloc.account,
+                        state.collection,
+                      ).isPermitted(CollectionCapability.manualSort);
+                      if (canSort &&
+                          !SessionStorage().hasShowDragRearrangeNotification) {
+                        SnackBarManager().showSnackBar(
+                          SnackBar(
+                            content: Text(
+                              L10n.global().albumEditDragRearrangeNotification,
+                            ),
+                            duration: k.snackBarDurationNormal,
+                          ),
+                        );
+                        SessionStorage().hasShowDragRearrangeNotification =
+                            true;
+                      }
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.placePickerRequest,
+                    listener: (context, placePickerRequest) async {
+                      if (placePickerRequest.value != null) {
+                        final result = await Navigator.of(
+                          context,
+                        ).pushNamed<CameraPosition>(
+                          PlacePicker.routeName,
+                          arguments: PlacePickerArguments(
+                            initialPosition:
+                                placePickerRequest.value!.initialPosition,
+                            initialZoom:
+                                placePickerRequest.value!.initialPosition ==
+                                        null
+                                    ? null
+                                    : 15.5,
+                          ),
+                        );
+                        if (result == null) {
+                          return;
+                        }
+                        context.read<_Bloc>().add(_AddMapToCollection(result));
+                      }
+                    },
+                  ),
+                  _BlocListenerT<ExceptionEvent?>(
+                    selector: (state) => state.error,
+                    listener: (context, error) {
+                      if (error != null && isPageVisible()) {
+                        if (error.error is _ArchiveFailedError) {
+                          SnackBarManager().showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                L10n.global()
+                                    .archiveSelectedFailureNotification(
+                                      (error.error as _ArchiveFailedError)
+                                          .count,
+                                    ),
+                              ),
+                              duration: k.snackBarDurationNormal,
+                            ),
+                          );
+                        } else if (error.error is _RemoveFailedError) {
+                          SnackBarManager().showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                L10n.global().deleteSelectedFailureNotification(
+                                  (error.error as _RemoveFailedError).count,
+                                ),
+                              ),
+                              duration: k.snackBarDurationNormal,
+                            ),
+                          );
+                        } else {
+                          SnackBarManager().showSnackBarForException(
+                            error.error,
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  _BlocListener(
+                    listenWhen:
+                        (previous, current) =>
+                            previous.message != current.message,
+                    listener: (context, state) {
+                      if (state.message != null && isPageVisible()) {
+                        SnackBarManager().showSnackBar(
+                          SnackBar(
+                            content: Text(state.message!),
+                            duration: k.snackBarDurationNormal,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    FingerListener(
+                      onPointerMove: (event) => _onPointerMove(context, event),
+                      onFingerChanged: (finger) {
+                        setState(() {
+                          _finger = finger;
+                        });
+                      },
+                      child: GestureDetector(
+                        onScaleStart: (_) {
+                          _bloc.add(const _StartScaling());
+                        },
+                        onScaleUpdate: (details) {
+                          _bloc.add(_SetScale(details.scale));
+                        },
+                        onScaleEnd: (_) {
+                          _bloc.add(const _EndScaling());
+                        },
+                        child: CustomScrollView(
+                          controller: _scrollController,
+                          physics:
+                              _finger >= 2
+                                  ? const NeverScrollableScrollPhysics()
+                                  : null,
+                          slivers: [
+                            _BlocBuilder(
+                              buildWhen:
+                                  (previous, current) =>
+                                      previous.selectedItems.isEmpty !=
+                                          current.selectedItems.isEmpty ||
+                                      previous.isEditMode != current.isEditMode,
+                              builder: (context, state) {
+                                if (state.isEditMode) {
+                                  return const _EditAppBar();
+                                } else if (state.selectedItems.isNotEmpty) {
+                                  return const _SelectionAppBar();
+                                } else {
+                                  return const _AppBar();
+                                }
+                              },
+                            ),
+                            SliverToBoxAdapter(
+                              child: _BlocBuilder(
+                                buildWhen:
+                                    (previous, current) =>
+                                        previous.isLoading != current.isLoading,
+                                builder:
+                                    (context, state) =>
+                                        state.isLoading
+                                            ? const LinearProgressIndicator()
+                                            : const SizedBox(height: 4),
+                              ),
+                            ),
+                            _BlocBuilder(
+                              buildWhen:
+                                  (previous, current) =>
+                                      previous.isEditMode !=
+                                          current.isEditMode ||
+                                      previous.scale != current.scale,
+                              builder: (context, state) {
+                                if (!state.isEditMode) {
+                                  return SliverTransitionedScale(
+                                    scale: state.scale,
+                                    baseSliver: const _ContentList(),
+                                    overlaySliver: const _ScalingList(),
+                                  );
+                                } else {
+                                  if (context.bloc
+                                      .isCollectionCapabilityPermitted(
+                                        CollectionCapability.manualSort,
+                                      )) {
+                                    return const _EditContentList();
+                                  } else {
+                                    return const _UnmodifiableEditContentList();
+                                  }
+                                }
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    _BlocBuilder(
+                      buildWhen:
+                          (previous, current) =>
+                              previous.isEditBusy != current.isEditBusy,
+                      builder: (context, state) {
+                        if (state.isEditBusy) {
+                          return Container(
+                            color: Colors.black.withValues(alpha: .5),
+                            alignment: Alignment.center,
+                            child:
+                                const AppIntermediateCircularProgressIndicator(),
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
+                  ],
                 ),
-                _BlocBuilder(
-                  buildWhen: (previous, current) =>
-                      previous.isEditBusy != current.isEditBusy,
-                  builder: (context, state) {
-                    if (state.isEditBusy) {
-                      return Container(
-                        color: Colors.black.withValues(alpha: .5),
-                        alignment: Alignment.center,
-                        child: const AppIntermediateCircularProgressIndicator(),
-                      );
-                    } else {
-                      return const SizedBox.shrink();
-                    }
-                  },
-                ),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
     );
   }
 
@@ -397,11 +427,14 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
       _log.fine("[_onPointerMove] Begin scrolling down");
       if (_scrollController.offset <
           _scrollController.position.maxScrollExtent) {
-        _scrollController.animateTo(maxExtent,
-            duration: Duration(
-                milliseconds:
-                    ((maxExtent - _scrollController.offset) * 1.6).round()),
-            curve: Curves.linear);
+        _scrollController.animateTo(
+          maxExtent,
+          duration: Duration(
+            milliseconds:
+                ((maxExtent - _scrollController.offset) * 1.6).round(),
+          ),
+          curve: Curves.linear,
+        );
         _isDragScrollingDown = true;
       }
     } else if (event.position.dy <= 100) {
@@ -411,10 +444,13 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
       }
       _log.fine("[_onPointerMove] Begin scrolling up");
       if (_scrollController.offset > 0) {
-        _scrollController.animateTo(0,
-            duration: Duration(
-                milliseconds: (_scrollController.offset * 1.6).round()),
-            curve: Curves.linear);
+        _scrollController.animateTo(
+          0,
+          duration: Duration(
+            milliseconds: (_scrollController.offset * 1.6).round(),
+          ),
+          curve: Curves.linear,
+        );
         _isDragScrollingDown = false;
       }
     } else if (_isDragScrollingDown != null) {

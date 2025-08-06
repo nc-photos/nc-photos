@@ -11,8 +11,9 @@ extension _$RecognizeFaceRemoteDataSourceNpLog
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.recognize_face.data_source.RecognizeFaceRemoteDataSource");
+  static final log = Logger(
+    "entity.recognize_face.data_source.RecognizeFaceRemoteDataSource",
+  );
 }
 
 extension _$RecognizeFaceSqliteDbDataSourceNpLog
@@ -21,5 +22,6 @@ extension _$RecognizeFaceSqliteDbDataSourceNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "entity.recognize_face.data_source.RecognizeFaceSqliteDbDataSource");
+    "entity.recognize_face.data_source.RecognizeFaceSqliteDbDataSource",
+  );
 }

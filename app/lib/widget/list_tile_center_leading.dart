@@ -9,16 +9,11 @@ import 'package:flutter/widgets.dart';
 /// This widget is only needed when the content of the ListTile may grow more
 /// than 1 line
 class ListTileCenterLeading extends StatelessWidget {
-  const ListTileCenterLeading({
-    super.key,
-    required this.child,
-  });
+  const ListTileCenterLeading({super.key, required this.child});
 
   @override
-  build(BuildContext context) => SizedBox(
-        height: double.infinity,
-        child: child,
-      );
+  build(BuildContext context) =>
+      SizedBox(height: double.infinity, child: child);
 
   final Widget child;
 }

@@ -41,9 +41,9 @@ class PlacesBrowser extends StatelessWidget {
   static const routeName = "/places-browser";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const PlacesBrowser(),
-        settings: settings,
-      );
+    builder: (_) => const PlacesBrowser(),
+    settings: settings,
+  );
 
   const PlacesBrowser({super.key});
 
@@ -51,10 +51,11 @@ class PlacesBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (_) => _Bloc(
-        account: accountController.account,
-        placesController: accountController.placesController,
-      ),
+      create:
+          (_) => _Bloc(
+            account: accountController.account,
+            placesController: accountController.placesController,
+          ),
       child: const _WrappedPlacesBrowser(),
     );
   }
@@ -108,11 +109,14 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
                   const _AppBar(),
                   SliverToBoxAdapter(
                     child: _BlocBuilder(
-                      buildWhen: (previous, current) =>
-                          previous.isLoading != current.isLoading,
-                      builder: (context, state) => state.isLoading
-                          ? const LinearProgressIndicator()
-                          : const SizedBox(height: 4),
+                      buildWhen:
+                          (previous, current) =>
+                              previous.isLoading != current.isLoading,
+                      builder:
+                          (context, state) =>
+                              state.isLoading
+                                  ? const LinearProgressIndicator()
+                                  : const SizedBox(height: 4),
                     ),
                   ),
                   _CountryList(
@@ -120,9 +124,7 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
                       _onTap(context, item);
                     },
                   ),
-                  const SliverToBoxAdapter(
-                    child: SizedBox(height: 8),
-                  ),
+                  const SliverToBoxAdapter(child: SizedBox(height: 8)),
                   _ContentList(
                     onTap: (_, item) {
                       _onTap(context, item);

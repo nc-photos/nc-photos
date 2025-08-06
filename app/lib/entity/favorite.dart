@@ -7,24 +7,15 @@ part 'favorite.g.dart';
 
 @toString
 class Favorite with EquatableMixin {
-  const Favorite({
-    required this.fileId,
-  });
+  const Favorite({required this.fileId});
 
   @override
   String toString() => _$toString();
 
-  Favorite copyWith({
-    int? fileId,
-  }) =>
-      Favorite(
-        fileId: fileId ?? this.fileId,
-      );
+  Favorite copyWith({int? fileId}) => Favorite(fileId: fileId ?? this.fileId);
 
   @override
-  get props => [
-        fileId,
-      ];
+  get props => [fileId];
 
   final int fileId;
 }

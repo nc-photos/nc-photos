@@ -22,9 +22,9 @@ part 'remove_from_album.g.dart';
 @npLog
 class RemoveFromAlbum {
   RemoveFromAlbum(this._c)
-      : assert(require(_c)),
-        assert(UnshareFileFromAlbum.require(_c)),
-        assert(PreProcessAlbum.require(_c));
+    : assert(require(_c)),
+      assert(UnshareFileFromAlbum.require(_c)),
+      assert(PreProcessAlbum.require(_c));
 
   static bool require(DiContainer c) => DiContainer.has(c, DiType.albumRepo);
 
@@ -42,33 +42,36 @@ class RemoveFromAlbum {
     _log.info("[call] Remove ${items.length} items from album '${album.name}'");
     assert(album.provider is AlbumStaticProvider);
 
-    final filtered = items
-        .mapIndexed((i, e) {
-          if (album.albumFile!.isOwned(account.userId) ||
-              e.addedBy == account.userId) {
-            return e;
-          } else {
-            onError?.call(
-              i,
-              e,
-              const AlbumItemPermissionException(
-                  "No permission to remove item"),
-              StackTrace.current,
-            );
-            return null;
-          }
-        })
-        .nonNulls
-        .toList();
+    final filtered =
+        items
+            .mapIndexed((i, e) {
+              if (album.albumFile!.isOwned(account.userId) ||
+                  e.addedBy == account.userId) {
+                return e;
+              } else {
+                onError?.call(
+                  i,
+                  e,
+                  const AlbumItemPermissionException(
+                    "No permission to remove item",
+                  ),
+                  StackTrace.current,
+                );
+                return null;
+              }
+            })
+            .nonNulls
+            .toList();
     final provider = album.provider as AlbumStaticProvider;
-    final newItems = provider.items
-        .where((e) =>
-            !filtered.containsIf(e, (a, b) => a.compareServerIdentity(b)))
-        .toList();
+    final newItems =
+        provider.items
+            .where(
+              (e) =>
+                  !filtered.containsIf(e, (a, b) => a.compareServerIdentity(b)),
+            )
+            .toList();
     var newAlbum = album.copyWith(
-      provider: AlbumStaticProvider.of(album).copyWith(
-        items: newItems,
-      ),
+      provider: AlbumStaticProvider.of(album).copyWith(items: newItems),
     );
     newAlbum = await _fixAlbumPostRemove(account, newAlbum, filtered);
     // TODO catch and use onError
@@ -92,7 +95,10 @@ class RemoveFromAlbum {
   /// Update the album accordingly if any of the removed items is interesting
   /// (e.g., cover, latest item, etc)
   Future<Album> _fixAlbumPostRemove(
-      Account account, Album newAlbum, List<AlbumItem> items) async {
+    Account account,
+    Album newAlbum,
+    List<AlbumItem> items,
+  ) async {
     bool isNeedUpdate = false;
     for (final fileItem in items.whereType<AlbumFileItem>()) {
       if (newAlbum.coverProvider
@@ -116,7 +122,8 @@ class RemoveFromAlbum {
     }
 
     _log.info(
-        "[_fixAlbumPostRemove] Resync as interesting item is being removed");
+      "[_fixAlbumPostRemove] Resync as interesting item is being removed",
+    );
     // need to update the album properties
     final newItemsSynced = await PreProcessAlbum(_c)(account, newAlbum);
     newAlbum = await UpdateAlbumWithActualItems(null)(
@@ -128,11 +135,15 @@ class RemoveFromAlbum {
   }
 
   Future<void> _unshareFiles(
-      Account account, Album album, List<FileDescriptor> files) async {
-    final albumShares = (album.shares!.map((e) => e.userId).toList()
-          ..add(album.albumFile!.ownerId ?? account.userId))
-        .where((element) => element != account.userId)
-        .toList();
+    Account account,
+    Album album,
+    List<FileDescriptor> files,
+  ) async {
+    final albumShares =
+        (album.shares!.map((e) => e.userId).toList()
+              ..add(album.albumFile!.ownerId ?? account.userId))
+            .where((element) => element != account.userId)
+            .toList();
     if (albumShares.isNotEmpty) {
       await UnshareFileFromAlbum(_c)(account, album, files, albumShares);
     }

@@ -18,7 +18,8 @@ abstract class PersonAdapter {
         return PersonRecognizeAdapter(c, account, person);
       default:
         throw UnsupportedError(
-            "Unknown type: ${person.contentProvider.runtimeType}");
+          "Unknown type: ${person.contentProvider.runtimeType}",
+        );
     }
   }
 

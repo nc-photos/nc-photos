@@ -34,7 +34,11 @@ class ImageLocation with EquatableMixin {
   });
 
   factory ImageLocation.empty() => const ImageLocation(
-      name: null, latitude: null, longitude: null, countryCode: null);
+    name: null,
+    latitude: null,
+    longitude: null,
+    countryCode: null,
+  );
 
   static ImageLocation fromJson(JsonObj json) {
     return ImageLocation(
@@ -49,14 +53,14 @@ class ImageLocation with EquatableMixin {
   }
 
   JsonObj toJson() => {
-        "v": version,
-        if (name != null) "name": name,
-        if (latitude != null) "lat": (latitude! * 10000).round(),
-        if (longitude != null) "lng": (longitude! * 10000).round(),
-        if (countryCode != null) "cc": countryCode,
-        if (admin1 != null) "admin1": admin1,
-        if (admin2 != null) "admin2": admin2,
-      };
+    "v": version,
+    if (name != null) "name": name,
+    if (latitude != null) "lat": (latitude! * 10000).round(),
+    if (longitude != null) "lng": (longitude! * 10000).round(),
+    if (countryCode != null) "cc": countryCode,
+    if (admin1 != null) "admin1": admin1,
+    if (admin2 != null) "admin2": admin2,
+  };
 
   bool isEmpty() => name == null;
 
@@ -65,14 +69,14 @@ class ImageLocation with EquatableMixin {
 
   @override
   get props => [
-        version,
-        name,
-        latitude,
-        longitude,
-        countryCode,
-        admin1,
-        admin2,
-      ];
+    version,
+    name,
+    latitude,
+    longitude,
+    countryCode,
+    admin1,
+    admin2,
+  ];
 
   final int version;
   final String? name;
@@ -89,8 +93,7 @@ enum MetadataSrc {
   // must not modify the order
   legacy,
   nextcloud,
-  exiv2,
-  ;
+  exiv2;
 
   factory MetadataSrc.fromValue(int value) => MetadataSrc.values[value];
 }
@@ -166,15 +169,17 @@ class Metadata with EquatableMixin {
       }
     }
     return Metadata(
-      lastUpdated: result["lastUpdated"] == null
-          ? null
-          : DateTime.parse(result["lastUpdated"]),
+      lastUpdated:
+          result["lastUpdated"] == null
+              ? null
+              : DateTime.parse(result["lastUpdated"]),
       fileEtag: result["fileEtag"],
       imageWidth: result["imageWidth"],
       imageHeight: result["imageHeight"],
-      exif: result["exif"] == null
-          ? null
-          : Exif.fromJson(result["exif"].cast<String, dynamic>()),
+      exif:
+          result["exif"] == null
+              ? null
+              : Exif.fromJson(result["exif"].cast<String, dynamic>()),
       src: MetadataSrc.fromValue(result["src"]),
     );
   }
@@ -224,25 +229,30 @@ class Metadata with EquatableMixin {
       fileEtag: etag,
       imageWidth: int.parse(size["width"]!),
       imageHeight: int.parse(size["height"]!),
-      exif: ifd0 != null || exif != null || gps != null
-          ? Exif({
-              if (ifd0 != null) ...ifd0,
-              if (exif != null) ...exif,
-              if (lat != null && lng != null) ...{
-                "GPSLatitude": gpsDoubleToDms(lat),
-                "GPSLatitudeRef": lat.isNegative ? "S" : "N",
-                "GPSLongitude": gpsDoubleToDms(lng),
-                "GPSLongitudeRef": lng.isNegative ? "W" : "E",
-                if (alt != null) ...{
-                  "GPSAltitude": doubleToRational(alt),
-                  "GPSAltitudeRef": alt.isNegative ? 1 : 0,
-                }
-              }
-            }..removeWhere((key, value) =>
-              key == "MakerNote" ||
-              key == "UserComment" ||
-              key == "ImageDescription"))
-          : null,
+      exif:
+          ifd0 != null || exif != null || gps != null
+              ? Exif(
+                {
+                  if (ifd0 != null) ...ifd0,
+                  if (exif != null) ...exif,
+                  if (lat != null && lng != null) ...{
+                    "GPSLatitude": gpsDoubleToDms(lat),
+                    "GPSLatitudeRef": lat.isNegative ? "S" : "N",
+                    "GPSLongitude": gpsDoubleToDms(lng),
+                    "GPSLongitudeRef": lng.isNegative ? "W" : "E",
+                    if (alt != null) ...{
+                      "GPSAltitude": doubleToRational(alt),
+                      "GPSAltitudeRef": alt.isNegative ? 1 : 0,
+                    },
+                  },
+                }..removeWhere(
+                  (key, value) =>
+                      key == "MakerNote" ||
+                      key == "UserComment" ||
+                      key == "ImageDescription",
+                ),
+              )
+              : null,
       src: MetadataSrc.nextcloud,
     );
   }
@@ -252,13 +262,13 @@ class Metadata with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        lastUpdated,
-        fileEtag,
-        imageWidth,
-        imageHeight,
-        // exif is handled separately, see [equals]
-        src,
-      ];
+    lastUpdated,
+    fileEtag,
+    imageWidth,
+    imageHeight,
+    // exif is handled separately, see [equals]
+    src,
+  ];
 
   final DateTime lastUpdated;
 
@@ -282,10 +292,7 @@ abstract class MetadataUpgrader {
 /// Upgrade v1 Metadata to v2
 @npLog
 class MetadataUpgraderV1 implements MetadataUpgrader {
-  MetadataUpgraderV1({
-    required this.fileContentType,
-    this.logFilePath,
-  });
+  MetadataUpgraderV1({required this.fileContentType, this.logFilePath});
 
   @override
   JsonObj? call(JsonObj json) {
@@ -307,10 +314,7 @@ class MetadataUpgraderV1 implements MetadataUpgrader {
 /// Upgrade v2 Metadata to v3
 @npLog
 class MetadataUpgraderV2 implements MetadataUpgrader {
-  MetadataUpgraderV2({
-    required this.fileContentType,
-    this.logFilePath,
-  });
+  MetadataUpgraderV2({required this.fileContentType, this.logFilePath});
 
   @override
   JsonObj? call(JsonObj json) {
@@ -339,10 +343,7 @@ class MetadataUpgraderV2 implements MetadataUpgrader {
 /// Upgrade v3 Metadata to v4
 @npLog
 class MetadataUpgraderV3 implements MetadataUpgrader {
-  const MetadataUpgraderV3({
-    required this.fileContentType,
-    this.logFilePath,
-  });
+  const MetadataUpgraderV3({required this.fileContentType, this.logFilePath});
 
   @override
   JsonObj? call(JsonObj json) {
@@ -367,10 +368,7 @@ class MetadataUpgraderV3 implements MetadataUpgrader {
 /// Upgrade v4 Metadata to v5
 @npLog
 class MetadataUpgraderV4 implements MetadataUpgrader {
-  const MetadataUpgraderV4({
-    required this.fileContentType,
-    this.logFilePath,
-  });
+  const MetadataUpgraderV4({required this.fileContentType, this.logFilePath});
 
   @override
   JsonObj? call(JsonObj json) {
@@ -431,9 +429,10 @@ class File with EquatableMixin implements FileDescriptor {
       contentLength: json["contentLength"],
       contentType: json["contentType"],
       etag: json["etag"],
-      lastModified: json["lastModified"] == null
-          ? null
-          : DateTime.parse(json["lastModified"]),
+      lastModified:
+          json["lastModified"] == null
+              ? null
+              : DateTime.parse(json["lastModified"]),
       isCollection: json["isCollection"],
       usedBytes: json["usedBytes"],
       hasPreview: json["hasPreview"],
@@ -443,37 +442,41 @@ class File with EquatableMixin implements FileDescriptor {
       ownerDisplayName: json["ownerDisplayName"],
       trashbinFilename: json["trashbinFilename"],
       trashbinOriginalLocation: json["trashbinOriginalLocation"],
-      trashbinDeletionTime: json["trashbinDeletionTime"] == null
-          ? null
-          : DateTime.parse(json["trashbinDeletionTime"]),
-      metadata: json["metadata"] == null
-          ? null
-          : Metadata.fromJson(
-              json["metadata"].cast<String, dynamic>(),
-              upgraderV1: MetadataUpgraderV1(
-                fileContentType: json["contentType"],
-                logFilePath: json["path"],
+      trashbinDeletionTime:
+          json["trashbinDeletionTime"] == null
+              ? null
+              : DateTime.parse(json["trashbinDeletionTime"]),
+      metadata:
+          json["metadata"] == null
+              ? null
+              : Metadata.fromJson(
+                json["metadata"].cast<String, dynamic>(),
+                upgraderV1: MetadataUpgraderV1(
+                  fileContentType: json["contentType"],
+                  logFilePath: json["path"],
+                ),
+                upgraderV2: MetadataUpgraderV2(
+                  fileContentType: json["contentType"],
+                  logFilePath: json["path"],
+                ),
+                upgraderV3: MetadataUpgraderV3(
+                  fileContentType: json["contentType"],
+                  logFilePath: json["path"],
+                ),
+                upgraderV4: MetadataUpgraderV4(
+                  fileContentType: json["contentType"],
+                  logFilePath: json["path"],
+                ),
               ),
-              upgraderV2: MetadataUpgraderV2(
-                fileContentType: json["contentType"],
-                logFilePath: json["path"],
-              ),
-              upgraderV3: MetadataUpgraderV3(
-                fileContentType: json["contentType"],
-                logFilePath: json["path"],
-              ),
-              upgraderV4: MetadataUpgraderV4(
-                fileContentType: json["contentType"],
-                logFilePath: json["path"],
-              ),
-            ),
       isArchived: json["isArchived"],
-      overrideDateTime: json["overrideDateTime"] == null
-          ? null
-          : DateTime.parse(json["overrideDateTime"]),
-      location: json["location"] == null
-          ? null
-          : ImageLocation.fromJson(json["location"]),
+      overrideDateTime:
+          json["overrideDateTime"] == null
+              ? null
+              : DateTime.parse(json["overrideDateTime"]),
+      location:
+          json["location"] == null
+              ? null
+              : ImageLocation.fromJson(json["location"]),
     );
   }
 
@@ -551,35 +554,36 @@ class File with EquatableMixin implements FileDescriptor {
       trashbinDeletionTime: trashbinDeletionTime ?? this.trashbinDeletionTime,
       metadata: metadata == null ? this.metadata : metadata.obj,
       isArchived: isArchived == null ? this.isArchived : isArchived.obj,
-      overrideDateTime: overrideDateTime == null
-          ? this.overrideDateTime
-          : overrideDateTime.obj,
+      overrideDateTime:
+          overrideDateTime == null
+              ? this.overrideDateTime
+              : overrideDateTime.obj,
       location: location == null ? this.location : location.obj,
     );
   }
 
   @override
   get props => [
-        path,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        isCollection,
-        usedBytes,
-        hasPreview,
-        fileId,
-        isFavorite,
-        ownerId,
-        ownerDisplayName,
-        trashbinFilename,
-        trashbinOriginalLocation,
-        trashbinDeletionTime,
-        // metadata is handled separately, see [equals]
-        isArchived,
-        overrideDateTime,
-        location,
-      ];
+    path,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    isCollection,
+    usedBytes,
+    hasPreview,
+    fileId,
+    isFavorite,
+    ownerId,
+    ownerDisplayName,
+    trashbinFilename,
+    trashbinOriginalLocation,
+    trashbinDeletionTime,
+    // metadata is handled separately, see [equals]
+    isArchived,
+    overrideDateTime,
+    location,
+  ];
 
   @override
   get fdPath => path;
@@ -623,21 +627,21 @@ class File with EquatableMixin implements FileDescriptor {
 
 extension FileExtension on File {
   DateTime get bestDateTime => file_util.getBestDateTime(
-        overrideDateTime: overrideDateTime,
-        dateTimeOriginal: metadata?.exif?.dateTimeOriginal,
-        lastModified: lastModified,
-      );
+    overrideDateTime: overrideDateTime,
+    dateTimeOriginal: metadata?.exif?.dateTimeOriginal,
+    lastModified: lastModified,
+  );
 
   bool isOwned(CiString userId) => ownerId == null || ownerId == userId;
 
   FileDescriptor toDescriptor() => FileDescriptor(
-        fdPath: path,
-        fdId: fileId!,
-        fdMime: contentType,
-        fdIsArchived: isArchived ?? false,
-        fdIsFavorite: isFavorite ?? false,
-        fdDateTime: bestDateTime,
-      );
+    fdPath: path,
+    fdId: fileId!,
+    fdMime: contentType,
+    fdIsArchived: isArchived ?? false,
+    fdIsFavorite: isFavorite ?? false,
+    fdDateTime: bestDateTime,
+  );
 }
 
 class FileServerIdentityComparator {
@@ -696,16 +700,15 @@ class FileRepo {
     OrNull<DateTime>? overrideDateTime,
     bool? favorite,
     OrNull<ImageLocation>? location,
-  }) =>
-      dataSrc.updateProperty(
-        account,
-        file,
-        metadata: metadata,
-        isArchived: isArchived,
-        overrideDateTime: overrideDateTime,
-        favorite: favorite,
-        location: location,
-      );
+  }) => dataSrc.updateProperty(
+    account,
+    file,
+    metadata: metadata,
+    isArchived: isArchived,
+    overrideDateTime: overrideDateTime,
+    favorite: favorite,
+    location: location,
+  );
 
   /// See [FileDataSource.copy]
   Future<void> copy(
@@ -713,13 +716,7 @@ class FileRepo {
     File f,
     String destination, {
     bool? shouldOverwrite,
-  }) =>
-      dataSrc.copy(
-        account,
-        f,
-        destination,
-        shouldOverwrite: shouldOverwrite,
-      );
+  }) => dataSrc.copy(account, f, destination, shouldOverwrite: shouldOverwrite);
 
   /// See [FileDataSource.move]
   Future<void> move(
@@ -727,13 +724,7 @@ class FileRepo {
     File f,
     String destination, {
     bool? shouldOverwrite,
-  }) =>
-      dataSrc.move(
-        account,
-        f,
-        destination,
-        shouldOverwrite: shouldOverwrite,
-      );
+  }) => dataSrc.move(account, f, destination, shouldOverwrite: shouldOverwrite);
 
   /// See [FileDataSource.createDir]
   Future<void> createDir(Account account, String path) =>

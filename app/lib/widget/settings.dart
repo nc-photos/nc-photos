@@ -9,7 +9,8 @@ import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/language_util.dart' as language_util;
 import 'package:nc_photos/mobile/platform.dart'
-    if (dart.library.html) 'package:nc_photos/web/platform.dart' as platform;
+    if (dart.library.html) 'package:nc_photos/web/platform.dart'
+    as platform;
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/platform/notification.dart';
 import 'package:nc_photos/stream_util.dart';
@@ -33,10 +34,8 @@ part 'settings.g.dart';
 class Settings extends StatefulWidget {
   static const routeName = "/settings";
 
-  static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const Settings(),
-        settings: settings,
-      );
+  static Route buildRoute(RouteSettings settings) =>
+      MaterialPageRoute(builder: (_) => const Settings(), settings: settings);
 
   const Settings({super.key});
 
@@ -57,123 +56,123 @@ class _SettingsState extends State<Settings> {
             title: Text(L10n.global().settingsWidgetTitle),
           ),
           SliverList(
-            delegate: SliverChildListDelegate(
-              [
-                ValueStreamBuilder<language_util.AppLanguage>(
-                  stream: context.read<PrefController>().language,
-                  builder: (context, snapshot) => ListTile(
-                    leading: const ListTileCenterLeading(
-                      child: Icon(Icons.translate_outlined),
+            delegate: SliverChildListDelegate([
+              ValueStreamBuilder<language_util.AppLanguage>(
+                stream: context.read<PrefController>().language,
+                builder:
+                    (context, snapshot) => ListTile(
+                      leading: const ListTileCenterLeading(
+                        child: Icon(Icons.translate_outlined),
+                      ),
+                      title: Text(L10n.global().settingsLanguageTitle),
+                      subtitle: Text(snapshot.requireData.nativeName),
+                      onTap: () {
+                        Navigator.of(
+                          context,
+                        ).pushNamed(LanguageSettings.routeName);
+                      },
                     ),
-                    title: Text(L10n.global().settingsLanguageTitle),
-                    subtitle: Text(snapshot.requireData.nativeName),
-                    onTap: () {
-                      Navigator.of(context)
-                          .pushNamed(LanguageSettings.routeName);
-                    },
-                  ),
-                ),
+              ),
+              _SubPageItem(
+                leading: const Icon(Icons.palette_outlined),
+                label: L10n.global().settingsThemeTitle,
+                description: L10n.global().settingsThemeDescription,
+                pageBuilder: () => const ThemeSettings(),
+              ),
+              _SubPageItem(
+                leading: const Icon(Icons.local_offer_outlined),
+                label: L10n.global().settingsMetadataTitle,
+                pageBuilder: () => const MetadataSettings(),
+              ),
+              _SubPageItem(
+                leading: const Icon(Icons.image_outlined),
+                label: L10n.global().photosTabLabel,
+                description: L10n.global().settingsPhotosDescription,
+                pageBuilder: () => const PhotosSettings(),
+              ),
+              _SubPageItem(
+                leading: const Icon(Icons.grid_view_outlined),
+                label: L10n.global().collectionsTooltip,
+                pageBuilder: () => const CollectionSettings(),
+              ),
+              _SubPageItem(
+                leading: const Icon(Icons.view_carousel_outlined),
+                label: L10n.global().settingsViewerTitle,
+                description: L10n.global().settingsViewerDescription,
+                pageBuilder: () => const ViewerSettings(),
+              ),
+              if (features.isSupportEnhancement)
                 _SubPageItem(
-                  leading: const Icon(Icons.palette_outlined),
-                  label: L10n.global().settingsThemeTitle,
-                  description: L10n.global().settingsThemeDescription,
-                  pageBuilder: () => const ThemeSettings(),
+                  leading: const Icon(Icons.auto_fix_high_outlined),
+                  label: L10n.global().settingsImageEditTitle,
+                  description: L10n.global().settingsImageEditDescription,
+                  pageBuilder: () => const EnhancementSettings(),
                 ),
+              _SubPageItem(
+                leading: const Icon(Icons.emoji_symbols_outlined),
+                label: L10n.global().settingsMiscellaneousTitle,
+                pageBuilder: () => const MiscSettings(),
+              ),
+              _SubPageItem(
+                leading: const Icon(Icons.warning_amber),
+                label: L10n.global().settingsExpertTitle,
+                pageBuilder: () => const ExpertSettings(),
+              ),
+              if (_isShowDevSettings)
                 _SubPageItem(
-                  leading: const Icon(Icons.local_offer_outlined),
-                  label: L10n.global().settingsMetadataTitle,
-                  pageBuilder: () => const MetadataSettings(),
+                  leading: const Icon(Icons.code_outlined),
+                  label: "Developer options",
+                  pageBuilder: () => const DeveloperSettings(),
                 ),
-                _SubPageItem(
-                  leading: const Icon(Icons.image_outlined),
-                  label: L10n.global().photosTabLabel,
-                  description: L10n.global().settingsPhotosDescription,
-                  pageBuilder: () => const PhotosSettings(),
-                ),
-                _SubPageItem(
-                  leading: const Icon(Icons.grid_view_outlined),
-                  label: L10n.global().collectionsTooltip,
-                  pageBuilder: () => const CollectionSettings(),
-                ),
-                _SubPageItem(
-                  leading: const Icon(Icons.view_carousel_outlined),
-                  label: L10n.global().settingsViewerTitle,
-                  description: L10n.global().settingsViewerDescription,
-                  pageBuilder: () => const ViewerSettings(),
-                ),
-                if (features.isSupportEnhancement)
-                  _SubPageItem(
-                    leading: const Icon(Icons.auto_fix_high_outlined),
-                    label: L10n.global().settingsImageEditTitle,
-                    description: L10n.global().settingsImageEditDescription,
-                    pageBuilder: () => const EnhancementSettings(),
-                  ),
-                _SubPageItem(
-                  leading: const Icon(Icons.emoji_symbols_outlined),
-                  label: L10n.global().settingsMiscellaneousTitle,
-                  pageBuilder: () => const MiscSettings(),
-                ),
-                _SubPageItem(
-                  leading: const Icon(Icons.warning_amber),
-                  label: L10n.global().settingsExpertTitle,
-                  pageBuilder: () => const ExpertSettings(),
-                ),
-                if (_isShowDevSettings)
-                  _SubPageItem(
-                    leading: const Icon(Icons.code_outlined),
-                    label: "Developer options",
-                    pageBuilder: () => const DeveloperSettings(),
-                  ),
-                SettingsListCaption(
-                  label: L10n.global().settingsAboutSectionTitle,
-                ),
+              SettingsListCaption(
+                label: L10n.global().settingsAboutSectionTitle,
+              ),
+              ListTile(
+                title: Text(L10n.global().settingsVersionTitle),
+                subtitle: const Text(k.versionStr),
+                onTap: () {
+                  if (!_isShowDevSettings && --_devSettingsUnlockCount <= 0) {
+                    setState(() {
+                      _isShowDevSettings = true;
+                    });
+                  }
+                },
+              ),
+              ListTile(
+                title: Text(L10n.global().settingsSourceCodeTitle),
+                onTap: () {
+                  launch(_sourceRepo);
+                },
+              ),
+              ListTile(
+                title: Text(L10n.global().settingsBugReportTitle),
+                onTap: () {
+                  launch(_bugReportUrl);
+                },
+              ),
+              SwitchListTile(
+                title: Text(L10n.global().settingsCaptureLogsTitle),
+                subtitle: Text(L10n.global().settingsCaptureLogsDescription),
+                value: LogCapturer().isEnable,
+                onChanged: (value) => _onCaptureLogChanged(context, value),
+              ),
+              if (translator.isNotEmpty)
                 ListTile(
-                  title: Text(L10n.global().settingsVersionTitle),
-                  subtitle: const Text(k.versionStr),
+                  title: Text(L10n.global().settingsTranslatorTitle),
+                  subtitle: Text(translator),
                   onTap: () {
-                    if (!_isShowDevSettings && --_devSettingsUnlockCount <= 0) {
-                      setState(() {
-                        _isShowDevSettings = true;
-                      });
-                    }
+                    launch(_translationUrl);
+                  },
+                )
+              else
+                ListTile(
+                  title: const Text("Improve translation"),
+                  subtitle: const Text("Help translating to your language"),
+                  onTap: () {
+                    launch(_translationUrl);
                   },
                 ),
-                ListTile(
-                  title: Text(L10n.global().settingsSourceCodeTitle),
-                  onTap: () {
-                    launch(_sourceRepo);
-                  },
-                ),
-                ListTile(
-                  title: Text(L10n.global().settingsBugReportTitle),
-                  onTap: () {
-                    launch(_bugReportUrl);
-                  },
-                ),
-                SwitchListTile(
-                  title: Text(L10n.global().settingsCaptureLogsTitle),
-                  subtitle: Text(L10n.global().settingsCaptureLogsDescription),
-                  value: LogCapturer().isEnable,
-                  onChanged: (value) => _onCaptureLogChanged(context, value),
-                ),
-                if (translator.isNotEmpty)
-                  ListTile(
-                    title: Text(L10n.global().settingsTranslatorTitle),
-                    subtitle: Text(translator),
-                    onTap: () {
-                      launch(_translationUrl);
-                    },
-                  )
-                else
-                  ListTile(
-                    title: const Text("Improve translation"),
-                    subtitle: const Text("Help translating to your language"),
-                    onTap: () {
-                      launch(_translationUrl);
-                    },
-                  ),
-              ],
-            ),
+            ]),
           ),
         ],
       ),
@@ -184,17 +183,18 @@ class _SettingsState extends State<Settings> {
     if (value) {
       final result = await showDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
-          content: Text(L10n.global().captureLogDetails),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(L10n.global().enableButtonLabel),
+        builder:
+            (context) => AlertDialog(
+              content: Text(L10n.global().captureLogDetails),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(L10n.global().enableButtonLabel),
+                ),
+              ],
             ),
-          ],
-        ),
       );
       if (result == true) {
         setState(() {
@@ -217,8 +217,11 @@ class _SettingsState extends State<Settings> {
     try {
       await nm.notify(LogSaveSuccessfulNotification(result));
     } catch (e, stacktrace) {
-      _log.shout("[_onLogSaveSuccessful] Failed showing platform notification",
-          e, stacktrace);
+      _log.shout(
+        "[_onLogSaveSuccessful] Failed showing platform notification",
+        e,
+        stacktrace,
+      );
     }
   }
 
@@ -245,11 +248,9 @@ class _SubPageItem extends StatelessWidget {
       title: Text(label),
       subtitle: description == null ? null : Text(description!),
       onTap: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (_) => pageBuilder(),
-          ),
-        );
+        Navigator.of(
+          context,
+        ).push(MaterialPageRoute(builder: (_) => pageBuilder()));
       },
     );
   }

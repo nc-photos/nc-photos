@@ -18,8 +18,9 @@ class DriftTableSortGenerator extends GeneratorForAnnotation<DriftTableSort> {
       print("Not a class");
       return null;
     }
-    final driftTableSort =
-        DriftTableSort(annotation.read("dbClass").stringValue);
+    final driftTableSort = DriftTableSort(
+      annotation.read("dbClass").stringValue,
+    );
     final clazz = element;
     if (!clazz.allSupertypes.any((t) => t.element.name == "Table")) {
       print("Not a drift table");
@@ -36,14 +37,16 @@ class DriftTableSortGenerator extends GeneratorForAnnotation<DriftTableSort> {
     final enumValues = columns
         .map((f) => "${f.name}Asc, ${f.name}Desc, ")
         .reduce((a, b) => a + b);
-    final cases = columns.map((f) {
-      return """
+    final cases = columns
+        .map((f) {
+          return """
 case $sortEnumName.${f.name}Asc:
   return OrderingTerm.asc(db.${clazz.name.replaceRange(0, 1, clazz.name[0].toLowerCase())}.${f.name});
 case $sortEnumName.${f.name}Desc:
   return OrderingTerm.desc(db.${clazz.name.replaceRange(0, 1, clazz.name[0].toLowerCase())}.${f.name});
 """;
-    }).reduce((a, b) => a + b);
+        })
+        .reduce((a, b) => a + b);
     return """
 enum $sortEnumName { $enumValues }
 

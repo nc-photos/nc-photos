@@ -27,21 +27,20 @@ class _State {
     required bool canPlay,
     required bool canLoop,
     required bool isPlayControlVisible,
-  }) =>
-      _State(
-        shouldPlayLivePhoto: shouldPlayLivePhoto,
-        canZoom: canZoom,
-        canPlay: canPlay,
-        canLoop: canLoop,
-        isPlayControlVisible: isPlayControlVisible,
-        isLoaded: false,
-        isZoomed: false,
-        isPlaying: false,
-        videoAspectRatio: 1,
-        videoDuration: Duration.zero,
-        videoIsLooping: false,
-        videoVolume: 0,
-      );
+  }) => _State(
+    shouldPlayLivePhoto: shouldPlayLivePhoto,
+    canZoom: canZoom,
+    canPlay: canPlay,
+    canLoop: canLoop,
+    isPlayControlVisible: isPlayControlVisible,
+    isLoaded: false,
+    isZoomed: false,
+    isPlaying: false,
+    videoAspectRatio: 1,
+    videoDuration: Duration.zero,
+    videoIsLooping: false,
+    videoVolume: 0,
+  );
 
   @override
   String toString() => _$toString();
@@ -136,10 +135,7 @@ class _SetLoaded implements _Event {
 
 @toString
 class _SetVideoMetadata implements _Event {
-  const _SetVideoMetadata({
-    required this.aspectRatio,
-    required this.duration,
-  });
+  const _SetVideoMetadata({required this.aspectRatio, required this.duration});
 
   @override
   String toString() => _$toString();

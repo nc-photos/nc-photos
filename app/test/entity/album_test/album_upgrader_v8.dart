@@ -6,9 +6,7 @@ void _upgradeV8JsonNonManualCover() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "memory",
@@ -36,9 +34,7 @@ void _upgradeV8JsonNonManualCover() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "memory",
@@ -70,9 +66,7 @@ void _upgradeV8JsonManualNow() {
       "lastUpdated": "2020-01-02T03:04:05.678901Z",
       "provider": <String, dynamic>{
         "type": "static",
-        "content": <String, dynamic>{
-          "items": [],
-        },
+        "content": <String, dynamic>{"items": []},
       },
       "coverProvider": <String, dynamic>{
         "type": "manual",
@@ -96,9 +90,7 @@ void _upgradeV8JsonManualNow() {
       "lastUpdated": "2020-01-02T03:04:05.678901Z",
       "provider": <String, dynamic>{
         "type": "static",
-        "content": <String, dynamic>{
-          "items": [],
-        },
+        "content": <String, dynamic>{"items": []},
       },
       "coverProvider": <String, dynamic>{
         "type": "manual",
@@ -130,9 +122,7 @@ void _upgradeV8JsonManualExifTime() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "manual",
@@ -161,9 +151,7 @@ void _upgradeV8JsonManualExifTime() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "manual",
@@ -195,9 +183,7 @@ void _upgradeV8JsonAutoNull() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -216,9 +202,7 @@ void _upgradeV8JsonAutoNull() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -240,9 +224,7 @@ void _upgradeV8JsonAutoLastModified() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -267,9 +249,7 @@ void _upgradeV8JsonAutoLastModified() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -300,9 +280,7 @@ void _upgradeV8JsonAutoNoFileId() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -326,9 +304,7 @@ void _upgradeV8JsonAutoNoFileId() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": [],
-      },
+      "content": <String, dynamic>{"items": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -361,8 +337,8 @@ void _upgradeV8DbNonManualCover() {
         "fdMime": null,
         "fdIsArchived": false,
         "fdIsFavorite": false,
-        "fdDateTime": "2020-01-02T03:04:05.678901Z"
-      }
+        "fdDateTime": "2020-01-02T03:04:05.678901Z",
+      },
     },
     sortProviderType: "null",
     sortProviderContent: {},
@@ -386,8 +362,8 @@ void _upgradeV8DbNonManualCover() {
           "fdMime": null,
           "fdIsArchived": false,
           "fdIsFavorite": false,
-          "fdDateTime": "2020-01-02T03:04:05.678901Z"
-        }
+          "fdDateTime": "2020-01-02T03:04:05.678901Z",
+        },
       },
       sortProviderType: "null",
       sortProviderContent: {},
@@ -410,8 +386,8 @@ void _upgradeV8DbManualNow() {
       coverProviderContent: {
         "coverFile": {
           "path": "remote.php/dav/files/admin/test1.jpg",
-          "fileId": 1
-        }
+          "fileId": 1,
+        },
       },
       sortProviderType: "null",
       sortProviderContent: {},
@@ -435,8 +411,8 @@ void _upgradeV8DbManualNow() {
             "fdMime": null,
             "fdIsArchived": false,
             "fdIsFavorite": false,
-            "fdDateTime": "2020-01-02T03:04:05.000Z"
-          }
+            "fdDateTime": "2020-01-02T03:04:05.000Z",
+          },
         },
         sortProviderType: "null",
         sortProviderContent: {},
@@ -461,9 +437,9 @@ void _upgradeV8DbManualExifTime() {
         "path": "remote.php/dav/files/admin/test1.jpg",
         "fileId": 1,
         "metadata": {
-          "exif": {"DateTimeOriginal": "2020:01:02 03:04:05"}
-        }
-      }
+          "exif": {"DateTimeOriginal": "2020:01:02 03:04:05"},
+        },
+      },
     },
     sortProviderType: "null",
     sortProviderContent: {},
@@ -490,7 +466,7 @@ void _upgradeV8DbManualExifTime() {
           "fdIsArchived": false,
           "fdIsFavorite": false,
           "fdDateTime": dateTime,
-        }
+        },
       },
       sortProviderType: "null",
       sortProviderContent: {},
@@ -547,8 +523,8 @@ void _upgradeV8DbAutoLastModified() {
       "coverFile": {
         "path": "remote.php/dav/files/admin/test1.jpg",
         "fileId": 1,
-        "lastModified": "2020-01-02T03:04:05.000Z"
-      }
+        "lastModified": "2020-01-02T03:04:05.000Z",
+      },
     },
     sortProviderType: "null",
     sortProviderContent: {},
@@ -572,8 +548,8 @@ void _upgradeV8DbAutoLastModified() {
           "fdMime": null,
           "fdIsArchived": false,
           "fdIsFavorite": false,
-          "fdDateTime": "2020-01-02T03:04:05.000Z"
-        }
+          "fdDateTime": "2020-01-02T03:04:05.000Z",
+        },
       },
       sortProviderType: "null",
       sortProviderContent: {},
@@ -595,8 +571,8 @@ void _upgradeV8DbAutoNoFileId() {
     coverProviderContent: {
       "coverFile": {
         "path": "remote.php/dav/files/admin/test1.jpg",
-        "lastModified": "2020-01-02T03:04:05.000Z"
-      }
+        "lastModified": "2020-01-02T03:04:05.000Z",
+      },
     },
     sortProviderType: "null",
     sortProviderContent: {},

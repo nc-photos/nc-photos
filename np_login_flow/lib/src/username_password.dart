@@ -10,26 +10,19 @@ part 'username_password.g.dart';
 /// Exchange token with username and password (or app password)
 @npLog
 class UsernamePassword implements LoginFlow {
-  UsernamePassword({
-    required this.username,
-    required this.password,
-  });
+  UsernamePassword({required this.username, required this.password});
 
   @override
   void dispose() {}
 
   @override
-  Future<LoginResult> login({
-    required Uri uri,
-  }) async {
+  Future<LoginResult> login({required Uri uri}) async {
     _log.info("[login] $uri");
     final api = Api(uri, BasicAuth(username, password));
     final response = await api.request(
       "GET",
       "ocs/v2.php/core/getapppassword",
-      header: {
-        "OCS-APIRequest": "true",
-      },
+      header: {"OCS-APIRequest": "true"},
     );
     if (!_shouldRun) {
       _log.fine("[login] Login interrupted");
@@ -40,11 +33,7 @@ class UsernamePassword implements LoginFlow {
         final appPwdRegex = RegExp(r"<apppassword>(.*)</apppassword>");
         final appPwdMatch = appPwdRegex.firstMatch(response.body);
         final value = appPwdMatch!.group(1)!;
-        return LoginResult(
-          server: uri,
-          username: username,
-          password: value,
-        );
+        return LoginResult(server: uri, username: username, password: value);
       } catch (_) {
         // this happens when the address is not the base URL and so Nextcloud
         // returned the login page
@@ -54,11 +43,7 @@ class UsernamePassword implements LoginFlow {
       // If the client is authenticated with an app password a 403 will be
       // returned
       _log.info("[login] Already an app password");
-      return LoginResult(
-        server: uri,
-        username: username,
-        password: password,
-      );
+      return LoginResult(server: uri, username: username, password: password);
     } else {
       _log.severe("[login] Failed while requesting app password: $response");
       throw LoginException(

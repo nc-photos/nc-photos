@@ -8,7 +8,9 @@ import 'package:nc_photos/entity/recognize_face_item.dart';
 
 class PersonBuilder {
   static Person byFaceRecognitionPerson(
-      Account account, FaceRecognitionPerson person) {
+    Account account,
+    FaceRecognitionPerson person,
+  ) {
     return Person(
       name: person.name,
       contentProvider: PersonFaceRecognitionProvider(
@@ -19,7 +21,10 @@ class PersonBuilder {
   }
 
   static Person byRecognizeFace(
-      Account account, RecognizeFace face, List<RecognizeFaceItem>? items) {
+    Account account,
+    RecognizeFace face,
+    List<RecognizeFaceItem>? items,
+  ) {
     return Person(
       name: face.isNamed ? face.label : "",
       contentProvider: PersonRecognizeProvider(

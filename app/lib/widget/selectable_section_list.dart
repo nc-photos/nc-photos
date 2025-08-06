@@ -21,10 +21,7 @@ export 'package:nc_photos/widget/selectable_item_list.dart'
 part 'selectable_section_list.g.dart';
 
 class SelectableSection<T extends SelectableItemMetadata> {
-  const SelectableSection({
-    required this.header,
-    required this.items,
-  });
+  const SelectableSection({required this.header, required this.items});
 
   final T header;
   final List<T> items;
@@ -67,9 +64,14 @@ class SelectableSectionList<T extends SelectableItemMetadata>
   final List<SelectableSection<T>> sections;
   final Set<T> selectedItems;
   final Widget Function(BuildContext context, int section, T metadata)
-      sectionHeaderBuilder;
+  sectionHeaderBuilder;
   final Widget Function(
-      BuildContext context, int section, int index, T metadata) itemBuilder;
+    BuildContext context,
+    int section,
+    int index,
+    T metadata,
+  )
+  itemBuilder;
 
   /// The maximum extent of tiles in the cross axis. Required if
   /// [extentOptimizer] is null
@@ -85,7 +87,7 @@ class SelectableSectionList<T extends SelectableItemMetadata>
   final Alignment indicatorAlignment;
 
   final void Function(BuildContext context, int section, int index, T metadata)?
-      onItemTap;
+  onItemTap;
   final void Function(BuildContext context, Set<T> selected)? onSelectionChange;
 }
 
@@ -165,7 +167,8 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
   void _onItemLongPress(int section, int index, T metadata) {
     if (!widget.sections[section].items.containsIdentical(metadata)) {
       _log.warning(
-          "[_onItemLongPress] Item not found in backing list, ignoring");
+        "[_onItemLongPress] Item not found in backing list, ignoring",
+      );
       return;
     }
     final wasSelecting = _isSelecting;
@@ -190,9 +193,11 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
       if (!SessionStorage().hasShowRangeSelectNotification) {
         SnackBarManager().showSnackBar(
           SnackBar(
-            content: Text(getRawPlatform() == NpPlatform.web
-                ? L10n.global().webSelectRangeNotification
-                : L10n.global().mobileSelectRangeNotification),
+            content: Text(
+              getRawPlatform() == NpPlatform.web
+                  ? L10n.global().webSelectRangeNotification
+                  : L10n.global().mobileSelectRangeNotification,
+            ),
             duration: k.snackBarDurationNormal,
           ),
           canBeReplaced: true,
@@ -206,23 +211,33 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
   ///
   /// [a] and [b] are not necessary to be sorted, this method will handle both
   /// [a] > [b] and [a] < [b] cases
-  void _selectRange(Set<SelectableItemMetadata> target, _SectionPosition a,
-      _SectionPosition b) {
+  void _selectRange(
+    Set<SelectableItemMetadata> target,
+    _SectionPosition a,
+    _SectionPosition b,
+  ) {
     if (a.section == b.section) {
       // same section
       final beg = math.min(a.index, b.index);
       final end = math.max(a.index, b.index) + 1;
-      target.addAll(widget.sections[a.section].items
-          .sublist(beg, end)
-          .where((e) => e.isSelectable));
+      target.addAll(
+        widget.sections[a.section].items
+            .sublist(beg, end)
+            .where((e) => e.isSelectable),
+      );
     } else {
       if (a.section < b.section) {
         // forward
-        target.addAll(widget.sections[a.section].items
-            .sublist(a.index)
-            .where((e) => e.isSelectable));
+        target.addAll(
+          widget.sections[a.section].items
+              .sublist(a.index)
+              .where((e) => e.isSelectable),
+        );
         _selectRange(
-            target, _SectionPosition(section: a.section + 1, index: 0), b);
+          target,
+          _SectionPosition(section: a.section + 1, index: 0),
+          b,
+        );
       } else {
         // backward
         _selectRange(target, b, a);
@@ -277,8 +292,8 @@ class _SliverSectionGridView extends StatelessWidget {
               crossAxisSpacing: crossAxisSpacing,
             ),
             itemCount: itemCount(section),
-            itemBuilder: (context, index) =>
-                itemBuilder(context, section, index),
+            itemBuilder:
+                (context, index) => itemBuilder(context, section, index),
           );
         } else {
           // section title
@@ -290,15 +305,19 @@ class _SliverSectionGridView extends StatelessWidget {
 
   Widget _optimizedBuild(BuildContext context) {
     final sectionItemCounts = List.generate(sectionCount, itemCount);
-    final sectionRowCounts = List.generate(sectionCount,
-        (i) => (sectionItemCounts[i] / extentOptimizer!.itemPerRow).ceil());
+    final sectionRowCounts = List.generate(
+      sectionCount,
+      (i) => (sectionItemCounts[i] / extentOptimizer!.itemPerRow).ceil(),
+    );
     final rowCount = sectionCount + sectionRowCounts.sum;
 
     return SuperSliverList.builder(
       itemCount: rowCount,
       itemBuilder: (context, index) {
-        final (section, row) =
-            _listIndexToSectionAndRow(sectionRowCounts, index);
+        final (section, row) = _listIndexToSectionAndRow(
+          sectionRowCounts,
+          index,
+        );
         if (row == 0) {
           // section title
           return sectionTitleBuilder(context, section);
@@ -306,20 +325,27 @@ class _SliverSectionGridView extends StatelessWidget {
           // item
           final firstItemIndex = (row - 1) * extentOptimizer!.itemPerRow;
           final thisRowCount = math.min(
-              sectionItemCounts[section] - firstItemIndex,
-              extentOptimizer!.itemPerRow);
+            sectionItemCounts[section] - firstItemIndex,
+            extentOptimizer!.itemPerRow,
+          );
           return Row(
-            children: List<Widget>.generate(
-              extentOptimizer!.itemPerRow,
-              (i) => Expanded(
-                child: AspectRatio(
-                  aspectRatio: childAspectRatio,
-                  child: i < thisRowCount
-                      ? itemBuilder(context, section, firstItemIndex + i)
-                      : const SizedBox.shrink(),
-                ),
-              ),
-            ).separated((_) => SizedBox(width: crossAxisSpacing)).toList(),
+            children:
+                List<Widget>.generate(
+                  extentOptimizer!.itemPerRow,
+                  (i) => Expanded(
+                    child: AspectRatio(
+                      aspectRatio: childAspectRatio,
+                      child:
+                          i < thisRowCount
+                              ? itemBuilder(
+                                context,
+                                section,
+                                firstItemIndex + i,
+                              )
+                              : const SizedBox.shrink(),
+                    ),
+                  ),
+                ).separated((_) => SizedBox(width: crossAxisSpacing)).toList(),
           );
         }
       },
@@ -327,8 +353,10 @@ class _SliverSectionGridView extends StatelessWidget {
         if (index == null) {
           return 0;
         }
-        final (section, row) =
-            _listIndexToSectionAndRow(sectionRowCounts, index);
+        final (section, row) = _listIndexToSectionAndRow(
+          sectionRowCounts,
+          index,
+        );
         if (row == 0) {
           return extentOptimizer!.titleExtentBuilder(section);
         } else {
@@ -339,7 +367,9 @@ class _SliverSectionGridView extends StatelessWidget {
   }
 
   (int section, int row) _listIndexToSectionAndRow(
-      List<int> sectionRowCounts, int index) {
+    List<int> sectionRowCounts,
+    int index,
+  ) {
     var remain = index;
     var i = 0;
     while (true) {
@@ -358,7 +388,7 @@ class _SliverSectionGridView extends StatelessWidget {
   final Widget Function(BuildContext context, int section) sectionTitleBuilder;
   final int Function(int section) itemCount;
   final Widget Function(BuildContext context, int section, int index)
-      itemBuilder;
+  itemBuilder;
   final double? maxCrossAxisExtent;
   final double childAspectRatio;
   final double mainAxisSpacing;
@@ -368,10 +398,7 @@ class _SliverSectionGridView extends StatelessWidget {
 }
 
 class _SectionPosition with EquatableMixin {
-  const _SectionPosition({
-    required this.section,
-    required this.index,
-  });
+  const _SectionPosition({required this.section, required this.index});
 
   @override
   List<Object?> get props => [section, index];

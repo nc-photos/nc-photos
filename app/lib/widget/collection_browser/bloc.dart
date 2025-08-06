@@ -11,14 +11,18 @@ class _Bloc extends Bloc<_Event, _State>
     required this.filesController,
     required this.db,
     required Collection collection,
-  })  : _c = container,
-        _isAdHocCollection = !collectionsController.stream.value.data
-            .any((e) => e.collection.compareIdentity(collection)),
-        super(_State.init(
-          collection: collection,
-          cover: _getCover(collection),
-          zoom: prefController.albumBrowserZoomLevelValue,
-        )) {
+  }) : _c = container,
+       _isAdHocCollection =
+           !collectionsController.stream.value.data.any(
+             (e) => e.collection.compareIdentity(collection),
+           ),
+       super(
+         _State.init(
+           collection: collection,
+           cover: _getCover(collection),
+           zoom: prefController.albumBrowserZoomLevelValue,
+         ),
+       ) {
     _initItemController(collection);
 
     on<_UpdateCollection>(_onUpdateCollection);
@@ -45,9 +49,12 @@ class _Bloc extends Bloc<_Event, _State>
     on<_DownloadSelectedItems>(_onDownloadSelectedItems);
     on<_AddSelectedItemsToCollection>(_onAddSelectedItemsToCollection);
     on<_RemoveSelectedItemsFromCollection>(
-        _onRemoveSelectedItemsFromCollection);
-    on<_ArchiveSelectedItems>(_onArchiveSelectedItems,
-        transformer: concurrent());
+      _onRemoveSelectedItemsFromCollection,
+    );
+    on<_ArchiveSelectedItems>(
+      _onArchiveSelectedItems,
+      transformer: concurrent(),
+    );
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
 
     on<_SetDragging>(_onSetDragging);
@@ -60,26 +67,33 @@ class _Bloc extends Bloc<_Event, _State>
     on<_SetMessage>(_onSetMessage);
 
     if (!_isAdHocCollection) {
-      _subscriptions.add(collectionsController.stream.listen((event) {
-        final c = event.data
-            .firstWhere((d) => state.collection.compareIdentity(d.collection));
-        if (!identical(c, state.collection)) {
-          add(_UpdateCollection(c.collection));
-        }
-      }));
+      _subscriptions.add(
+        collectionsController.stream.listen((event) {
+          final c = event.data.firstWhere(
+            (d) => state.collection.compareIdentity(d.collection),
+          );
+          if (!identical(c, state.collection)) {
+            add(_UpdateCollection(c.collection));
+          }
+        }),
+      );
     } else {
       _log.info("[_Bloc] Ad hoc collection");
     }
 
-    _subscriptions.add(itemsController.stream.listen((event) {
-      if (!event.hasNext && _isInitialLoad) {
-        _isInitialLoad = false;
-        filesController.queryByFileId(event.items
-            .whereType<CollectionFileItem>()
-            .map((e) => e.file.fdId)
-            .toList());
-      }
-    }));
+    _subscriptions.add(
+      itemsController.stream.listen((event) {
+        if (!event.hasNext && _isInitialLoad) {
+          _isInitialLoad = false;
+          filesController.queryByFileId(
+            event.items
+                .whereType<CollectionFileItem>()
+                .map((e) => e.file.fdId)
+                .toList(),
+          );
+        }
+      }),
+    );
   }
 
   @override
@@ -95,8 +109,8 @@ class _Bloc extends Bloc<_Event, _State>
 
   @override
   bool Function(dynamic, dynamic)? get shouldLog => (currentState, nextState) {
-        return currentState.scale == nextState.scale;
-      };
+    return currentState.scale == nextState.scale;
+  };
 
   @override
   void onError(Object error, StackTrace stackTrace) {
@@ -112,8 +126,11 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   bool isCollectionCapabilityPermitted(CollectionCapability capability) {
-    return CollectionAdapter.of(_c, account, state.collection)
-        .isPermitted(capability);
+    return CollectionAdapter.of(
+      _c,
+      account,
+      state.collection,
+    ).isPermitted(capability);
   }
 
   bool get isAdHocCollection => _isAdHocCollection;
@@ -130,19 +147,17 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         itemsController.stream,
-        onData: (data) => state.copyWith(
-          items: _filterItems(data.items, state.itemsWhitelist),
-          rawItems: data.items,
-          isLoading: data.hasNext,
-        ),
+        onData:
+            (data) => state.copyWith(
+              items: _filterItems(data.items, state.itemsWhitelist),
+              rawItems: data.items,
+              isLoading: data.hasNext,
+            ),
       ),
       forEach(
         emit,
         itemsController.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isLoading: false, error: data),
       ),
       // do we need this as we already filter files in filesController?
       forEach(
@@ -159,10 +174,11 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         filesController.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: false,
-          error: ExceptionEvent(data.error, data.stackTrace),
-        ),
+        onData:
+            (data) => state.copyWith(
+              isLoading: false,
+              error: ExceptionEvent(data.error, data.stackTrace),
+            ),
       ),
     ]);
   }
@@ -177,16 +193,23 @@ class _Bloc extends Bloc<_Event, _State>
   void _onDownload(_Download ev, Emitter<_State> emit) {
     _log.info(ev);
     if (state.items.isNotEmpty) {
-      unawaited(DownloadHandler(_c).downloadFiles(
-        account,
-        state.items.whereType<CollectionFileItem>().map((e) => e.file).toList(),
-        parentDir: state.collection.name,
-      ));
+      unawaited(
+        DownloadHandler(_c).downloadFiles(
+          account,
+          state.items
+              .whereType<CollectionFileItem>()
+              .map((e) => e.file)
+              .toList(),
+          parentDir: state.collection.name,
+        ),
+      );
     }
   }
 
   Future<void> _onImportPendingSharedCollection(
-      _ImportPendingSharedCollection ev, Emitter<_State> emit) async {
+    _ImportPendingSharedCollection ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
     final newCollection = await collectionsController
         .importPendingSharedCollection(state.collection);
@@ -208,12 +231,14 @@ class _Bloc extends Bloc<_Event, _State>
   void _onAddLabelToCollection(_AddLabelToCollection ev, Emitter<_State> emit) {
     _log.info(ev);
     assert(isCollectionCapabilityPermitted(CollectionCapability.labelItem));
-    emit(state.copyWith(
-      editItems: [
-        NewCollectionLabelItem(ev.label, clock.now().toUtc()),
-        ...state.editItems ?? state.items,
-      ],
-    ));
+    emit(
+      state.copyWith(
+        editItems: [
+          NewCollectionLabelItem(ev.label, clock.now().toUtc()),
+          ...state.editItems ?? state.items,
+        ],
+      ),
+    );
   }
 
   Future<void> _onRequestAddMap(_RequestAddMap ev, _Emitter emit) async {
@@ -222,23 +247,31 @@ class _Bloc extends Bloc<_Event, _State>
     try {
       final location = await db.getFirstLocationOfFileIds(
         account: account.toDb(),
-        fileIds: state.transformedItems
-            .whereType<_FileItem>()
-            .map((e) => e.file.fdId)
-            .toList(),
+        fileIds:
+            state.transformedItems
+                .whereType<_FileItem>()
+                .map((e) => e.file.fdId)
+                .toList(),
       );
-      final mapCoord =
-          location?.let((e) => MapCoord(e.latitude!, e.longitude!));
-      emit(state.copyWith(
-        placePickerRequest:
-            Unique(_PlacePickerRequest(initialPosition: mapCoord)),
-      ));
+      final mapCoord = location?.let(
+        (e) => MapCoord(e.latitude!, e.longitude!),
+      );
+      emit(
+        state.copyWith(
+          placePickerRequest: Unique(
+            _PlacePickerRequest(initialPosition: mapCoord),
+          ),
+        ),
+      );
     } catch (e, stackTrace) {
-      _log.severe("[_onRequestAddMap] Failed while getFirstLocationOfFileIds",
-          e, stackTrace);
-      emit(state.copyWith(
-        placePickerRequest: Unique(const _PlacePickerRequest()),
-      ));
+      _log.severe(
+        "[_onRequestAddMap] Failed while getFirstLocationOfFileIds",
+        e,
+        stackTrace,
+      );
+      emit(
+        state.copyWith(placePickerRequest: Unique(const _PlacePickerRequest())),
+      );
     } finally {
       emit(state.copyWith(isAddMapBusy: false));
     }
@@ -247,38 +280,46 @@ class _Bloc extends Bloc<_Event, _State>
   void _onAddMapToCollection(_AddMapToCollection ev, Emitter<_State> emit) {
     _log.info(ev);
     assert(isCollectionCapabilityPermitted(CollectionCapability.mapItem));
-    emit(state.copyWith(
-      editItems: [
-        NewCollectionMapItem(ev.location, clock.now().toUtc()),
-        ...state.editItems ?? state.items,
-      ],
-    ));
+    emit(
+      state.copyWith(
+        editItems: [
+          NewCollectionMapItem(ev.location, clock.now().toUtc()),
+          ...state.editItems ?? state.items,
+        ],
+      ),
+    );
   }
 
   void _onEditSort(_EditSort ev, Emitter<_State> emit) {
     _log.info(ev);
     final result = _transformItems(state.editItems ?? state.items, ev.sort);
-    emit(state.copyWith(
-      editSort: ev.sort,
-      editTransformedItems: result.transformed,
-    ));
+    emit(
+      state.copyWith(
+        editSort: ev.sort,
+        editTransformedItems: result.transformed,
+      ),
+    );
   }
 
   void _onEditManualSort(_EditManualSort ev, Emitter<_State> emit) {
     _log.info(ev);
     assert(isCollectionCapabilityPermitted(CollectionCapability.manualSort));
-    emit(state.copyWith(
-      editSort: CollectionItemSort.manual,
-      editItems:
-          ev.sorted.whereType<_ActualItem>().map((e) => e.original).toList(),
-      editTransformedItems: ev.sorted,
-    ));
+    emit(
+      state.copyWith(
+        editSort: CollectionItemSort.manual,
+        editItems:
+            ev.sorted.whereType<_ActualItem>().map((e) => e.original).toList(),
+        editTransformedItems: ev.sorted,
+      ),
+    );
   }
 
   void _onTransformEditItems(_TransformEditItems ev, Emitter<_State> emit) {
     _log.info(ev);
-    final result =
-        _transformItems(ev.items, state.editSort ?? state.collection.itemSort);
+    final result = _transformItems(
+      ev.items,
+      state.editSort ?? state.collection.itemSort,
+    );
     emit(state.copyWith(editTransformedItems: result.transformed));
   }
 
@@ -296,32 +337,35 @@ class _Bloc extends Bloc<_Event, _State>
           itemSort: state.editSort,
         );
       }
-      emit(state.copyWith(
-        isEditMode: false,
-        isEditBusy: false,
-        editName: null,
-        editItems: null,
-        editTransformedItems: null,
-        editSort: null,
-      ));
+      emit(
+        state.copyWith(
+          isEditMode: false,
+          isEditBusy: false,
+          editName: null,
+          editItems: null,
+          editTransformedItems: null,
+          editSort: null,
+        ),
+      );
     } catch (e, stackTrace) {
       _log.severe("[_onDoneEdit] Failed while edit", e, stackTrace);
-      emit(state.copyWith(
-        error: ExceptionEvent(e, stackTrace),
-        isEditBusy: false,
-      ));
+      emit(
+        state.copyWith(error: ExceptionEvent(e, stackTrace), isEditBusy: false),
+      );
     }
   }
 
   void _onCancelEdit(_CancelEdit ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isEditMode: false,
-      editName: null,
-      editItems: null,
-      editTransformedItems: null,
-      editSort: null,
-    ));
+    emit(
+      state.copyWith(
+        isEditMode: false,
+        editName: null,
+        editItems: null,
+        editTransformedItems: null,
+        editSort: null,
+      ),
+    );
   }
 
   void _onUnsetCover(_UnsetCover ev, Emitter<_State> emit) {
@@ -332,21 +376,25 @@ class _Bloc extends Bloc<_Event, _State>
   void _onSetSelectedItems(_SetSelectedItems ev, Emitter<_State> emit) {
     _log.info(ev);
     final adapter = CollectionAdapter.of(_c, account, state.collection);
-    emit(state.copyWith(
-      selectedItems: ev.items,
-      isSelectionRemovable: ev.items
-          .whereType<_ActualItem>()
-          .map((e) => e.original)
-          .any(adapter.isItemRemovable),
-      isSelectionDeletable: ev.items
-          .whereType<_ActualItem>()
-          .map((e) => e.original)
-          .any(adapter.isItemDeletable),
-    ));
+    emit(
+      state.copyWith(
+        selectedItems: ev.items,
+        isSelectionRemovable: ev.items
+            .whereType<_ActualItem>()
+            .map((e) => e.original)
+            .any(adapter.isItemRemovable),
+        isSelectionDeletable: ev.items
+            .whereType<_ActualItem>()
+            .map((e) => e.original)
+            .any(adapter.isItemDeletable),
+      ),
+    );
   }
 
   void _onDownloadSelectedItems(
-      _DownloadSelectedItems ev, Emitter<_State> emit) {
+    _DownloadSelectedItems ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
@@ -358,7 +406,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _onAddSelectedItemsToCollection(
-      _AddSelectedItemsToCollection ev, Emitter<_State> emit) {
+    _AddSelectedItemsToCollection ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
@@ -376,16 +426,19 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _onRemoveSelectedItemsFromCollection(
-      _RemoveSelectedItemsFromCollection ev, Emitter<_State> emit) {
+    _RemoveSelectedItemsFromCollection ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
     final adapter = CollectionAdapter.of(_c, account, state.collection);
-    final selectedItems = selected
-        .whereType<_ActualItem>()
-        .map((e) => e.original)
-        .where(adapter.isItemRemovable)
-        .toList();
+    final selectedItems =
+        selected
+            .whereType<_ActualItem>()
+            .map((e) => e.original)
+            .where(adapter.isItemRemovable)
+            .toList();
     if (selectedItems.isNotEmpty) {
       unawaited(itemsController.removeItems(selectedItems));
     }
@@ -407,21 +460,25 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _onDeleteSelectedItems(
-      _DeleteSelectedItems ev, Emitter<_State> emit) async {
+    _DeleteSelectedItems ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
     final adapter = CollectionAdapter.of(_c, account, state.collection);
-    final selectedItems = selected
-        .whereType<_ActualItem>()
-        .map((e) => e.original)
-        .where(adapter.isItemRemovable)
-        .toList();
-    final selectedFiles = selected
-        .whereType<_FileItem>()
-        .where((e) => adapter.isItemDeletable(e.original))
-        .map((e) => e.file)
-        .toList();
+    final selectedItems =
+        selected
+            .whereType<_ActualItem>()
+            .map((e) => e.original)
+            .where(adapter.isItemRemovable)
+            .toList();
+    final selectedFiles =
+        selected
+            .whereType<_FileItem>()
+            .where((e) => adapter.isItemDeletable(e.original))
+            .map((e) => e.file)
+            .toList();
     if (selectedFiles.isNotEmpty) {
       await filesController.remove(
         selectedFiles,
@@ -457,10 +514,7 @@ class _Bloc extends Bloc<_Event, _State>
     } else {
       newZoom = state.zoom;
     }
-    emit(state.copyWith(
-      zoom: newZoom,
-      scale: null,
-    ));
+    emit(state.copyWith(zoom: newZoom, scale: null));
     unawaited(prefController.setAlbumBrowserZoomLevel(newZoom));
   }
 
@@ -498,16 +552,20 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _clearSelection(Emitter<_State> emit) {
-    emit(state.copyWith(
-      selectedItems: const {},
-      isSelectionRemovable: true,
-      isSelectionManageableFile: true,
-    ));
+    emit(
+      state.copyWith(
+        selectedItems: const {},
+        isSelectionRemovable: true,
+        isSelectionManageableFile: true,
+      ),
+    );
   }
 
   /// Convert [CollectionItem] to the corresponding [_Item]
   _TransformResult _transformItems(
-      List<CollectionItem> items, CollectionItemSort sort) {
+    List<CollectionItem> items,
+    CollectionItemSort sort,
+  ) {
     final sorter = CollectionSorter.fromSortType(sort);
     final sortedItems = sorter(items);
     final dateHelper = photo_list_util.DateGroupHelper(isMonthOnly: false);
@@ -518,76 +576,79 @@ class _Bloc extends Bloc<_Event, _State>
       if (item is CollectionFileItem) {
         if (sorter is CollectionTimeSorter &&
             _c.pref.isAlbumBrowserShowDateOr()) {
-          final date =
-              dateHelper.onDate(item.file.fdDateTime.toLocal().toDate());
+          final date = dateHelper.onDate(
+            item.file.fdDateTime.toLocal().toDate(),
+          );
           if (date != null) {
             transformed.add(_DateItem(date: date));
           }
         }
 
         if (file_util.isSupportedImageMime(item.file.fdMime ?? "")) {
-          transformed.add(_PhotoItem(
-            original: item,
-            file: item.file,
-            account: account,
-          ));
+          transformed.add(
+            _PhotoItem(original: item, file: item.file, account: account),
+          );
         } else if (file_util.isSupportedVideoMime(item.file.fdMime ?? "")) {
-          transformed.add(_VideoItem(
-            original: item,
-            file: item.file,
-            account: account,
-          ));
+          transformed.add(
+            _VideoItem(original: item, file: item.file, account: account),
+          );
         } else {
           _log.shout(
-              "[_transformItems] Unsupported file format: ${item.file.fdMime}");
+            "[_transformItems] Unsupported file format: ${item.file.fdMime}",
+          );
         }
       } else if (item is CollectionLabelItem) {
-        transformed.add(_LabelItem(
-          original: item,
-          id: item.id,
-          text: item.text,
-          onEditPressed: () {
-            // TODO
-          },
-        ));
+        transformed.add(
+          _LabelItem(
+            original: item,
+            id: item.id,
+            text: item.text,
+            onEditPressed: () {
+              // TODO
+            },
+          ),
+        );
       } else if (item is CollectionMapItem) {
-        transformed.add(_MapItem(
-          original: item,
-          id: item.id,
-          location: item.location,
-          onEditPressed: () {
-            // TODO
-          },
-        ));
+        transformed.add(
+          _MapItem(
+            original: item,
+            id: item.id,
+            location: item.location,
+            onEditPressed: () {
+              // TODO
+            },
+          ),
+        );
       }
     }
-    return _TransformResult(
-      sorted: sortedItems,
-      transformed: transformed,
-    );
+    return _TransformResult(sorted: sortedItems, transformed: transformed);
   }
 
   /// Remove file items not recognized by the app
   List<CollectionItem> _filterItems(
-      List<CollectionItem> rawItems, Set<int>? whitelist) {
+    List<CollectionItem> rawItems,
+    Set<int>? whitelist,
+  ) {
     if (whitelist == null) {
       return rawItems;
     }
-    final results = rawItems.where((e) {
-      if (e is CollectionFileItem) {
-        if (file_util.isNcAlbumFile(account, e.file)) {
-          // file shared with us are not in our db
-          return true;
-        } else {
-          return whitelist.contains(e.file.fdId);
-        }
-      } else {
-        return true;
-      }
-    }).toList();
+    final results =
+        rawItems.where((e) {
+          if (e is CollectionFileItem) {
+            if (file_util.isNcAlbumFile(account, e.file)) {
+              // file shared with us are not in our db
+              return true;
+            } else {
+              return whitelist.contains(e.file.fdId);
+            }
+          } else {
+            return true;
+          }
+        }).toList();
     if (rawItems.length != results.length) {
       _log.fine(
-          "[_filterItems] ${rawItems.length - results.length} items filtered out");
+        "[_filterItems] ${rawItems.length - results.length} items filtered out",
+      );
     }
     return results;
   }
@@ -644,10 +705,7 @@ class _Bloc extends Bloc<_Event, _State>
 }
 
 class _TransformResult {
-  const _TransformResult({
-    required this.sorted,
-    required this.transformed,
-  });
+  const _TransformResult({required this.sorted, required this.transformed});
 
   final List<CollectionItem> sorted;
   final List<_Item> transformed;

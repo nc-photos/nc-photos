@@ -51,21 +51,20 @@ part 'map_browser/view.dart';
 class MapBrowser extends StatelessWidget {
   static const routeName = "/map-browser";
 
-  static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const MapBrowser(),
-        settings: settings,
-      );
+  static Route buildRoute(RouteSettings settings) =>
+      MaterialPageRoute(builder: (_) => const MapBrowser(), settings: settings);
 
   const MapBrowser({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        KiwiContainer().resolve(),
-        account: context.read<AccountController>().account,
-        prefController: context.read(),
-      )..add(const _LoadData()),
+      create:
+          (_) => _Bloc(
+            KiwiContainer().resolve(),
+            account: context.read<AccountController>().account,
+            prefController: context.read(),
+          )..add(const _LoadData()),
       child: const _WrappedMapBrowser(),
     );
   }
@@ -99,15 +98,17 @@ class _WrappedMapBrowser extends StatelessWidget {
             ),
             _BlocSelector<bool>(
               selector: (state) => state.isShowDataRangeControlPanel,
-              builder: (context, isShowAnyPanel) => Positioned.fill(
-                child: isShowAnyPanel
-                    ? GestureDetector(
-                        onTap: () {
-                          context.addEvent(const _CloseControlPanel());
-                        },
-                      )
-                    : const SizedBox.shrink(),
-              ),
+              builder:
+                  (context, isShowAnyPanel) => Positioned.fill(
+                    child:
+                        isShowAnyPanel
+                            ? GestureDetector(
+                              onTap: () {
+                                context.addEvent(const _CloseControlPanel());
+                              },
+                            )
+                            : const SizedBox.shrink(),
+                  ),
             ),
             Positioned(
               left: 8,
@@ -115,11 +116,11 @@ class _WrappedMapBrowser extends StatelessWidget {
               top: MediaQuery.of(context).padding.top + 8,
               child: _BlocSelector<bool>(
                 selector: (state) => state.isShowDataRangeControlPanel,
-                builder: (context, isShowDataRangeControlPanel) =>
-                    _PanelContainer(
-                  isShow: isShowDataRangeControlPanel,
-                  child: const _DateRangeControlPanel(),
-                ),
+                builder:
+                    (context, isShowDataRangeControlPanel) => _PanelContainer(
+                      isShow: isShowDataRangeControlPanel,
+                      child: const _DateRangeControlPanel(),
+                    ),
               ),
             ),
           ],

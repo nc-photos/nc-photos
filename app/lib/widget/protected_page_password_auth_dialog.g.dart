@@ -22,10 +22,12 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic isAuthorized, dynamic setupResult = copyWithNull}) {
     return _State(
-        isAuthorized: isAuthorized as Unique<bool?>? ?? that.isAuthorized,
-        setupResult: setupResult == copyWithNull
-            ? that.setupResult
-            : setupResult as CiString?);
+      isAuthorized: isAuthorized as Unique<bool?>? ?? that.isAuthorized,
+      setupResult:
+          setupResult == copyWithNull
+              ? that.setupResult
+              : setupResult as CiString?,
+    );
   }
 
   final _State that;

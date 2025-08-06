@@ -24,14 +24,17 @@ class RemoveCollections {
     ErrorWithValueHandler<Collection>? onError,
   }) async {
     var failed = 0;
-    final futures = Future.wait(collections.map((c) {
-      return CollectionAdapter.of(_c, account, c)
-          .remove()
-          .catchError((e, stackTrace) {
-        ++failed;
-        onError?.call(c, e, stackTrace);
-      });
-    }));
+    final futures = Future.wait(
+      collections.map((c) {
+        return CollectionAdapter.of(_c, account, c).remove().catchError((
+          e,
+          stackTrace,
+        ) {
+          ++failed;
+          onError?.call(c, e, stackTrace);
+        });
+      }),
+    );
     await futures;
     if (failed > 0) {
       _log.warning("[call] Failed removing $failed collections");

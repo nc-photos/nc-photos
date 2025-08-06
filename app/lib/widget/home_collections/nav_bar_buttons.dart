@@ -17,9 +17,7 @@ class HomeCollectionsNavBarButton extends StatelessWidget {
     if (isMinimized) {
       return IconButtonTheme(
         data: const IconButtonThemeData(
-          style: ButtonStyle(
-            tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          ),
+          style: ButtonStyle(tapTargetSize: MaterialTapTargetSize.shrinkWrap),
         ),
         child: IconButton.outlined(
           icon: Stack(
@@ -86,14 +84,15 @@ class _NavBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.selectedItems.isEmpty,
-      builder: (context, isEnabled) => HomeCollectionsNavBarButton(
-        icon: icon,
-        label: label,
-        isMinimized: isMinimized,
-        isShowIndicator: isShowIndicator,
-        isEnabled: isEnabled,
-        onPressed: onPressed,
-      ),
+      builder:
+          (context, isEnabled) => HomeCollectionsNavBarButton(
+            icon: icon,
+            label: label,
+            isMinimized: isMinimized,
+            isShowIndicator: isShowIndicator,
+            isEnabled: isEnabled,
+            onPressed: onPressed,
+          ),
     );
   }
 
@@ -118,9 +117,7 @@ class _NavBarNewButton extends StatelessWidget {
         try {
           final collection = await showDialog<Collection>(
             context: context,
-            builder: (_) => NewCollectionDialog(
-              account: context.bloc.account,
-            ),
+            builder: (_) => NewCollectionDialog(account: context.bloc.account),
           );
           if (collection == null) {
             return;
@@ -130,15 +127,22 @@ class _NavBarNewButton extends StatelessWidget {
           // branching
           if (collection.isDynamicCollection) {
             // open the newly created collection
-            unawaited(Navigator.of(context).pushNamed(
-              CollectionBrowser.routeName,
-              arguments: CollectionBrowserArguments(collection),
-            ));
+            unawaited(
+              Navigator.of(context).pushNamed(
+                CollectionBrowser.routeName,
+                arguments: CollectionBrowserArguments(collection),
+              ),
+            );
           }
         } catch (e, stacktrace) {
           _log.shout("[build] Uncaught exception", e, stacktrace);
-          context.addEvent(_SetError(AppMessageException(
-              L10n.global().createCollectionFailureNotification)));
+          context.addEvent(
+            _SetError(
+              AppMessageException(
+                L10n.global().createCollectionFailureNotification,
+              ),
+            ),
+          );
         }
       },
     );
@@ -146,17 +150,16 @@ class _NavBarNewButton extends StatelessWidget {
 }
 
 class _NavBarSharingButton extends StatelessWidget {
-  const _NavBarSharingButton({
-    required this.isMinimized,
-  });
+  const _NavBarSharingButton({required this.isMinimized});
 
   @override
   Widget build(BuildContext context) {
     return ValueStreamBuilderEx<bool>(
-      stream: context
-          .read<AccountController>()
-          .accountPrefController
-          .hasNewSharedAlbum,
+      stream:
+          context
+              .read<AccountController>()
+              .accountPrefController
+              .hasNewSharedAlbum,
       builder: StreamWidgetBuilder.value(
         (context, hasNewSharedAlbum) => _NavBarButton(
           icon: const Icon(Icons.share_outlined),
@@ -178,9 +181,7 @@ class _NavBarSharingButton extends StatelessWidget {
 }
 
 class _NavBarEditedButton extends StatelessWidget {
-  const _NavBarEditedButton({
-    required this.isMinimized,
-  });
+  const _NavBarEditedButton({required this.isMinimized});
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +202,7 @@ class _NavBarEditedButton extends StatelessWidget {
 }
 
 class _NavBarArchiveButton extends StatelessWidget {
-  const _NavBarArchiveButton({
-    required this.isMinimized,
-  });
+  const _NavBarArchiveButton({required this.isMinimized});
 
   @override
   Widget build(BuildContext context) {
@@ -221,9 +220,7 @@ class _NavBarArchiveButton extends StatelessWidget {
 }
 
 class _NavBarTrashButton extends StatelessWidget {
-  const _NavBarTrashButton({
-    required this.isMinimized,
-  });
+  const _NavBarTrashButton({required this.isMinimized});
 
   @override
   Widget build(BuildContext context) {
@@ -244,9 +241,7 @@ class _NavBarTrashButton extends StatelessWidget {
 }
 
 class _NavBarMapButton extends StatelessWidget {
-  const _NavBarMapButton({
-    required this.isMinimized,
-  });
+  const _NavBarMapButton({required this.isMinimized});
 
   @override
   Widget build(BuildContext context) {

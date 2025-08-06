@@ -3,13 +3,14 @@ part of '../viewer_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State(
+  _Bloc({required this.prefController})
+    : super(
+        _State(
           screenBrightness: prefController.viewerScreenBrightnessValue,
           isForceRotation: prefController.isViewerForceRotationValue,
           gpsMapProvider: prefController.gpsMapProviderValue,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_SetScreenBrightness>(_onSetScreenBrightness);
     on<_SetForceRotation>(_onSetForceRotation);

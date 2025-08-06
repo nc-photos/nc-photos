@@ -7,9 +7,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.account,
     required this.filesController,
     required this.prefController,
-  }) : super(_State.init(
-          zoom: prefController.albumBrowserZoomLevelValue,
-        )) {
+  }) : super(_State.init(zoom: prefController.albumBrowserZoomLevelValue)) {
     on<_LoadItems>(_onLoad);
     on<_TransformItems>(_onTransformItems);
     on<_OnItemTransformed>(_onOnItemTransformed);
@@ -37,11 +35,11 @@ class _Bloc extends Bloc<_Event, _State>
 
   @override
   bool Function(dynamic, dynamic)? get shouldLog => (currentState, nextState) {
-        currentState = currentState as _State;
-        nextState = nextState as _State;
-        return currentState.scale == nextState.scale &&
-            currentState.visibleItems == nextState.visibleItems;
-      };
+    currentState = currentState as _State;
+    nextState = nextState as _State;
+    return currentState.scale == nextState.scale &&
+        currentState.visibleItems == nextState.visibleItems;
+  };
 
   @override
   void onError(Object error, StackTrace stackTrace) {
@@ -63,18 +61,20 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         filesController.stream,
-        onData: (data) => state.copyWith(
-          files: data.data,
-          isLoading: data.hasNext || _itemTransformerQueue.isProcessing,
-        ),
+        onData:
+            (data) => state.copyWith(
+              files: data.data,
+              isLoading: data.hasNext || _itemTransformerQueue.isProcessing,
+            ),
       ),
       forEach(
         emit,
         filesController.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: _itemTransformerQueue.isProcessing,
-          error: data,
-        ),
+        onData:
+            (data) => state.copyWith(
+              isLoading: _itemTransformerQueue.isProcessing,
+              error: data,
+            ),
       ),
     ]);
   }
@@ -87,10 +87,12 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onOnItemTransformed(_OnItemTransformed ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      transformedItems: ev.items,
-      isLoading: _itemTransformerQueue.isProcessing,
-    ));
+    emit(
+      state.copyWith(
+        transformedItems: ev.items,
+        isLoading: _itemTransformerQueue.isProcessing,
+      ),
+    );
   }
 
   void _onSetSelectedItems(_SetSelectedItems ev, Emitter<_State> emit) {
@@ -99,7 +101,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _onUnarchiveSelectedItems(
-      _UnarchiveSelectedItems ev, Emitter<_State> emit) {
+    _UnarchiveSelectedItems ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
@@ -132,10 +136,7 @@ class _Bloc extends Bloc<_Event, _State>
     } else {
       newZoom = state.zoom;
     }
-    emit(state.copyWith(
-      zoom: newZoom,
-      scale: null,
-    ));
+    emit(state.copyWith(zoom: newZoom, scale: null));
     unawaited(prefController.setAlbumBrowserZoomLevel(newZoom));
   }
 
@@ -152,10 +153,7 @@ class _Bloc extends Bloc<_Event, _State>
   Future _transformItems(List<FileDescriptor> files) async {
     _log.info("[_transformItems] Queue ${files.length} items");
     _itemTransformerQueue.addJob(
-      _ItemTransformerArgument(
-        account: account,
-        files: files,
-      ),
+      _ItemTransformerArgument(account: account, files: files),
       _buildItem,
       (result) {
         safeAdd(_OnItemTransformed(result.items));
@@ -206,18 +204,13 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
 
 _Item? _buildSingleItem(Account account, FileDescriptor file) {
   if (file_util.isSupportedImageFormat(file)) {
-    return _PhotoItem(
-      file: file,
-      account: account,
-    );
+    return _PhotoItem(file: file, account: account);
   } else if (file_util.isSupportedVideoFormat(file)) {
-    return _VideoItem(
-      file: file,
-      account: account,
-    );
+    return _VideoItem(file: file, account: account);
   } else {
-    _$__NpLog.log
-        .shout("[_buildSingleItem] Unsupported file format: ${file.fdMime}");
+    _$__NpLog.log.shout(
+      "[_buildSingleItem] Unsupported file format: ${file.fdMime}",
+    );
     return null;
   }
 }

@@ -51,35 +51,39 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
 
   @override
   build(BuildContext context) {
-    return BlocListener<HomeSearchSuggestionBloc,
-        HomeSearchSuggestionBlocState>(
+    return BlocListener<
+      HomeSearchSuggestionBloc,
+      HomeSearchSuggestionBlocState
+    >(
       bloc: _bloc,
       listener: (context, state) => _onStateChange(context, state),
       child:
           BlocBuilder<HomeSearchSuggestionBloc, HomeSearchSuggestionBlocState>(
-        bloc: _bloc,
-        builder: (context, state) => Theme(
-          data: Theme.of(context).run((t) {
-            return t.copyWith(
-              listTileTheme: ListTileThemeData(
-                iconColor: t.colorScheme.onSurface,
-                textColor: t.colorScheme.onSurface,
-              ),
-            );
-          }),
-          child: _buildContent(context, state),
-        ),
-      ),
+            bloc: _bloc,
+            builder:
+                (context, state) => Theme(
+                  data: Theme.of(context).run((t) {
+                    return t.copyWith(
+                      listTileTheme: ListTileThemeData(
+                        iconColor: t.colorScheme.onSurface,
+                        textColor: t.colorScheme.onSurface,
+                      ),
+                    );
+                  }),
+                  child: _buildContent(context, state),
+                ),
+          ),
     );
   }
 
   void _initBloc() {
-    _bloc = (widget.controller._bloc ??= HomeSearchSuggestionBloc(
-      widget.account,
-      context.read<AccountController>().collectionsController,
-      context.read<AccountController>().serverController,
-      context.read<AccountController>().accountPrefController,
-    ));
+    _bloc =
+        (widget.controller._bloc ??= HomeSearchSuggestionBloc(
+          widget.account,
+          context.read<AccountController>().collectionsController,
+          context.read<AccountController>().serverController,
+          context.read<AccountController>().accountPrefController,
+        ));
     if (_bloc.state is! HomeSearchSuggestionBlocInit) {
       // process the current state
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -93,7 +97,9 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
   }
 
   Widget _buildContent(
-      BuildContext context, HomeSearchSuggestionBlocState state) {
+    BuildContext context,
+    HomeSearchSuggestionBlocState state,
+  ) {
     if (_items.isEmpty) {
       return const SizedBox.shrink();
     } else {
@@ -108,7 +114,9 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
   }
 
   void _onStateChange(
-      BuildContext context, HomeSearchSuggestionBlocState state) {
+    BuildContext context,
+    HomeSearchSuggestionBlocState state,
+  ) {
     if (state is HomeSearchSuggestionBlocInit) {
       _items = [];
     } else if (state is HomeSearchSuggestionBlocSuccess ||
@@ -167,22 +175,25 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
   }
 
   void _transformItems(List<HomeSearchResult> results) {
-    final items = () sync* {
-      for (final r in results) {
-        if (r is HomeSearchCollectionResult) {
-          yield _CollectionListItem(r.collection, onTap: _onCollectionPressed);
-        } else if (r is HomeSearchTagResult) {
-          yield _TagListItem(r.tag, onTap: _onTagPressed);
-        } else if (r is HomeSearchPersonResult) {
-          yield _PersonListItem(r.person, onTap: _onPersonPressed);
-        } else if (r is HomeSearchLocationResult) {
-          yield _LocationListItem(r.location, onTap: _onLocationPressed);
-        } else {
-          _log.warning("[_transformItems] Unknown type: ${r.runtimeType}");
-        }
-      }
-    }()
-        .toList();
+    final items =
+        () sync* {
+          for (final r in results) {
+            if (r is HomeSearchCollectionResult) {
+              yield _CollectionListItem(
+                r.collection,
+                onTap: _onCollectionPressed,
+              );
+            } else if (r is HomeSearchTagResult) {
+              yield _TagListItem(r.tag, onTap: _onTagPressed);
+            } else if (r is HomeSearchPersonResult) {
+              yield _PersonListItem(r.person, onTap: _onPersonPressed);
+            } else if (r is HomeSearchLocationResult) {
+              yield _LocationListItem(r.location, onTap: _onLocationPressed);
+            } else {
+              _log.warning("[_transformItems] Unknown type: ${r.runtimeType}");
+            }
+          }
+        }().toList();
     _items = items;
   }
 
@@ -196,68 +207,56 @@ abstract class _ListItem {
 }
 
 class _CollectionListItem implements _ListItem {
-  const _CollectionListItem(
-    this.collection, {
-    this.onTap,
-  });
+  const _CollectionListItem(this.collection, {this.onTap});
 
   @override
   Widget buildWidget(BuildContext context) => ListTile(
-        leading: const Icon(Icons.photo_album_outlined),
-        title: Text(collection.name),
-        onTap: onTap == null ? null : () => onTap!(this),
-      );
+    leading: const Icon(Icons.photo_album_outlined),
+    title: Text(collection.name),
+    onTap: onTap == null ? null : () => onTap!(this),
+  );
 
   final Collection collection;
   final void Function(_CollectionListItem item)? onTap;
 }
 
 class _TagListItem implements _ListItem {
-  const _TagListItem(
-    this.tag, {
-    this.onTap,
-  });
+  const _TagListItem(this.tag, {this.onTap});
 
   @override
   buildWidget(BuildContext context) => ListTile(
-        leading: const Icon(Icons.local_offer_outlined),
-        title: Text(tag.displayName),
-        onTap: onTap == null ? null : () => onTap!(this),
-      );
+    leading: const Icon(Icons.local_offer_outlined),
+    title: Text(tag.displayName),
+    onTap: onTap == null ? null : () => onTap!(this),
+  );
 
   final Tag tag;
   final void Function(_TagListItem)? onTap;
 }
 
 class _PersonListItem implements _ListItem {
-  const _PersonListItem(
-    this.person, {
-    this.onTap,
-  });
+  const _PersonListItem(this.person, {this.onTap});
 
   @override
   buildWidget(BuildContext context) => ListTile(
-        leading: const Icon(Icons.person_outline),
-        title: Text(person.name),
-        onTap: onTap == null ? null : () => onTap!(this),
-      );
+    leading: const Icon(Icons.person_outline),
+    title: Text(person.name),
+    onTap: onTap == null ? null : () => onTap!(this),
+  );
 
   final Person person;
   final void Function(_PersonListItem)? onTap;
 }
 
 class _LocationListItem implements _ListItem {
-  const _LocationListItem(
-    this.location, {
-    this.onTap,
-  });
+  const _LocationListItem(this.location, {this.onTap});
 
   @override
   buildWidget(BuildContext context) => ListTile(
-        leading: const Icon(Icons.location_on_outlined),
-        title: Text(location.place),
-        onTap: onTap == null ? null : () => onTap!(this),
-      );
+    leading: const Icon(Icons.location_on_outlined),
+    title: Text(location.place),
+    onTap: onTap == null ? null : () => onTap!(this),
+  );
 
   final LocationGroup location;
   final void Function(_LocationListItem)? onTap;

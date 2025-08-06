@@ -2,10 +2,7 @@ part of '../export_collection_dialog.dart';
 
 @genCopyWith
 class _FormValue {
-  const _FormValue({
-    this.name = "",
-    this.provider = _ProviderOption.appAlbum,
-  });
+  const _FormValue({this.name = "", this.provider = _ProviderOption.appAlbum});
 
   final String name;
   final _ProviderOption provider;
@@ -21,10 +18,7 @@ class _State {
   });
 
   factory _State.init() {
-    return const _State(
-      formValue: _FormValue(),
-      isExporting: false,
-    );
+    return const _State(formValue: _FormValue(), isExporting: false);
   }
 
   final _FormValue formValue;

@@ -13,10 +13,12 @@ class NotificationManager implements itf.NotificationManager {
   @override
   notify(itf.Notification n) async {
     if (n is itf.LogSaveSuccessfulNotification) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().captureLogSuccessNotification),
-        duration: k.snackBarDurationShort,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().captureLogSuccessNotification),
+          duration: k.snackBarDurationShort,
+        ),
+      );
     } else {
       _log.shout("[notify] Unknown type: ${n.runtimeType}");
       throw UnsupportedError("Unsupported notification");

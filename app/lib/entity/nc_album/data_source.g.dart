@@ -10,14 +10,16 @@ extension _$NcAlbumRemoteDataSourceNpLog on NcAlbumRemoteDataSource {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.nc_album.data_source.NcAlbumRemoteDataSource");
+  static final log = Logger(
+    "entity.nc_album.data_source.NcAlbumRemoteDataSource",
+  );
 }
 
 extension _$NcAlbumSqliteDbDataSourceNpLog on NcAlbumSqliteDbDataSource {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.nc_album.data_source.NcAlbumSqliteDbDataSource");
+  static final log = Logger(
+    "entity.nc_album.data_source.NcAlbumSqliteDbDataSource",
+  );
 }

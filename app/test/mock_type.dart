@@ -53,14 +53,14 @@ class MockAlbumRepo implements AlbumRepo {
 
 /// [AlbumRepo] mock that support some ops with an internal List
 class MockAlbumMemoryRepo extends MockAlbumRepo {
-  MockAlbumMemoryRepo([
-    List<Album> initialData = const [],
-  ]) : albums = initialData.map((a) => a.copyWith()).toList();
+  MockAlbumMemoryRepo([List<Album> initialData = const []])
+    : albums = initialData.map((a) => a.copyWith()).toList();
 
   @override
   Future<Album> get(Account account, File albumFile) async {
-    return albums.firstWhere((element) =>
-        element.albumFile?.compareServerIdentity(albumFile) == true);
+    return albums.firstWhere(
+      (element) => element.albumFile?.compareServerIdentity(albumFile) == true,
+    );
   }
 
   @override
@@ -76,8 +76,10 @@ class MockAlbumMemoryRepo extends MockAlbumRepo {
 
   @override
   Future<void> update(Account account, Album album) async {
-    final i = albums.indexWhere((element) =>
-        element.albumFile?.compareServerIdentity(album.albumFile!) == true);
+    final i = albums.indexWhere(
+      (element) =>
+          element.albumFile?.compareServerIdentity(album.albumFile!) == true,
+    );
     albums[i] = album;
   }
 
@@ -117,9 +119,8 @@ class MockFavoriteRepo implements FavoriteRepo {
 }
 
 class MockFavoriteMemoryRepo extends MockFavoriteRepo {
-  MockFavoriteMemoryRepo([
-    List<Favorite> initialData = const [],
-  ]) : favorite = initialData.map((a) => a.copyWith()).toList();
+  MockFavoriteMemoryRepo([List<Favorite> initialData = const []])
+    : favorite = initialData.map((a) => a.copyWith()).toList();
 
   @override
   list(Account account, File dir) async {
@@ -132,8 +133,12 @@ class MockFavoriteMemoryRepo extends MockFavoriteRepo {
 /// Mock of [FileDataSource] where all methods will throw UnimplementedError
 class MockFileDataSource implements FileDataSource {
   @override
-  Future<void> copy(Account account, FileDescriptor f, String destination,
-      {bool? shouldOverwrite}) {
+  Future<void> copy(
+    Account account,
+    FileDescriptor f,
+    String destination, {
+    bool? shouldOverwrite,
+  }) {
     throw UnimplementedError();
   }
 
@@ -163,8 +168,12 @@ class MockFileDataSource implements FileDataSource {
   }
 
   @override
-  Future<void> move(Account account, File f, String destination,
-      {bool? shouldOverwrite}) {
+  Future<void> move(
+    Account account,
+    File f,
+    String destination, {
+    bool? shouldOverwrite,
+  }) {
     throw UnimplementedError();
   }
 
@@ -194,10 +203,10 @@ class MockFileDataSource implements FileDataSource {
 
 /// [FileDataSource] mock that support some ops with an internal List
 class MockFileMemoryDataSource extends MockFileDataSource {
-  MockFileMemoryDataSource([
-    List<File> initialData = const [],
-  ]) : files = initialData.map((f) => f.copyWith()).toList() {
-    _id = files
+  MockFileMemoryDataSource([List<File> initialData = const []])
+    : files = initialData.map((f) => f.copyWith()).toList() {
+    _id =
+        files
             .where((f) => f.fileId != null)
             .map((f) => f.fileId!)
             .fold(-1, math.max) +
@@ -234,9 +243,12 @@ class MockFileWebdavDataSource implements FileWebdavDataSource {
   const MockFileWebdavDataSource(this.src);
 
   @override
-  copy(Account account, FileDescriptor f, String destination,
-          {bool? shouldOverwrite}) =>
-      src.copy(account, f, destination, shouldOverwrite: shouldOverwrite);
+  copy(
+    Account account,
+    FileDescriptor f,
+    String destination, {
+    bool? shouldOverwrite,
+  }) => src.copy(account, f, destination, shouldOverwrite: shouldOverwrite);
 
   @override
   createDir(Account account, String path) => src.createDir(account, path);
@@ -280,25 +292,23 @@ class MockFileWebdavDataSource implements FileWebdavDataSource {
     OrNull<DateTime>? overrideDateTime,
     bool? favorite,
     OrNull<ImageLocation>? location,
-  }) =>
-      src.updateProperty(
-        account,
-        f,
-        metadata: metadata,
-        isArchived: isArchived,
-        overrideDateTime: overrideDateTime,
-        favorite: favorite,
-        location: location,
-      );
+  }) => src.updateProperty(
+    account,
+    f,
+    metadata: metadata,
+    isArchived: isArchived,
+    overrideDateTime: overrideDateTime,
+    favorite: favorite,
+    location: location,
+  );
 
   final MockFileMemoryDataSource src;
 }
 
 /// [FileRepo] mock that support some ops with an internal List
 class MockFileMemoryRepo extends FileRepo {
-  MockFileMemoryRepo([
-    List<File> initialData = const [],
-  ]) : super(MockFileMemoryDataSource(initialData));
+  MockFileMemoryRepo([List<File> initialData = const []])
+    : super(MockFileMemoryDataSource(initialData));
 
   List<File> get files {
     return (dataSrc as MockFileMemoryDataSource).files;
@@ -347,9 +357,8 @@ class MockFileDataSource2 implements FileDataSource2 {
 }
 
 class MockFileMemoryDataSource2 extends MockFileDataSource2 {
-  MockFileMemoryDataSource2([
-    List<FileDescriptor> initialData = const [],
-  ]) : files = initialData.map((f) => f.copyWith()).toList();
+  MockFileMemoryDataSource2([List<FileDescriptor> initialData = const []])
+    : files = initialData.map((f) => f.copyWith()).toList();
 
   @override
   Future<List<FileDescriptor>> getFileDescriptors(
@@ -361,11 +370,17 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
     int? limit,
   }) async {
     return files.where((f) {
-      if (account.roots.any((r) => file_util.isOrUnderDirPath(
-          f.fdPath, file_util.unstripPath(account, r)))) {
+      if (account.roots.any(
+        (r) => file_util.isOrUnderDirPath(
+          f.fdPath,
+          file_util.unstripPath(account, r),
+        ),
+      )) {
         return true;
       } else if (file_util.isOrUnderDirPath(
-          f.fdPath, file_util.unstripPath(account, shareDirPath))) {
+        f.fdPath,
+        file_util.unstripPath(account, shareDirPath),
+      )) {
         return true;
       } else {
         return false;
@@ -381,11 +396,17 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
   }) async {
     return files
         .where((f) {
-          if (account.roots.any((r) => file_util.isOrUnderDirPath(
-              f.fdPath, file_util.unstripPath(account, r)))) {
+          if (account.roots.any(
+            (r) => file_util.isOrUnderDirPath(
+              f.fdPath,
+              file_util.unstripPath(account, r),
+            ),
+          )) {
             return true;
           } else if (file_util.isOrUnderDirPath(
-              f.fdPath, file_util.unstripPath(account, shareDirPath))) {
+            f.fdPath,
+            file_util.unstripPath(account, shareDirPath),
+          )) {
             return true;
           } else {
             return false;
@@ -405,9 +426,8 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
 
 /// [FileRepo2] mock that support some ops with an internal List
 class MockFileMemoryRepo2 extends BasicFileRepo {
-  MockFileMemoryRepo2([
-    List<FileDescriptor> initialData = const [],
-  ]) : super(MockFileMemoryDataSource2(initialData));
+  MockFileMemoryRepo2([List<FileDescriptor> initialData = const []])
+    : super(MockFileMemoryDataSource2(initialData));
 
   List<FileDescriptor> get files {
     return (dataSrc as MockFileMemoryDataSource2).files;
@@ -466,9 +486,8 @@ class MockShareRepo implements ShareRepo {
 
 /// [ShareRepo] mock that support some ops with an internal List
 class MockShareMemoryRepo extends MockShareRepo {
-  MockShareMemoryRepo([
-    List<Share> initialData = const [],
-  ]) : shares = List.of(initialData) {
+  MockShareMemoryRepo([List<Share> initialData = const []])
+    : shares = List.of(initialData) {
     _id = shares.map((e) => int.parse(e.id)).fold(-1, math.max) + 1;
   }
 
@@ -491,7 +510,10 @@ class MockShareMemoryRepo extends MockShareRepo {
 
   @override
   Future<Share> create(
-      Account account, FileDescriptor file, String shareWith) async {
+    Account account,
+    FileDescriptor file,
+    String shareWith,
+  ) async {
     final share = Share(
       id: (_id++).toString(),
       shareType: ShareType.user,
@@ -531,9 +553,8 @@ class MockShareeRepo implements ShareeRepo {
 }
 
 class MockShareeMemoryRepo extends MockShareeRepo {
-  MockShareeMemoryRepo([
-    List<Sharee> initialData = const [],
-  ]) : sharees = List.of(initialData);
+  MockShareeMemoryRepo([List<Sharee> initialData = const []])
+    : sharees = List.of(initialData);
 
   @override
   list(Account account) async {
@@ -559,9 +580,8 @@ class MockTagRepo implements TagRepo {
 }
 
 class MockTagMemoryRepo extends MockTagRepo {
-  MockTagMemoryRepo([
-    Map<String, List<Tag>> initialData = const {},
-  ]) : tags = initialData.map((key, value) => MapEntry(key, List.of(value)));
+  MockTagMemoryRepo([Map<String, List<Tag>> initialData = const {}])
+    : tags = initialData.map((key, value) => MapEntry(key, List.of(value)));
 
   @override
   list(Account account) async {
@@ -579,7 +599,9 @@ class MockFaceRecognitionPersonRepo implements FaceRecognitionPersonRepo {
 
   @override
   Stream<List<FaceRecognitionFace>> getFaces(
-      Account account, FaceRecognitionPerson person) {
+    Account account,
+    FaceRecognitionPerson person,
+  ) {
     throw UnimplementedError();
   }
 }

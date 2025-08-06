@@ -21,13 +21,12 @@ class _PersonItem {
         coverMime: result?.mime,
       );
     } catch (e, stackTrace) {
-      _$_PersonItemNpLog.log
-          .warning("[fromPerson] Failed while getCoverUrl", e, stackTrace);
-      return _PersonItem._(
-        person: person,
-        coverUrl: null,
-        coverMime: null,
+      _$_PersonItemNpLog.log.warning(
+        "[fromPerson] Failed while getCoverUrl",
+        e,
+        stackTrace,
       );
+      return _PersonItem._(person: person, coverUrl: null, coverMime: null);
     }
   }
 
@@ -40,10 +39,7 @@ class _PersonItem {
 
 @npLog
 class _PlaceItem {
-  _PlaceItem({
-    required Account account,
-    required this.place,
-  }) {
+  _PlaceItem({required Account account, required this.place}) {
     try {
       _coverUrl = getThumbnailUrlForImageFile(
         account,
@@ -57,8 +53,11 @@ class _PlaceItem {
         ),
       );
     } catch (e, stackTrace) {
-      _log.warning("[_PlaceItem] Failed while getThumbnailUrlForImageFile", e,
-          stackTrace);
+      _log.warning(
+        "[_PlaceItem] Failed while getThumbnailUrlForImageFile",
+        e,
+        stackTrace,
+      );
     }
   }
 

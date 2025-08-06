@@ -6,18 +6,18 @@ extension SqliteDbCompat75Extension on SqliteDb {
     var i = 0;
     while (true) {
       final q = selectOnly(files).join([
-        innerJoin(accountFiles, accountFiles.file.equalsExp(files.rowId),
-            useColumns: false),
+        innerJoin(
+          accountFiles,
+          accountFiles.file.equalsExp(files.rowId),
+          useColumns: false,
+        ),
       ]);
       q
         ..addColumns([files.rowId])
         ..where(files.contentType.equals("application/octet-stream"))
         ..where(accountFiles.relativePath.like("%.jxl"))
         ..orderBy([
-          OrderingTerm(
-            expression: accountFiles.rowId,
-            mode: OrderingMode.asc,
-          ),
+          OrderingTerm(expression: accountFiles.rowId, mode: OrderingMode.asc),
         ])
         ..limit(1000, offset: i);
       final fileRowIds = await q.map((r) => r.read(files.rowId)!).get();
@@ -32,9 +32,7 @@ extension SqliteDbCompat75Extension on SqliteDb {
       for (final e in updateFiles) {
         batch.update(
           files,
-          const FilesCompanion(
-            contentType: Value("image/jxl"),
-          ),
+          const FilesCompanion(contentType: Value("image/jxl")),
           where: (table) => table.rowId.equals(e),
         );
       }
@@ -44,7 +42,8 @@ extension SqliteDbCompat75Extension on SqliteDb {
 
 extension SqliteDbCompat55Extension on SqliteDb {
   Future<void> migrateV55(
-      void Function(int current, int count)? onProgress) async {
+    void Function(int current, int count)? onProgress,
+  ) async {
     final countExp = accountFiles.rowId.count();
     final countQ = selectOnly(accountFiles)..addColumns([countExp]);
     final count = await countQ.map((r) => r.read(countExp)!).getSingle();
@@ -59,21 +58,21 @@ extension SqliteDbCompat55Extension on SqliteDb {
       ]);
       q
         ..orderBy([
-          OrderingTerm(
-            expression: accountFiles.rowId,
-            mode: OrderingMode.asc,
-          ),
+          OrderingTerm(expression: accountFiles.rowId, mode: OrderingMode.asc),
         ])
         ..limit(1000, offset: i);
-      final dbFiles = await q
-          .map((r) => CompleteFile(
-                r.readTable(files),
-                r.readTable(accountFiles),
-                r.readTable(images),
-                null,
-                null,
-              ))
-          .get();
+      final dbFiles =
+          await q
+              .map(
+                (r) => CompleteFile(
+                  r.readTable(files),
+                  r.readTable(accountFiles),
+                  r.readTable(images),
+                  null,
+                  null,
+                ),
+              )
+              .get();
       for (final f in dbFiles) {
         final bestDateTime = _getBestDateTimeV55(
           overrideDateTime: f.accountFile.overrideDateTime,
@@ -98,20 +97,21 @@ extension SqliteDbCompat55Extension on SqliteDb {
     }
 
     _log.info(
-        "[migrateV55] ${dateTimeUpdates.length} rows require updating, ${imageRemoves.length} rows require removing");
+      "[migrateV55] ${dateTimeUpdates.length} rows require updating, ${imageRemoves.length} rows require removing",
+    );
     if (isDevMode) {
       _log.fine(
-          "[migrateV55] dateTimeUpdates: ${dateTimeUpdates.map((e) => e.rowId).toReadableString()}");
+        "[migrateV55] dateTimeUpdates: ${dateTimeUpdates.map((e) => e.rowId).toReadableString()}",
+      );
       _log.fine(
-          "[migrateV55] imageRemoves: ${imageRemoves.map((e) => e).toReadableString()}");
+        "[migrateV55] imageRemoves: ${imageRemoves.map((e) => e).toReadableString()}",
+      );
     }
     await batch((batch) {
       for (final pair in dateTimeUpdates) {
         batch.update(
           accountFiles,
-          AccountFilesCompanion(
-            bestDateTime: Value(pair.dateTime),
-          ),
+          AccountFilesCompanion(bestDateTime: Value(pair.dateTime)),
           where: ($AccountFilesTable table) => table.rowId.equals(pair.rowId),
         );
       }

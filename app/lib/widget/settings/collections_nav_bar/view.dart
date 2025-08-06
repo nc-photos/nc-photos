@@ -37,16 +37,14 @@ class _DemoViewState extends State<_DemoView> {
                         data: btn.type,
                         feedback: _CandidateButtonDelegate(btn.type),
                         onDropBefore: (data) {
-                          context.addEvent(_MoveButton.before(
-                            which: data,
-                            target: btn.type,
-                          ));
+                          context.addEvent(
+                            _MoveButton.before(which: data, target: btn.type),
+                          );
                         },
                         onDropAfter: (data) {
-                          context.addEvent(_MoveButton.after(
-                            which: data,
-                            target: btn.type,
-                          ));
+                          context.addEvent(
+                            _MoveButton.after(which: data, target: btn.type),
+                          );
                         },
                         child: Center(
                           child: Padding(
@@ -70,22 +68,23 @@ class _DemoViewState extends State<_DemoView> {
         );
         if (buttons.isEmpty) {
           return DragTarget<HomeCollectionsNavBarButtonType>(
-            builder: (context, candidateData, rejectedData) => SizedBox(
-              height: 48,
-              child: Stack(
-                children: [
-                  navBar,
-                  IgnorePointer(
-                    child: Opacity(
-                      opacity: candidateData.isNotEmpty ? .35 : 0,
-                      child: Container(
-                        color: Theme.of(context).colorScheme.onSurface,
+            builder:
+                (context, candidateData, rejectedData) => SizedBox(
+                  height: 48,
+                  child: Stack(
+                    children: [
+                      navBar,
+                      IgnorePointer(
+                        child: Opacity(
+                          opacity: candidateData.isNotEmpty ? .35 : 0,
+                          child: Container(
+                            color: Theme.of(context).colorScheme.onSurface,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
-            ),
+                ),
             onAcceptWithDetails: (details) {
               context.addEvent(_MoveButton.first(which: details.data));
             },
@@ -101,10 +100,7 @@ class _DemoViewState extends State<_DemoView> {
 }
 
 class _DemoButtonDelegate extends StatelessWidget {
-  const _DemoButtonDelegate(
-    this.type, {
-    required this.isMinimized,
-  });
+  const _DemoButtonDelegate(this.type, {required this.isMinimized});
 
   @override
   Widget build(BuildContext context) {
@@ -157,40 +153,47 @@ class _CandidateGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<HomeCollectionsNavBarButtonType>(
-      builder: (context, candidateData, rejectedData) => Stack(
-        children: [
-          _BlocSelector(
-            selector: (state) => state.buttons,
-            builder: (context, buttons) => Padding(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+      builder:
+          (context, candidateData, rejectedData) => Stack(
+            children: [
+              _BlocSelector(
+                selector: (state) => state.buttons,
+                builder:
+                    (context, buttons) => Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Wrap(
+                        direction: Axis.horizontal,
+                        spacing: 16,
+                        runSpacing: 8,
+                        children:
+                            HomeCollectionsNavBarButtonType.values
+                                .where((e) => !buttons.any((b) => b.type == e))
+                                .map(
+                                  (e) => my.Draggable<
+                                    HomeCollectionsNavBarButtonType
+                                  >(
+                                    data: e,
+                                    feedback: _CandidateButtonDelegate(e),
+                                    child: _CandidateButtonDelegate(e),
+                                  ),
+                                )
+                                .toList(),
+                      ),
+                    ),
               ),
-              child: Wrap(
-                direction: Axis.horizontal,
-                spacing: 16,
-                runSpacing: 8,
-                children: HomeCollectionsNavBarButtonType.values
-                    .where((e) => !buttons.any((b) => b.type == e))
-                    .map((e) => my.Draggable<HomeCollectionsNavBarButtonType>(
-                          data: e,
-                          feedback: _CandidateButtonDelegate(e),
-                          child: _CandidateButtonDelegate(e),
-                        ))
-                    .toList(),
+              IgnorePointer(
+                child: Opacity(
+                  opacity: candidateData.isNotEmpty ? .1 : 0,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-          IgnorePointer(
-            child: Opacity(
-              opacity: candidateData.isNotEmpty ? .1 : 0,
-              child: Container(
-                color: Theme.of(context).colorScheme.onSurface,
-              ),
-            ),
-          ),
-        ],
-      ),
       onAcceptWithDetails: (details) {
         context.addEvent(_RemoveButton(details.data));
       },

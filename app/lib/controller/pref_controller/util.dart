@@ -162,30 +162,37 @@ extension on Pref {
   Future<bool> setSlideshowReverse(bool value) =>
       provider.setBool(PrefKey.isSlideshowReverse, value);
 
-  List<ViewerAppBarButtonType>? getViewerAppBarButtons() => provider
-      .getIntList(PrefKey.viewerAppBarButtons)
-      ?.map(ViewerAppBarButtonType.fromValue)
-      .toList();
+  List<ViewerAppBarButtonType>? getViewerAppBarButtons() =>
+      provider
+          .getIntList(PrefKey.viewerAppBarButtons)
+          ?.map(ViewerAppBarButtonType.fromValue)
+          .toList();
   Future<bool> setViewerAppBarButtons(List<ViewerAppBarButtonType>? value) {
     if (value == null) {
       return provider.remove(PrefKey.viewerAppBarButtons);
     } else {
       return provider.setIntList(
-          PrefKey.viewerAppBarButtons, value.map((e) => e.index).toList());
+        PrefKey.viewerAppBarButtons,
+        value.map((e) => e.index).toList(),
+      );
     }
   }
 
-  List<ViewerAppBarButtonType>? getViewerBottomAppBarButtons() => provider
-      .getIntList(PrefKey.viewerBottomAppBarButtons)
-      ?.map(ViewerAppBarButtonType.fromValue)
-      .toList();
+  List<ViewerAppBarButtonType>? getViewerBottomAppBarButtons() =>
+      provider
+          .getIntList(PrefKey.viewerBottomAppBarButtons)
+          ?.map(ViewerAppBarButtonType.fromValue)
+          .toList();
   Future<bool> setViewerBottomAppBarButtons(
-      List<ViewerAppBarButtonType>? value) {
+    List<ViewerAppBarButtonType>? value,
+  ) {
     if (value == null) {
       return provider.remove(PrefKey.viewerBottomAppBarButtons);
     } else {
-      return provider.setIntList(PrefKey.viewerBottomAppBarButtons,
-          value.map((e) => e.index).toList());
+      return provider.setIntList(
+        PrefKey.viewerBottomAppBarButtons,
+        value.map((e) => e.index).toList(),
+      );
     }
   }
 
@@ -210,8 +217,11 @@ MapCoord? _tryMapCoordFromJson(dynamic json) {
     final j = (json as List).cast<double>();
     return MapCoord(j[0], j[1]);
   } catch (e, stackTrace) {
-    _$__NpLog.log
-        .severe("[_tryMapCoordFromJson] Failed to parse json", e, stackTrace);
+    _$__NpLog.log.severe(
+      "[_tryMapCoordFromJson] Failed to parse json",
+      e,
+      stackTrace,
+    );
     return null;
   }
 }

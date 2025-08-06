@@ -23,7 +23,8 @@ class AddFileToNcAlbum {
     ErrorWithValueHandler<FileDescriptor>? onError,
   }) async {
     _log.info(
-        "[call] Add ${files.length} items to album '${album.strippedPath}'");
+      "[call] Add ${files.length} items to album '${album.strippedPath}'",
+    );
     var count = 0;
     for (final f in files) {
       try {

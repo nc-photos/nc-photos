@@ -56,58 +56,53 @@ class _WrappedDeveloperSettingsState extends State<_WrappedDeveloperSettings>
             },
           ),
           BlocListener<_Bloc, _State>(
-            listenWhen: (previous, current) =>
-                previous.message != current.message,
+            listenWhen:
+                (previous, current) => previous.message != current.message,
             listener: (context, state) {
               if (state.message != null && isPageVisible()) {
-                SnackBarManager().showSnackBar(SnackBar(
-                  content: Text(state.message!.value),
-                  duration: k.snackBarDurationNormal,
-                ));
+                SnackBarManager().showSnackBar(
+                  SnackBar(
+                    content: Text(state.message!.value),
+                    duration: k.snackBarDurationNormal,
+                  ),
+                );
               }
             },
           ),
         ],
         child: CustomScrollView(
           slivers: [
-            const SliverAppBar(
-              pinned: true,
-              title: Text("Developer options"),
-            ),
+            const SliverAppBar(pinned: true, title: Text("Developer options")),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
+              delegate: SliverChildListDelegate([
+                ListTile(
+                  title: const Text("Clear image cache"),
+                  onTap: () async {
+                    context.read<_Bloc>().add(const _ClearImageCache());
+                  },
+                ),
+                ListTile(
+                  title: const Text("SQL:VACUUM"),
+                  onTap: () {
+                    context.read<_Bloc>().add(const _VacuumDb());
+                  },
+                ),
+                if (isDevMode) ...[
                   ListTile(
-                    title: const Text("Clear image cache"),
-                    onTap: () async {
-                      context.read<_Bloc>().add(const _ClearImageCache());
-                    },
-                  ),
-                  ListTile(
-                    title: const Text("SQL:VACUUM"),
+                    title: const Text("Export SQLite DB"),
                     onTap: () {
-                      context.read<_Bloc>().add(const _VacuumDb());
+                      context.read<_Bloc>().add(const _ExportDb());
                     },
                   ),
-                  if (isDevMode) ...[
+                  if (getRawPlatform().isMobile)
                     ListTile(
-                      title: const Text("Export SQLite DB"),
+                      title: const Text("Clear whitelisted certs"),
                       onTap: () {
-                        context.read<_Bloc>().add(const _ExportDb());
+                        context.read<_Bloc>().add(const _ClearCertWhitelist());
                       },
                     ),
-                    if (getRawPlatform().isMobile)
-                      ListTile(
-                        title: const Text("Clear whitelisted certs"),
-                        onTap: () {
-                          context
-                              .read<_Bloc>()
-                              .add(const _ClearCertWhitelist());
-                        },
-                      ),
-                  ],
                 ],
-              ),
+              ]),
             ),
           ],
         ),

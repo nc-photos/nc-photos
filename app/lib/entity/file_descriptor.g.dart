@@ -13,13 +13,14 @@ part of 'file_descriptor.dart';
 // **************************************************************************
 
 abstract class $FileDescriptorCopyWithWorker {
-  FileDescriptor call(
-      {String? fdPath,
-      int? fdId,
-      String? fdMime,
-      bool? fdIsArchived,
-      bool? fdIsFavorite,
-      DateTime? fdDateTime});
+  FileDescriptor call({
+    String? fdPath,
+    int? fdId,
+    String? fdMime,
+    bool? fdIsArchived,
+    bool? fdIsFavorite,
+    DateTime? fdDateTime,
+  });
 }
 
 class _$FileDescriptorCopyWithWorkerImpl
@@ -27,20 +28,22 @@ class _$FileDescriptorCopyWithWorkerImpl
   _$FileDescriptorCopyWithWorkerImpl(this.that);
 
   @override
-  FileDescriptor call(
-      {dynamic fdPath,
-      dynamic fdId,
-      dynamic fdMime = copyWithNull,
-      dynamic fdIsArchived,
-      dynamic fdIsFavorite,
-      dynamic fdDateTime}) {
+  FileDescriptor call({
+    dynamic fdPath,
+    dynamic fdId,
+    dynamic fdMime = copyWithNull,
+    dynamic fdIsArchived,
+    dynamic fdIsFavorite,
+    dynamic fdDateTime,
+  }) {
     return FileDescriptor(
-        fdPath: fdPath as String? ?? that.fdPath,
-        fdId: fdId as int? ?? that.fdId,
-        fdMime: fdMime == copyWithNull ? that.fdMime : fdMime as String?,
-        fdIsArchived: fdIsArchived as bool? ?? that.fdIsArchived,
-        fdIsFavorite: fdIsFavorite as bool? ?? that.fdIsFavorite,
-        fdDateTime: fdDateTime as DateTime? ?? that.fdDateTime);
+      fdPath: fdPath as String? ?? that.fdPath,
+      fdId: fdId as int? ?? that.fdId,
+      fdMime: fdMime == copyWithNull ? that.fdMime : fdMime as String?,
+      fdIsArchived: fdIsArchived as bool? ?? that.fdIsArchived,
+      fdIsFavorite: fdIsFavorite as bool? ?? that.fdIsFavorite,
+      fdDateTime: fdDateTime as DateTime? ?? that.fdDateTime,
+    );
   }
 
   final FileDescriptor that;

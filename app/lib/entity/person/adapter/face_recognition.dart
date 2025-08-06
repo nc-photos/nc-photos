@@ -16,12 +16,13 @@ part 'face_recognition.g.dart';
 @npLog
 class PersonFaceRecognitionAdapter implements PersonAdapter {
   PersonFaceRecognitionAdapter(this._c, this.account, this.person)
-      : _provider = person.contentProvider as PersonFaceRecognitionProvider;
+    : _provider = person.contentProvider as PersonFaceRecognitionProvider;
 
   @override
   Stream<List<PersonFace>> listFace() {
-    return ListFaceRecognitionFace(_c)(account, _provider.person)
-        .asyncMap((faces) async {
+    return ListFaceRecognitionFace(_c)(account, _provider.person).asyncMap((
+      faces,
+    ) async {
       final found = await FindFileDescriptor(_c)(
         account,
         faces.map((e) => e.fileId).toList(),

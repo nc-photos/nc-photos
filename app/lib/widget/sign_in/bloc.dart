@@ -2,10 +2,8 @@ part of '../sign_in.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
-  _Bloc({
-    required this.npDb,
-    required this.prefController,
-  }) : super(_State.init()) {
+  _Bloc({required this.npDb, required this.prefController})
+    : super(_State.init()) {
     on<_SetScheme>(_onSetScheme);
     on<_SetServerUrl>(_onSetServerUrl);
     on<_Connect>(_onConnect);
@@ -51,10 +49,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     final _ConnectArg arg;
     switch (state.method) {
       case _SignInMethod.serverFlowV2:
-        arg = _ConnectArg(
-          scheme: scheme,
-          address: serverUrl,
-        );
+        arg = _ConnectArg(scheme: scheme, address: serverUrl);
         break;
       case _SignInMethod.usernamePassword:
         arg = _ConnectArg(
@@ -70,15 +65,14 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _onSetConnectedAccount(
-      _SetConnectedAccount ev, _Emitter emit) async {
+    _SetConnectedAccount ev,
+    _Emitter emit,
+  ) async {
     _log.info(ev);
     emit(state.copyWith(isConnecting: true));
     try {
       await _persistAccount(ev.value);
-      emit(state.copyWith(
-        isCompleted: true,
-        connectedAccount: ev.value,
-      ));
+      emit(state.copyWith(isCompleted: true, connectedAccount: ev.value));
     } catch (_) {
       emit(state.copyWith(isConnecting: false));
       rethrow;
@@ -120,8 +114,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         await pref_util.loadAccountPref(account),
       );
     } catch (e, stackTrace) {
-      _log.shout("[_persistAccount] Failed reading pref for account: $account",
-          e, stackTrace);
+      _log.shout(
+        "[_persistAccount] Failed reading pref for account: $account",
+        e,
+        stackTrace,
+      );
     }
     unawaited(prefController.setAccounts(accounts));
     unawaited(prefController.setCurrentAccountIndex(accounts.indexOf(account)));

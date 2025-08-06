@@ -37,10 +37,9 @@ class ListAlbum {
     List<File> ls;
     try {
       ls = await Ls(_c.fileRepo)(
-          account,
-          File(
-            path: remote_storage_util.getRemoteAlbumsDir(account),
-          ));
+        account,
+        File(path: remote_storage_util.getRemoteAlbumsDir(account)),
+      );
     } catch (e, stackTrace) {
       if (e is ApiException && e.response.statusCode == 404) {
         // no albums

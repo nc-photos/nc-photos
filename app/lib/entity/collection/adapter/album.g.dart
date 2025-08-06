@@ -10,6 +10,7 @@ extension _$CollectionAlbumAdapterNpLog on CollectionAlbumAdapter {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.collection.adapter.album.CollectionAlbumAdapter");
+  static final log = Logger(
+    "entity.collection.adapter.album.CollectionAlbumAdapter",
+  );
 }

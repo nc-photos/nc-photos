@@ -12,5 +12,6 @@ extension _$ImageEditorPersistOptionDialogNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.image_editor_persist_option_dialog.ImageEditorPersistOptionDialog");
+    "widget.image_editor_persist_option_dialog.ImageEditorPersistOptionDialog",
+  );
 }

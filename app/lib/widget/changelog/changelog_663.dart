@@ -11,7 +11,8 @@ class _Changelog663 extends StatelessWidget {
       children: [
         _subSection("Changes"),
         _bulletGroup(
-            const Text("Fixed collections not being sorted correctly")),
+          const Text("Fixed collections not being sorted correctly"),
+        ),
       ],
     );
   }

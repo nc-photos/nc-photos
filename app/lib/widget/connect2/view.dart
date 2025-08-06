@@ -1,9 +1,7 @@
 part of 'connect.dart';
 
 class _WebDavUrlDialog extends StatefulWidget {
-  const _WebDavUrlDialog({
-    required this.account,
-  });
+  const _WebDavUrlDialog({required this.account});
 
   @override
   State<StatefulWidget> createState() => _WebDavUrlDialogState();

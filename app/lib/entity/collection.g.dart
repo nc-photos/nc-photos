@@ -22,9 +22,10 @@ class _$CollectionCopyWithWorkerImpl implements $CollectionCopyWithWorker {
   @override
   Collection call({dynamic name, dynamic contentProvider}) {
     return Collection(
-        name: name as String? ?? that.name,
-        contentProvider: contentProvider as CollectionContentProvider? ??
-            that.contentProvider);
+      name: name as String? ?? that.name,
+      contentProvider:
+          contentProvider as CollectionContentProvider? ?? that.contentProvider,
+    );
   }
 
   final Collection that;

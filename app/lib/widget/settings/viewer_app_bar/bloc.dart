@@ -3,14 +3,15 @@ part of '../viewer_app_bar_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-    required this.isBottom,
-  }) : super(_State.init(
-          buttons: isBottom
-              ? prefController.viewerBottomAppBarButtonsValue
-              : prefController.viewerAppBarButtonsValue,
-        )) {
+  _Bloc({required this.prefController, required this.isBottom})
+    : super(
+        _State.init(
+          buttons:
+              isBottom
+                  ? prefController.viewerBottomAppBarButtonsValue
+                  : prefController.viewerAppBarButtonsValue,
+        ),
+      ) {
     on<_MoveButton>(_onMoveButton);
     on<_RemoveButton>(_onRemoveButton);
     on<_RevertDefault>(_onRevertDefault);
@@ -69,7 +70,8 @@ class _Bloc extends Bloc<_Event, _State>
       result.insert(found + 1, ev.which);
     }
     _log.fine(
-        "[_onMoveButton] From ${state.buttons.toReadableString()} -> ${result.toReadableString()}");
+      "[_onMoveButton] From ${state.buttons.toReadableString()} -> ${result.toReadableString()}",
+    );
     emit(state.copyWith(buttons: result));
   }
 
@@ -82,8 +84,9 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     if (isBottom) {
       await prefController.setViewerBottomAppBarButtons(null);
-      emit(state.copyWith(
-          buttons: prefController.viewerBottomAppBarButtonsValue));
+      emit(
+        state.copyWith(buttons: prefController.viewerBottomAppBarButtonsValue),
+      );
     } else {
       await prefController.setViewerAppBarButtons(null);
       emit(state.copyWith(buttons: prefController.viewerAppBarButtonsValue));

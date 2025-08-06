@@ -13,25 +13,31 @@ part of 'developer_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {_Event? lastSuccessful, ExceptionEvent? error, StateMessage? message});
+  _State call({
+    _Event? lastSuccessful,
+    ExceptionEvent? error,
+    StateMessage? message,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic lastSuccessful = copyWithNull,
-      dynamic error = copyWithNull,
-      dynamic message = copyWithNull}) {
+  _State call({
+    dynamic lastSuccessful = copyWithNull,
+    dynamic error = copyWithNull,
+    dynamic message = copyWithNull,
+  }) {
     return _State(
-        lastSuccessful: lastSuccessful == copyWithNull
-            ? that.lastSuccessful
-            : lastSuccessful as _Event?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-        message:
-            message == copyWithNull ? that.message : message as StateMessage?);
+      lastSuccessful:
+          lastSuccessful == copyWithNull
+              ? that.lastSuccessful
+              : lastSuccessful as _Event?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      message:
+          message == copyWithNull ? that.message : message as StateMessage?,
+    );
   }
 
   final _State that;
@@ -52,7 +58,8 @@ extension _$_WrappedDeveloperSettingsStateNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.settings.developer_settings._WrappedDeveloperSettingsState");
+    "widget.settings.developer_settings._WrappedDeveloperSettingsState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

@@ -32,9 +32,7 @@ import 'package:np_string/np_string.dart';
 part 'test_compat_util.dart';
 
 class FilesBuilder {
-  FilesBuilder({
-    int initialFileId = 0,
-  }) : fileId = initialFileId;
+  FilesBuilder({int initialFileId = 0}) : fileId = initialFileId;
 
   List<File> build() {
     return files.map((f) => f.copyWith()).toList();
@@ -54,22 +52,24 @@ class FilesBuilder {
     Metadata? metadata,
     ImageLocation? location,
   }) {
-    files.add(File(
-      path: "remote.php/dav/files/$relativePath",
-      contentLength: contentLength,
-      contentType: contentType,
-      etag: etag,
-      lastModified:
-          lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
-      isCollection: isCollection,
-      hasPreview: hasPreview,
-      fileId: fileId++,
-      isFavorite: isFavorite,
-      ownerId: ownerId.toCi(),
-      ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
-      metadata: metadata,
-      location: location,
-    ));
+    files.add(
+      File(
+        path: "remote.php/dav/files/$relativePath",
+        contentLength: contentLength,
+        contentType: contentType,
+        etag: etag,
+        lastModified:
+            lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
+        isCollection: isCollection,
+        hasPreview: hasPreview,
+        fileId: fileId++,
+        isFavorite: isFavorite,
+        ownerId: ownerId.toCi(),
+        ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
+        metadata: metadata,
+        location: location,
+      ),
+    );
   }
 
   void addGenericFile(
@@ -82,18 +82,17 @@ class FilesBuilder {
     bool? isFavorite,
     String ownerId = "admin",
     String? ownerDisplayName,
-  }) =>
-      add(
-        relativePath,
-        contentLength: contentLength,
-        contentType: contentType,
-        etag: etag,
-        lastModified: lastModified,
-        hasPreview: hasPreview,
-        isFavorite: isFavorite,
-        ownerId: ownerId,
-        ownerDisplayName: ownerDisplayName,
-      );
+  }) => add(
+    relativePath,
+    contentLength: contentLength,
+    contentType: contentType,
+    etag: etag,
+    lastModified: lastModified,
+    hasPreview: hasPreview,
+    isFavorite: isFavorite,
+    ownerId: ownerId,
+    ownerDisplayName: ownerDisplayName,
+  );
 
   void addJpeg(
     String relativePath, {
@@ -106,28 +105,29 @@ class FilesBuilder {
     String? ownerDisplayName,
     OrNull<Metadata>? metadata,
     ImageLocation? location,
-  }) =>
-      add(
-        relativePath,
-        contentLength: contentLength,
-        contentType: "image/jpeg",
-        etag: etag,
-        lastModified: lastModified,
-        hasPreview: hasPreview,
-        isFavorite: isFavorite,
-        ownerId: ownerId,
-        ownerDisplayName: ownerDisplayName,
-        metadata: metadata == null
+  }) => add(
+    relativePath,
+    contentLength: contentLength,
+    contentType: "image/jpeg",
+    etag: etag,
+    lastModified: lastModified,
+    hasPreview: hasPreview,
+    isFavorite: isFavorite,
+    ownerId: ownerId,
+    ownerDisplayName: ownerDisplayName,
+    metadata:
+        metadata == null
             ? Metadata(
-                lastUpdated: lastModified ??
-                    DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
-                imageWidth: 640,
-                imageHeight: 480,
-                src: MetadataSrc.legacy,
-              )
+              lastUpdated:
+                  lastModified ??
+                  DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
+              imageWidth: 640,
+              imageHeight: 480,
+              src: MetadataSrc.legacy,
+            )
             : metadata.obj,
-        location: location,
-      );
+    location: location,
+  );
 
   void addDir(
     String relativePath, {
@@ -137,17 +137,16 @@ class FilesBuilder {
     bool? isFavorite,
     String ownerId = "admin",
     String? ownerDisplayName,
-  }) =>
-      add(
-        relativePath,
-        etag: etag,
-        lastModified: lastModified,
-        isCollection: true,
-        hasPreview: false,
-        isFavorite: isFavorite,
-        ownerId: ownerId,
-        ownerDisplayName: ownerDisplayName,
-      );
+  }) => add(
+    relativePath,
+    etag: etag,
+    lastModified: lastModified,
+    isCollection: true,
+    hasPreview: false,
+    isFavorite: isFavorite,
+    ownerId: ownerId,
+    ownerDisplayName: ownerDisplayName,
+  );
 
   void addAlbumJson(
     String homeDir,
@@ -157,17 +156,16 @@ class FilesBuilder {
     DateTime? lastModified,
     String ownerId = "admin",
     String? ownerDisplayName,
-  }) =>
-      add(
-        "$homeDir/.com.nkming.nc_photos/albums/$filename.nc_album.json",
-        contentLength: contentLength,
-        contentType: "application/json",
-        etag: etag,
-        lastModified: lastModified,
-        hasPreview: false,
-        ownerId: ownerId,
-        ownerDisplayName: ownerDisplayName,
-      );
+  }) => add(
+    "$homeDir/.com.nkming.nc_photos/albums/$filename.nc_album.json",
+    contentLength: contentLength,
+    contentType: "application/json",
+    etag: etag,
+    lastModified: lastModified,
+    hasPreview: false,
+    ownerId: ownerId,
+    ownerDisplayName: ownerDisplayName,
+  );
 
   final files = <File>[];
   int fileId;
@@ -181,30 +179,32 @@ class AlbumBuilder {
     this.albumFilename = "test0.nc_album.json",
     this.fileId = 0,
     String? ownerId,
-  })  : lastUpdated = lastUpdated ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
-        name = name ?? "test",
-        ownerId = ownerId ?? "admin";
+  }) : lastUpdated = lastUpdated ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
+       name = name ?? "test",
+       ownerId = ownerId ?? "admin";
 
   factory AlbumBuilder.ofId({
     required int albumId,
     DateTime? lastUpdated,
     String? name,
     String? ownerId,
-  }) =>
-      AlbumBuilder(
-        lastUpdated: lastUpdated,
-        name: name,
-        albumFilename: "test$albumId.nc_album.json",
-        fileId: albumId,
-        ownerId: ownerId,
-      );
+  }) => AlbumBuilder(
+    lastUpdated: lastUpdated,
+    name: name,
+    albumFilename: "test$albumId.nc_album.json",
+    fileId: albumId,
+    ownerId: ownerId,
+  );
 
   Album build() {
-    final latestFileItem = items
-        .whereType<AlbumFileItem>()
-        .stableSorted((a, b) => a.file.fdDateTime.compareTo(b.file.fdDateTime))
-        .reversed
-        .firstOrNull;
+    final latestFileItem =
+        items
+            .whereType<AlbumFileItem>()
+            .stableSorted(
+              (a, b) => a.file.fdDateTime.compareTo(b.file.fdDateTime),
+            )
+            .reversed
+            .firstOrNull;
     return Album(
       lastUpdated: lastUpdated,
       name: name,
@@ -212,9 +212,10 @@ class AlbumBuilder {
         items: items,
         latestItemTime: latestFileItem?.file.fdDateTime,
       ),
-      coverProvider: cover == null
-          ? AlbumAutoCoverProvider(coverFile: latestFileItem?.file)
-          : AlbumManualCoverProvider(coverFile: cover!),
+      coverProvider:
+          cover == null
+              ? AlbumAutoCoverProvider(coverFile: latestFileItem?.file)
+              : AlbumManualCoverProvider(coverFile: cover!),
       sortProvider: const AlbumNullSortProvider(),
       shares: shares.isEmpty ? null : shares,
       albumFile: buildAlbumFile(
@@ -254,14 +255,8 @@ class AlbumBuilder {
   /// Add an album share
   ///
   /// By default, the album will be shared at 2020-01-02 03:04:05
-  void addShare(
-    String userId, {
-    DateTime? sharedAt,
-  }) {
-    shares.add(buildAlbumShare(
-      userId: userId,
-      sharedAt: sharedAt,
-    ));
+  void addShare(String userId, {DateTime? sharedAt}) {
+    shares.add(buildAlbumShare(userId: userId, sharedAt: sharedAt));
   }
 
   static List<AlbumFileItem> fileItemsOf(Album album) =>
@@ -326,16 +321,15 @@ Account buildAccount({
   String username2 = "admin",
   String password = "pass",
   List<String> roots = const [""],
-}) =>
-    Account(
-      id: id ?? "$userId-000000",
-      scheme: scheme,
-      address: address,
-      userId: userId.toCi(),
-      username2: username2,
-      password: password,
-      roots: roots,
-    );
+}) => Account(
+  id: id ?? "$userId-000000",
+  scheme: scheme,
+  address: address,
+  userId: userId.toCi(),
+  username2: username2,
+  password: password,
+  roots: roots,
+);
 
 /// Build a mock [File] pointing to a album JSON file
 ///
@@ -348,36 +342,31 @@ File buildAlbumFile({
   String ownerId = "admin",
   String? ownerDisplayName,
   String? etag,
-}) =>
-    File(
-      path: path,
-      contentLength: contentLength,
-      contentType: "application/json",
-      lastModified: lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
-      isCollection: false,
-      hasPreview: false,
-      fileId: fileId,
-      ownerId: ownerId.toCi(),
-      ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
-      etag: fileId.toString(),
-    );
+}) => File(
+  path: path,
+  contentLength: contentLength,
+  contentType: "application/json",
+  lastModified: lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
+  isCollection: false,
+  hasPreview: false,
+  fileId: fileId,
+  ownerId: ownerId.toCi(),
+  ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
+  etag: fileId.toString(),
+);
 
-String buildAlbumFilePath(
-  String filename, {
-  String user = "admin",
-}) =>
+String buildAlbumFilePath(String filename, {String user = "admin"}) =>
     "remote.php/dav/files/$user/.com.nkming.nc_photos/albums/$filename";
 
 AlbumShare buildAlbumShare({
   required String userId,
   String? displayName,
   DateTime? sharedAt,
-}) =>
-    AlbumShare(
-      userId: userId.toCi(),
-      displayName: displayName ?? userId,
-      sharedAt: sharedAt ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
-    );
+}) => AlbumShare(
+  userId: userId.toCi(),
+  displayName: displayName ?? userId,
+  sharedAt: sharedAt ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
+);
 
 /// Build a mock [File] pointing to a JPEG image file
 ///
@@ -390,27 +379,26 @@ File buildJpegFile({
   required int fileId,
   String ownerId = "admin",
   String? ownerDisplayName,
-}) =>
-    File(
-      path: path,
-      contentLength: contentLength,
-      contentType: "image/jpeg",
-      lastModified: lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
-      isCollection: false,
-      hasPreview: hasPreview,
-      fileId: fileId,
-      ownerId: ownerId.toCi(),
-      ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
-    );
+}) => File(
+  path: path,
+  contentLength: contentLength,
+  contentType: "image/jpeg",
+  lastModified: lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
+  isCollection: false,
+  hasPreview: hasPreview,
+  fileId: fileId,
+  ownerId: ownerId.toCi(),
+  ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
+);
 
 FileDescriptor fileToFileDescriptor(File f) => FileDescriptor(
-      fdPath: f.path,
-      fdId: f.fileId!,
-      fdMime: f.contentType,
-      fdIsArchived: f.isArchived ?? false,
-      fdIsFavorite: f.isFavorite ?? false,
-      fdDateTime: f.bestDateTime,
-    );
+  fdPath: f.path,
+  fdId: f.fileId!,
+  fdMime: f.contentType,
+  fdIsArchived: f.isArchived ?? false,
+  fdIsFavorite: f.isFavorite ?? false,
+  fdDateTime: f.bestDateTime,
+);
 
 Share buildShare({
   required String id,
@@ -419,21 +407,20 @@ Share buildShare({
   String? displaynameOwner,
   required File file,
   required String shareWith,
-}) =>
-    Share(
-      id: id,
-      shareType: ShareType.user,
-      stime: stime ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
-      uidOwner: uidOwner.toCi(),
-      displaynameOwner: displaynameOwner ?? uidOwner,
-      uidFileOwner: file.ownerId!,
-      path: file.strippedPath,
-      itemType: ShareItemType.file,
-      mimeType: file.contentType ?? "",
-      itemSource: file.fileId!,
-      shareWith: shareWith.toCi(),
-      shareWithDisplayName: shareWith,
-    );
+}) => Share(
+  id: id,
+  shareType: ShareType.user,
+  stime: stime ?? DateTime.utc(2020, 1, 2, 3, 4, 5),
+  uidOwner: uidOwner.toCi(),
+  displaynameOwner: displaynameOwner ?? uidOwner,
+  uidFileOwner: file.ownerId!,
+  path: file.strippedPath,
+  itemType: ShareItemType.file,
+  mimeType: file.contentType ?? "",
+  itemSource: file.fileId!,
+  shareWith: shareWith.toCi(),
+  shareWithDisplayName: shareWith,
+);
 
 Sharee buildSharee({
   ShareeType type = ShareeType.user,
@@ -441,21 +428,18 @@ Sharee buildSharee({
   int shareType = 0,
   required CiString shareWith,
   String? shareWithDisplayNameUnique,
-}) =>
-    Sharee(
-      type: type,
-      label: label ?? shareWith.toString(),
-      shareType: shareType,
-      shareWith: shareWith,
-    );
+}) => Sharee(
+  type: type,
+  label: label ?? shareWith.toString(),
+  shareType: shareType,
+  shareWith: shareWith,
+);
 
 NpDb buildTestDb() {
   final db = NpDbSqlite();
   db.initWithDb(
     db: compat.SqliteDb(
-      executor: sql.NativeDatabase.memory(
-        logStatements: true,
-      ),
+      executor: sql.NativeDatabase.memory(logStatements: true),
     ),
   );
   sql.driftRuntimeOptions.debugPrint = _debugPrintSql;
@@ -463,19 +447,26 @@ NpDb buildTestDb() {
 }
 
 Future<void> insertFiles(
-    compat.SqliteDb db, Account account, Iterable<File> files) async {
+  compat.SqliteDb db,
+  Account account,
+  Iterable<File> files,
+) async {
   final dbAccount = await db.accountOf(compat.ByAccount.db(account.toDb()));
   for (final f in files) {
-    final sharedQuery = db.selectOnly(db.files).join([
-      sql.innerJoin(
-          db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId),
-          useColumns: false),
-    ])
-      ..addColumns([db.files.rowId])
-      ..where(db.accountFiles.account.equals(dbAccount.rowId).not())
-      ..where(db.files.fileId.equals(f.fileId!));
-    var rowId = (await sharedQuery.map((r) => r.read(db.files.rowId)).get())
-        .firstOrNull;
+    final sharedQuery =
+        db.selectOnly(db.files).join([
+            sql.innerJoin(
+              db.accountFiles,
+              db.accountFiles.file.equalsExp(db.files.rowId),
+              useColumns: false,
+            ),
+          ])
+          ..addColumns([db.files.rowId])
+          ..where(db.accountFiles.account.equals(dbAccount.rowId).not())
+          ..where(db.files.fileId.equals(f.fileId!));
+    var rowId =
+        (await sharedQuery.map((r) => r.read(db.files.rowId)).get())
+            .firstOrNull;
     final insert = _SqliteFileConverter.toSql(dbAccount, f);
     if (rowId == null) {
       final dbFile = await db.into(db.files).insertReturning(insert.file);
@@ -485,12 +476,20 @@ Future<void> insertFiles(
         .into(db.accountFiles)
         .insertReturning(insert.accountFile.copyWith(file: sql.Value(rowId)));
     if (insert.image != null) {
-      await db.into(db.images).insert(
-          insert.image!.copyWith(accountFile: sql.Value(dbAccountFile.rowId)));
+      await db
+          .into(db.images)
+          .insert(
+            insert.image!.copyWith(accountFile: sql.Value(dbAccountFile.rowId)),
+          );
     }
     if (insert.imageLocation != null) {
-      await db.into(db.imageLocations).insert(insert.imageLocation!
-          .copyWith(accountFile: sql.Value(dbAccountFile.rowId)));
+      await db
+          .into(db.imageLocations)
+          .insert(
+            insert.imageLocation!.copyWith(
+              accountFile: sql.Value(dbAccountFile.rowId),
+            ),
+          );
     }
     if (insert.trash != null) {
       await db
@@ -500,33 +499,50 @@ Future<void> insertFiles(
   }
 }
 
-Future<void> insertDirRelation(compat.SqliteDb db, Account account, File dir,
-    Iterable<File> children) async {
+Future<void> insertDirRelation(
+  compat.SqliteDb db,
+  Account account,
+  File dir,
+  Iterable<File> children,
+) async {
   final dbAccount = await db.accountOf(compat.ByAccount.db(account.toDb()));
-  final dirRowIds = (await db
-          .accountFileRowIdsByFileIds(_ByAccount.sql(dbAccount), [dir.fileId!]))
-      .first;
+  final dirRowIds =
+      (await db.accountFileRowIdsByFileIds(_ByAccount.sql(dbAccount), [
+        dir.fileId!,
+      ])).first;
   final childRowIds = await db.accountFileRowIdsByFileIds(
-      _ByAccount.sql(dbAccount), [dir, ...children].map((f) => f.fileId!));
+    _ByAccount.sql(dbAccount),
+    [dir, ...children].map((f) => f.fileId!),
+  );
   await db.batch((batch) {
     batch.insertAll(
       db.dirFiles,
-      childRowIds.map((c) => compat.DirFilesCompanion.insert(
-            dir: dirRowIds.fileRowId,
-            child: c.fileRowId,
-          )),
+      childRowIds.map(
+        (c) => compat.DirFilesCompanion.insert(
+          dir: dirRowIds.fileRowId,
+          child: c.fileRowId,
+        ),
+      ),
     );
   });
 }
 
 Future<void> insertAlbums(
-    compat.SqliteDb db, Account account, Iterable<Album> albums) async {
+  compat.SqliteDb db,
+  Account account,
+  Iterable<Album> albums,
+) async {
   final dbAccount = await db.accountOf(compat.ByAccount.db(account.toDb()));
   for (final a in albums) {
-    final rowIds =
-        await db.accountFileRowIdsOf(a.albumFile!, sqlAccount: dbAccount);
-    final insert =
-        _SqliteAlbumConverter.toSql(a, rowIds.fileRowId, a.albumFile!.etag!);
+    final rowIds = await db.accountFileRowIdsOf(
+      a.albumFile!,
+      sqlAccount: dbAccount,
+    );
+    final insert = _SqliteAlbumConverter.toSql(
+      a,
+      rowIds.fileRowId,
+      a.albumFile!.etag!,
+    );
     final dbAlbum = await db.into(db.albums).insertReturning(insert.album);
     for (final s in insert.shares) {
       await db
@@ -539,26 +555,36 @@ Future<void> insertAlbums(
 Future<Set<File>> listSqliteDbFiles(compat.SqliteDb db) async {
   final query = db.select(db.files).join([
     sql.innerJoin(
-        db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId)),
+      db.accountFiles,
+      db.accountFiles.file.equalsExp(db.files.rowId),
+    ),
     sql.innerJoin(
-        db.accounts, db.accounts.rowId.equalsExp(db.accountFiles.account)),
+      db.accounts,
+      db.accounts.rowId.equalsExp(db.accountFiles.account),
+    ),
     sql.leftOuterJoin(
-        db.images, db.images.accountFile.equalsExp(db.accountFiles.rowId)),
-    sql.leftOuterJoin(db.imageLocations,
-        db.imageLocations.accountFile.equalsExp(db.accountFiles.rowId)),
+      db.images,
+      db.images.accountFile.equalsExp(db.accountFiles.rowId),
+    ),
+    sql.leftOuterJoin(
+      db.imageLocations,
+      db.imageLocations.accountFile.equalsExp(db.accountFiles.rowId),
+    ),
     sql.leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
   ]);
   return (await query
-          .map((r) => _SqliteFileConverter.fromSql(
-                r.readTable(db.accounts).userId,
-                compat.CompleteFile(
-                  r.readTable(db.files),
-                  r.readTable(db.accountFiles),
-                  r.readTableOrNull(db.images),
-                  r.readTableOrNull(db.imageLocations),
-                  r.readTableOrNull(db.trashes),
-                ),
-              ))
+          .map(
+            (r) => _SqliteFileConverter.fromSql(
+              r.readTable(db.accounts).userId,
+              compat.CompleteFile(
+                r.readTable(db.files),
+                r.readTable(db.accountFiles),
+                r.readTableOrNull(db.images),
+                r.readTableOrNull(db.imageLocations),
+                r.readTableOrNull(db.trashes),
+              ),
+            ),
+          )
           .get())
       .toSet();
 }
@@ -566,28 +592,38 @@ Future<Set<File>> listSqliteDbFiles(compat.SqliteDb db) async {
 Future<Map<File, Set<File>>> listSqliteDbDirs(compat.SqliteDb db) async {
   final query = db.select(db.files).join([
     sql.innerJoin(
-        db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId)),
+      db.accountFiles,
+      db.accountFiles.file.equalsExp(db.files.rowId),
+    ),
     sql.innerJoin(
-        db.accounts, db.accounts.rowId.equalsExp(db.accountFiles.account)),
+      db.accounts,
+      db.accounts.rowId.equalsExp(db.accountFiles.account),
+    ),
     sql.leftOuterJoin(
-        db.images, db.images.accountFile.equalsExp(db.accountFiles.rowId)),
-    sql.leftOuterJoin(db.imageLocations,
-        db.imageLocations.accountFile.equalsExp(db.accountFiles.rowId)),
+      db.images,
+      db.images.accountFile.equalsExp(db.accountFiles.rowId),
+    ),
+    sql.leftOuterJoin(
+      db.imageLocations,
+      db.imageLocations.accountFile.equalsExp(db.accountFiles.rowId),
+    ),
     sql.leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
   ]);
-  final fileMap = Map.fromEntries(await query.map((r) {
-    final f = compat.CompleteFile(
-      r.readTable(db.files),
-      r.readTable(db.accountFiles),
-      r.readTableOrNull(db.images),
-      r.readTableOrNull(db.imageLocations),
-      r.readTableOrNull(db.trashes),
-    );
-    return MapEntry(
-      f.file.rowId,
-      _SqliteFileConverter.fromSql(r.readTable(db.accounts).userId, f),
-    );
-  }).get());
+  final fileMap = Map.fromEntries(
+    await query.map((r) {
+      final f = compat.CompleteFile(
+        r.readTable(db.files),
+        r.readTable(db.accountFiles),
+        r.readTableOrNull(db.images),
+        r.readTableOrNull(db.imageLocations),
+        r.readTableOrNull(db.trashes),
+      );
+      return MapEntry(
+        f.file.rowId,
+        _SqliteFileConverter.fromSql(r.readTable(db.accounts).userId, f),
+      );
+    }).get(),
+  );
 
   final dirQuery = db.select(db.dirFiles);
   final dirs =
@@ -603,58 +639,80 @@ Future<Set<Album>> listSqliteDbAlbums(compat.SqliteDb db) async {
   final albumQuery = db.select(db.albums).join([
     sql.innerJoin(db.files, db.files.rowId.equalsExp(db.albums.file)),
     sql.innerJoin(
-        db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId)),
+      db.accountFiles,
+      db.accountFiles.file.equalsExp(db.files.rowId),
+    ),
     sql.innerJoin(
-        db.accounts, db.accounts.rowId.equalsExp(db.accountFiles.account)),
+      db.accounts,
+      db.accounts.rowId.equalsExp(db.accountFiles.account),
+    ),
   ]);
-  final albums = await albumQuery.map((r) {
-    final albumFile = _SqliteFileConverter.fromSql(
-      r.readTable(db.accounts).userId,
-      compat.CompleteFile(
-        r.readTable(db.files),
-        r.readTable(db.accountFiles),
-        null,
-        null,
-        null,
-      ),
-    );
-    return (
-      rowId: r.read(db.albums.rowId)!,
-      album:
-          _SqliteAlbumConverter.fromSql(r.readTable(db.albums), albumFile, []),
-    );
-  }).get();
+  final albums =
+      await albumQuery.map((r) {
+        final albumFile = _SqliteFileConverter.fromSql(
+          r.readTable(db.accounts).userId,
+          compat.CompleteFile(
+            r.readTable(db.files),
+            r.readTable(db.accountFiles),
+            null,
+            null,
+            null,
+          ),
+        );
+        return (
+          rowId: r.read(db.albums.rowId)!,
+          album: _SqliteAlbumConverter.fromSql(
+            r.readTable(db.albums),
+            albumFile,
+            [],
+          ),
+        );
+      }).get();
 
   final results = <Album>{};
   for (final (:rowId, :album) in albums) {
     final shareQuery = db.select(db.albumShares)
       ..where((t) => t.album.equals(rowId));
     final dbShares = await shareQuery.get();
-    results.add(album.copyWith(
-      lastUpdated: const OrNull(null),
-      shares: dbShares.isEmpty
-          ? null
-          : OrNull(dbShares
-              .map((s) => AlbumShare(
-                    userId: s.userId.toCi(),
-                    displayName: s.displayName,
-                    sharedAt: s.sharedAt,
-                  ))
-              .toList()),
-    ));
+    results.add(
+      album.copyWith(
+        lastUpdated: const OrNull(null),
+        shares:
+            dbShares.isEmpty
+                ? null
+                : OrNull(
+                  dbShares
+                      .map(
+                        (s) => AlbumShare(
+                          userId: s.userId.toCi(),
+                          displayName: s.displayName,
+                          sharedAt: s.sharedAt,
+                        ),
+                      )
+                      .toList(),
+                ),
+      ),
+    );
   }
   return results;
 }
 
 Future<Set<SqlAccountWithServer>> listSqliteDbServerAccounts(
-    compat.SqliteDb db) async {
+  compat.SqliteDb db,
+) async {
   final query = db.select(db.servers).join([
     sql.leftOuterJoin(
-        db.accounts, db.accounts.server.equalsExp(db.servers.rowId)),
+      db.accounts,
+      db.accounts.server.equalsExp(db.servers.rowId),
+    ),
   ]);
   return (await query
-          .map((r) => SqlAccountWithServer(
-              r.readTable(db.servers), r.readTable(db.accounts)))
+          .map(
+            (r) => SqlAccountWithServer(
+              r.readTable(db.servers),
+              r.readTable(db.accounts),
+            ),
+          )
           .get())
       .toSet();
 }

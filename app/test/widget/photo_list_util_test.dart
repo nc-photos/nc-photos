@@ -56,7 +56,10 @@ void _sameYear() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2021, 2, 3));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2021, 2, 3),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -72,7 +75,10 @@ void _nextYear() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2022, 2, 3));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2022, 2, 3),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -87,18 +93,23 @@ void _prevYear() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2020, 2, 3));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2020",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2020, month: 2, day: 3, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2020, 2, 3),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2020",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2020,
+        month: 2,
+        day: 3,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken in the prev year
@@ -111,7 +122,10 @@ void _prevYear3DaysBefore() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2020, 1, 31));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2020, 1, 31),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -126,18 +140,23 @@ void _prevYear2DaysBefore() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2020, 2, 1));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2020",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2020, month: 2, day: 3, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2020, 2, 1),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2020",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2020,
+        month: 2,
+        day: 3,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken in the prev year
@@ -150,7 +169,10 @@ void _prevYear3DaysAfter() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2020, 2, 6));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2020, 2, 6),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -165,18 +187,23 @@ void _prevYear2DaysAfter() {
   final today = Date(2021, 2, 3);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2020, 2, 5));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2020",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2020, month: 2, day: 3, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2020, 2, 5),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2020",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2020,
+        month: 2,
+        day: 3,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken in the prev year
@@ -189,7 +216,10 @@ void _onFeb29AddFeb26() {
   final today = Date(2020, 2, 29);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2019, 2, 26));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2019, 2, 26),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -204,18 +234,23 @@ void _onFeb29AddFeb27() {
   final today = Date(2020, 2, 29);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2019, 2, 27));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2019",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2019, month: 2, day: 29, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2019, 2, 27),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2019",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2019,
+        month: 2,
+        day: 29,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken in the prev year
@@ -228,7 +263,10 @@ void _onFeb29AddMar4() {
   final today = Date(2020, 2, 29);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2019, 3, 4));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2019, 3, 4),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -243,18 +281,23 @@ void _onFeb29AddMar3() {
   final today = Date(2020, 2, 29);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2019, 3, 3));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2019",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2019, month: 2, day: 29, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2019, 3, 3),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2019",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2019,
+        month: 2,
+        day: 29,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken in the prev leap year
@@ -267,7 +310,10 @@ void _onFeb29AddMar3LeapYear() {
   final today = Date(2020, 2, 29);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2016, 3, 3));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2016, 3, 3),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -282,18 +328,23 @@ void _onFeb29AddMar2LeapYear() {
   final today = Date(2020, 2, 29);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2016, 3, 2));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2016",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2016, month: 2, day: 29, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2016, 3, 2),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2016",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2016,
+        month: 2,
+        day: 29,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken around new year's day
@@ -306,7 +357,10 @@ void _onJan1AddDec31() {
   final today = Date(2020, 1, 1);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2019, 12, 31));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2019, 12, 31),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -321,18 +375,23 @@ void _onJan1AddDec31PrevYear() {
   final today = Date(2020, 1, 1);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2018, 12, 31));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2019",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2019, month: 1, day: 1, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2018, 12, 31),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2019",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2019,
+        month: 1,
+        day: 1,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file taken around new year's day
@@ -345,18 +404,23 @@ void _onDec31AddJan1() {
   final today = Date(2020, 12, 31);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 2);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2020, 1, 1));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2019",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2019, month: 12, day: 31, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2020, 1, 1),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2019",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2019,
+        month: 12,
+        day: 31,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file with 0 day offset when range = 0
@@ -369,18 +433,23 @@ void _onMay15AddMay15Range0() {
   final today = Date(2022, 5, 15);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 0);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2021, 5, 15));
-  obj.addFile(file);
-  expect(
-    obj.build(_nameBuilder).toList(),
-    [
-      Collection(
-        name: "2021",
-        contentProvider: CollectionMemoryProvider(
-            account: account, year: 2021, month: 5, day: 15, cover: file),
-      ),
-    ],
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2021, 5, 15),
   );
+  obj.addFile(file);
+  expect(obj.build(_nameBuilder).toList(), [
+    Collection(
+      name: "2021",
+      contentProvider: CollectionMemoryProvider(
+        account: account,
+        year: 2021,
+        month: 5,
+        day: 15,
+        cover: file,
+      ),
+    ),
+  ]);
 }
 
 /// Add a file with 1 day offset when range = 0
@@ -393,7 +462,10 @@ void _onMay15AddMay16Range0() {
   final today = Date(2022, 5, 15);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: 0);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2021, 5, 16));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2021, 5, 16),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }
@@ -408,7 +480,10 @@ void _onMay15AddMay16RangeNegative() {
   final today = Date(2022, 5, 15);
   final obj = MemoryCollectionHelper(account, today: today, dayRange: -1);
   final file = util.buildJpegFile(
-      path: "", fileId: 0, lastModified: DateTime.utc(2021, 5, 16));
+    path: "",
+    fileId: 0,
+    lastModified: DateTime.utc(2021, 5, 16),
+  );
   obj.addFile(file);
   expect(obj.build(_nameBuilder), []);
 }

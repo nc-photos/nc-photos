@@ -10,11 +10,8 @@ class _State {
     this.error,
   });
 
-  factory _State.init() => const _State(
-        persons: [],
-        isLoading: false,
-        transformedItems: [],
-      );
+  factory _State.init() =>
+      const _State(persons: [], isLoading: false, transformedItems: []);
 
   @override
   String toString() => _$toString();

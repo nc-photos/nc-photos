@@ -102,8 +102,10 @@ class _SlideshowDialogState extends State<SlideshowDialog> {
                         _durationMinute = int.parse(value);
                       } catch (_) {}
                     },
-                    initialValue:
-                        widget.duration.inMinutes.toString().padLeft(2, "0"),
+                    initialValue: widget.duration.inMinutes.toString().padLeft(
+                      2,
+                      "0",
+                    ),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -178,10 +180,12 @@ class _SlideshowDialogState extends State<SlideshowDialog> {
       _formKey.currentState!.save();
       if (_formValue.minute == 0 && _formValue.second == 0) {
         // invalid
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(L10n.global().dateTimeInputInvalid),
-          duration: k.snackBarDurationNormal,
-        ));
+        SnackBarManager().showSnackBar(
+          SnackBar(
+            content: Text(L10n.global().dateTimeInputInvalid),
+            duration: k.snackBarDurationNormal,
+          ),
+        );
         return;
       }
 

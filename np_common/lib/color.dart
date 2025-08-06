@@ -64,11 +64,13 @@ class ColorInt {
   ///
   /// See also [fromRGBO], which takes the alpha value as a floating point
   /// value.
-  const ColorInt.fromARGB(int a, int r, int g, int b) :
-    value = (((a & 0xff) << 24) |
-             ((r & 0xff) << 16) |
-             ((g & 0xff) << 8)  |
-             ((b & 0xff) << 0)) & 0xFFFFFFFF;
+  const ColorInt.fromARGB(int a, int r, int g, int b)
+    : value =
+          (((a & 0xff) << 24) |
+              ((r & 0xff) << 16) |
+              ((g & 0xff) << 8) |
+              ((b & 0xff) << 0)) &
+          0xFFFFFFFF;
 
   /// Create a color from red, green, blue, and opacity, similar to `rgba()` in CSS.
   ///
@@ -81,11 +83,13 @@ class ColorInt {
   /// Out of range values are brought into range using modulo 255.
   ///
   /// See also [fromARGB], which takes the opacity as an integer value.
-  const ColorInt.fromRGBO(int r, int g, int b, double opacity) :
-    value = ((((opacity * 0xff ~/ 1) & 0xff) << 24) |
-              ((r                    & 0xff) << 16) |
-              ((g                    & 0xff) << 8)  |
-              ((b                    & 0xff) << 0)) & 0xFFFFFFFF;
+  const ColorInt.fromRGBO(int r, int g, int b, double opacity)
+    : value =
+          ((((opacity * 0xff ~/ 1) & 0xff) << 24) |
+              ((r & 0xff) << 16) |
+              ((g & 0xff) << 8) |
+              ((b & 0xff) << 0)) &
+          0xFFFFFFFF;
 
   /// A 32 bit value representing this color.
   ///
@@ -234,19 +238,22 @@ class ColorInt {
   /// overlay each other: instead, just paint one with the combined color.
   static ColorInt alphaBlend(ColorInt foreground, ColorInt background) {
     final int alpha = foreground.alpha;
-    if (alpha == 0x00) { // Foreground completely transparent.
+    if (alpha == 0x00) {
+      // Foreground completely transparent.
       return background;
     }
     final int invAlpha = 0xff - alpha;
     int backAlpha = background.alpha;
-    if (backAlpha == 0xff) { // Opaque background case
+    if (backAlpha == 0xff) {
+      // Opaque background case
       return ColorInt.fromARGB(
         0xff,
         (alpha * foreground.red + invAlpha * background.red) ~/ 0xff,
         (alpha * foreground.green + invAlpha * background.green) ~/ 0xff,
         (alpha * foreground.blue + invAlpha * background.blue) ~/ 0xff,
       );
-    } else { // General case
+    } else {
+      // General case
       backAlpha = (backAlpha * invAlpha) ~/ 0xff;
       final int outAlpha = alpha + backAlpha;
       assert(outAlpha != 0x00);
@@ -274,8 +281,7 @@ class ColorInt {
     if (other.runtimeType != runtimeType) {
       return false;
     }
-    return other is ColorInt
-        && other.value == value;
+    return other is ColorInt && other.value == value;
   }
 
   @override

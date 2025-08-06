@@ -28,11 +28,7 @@ class ListShare {
       // file not found
       _log.warning("[call] File not found in db: ${logFilename(file.fdPath)}");
     }
-    return _c.shareRepo.list(
-      account,
-      file,
-      isIncludeReshare: isIncludeReshare,
-    );
+    return _c.shareRepo.list(account, file, isIncludeReshare: isIncludeReshare);
   }
 
   final DiContainer _c;

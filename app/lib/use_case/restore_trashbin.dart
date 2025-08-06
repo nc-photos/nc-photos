@@ -8,9 +8,7 @@ import 'package:nc_photos/event/event.dart';
 import 'package:nc_photos/use_case/move.dart';
 
 class RestoreTrashbin {
-  RestoreTrashbin(this._c)
-      : assert(require(_c)),
-        assert(Move.require(_c));
+  RestoreTrashbin(this._c) : assert(require(_c)), assert(Move.require(_c));
 
   static bool require(DiContainer c) => true;
 
@@ -22,9 +20,9 @@ class RestoreTrashbin {
       "remote.php/dav/trashbin/${account.userId}/restore/${file.filename}",
       shouldOverwrite: true,
     );
-    KiwiContainer()
-        .resolve<EventBus>()
-        .fire(FileTrashbinRestoredEvent(account, file));
+    KiwiContainer().resolve<EventBus>().fire(
+      FileTrashbinRestoredEvent(account, file),
+    );
   }
 
   final DiContainer _c;

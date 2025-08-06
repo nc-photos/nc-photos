@@ -3,8 +3,8 @@ import 'package:nc_photos/stream_extension.dart';
 import 'package:np_platform_permission/np_platform_permission.dart';
 
 Future<Map<String, int>> requestPermissionsForResult(
-        List<String> permissions) =>
-    _doRequest(() => Permission.request(permissions));
+  List<String> permissions,
+) => _doRequest(() => Permission.request(permissions));
 
 Future<Map<String, int>> requestReadExternalStorageForResult() =>
     _doRequest(() => Permission.requestReadExternalStorage());

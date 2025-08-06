@@ -105,16 +105,19 @@ class _ZoomableViewerState extends State<ZoomableViewer>
 
   /// Called when double tapping the image to zoom in to the default level
   void _autoZoomIn() {
-    final animController =
-        AnimationController(duration: k.animationDurationShort, vsync: this);
+    final animController = AnimationController(
+      duration: k.animationDurationShort,
+      vsync: this,
+    );
     final originX = -_prevFingerPosition.dx / 2;
     final originY = -_prevFingerPosition.dy / 2;
     final anim = Matrix4Tween(
-            begin: Matrix4.identity(),
-            end: Matrix4.identity()
-              ..scale(2.0)
-              ..translate(originX, originY))
-        .animate(animController);
+      begin: Matrix4.identity(),
+      end:
+          Matrix4.identity()
+            ..scale(2.0)
+            ..translate(originX, originY),
+    ).animate(animController);
     animController
       ..addListener(() {
         _transformationController.value = anim.value;
@@ -130,11 +133,14 @@ class _ZoomableViewerState extends State<ZoomableViewer>
 
   /// Called when double tapping the zoomed image to zoom out
   void _autoZoomOut() {
-    final animController =
-        AnimationController(duration: k.animationDurationShort, vsync: this);
+    final animController = AnimationController(
+      duration: k.animationDurationShort,
+      vsync: this,
+    );
     final anim = Matrix4Tween(
-            begin: _transformationController.value, end: Matrix4.identity())
-        .animate(animController);
+      begin: _transformationController.value,
+      end: Matrix4.identity(),
+    ).animate(animController);
     animController
       ..addListener(() {
         _transformationController.value = anim.value;

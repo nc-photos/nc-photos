@@ -1,16 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/app_localizations.dart';
 
-enum SetAsMethod {
-  file,
-  preview,
-}
+enum SetAsMethod { file, preview }
 
 class SetAsMethodDialog extends StatelessWidget {
-  const SetAsMethodDialog({
-    super.key,
-    this.isSupportPerview = true,
-  });
+  const SetAsMethodDialog({super.key, this.isSupportPerview = true});
 
   @override
   Widget build(BuildContext context) {

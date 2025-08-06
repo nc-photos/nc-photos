@@ -40,22 +40,38 @@ class FileParser extends XmlResponseParser {
     Map<String, String>? customProperties;
 
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("href",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "href",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         href = Uri.decodeComponent(child.innerText);
-      } else if (child.matchQualifiedName("propstat",
-          prefix: "DAV:", namespaces: namespaces)) {
-        final status = child.children
-            .whereType<XmlElement>()
-            .firstWhere((element) => element.matchQualifiedName("status",
-                prefix: "DAV:", namespaces: namespaces))
-            .innerText;
+      } else if (child.matchQualifiedName(
+        "propstat",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
+        final status =
+            child.children
+                .whereType<XmlElement>()
+                .firstWhere(
+                  (element) => element.matchQualifiedName(
+                    "status",
+                    prefix: "DAV:",
+                    namespaces: namespaces,
+                  ),
+                )
+                .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
         final prop = child.children.whereType<XmlElement>().firstWhere(
-            (element) => element.matchQualifiedName("prop",
-                prefix: "DAV:", namespaces: namespaces));
+          (element) => element.matchQualifiedName(
+            "prop",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        );
         final propParser = _PropParser(namespaces: namespaces);
         propParser.parse(prop);
         contentLength = propParser.contentLength;
@@ -103,80 +119,135 @@ class FileParser extends XmlResponseParser {
 }
 
 class _PropParser {
-  _PropParser({
-    this.namespaces = const {},
-  });
+  _PropParser({this.namespaces = const {}});
 
   /// Parse <DAV:prop> element contents
   void parse(XmlElement element) {
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("getlastmodified",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "getlastmodified",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _lastModified = HttpDate.parse(child.innerText);
-      } else if (child.matchQualifiedName("getetag",
-          prefix: "DAV:", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "getetag",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _etag = child.innerText.replaceAll("\"", "");
-      } else if (child.matchQualifiedName("getcontenttype",
-          prefix: "DAV:", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "getcontenttype",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _contentType = child.innerText;
-      } else if (child.matchQualifiedName("resourcetype",
-          prefix: "DAV:", namespaces: namespaces)) {
-        _isCollection = child.children.whereType<XmlElement>().any((element) =>
-            element.matchQualifiedName("collection",
-                prefix: "DAV:", namespaces: namespaces));
-      } else if (child.matchQualifiedName("getcontentlength",
-          prefix: "DAV:", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "resourcetype",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
+        _isCollection = child.children.whereType<XmlElement>().any(
+          (element) => element.matchQualifiedName(
+            "collection",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        );
+      } else if (child.matchQualifiedName(
+        "getcontentlength",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _contentLength = int.parse(child.innerText);
-      } else if (child.matchQualifiedName("fileid",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "fileid",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _fileId = int.parse(child.innerText);
-      } else if (child.matchQualifiedName("favorite",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "favorite",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _favorite = child.innerText != "0";
-      } else if (child.matchQualifiedName("owner-id",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "owner-id",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _ownerId = child.innerText;
-      } else if (child.matchQualifiedName("owner-display-name",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "owner-display-name",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _ownerDisplayName = child.innerText;
-      } else if (child.matchQualifiedName("has-preview",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "has-preview",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _hasPreview = child.innerText == "true";
-      } else if (child.matchQualifiedName("trashbin-filename",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "trashbin-filename",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _trashbinFilename = child.innerText;
-      } else if (child.matchQualifiedName("trashbin-original-location",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "trashbin-original-location",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _trashbinOriginalLocation = child.innerText;
-      } else if (child.matchQualifiedName("trashbin-deletion-time",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "trashbin-deletion-time",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _trashbinDeletionTime = DateTime.fromMillisecondsSinceEpoch(
-            int.parse(child.innerText) * 1000);
-      } else if (child.matchQualifiedName("metadata-photos-ifd0",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+          int.parse(child.innerText) * 1000,
+        );
+      } else if (child.matchQualifiedName(
+        "metadata-photos-ifd0",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         for (final ifd0Child in child.children.whereType<XmlElement>()) {
           (_metadataPhotosIfd0 ??= {})[ifd0Child.localName] =
               ifd0Child.innerText;
         }
-      } else if (child.matchQualifiedName("metadata-photos-exif",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "metadata-photos-exif",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         for (final c in child.children.whereType<XmlElement>()) {
           (_metadataPhotosExif ??= {})[c.localName] = c.innerText;
         }
-      } else if (child.matchQualifiedName("metadata-photos-gps",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "metadata-photos-gps",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         for (final c in child.children.whereType<XmlElement>()) {
           (_metadataPhotosGps ??= {})[c.localName] = c.innerText;
         }
-      } else if (child.matchQualifiedName("metadata-photos-size",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "metadata-photos-size",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         for (final c in child.children.whereType<XmlElement>()) {
           (_metadataPhotosSize ??= {})[c.localName] = c.innerText;
         }
       } else {
-        final key = child.name.prefix == null
-            ? child.localName
-            : "${_expandNamespace(child, namespaces)}:${child.localName}";
+        final key =
+            child.name.prefix == null
+                ? child.localName
+                : "${_expandNamespace(child, namespaces)}:${child.localName}";
         (_customProperties ??= {})[key] = child.innerText;
       }
     }

@@ -22,14 +22,13 @@ void main() {
 /// Expect: one file
 Future<void> _one() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -37,10 +36,9 @@ Future<void> _one() async {
   });
 
   expect(
-    await InflateFileDescriptor(c)(
-      account,
-      [util.fileToFileDescriptor(files[1])],
-    ),
+    await InflateFileDescriptor(c)(account, [
+      util.fileToFileDescriptor(files[1]),
+    ]),
     [files[1]],
   );
 }
@@ -50,18 +48,17 @@ Future<void> _one() async {
 /// Expect: 3 files
 Future<void> _multiple() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg")
-        ..addJpeg("admin/test3.jpg")
-        ..addJpeg("admin/test4.jpg")
-        ..addJpeg("admin/test5.jpg")
-        ..addJpeg("admin/test6.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg")
+            ..addJpeg("admin/test3.jpg")
+            ..addJpeg("admin/test4.jpg")
+            ..addJpeg("admin/test5.jpg")
+            ..addJpeg("admin/test6.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -82,14 +79,13 @@ Future<void> _multiple() async {
 /// Expect: throw StateError
 Future<void> _missing() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -97,19 +93,16 @@ Future<void> _missing() async {
   });
 
   expect(
-    () async => await InflateFileDescriptor(c)(
-      account,
-      [
-        FileDescriptor(
-          fdPath: "remote.php/dav/files/admin/test3.jpg",
-          fdId: 4,
-          fdMime: null,
-          fdIsArchived: false,
-          fdIsFavorite: false,
-          fdDateTime: clock.now(),
-        ),
-      ],
-    ),
+    () async => await InflateFileDescriptor(c)(account, [
+      FileDescriptor(
+        fdPath: "remote.php/dav/files/admin/test3.jpg",
+        fdId: 4,
+        fdMime: null,
+        fdIsArchived: false,
+        fdIsFavorite: false,
+        fdDateTime: clock.now(),
+      ),
+    ]),
     throwsA(const TypeMatcher<StateError>()),
   );
 }

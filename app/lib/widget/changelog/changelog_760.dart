@@ -17,9 +17,7 @@ class _Changelog760 extends StatelessWidget {
         _subSection("Contributors"),
         _bulletGroup(
           const Text("Special thanks to the following contributors \u{1f44f}"),
-          [
-            const Text("yoking"),
-          ],
+          [const Text("yoking")],
         ),
       ],
     );

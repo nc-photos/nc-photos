@@ -29,7 +29,8 @@ class EditAlbum {
     List<AlbumItem>? knownItems,
   }) async {
     _log.info(
-        "[call] Edit album ${album.name}, name: $name, items: $items, itemSort: $itemSort, cover: $cover");
+      "[call] Edit album ${album.name}, name: $name, items: $items, itemSort: $itemSort, cover: $cover",
+    );
     var newAlbum = album;
     if (name != null) {
       newAlbum = newAlbum.copyWith(name: name);

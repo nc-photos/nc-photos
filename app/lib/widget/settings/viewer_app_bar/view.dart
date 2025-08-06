@@ -8,69 +8,72 @@ class _DemoView extends StatelessWidget {
     return Theme(
       data: buildDarkTheme(context),
       child: Builder(
-        builder: (context) => _BlocSelector(
-          selector: (state) => state.buttons,
-          builder: (context, buttons) {
-            final appBar = AppBar(
-              backgroundColor: Colors.black,
-              leading: IgnorePointer(
-                ignoring: true,
-                child: BackButton(onPressed: () {}),
-              ),
-              title: const _DemoAppBarTitle(),
-              actions: [
-                ...buttons.map((e) => SizedBox.square(
-                      dimension: 48,
-                      child: my.Draggable<ViewerAppBarButtonType>(
-                        data: e,
-                        feedback: _DraggingButton(
+        builder:
+            (context) => _BlocSelector(
+              selector: (state) => state.buttons,
+              builder: (context, buttons) {
+                final appBar = AppBar(
+                  backgroundColor: Colors.black,
+                  leading: IgnorePointer(
+                    ignoring: true,
+                    child: BackButton(onPressed: () {}),
+                  ),
+                  title: const _DemoAppBarTitle(),
+                  actions: [
+                    ...buttons.map(
+                      (e) => SizedBox.square(
+                        dimension: 48,
+                        child: my.Draggable<ViewerAppBarButtonType>(
+                          data: e,
+                          feedback: _DraggingButton(
+                            child: _DemoButtonDelegate(e),
+                          ),
+                          onDropBefore: (data) {
+                            context.addEvent(
+                              _MoveButton.before(which: data, target: e),
+                            );
+                          },
+                          onDropAfter: (data) {
+                            context.addEvent(
+                              _MoveButton.after(which: data, target: e),
+                            );
+                          },
                           child: _DemoButtonDelegate(e),
                         ),
-                        onDropBefore: (data) {
-                          context.addEvent(_MoveButton.before(
-                            which: data,
-                            target: e,
-                          ));
-                        },
-                        onDropAfter: (data) {
-                          context.addEvent(_MoveButton.after(
-                            which: data,
-                            target: e,
-                          ));
-                        },
-                        child: _DemoButtonDelegate(e),
                       ),
-                    )),
-                const _DemoMoreButton(),
-              ],
-            );
-            if (buttons.isEmpty) {
-              return DragTarget<ViewerAppBarButtonType>(
-                builder: (context, candidateData, rejectedData) => SizedBox(
-                  height: kToolbarHeight,
-                  child: Stack(
-                    children: [
-                      appBar,
-                      IgnorePointer(
-                        child: Opacity(
-                          opacity: candidateData.isNotEmpty ? .35 : 0,
-                          child: Container(
-                            color: Theme.of(context).colorScheme.onSurface,
+                    ),
+                    const _DemoMoreButton(),
+                  ],
+                );
+                if (buttons.isEmpty) {
+                  return DragTarget<ViewerAppBarButtonType>(
+                    builder:
+                        (context, candidateData, rejectedData) => SizedBox(
+                          height: kToolbarHeight,
+                          child: Stack(
+                            children: [
+                              appBar,
+                              IgnorePointer(
+                                child: Opacity(
+                                  opacity: candidateData.isNotEmpty ? .35 : 0,
+                                  child: Container(
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                onAcceptWithDetails: (details) {
-                  context.addEvent(_MoveButton.first(which: details.data));
-                },
-              );
-            } else {
-              return appBar;
-            }
-          },
-        ),
+                    onAcceptWithDetails: (details) {
+                      context.addEvent(_MoveButton.first(which: details.data));
+                    },
+                  );
+                } else {
+                  return appBar;
+                }
+              },
+            ),
       ),
     );
   }
@@ -85,9 +88,10 @@ class _DemoAppBarTitle extends StatelessWidget {
     final localTime = DateTime.now();
     return Column(
       mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: getRawPlatform() == NpPlatform.iOs
-          ? CrossAxisAlignment.center
-          : CrossAxisAlignment.start,
+      crossAxisAlignment:
+          getRawPlatform() == NpPlatform.iOs
+              ? CrossAxisAlignment.center
+              : CrossAxisAlignment.start,
       children: [
         Text(
           (localTime.year == DateTime.now().year
@@ -118,46 +122,58 @@ class _DemoBottomView extends StatelessWidget {
         color: Colors.black,
         child: _BlocSelector(
           selector: (state) => state.buttons,
-          builder: (context, buttons) => buttons.isEmpty
-              ? DragTarget<ViewerAppBarButtonType>(
-                  builder: (context, candidateData, rejectedData) => Opacity(
-                    opacity: candidateData.isNotEmpty ? .35 : 0,
-                    child: Container(
-                      color: Theme.of(context).colorScheme.onSurface,
-                    ),
-                  ),
-                  onAcceptWithDetails: (details) {
-                    context.addEvent(_MoveButton.first(which: details.data));
-                  },
-                )
-              : Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  mainAxisSize: MainAxisSize.max,
-                  children: buttons
-                      .map((e) => Expanded(
-                            flex: 1,
-                            child: my.Draggable<ViewerAppBarButtonType>(
-                              data: e,
-                              feedback: _DraggingButton(
-                                child: _DemoButtonDelegate(e),
+          builder:
+              (context, buttons) =>
+                  buttons.isEmpty
+                      ? DragTarget<ViewerAppBarButtonType>(
+                        builder:
+                            (context, candidateData, rejectedData) => Opacity(
+                              opacity: candidateData.isNotEmpty ? .35 : 0,
+                              child: Container(
+                                color: Theme.of(context).colorScheme.onSurface,
                               ),
-                              onDropBefore: (data) {
-                                context.addEvent(_MoveButton.before(
-                                  which: data,
-                                  target: e,
-                                ));
-                              },
-                              onDropAfter: (data) {
-                                context.addEvent(_MoveButton.after(
-                                  which: data,
-                                  target: e,
-                                ));
-                              },
-                              child: _DemoButtonDelegate(e),
                             ),
-                          ))
-                      .toList(),
-                ),
+                        onAcceptWithDetails: (details) {
+                          context.addEvent(
+                            _MoveButton.first(which: details.data),
+                          );
+                        },
+                      )
+                      : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.max,
+                        children:
+                            buttons
+                                .map(
+                                  (e) => Expanded(
+                                    flex: 1,
+                                    child: my.Draggable<ViewerAppBarButtonType>(
+                                      data: e,
+                                      feedback: _DraggingButton(
+                                        child: _DemoButtonDelegate(e),
+                                      ),
+                                      onDropBefore: (data) {
+                                        context.addEvent(
+                                          _MoveButton.before(
+                                            which: data,
+                                            target: e,
+                                          ),
+                                        );
+                                      },
+                                      onDropAfter: (data) {
+                                        context.addEvent(
+                                          _MoveButton.after(
+                                            which: data,
+                                            target: e,
+                                          ),
+                                        );
+                                      },
+                                      child: _DemoButtonDelegate(e),
+                                    ),
+                                  ),
+                                )
+                                .toList(),
+                      ),
         ),
       ),
     );
@@ -202,43 +218,48 @@ class _CandidateGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<ViewerAppBarButtonType>(
-      builder: (context, candidateData, rejectedData) => Stack(
-        children: [
-          _BlocSelector(
-            selector: (state) => state.buttons,
-            builder: (context, buttons) => GridView.extent(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 8,
+      builder:
+          (context, candidateData, rejectedData) => Stack(
+            children: [
+              _BlocSelector(
+                selector: (state) => state.buttons,
+                builder:
+                    (context, buttons) => GridView.extent(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      physics: const NeverScrollableScrollPhysics(),
+                      maxCrossAxisExtent: 72,
+                      childAspectRatio: 0.8,
+                      crossAxisSpacing: 8,
+                      mainAxisSpacing: 16,
+                      shrinkWrap: true,
+                      children:
+                          ViewerAppBarButtonType.values
+                              .where((e) => !buttons.contains(e))
+                              .map(
+                                (e) => my.Draggable<ViewerAppBarButtonType>(
+                                  data: e,
+                                  feedback: _DraggingButton(
+                                    child: _DemoButtonDelegate(e),
+                                  ),
+                                  child: _CandidateButtonDelegate(e),
+                                ),
+                              )
+                              .toList(),
+                    ),
               ),
-              physics: const NeverScrollableScrollPhysics(),
-              maxCrossAxisExtent: 72,
-              childAspectRatio: 0.8,
-              crossAxisSpacing: 8,
-              mainAxisSpacing: 16,
-              shrinkWrap: true,
-              children: ViewerAppBarButtonType.values
-                  .where((e) => !buttons.contains(e))
-                  .map((e) => my.Draggable<ViewerAppBarButtonType>(
-                        data: e,
-                        feedback: _DraggingButton(
-                          child: _DemoButtonDelegate(e),
-                        ),
-                        child: _CandidateButtonDelegate(e),
-                      ))
-                  .toList(),
-            ),
-          ),
-          IgnorePointer(
-            child: Opacity(
-              opacity: candidateData.isNotEmpty ? .1 : 0,
-              child: Container(
-                color: Theme.of(context).colorScheme.onSurface,
+              IgnorePointer(
+                child: Opacity(
+                  opacity: candidateData.isNotEmpty ? .1 : 0,
+                  child: Container(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
-        ],
-      ),
       onAcceptWithDetails: (details) {
         context.addEvent(_RemoveButton(details.data));
       },
@@ -283,9 +304,7 @@ class _CandidateButtonDelegate extends StatelessWidget {
 }
 
 class _DraggingButton extends StatelessWidget {
-  const _DraggingButton({
-    required this.child,
-  });
+  const _DraggingButton({required this.child});
 
   @override
   Widget build(BuildContext context) {

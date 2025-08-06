@@ -80,11 +80,13 @@ class LsTrashbinBlocInconsistent extends LsTrashbinBlocState {
 @npLog
 class LsTrashbinBloc extends Bloc<LsTrashbinBlocEvent, LsTrashbinBlocState> {
   LsTrashbinBloc() : super(LsTrashbinBlocInit()) {
-    _fileRemovedEventListener =
-        AppEventListener<FileRemovedEvent>(_onFileRemovedEvent);
+    _fileRemovedEventListener = AppEventListener<FileRemovedEvent>(
+      _onFileRemovedEvent,
+    );
     _fileTrashbinRestoredEventListener =
         AppEventListener<FileTrashbinRestoredEvent>(
-            _onFileTrashbinRestoredEvent);
+          _onFileTrashbinRestoredEvent,
+        );
     _fileRemovedEventListener.begin();
     _fileTrashbinRestoredEventListener.begin();
 
@@ -113,7 +115,9 @@ class LsTrashbinBloc extends Bloc<LsTrashbinBlocEvent, LsTrashbinBlocState> {
   }
 
   Future<void> _onEvent(
-      LsTrashbinBlocEvent event, Emitter<LsTrashbinBlocState> emit) async {
+    LsTrashbinBlocEvent event,
+    Emitter<LsTrashbinBlocState> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is LsTrashbinBlocQuery) {
       await _onEventQuery(event, emit);
@@ -123,7 +127,9 @@ class LsTrashbinBloc extends Bloc<LsTrashbinBlocEvent, LsTrashbinBlocState> {
   }
 
   Future<void> _onEventQuery(
-      LsTrashbinBlocQuery ev, Emitter<LsTrashbinBlocState> emit) async {
+    LsTrashbinBlocQuery ev,
+    Emitter<LsTrashbinBlocState> emit,
+  ) async {
     try {
       emit(LsTrashbinBlocLoading(ev.account, state.items));
       emit(LsTrashbinBlocSuccess(ev.account, await _query(ev)));
@@ -133,8 +139,10 @@ class LsTrashbinBloc extends Bloc<LsTrashbinBlocEvent, LsTrashbinBlocState> {
     }
   }
 
-  Future<void> _onExternalEvent(_LsTrashbinBlocExternalEvent ev,
-      Emitter<LsTrashbinBlocState> emit) async {
+  Future<void> _onExternalEvent(
+    _LsTrashbinBlocExternalEvent ev,
+    Emitter<LsTrashbinBlocState> emit,
+  ) async {
     emit(LsTrashbinBlocInconsistent(state.account, state.items));
   }
 
@@ -171,7 +179,7 @@ class LsTrashbinBloc extends Bloc<LsTrashbinBlocEvent, LsTrashbinBlocState> {
 
   late final AppEventListener<FileRemovedEvent> _fileRemovedEventListener;
   late final AppEventListener<FileTrashbinRestoredEvent>
-      _fileTrashbinRestoredEventListener;
+  _fileTrashbinRestoredEventListener;
 
   late Throttler _refreshThrottler;
 

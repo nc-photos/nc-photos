@@ -17,13 +17,12 @@ class _Item {
         coverMime: result?.mime,
       );
     } catch (e, stackTrace) {
-      _$_ItemNpLog.log
-          .warning("[fromCollection] Failed while getCoverUrl", e, stackTrace);
-      return _Item._(
-        collection: collection,
-        coverUrl: null,
-        coverMime: null,
+      _$_ItemNpLog.log.warning(
+        "[fromCollection] Failed while getCoverUrl",
+        e,
+        stackTrace,
       );
+      return _Item._(collection: collection, coverUrl: null, coverMime: null);
     }
   }
 

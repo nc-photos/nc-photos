@@ -10,6 +10,7 @@ extension _$_MeasurableItemListStateNpLog on _MeasurableItemListState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.measurable_item_list._MeasurableItemListState");
+  static final log = Logger(
+    "widget.measurable_item_list._MeasurableItemListState",
+  );
 }

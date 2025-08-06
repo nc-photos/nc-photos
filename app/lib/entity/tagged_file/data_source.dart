@@ -19,17 +19,17 @@ class TaggedFileRemoteDataSource implements TaggedFileDataSource {
   @override
   list(Account account, File dir, List<Tag> tags) async {
     _log.info(
-        "[list] ${tags.map((t) => t.displayName).toReadableString()} under ${dir.path}");
-    final response = await ApiUtil.fromAccount(account).files().report(
-          path: dir.path,
-          systemtag: tags.map((t) => t.id).toList(),
-        );
+      "[list] ${tags.map((t) => t.displayName).toReadableString()} under ${dir.path}",
+    );
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().report(path: dir.path, systemtag: tags.map((t) => t.id).toList());
     if (!response.isGood) {
       _log.severe("[list] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiTaggedFiles = await api.TaggedFileParser().parse(response.body);

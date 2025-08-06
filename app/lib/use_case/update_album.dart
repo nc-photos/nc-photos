@@ -9,7 +9,8 @@ class UpdateAlbum {
     if (album.savedVersion > Album.version) {
       // the album is created by a newer version of this app
       throw AlbumDowngradeException(
-          "Not allowed to downgrade album '${album.name}'");
+        "Not allowed to downgrade album '${album.name}'",
+      );
     }
     await albumRepo.update(account, album);
   }
