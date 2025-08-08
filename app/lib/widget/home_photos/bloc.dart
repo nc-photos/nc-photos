@@ -749,7 +749,18 @@ class _Bloc extends Bloc<_Event, _State>
             )
             .toSet();
     if (missingDates.isNotEmpty && !_isQueryingFiles) {
-      _requestFilesFrom(missingDates.sortedBySelf().last);
+      final missingDatesSorted = missingDates.sortedBySelf();
+      for (final d in missingDatesSorted.reversed) {
+        _queryCount[d] = (_queryCount[d] ?? 0) + 1;
+        if (_queryCount[d]! > 4) {
+          _log.warning(
+            "[_requestMoreFiles] Date failed for too many times, ignore: $d",
+          );
+          continue;
+        }
+        _requestFilesFrom(missingDates.sortedBySelf().last);
+        break;
+      }
     }
   }
 
@@ -930,6 +941,7 @@ class _Bloc extends Bloc<_Event, _State>
   var _isInitialLoad = true;
   var _isQueryingFiles = false;
   Timer? _filesQueryTimer;
+  final _queryCount = <Date, int>{};
 }
 
 double _getLogicalHeightByItemCount({
