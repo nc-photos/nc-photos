@@ -575,6 +575,13 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(isBusy: true));
     try {
       final afIds = await contentProvider.listAfIds();
+      var index = afIds.indexOf(ev.request.afId);
+      if (index == -1) {
+        _log.warning(
+          "[_onStartSlideshowResult] Initial id not found: ${ev.request.afId}",
+        );
+        index = 0;
+      }
       final req = _SlideshowRequest(
         afIds: afIds,
         startIndex: afIds.indexOf(ev.request.afId),
