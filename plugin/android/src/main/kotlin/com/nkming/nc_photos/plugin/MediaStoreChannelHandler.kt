@@ -597,15 +597,9 @@ internal class MediaStoreChannelHandler(context: Context) :
 								") AND " +
 								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
 					)
-					putStringArray(
-						ContentResolver.QUERY_ARG_SORT_COLUMNS,
-						arrayOf(
-							MediaStore.MediaColumns.DATE_TAKEN
-						),
-					)
-					putInt(
-						ContentResolver.QUERY_ARG_SORT_DIRECTION,
-						ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+						"${MediaStore.MediaColumns.DATE_TAKEN} DESC"
 					)
 				},
 				null,
@@ -655,36 +649,34 @@ internal class MediaStoreChannelHandler(context: Context) :
 		val results = mutableListOf<Map<String, Any>>()
 		doWork {
 			context.contentResolver.query(
-				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				MediaStore.Files.getContentUri("external"),
 				arrayOf(
-					MediaStore.Images.ImageColumns._ID,
-					MediaStore.Images.ImageColumns.DATE_TAKEN,
+					MediaStore.MediaColumns._ID,
+					MediaStore.MediaColumns.DATE_TAKEN,
 				),
 				Bundle().apply {
 					putString(
 						ContentResolver.QUERY_ARG_SQL_SELECTION,
-						"${MediaStore.Images.ImageColumns.DATE_TAKEN} IS NOT NULL",
+						"(" +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+								" OR " +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+								") AND " +
+								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
 					)
-					putStringArray(
-						ContentResolver.QUERY_ARG_SORT_COLUMNS,
-						arrayOf(
-							MediaStore.Images.ImageColumns.DATE_TAKEN,
-							MediaStore.Images.ImageColumns._ID
-						),
-					)
-					putInt(
-						ContentResolver.QUERY_ARG_SORT_DIRECTION,
-						ContentResolver.QUERY_SORT_DIRECTION_DESCENDING,
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+						"${MediaStore.MediaColumns.DATE_TAKEN} DESC, ${MediaStore.MediaColumns._ID} DESC"
 					)
 				},
 				null,
 			)?.use {
 				if (it.moveToFirst()) {
 					val idColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns._ID
+						MediaStore.MediaColumns._ID
 					)
 					val dateColumn = it.getColumnIndexOrThrow(
-						MediaStore.Images.ImageColumns.DATE_TAKEN
+						MediaStore.MediaColumns.DATE_TAKEN
 					)
 					do {
 						val id = it.getLong(idColumn)
