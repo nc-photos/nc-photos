@@ -424,9 +424,9 @@ class PhotoListLocalVideo extends StatelessWidget {
   Widget build(BuildContext context) {
     final ImageProvider provider;
     if (file is LocalUriFile) {
-      provider = VideoUriThumbnailImage(
+      provider = ContentUriImage(
         (file as LocalUriFile).uri,
-        sizeHint: SizeInt.square(k.photoThumbSize),
+        thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
       );
     } else {
       throw ArgumentError("Invalid file");
