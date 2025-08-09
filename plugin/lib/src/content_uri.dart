@@ -19,6 +19,25 @@ class ContentUri {
     }
   }
 
+  static Future<Uint8List> readThumbnail({
+    required String uri,
+    required int width,
+    required int height,
+  }) async {
+    try {
+      return await _methodChannel.invokeMethod(
+        "readThumbnail",
+        <String, dynamic>{"uri": uri, "width": width, "height": height},
+      );
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionFileNotFound) {
+        throw const FileNotFoundException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   static Future<String> getUriForFile(String filePath) async {
     return await _methodChannel.invokeMethod("getUriForFile", <String, dynamic>{
       "filePath": filePath,
