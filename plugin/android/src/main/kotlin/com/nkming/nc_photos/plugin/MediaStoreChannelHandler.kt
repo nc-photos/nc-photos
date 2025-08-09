@@ -9,7 +9,6 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Size
 import androidx.annotation.RequiresApi
 import androidx.core.database.getLongOrNull
 import androidx.lifecycle.LifecycleOwner
@@ -17,10 +16,8 @@ import androidx.lifecycle.lifecycleScope
 import com.nkming.nc_photos.np_android_core.MediaStoreUtil
 import com.nkming.nc_photos.np_android_core.PermissionException
 import com.nkming.nc_photos.np_android_core.PermissionUtil
-import com.nkming.nc_photos.np_android_core.Rgba8Image
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
-import com.nkming.nc_photos.np_android_core.use
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
 import io.flutter.plugin.common.EventChannel
@@ -210,23 +207,6 @@ internal class MediaStoreChannelHandler(context: Context) :
 						getFileIdWithTimestamps(result)
 					} else {
 						result.success(listOf<Map<String, Any>>())
-					}
-				} catch (e: Throwable) {
-					result.error("systemException", e.message, null)
-				}
-			}
-
-			"getVideoThumbnail" -> {
-				try {
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-						getVideoThumbnail(
-							call.argument("uri")!!,
-							call.argument("width")!!,
-							call.argument("height")!!,
-							result
-						)
-					} else {
-						result.error("systemException", "not implemented", null)
 					}
 				} catch (e: Throwable) {
 					result.error("systemException", e.message, null)
@@ -692,20 +672,6 @@ internal class MediaStoreChannelHandler(context: Context) :
 			}
 			result.success(results)
 		}
-	}
-
-	@RequiresApi(Build.VERSION_CODES.Q)
-	private fun getVideoThumbnail(
-		uriStr: String,
-		width: Int,
-		height: Int,
-		result: MethodChannel.Result
-	) {
-		val uri = Uri.parse(uriStr)
-		val thumb = context.contentResolver.loadThumbnail(
-			uri, Size(width, height), null
-		).use { Rgba8Image.fromBitmap(it) }
-		result.success(thumb.toJson())
 	}
 
 	private fun inputToUri(fromFile: String): Uri {
