@@ -9,7 +9,6 @@ import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
-import 'package:nc_photos/mobile/android/video_uri_thumbnail_image_provider.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/selectable_item_stream_list_mixin.dart';
@@ -361,7 +360,10 @@ class PhotoListLocalImage extends StatelessWidget {
   Widget build(BuildContext context) {
     final ImageProvider provider;
     if (file is LocalUriFile) {
-      provider = ContentUriImage((file as LocalUriFile).uri);
+      provider = ContentUriImage(
+        (file as LocalUriFile).uri,
+        thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
+      );
     } else {
       throw ArgumentError("Invalid file");
     }
