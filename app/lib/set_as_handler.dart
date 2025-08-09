@@ -19,11 +19,7 @@ part 'set_as_handler.g.dart';
 /// A special way to share image to other apps
 @npLog
 class SetAsHandler {
-  SetAsHandler(
-    this._c, {
-    required this.context,
-    this.clearSelection,
-  });
+  SetAsHandler(this._c, {required this.context, this.clearSelection});
 
   Future<void> setAsFile(Account account, FileDescriptor fd) async {
     try {
@@ -56,24 +52,34 @@ class SetAsHandler {
 
   Future<void> _setAsAsPreview(Account account, File file) async {
     assert(getRawPlatform() == NpPlatform.android);
-    final results = await InternalDownloadHandler(account)
-        .downloadPreviews(context, [file]);
-    final share = AndroidFileShare(results.entries
-        .map((e) => AndroidFileShareFile(e.value as String, e.key.contentType))
-        .toList());
+    final results = await InternalDownloadHandler(
+      account,
+    ).downloadPreviews(context, [file]);
+    final share = AndroidFileShare(
+      results.entries
+          .map(
+            (e) => AndroidFileShareFile(e.value as String, e.key.contentType),
+          )
+          .toList(),
+    );
     return share.setAs();
   }
 
   Future<void> _setAsAsFile(Account account, File file) async {
     assert(getRawPlatform() == NpPlatform.android);
-    final results =
-        await InternalDownloadHandler(account).downloadFiles(context, [file]);
+    final results = await InternalDownloadHandler(
+      account,
+    ).downloadFiles(context, [file]);
     if (results.isEmpty) {
       return;
     }
-    final share = AndroidFileShare(results.entries
-        .map((e) => AndroidFileShareFile(e.value as String, e.key.contentType))
-        .toList());
+    final share = AndroidFileShare(
+      results.entries
+          .map(
+            (e) => AndroidFileShareFile(e.value as String, e.key.contentType),
+          )
+          .toList(),
+    );
     return share.setAs();
   }
 

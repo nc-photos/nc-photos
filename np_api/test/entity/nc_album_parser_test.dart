@@ -33,19 +33,16 @@ Future<void> _noAlbum() async {
 </d:multistatus>
 """;
   final results = await NcAlbumParser().parse(xml);
-  expect(
-    results,
-    [
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/",
-        lastPhoto: null,
-        nbItems: null,
-        location: null,
-        dateRange: null,
-        collaborators: [],
-      ),
-    ],
-  );
+  expect(results, [
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/",
+      lastPhoto: null,
+      nbItems: null,
+      location: null,
+      dateRange: null,
+      collaborators: [],
+    ),
+  ]);
 }
 
 Future<void> _empty() async {
@@ -84,30 +81,24 @@ Future<void> _empty() async {
 </d:multistatus>
 """;
   final results = await NcAlbumParser().parse(xml);
-  expect(
-    results,
-    [
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/",
-        lastPhoto: null,
-        nbItems: null,
-        location: null,
-        dateRange: null,
-        collaborators: [],
-      ),
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/test/",
-        lastPhoto: -1,
-        nbItems: 0,
-        location: null,
-        dateRange: <String, dynamic>{
-          "start": null,
-          "end": null,
-        },
-        collaborators: [],
-      ),
-    ],
-  );
+  expect(results, [
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/",
+      lastPhoto: null,
+      nbItems: null,
+      location: null,
+      dateRange: null,
+      collaborators: [],
+    ),
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/test/",
+      lastPhoto: -1,
+      nbItems: 0,
+      location: null,
+      dateRange: <String, dynamic>{"start": null, "end": null},
+      collaborators: [],
+    ),
+  ]);
 }
 
 Future<void> _basic() async {
@@ -146,30 +137,24 @@ Future<void> _basic() async {
 </d:multistatus>
 """;
   final results = await NcAlbumParser().parse(xml);
-  expect(
-    results,
-    [
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/",
-        lastPhoto: null,
-        nbItems: null,
-        location: null,
-        dateRange: null,
-        collaborators: [],
-      ),
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/test/",
-        lastPhoto: 1,
-        nbItems: 1,
-        location: null,
-        dateRange: <String, dynamic>{
-          "start": 1577934245,
-          "end": 1580702706,
-        },
-        collaborators: [],
-      ),
-    ],
-  );
+  expect(results, [
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/",
+      lastPhoto: null,
+      nbItems: null,
+      location: null,
+      dateRange: null,
+      collaborators: [],
+    ),
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/test/",
+      lastPhoto: 1,
+      nbItems: 1,
+      location: null,
+      dateRange: <String, dynamic>{"start": 1577934245, "end": 1580702706},
+      collaborators: [],
+    ),
+  ]);
 }
 
 Future<void> _collaborative() async {
@@ -214,34 +199,24 @@ Future<void> _collaborative() async {
 </d:multistatus>
 """;
   final results = await NcAlbumParser().parse(xml);
-  expect(
-    results,
-    [
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/",
-        lastPhoto: null,
-        nbItems: null,
-        location: null,
-        dateRange: null,
-        collaborators: [],
-      ),
-      const NcAlbum(
-        href: "/remote.php/dav/photos/admin/albums/test/",
-        lastPhoto: 1,
-        nbItems: 1,
-        location: null,
-        dateRange: <String, dynamic>{
-          "start": 1577934245,
-          "end": 1580702706,
-        },
-        collaborators: [
-          NcAlbumCollaborator(
-            id: "user2",
-            label: "User2",
-            type: 0,
-          ),
-        ],
-      ),
-    ],
-  );
+  expect(results, [
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/",
+      lastPhoto: null,
+      nbItems: null,
+      location: null,
+      dateRange: null,
+      collaborators: [],
+    ),
+    const NcAlbum(
+      href: "/remote.php/dav/photos/admin/albums/test/",
+      lastPhoto: 1,
+      nbItems: 1,
+      location: null,
+      dateRange: <String, dynamic>{"start": 1577934245, "end": 1580702706},
+      collaborators: [
+        NcAlbumCollaborator(id: "user2", label: "User2", type: 0),
+      ],
+    ),
+  ]);
 }

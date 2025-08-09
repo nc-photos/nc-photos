@@ -35,17 +35,8 @@ Future<void> _faces() async {
 """;
   final results = await FaceRecognitionFaceParser().parse(json);
   expect(results, const [
-    FaceRecognitionFace(
-      id: 1,
-      fileId: 111,
-    ),
-    FaceRecognitionFace(
-      id: 2,
-      fileId: 222,
-    ),
-    FaceRecognitionFace(
-      id: 10,
-      fileId: 333,
-    ),
+    FaceRecognitionFace(id: 1, fileId: 111),
+    FaceRecognitionFace(id: 2, fileId: 222),
+    FaceRecognitionFace(id: 10, fileId: 333),
   ]);
 }

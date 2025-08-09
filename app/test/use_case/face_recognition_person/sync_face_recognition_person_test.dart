@@ -38,30 +38,31 @@ Future<void> _new() async {
     ],
   });
   c.faceRecognitionPersonRepoLocal = BasicFaceRecognitionPersonRepo(
-      FaceRecognitionPersonSqliteDbDataSource(c.npDb));
+    FaceRecognitionPersonSqliteDbDataSource(c.npDb),
+  );
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await c.sqliteDb.batch((batch) {
       batch.insert(
         c.sqliteDb.faceRecognitionPersons,
         compat.FaceRecognitionPersonsCompanion.insert(
-            account: 1, name: "test1", thumbFaceId: 1, count: 1),
+          account: 1,
+          name: "test1",
+          thumbFaceId: 1,
+          count: 1,
+        ),
       );
     });
   });
 
   await SyncFaceRecognitionPerson(c)(account);
-  expect(
-    await _listSqliteDbPersons(c.sqliteDb),
-    {
-      account.userId.toCaseInsensitiveString(): {
-        const DbFaceRecognitionPerson(name: "test1", thumbFaceId: 1, count: 1),
-        const DbFaceRecognitionPerson(name: "test2", thumbFaceId: 2, count: 10),
-        const DbFaceRecognitionPerson(
-            name: "test3", thumbFaceId: 3, count: 100),
-      },
+  expect(await _listSqliteDbPersons(c.sqliteDb), {
+    account.userId.toCaseInsensitiveString(): {
+      const DbFaceRecognitionPerson(name: "test1", thumbFaceId: 1, count: 1),
+      const DbFaceRecognitionPerson(name: "test2", thumbFaceId: 2, count: 10),
+      const DbFaceRecognitionPerson(name: "test3", thumbFaceId: 3, count: 100),
     },
-  );
+  });
 }
 
 /// Sync with remote where there are removed persons
@@ -80,30 +81,40 @@ Future<void> _remove() async {
     ],
   });
   c.faceRecognitionPersonRepoLocal = BasicFaceRecognitionPersonRepo(
-      FaceRecognitionPersonSqliteDbDataSource(c.npDb));
+    FaceRecognitionPersonSqliteDbDataSource(c.npDb),
+  );
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await c.sqliteDb.batch((batch) {
       batch.insertAll(c.sqliteDb.faceRecognitionPersons, [
         compat.FaceRecognitionPersonsCompanion.insert(
-            account: 1, name: "test1", thumbFaceId: 1, count: 1),
+          account: 1,
+          name: "test1",
+          thumbFaceId: 1,
+          count: 1,
+        ),
         compat.FaceRecognitionPersonsCompanion.insert(
-            account: 1, name: "test2", thumbFaceId: 2, count: 10),
+          account: 1,
+          name: "test2",
+          thumbFaceId: 2,
+          count: 10,
+        ),
         compat.FaceRecognitionPersonsCompanion.insert(
-            account: 1, name: "test3", thumbFaceId: 3, count: 100),
+          account: 1,
+          name: "test3",
+          thumbFaceId: 3,
+          count: 100,
+        ),
       ]);
     });
   });
 
   await SyncFaceRecognitionPerson(c)(account);
-  expect(
-    await _listSqliteDbPersons(c.sqliteDb),
-    {
-      account.userId.toCaseInsensitiveString(): {
-        const DbFaceRecognitionPerson(name: "test1", thumbFaceId: 1, count: 1),
-      },
+  expect(await _listSqliteDbPersons(c.sqliteDb), {
+    account.userId.toCaseInsensitiveString(): {
+      const DbFaceRecognitionPerson(name: "test1", thumbFaceId: 1, count: 1),
     },
-  );
+  });
 }
 
 /// Sync with remote where there are updated persons (i.e, same name, different
@@ -124,47 +135,60 @@ Future<void> _update() async {
     ],
   });
   c.faceRecognitionPersonRepoLocal = BasicFaceRecognitionPersonRepo(
-      FaceRecognitionPersonSqliteDbDataSource(c.npDb));
+    FaceRecognitionPersonSqliteDbDataSource(c.npDb),
+  );
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await c.sqliteDb.batch((batch) {
       batch.insertAll(c.sqliteDb.faceRecognitionPersons, [
         compat.FaceRecognitionPersonsCompanion.insert(
-            account: 1, name: "test1", thumbFaceId: 1, count: 1),
+          account: 1,
+          name: "test1",
+          thumbFaceId: 1,
+          count: 1,
+        ),
         compat.FaceRecognitionPersonsCompanion.insert(
-            account: 1, name: "test2", thumbFaceId: 2, count: 10),
+          account: 1,
+          name: "test2",
+          thumbFaceId: 2,
+          count: 10,
+        ),
       ]);
     });
   });
 
   await SyncFaceRecognitionPerson(c)(account);
-  expect(
-    await _listSqliteDbPersons(c.sqliteDb),
-    {
-      account.userId.toCaseInsensitiveString(): {
-        const DbFaceRecognitionPerson(name: "test1", thumbFaceId: 1, count: 1),
-        const DbFaceRecognitionPerson(name: "test2", thumbFaceId: 3, count: 10),
-      },
+  expect(await _listSqliteDbPersons(c.sqliteDb), {
+    account.userId.toCaseInsensitiveString(): {
+      const DbFaceRecognitionPerson(name: "test1", thumbFaceId: 1, count: 1),
+      const DbFaceRecognitionPerson(name: "test2", thumbFaceId: 3, count: 10),
     },
-  );
+  });
 }
 
 Future<Map<String, Set<DbFaceRecognitionPerson>>> _listSqliteDbPersons(
-    compat.SqliteDb db) async {
+  compat.SqliteDb db,
+) async {
   final query = db.select(db.faceRecognitionPersons).join([
-    sql.innerJoin(db.accounts,
-        db.accounts.rowId.equalsExp(db.faceRecognitionPersons.account)),
+    sql.innerJoin(
+      db.accounts,
+      db.accounts.rowId.equalsExp(db.faceRecognitionPersons.account),
+    ),
   ]);
-  final result = await query
-      .map((r) => (
-            account: r.readTable(db.accounts),
-            faceRecognitionPerson: r.readTable(db.faceRecognitionPersons),
-          ))
-      .get();
+  final result =
+      await query
+          .map(
+            (r) => (
+              account: r.readTable(db.accounts),
+              faceRecognitionPerson: r.readTable(db.faceRecognitionPersons),
+            ),
+          )
+          .get();
   final product = <String, Set<DbFaceRecognitionPerson>>{};
   for (final r in result) {
     (product[r.account.userId] ??= {}).add(
-        compat.FaceRecognitionPersonConverter.fromSql(r.faceRecognitionPerson));
+      compat.FaceRecognitionPersonConverter.fromSql(r.faceRecognitionPerson),
+    );
   }
   return product;
 }

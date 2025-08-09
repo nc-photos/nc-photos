@@ -12,9 +12,7 @@ abstract class _Item implements SelectableItemMetadata {
 }
 
 abstract class _FileItem extends _Item {
-  const _FileItem({
-    required this.file,
-  });
+  const _FileItem({required this.file});
 
   @override
   String get id => "file-${file.fdId}";
@@ -34,10 +32,8 @@ abstract class _FileItem extends _Item {
 }
 
 class _PhotoItem extends _FileItem {
-  _PhotoItem({
-    required super.file,
-    required this.account,
-  }) : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
+  _PhotoItem({required super.file, required this.account})
+    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
@@ -58,10 +54,8 @@ class _PhotoItem extends _FileItem {
 }
 
 class _VideoItem extends _FileItem {
-  _VideoItem({
-    required super.file,
-    required this.account,
-  }) : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
+  _VideoItem({required super.file, required this.account})
+    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
@@ -84,10 +78,7 @@ class _VideoItem extends _FileItem {
 }
 
 class _DateItem extends _Item {
-  const _DateItem({
-    required this.date,
-    required this.isMonthOnly,
-  });
+  const _DateItem({required this.date, required this.isMonthOnly});
 
   @override
   String get id => "date-$date";
@@ -102,10 +93,7 @@ class _DateItem extends _Item {
   Widget buildWidget(BuildContext context) {
     return SizedBox(
       height: AppDimension.of(context).timelineDateItemHeight,
-      child: PhotoListDate(
-        date: date,
-        isMonthOnly: isMonthOnly,
-      ),
+      child: PhotoListDate(date: date, isMonthOnly: isMonthOnly),
     );
   }
 
@@ -132,10 +120,7 @@ class _ItemTransformerArgument {
 }
 
 class _ItemTransformerResult {
-  const _ItemTransformerResult({
-    required this.items,
-    required this.dates,
-  });
+  const _ItemTransformerResult({required this.items, required this.dates});
 
   final List<List<_Item>> items;
   final Set<Date> dates;
@@ -161,11 +146,7 @@ class _VisibleDate implements Comparable<_VisibleDate> {
   final Date date;
 }
 
-enum _SelectionMenuOption {
-  archive,
-  delete,
-  download,
-}
+enum _SelectionMenuOption { archive, delete, download }
 
 @toString
 class _ArchiveFailedError implements Exception {
@@ -188,10 +169,7 @@ class _RemoveFailedError implements Exception {
 }
 
 class _SummaryFileItem extends _Item {
-  const _SummaryFileItem({
-    required this.date,
-    required this.index,
-  });
+  const _SummaryFileItem({required this.date, required this.index});
 
   @override
   String get id => "summary-file-$date-$index";

@@ -10,6 +10,7 @@ extension _$CollectionAlbumSortAdapterNpLog on CollectionAlbumSortAdapter {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.collection_item.sorter.CollectionAlbumSortAdapter");
+  static final log = Logger(
+    "entity.collection_item.sorter.CollectionAlbumSortAdapter",
+  );
 }

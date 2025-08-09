@@ -33,23 +33,22 @@ class _State {
   factory _State.init({
     required bool isEnableMemoryCollection,
     required int zoom,
-  }) =>
-      _State(
-        files: const [],
-        isLoading: false,
-        transformedItems: const [],
-        selectedItems: const {},
-        visibleDates: const {},
-        queriedDates: const {},
-        isEnableMemoryCollection: isEnableMemoryCollection,
-        memoryCollections: const [],
-        zoom: zoom,
-        finger: 0,
-        isScrolling: false,
-        filesSummary: const DbFilesSummary(items: {}),
-        minimapYRatio: 1,
-        hasMissingVideoPreview: false,
-      );
+  }) => _State(
+    files: const [],
+    isLoading: false,
+    transformedItems: const [],
+    selectedItems: const {},
+    visibleDates: const {},
+    queriedDates: const {},
+    isEnableMemoryCollection: isEnableMemoryCollection,
+    memoryCollections: const [],
+    zoom: zoom,
+    finger: 0,
+    isScrolling: false,
+    filesSummary: const DbFilesSummary(items: {}),
+    minimapYRatio: 1,
+    hasMissingVideoPreview: false,
+  );
 
   @override
   String toString() => _$toString();
@@ -133,9 +132,7 @@ class _OnItemTransformed implements _Event {
 /// Set the currently selected items
 @toString
 class _SetSelectedItems implements _Event {
-  const _SetSelectedItems({
-    required this.items,
-  });
+  const _SetSelectedItems({required this.items});
 
   @override
   String toString() => _$toString();
@@ -262,7 +259,10 @@ class _EndScrolling implements _Event {
 @toString
 class _SetLayoutConstraint implements _Event {
   const _SetLayoutConstraint(
-      this.viewWidth, this.viewHeight, this.viewOverlayPadding);
+    this.viewWidth,
+    this.viewHeight,
+    this.viewOverlayPadding,
+  );
 
   @override
   String toString() => _$toString();

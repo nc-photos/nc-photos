@@ -14,9 +14,7 @@ part 'remove_selection_handler.g.dart';
 
 @npLog
 class RemoveSelectionHandler {
-  const RemoveSelectionHandler({
-    required this.filesController,
-  });
+  const RemoveSelectionHandler({required this.filesController});
 
   /// Remove [selectedFiles] and return the removed count
   Future<int> call({
@@ -45,28 +43,34 @@ class RemoveSelectionHandler {
         return RemoveFailureError(fileIds);
       },
     );
-    final trashAction = isMoveToTrash
-        ? SnackBarAction(
-            label: L10n.global().albumTrashLabel,
-            onPressed: () {
-              NavigationManager().getNavigator()?.pushNamed(
+    final trashAction =
+        isMoveToTrash
+            ? SnackBarAction(
+              label: L10n.global().albumTrashLabel,
+              onPressed: () {
+                NavigationManager().getNavigator()?.pushNamed(
                   TrashbinBrowser.routeName,
-                  arguments: TrashbinBrowserArguments(account));
-            },
-          )
-        : null;
+                  arguments: TrashbinBrowserArguments(account),
+                );
+              },
+            )
+            : null;
     if (failureCount == 0) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(successText),
-        duration: k.snackBarDurationNormal,
-        action: trashAction,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(successText),
+          duration: k.snackBarDurationNormal,
+          action: trashAction,
+        ),
+      );
     } else {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(failureText(failureCount)),
-        duration: k.snackBarDurationNormal,
-        action: trashAction,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(failureText(failureCount)),
+          duration: k.snackBarDurationNormal,
+          action: trashAction,
+        ),
+      );
     }
     return selection.length - failureCount;
   }

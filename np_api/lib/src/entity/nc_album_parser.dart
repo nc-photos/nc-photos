@@ -23,22 +23,38 @@ class NcAlbumParser extends XmlResponseParser {
     List<NcAlbumCollaborator>? collaborators;
 
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("href",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "href",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         href = Uri.decodeComponent(child.innerText);
-      } else if (child.matchQualifiedName("propstat",
-          prefix: "DAV:", namespaces: namespaces)) {
-        final status = child.children
-            .whereType<XmlElement>()
-            .firstWhere((element) => element.matchQualifiedName("status",
-                prefix: "DAV:", namespaces: namespaces))
-            .innerText;
+      } else if (child.matchQualifiedName(
+        "propstat",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
+        final status =
+            child.children
+                .whereType<XmlElement>()
+                .firstWhere(
+                  (element) => element.matchQualifiedName(
+                    "status",
+                    prefix: "DAV:",
+                    namespaces: namespaces,
+                  ),
+                )
+                .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
         final prop = child.children.whereType<XmlElement>().firstWhere(
-            (element) => element.matchQualifiedName("prop",
-                prefix: "DAV:", namespaces: namespaces));
+          (element) => element.matchQualifiedName(
+            "prop",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        );
         final propParser = _PropParser(namespaces: namespaces);
         propParser.parse(prop);
         lastPhoto = propParser.lastPhoto;
@@ -61,32 +77,48 @@ class NcAlbumParser extends XmlResponseParser {
 }
 
 class _PropParser {
-  _PropParser({
-    this.namespaces = const {},
-  });
+  _PropParser({this.namespaces = const {}});
 
   /// Parse <DAV:prop> element contents
   void parse(XmlElement element) {
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("last-photo",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "last-photo",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _lastPhoto =
             child.innerText.isEmpty ? null : int.parse(child.innerText);
-      } else if (child.matchQualifiedName("nbItems",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "nbItems",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _nbItems = child.innerText.isEmpty ? null : int.parse(child.innerText);
-      } else if (child.matchQualifiedName("location",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "location",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _location = child.innerText.isEmpty ? null : child.innerText;
-      } else if (child.matchQualifiedName("dateRange",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "dateRange",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _dateRange =
             child.innerText.isEmpty ? null : jsonDecode(child.innerText);
-      } else if (child.matchQualifiedName("collaborators",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "collaborators",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         for (final cc in child.children.whereType<XmlElement>()) {
-          if (cc.matchQualifiedName("collaborator",
-              prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+          if (cc.matchQualifiedName(
+            "collaborator",
+            prefix: "http://nextcloud.org/ns",
+            namespaces: namespaces,
+          )) {
             _collaborators ??= [];
             _collaborators!.add(_parseCollaborator(cc));
           }

@@ -13,68 +13,73 @@ part of 'slideshow_viewer.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? hasInit,
-      int? page,
-      int? nextPage,
-      bool? shouldAnimateNextPage,
-      Map<int, FileDescriptor>? rawFiles,
-      Map<int, CollectionFileItem>? collectionItems,
-      List<FileDescriptor?>? files,
-      FileDescriptor? currentFile,
-      bool? isShowUi,
-      bool? isPlay,
-      bool? isVideoCompleted,
-      bool? hasPrev,
-      bool? hasNext,
-      bool? isShowTimeline,
-      bool? hasShownTimeline,
-      bool? hasRequestExit});
+  _State call({
+    bool? hasInit,
+    int? page,
+    int? nextPage,
+    bool? shouldAnimateNextPage,
+    Map<int, FileDescriptor>? rawFiles,
+    Map<int, CollectionFileItem>? collectionItems,
+    List<FileDescriptor?>? files,
+    FileDescriptor? currentFile,
+    bool? isShowUi,
+    bool? isPlay,
+    bool? isVideoCompleted,
+    bool? hasPrev,
+    bool? hasNext,
+    bool? isShowTimeline,
+    bool? hasShownTimeline,
+    bool? hasRequestExit,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic hasInit,
-      dynamic page,
-      dynamic nextPage,
-      dynamic shouldAnimateNextPage,
-      dynamic rawFiles,
-      dynamic collectionItems = copyWithNull,
-      dynamic files,
-      dynamic currentFile = copyWithNull,
-      dynamic isShowUi,
-      dynamic isPlay,
-      dynamic isVideoCompleted,
-      dynamic hasPrev,
-      dynamic hasNext,
-      dynamic isShowTimeline,
-      dynamic hasShownTimeline,
-      dynamic hasRequestExit}) {
+  _State call({
+    dynamic hasInit,
+    dynamic page,
+    dynamic nextPage,
+    dynamic shouldAnimateNextPage,
+    dynamic rawFiles,
+    dynamic collectionItems = copyWithNull,
+    dynamic files,
+    dynamic currentFile = copyWithNull,
+    dynamic isShowUi,
+    dynamic isPlay,
+    dynamic isVideoCompleted,
+    dynamic hasPrev,
+    dynamic hasNext,
+    dynamic isShowTimeline,
+    dynamic hasShownTimeline,
+    dynamic hasRequestExit,
+  }) {
     return _State(
-        hasInit: hasInit as bool? ?? that.hasInit,
-        page: page as int? ?? that.page,
-        nextPage: nextPage as int? ?? that.nextPage,
-        shouldAnimateNextPage:
-            shouldAnimateNextPage as bool? ?? that.shouldAnimateNextPage,
-        rawFiles: rawFiles as Map<int, FileDescriptor>? ?? that.rawFiles,
-        collectionItems: collectionItems == copyWithNull
-            ? that.collectionItems
-            : collectionItems as Map<int, CollectionFileItem>?,
-        files: files as List<FileDescriptor?>? ?? that.files,
-        currentFile: currentFile == copyWithNull
-            ? that.currentFile
-            : currentFile as FileDescriptor?,
-        isShowUi: isShowUi as bool? ?? that.isShowUi,
-        isPlay: isPlay as bool? ?? that.isPlay,
-        isVideoCompleted: isVideoCompleted as bool? ?? that.isVideoCompleted,
-        hasPrev: hasPrev as bool? ?? that.hasPrev,
-        hasNext: hasNext as bool? ?? that.hasNext,
-        isShowTimeline: isShowTimeline as bool? ?? that.isShowTimeline,
-        hasShownTimeline: hasShownTimeline as bool? ?? that.hasShownTimeline,
-        hasRequestExit: hasRequestExit as bool? ?? that.hasRequestExit);
+      hasInit: hasInit as bool? ?? that.hasInit,
+      page: page as int? ?? that.page,
+      nextPage: nextPage as int? ?? that.nextPage,
+      shouldAnimateNextPage:
+          shouldAnimateNextPage as bool? ?? that.shouldAnimateNextPage,
+      rawFiles: rawFiles as Map<int, FileDescriptor>? ?? that.rawFiles,
+      collectionItems:
+          collectionItems == copyWithNull
+              ? that.collectionItems
+              : collectionItems as Map<int, CollectionFileItem>?,
+      files: files as List<FileDescriptor?>? ?? that.files,
+      currentFile:
+          currentFile == copyWithNull
+              ? that.currentFile
+              : currentFile as FileDescriptor?,
+      isShowUi: isShowUi as bool? ?? that.isShowUi,
+      isPlay: isPlay as bool? ?? that.isPlay,
+      isVideoCompleted: isVideoCompleted as bool? ?? that.isVideoCompleted,
+      hasPrev: hasPrev as bool? ?? that.hasPrev,
+      hasNext: hasNext as bool? ?? that.hasNext,
+      isShowTimeline: isShowTimeline as bool? ?? that.isShowTimeline,
+      hasShownTimeline: hasShownTimeline as bool? ?? that.hasShownTimeline,
+      hasRequestExit: hasRequestExit as bool? ?? that.hasRequestExit,
+    );
   }
 
   final _State that;

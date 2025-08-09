@@ -57,11 +57,12 @@ class SlideshowViewer extends StatelessWidget {
   static const routeName = "/slideshow-viewer";
 
   static Route buildRoute(
-          SlideshowViewerArguments args, RouteSettings settings) =>
-      MaterialPageRoute<int>(
-        builder: (context) => SlideshowViewer.fromArgs(args),
-        settings: settings,
-      );
+    SlideshowViewerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute<int>(
+    builder: (context) => SlideshowViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const SlideshowViewer({
     super.key,
@@ -72,27 +73,28 @@ class SlideshowViewer extends StatelessWidget {
   });
 
   SlideshowViewer.fromArgs(SlideshowViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          fileIds: args.fileIds,
-          startIndex: args.startIndex,
-          collectionId: args.collectionId,
-          config: args.config,
-        );
+    : this(
+        key: key,
+        fileIds: args.fileIds,
+        startIndex: args.startIndex,
+        collectionId: args.collectionId,
+        config: args.config,
+      );
 
   @override
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (context) => _Bloc(
-        account: accountController.account,
-        filesController: accountController.filesController,
-        collectionsController: accountController.collectionsController,
-        fileIds: fileIds,
-        startIndex: startIndex,
-        collectionId: collectionId,
-        config: config,
-      )..add(const _Init()),
+      create:
+          (context) => _Bloc(
+            account: accountController.account,
+            filesController: accountController.filesController,
+            collectionsController: accountController.collectionsController,
+            fileIds: fileIds,
+            startIndex: startIndex,
+            collectionId: collectionId,
+            config: config,
+          )..add(const _Init()),
       child: const _WrappedSlideshowViewer(),
     );
   }
@@ -122,10 +124,7 @@ class _WrappedSlideshowViewerState extends State<_WrappedSlideshowViewer>
 
   @override
   List<Disposable> initDisposables() {
-    return [
-      ...super.initDisposables(),
-      WakelockControllerDisposable(),
-    ];
+    return [...super.initDisposables(), WakelockControllerDisposable()];
   }
 
   @override
@@ -158,8 +157,9 @@ class _WrappedSlideshowViewerState extends State<_WrappedSlideshowViewer>
               },
               child: _BlocSelector<bool>(
                 selector: (state) => state.hasInit,
-                builder: (context, hasInit) =>
-                    hasInit ? const _Body() : const _InitBody(),
+                builder:
+                    (context, hasInit) =>
+                        hasInit ? const _Body() : const _InitBody(),
               ),
             ),
           ),

@@ -9,7 +9,9 @@ import 'package:to_string/to_string.dart';
 part 'file_descriptor.g.dart';
 
 int compareFileDescriptorDateTimeDescending(
-    FileDescriptor x, FileDescriptor y) {
+  FileDescriptor x,
+  FileDescriptor y,
+) {
   final tmp = y.fdDateTime.compareTo(x.fdDateTime);
   if (tmp != 0) {
     return tmp;
@@ -32,22 +34,22 @@ class FileDescriptor with EquatableMixin {
   });
 
   static FileDescriptor fromJson(JsonObj json) => FileDescriptor(
-        fdPath: json["fdPath"],
-        fdId: json["fdId"],
-        fdMime: json["fdMime"],
-        fdIsArchived: json["fdIsArchived"],
-        fdIsFavorite: json["fdIsFavorite"],
-        fdDateTime: DateTime.parse(json["fdDateTime"]),
-      );
+    fdPath: json["fdPath"],
+    fdId: json["fdId"],
+    fdMime: json["fdMime"],
+    fdIsArchived: json["fdIsArchived"],
+    fdIsFavorite: json["fdIsFavorite"],
+    fdDateTime: DateTime.parse(json["fdDateTime"]),
+  );
 
   static JsonObj toJson(FileDescriptor that) => {
-        "fdPath": that.fdPath,
-        "fdId": that.fdId,
-        "fdMime": that.fdMime,
-        "fdIsArchived": that.fdIsArchived,
-        "fdIsFavorite": that.fdIsFavorite,
-        "fdDateTime": that.fdDateTime.toUtc().toIso8601String(),
-      };
+    "fdPath": that.fdPath,
+    "fdId": that.fdId,
+    "fdMime": that.fdMime,
+    "fdIsArchived": that.fdIsArchived,
+    "fdIsFavorite": that.fdIsFavorite,
+    "fdDateTime": that.fdDateTime.toUtc().toIso8601String(),
+  };
 
   @override
   String toString() => _$toString();
@@ -56,13 +58,13 @@ class FileDescriptor with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        fdPath,
-        fdId,
-        fdMime,
-        fdIsArchived,
-        fdIsFavorite,
-        fdDateTime,
-      ];
+    fdPath,
+    fdId,
+    fdMime,
+    fdIsArchived,
+    fdIsFavorite,
+    fdDateTime,
+  ];
 
   final String fdPath;
   final int fdId;

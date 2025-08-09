@@ -9,7 +9,9 @@ part 'v46.g.dart';
 @npLog
 class CompatV46 {
   static Future<void> insertDbAccounts(
-      PrefController prefController, NpDb db) async {
+    PrefController prefController,
+    NpDb db,
+  ) async {
     _log.info("[insertDbAccounts] Insert current accounts to Sqlite database");
     final accounts = prefController.accountsValue;
     await db.addAccounts(accounts.toDb());

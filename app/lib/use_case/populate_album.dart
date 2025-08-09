@@ -23,7 +23,8 @@ class PopulateAlbum {
   Future<List<AlbumItem>> call(Account account, Album album) async {
     if (album.provider is AlbumStaticProvider) {
       _log.warning(
-          "[call] Populate only make sense for dynamic albums: ${album.name}");
+        "[call] Populate only make sense for dynamic albums: ${album.name}",
+      );
       return AlbumStaticProvider.of(album).items;
     } else if (album.provider is AlbumDirProvider) {
       return _populateDirAlbum(account, album);
@@ -31,12 +32,15 @@ class PopulateAlbum {
       return _populateTagAlbum(account, album);
     } else {
       throw ArgumentError(
-          "Unknown album provider: ${album.provider.runtimeType}");
+        "Unknown album provider: ${album.provider.runtimeType}",
+      );
     }
   }
 
   Future<List<AlbumItem>> _populateDirAlbum(
-      Account account, Album album) async {
+    Account account,
+    Album album,
+  ) async {
     assert(album.provider is AlbumDirProvider);
     final provider = album.provider as AlbumDirProvider;
     final products = <AlbumItem>[];
@@ -47,18 +51,23 @@ class PopulateAlbum {
       await for (final result in stream) {
         if (result is ExceptionEvent) {
           _log.severe(
-              "[_populateDirAlbum] Failed while scanning dir: ${logFilename(d.path)}",
-              result.error,
-              result.stackTrace);
+            "[_populateDirAlbum] Failed while scanning dir: ${logFilename(d.path)}",
+            result.error,
+            result.stackTrace,
+          );
           firstException = result;
           continue;
         }
-        products.addAll((result as List).cast<File>().map((f) => AlbumFileItem(
+        products.addAll(
+          (result as List).cast<File>().map(
+            (f) => AlbumFileItem(
               addedBy: account.userId,
               addedAt: clock.now(),
               file: f,
               ownerId: f.ownerId ?? account.userId,
-            )));
+            ),
+          ),
+        );
         hasGood = true;
       }
     }
@@ -69,17 +78,23 @@ class PopulateAlbum {
   }
 
   Future<List<AlbumItem>> _populateTagAlbum(
-      Account account, Album album) async {
+    Account account,
+    Album album,
+  ) async {
     assert(album.provider is AlbumTagProvider);
     final provider = album.provider as AlbumTagProvider;
     final products = <AlbumItem>[];
     final files = await ListTaggedFile(_c)(account, provider.tags);
-    products.addAll(files.map((f) => AlbumFileItem(
+    products.addAll(
+      files.map(
+        (f) => AlbumFileItem(
           addedBy: account.userId,
           addedAt: clock.now(),
           file: f,
           ownerId: f.ownerId ?? account.userId,
-        )));
+        ),
+      ),
+    );
     return products;
   }
 

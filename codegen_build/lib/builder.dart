@@ -6,5 +6,6 @@ import 'package:source_gen/source_gen.dart';
 Builder driftTableSortBuilder(BuilderOptions options) =>
     SharedPartBuilder([const DriftTableSortGenerator()], "drift_table_sort");
 
-Builder npSubjectAccessorBuilder(BuilderOptions options) => SharedPartBuilder(
-    [const NpSubjectAccessorGenerator()], "np_subject_accessor");
+Builder npSubjectAccessorBuilder(BuilderOptions options) => SharedPartBuilder([
+  const NpSubjectAccessorGenerator(),
+], "np_subject_accessor");

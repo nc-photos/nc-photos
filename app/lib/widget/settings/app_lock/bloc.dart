@@ -2,11 +2,12 @@ part of '../app_lock_settings.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
-  _Bloc({
-    required this.securePrefController,
-  }) : super(_State.init(
+  _Bloc({required this.securePrefController})
+    : super(
+        _State.init(
           appLockType: securePrefController.protectedPageAuthTypeValue,
-        )) {
+        ),
+      ) {
     on<_SetAppLockType>(_onSetAppLockType);
   }
 

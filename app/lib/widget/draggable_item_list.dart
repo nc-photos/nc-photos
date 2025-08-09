@@ -36,9 +36,9 @@ class DraggableItemList<T extends DraggableItemMetadata>
   final List<T> items;
   final double maxCrossAxisExtent;
   final Widget Function(BuildContext context, int index, T metadata)
-      itemBuilder;
+  itemBuilder;
   final Widget? Function(BuildContext context, int index, T metadata)?
-      itemDragFeedbackBuilder;
+  itemDragFeedbackBuilder;
   final Size? Function(int index, T metadata)? itemDragFeedbackSize;
   final StaggeredTile? Function(int index, T metadata) staggeredTileBuilder;
 
@@ -66,7 +66,8 @@ class _DraggableItemListState<T extends DraggableItemMetadata>
           return my.Draggable<_DraggableData>(
             data: _DraggableData(i, meta),
             feedback: SizedBox.fromSize(
-              size: widget.itemDragFeedbackSize?.call(i, meta) ??
+              size:
+                  widget.itemDragFeedbackSize?.call(i, meta) ??
                   Size.square(widget.maxCrossAxisExtent * .65),
               child: widget.itemDragFeedbackBuilder?.call(context, i, meta),
             ),
@@ -84,8 +85,8 @@ class _DraggableItemListState<T extends DraggableItemMetadata>
           return widget.itemBuilder(context, i, meta);
         }
       },
-      staggeredTileBuilder: (i) =>
-          widget.staggeredTileBuilder(i, widget.items[i]),
+      staggeredTileBuilder:
+          (i) => widget.staggeredTileBuilder(i, widget.items[i]),
     );
   }
 

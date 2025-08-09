@@ -30,7 +30,10 @@ abstract class CollectionAdapter {
   const CollectionAdapter();
 
   static CollectionAdapter of(
-      DiContainer c, Account account, Collection collection) {
+    DiContainer c,
+    Account account,
+    Collection collection,
+  ) {
     switch (collection.contentProvider.runtimeType) {
       case const (CollectionAdHocProvider):
         return CollectionAdHocAdapter(c, account, collection);
@@ -48,7 +51,8 @@ abstract class CollectionAdapter {
         return CollectionTagAdapter(c, account, collection);
       default:
         throw UnsupportedError(
-            "Unknown type: ${collection.contentProvider.runtimeType}");
+          "Unknown type: ${collection.contentProvider.runtimeType}",
+        );
     }
   }
 

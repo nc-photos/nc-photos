@@ -32,8 +32,10 @@ class SyncDir {
     ValueChanged<Progress>? onProgressUpdate,
   }) async {
     final dirCache = await _queryAllDirEtags(account, dirPath);
-    final remoteRoot =
-        await LsSingleFile(_c.withRemoteFileRepo())(account, dirPath);
+    final remoteRoot = await LsSingleFile(_c.withRemoteFileRepo())(
+      account,
+      dirPath,
+    );
     return await _syncDir(
       account,
       remoteRoot,
@@ -58,23 +60,32 @@ class SyncDir {
     _log.info("[_syncDir] Dir changed: ${remoteDir.path}");
 
     final dataSrc = FileCachedDataSource(_c, shouldCheckCache: true);
-    final syncState = await dataSrc.beginSync(account, remoteDir,
-        remoteTouchEtag: status.touchResult);
+    final syncState = await dataSrc.beginSync(
+      account,
+      remoteDir,
+      remoteTouchEtag: status.touchResult,
+    );
     final children = syncState.files;
     if (!isRecursive) {
       await dataSrc.concludeSync(syncState);
       return true;
     }
-    final subDirs = children
-        .where((f) =>
-            f.isCollection == true &&
-            !remoteDir.compareServerIdentity(f) &&
-            !f.path.endsWith(remote_storage_util.getRemoteStorageDir(account)))
-        .toList();
+    final subDirs =
+        children
+            .where(
+              (f) =>
+                  f.isCollection == true &&
+                  !remoteDir.compareServerIdentity(f) &&
+                  !f.path.endsWith(
+                    remote_storage_util.getRemoteStorageDir(account),
+                  ),
+            )
+            .toList();
     final progress = IntProgress(subDirs.length);
     for (final d in subDirs) {
-      onProgressUpdate
-          ?.call(Progress(progress.progress, d.strippedPathWithEmpty));
+      onProgressUpdate?.call(
+        Progress(progress.progress, d.strippedPathWithEmpty),
+      );
       try {
         await _syncDir(
           account,
@@ -87,8 +98,11 @@ class SyncDir {
           },
         );
       } catch (e, stackTrace) {
-        _log.severe("[_syncDir] Failed while _syncDir: ${logFilename(d.path)}",
-            e, stackTrace);
+        _log.severe(
+          "[_syncDir] Failed while _syncDir: ${logFilename(d.path)}",
+          e,
+          stackTrace,
+        );
       }
       progress.next();
     }
@@ -97,7 +111,10 @@ class SyncDir {
   }
 
   Future<({bool isUpdated, String? touchResult})> _checkContentUpdated(
-      Account account, File remoteDir, Map<int, String> dirCache) async {
+    Account account,
+    File remoteDir,
+    Map<int, String> dirCache,
+  ) async {
     String? touchResult;
     try {
       touchResult = await _c.touchManager.checkTouchEtag(account, remoteDir);
@@ -112,7 +129,9 @@ class SyncDir {
   }
 
   Future<Map<int, String>> _queryAllDirEtags(
-      Account account, String dirPath) async {
+    Account account,
+    String dirPath,
+  ) async {
     final dir = File(path: dirPath);
     return _c.npDb.getDirFileIdToEtagByLikeRelativePath(
       account: account.toDb(),

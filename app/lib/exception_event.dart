@@ -1,8 +1,5 @@
 class ExceptionEvent {
-  const ExceptionEvent(
-    this.error, [
-    this.stackTrace,
-  ]);
+  const ExceptionEvent(this.error, [this.stackTrace]);
 
   void throwMe() {
     Error.throwWithStackTrace(error, stackTrace ?? StackTrace.current);

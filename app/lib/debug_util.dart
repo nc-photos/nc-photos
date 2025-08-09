@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:nc_photos/mobile/platform.dart'
-    if (dart.library.html) 'package:nc_photos/web/platform.dart' as platform;
+    if (dart.library.html) 'package:nc_photos/web/platform.dart'
+    as platform;
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:path/path.dart' as path_lib;
@@ -38,18 +39,16 @@ class LogCapturer {
   static LogCapturer? _inst;
 }
 
-String logFilename(
-  String? filename, {
-  bool? shouldLogFileName,
-}) {
+String logFilename(String? filename, {bool? shouldLogFileName}) {
   if ((shouldLogFileName ?? isDevMode) || filename == null) {
     return "$filename";
   }
   try {
     final basename = path_lib.basenameWithoutExtension(filename);
-    final displayName = basename.length <= 6
-        ? basename
-        : "${basename.slice(0, 3)}***${basename.slice(-3)}";
+    final displayName =
+        basename.length <= 6
+            ? basename
+            : "${basename.slice(0, 3)}***${basename.slice(-3)}";
     return "${path_lib.dirname(filename) != "." ? "***/" : ""}"
         "$displayName"
         "${path_lib.extension(filename)}";

@@ -49,15 +49,14 @@ class Api {
     final url = _makeUri(endpoint, queryParameters: queryParameters);
     final req = http.Request(method, url);
     if (auth != null) {
-      req.headers.addAll({
-        "authorization": auth!.toHeaderValue(),
-      });
+      req.headers.addAll({"authorization": auth!.toHeaderValue()});
     }
     if (header != null) {
       // turn all to lower case, since HTTP headers are case-insensitive, this
       // smooths our processing (if any)
       req.headers.addEntries(
-          header.entries.map((e) => MapEntry(e.key.toLowerCase(), e.value)));
+        header.entries.map((e) => MapEntry(e.key.toLowerCase(), e.value)),
+      );
     }
     if (body != null) {
       req.body = body;
@@ -65,8 +64,9 @@ class Api {
       req.bodyBytes = bodyBytes;
     }
     _log.finer(req.url);
-    final response =
-        await http.Response.fromStream(await getHttpClient().send(req));
+    final response = await http.Response.fromStream(
+      await getHttpClient().send(req),
+    );
     if (!isHttpStatusGood(response.statusCode)) {
       if (response.statusCode == 404) {
         _log.severe(
@@ -79,14 +79,14 @@ class Api {
         );
       }
     }
-    return Response(response.statusCode, response.headers,
-        isResponseString ? response.body : response.bodyBytes);
+    return Response(
+      response.statusCode,
+      response.headers,
+      isResponseString ? response.body : response.bodyBytes,
+    );
   }
 
-  Uri _makeUri(
-    String endpoint, {
-    Map<String, String>? queryParameters,
-  }) {
+  Uri _makeUri(String endpoint, {Map<String, String>? queryParameters}) {
     final path = "${baseUrl.path}/$endpoint";
     if (baseUrl.scheme == "http") {
       return Uri.http(baseUrl.authority, path, queryParameters);

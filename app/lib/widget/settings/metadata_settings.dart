@@ -23,9 +23,7 @@ class MetadataSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      )..add(const _Init()),
+      create: (_) => _Bloc(prefController: context.read())..add(const _Init()),
       child: const _WrappedMetadataSettings(),
     );
   }
@@ -61,65 +59,79 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
               title: Text(L10n.global().settingsMetadataTitle),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _BlocSelector<bool>(
-                    selector: (state) => state.isEnable,
+              delegate: SliverChildListDelegate([
+                _BlocSelector<bool>(
+                  selector: (state) => state.isEnable,
+                  builder: (context, state) {
+                    return SwitchListTile(
+                      title: Text(L10n.global().settingsExifSupportTitle2),
+                      subtitle:
+                          state
+                              ? Text(
+                                L10n.global().settingsExifSupportTrueSubtitle,
+                              )
+                              : null,
+                      value: state,
+                      onChanged: (value) => _onEnableChanged(context, value),
+                    );
+                  },
+                ),
+                if (getRawPlatform().isMobile)
+                  _BlocBuilder(
+                    buildWhen:
+                        (previous, current) =>
+                            previous.isEnable != current.isEnable ||
+                            previous.isWifiOnly != current.isWifiOnly,
                     builder: (context, state) {
                       return SwitchListTile(
-                        title: Text(L10n.global().settingsExifSupportTitle2),
-                        subtitle: state
-                            ? Text(
-                                L10n.global().settingsExifSupportTrueSubtitle)
-                            : null,
-                        value: state,
-                        onChanged: (value) => _onEnableChanged(context, value),
+                        title: Text(L10n.global().settingsExifWifiOnlyTitle),
+                        subtitle:
+                            state.isWifiOnly
+                                ? null
+                                : Text(
+                                  L10n.global()
+                                      .settingsExifWifiOnlyFalseSubtitle,
+                                ),
+                        value: state.isWifiOnly,
+                        onChanged:
+                            state.isEnable
+                                ? (value) {
+                                  context.addEvent(_SetWifiOnly(value));
+                                }
+                                : null,
                       );
                     },
                   ),
-                  if (getRawPlatform().isMobile)
-                    _BlocBuilder(
-                      buildWhen: (previous, current) =>
+                _BlocBuilder(
+                  buildWhen:
+                      (previous, current) =>
                           previous.isEnable != current.isEnable ||
-                          previous.isWifiOnly != current.isWifiOnly,
-                      builder: (context, state) {
-                        return SwitchListTile(
-                          title: Text(L10n.global().settingsExifWifiOnlyTitle),
-                          subtitle: state.isWifiOnly
-                              ? null
-                              : Text(L10n.global()
-                                  .settingsExifWifiOnlyFalseSubtitle),
-                          value: state.isWifiOnly,
-                          onChanged: state.isEnable
-                              ? (value) {
-                                  context.addEvent(_SetWifiOnly(value));
+                          previous.isFallback != current.isFallback,
+                  builder:
+                      (context, state) => SwitchListTile(
+                        title: Text(
+                          L10n.global().settingsFallbackClientExifTitle,
+                        ),
+                        subtitle:
+                            state.isFallback
+                                ? Text(
+                                  L10n.global()
+                                      .settingsFallbackClientExifTrueText,
+                                )
+                                : Text(
+                                  L10n.global()
+                                      .settingsFallbackClientExifFalseText,
+                                ),
+                        value: state.isFallback,
+                        onChanged:
+                            state.isEnable
+                                ? (value) {
+                                  _onFallbackChanged(context, value);
                                 }
-                              : null,
-                        );
-                      },
-                    ),
-                  _BlocBuilder(
-                    buildWhen: (previous, current) =>
-                        previous.isEnable != current.isEnable ||
-                        previous.isFallback != current.isFallback,
-                    builder: (context, state) => SwitchListTile(
-                      title:
-                          Text(L10n.global().settingsFallbackClientExifTitle),
-                      subtitle: state.isFallback
-                          ? Text(
-                              L10n.global().settingsFallbackClientExifTrueText)
-                          : Text(L10n.global()
-                              .settingsFallbackClientExifFalseText),
-                      value: state.isFallback,
-                      onChanged: state.isEnable
-                          ? (value) {
-                              _onFallbackChanged(context, value);
-                            }
-                          : null,
-                    ),
-                  ),
-                ],
-              ),
+                                : null,
+                      ),
+                ),
+              ]),
             ),
           ],
         ),
@@ -131,31 +143,34 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
     if (value) {
       final result = await showDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
-          title: Text(L10n.global().exifSupportConfirmationDialogTitle2),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(L10n.global().exifSupportDetails),
-              const SizedBox(height: 16),
-              Text(L10n.global().exifSupportNextcloud28Notes),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+        builder:
+            (context) => AlertDialog(
+              title: Text(L10n.global().exifSupportConfirmationDialogTitle2),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(L10n.global().exifSupportDetails),
+                  const SizedBox(height: 16),
+                  Text(L10n.global().exifSupportNextcloud28Notes),
+                ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    MaterialLocalizations.of(context).cancelButtonLabel,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(L10n.global().enableButtonLabel),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(L10n.global().enableButtonLabel),
-            ),
-          ],
-        ),
       );
       if (context.mounted && result == true) {
         context.addEvent(const _SetEnable(true));
@@ -169,26 +184,31 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
     if (value) {
       final result = await showDialog<bool>(
         context: context,
-        builder: (context) => AlertDialog(
-          title:
-              Text(L10n.global().settingsFallbackClientExifConfirmDialogTitle),
-          content:
-              Text(L10n.global().settingsFallbackClientExifConfirmDialogText),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+        builder:
+            (context) => AlertDialog(
+              title: Text(
+                L10n.global().settingsFallbackClientExifConfirmDialogTitle,
+              ),
+              content: Text(
+                L10n.global().settingsFallbackClientExifConfirmDialogText,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text(
+                    MaterialLocalizations.of(context).cancelButtonLabel,
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(true);
+                  },
+                  child: Text(L10n.global().enableButtonLabel),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(L10n.global().enableButtonLabel),
-            ),
-          ],
-        ),
       );
       if (context.mounted && result == true) {
         context.addEvent(const _SetFallback(true));

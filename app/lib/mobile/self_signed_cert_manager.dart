@@ -30,9 +30,11 @@ class SelfSignedCertManager {
   /// Verify [cert] and return if it's registered in the whitelist for [host]
   bool verify(X509Certificate cert, String host, int port) {
     final fingerprint = _sha1BytesToString(cert.sha1);
-    return _whitelist.any((info) =>
-        fingerprint == info.sha1 &&
-        host.toLowerCase() == info.host.toLowerCase());
+    return _whitelist.any(
+      (info) =>
+          fingerprint == info.sha1 &&
+          host.toLowerCase() == info.host.toLowerCase(),
+    );
   }
 
   bool get hasBadCert => _latestBadCert != null;
@@ -71,16 +73,18 @@ class SelfSignedCertManager {
           final pemF = File(f.path.slice(0, -5));
           await Future.wait([f.delete(), pemF.delete()]);
           _log.info(
-              "[removeFromWhitelist] File removed: ${f.path}, ${pemF.path}");
+            "[removeFromWhitelist] File removed: ${f.path}, ${pemF.path}",
+          );
           unawaited(SelfSignedCert.reload());
           _whitelist.remove(cert);
           return true;
         }
       } catch (e, stacktrace) {
         _log.severe(
-            "[removeFromWhitelist] Failed to read certificate file: ${path_lib.basename(f.path)}",
-            e,
-            stacktrace);
+          "[removeFromWhitelist] Failed to read certificate file: ${path_lib.basename(f.path)}",
+          e,
+          stacktrace,
+        );
       }
     }
     return false;
@@ -100,13 +104,15 @@ class SelfSignedCertManager {
       try {
         final info = CertInfo.fromJson(jsonDecode(await f.readAsString()));
         _log.info(
-            "[_readAllCerts] Found certificate info: ${path_lib.basename(f.path)} for host: ${info.host}");
+          "[_readAllCerts] Found certificate info: ${path_lib.basename(f.path)} for host: ${info.host}",
+        );
         products.add(info);
       } catch (e, stacktrace) {
         _log.severe(
-            "[_readAllCerts] Failed to read certificate file: ${path_lib.basename(f.path)}",
-            e,
-            stacktrace);
+          "[_readAllCerts] Failed to read certificate file: ${path_lib.basename(f.path)}",
+          e,
+          stacktrace,
+        );
       }
     }
     return products;
@@ -127,7 +133,8 @@ class SelfSignedCertManager {
       final certInfo = CertInfo.fromX509Certificate(host, cert);
       await siteF.writeAsString(jsonEncode(certInfo.toJson()), flush: true);
       _log.info(
-          "[_writeCert] Persisted cert at '${certF.path}' for host '${_latestBadCert?.host}'");
+        "[_writeCert] Persisted cert at '${certF.path}' for host '${_latestBadCert?.host}'",
+      );
       return certInfo;
     }
   }
@@ -194,13 +201,13 @@ final class CertInfo with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        host,
-        sha1,
-        subject,
-        issuer,
-        startValidity,
-        endValidity,
-      ];
+    host,
+    sha1,
+    subject,
+    issuer,
+    startValidity,
+    endValidity,
+  ];
 
   final String host;
   final String sha1;
@@ -231,8 +238,11 @@ class _CustomHttpOverrides extends HttpOverrides {
             return true;
           }
         } catch (e, stacktrace) {
-          _log.shout("[badCertificateCallback] Failed while verifying cert", e,
-              stacktrace);
+          _log.shout(
+            "[badCertificateCallback] Failed while verifying cert",
+            e,
+            stacktrace,
+          );
         }
         SelfSignedCertManager()._latestBadCert = _BadCertInfo(cert, host, port);
         return false;

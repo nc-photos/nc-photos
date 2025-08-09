@@ -50,21 +50,19 @@ class NewCollectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        account: account,
-        supportedProviders: {
-          _ProviderOption.appAlbum,
-          if (context
-              .read<AccountController>()
-              .serverController
-              .isSupported(ServerFeature.ncAlbum))
-            _ProviderOption.ncAlbum,
-          if (isAllowDynamic) ...{
-            _ProviderOption.dir,
-            _ProviderOption.tag,
-          },
-        },
-      ),
+      create:
+          (context) => _Bloc(
+            account: account,
+            supportedProviders: {
+              _ProviderOption.appAlbum,
+              if (context
+                  .read<AccountController>()
+                  .serverController
+                  .isSupported(ServerFeature.ncAlbum))
+                _ProviderOption.ncAlbum,
+              if (isAllowDynamic) ...{_ProviderOption.dir, _ProviderOption.tag},
+            },
+          ),
       child: const _WrappedNewCollectionDialog(),
     );
   }
@@ -88,8 +86,9 @@ class _WrappedNewCollectionDialogState
     return MultiBlocListener(
       listeners: [
         BlocListener<_Bloc, _State>(
-          listenWhen: (previous, current) =>
-              previous.result != current.result && current.result != null,
+          listenWhen:
+              (previous, current) =>
+                  previous.result != current.result && current.result != null,
           listener: _onResult,
         ),
         BlocListener<_Bloc, _State>(
@@ -106,43 +105,47 @@ class _WrappedNewCollectionDialogState
         ),
       ],
       child: BlocBuilder<_Bloc, _State>(
-        buildWhen: (previous, current) =>
-            previous.result != current.result ||
-            previous.showDialog != current.showDialog,
-        builder: (context, state) => Visibility(
-          visible: state.result == null && state.showDialog,
-          child: AlertDialog(
-            title: Text(L10n.global().createCollectionTooltip),
-            content: Form(
-              key: _formKey,
-              child: Container(
-                constraints: const BoxConstraints.tightFor(width: 280),
-                child: const Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _NameTextField(),
-                    _ProviderDropdown(),
-                    SizedBox(height: 8),
-                    _ProviderDescription(),
-                  ],
+        buildWhen:
+            (previous, current) =>
+                previous.result != current.result ||
+                previous.showDialog != current.showDialog,
+        builder:
+            (context, state) => Visibility(
+              visible: state.result == null && state.showDialog,
+              child: AlertDialog(
+                title: Text(L10n.global().createCollectionTooltip),
+                content: Form(
+                  key: _formKey,
+                  child: Container(
+                    constraints: const BoxConstraints.tightFor(width: 280),
+                    child: const Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _NameTextField(),
+                        _ProviderDropdown(),
+                        SizedBox(height: 8),
+                        _ProviderDescription(),
+                      ],
+                    ),
+                  ),
                 ),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      launch(help_util.collectionTypesUrl);
+                    },
+                    child: Text(L10n.global().learnMoreButtonLabel),
+                  ),
+                  TextButton(
+                    onPressed: () => _onOkPressed(context),
+                    child: Text(
+                      MaterialLocalizations.of(context).okButtonLabel,
+                    ),
+                  ),
+                ],
               ),
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  launch(help_util.collectionTypesUrl);
-                },
-                child: Text(L10n.global().learnMoreButtonLabel),
-              ),
-              TextButton(
-                onPressed: () => _onOkPressed(context),
-                child: Text(MaterialLocalizations.of(context).okButtonLabel),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
@@ -182,12 +185,16 @@ class _WrappedNewCollectionDialogState
   }
 
   Future<void> _onResult(BuildContext context, _State state) async {
-    unawaited(showDialog(
-      barrierDismissible: false,
-      context: context,
-      builder: (_) =>
-          ProcessingDialog(text: L10n.global().genericProcessingDialogContent),
-    ));
+    unawaited(
+      showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder:
+            (_) => ProcessingDialog(
+              text: L10n.global().genericProcessingDialogContent,
+            ),
+      ),
+    );
     try {
       final collection = await context
           .read<AccountController>()
@@ -198,11 +205,13 @@ class _WrappedNewCollectionDialogState
         ..pop(collection);
     } catch (e, stackTrace) {
       _log.shout("[_onResult] Failed", e, stackTrace);
-      unawaited(AppToast.showToast(
-        context,
-        msg: exception_util.toUserString(e),
-        duration: k.snackBarDurationNormal,
-      ));
+      unawaited(
+        AppToast.showToast(
+          context,
+          msg: exception_util.toUserString(e),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       Navigator.of(context)
         ..pop()
         ..pop();
@@ -220,9 +229,7 @@ class _NameTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(
-        hintText: L10n.global().nameInputHint,
-      ),
+      decoration: InputDecoration(hintText: L10n.global().nameInputHint),
       validator: (value) {
         if (value!.isEmpty) {
           return L10n.global().nameInputInvalidEmpty;
@@ -242,22 +249,27 @@ class _ProviderDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_Bloc, _State>(
-      buildWhen: (previous, current) =>
-          previous.formValue.provider != current.formValue.provider,
-      builder: (context, state) => DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<_ProviderOption>(
-          value: state.formValue.provider,
-          items: state.supportedProviders
-              .map((e) => DropdownMenuItem<_ProviderOption>(
-                    value: e,
-                    child: Text(e.toValueString(context)),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            context.read<_Bloc>().add(_SubmitProvider(value!));
-          },
-        ),
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.formValue.provider != current.formValue.provider,
+      builder:
+          (context, state) => DropdownButtonHideUnderline(
+            child: DropdownButtonFormField<_ProviderOption>(
+              value: state.formValue.provider,
+              items:
+                  state.supportedProviders
+                      .map(
+                        (e) => DropdownMenuItem<_ProviderOption>(
+                          value: e,
+                          child: Text(e.toValueString(context)),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (value) {
+                context.read<_Bloc>().add(_SubmitProvider(value!));
+              },
+            ),
+          ),
     );
   }
 }
@@ -268,12 +280,14 @@ class _ProviderDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_Bloc, _State>(
-      buildWhen: (previous, current) =>
-          previous.formValue.provider != current.formValue.provider,
-      builder: (context, state) => Text(
-        state.formValue.provider.toDescription(context),
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.formValue.provider != current.formValue.provider,
+      builder:
+          (context, state) => Text(
+            state.formValue.provider.toDescription(context),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
     );
   }
 }

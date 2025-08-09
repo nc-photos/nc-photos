@@ -21,15 +21,14 @@ class Copy {
     bool shouldCreateMissingDir = false,
     bool shouldOverwrite = false,
     bool shouldRenameOnOverwrite = false,
-  }) =>
-      _doWork(
-        account,
-        file,
-        destination,
-        shouldCreateMissingDir: shouldCreateMissingDir,
-        shouldOverwrite: shouldOverwrite,
-        shouldRenameOnOverwrite: shouldRenameOnOverwrite,
-      );
+  }) => _doWork(
+    account,
+    file,
+    destination,
+    shouldCreateMissingDir: shouldCreateMissingDir,
+    shouldOverwrite: shouldOverwrite,
+    shouldRenameOnOverwrite: shouldRenameOnOverwrite,
+  );
 
   Future<void> _doWork(
     Account account,
@@ -52,8 +51,12 @@ class Copy {
           // no dir
           _log.info("[call] Auto creating parent dirs");
           await CreateDir(fileRepo)(account, path_lib.dirname(to));
-          await fileRepo.copy(account, file, to,
-              shouldOverwrite: shouldOverwrite);
+          await fileRepo.copy(
+            account,
+            file,
+            to,
+            shouldOverwrite: shouldOverwrite,
+          );
         } else if (e.response.statusCode == 204 && shouldRenameOnOverwrite) {
           return _doWork(
             account,
@@ -77,8 +80,10 @@ class Copy {
     if (retryCount < 2) {
       return destination;
     }
-    final newName =
-        file_util.renameConflict(path_lib.basename(destination), retryCount);
+    final newName = file_util.renameConflict(
+      path_lib.basename(destination),
+      retryCount,
+    );
     return "${path_lib.dirname(destination)}/$newName";
   }
 

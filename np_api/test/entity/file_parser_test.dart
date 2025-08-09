@@ -184,9 +184,7 @@ Future<void> _filesIsArchived() async {
       lastModified: DateTime.utc(2021, 1, 1, 2, 3, 4),
       hasPreview: true,
       isCollection: false,
-      customProperties: {
-        "com.nkming.nc_photos:is-archived": "true",
-      },
+      customProperties: {"com.nkming.nc_photos:is-archived": "true"},
     ),
   ]);
 }
@@ -629,10 +627,7 @@ Future<void> _filesNc28MetadataSize() async {
       hasPreview: false,
       fileId: 123,
       isCollection: false,
-      metadataPhotosSize: {
-        "width": "4032",
-        "height": "3024",
-      },
+      metadataPhotosSize: {"width": "4032", "height": "3024"},
     ),
   ]);
 }

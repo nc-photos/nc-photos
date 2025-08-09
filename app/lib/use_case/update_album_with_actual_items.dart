@@ -18,24 +18,33 @@ class UpdateAlbumWithActualItems {
   ///
   /// If [albumRepo] is null, the modified album will not be saved
   Future<Album> call(
-      Account account, Album album, List<AlbumItem> items) async {
-    final sortedItems =
-        const AlbumTimeSortProvider(isAscending: false).sort(items);
+    Account account,
+    Album album,
+    List<AlbumItem> items,
+  ) async {
+    final sortedItems = const AlbumTimeSortProvider(
+      isAscending: false,
+    ).sort(items);
 
     bool shouldUpdate = false;
-    final albumUpdatedCover =
-        UpdateAutoAlbumCover().updateWithSortedItems(album, sortedItems);
+    final albumUpdatedCover = UpdateAutoAlbumCover().updateWithSortedItems(
+      album,
+      sortedItems,
+    );
     if (!identical(albumUpdatedCover, album)) {
       _log.info("[call] Update album cover");
       shouldUpdate = true;
     }
     album = albumUpdatedCover;
 
-    final albumUpdatedTime =
-        UpdateAlbumTime().updateWithSortedItems(album, sortedItems);
+    final albumUpdatedTime = UpdateAlbumTime().updateWithSortedItems(
+      album,
+      sortedItems,
+    );
     if (!identical(albumUpdatedTime, album)) {
       _log.info(
-          "[call] Update album time: ${album.provider.latestItemTime} -> ${albumUpdatedTime.provider.latestItemTime}");
+        "[call] Update album time: ${album.provider.latestItemTime} -> ${albumUpdatedTime.provider.latestItemTime}",
+      );
       shouldUpdate = true;
     }
     album = albumUpdatedTime;

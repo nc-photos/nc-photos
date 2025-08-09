@@ -54,17 +54,19 @@ class BasicFileRepo implements FileRepo2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
-  }) =>
-      dataSrc.getFileDescriptors(account, shareDirPath,
-          timeRange: timeRange, isArchived: isArchived);
+  }) => dataSrc.getFileDescriptors(
+    account,
+    shareDirPath,
+    timeRange: timeRange,
+    isArchived: isArchived,
+  );
 
   @override
   Future<List<int>> getFileIds(
     Account account,
     String shareDirPath, {
     bool? isArchived,
-  }) =>
-      dataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
+  }) => dataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
 
   @override
   Future<void> updateProperty(
@@ -75,16 +77,15 @@ class BasicFileRepo implements FileRepo2 {
     OrNull<DateTime>? overrideDateTime,
     bool? favorite,
     OrNull<ImageLocation>? location,
-  }) =>
-      dataSrc.updateProperty(
-        account,
-        f,
-        metadata: metadata,
-        isArchived: isArchived,
-        overrideDateTime: overrideDateTime,
-        favorite: favorite,
-        location: location,
-      );
+  }) => dataSrc.updateProperty(
+    account,
+    f,
+    metadata: metadata,
+    isArchived: isArchived,
+    overrideDateTime: overrideDateTime,
+    favorite: favorite,
+    location: location,
+  );
 
   @override
   Future<void> remove(Account account, FileDescriptor f) =>
@@ -104,17 +105,19 @@ class CachedFileRepo implements FileRepo2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
-  }) =>
-      cacheDataSrc.getFileDescriptors(account, shareDirPath,
-          timeRange: timeRange, isArchived: isArchived);
+  }) => cacheDataSrc.getFileDescriptors(
+    account,
+    shareDirPath,
+    timeRange: timeRange,
+    isArchived: isArchived,
+  );
 
   @override
   Future<List<int>> getFileIds(
     Account account,
     String shareDirPath, {
     bool? isArchived,
-  }) =>
-      cacheDataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
+  }) => cacheDataSrc.getFileIds(account, shareDirPath, isArchived: isArchived);
 
   @override
   Future<void> updateProperty(

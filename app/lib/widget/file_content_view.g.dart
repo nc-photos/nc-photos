@@ -13,68 +13,74 @@ part of 'file_content_view.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? shouldPlayLivePhoto,
-      bool? canZoom,
-      bool? canPlay,
-      bool? canLoop,
-      bool? isPlayControlVisible,
-      bool? isLoaded,
-      bool? isZoomed,
-      bool? isPlaying,
-      double? contentHeight,
-      double? videoAspectRatio,
-      Duration? videoDuration,
-      bool? videoIsLooping,
-      double? videoVolume,
-      ({Object error, StackTrace? stackTrace})? error,
-      ({Object error, StackTrace? stackTrace})? loadError});
+  _State call({
+    bool? shouldPlayLivePhoto,
+    bool? canZoom,
+    bool? canPlay,
+    bool? canLoop,
+    bool? isPlayControlVisible,
+    bool? isLoaded,
+    bool? isZoomed,
+    bool? isPlaying,
+    double? contentHeight,
+    double? videoAspectRatio,
+    Duration? videoDuration,
+    bool? videoIsLooping,
+    double? videoVolume,
+    ({Object error, StackTrace? stackTrace})? error,
+    ({Object error, StackTrace? stackTrace})? loadError,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic shouldPlayLivePhoto,
-      dynamic canZoom,
-      dynamic canPlay,
-      dynamic canLoop,
-      dynamic isPlayControlVisible,
-      dynamic isLoaded,
-      dynamic isZoomed,
-      dynamic isPlaying,
-      dynamic contentHeight = copyWithNull,
-      dynamic videoAspectRatio,
-      dynamic videoDuration,
-      dynamic videoIsLooping,
-      dynamic videoVolume,
-      dynamic error = copyWithNull,
-      dynamic loadError = copyWithNull}) {
+  _State call({
+    dynamic shouldPlayLivePhoto,
+    dynamic canZoom,
+    dynamic canPlay,
+    dynamic canLoop,
+    dynamic isPlayControlVisible,
+    dynamic isLoaded,
+    dynamic isZoomed,
+    dynamic isPlaying,
+    dynamic contentHeight = copyWithNull,
+    dynamic videoAspectRatio,
+    dynamic videoDuration,
+    dynamic videoIsLooping,
+    dynamic videoVolume,
+    dynamic error = copyWithNull,
+    dynamic loadError = copyWithNull,
+  }) {
     return _State(
-        shouldPlayLivePhoto:
-            shouldPlayLivePhoto as bool? ?? that.shouldPlayLivePhoto,
-        canZoom: canZoom as bool? ?? that.canZoom,
-        canPlay: canPlay as bool? ?? that.canPlay,
-        canLoop: canLoop as bool? ?? that.canLoop,
-        isPlayControlVisible:
-            isPlayControlVisible as bool? ?? that.isPlayControlVisible,
-        isLoaded: isLoaded as bool? ?? that.isLoaded,
-        isZoomed: isZoomed as bool? ?? that.isZoomed,
-        isPlaying: isPlaying as bool? ?? that.isPlaying,
-        contentHeight: contentHeight == copyWithNull
-            ? that.contentHeight
-            : contentHeight as double?,
-        videoAspectRatio: videoAspectRatio as double? ?? that.videoAspectRatio,
-        videoDuration: videoDuration as Duration? ?? that.videoDuration,
-        videoIsLooping: videoIsLooping as bool? ?? that.videoIsLooping,
-        videoVolume: videoVolume as double? ?? that.videoVolume,
-        error: error == copyWithNull
-            ? that.error
-            : error as ({Object error, StackTrace? stackTrace})?,
-        loadError: loadError == copyWithNull
-            ? that.loadError
-            : loadError as ({Object error, StackTrace? stackTrace})?);
+      shouldPlayLivePhoto:
+          shouldPlayLivePhoto as bool? ?? that.shouldPlayLivePhoto,
+      canZoom: canZoom as bool? ?? that.canZoom,
+      canPlay: canPlay as bool? ?? that.canPlay,
+      canLoop: canLoop as bool? ?? that.canLoop,
+      isPlayControlVisible:
+          isPlayControlVisible as bool? ?? that.isPlayControlVisible,
+      isLoaded: isLoaded as bool? ?? that.isLoaded,
+      isZoomed: isZoomed as bool? ?? that.isZoomed,
+      isPlaying: isPlaying as bool? ?? that.isPlaying,
+      contentHeight:
+          contentHeight == copyWithNull
+              ? that.contentHeight
+              : contentHeight as double?,
+      videoAspectRatio: videoAspectRatio as double? ?? that.videoAspectRatio,
+      videoDuration: videoDuration as Duration? ?? that.videoDuration,
+      videoIsLooping: videoIsLooping as bool? ?? that.videoIsLooping,
+      videoVolume: videoVolume as double? ?? that.videoVolume,
+      error:
+          error == copyWithNull
+              ? that.error
+              : error as ({Object error, StackTrace? stackTrace})?,
+      loadError:
+          loadError == copyWithNull
+              ? that.loadError
+              : loadError as ({Object error, StackTrace? stackTrace})?,
+    );
   }
 
   final _State that;

@@ -150,8 +150,10 @@ class AppPasswordExchangeBloc
     return super.close();
   }
 
-  Future<void> _onEventGroup1(AppPasswordExchangeBlocEvent event,
-      Emitter<AppPasswordExchangeBlocState> emit) async {
+  Future<void> _onEventGroup1(
+    AppPasswordExchangeBlocEvent event,
+    Emitter<AppPasswordExchangeBlocState> emit,
+  ) async {
     _log.info("[_onEventGroup1] $event");
     if (_isCanceled) {
       _log.fine("[_onEventGroup1] canceled = true, ignore event");
@@ -168,8 +170,10 @@ class AppPasswordExchangeBloc
     }
   }
 
-  Future<void> _onEventInitiateLogin(AppPasswordExchangeBlocInitiateLogin ev,
-      Emitter<AppPasswordExchangeBlocState> emit) async {
+  Future<void> _onEventInitiateLogin(
+    AppPasswordExchangeBlocInitiateLogin ev,
+    Emitter<AppPasswordExchangeBlocState> emit,
+  ) async {
     final uri = ev.uri;
     try {
       final initiateLoginResponse = await api_util.initiateLogin(uri);
@@ -181,14 +185,19 @@ class AppPasswordExchangeBloc
       _log.info("[_onEventInitiateLogin] Self-signed cert");
       emit(AppPasswordExchangeBlocFailure(e));
     } catch (e, stacktrace) {
-      _log.shout("[_onEventInitiateLogin] Failed while exchanging password", e,
-          stacktrace);
+      _log.shout(
+        "[_onEventInitiateLogin] Failed while exchanging password",
+        e,
+        stacktrace,
+      );
       emit(AppPasswordExchangeBlocFailure(e));
     }
   }
 
-  Future<void> _onEventPoll(AppPasswordExchangeBlocPoll ev,
-      Emitter<AppPasswordExchangeBlocState> emit) async {
+  Future<void> _onEventPoll(
+    AppPasswordExchangeBlocPoll ev,
+    Emitter<AppPasswordExchangeBlocState> emit,
+  ) async {
     final pollOptions = ev.pollOptions;
     try {
       await _pollPasswordSubscription?.cancel();
@@ -198,7 +207,10 @@ class AppPasswordExchangeBloc
     } catch (e, stacktrace) {
       await _pollPasswordSubscription?.cancel();
       _log.shout(
-          "[_onEventPoll] Failed while polling for password", e, stacktrace);
+        "[_onEventPoll] Failed while polling for password",
+        e,
+        stacktrace,
+      );
       emit(AppPasswordExchangeBlocFailure(e));
     }
   }
@@ -212,22 +224,25 @@ class AppPasswordExchangeBloc
       }
     } catch (e, stacktrace) {
       _log.shout(
-          "[_pollAppPasswordStreamListener] Failed while polling for password",
-          e,
-          stacktrace);
+        "[_pollAppPasswordStreamListener] Failed while polling for password",
+        e,
+        stacktrace,
+      );
       add(_AppPasswordExchangeBlocAppPwFailed(e));
     }
   }
 
   Future<void> _onEventAppPasswordReceived(
-      _AppPasswordExchangeBlocAppPwReceived ev,
-      Emitter<AppPasswordExchangeBlocState> emit) async {
+    _AppPasswordExchangeBlocAppPwReceived ev,
+    Emitter<AppPasswordExchangeBlocState> emit,
+  ) async {
     try {
       final response = ev.appPasswordResponse;
       final account = Account(
         id: Account.newId(),
         scheme: response.server.scheme,
-        address: response.server.authority +
+        address:
+            response.server.authority +
             (response.server.path.isEmpty ? "" : response.server.path),
         userId: response.loginName.toCi(),
         username2: response.loginName,
@@ -237,28 +252,32 @@ class AppPasswordExchangeBloc
       emit(AppPasswordExchangeBlocResult(account));
     } catch (e, stacktrace) {
       _log.shout(
-          "[_onEventAppPasswordReceived] Failed while exchanging password",
-          e,
-          stacktrace);
+        "[_onEventAppPasswordReceived] Failed while exchanging password",
+        e,
+        stacktrace,
+      );
       emit(AppPasswordExchangeBlocFailure(e));
     }
   }
 
   Future<void> _onEventAppPasswordFailure(
-      _AppPasswordExchangeBlocAppPwFailed ev,
-      Emitter<AppPasswordExchangeBlocState> emit) async {
+    _AppPasswordExchangeBlocAppPwFailed ev,
+    Emitter<AppPasswordExchangeBlocState> emit,
+  ) async {
     await _pollPasswordSubscription?.cancel();
     emit(AppPasswordExchangeBlocFailure(ev.exception));
   }
 
-  Future<void> _onEventCancel(AppPasswordExchangeBlocCancel ev,
-      Emitter<AppPasswordExchangeBlocState> emit) async {
+  Future<void> _onEventCancel(
+    AppPasswordExchangeBlocCancel ev,
+    Emitter<AppPasswordExchangeBlocState> emit,
+  ) async {
     await _pollPasswordSubscription?.cancel();
     _isCanceled = true;
     emit(const AppPasswordExchangeBlocResult(null));
   }
 
   StreamSubscription<Future<api_util.AppPasswordResponse>>?
-      _pollPasswordSubscription;
+  _pollPasswordSubscription;
   bool _isCanceled = false;
 }

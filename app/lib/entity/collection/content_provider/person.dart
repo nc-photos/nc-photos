@@ -10,10 +10,7 @@ import 'package:np_common/object_util.dart';
 class CollectionPersonProvider
     with EquatableMixin
     implements CollectionContentProvider {
-  const CollectionPersonProvider({
-    required this.account,
-    required this.person,
-  });
+  const CollectionPersonProvider({required this.account, required this.person});
 
   @override
   String get fourCc => "PERS";
@@ -29,8 +26,8 @@ class CollectionPersonProvider
 
   @override
   List<CollectionCapability> get capabilities => [
-        CollectionCapability.deleteItem,
-      ];
+    CollectionCapability.deleteItem,
+  ];
 
   @override
   CollectionItemSort get itemSort => CollectionItemSort.dateDescending;

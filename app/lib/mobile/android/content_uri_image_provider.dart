@@ -12,10 +12,7 @@ part 'content_uri_image_provider.g.dart';
 class ContentUriImage extends ImageProvider<ContentUriImage>
     with EquatableMixin {
   /// Creates an object that decodes a content Uri as an image.
-  const ContentUriImage(
-    this.uri, {
-    this.scale = 1.0,
-  });
+  const ContentUriImage(this.uri, {this.scale = 1.0});
 
   @override
   obtainKey(ImageConfiguration configuration) {
@@ -24,19 +21,22 @@ class ContentUriImage extends ImageProvider<ContentUriImage>
 
   @override
   ImageStreamCompleter loadImage(
-      ContentUriImage key, ImageDecoderCallback decode) {
+    ContentUriImage key,
+    ImageDecoderCallback decode,
+  ) {
     return MultiFrameImageStreamCompleter(
       codec: _loadAsync(key, decode),
       scale: key.scale,
       debugLabel: key.uri,
-      informationCollector: () => <DiagnosticsNode>[
-        ErrorDescription("Content uri: $uri"),
-      ],
+      informationCollector:
+          () => <DiagnosticsNode>[ErrorDescription("Content uri: $uri")],
     );
   }
 
   Future<ui.Codec> _loadAsync(
-      ContentUriImage key, ImageDecoderCallback decode) async {
+    ContentUriImage key,
+    ImageDecoderCallback decode,
+  ) async {
     assert(key == this);
     final bytes = await ContentUri.readUri(uri);
     if (bytes.lengthInBytes == 0) {
@@ -44,16 +44,14 @@ class ContentUriImage extends ImageProvider<ContentUriImage>
       PaintingBinding.instance.imageCache.evict(key);
       throw StateError("$uri is empty and cannot be loaded as an image.");
     }
-    final ui.ImmutableBuffer buffer =
-        await ui.ImmutableBuffer.fromUint8List(bytes);
+    final ui.ImmutableBuffer buffer = await ui.ImmutableBuffer.fromUint8List(
+      bytes,
+    );
     return decode(buffer);
   }
 
   @override
-  get props => [
-        uri,
-        scale,
-      ];
+  get props => [uri, scale];
 
   @override
   String toString() => _$toString();

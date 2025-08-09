@@ -13,26 +13,30 @@ part of 'misc_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? isDoubleTapExit,
-      ProtectedPageAuthType? appLockType,
-      ExceptionEvent? error});
+  _State call({
+    bool? isDoubleTapExit,
+    ProtectedPageAuthType? appLockType,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isDoubleTapExit,
-      dynamic appLockType = copyWithNull,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic isDoubleTapExit,
+    dynamic appLockType = copyWithNull,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        isDoubleTapExit: isDoubleTapExit as bool? ?? that.isDoubleTapExit,
-        appLockType: appLockType == copyWithNull
-            ? that.appLockType
-            : appLockType as ProtectedPageAuthType?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isDoubleTapExit: isDoubleTapExit as bool? ?? that.isDoubleTapExit,
+      appLockType:
+          appLockType == copyWithNull
+              ? that.appLockType
+              : appLockType as ProtectedPageAuthType?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

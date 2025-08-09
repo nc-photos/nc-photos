@@ -10,6 +10,7 @@ extension _$ShareAlbumWithUserNpLog on ShareAlbumWithUser {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("use_case.album.share_album_with_user.ShareAlbumWithUser");
+  static final log = Logger(
+    "use_case.album.share_album_with_user.ShareAlbumWithUser",
+  );
 }

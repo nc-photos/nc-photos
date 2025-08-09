@@ -41,34 +41,33 @@ class _State {
     required FileDescriptor initialFile,
     required List<ViewerAppBarButtonType> appBarButtons,
     required List<ViewerAppBarButtonType> bottomAppBarButtons,
-  }) =>
-      _State(
-        pageFileIdMap: const {},
-        fileIdFileMap: const {},
-        mergedFileIdFileMap: const {},
-        fileStates: const {},
-        index: initialIndex,
-        currentFile: initialFile,
-        isShowDetailPane: false,
-        isClosingDetailPane: false,
-        isDetailPaneActive: false,
-        openDetailPaneRequest: Unique(const _OpenDetailPaneRequest(false)),
-        closeDetailPane: Unique(false),
-        isZoomed: false,
-        isInitialLoad: true,
-        isShowAppBar: true,
-        appBarButtons: appBarButtons,
-        bottomAppBarButtons: bottomAppBarButtons,
-        pendingRemoveFile: Unique(null),
-        removedFileIds: const [],
-        imageEditorRequest: Unique(null),
-        imageEnhancerRequest: Unique(null),
-        shareRequest: Unique(null),
-        startSlideshowRequest: Unique(null),
-        slideshowRequest: Unique(null),
-        setAsRequest: Unique(null),
-        isBusy: false,
-      );
+  }) => _State(
+    pageFileIdMap: const {},
+    fileIdFileMap: const {},
+    mergedFileIdFileMap: const {},
+    fileStates: const {},
+    index: initialIndex,
+    currentFile: initialFile,
+    isShowDetailPane: false,
+    isClosingDetailPane: false,
+    isDetailPaneActive: false,
+    openDetailPaneRequest: Unique(const _OpenDetailPaneRequest(false)),
+    closeDetailPane: Unique(false),
+    isZoomed: false,
+    isInitialLoad: true,
+    isShowAppBar: true,
+    appBarButtons: appBarButtons,
+    bottomAppBarButtons: bottomAppBarButtons,
+    pendingRemoveFile: Unique(null),
+    removedFileIds: const [],
+    imageEditorRequest: Unique(null),
+    imageEnhancerRequest: Unique(null),
+    shareRequest: Unique(null),
+    startSlideshowRequest: Unique(null),
+    slideshowRequest: Unique(null),
+    setAsRequest: Unique(null),
+    isBusy: false,
+  );
 
   @override
   String toString() => _$toString();
@@ -158,10 +157,7 @@ class _SetIndex implements _Event {
 
 @toString
 class _JumpToLastSlideshow implements _Event {
-  const _JumpToLastSlideshow({
-    required this.index,
-    required this.fileId,
-  });
+  const _JumpToLastSlideshow({required this.index, required this.fileId});
 
   @override
   String toString() => _$toString();

@@ -25,16 +25,22 @@ void main() {
     test("manual cover file", _removeManualCoverFile);
     group("shared album (owned)", () {
       test("file", _removeFromSharedAlbumOwned);
-      test("file w/ shares managed by others",
-          _removeFromSharedAlbumOwnedWithOtherShare);
+      test(
+        "file w/ shares managed by others",
+        _removeFromSharedAlbumOwnedWithOtherShare,
+      );
       test("file w/ extra share", _removeFromSharedAlbumOwnedLeaveExtraShare);
-      test("file w/ share in other album",
-          _removeFromSharedAlbumOwnedFileInOtherAlbum);
+      test(
+        "file w/ share in other album",
+        _removeFromSharedAlbumOwnedFileInOtherAlbum,
+      );
     });
     group("shared album (not owned)", () {
       test("file", _removeFromSharedAlbumNotOwned);
-      test("file w/ shares managed by owner",
-          _removeFromSharedAlbumNotOwnedWithOwnerShare);
+      test(
+        "file w/ shares managed by owner",
+        _removeFromSharedAlbumNotOwnedWithOwnerShare,
+      );
     });
   });
 }
@@ -64,13 +70,18 @@ Future<void> _removeLastFile() async {
   });
 
   await RemoveFromAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItem1]);
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItem1],
+  );
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -90,16 +101,18 @@ Future<void> _removeLastFile() async {
 /// Expect: file removed from album
 Future<void> _remove1OfNFiles() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg")
-        ..addJpeg("admin/test3.jpg"))
-      .build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor())
-        ..addFileItem(files[1].toDescriptor())
-        ..addFileItem(files[2].toDescriptor()))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 1)
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg")
+            ..addJpeg("admin/test3.jpg"))
+          .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor())
+            ..addFileItem(files[1].toDescriptor())
+            ..addFileItem(files[2].toDescriptor()))
+          .build();
   final fileItems = util.AlbumBuilder.fileItemsOf(album);
   final albumFile = album.albumFile!;
   final c = DiContainer(
@@ -114,14 +127,19 @@ Future<void> _remove1OfNFiles() async {
     await util.insertFiles(c.sqliteDb, account, files);
   });
 
-  await RemoveFromAlbum(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItems[0]]);
+  await RemoveFromAlbum(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItems[0]],
+  );
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5).toUtc()),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5).toUtc()),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -146,19 +164,27 @@ Future<void> _remove1OfNFiles() async {
 /// Expect: file removed from album, auto cover and time updated
 Future<void> _removeLatestOfNFiles() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg",
-            lastModified: DateTime.utc(2020, 1, 2, 3, 4, 8))
-        ..addJpeg("admin/test2.jpg",
-            lastModified: DateTime.utc(2020, 1, 2, 3, 4, 7))
-        ..addJpeg("admin/test3.jpg",
-            lastModified: DateTime.utc(2020, 1, 2, 3, 4, 6)))
-      .build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor())
-        ..addFileItem(files[1].toDescriptor())
-        ..addFileItem(files[2].toDescriptor()))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 1)
+            ..addJpeg(
+              "admin/test1.jpg",
+              lastModified: DateTime.utc(2020, 1, 2, 3, 4, 8),
+            )
+            ..addJpeg(
+              "admin/test2.jpg",
+              lastModified: DateTime.utc(2020, 1, 2, 3, 4, 7),
+            )
+            ..addJpeg(
+              "admin/test3.jpg",
+              lastModified: DateTime.utc(2020, 1, 2, 3, 4, 6),
+            ))
+          .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor())
+            ..addFileItem(files[1].toDescriptor())
+            ..addFileItem(files[2].toDescriptor()))
+          .build();
   final fileItems = util.AlbumBuilder.fileItemsOf(album);
   final albumFile = album.albumFile!;
   final c = DiContainer(
@@ -173,14 +199,19 @@ Future<void> _removeLatestOfNFiles() async {
     await util.insertFiles(c.sqliteDb, account, files);
   });
 
-  await RemoveFromAlbum(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItems[0]]);
+  await RemoveFromAlbum(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItems[0]],
+  );
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5).toUtc()),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5).toUtc()),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -205,16 +236,18 @@ Future<void> _removeLatestOfNFiles() async {
 /// Expect: file removed from album, cover reverted to auto cover
 Future<void> _removeManualCoverFile() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg")
-        ..addJpeg("admin/test3.jpg"))
-      .build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor(), isCover: true)
-        ..addFileItem(files[1].toDescriptor())
-        ..addFileItem(files[2].toDescriptor()))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 1)
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg")
+            ..addJpeg("admin/test3.jpg"))
+          .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor(), isCover: true)
+            ..addFileItem(files[1].toDescriptor())
+            ..addFileItem(files[2].toDescriptor()))
+          .build();
   final fileItems = util.AlbumBuilder.fileItemsOf(album);
   final albumFile = album.albumFile!;
   final c = DiContainer(
@@ -229,14 +262,19 @@ Future<void> _removeManualCoverFile() async {
     await util.insertFiles(c.sqliteDb, account, files);
   });
 
-  await RemoveFromAlbum(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItems[0]]);
+  await RemoveFromAlbum(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItems[0]],
+  );
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -263,10 +301,11 @@ Future<void> _removeFromSharedAlbumOwned() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor())
-        ..addShare("user1"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor())
+            ..addShare("user1"))
+          .build();
   final file1 = files[0];
   final fileItem1 = util.AlbumBuilder.fileItemsOf(album)[0];
   final albumFile = album.albumFile!;
@@ -286,11 +325,13 @@ Future<void> _removeFromSharedAlbumOwned() async {
   });
 
   await RemoveFromAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItem1]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [util.buildShare(id: "0", file: albumFile, shareWith: "user1")],
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItem1],
   );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+  ]);
 }
 
 /// Remove a file (user1 -> admin, user2) from a shared album
@@ -301,14 +342,15 @@ Future<void> _removeFromSharedAlbumOwned() async {
 Future<void> _removeFromSharedAlbumOwnedWithOtherShare() async {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files = (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("user1/test1.jpg", ownerId: "user1"))
-      .build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor(), addedBy: "user1")
-        ..addShare("user1")
-        ..addShare("user2"))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 1)
+        ..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor(), addedBy: "user1")
+            ..addShare("user1")
+            ..addShare("user2"))
+          .build();
   final file1 = files[0];
   final fileItem1 = util.AlbumBuilder.fileItemsOf(album)[0];
   final albumFile = album.albumFile!;
@@ -319,9 +361,17 @@ Future<void> _removeFromSharedAlbumOwnedWithOtherShare() async {
       util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
       util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
       util.buildShare(
-          id: "2", uidOwner: "user1", file: file1, shareWith: "admin"),
+        id: "2",
+        uidOwner: "user1",
+        file: file1,
+        shareWith: "admin",
+      ),
       util.buildShare(
-          id: "3", uidOwner: "user1", file: file1, shareWith: "user2"),
+        id: "3",
+        uidOwner: "user1",
+        file: file1,
+        shareWith: "user2",
+      ),
     ]),
     npDb: util.buildTestDb(),
   );
@@ -333,18 +383,26 @@ Future<void> _removeFromSharedAlbumOwnedWithOtherShare() async {
   });
 
   await RemoveFromAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItem1]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-      util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
-      util.buildShare(
-          id: "2", uidOwner: "user1", file: file1, shareWith: "admin"),
-      util.buildShare(
-          id: "3", uidOwner: "user1", file: file1, shareWith: "user2"),
-    ],
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItem1],
   );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+    util.buildShare(
+      id: "2",
+      uidOwner: "user1",
+      file: file1,
+      shareWith: "admin",
+    ),
+    util.buildShare(
+      id: "3",
+      uidOwner: "user1",
+      file: file1,
+      shareWith: "user2",
+    ),
+  ]);
 }
 
 /// Remove a file from a shared album (admin -> user1) with extra unmanaged
@@ -356,10 +414,11 @@ Future<void> _removeFromSharedAlbumOwnedLeaveExtraShare() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor())
-        ..addShare("user1"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor())
+            ..addShare("user1"))
+          .build();
   final file1 = files[0];
   final fileItem1 = util.AlbumBuilder.fileItemsOf(album)[0];
   final albumFile = album.albumFile!;
@@ -380,14 +439,14 @@ Future<void> _removeFromSharedAlbumOwnedLeaveExtraShare() async {
   });
 
   await RemoveFromAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItem1]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-      util.buildShare(id: "2", file: file1, shareWith: "user2"),
-    ],
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItem1],
   );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    util.buildShare(id: "2", file: file1, shareWith: "user2"),
+  ]);
 }
 
 /// Remove a file from a shared album (admin -> user1, user2) where the file is
@@ -399,15 +458,17 @@ Future<void> _removeFromSharedAlbumOwnedFileInOtherAlbum() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 2)..addJpeg("admin/test1.jpg")).build();
-  final album1 = (util.AlbumBuilder()
-        ..addFileItem(files[0].toDescriptor())
-        ..addShare("user1")
-        ..addShare("user2"))
-      .build();
-  final album2 = (util.AlbumBuilder.ofId(albumId: 1)
-        ..addFileItem(files[0].toDescriptor())
-        ..addShare("user1"))
-      .build();
+  final album1 =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0].toDescriptor())
+            ..addShare("user1")
+            ..addShare("user2"))
+          .build();
+  final album2 =
+      (util.AlbumBuilder.ofId(albumId: 1)
+            ..addFileItem(files[0].toDescriptor())
+            ..addShare("user1"))
+          .build();
   final album1fileItems = util.AlbumBuilder.fileItemsOf(album1);
   final album1File = album1.albumFile!;
   final album2File = album2.albumFile!;
@@ -428,16 +489,16 @@ Future<void> _removeFromSharedAlbumOwnedFileInOtherAlbum() async {
     await util.insertFiles(c.sqliteDb, account, files);
   });
 
-  await RemoveFromAlbum(c)(account,
-      c.albumMemoryRepo.findAlbumByPath(album1File.path), [album1fileItems[0]]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(id: "0", file: album1File, shareWith: "user1"),
-      util.buildShare(id: "1", file: files[0], shareWith: "user1"),
-      util.buildShare(id: "3", file: album2File, shareWith: "user1"),
-    ],
+  await RemoveFromAlbum(c)(
+    account,
+    c.albumMemoryRepo.findAlbumByPath(album1File.path),
+    [album1fileItems[0]],
   );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: album1File, shareWith: "user1"),
+    util.buildShare(id: "1", file: files[0], shareWith: "user1"),
+    util.buildShare(id: "3", file: album2File, shareWith: "user1"),
+  ]);
 }
 
 /// Remove a file from a shared album (user1 -> admin, user2)
@@ -447,11 +508,12 @@ Future<void> _removeFromSharedAlbumNotOwned() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder(ownerId: "user1")
-        ..addFileItem(files[0].toDescriptor())
-        ..addShare("admin")
-        ..addShare("user2"))
-      .build();
+  final album =
+      (util.AlbumBuilder(ownerId: "user1")
+            ..addFileItem(files[0].toDescriptor())
+            ..addShare("admin")
+            ..addShare("user2"))
+          .build();
   final file1 = files[0];
   final fileItem1 = util.AlbumBuilder.fileItemsOf(album)[0];
   final albumFile = album.albumFile!;
@@ -460,9 +522,17 @@ Future<void> _removeFromSharedAlbumNotOwned() async {
     fileRepo: MockFileMemoryRepo([albumFile, file1]),
     shareRepo: MockShareMemoryRepo([
       util.buildShare(
-          id: "0", uidOwner: "user1", file: albumFile, shareWith: "admin"),
+        id: "0",
+        uidOwner: "user1",
+        file: albumFile,
+        shareWith: "admin",
+      ),
       util.buildShare(
-          id: "1", uidOwner: "user1", file: albumFile, shareWith: "user2"),
+        id: "1",
+        uidOwner: "user1",
+        file: albumFile,
+        shareWith: "user2",
+      ),
       util.buildShare(id: "2", file: file1, shareWith: "user1"),
       util.buildShare(id: "3", file: file1, shareWith: "user2"),
     ]),
@@ -475,16 +545,24 @@ Future<void> _removeFromSharedAlbumNotOwned() async {
   });
 
   await RemoveFromAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItem1]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(
-          id: "0", uidOwner: "user1", file: albumFile, shareWith: "admin"),
-      util.buildShare(
-          id: "1", uidOwner: "user1", file: albumFile, shareWith: "user2"),
-    ],
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItem1],
   );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(
+      id: "0",
+      uidOwner: "user1",
+      file: albumFile,
+      shareWith: "admin",
+    ),
+    util.buildShare(
+      id: "1",
+      uidOwner: "user1",
+      file: albumFile,
+      shareWith: "user2",
+    ),
+  ]);
 }
 
 /// Remove a file (admin -> user1 | user1 -> user2) from a shared album
@@ -496,11 +574,12 @@ Future<void> _removeFromSharedAlbumNotOwnedWithOwnerShare() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder(ownerId: "user1")
-        ..addFileItem(files[0].toDescriptor())
-        ..addShare("admin")
-        ..addShare("user2"))
-      .build();
+  final album =
+      (util.AlbumBuilder(ownerId: "user1")
+            ..addFileItem(files[0].toDescriptor())
+            ..addShare("admin")
+            ..addShare("user2"))
+          .build();
   final file1 = files[0];
   final fileItem1 = util.AlbumBuilder.fileItemsOf(album)[0];
   final albumFile = album.albumFile!;
@@ -509,12 +588,24 @@ Future<void> _removeFromSharedAlbumNotOwnedWithOwnerShare() async {
     fileRepo: MockFileMemoryRepo([albumFile, file1]),
     shareRepo: MockShareMemoryRepo([
       util.buildShare(
-          id: "0", uidOwner: "user1", file: albumFile, shareWith: "admin"),
+        id: "0",
+        uidOwner: "user1",
+        file: albumFile,
+        shareWith: "admin",
+      ),
       util.buildShare(id: "1", file: file1, shareWith: "user1"),
       util.buildShare(
-          id: "2", uidOwner: "user1", file: albumFile, shareWith: "user2"),
+        id: "2",
+        uidOwner: "user1",
+        file: albumFile,
+        shareWith: "user2",
+      ),
       util.buildShare(
-          id: "3", uidOwner: "user1", file: file1, shareWith: "user2"),
+        id: "3",
+        uidOwner: "user1",
+        file: file1,
+        shareWith: "user2",
+      ),
     ]),
     npDb: util.buildTestDb(),
   );
@@ -525,16 +616,28 @@ Future<void> _removeFromSharedAlbumNotOwnedWithOwnerShare() async {
   });
 
   await RemoveFromAlbum(c)(
-      account, c.albumMemoryRepo.findAlbumByPath(albumFile.path), [fileItem1]);
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(
-          id: "0", uidOwner: "user1", file: albumFile, shareWith: "admin"),
-      util.buildShare(
-          id: "2", uidOwner: "user1", file: albumFile, shareWith: "user2"),
-      util.buildShare(
-          id: "3", uidOwner: "user1", file: file1, shareWith: "user2"),
-    ],
+    account,
+    c.albumMemoryRepo.findAlbumByPath(albumFile.path),
+    [fileItem1],
   );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(
+      id: "0",
+      uidOwner: "user1",
+      file: albumFile,
+      shareWith: "admin",
+    ),
+    util.buildShare(
+      id: "2",
+      uidOwner: "user1",
+      file: albumFile,
+      shareWith: "user2",
+    ),
+    util.buildShare(
+      id: "3",
+      uidOwner: "user1",
+      file: file1,
+      shareWith: "user2",
+    ),
+  ]);
 }

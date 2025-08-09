@@ -13,32 +13,36 @@ part of 'places_browser.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {LocationGroupResult? places,
-      bool? isLoading,
-      List<_Item>? transformedPlaceItems,
-      List<_Item>? transformedCountryItems,
-      ExceptionEvent? error});
+  _State call({
+    LocationGroupResult? places,
+    bool? isLoading,
+    List<_Item>? transformedPlaceItems,
+    List<_Item>? transformedCountryItems,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic places,
-      dynamic isLoading,
-      dynamic transformedPlaceItems,
-      dynamic transformedCountryItems,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic places,
+    dynamic isLoading,
+    dynamic transformedPlaceItems,
+    dynamic transformedCountryItems,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        places: places as LocationGroupResult? ?? that.places,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedPlaceItems:
-            transformedPlaceItems as List<_Item>? ?? that.transformedPlaceItems,
-        transformedCountryItems: transformedCountryItems as List<_Item>? ??
-            that.transformedCountryItems,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      places: places as LocationGroupResult? ?? that.places,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedPlaceItems:
+          transformedPlaceItems as List<_Item>? ?? that.transformedPlaceItems,
+      transformedCountryItems:
+          transformedCountryItems as List<_Item>? ??
+          that.transformedCountryItems,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

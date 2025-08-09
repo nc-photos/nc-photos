@@ -7,8 +7,10 @@ void main() {
   group("unstripPath", () {
     test("path", () {
       final account = util.buildAccount();
-      expect(file_util.unstripPath(account, "test/test1.jpg"),
-          "remote.php/dav/files/admin/test/test1.jpg");
+      expect(
+        file_util.unstripPath(account, "test/test1.jpg"),
+        "remote.php/dav/files/admin/test/test1.jpg",
+      );
     });
 
     test("root", () {

@@ -17,10 +17,9 @@ class FavoriteRemoteDataSource implements FavoriteDataSource {
   @override
   list(Account account, File dir) async {
     _log.info("[list] ${dir.path}");
-    final response = await ApiUtil.fromAccount(account).files().report(
-          path: dir.path,
-          favorite: true,
-        );
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().report(path: dir.path, favorite: true);
     if (!response.isGood) {
       _log.severe("[list] Failed requesting server: $response");
       throw ApiException(

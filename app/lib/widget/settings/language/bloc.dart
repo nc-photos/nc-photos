@@ -3,11 +3,8 @@ part of '../language_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State.init(
-          selected: prefController.languageValue,
-        )) {
+  _Bloc({required this.prefController})
+    : super(_State.init(selected: prefController.languageValue)) {
     on<_Init>(_onInit);
     on<_SelectLanguage>(_onSelectLanguage);
     on<_SetError>(_onSetError);
@@ -37,9 +34,7 @@ class _Bloc extends Bloc<_Event, _State>
       onData: (data) => state.copyWith(selected: data),
       onError: (e, stackTrace) {
         _log.severe("[_onInit] Uncaught exception", e, stackTrace);
-        return state.copyWith(
-          error: ExceptionEvent(e, stackTrace),
-        );
+        return state.copyWith(error: ExceptionEvent(e, stackTrace));
       },
     );
   }

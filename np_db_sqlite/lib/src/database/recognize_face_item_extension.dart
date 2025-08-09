@@ -11,9 +11,11 @@ extension SqliteDbRecognizeFaceItemExtension on SqliteDb {
   }) {
     _log.info("[queryRecognizeFaceItemsByFaceLabel] label: $label");
     final query = select(recognizeFaceItems).join([
-      innerJoin(recognizeFaces,
-          recognizeFaces.rowId.equalsExp(recognizeFaceItems.parent),
-          useColumns: false),
+      innerJoin(
+        recognizeFaces,
+        recognizeFaces.rowId.equalsExp(recognizeFaceItems.parent),
+        useColumns: false,
+      ),
     ]);
     if (account.sqlAccount != null) {
       query
@@ -22,14 +24,23 @@ extension SqliteDbRecognizeFaceItemExtension on SqliteDb {
     } else {
       query
         ..join([
-          innerJoin(accounts, accounts.rowId.equalsExp(recognizeFaces.account),
-              useColumns: false),
-          innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-              useColumns: false),
+          innerJoin(
+            accounts,
+            accounts.rowId.equalsExp(recognizeFaces.account),
+            useColumns: false,
+          ),
+          innerJoin(
+            servers,
+            servers.rowId.equalsExp(accounts.server),
+            useColumns: false,
+          ),
         ])
         ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(accounts.userId
-            .equals(account.dbAccount!.userId.toCaseInsensitiveString()))
+        ..where(
+          accounts.userId.equals(
+            account.dbAccount!.userId.toCaseInsensitiveString(),
+          ),
+        )
         ..where(recognizeFaces.label.equals(label));
     }
     if (orderBy != null) {

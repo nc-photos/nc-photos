@@ -54,44 +54,53 @@ class Exif with EquatableMixin {
       // content is proprietary and thus useless to us anyway
       // UserComment is now also ignored as its size could be very large
       data.entries
-          .where((e) =>
-              e.key != "MakerNote" &&
-              e.key != "UserComment" &&
-              e.key != "ImageDescription")
+          .where(
+            (e) =>
+                e.key != "MakerNote" &&
+                e.key != "UserComment" &&
+                e.key != "ImageDescription",
+          )
           .map((e) {
-        final jsonValue = convertValue(e.value);
-        return MapEntry(e.key, jsonValue);
-      }),
+            final jsonValue = convertValue(e.value);
+            return MapEntry(e.key, jsonValue);
+          }),
     );
   }
 
   factory Exif.fromJson(JsonObj json) {
-    return Exif(Map.fromEntries(
-      json.entries.map((e) {
-        dynamic exifValue;
-        if (e.value is Map) {
-          exifValue = _objectFromJson((e.value as Map).cast<String, dynamic>());
-        } else if (e.value is List) {
-          exifValue = (e.value as List).map((e) {
-            if (e is Map) {
-              return _objectFromJson(e.cast<String, dynamic>());
-            } else {
-              return e;
-            }
-          }).toList();
-        } else {
-          exifValue = e.value;
-        }
-        return MapEntry(e.key, exifValue);
-      }),
-    ));
+    return Exif(
+      Map.fromEntries(
+        json.entries.map((e) {
+          dynamic exifValue;
+          if (e.value is Map) {
+            exifValue = _objectFromJson(
+              (e.value as Map).cast<String, dynamic>(),
+            );
+          } else if (e.value is List) {
+            exifValue =
+                (e.value as List).map((e) {
+                  if (e is Map) {
+                    return _objectFromJson(e.cast<String, dynamic>());
+                  } else {
+                    return e;
+                  }
+                }).toList();
+          } else {
+            exifValue = e.value;
+          }
+          return MapEntry(e.key, exifValue);
+        }),
+      ),
+    );
   }
 
   @override
   String toString() {
-    final dataStr = data.entries.map((e) {
-      return "${e.key}: '${e.value}'";
-    }).join(", ");
+    final dataStr = data.entries
+        .map((e) {
+          return "${e.key}: '${e.value}'";
+        })
+        .join(", ");
     return "Exif {$dataStr}";
   }
 
@@ -110,9 +119,10 @@ class Exif with EquatableMixin {
           : null;
     } catch (e, stackTrace) {
       _log.severe(
-          "[dateTimeOriginal] Non standard valie: ${data["DateTimeOriginal"]}",
-          e,
-          stackTrace);
+        "[dateTimeOriginal] Non standard valie: ${data["DateTimeOriginal"]}",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }
@@ -136,9 +146,7 @@ class Exif with EquatableMixin {
   List<Rational>? get gpsLongitude => data["GPSLongitude"]?.cast<Rational>();
 
   @override
-  List<Object?> get props => [
-        data,
-      ];
+  List<Object?> get props => [data];
 
   Rational? _readRationalValue(String key) {
     // values may be saved as typed (extracted by app) or untyped string
@@ -162,9 +170,10 @@ class Exif with EquatableMixin {
       );
     } catch (e, stackTrace) {
       _$ExifNpLog.log.shout(
-          "[_tryParseRationalString] Failed to parse rational string: $str",
-          e,
-          stackTrace);
+        "[_tryParseRationalString] Failed to parse rational string: $str",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }
@@ -177,9 +186,10 @@ class Exif with EquatableMixin {
       return int.parse(str);
     } catch (e, stackTrace) {
       _$ExifNpLog.log.shout(
-          "[_tryParseIntString] Failed to parse int string: $str",
-          e,
-          stackTrace);
+        "[_tryParseIntString] Failed to parse int string: $str",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }
@@ -190,30 +200,22 @@ class Exif with EquatableMixin {
 }
 
 extension on Rational {
-  JsonObj toJson() => {
-        "n": numerator,
-        "d": denominator,
-      };
+  JsonObj toJson() => {"n": numerator, "d": denominator};
 }
 
 extension on Date {
-  JsonObj toJson() => {
-        "_": "Date",
-        "y": year,
-        "m": month,
-        "d": day,
-      };
+  JsonObj toJson() => {"_": "Date", "y": year, "m": month, "d": day};
 }
 
 extension on Time {
   JsonObj toJson() => {
-        "_": "Time",
-        "h": hour,
-        "m": minute,
-        "s": second,
-        "th": tzHour,
-        "tm": tzMinute,
-      };
+    "_": "Time",
+    "h": hour,
+    "m": minute,
+    "s": second,
+    "th": tzHour,
+    "tm": tzMinute,
+  };
 }
 
 Object _objectFromJson(JsonObj json) {
@@ -225,6 +227,8 @@ Object _objectFromJson(JsonObj json) {
     case null:
     default:
       return Rational(
-          json["n"] ?? json["numerator"], json["d"] ?? json["denominator"]);
+        json["n"] ?? json["numerator"],
+        json["d"] ?? json["denominator"],
+      );
   }
 }

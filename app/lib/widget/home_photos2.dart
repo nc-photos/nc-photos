@@ -88,20 +88,22 @@ class HomePhotos2 extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (_) => _Bloc(
-        KiwiContainer().resolve(),
-        account: accountController.account,
-        filesController: accountController.filesController,
-        prefController: context.read(),
-        accountPrefController: accountController.accountPrefController,
-        collectionsController: accountController.collectionsController,
-        syncController: accountController.syncController,
-        personsController: accountController.personsController,
-        metadataController: accountController.metadataController,
-        serverController: accountController.serverController,
-        bottomAppBarHeight: AppDimension.of(context).homeBottomAppBarHeight,
-        draggableThumbSize: AppDimension.of(context).timelineDraggableThumbSize,
-      ),
+      create:
+          (_) => _Bloc(
+            KiwiContainer().resolve(),
+            account: accountController.account,
+            filesController: accountController.filesController,
+            prefController: context.read(),
+            accountPrefController: accountController.accountPrefController,
+            collectionsController: accountController.collectionsController,
+            syncController: accountController.syncController,
+            personsController: accountController.personsController,
+            metadataController: accountController.metadataController,
+            serverController: accountController.serverController,
+            bottomAppBarHeight: AppDimension.of(context).homeBottomAppBarHeight,
+            draggableThumbSize:
+                AppDimension.of(context).timelineDraggableThumbSize,
+          ),
       child: const _WrappedHomePhotos(),
     );
   }
@@ -160,19 +162,27 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
             listener: (context, error) {
               if (error != null && _isVisible == true) {
                 if (error.error is _ArchiveFailedError) {
-                  SnackBarManager().showSnackBar(SnackBar(
-                    content: Text(L10n.global()
-                        .archiveSelectedFailureNotification(
-                            (error.error as _ArchiveFailedError).count)),
-                    duration: k.snackBarDurationNormal,
-                  ));
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        L10n.global().archiveSelectedFailureNotification(
+                          (error.error as _ArchiveFailedError).count,
+                        ),
+                      ),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
                 } else if (error.error is _RemoveFailedError) {
-                  SnackBarManager().showSnackBar(SnackBar(
-                    content: Text(L10n.global()
-                        .deleteSelectedFailureNotification(
-                            (error.error as _RemoveFailedError).count)),
-                    duration: k.snackBarDurationNormal,
-                  ));
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        L10n.global().deleteSelectedFailureNotification(
+                          (error.error as _RemoveFailedError).count,
+                        ),
+                      ),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
                 } else {
                   SnackBarManager().showSnackBarForException(error.error);
                 }
@@ -182,19 +192,17 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
         ],
         child: _BlocSelector(
           selector: (state) => state.selectedItems.isEmpty,
-          builder: (context, isSelectedEmpty) => isSelectedEmpty
-              ? DoubleTapExitContainer(
-                  child: _BodyView(
-                    key: _bodyKey,
-                  ),
-                )
-              : PopScope(
-                  canPop: false,
-                  onPopInvokedWithResult: (didPop, result) {
-                    context.addEvent(const _SetSelectedItems(items: {}));
-                  },
-                  child: _BodyView(key: _bodyKey),
-                ),
+          builder:
+              (context, isSelectedEmpty) =>
+                  isSelectedEmpty
+                      ? DoubleTapExitContainer(child: _BodyView(key: _bodyKey))
+                      : PopScope(
+                        canPop: false,
+                        onPopInvokedWithResult: (didPop, result) {
+                          context.addEvent(const _SetSelectedItems(items: {}));
+                        },
+                        child: _BodyView(key: _bodyKey),
+                      ),
         ),
       ),
     );
@@ -255,9 +263,10 @@ class _InitialSyncBody extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         LinearProgressIndicator(
-                          value: (syncProgress?.progress ?? 0) == 0
-                              ? null
-                              : syncProgress!.progress,
+                          value:
+                              (syncProgress?.progress ?? 0) == 0
+                                  ? null
+                                  : syncProgress!.progress,
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -317,26 +326,30 @@ class _BodyState extends State<_Body> {
         child: LayoutBuilder(
           builder: (context, constraints) {
             if (constraints.hasBoundedHeight) {
-              context.addEvent(_SetLayoutConstraint(
-                constraints.maxWidth,
-                constraints.maxHeight,
-                MediaQuery.of(context).padding.top +
-                    kToolbarHeight +
-                    AppDimension.of(context).homeBottomAppBarHeight,
-              ));
+              context.addEvent(
+                _SetLayoutConstraint(
+                  constraints.maxWidth,
+                  constraints.maxHeight,
+                  MediaQuery.of(context).padding.top +
+                      kToolbarHeight +
+                      AppDimension.of(context).homeBottomAppBarHeight,
+                ),
+              );
             }
             return _BlocBuilder(
-              buildWhen: (previous, current) =>
-                  previous.minimapItems != current.minimapItems ||
-                  previous.viewHeight != current.viewHeight ||
-                  (previous.isEnableMemoryCollection &&
-                          previous.memoryCollections.isNotEmpty) !=
-                      (current.isEnableMemoryCollection &&
-                          current.memoryCollections.isNotEmpty),
+              buildWhen:
+                  (previous, current) =>
+                      previous.minimapItems != current.minimapItems ||
+                      previous.viewHeight != current.viewHeight ||
+                      (previous.isEnableMemoryCollection &&
+                              previous.memoryCollections.isNotEmpty) !=
+                          (current.isEnableMemoryCollection &&
+                              current.memoryCollections.isNotEmpty),
               builder: (context, state) {
                 final scrollExtent = _getScrollViewExtent(
                   context: context,
-                  hasMemoryCollection: state.isEnableMemoryCollection &&
+                  hasMemoryCollection:
+                      state.isEnableMemoryCollection &&
                       state.memoryCollections.isNotEmpty,
                 );
                 return Stack(
@@ -363,8 +376,9 @@ class _BodyState extends State<_Body> {
                         context.bloc.add(const _EndScrolling());
                       },
                       child: ScrollConfiguration(
-                        behavior: ScrollConfiguration.of(context)
-                            .copyWith(scrollbars: false),
+                        behavior: ScrollConfiguration.of(
+                          context,
+                        ).copyWith(scrollbars: false),
                         child: RefreshIndicator(
                           color: Theme.of(context).colorScheme.secondary,
                           backgroundColor:
@@ -383,67 +397,82 @@ class _BodyState extends State<_Body> {
                             children: [
                               _BlocSelector<bool>(
                                 selector: (state) => state.finger >= 2,
-                                builder: (context, isScaleMode) =>
-                                    CustomScrollView(
-                                  controller: _scrollController,
-                                  physics: isScaleMode
-                                      ? const NeverScrollableScrollPhysics()
-                                      : null,
-                                  slivers: [
-                                    _BlocSelector<bool>(
-                                      selector: (state) =>
-                                          state.selectedItems.isEmpty,
-                                      builder: (context, isEmpty) => isEmpty
-                                          ? const _AppBar()
-                                          : const _SelectionAppBar(),
+                                builder:
+                                    (context, isScaleMode) => CustomScrollView(
+                                      controller: _scrollController,
+                                      physics:
+                                          isScaleMode
+                                              ? const NeverScrollableScrollPhysics()
+                                              : null,
+                                      slivers: [
+                                        _BlocSelector<bool>(
+                                          selector:
+                                              (state) =>
+                                                  state.selectedItems.isEmpty,
+                                          builder:
+                                              (context, isEmpty) =>
+                                                  isEmpty
+                                                      ? const _AppBar()
+                                                      : const _SelectionAppBar(),
+                                        ),
+                                        _BlocBuilder(
+                                          buildWhen:
+                                              (previous, current) =>
+                                                  (previous
+                                                          .isEnableMemoryCollection &&
+                                                      previous
+                                                          .memoryCollections
+                                                          .isNotEmpty) !=
+                                                  (current.isEnableMemoryCollection &&
+                                                      current
+                                                          .memoryCollections
+                                                          .isNotEmpty),
+                                          builder: (context, state) {
+                                            if (state
+                                                    .isEnableMemoryCollection &&
+                                                state
+                                                    .memoryCollections
+                                                    .isNotEmpty) {
+                                              return const _MemoryCollectionList();
+                                            } else {
+                                              return const SliverToBoxAdapter();
+                                            }
+                                          },
+                                        ),
+                                        _BlocSelector<double?>(
+                                          selector: (state) => state.scale,
+                                          builder:
+                                              (context, scale) =>
+                                                  SliverTransitionedScale(
+                                                    scale: scale,
+                                                    baseSliver:
+                                                        const _ContentList(),
+                                                    overlaySliver:
+                                                        const _ScalingList(),
+                                                  ),
+                                        ),
+                                        SliverToBoxAdapter(
+                                          child: SizedBox(
+                                            height:
+                                                AppDimension.of(
+                                                  context,
+                                                ).homeBottomAppBarHeight,
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    _BlocBuilder(
-                                      buildWhen: (previous, current) =>
-                                          (previous.isEnableMemoryCollection &&
-                                              previous.memoryCollections
-                                                  .isNotEmpty) !=
-                                          (current.isEnableMemoryCollection &&
-                                              current.memoryCollections
-                                                  .isNotEmpty),
-                                      builder: (context, state) {
-                                        if (state.isEnableMemoryCollection &&
-                                            state
-                                                .memoryCollections.isNotEmpty) {
-                                          return const _MemoryCollectionList();
-                                        } else {
-                                          return const SliverToBoxAdapter();
-                                        }
-                                      },
-                                    ),
-                                    _BlocSelector<double?>(
-                                      selector: (state) => state.scale,
-                                      builder: (context, scale) =>
-                                          SliverTransitionedScale(
-                                        scale: scale,
-                                        baseSliver: const _ContentList(),
-                                        overlaySliver: const _ScalingList(),
-                                      ),
-                                    ),
-                                    SliverToBoxAdapter(
-                                      child: SizedBox(
-                                        height: AppDimension.of(context)
-                                            .homeBottomAppBarHeight,
-                                      ),
-                                    ),
-                                  ],
-                                ),
                               ),
                               _BlocSelector<bool>(
                                 selector: (state) => state.isScrolling,
-                                builder: (context, isScrolling) =>
-                                    AnimatedOpacity(
-                                  opacity: isScrolling ? 1 : 0,
-                                  duration: k.animationDurationNormal,
-                                  curve: Curves.fastOutSlowIn,
-                                  child: const _MinimapPadding(
-                                    child: _MinimapBackground(),
-                                  ),
-                                ),
+                                builder:
+                                    (context, isScrolling) => AnimatedOpacity(
+                                      opacity: isScrolling ? 1 : 0,
+                                      duration: k.animationDurationNormal,
+                                      curve: Curves.fastOutSlowIn,
+                                      child: const _MinimapPadding(
+                                        child: _MinimapBackground(),
+                                      ),
+                                    ),
                               ),
                             ],
                           ),
@@ -452,12 +481,13 @@ class _BodyState extends State<_Body> {
                     ),
                     _BlocSelector<bool>(
                       selector: (state) => state.isScrolling,
-                      builder: (context, isScrolling) => AnimatedOpacity(
-                        opacity: isScrolling ? 1 : 0,
-                        duration: k.animationDurationNormal,
-                        curve: Curves.fastOutSlowIn,
-                        child: const _MinimapPadding(child: _MinimapView()),
-                      ),
+                      builder:
+                          (context, isScrolling) => AnimatedOpacity(
+                            opacity: isScrolling ? 1 : 0,
+                            duration: k.animationDurationNormal,
+                            curve: Curves.fastOutSlowIn,
+                            child: const _MinimapPadding(child: _MinimapView()),
+                          ),
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -486,8 +516,10 @@ class _BodyState extends State<_Body> {
   }) {
     if (context.state.minimapItems?.isNotEmpty == true &&
         context.state.viewHeight != null) {
-      final contentListMaxExtent = context.state.minimapItems!
-          .fold(.0, (previousValue, e) => previousValue + e.logicalHeight);
+      final contentListMaxExtent = context.state.minimapItems!.fold(
+        .0,
+        (previousValue, e) => previousValue + e.logicalHeight,
+      );
       final appBarExtent = _getAppBarExtent(context);
       final bottomAppBarExtent =
           AppDimension.of(context).homeBottomAppBarHeight;
@@ -497,19 +529,22 @@ class _BodyState extends State<_Body> {
       // scroll extent = list height - widget viewport height
       // + sliver app bar height + bottom app bar height
       // + metadata task header height + smart album list height
-      final scrollExtent = contentListMaxExtent -
+      final scrollExtent =
+          contentListMaxExtent -
           context.state.viewHeight! +
           appBarExtent +
           bottomAppBarExtent +
           // metadataTaskHeaderExtent +
           smartAlbumListHeight;
-      _log.info("[_getScrollViewExtent] $contentListMaxExtent "
-          "- ${context.state.viewHeight} "
-          "+ $appBarExtent "
-          "+ $bottomAppBarExtent "
-          // "+ $metadataTaskHeaderExtent "
-          "+ $smartAlbumListHeight "
-          "= $scrollExtent");
+      _log.info(
+        "[_getScrollViewExtent] $contentListMaxExtent "
+        "- ${context.state.viewHeight} "
+        "+ $appBarExtent "
+        "+ $bottomAppBarExtent "
+        // "+ $metadataTaskHeaderExtent "
+        "+ $smartAlbumListHeight "
+        "= $scrollExtent",
+      );
       return scrollExtent;
     } else {
       return null;
@@ -521,8 +556,9 @@ class _BodyState extends State<_Body> {
 
   final _scrollController = ScrollController();
 
-  late final _onBackToTopListener =
-      AppEventListener<HomePhotos2BackToTopEvent>(_onBackToTop);
+  late final _onBackToTopListener = AppEventListener<HomePhotos2BackToTopEvent>(
+    _onBackToTop,
+  );
 }
 
 typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;

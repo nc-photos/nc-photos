@@ -22,8 +22,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic isDoubleTapExit, dynamic canPop}) {
     return _State(
-        isDoubleTapExit: isDoubleTapExit as bool? ?? that.isDoubleTapExit,
-        canPop: canPop as bool? ?? that.canPop);
+      isDoubleTapExit: isDoubleTapExit as bool? ?? that.isDoubleTapExit,
+      canPop: canPop as bool? ?? that.canPop,
+    );
   }
 
   final _State that;
@@ -43,7 +44,8 @@ extension _$_BlocNpLog on _Bloc {
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.double_tap_exit_container.double_tap_exit_container._Bloc");
+    "widget.double_tap_exit_container.double_tap_exit_container._Bloc",
+  );
 }
 
 // **************************************************************************

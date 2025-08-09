@@ -31,10 +31,7 @@ class DownloadProgressDialog extends StatelessWidget {
                 style: Theme.of(context).textTheme.labelMedium,
               ),
             ),
-          if (label != null) ...[
-            const SizedBox(height: 4),
-            Text(label!),
-          ],
+          if (label != null) ...[const SizedBox(height: 4), Text(label!)],
         ],
       ),
       actions: [

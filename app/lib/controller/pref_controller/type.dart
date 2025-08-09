@@ -4,8 +4,7 @@ enum PrefMapDefaultRangeType {
   thisMonth(0),
   prevMonth(1),
   thisYear(2),
-  custom(3),
-  ;
+  custom(3);
 
   const PrefMapDefaultRangeType(this.value);
 
@@ -27,10 +26,7 @@ class PrefHomeCollectionsNavButton {
         isMinimized: json["isMinimized"],
       );
 
-  JsonObj toJson() => {
-        "type": type.index,
-        "isMinimized": isMinimized,
-      };
+  JsonObj toJson() => {"type": type.index, "isMinimized": isMinimized};
 
   final HomeCollectionsNavBarButtonType type;
   final bool isMinimized;

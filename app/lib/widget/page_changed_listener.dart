@@ -1,10 +1,8 @@
 import 'package:flutter/widgets.dart';
 
 class PageChangedListener {
-  PageChangedListener(
-    this.pageController, {
-    this.onPageChanged,
-  }) : _prevPage = pageController.initialPage;
+  PageChangedListener(this.pageController, {this.onPageChanged})
+    : _prevPage = pageController.initialPage;
 
   void call() {
     if (pageController.hasClients) {

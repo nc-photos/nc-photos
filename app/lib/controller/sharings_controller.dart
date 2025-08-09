@@ -53,10 +53,7 @@ class SharingStreamAlbumData extends SharingStreamShareData {
 
 @genCopyWith
 class SharingStreamEvent {
-  const SharingStreamEvent({
-    required this.data,
-    required this.hasNext,
-  });
+  const SharingStreamEvent({required this.data, required this.hasNext});
 
   final List<SharingStreamData> data;
 
@@ -67,10 +64,7 @@ class SharingStreamEvent {
 
 @npLog
 class SharingsController {
-  SharingsController(
-    this._c, {
-    required this.account,
-  });
+  SharingsController(this._c, {required this.account});
 
   void dispose() {
     _sharingStreamContorller.close();
@@ -124,61 +118,79 @@ class SharingsController {
     await completer.future;
     _sharingStreamContorller.add(lastData.copyWith(hasNext: false));
 
-    _shareRemovedListener =
-        AppEventListener<ShareRemovedEvent>(_onShareRemovedEvent)..begin();
-    _fileMovedEventListener =
-        AppEventListener<FileMovedEvent>(_onFileMovedEvent)..begin();
+    _shareRemovedListener = AppEventListener<ShareRemovedEvent>(
+      _onShareRemovedEvent,
+    )..begin();
+    _fileMovedEventListener = AppEventListener<FileMovedEvent>(
+      _onFileMovedEvent,
+    )..begin();
   }
 
   void _onShareRemovedEvent(ShareRemovedEvent ev) {
     if (!_isAccountOfInterest(ev.account)) {
       return;
     }
-    _sharingStreamContorller.addWithValue((value) => value.copyWith(
-          data: value.data.where((e) {
-            if (e is SharingStreamShareData) {
-              return e.share.id != ev.share.id;
-            } else {
-              return true;
-            }
-          }).toList(),
-        ));
+    _sharingStreamContorller.addWithValue(
+      (value) => value.copyWith(
+        data:
+            value.data.where((e) {
+              if (e is SharingStreamShareData) {
+                return e.share.id != ev.share.id;
+              } else {
+                return true;
+              }
+            }).toList(),
+      ),
+    );
   }
 
   Future<void> _onFileMovedEvent(FileMovedEvent ev) async {
     if (!_isAccountOfInterest(ev.account)) {
       return;
     }
-    if (ev.destination
-            .startsWith(remote_storage_util.getRemoteAlbumsDir(ev.account)) &&
+    if (ev.destination.startsWith(
+          remote_storage_util.getRemoteAlbumsDir(ev.account),
+        ) &&
         ev.file.path.startsWith(
-            remote_storage_util.getRemotePendingSharedAlbumsDir(ev.account))) {
+          remote_storage_util.getRemotePendingSharedAlbumsDir(ev.account),
+        )) {
       // moving from pending dir to album dir
     } else if (ev.destination.startsWith(
-            remote_storage_util.getRemotePendingSharedAlbumsDir(ev.account)) &&
-        ev.file.path
-            .startsWith(remote_storage_util.getRemoteAlbumsDir(ev.account))) {
+          remote_storage_util.getRemotePendingSharedAlbumsDir(ev.account),
+        ) &&
+        ev.file.path.startsWith(
+          remote_storage_util.getRemoteAlbumsDir(ev.account),
+        )) {
       // moving from album dir to pending dir
     } else {
       // unrelated file
       return;
     }
     _log.info("[_onFileMovedEvent] ${ev.file.path} -> ${ev.destination}");
-    final newShares =
-        await ListShareWithMe(_c)(ev.account, File(path: ev.destination));
+    final newShares = await ListShareWithMe(_c)(
+      ev.account,
+      File(path: ev.destination),
+    );
     final newAlbumFile = await LsSingleFile(_c)(ev.account, ev.destination);
     final newAlbum = await _c.albumRepo.get(ev.account, newAlbumFile);
     if (_sharingStreamContorller.isClosed) {
       return;
     }
-    _sharingStreamContorller.addWithValue((value) => value.copyWith(
-          data: value.data
-              .whereNot((e) =>
-                  e is SharingStreamAlbumData &&
-                  e.share.path == ev.file.strippedPath)
-              .toList()
-            ..addAll(newShares.map((s) => SharingStreamAlbumData(s, newAlbum))),
-        ));
+    _sharingStreamContorller.addWithValue(
+      (value) => value.copyWith(
+        data:
+            value.data
+                .whereNot(
+                  (e) =>
+                      e is SharingStreamAlbumData &&
+                      e.share.path == ev.file.strippedPath,
+                )
+                .toList()
+              ..addAll(
+                newShares.map((s) => SharingStreamAlbumData(s, newAlbum)),
+              ),
+      ),
+    );
   }
 
   bool _isAccountOfInterest(Account account) =>

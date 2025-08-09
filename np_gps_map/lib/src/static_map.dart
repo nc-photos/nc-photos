@@ -18,15 +18,9 @@ class StaticMap extends StatelessWidget {
   Widget build(BuildContext context) {
     if (providerHint == GpsMapProvider.osm ||
         (getRawPlatform() == NpPlatform.android && !isNewGMapsRenderer())) {
-      return OsmGpsMap(
-        location: location,
-        onTap: onTap,
-      );
+      return OsmGpsMap(location: location, onTap: onTap);
     } else {
-      return GoogleGpsMap(
-        location: location,
-        onTap: onTap,
-      );
+      return GoogleGpsMap(location: location, onTap: onTap);
     }
   }
 

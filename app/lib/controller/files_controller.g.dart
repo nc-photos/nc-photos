@@ -23,7 +23,8 @@ class _$FilesSummaryStreamEventCopyWithWorkerImpl
   @override
   FilesSummaryStreamEvent call({dynamic summary}) {
     return FilesSummaryStreamEvent(
-        summary: summary as DbFilesSummary? ?? that.summary);
+      summary: summary as DbFilesSummary? ?? that.summary,
+    );
   }
 
   final FilesSummaryStreamEvent that;
@@ -46,8 +47,9 @@ class _$TimelineStreamEventCopyWithWorkerImpl
   @override
   TimelineStreamEvent call({dynamic data, dynamic isDummy}) {
     return TimelineStreamEvent(
-        data: data as Map<int, FileDescriptor>? ?? that.data,
-        isDummy: isDummy as bool? ?? that.isDummy);
+      data: data as Map<int, FileDescriptor>? ?? that.data,
+      isDummy: isDummy as bool? ?? that.isDummy,
+    );
   }
 
   final TimelineStreamEvent that;

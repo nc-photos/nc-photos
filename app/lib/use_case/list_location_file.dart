@@ -9,7 +9,11 @@ class ListLocationFile {
 
   /// List all files located in [place], [countryCode]
   Future<List<File>> call(
-      Account account, File dir, String? place, String countryCode) async {
+    Account account,
+    File dir,
+    String? place,
+    String countryCode,
+  ) async {
     final dbFiles = await _c.npDb.getFilesByDirKeyAndLocation(
       account: account.toDb(),
       dirRelativePath: dir.strippedPathWithEmpty,

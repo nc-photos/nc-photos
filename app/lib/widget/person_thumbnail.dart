@@ -33,7 +33,8 @@ class _PersonThumbnailState extends State<PersonThumbnail> {
     try {
       var m = Matrix4.identity();
       if (_layoutSize != null) {
-        final ratio = widget.dimension /
+        final ratio =
+            widget.dimension /
             math.min(_layoutSize!.width, _layoutSize!.height);
         final mm = widget.person.getCoverTransform(
           widget.dimension.toInt(),
@@ -64,9 +65,7 @@ class _PersonThumbnailState extends State<PersonThumbnail> {
         content = Opacity(opacity: 0, child: content);
       }
     } catch (_) {
-      content = const FittedBox(
-        child: _Placeholder(),
-      );
+      content = const FittedBox(child: _Placeholder());
     }
 
     return ClipRRect(

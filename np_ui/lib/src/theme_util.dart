@@ -32,8 +32,8 @@ extension ThemeDataExtension on ThemeData {
     TextStyle? Function(TextTheme textTheme) textStyleBuilder,
     Color? Function(ColorScheme colorScheme) colorBuilder,
   ) {
-    return textStyleBuilder(textTheme)?.copyWith(
-      color: colorBuilder(colorScheme),
-    );
+    return textStyleBuilder(
+      textTheme,
+    )?.copyWith(color: colorBuilder(colorScheme));
   }
 }

@@ -37,10 +37,8 @@ part 'database/tag_extension.dart';
 part 'database_extension.g.dart';
 
 class ByAccount {
-  const ByAccount._({
-    this.sqlAccount,
-    this.dbAccount,
-  }) : assert((sqlAccount != null) != (dbAccount != null));
+  const ByAccount._({this.sqlAccount, this.dbAccount})
+    : assert((sqlAccount != null) != (dbAccount != null));
 
   const ByAccount.sql(Account account) : this._(sqlAccount: account);
 
@@ -141,21 +139,30 @@ extension SqliteDbExtension on SqliteDb {
     if (account.sqlAccount != null) {
       return Future.value(account.sqlAccount!);
     } else {
-      final query = select(accounts).join([
-        innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-            useColumns: false)
-      ])
-        ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(accounts.userId
-            .equals(account.dbAccount!.userId.toCaseInsensitiveString()))
-        ..limit(1);
+      final query =
+          select(accounts).join([
+              innerJoin(
+                servers,
+                servers.rowId.equalsExp(accounts.server),
+                useColumns: false,
+              ),
+            ])
+            ..where(servers.address.equals(account.dbAccount!.serverAddress))
+            ..where(
+              accounts.userId.equals(
+                account.dbAccount!.userId.toCaseInsensitiveString(),
+              ),
+            )
+            ..limit(1);
       return query.map((r) => r.readTable(accounts)).getSingle();
     }
   }
 
   /// Query AccountFiles, Accounts and Files row ID by file key
   Future<AccountFileRowIds?> _accountFileRowIdsOfSingle(
-      ByAccount account, DbFileKey key) {
+    ByAccount account,
+    DbFileKey key,
+  ) {
     final query = _queryFiles().let((q) {
       q
         ..setQueryMode(
@@ -175,17 +182,21 @@ extension SqliteDbExtension on SqliteDb {
       return q.build()..limit(1);
     });
     return query
-        .map((r) => AccountFileRowIds(
-              accountFileRowId: r.read(accountFiles.rowId)!,
-              accountRowId: r.read(accountFiles.account)!,
-              fileRowId: r.read(accountFiles.file)!,
-            ))
+        .map(
+          (r) => AccountFileRowIds(
+            accountFileRowId: r.read(accountFiles.rowId)!,
+            accountRowId: r.read(accountFiles.account)!,
+            fileRowId: r.read(accountFiles.file)!,
+          ),
+        )
         .getSingleOrNull();
   }
 
   /// Query AccountFiles, Accounts and Files row ID by file keys
   Future<Map<int, AccountFileRowIds>> _accountFileRowIdsOf(
-      ByAccount account, List<DbFileKey> keys) {
+    ByAccount account,
+    List<DbFileKey> keys,
+  ) {
     final query = _queryFiles().let((q) {
       q
         ..setQueryMode(
@@ -201,19 +212,23 @@ extension SqliteDbExtension on SqliteDb {
         ..setAccount(account);
       return q.build();
     });
-    final fileIds = keys.map((k) => k.fileId).whereNotNull();
-    final relativePaths = keys.map((k) => k.relativePath).whereNotNull();
-    query.where(files.fileId.isIn(fileIds) |
-        accountFiles.relativePath.isIn(relativePaths));
+    final fileIds = keys.map((k) => k.fileId).nonNulls;
+    final relativePaths = keys.map((k) => k.relativePath).nonNulls;
+    query.where(
+      files.fileId.isIn(fileIds) |
+          accountFiles.relativePath.isIn(relativePaths),
+    );
     return query
-        .map((r) => MapEntry(
-              r.read(files.fileId)!,
-              AccountFileRowIds(
-                accountFileRowId: r.read(accountFiles.rowId)!,
-                accountRowId: r.read(accountFiles.account)!,
-                fileRowId: r.read(accountFiles.file)!,
-              ),
-            ))
+        .map(
+          (r) => MapEntry(
+            r.read(files.fileId)!,
+            AccountFileRowIds(
+              accountFileRowId: r.read(accountFiles.rowId)!,
+              accountRowId: r.read(accountFiles.account)!,
+              fileRowId: r.read(accountFiles.file)!,
+            ),
+          ),
+        )
         .get()
         .then((e) => e.toMap());
   }

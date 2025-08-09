@@ -43,14 +43,15 @@ Future<void> _dbGet() async {
     (util.AlbumBuilder.ofId(albumId: 0)).build(),
     (util.AlbumBuilder.ofId(albumId: 1)).build(),
   ];
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(
-        c.sqliteDb, account, albums.map((a) => a.albumFile!));
+      c.sqliteDb,
+      account,
+      albums.map((a) => a.albumFile!),
+    );
     await util.insertAlbums(c.sqliteDb, account, albums);
   });
 
@@ -63,12 +64,8 @@ Future<void> _dbGet() async {
 /// Expect: CacheNotFoundException
 Future<void> _dbGetNa() async {
   final account = util.buildAccount();
-  final albums = [
-    (util.AlbumBuilder.ofId(albumId: 0)).build(),
-  ];
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final albums = [(util.AlbumBuilder.ofId(albumId: 0)).build()];
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -91,21 +88,24 @@ Future<void> _dbGetAll() async {
     (util.AlbumBuilder.ofId(albumId: 1)).build(),
     (util.AlbumBuilder.ofId(albumId: 2)).build(),
   ];
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(
-        c.sqliteDb, account, albums.map((a) => a.albumFile!));
+      c.sqliteDb,
+      account,
+      albums.map((a) => a.albumFile!),
+    );
     await util.insertAlbums(c.sqliteDb, account, albums);
   });
 
   final src = AlbumSqliteDbDataSource(c);
   expect(
-    await src
-        .getAll(account, [albums[0].albumFile!, albums[2].albumFile!]).toList(),
+    await src.getAll(account, [
+      albums[0].albumFile!,
+      albums[2].albumFile!,
+    ]).toList(),
     [albums[0], albums[2]],
   );
 }
@@ -120,9 +120,7 @@ Future<void> _dbGetAllNa() async {
     (util.AlbumBuilder.ofId(albumId: 1)).build(),
     (util.AlbumBuilder.ofId(albumId: 2)).build(),
   ];
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -131,8 +129,11 @@ Future<void> _dbGetAllNa() async {
   });
 
   final src = AlbumSqliteDbDataSource(c);
-  final results = await src
-      .getAll(account, [albums[0].albumFile!, albums[2].albumFile!]).toList();
+  final results =
+      await src.getAll(account, [
+        albums[0].albumFile!,
+        albums[2].albumFile!,
+      ]).toList();
   expect(results.length, 2);
   expect(results[0], albums[0]);
   expect(
@@ -150,18 +151,20 @@ Future<void> _dbUpdateExisting() async {
     (util.AlbumBuilder.ofId(albumId: 0)).build(),
     (util.AlbumBuilder.ofId(albumId: 1)).build(),
   ];
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(
-        c.sqliteDb, account, albums.map((a) => a.albumFile!));
+      c.sqliteDb,
+      account,
+      albums.map((a) => a.albumFile!),
+    );
     await util.insertAlbums(c.sqliteDb, account, albums);
   });
 
@@ -188,10 +191,7 @@ Future<void> _dbUpdateExisting() async {
   );
   final src = AlbumSqliteDbDataSource(c);
   await src.update(account, updateAlbum);
-  expect(
-    await util.listSqliteDbAlbums(c.sqliteDb),
-    {albums[0], updateAlbum},
-  );
+  expect(await util.listSqliteDbAlbums(c.sqliteDb), {albums[0], updateAlbum});
 }
 
 /// Update an album that doesn't exist in DB
@@ -199,27 +199,22 @@ Future<void> _dbUpdateExisting() async {
 /// Expect: album inserted
 Future<void> _dbUpdateNew() async {
   final account = util.buildAccount();
-  final albums = [
-    (util.AlbumBuilder.ofId(albumId: 0)).build(),
-  ];
+  final albums = [(util.AlbumBuilder.ofId(albumId: 0)).build()];
   final newAlbum = (util.AlbumBuilder.ofId(albumId: 1)).build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
-    await util.insertFiles(c.sqliteDb, account,
-        [...albums.map((a) => a.albumFile!), newAlbum.albumFile!]);
+    await util.insertFiles(c.sqliteDb, account, [
+      ...albums.map((a) => a.albumFile!),
+      newAlbum.albumFile!,
+    ]);
     await util.insertAlbums(c.sqliteDb, account, albums);
   });
 
   final src = AlbumSqliteDbDataSource(c);
   await src.update(account, newAlbum);
-  expect(
-    await util.listSqliteDbAlbums(c.sqliteDb),
-    {...albums, newAlbum},
-  );
+  expect(await util.listSqliteDbAlbums(c.sqliteDb), {...albums, newAlbum});
 }
 
 /// Update shares of an album
@@ -231,18 +226,20 @@ Future<void> _dbUpdateShares() async {
     (util.AlbumBuilder.ofId(albumId: 0)).build(),
     (util.AlbumBuilder.ofId(albumId: 1)..addShare("user1")).build(),
   ];
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(
-        c.sqliteDb, account, albums.map((a) => a.albumFile!));
+      c.sqliteDb,
+      account,
+      albums.map((a) => a.albumFile!),
+    );
     await util.insertAlbums(c.sqliteDb, account, albums);
   });
 
@@ -279,10 +276,7 @@ Future<void> _dbUpdateShares() async {
   );
   final src = AlbumSqliteDbDataSource(c);
   await src.update(account, updateAlbum);
-  expect(
-    await util.listSqliteDbAlbums(c.sqliteDb),
-    {albums[0], updateAlbum},
-  );
+  expect(await util.listSqliteDbAlbums(c.sqliteDb), {albums[0], updateAlbum});
 }
 
 /// Delete shares of an album
@@ -294,18 +288,20 @@ Future<void> _dbUpdateDeleteShares() async {
     (util.AlbumBuilder.ofId(albumId: 0)).build(),
     (util.AlbumBuilder.ofId(albumId: 1)..addShare("user1")).build(),
   ];
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
     await util.insertFiles(
-        c.sqliteDb, account, albums.map((a) => a.albumFile!));
+      c.sqliteDb,
+      account,
+      albums.map((a) => a.albumFile!),
+    );
     await util.insertAlbums(c.sqliteDb, account, albums);
   });
 
@@ -333,8 +329,5 @@ Future<void> _dbUpdateDeleteShares() async {
   );
   final src = AlbumSqliteDbDataSource(c);
   await src.update(account, updateAlbum);
-  expect(
-    await util.listSqliteDbAlbums(c.sqliteDb),
-    {albums[0], updateAlbum},
-  );
+  expect(await util.listSqliteDbAlbums(c.sqliteDb), {albums[0], updateAlbum});
 }

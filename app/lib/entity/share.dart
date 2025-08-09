@@ -60,10 +60,7 @@ extension ShareTypeExtension on ShareType {
   }
 }
 
-enum ShareItemType {
-  file,
-  folder,
-}
+enum ShareItemType { file, folder }
 
 extension ShareItemTypeExtension on ShareItemType {
   static ShareItemType fromValue(String itemTypeVal) {
@@ -110,20 +107,20 @@ class Share with EquatableMixin {
 
   @override
   get props => [
-        id,
-        shareType,
-        stime,
-        uidOwner,
-        displaynameOwner,
-        uidFileOwner,
-        path,
-        itemType,
-        mimeType,
-        itemSource,
-        shareWith,
-        shareWithDisplayName,
-        url,
-      ];
+    id,
+    shareType,
+    stime,
+    uidOwner,
+    displaynameOwner,
+    uidFileOwner,
+    path,
+    itemType,
+    mimeType,
+    itemSource,
+    shareWith,
+    shareWithDisplayName,
+    url,
+  ];
 
   // see: https://doc.owncloud.com/server/latest/developer_manual/core/apis/ocs-share-api.html#response-attributes-2
   final String id;
@@ -153,8 +150,7 @@ class ShareRepo {
     Account account,
     FileDescriptor file, {
     bool? isIncludeReshare,
-  }) =>
-      dataSrc.list(account, file, isIncludeReshare: isIncludeReshare);
+  }) => dataSrc.list(account, file, isIncludeReshare: isIncludeReshare);
 
   /// See [ShareDataSource.listDir]
   Future<List<Share>> listDir(Account account, File dir) =>
@@ -173,15 +169,13 @@ class ShareRepo {
 
   /// See [ShareDataSource.create]
   Future<Share> create(
-          Account account, FileDescriptor file, String shareWith) =>
-      dataSrc.create(account, file, shareWith);
+    Account account,
+    FileDescriptor file,
+    String shareWith,
+  ) => dataSrc.create(account, file, shareWith);
 
   /// See [ShareDataSource.createLink]
-  Future<Share> createLink(
-    Account account,
-    File file, {
-    String? password,
-  }) =>
+  Future<Share> createLink(Account account, File file, {String? password}) =>
       dataSrc.createLink(account, file, password: password);
 
   /// See [ShareDataSource.delete]
@@ -217,11 +211,7 @@ abstract class ShareDataSource {
   /// Share a file/folder with a share link
   ///
   /// If [password] is not null, the share link will be password protected
-  Future<Share> createLink(
-    Account account,
-    File file, {
-    String? password,
-  });
+  Future<Share> createLink(Account account, File file, {String? password});
 
   /// Remove the given share
   Future<void> delete(Account account, Share share);

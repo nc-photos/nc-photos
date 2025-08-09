@@ -11,13 +11,15 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     required bool canPlay,
     required bool canLoop,
     required bool isPlayControlVisible,
-  }) : super(_State.init(
-          shouldPlayLivePhoto: shouldPlayLivePhoto,
-          canZoom: canZoom,
-          canPlay: canPlay,
-          canLoop: canLoop,
-          isPlayControlVisible: isPlayControlVisible,
-        )) {
+  }) : super(
+         _State.init(
+           shouldPlayLivePhoto: shouldPlayLivePhoto,
+           canZoom: canZoom,
+           canPlay: canPlay,
+           canLoop: canLoop,
+           isPlayControlVisible: isPlayControlVisible,
+         ),
+       ) {
     on<_Init>(_onInit);
     on<_SetShouldPlayLivePhoto>(_onSetShouldPlayLivePhoto);
     on<_SetCanZoom>(_onSetCanZoom);
@@ -107,10 +109,12 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onSetVideoMetadata(_SetVideoMetadata ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      videoAspectRatio: ev.aspectRatio,
-      videoDuration: ev.duration,
-    ));
+    emit(
+      state.copyWith(
+        videoAspectRatio: ev.aspectRatio,
+        videoDuration: ev.duration,
+      ),
+    );
   }
 
   void _onSetIsZoomed(_SetIsZoomed ev, _Emitter emit) {
@@ -172,11 +176,13 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onUpdateVideoPlayerValue(_UpdateVideoPlayerValue ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isPlaying: ev.value.isPlaying,
-      videoIsLooping: ev.value.isLooping,
-      videoVolume: ev.value.volume,
-    ));
+    emit(
+      state.copyWith(
+        isPlaying: ev.value.isPlaying,
+        videoIsLooping: ev.value.isLooping,
+        videoVolume: ev.value.volume,
+      ),
+    );
     if (ev.value.isPlaying && ev.value.position == ev.value.duration) {
       // finished
       _videoController?.pause();
@@ -185,10 +191,12 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onSetLivePhotoLoadFailed(_SetLivePhotoLoadFailed ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      shouldPlayLivePhoto: false,
-      error: (error: ev.error, stackTrace: ev.stackTrace),
-    ));
+    emit(
+      state.copyWith(
+        shouldPlayLivePhoto: false,
+        error: (error: ev.error, stackTrace: ev.stackTrace),
+      ),
+    );
   }
 
   void _onSetError(_SetError ev, Emitter<_State> emit) {
@@ -201,14 +209,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       final controller = await _initVideoController();
       _videoController = controller;
       unawaited(
-          controller.setVolume(prefController.isVideoPlayerMuteValue ? 0 : 1));
+        controller.setVolume(prefController.isVideoPlayerMuteValue ? 0 : 1),
+      );
       if (state.canLoop) {
         unawaited(controller.setLooping(prefController.isVideoPlayerLoopValue));
       }
-      add(_SetVideoMetadata(
-        aspectRatio: controller.value.aspectRatio,
-        duration: controller.value.duration,
-      ));
+      add(
+        _SetVideoMetadata(
+          aspectRatio: controller.value.aspectRatio,
+          duration: controller.value.duration,
+        ),
+      );
       add(const _SetLoaded());
       controller.addListener(() {
         if (_videoController != null) {
@@ -230,9 +241,10 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         return await _initVideoControllerWithFileUrl();
       } catch (e, stackTrace) {
         _log.warning(
-            "[_initVideoController] Failed while _initVideoControllerWithFileUrl",
-            e,
-            stackTrace);
+          "[_initVideoController] Failed while _initVideoControllerWithFileUrl",
+          e,
+          stackTrace,
+        );
       }
     }
     return await _initVideoControllerWithPublicUrl();

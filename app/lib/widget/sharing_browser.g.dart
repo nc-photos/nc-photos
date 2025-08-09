@@ -13,28 +13,31 @@ part of 'sharing_browser.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<SharingStreamData>? items,
-      bool? isLoading,
-      List<_Item>? transformedItems,
-      ExceptionEvent? error});
+  _State call({
+    List<SharingStreamData>? items,
+    bool? isLoading,
+    List<_Item>? transformedItems,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic items,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic items,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        items: items as List<SharingStreamData>? ?? that.items,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      items: items as List<SharingStreamData>? ?? that.items,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<_Item>? ?? that.transformedItems,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -53,8 +56,9 @@ extension _$_WrappedSharingBrowserStateNpLog on _WrappedSharingBrowserState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.sharing_browser._WrappedSharingBrowserState");
+  static final log = Logger(
+    "widget.sharing_browser._WrappedSharingBrowserState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

@@ -50,26 +50,15 @@ class Connect extends StatelessWidget {
         settings: settings,
       );
 
-  const Connect({
-    super.key,
-    required this.uri,
-    required this.login,
-  });
+  const Connect({super.key, required this.uri, required this.login});
 
   Connect.fromArgs(ConnectArguments args, {Key? key})
-      : this(
-          key: key,
-          uri: args.uri,
-          login: args.login,
-        );
+    : this(key: key, uri: args.uri, login: args.login);
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        uri: uri,
-        login: login,
-      )..add(const _Login()),
+      create: (context) => _Bloc(uri: uri, login: login)..add(const _Login()),
       child: const _WrappedConnect(),
     );
   }
@@ -110,25 +99,33 @@ class _WrappedConnect extends StatelessWidget {
                       if (SelfSignedCertManager().hasBadCert) {
                         _onSelfSignedCert(context);
                       } else {
-                        SnackBarManager().showSnackBar(SnackBar(
-                          content: Text(L10n.global().errorServerNoCert),
-                          duration: k.snackBarDurationNormal,
-                        ));
+                        SnackBarManager().showSnackBar(
+                          SnackBar(
+                            content: Text(L10n.global().errorServerNoCert),
+                            duration: k.snackBarDurationNormal,
+                          ),
+                        );
                         Navigator.of(context).pop(null);
                       }
                     } else if (error.error is LoginException &&
                         (error.error as LoginException).response.statusCode ==
                             401) {
-                      SnackBarManager().showSnackBar(SnackBar(
-                        content: Text(L10n.global().errorWrongPassword),
-                        duration: k.snackBarDurationNormal,
-                      ));
+                      SnackBarManager().showSnackBar(
+                        SnackBar(
+                          content: Text(L10n.global().errorWrongPassword),
+                          duration: k.snackBarDurationNormal,
+                        ),
+                      );
                       Navigator.of(context).pop(null);
                     } else {
-                      SnackBarManager().showSnackBar(SnackBar(
-                        content: Text(exception_util.toUserString(error.error)),
-                        duration: k.snackBarDurationNormal,
-                      ));
+                      SnackBarManager().showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            exception_util.toUserString(error.error),
+                          ),
+                          duration: k.snackBarDurationNormal,
+                        ),
+                      );
                       Navigator.of(context).pop(null);
                     }
                   }
@@ -139,7 +136,9 @@ class _WrappedConnect extends StatelessWidget {
                 listener: (context, askWebDavUrlRequest) {
                   if (askWebDavUrlRequest.value != null) {
                     _onCheckWebDavUrlFailed(
-                        context, askWebDavUrlRequest.value!.account);
+                      context,
+                      askWebDavUrlRequest.value!.account,
+                    );
                   }
                 },
               ),
@@ -170,24 +169,25 @@ class _WrappedConnect extends StatelessWidget {
   Future<void> _onSelfSignedCert(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().serverCertErrorDialogTitle),
-        content: Text(L10n.global().serverCertErrorDialogContent),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().serverCertErrorDialogTitle),
+            content: Text(L10n.global().serverCertErrorDialogContent),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(L10n.global().advancedButtonLabel),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text(L10n.global().advancedButtonLabel),
-          ),
-        ],
-      ),
     );
     if (context.mounted && result != true) {
       Navigator.of(context).pop(null);
@@ -195,27 +195,32 @@ class _WrappedConnect extends StatelessWidget {
     }
     final advancedResult = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().whitelistCertDialogTitle),
-        content: Text(L10n.global().whitelistCertDialogContent(
-          SelfSignedCertManager().getLastBadCertHost(),
-          SelfSignedCertManager().getLastBadCertFingerprint(),
-        )),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().whitelistCertDialogTitle),
+            content: Text(
+              L10n.global().whitelistCertDialogContent(
+                SelfSignedCertManager().getLastBadCertHost(),
+                SelfSignedCertManager().getLastBadCertFingerprint(),
+              ),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  MaterialLocalizations.of(context).cancelButtonLabel,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(L10n.global().whitelistCertButtonLabel),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-            child: Text(L10n.global().whitelistCertButtonLabel),
-          ),
-        ],
-      ),
     );
     if (context.mounted && advancedResult != true) {
       Navigator.of(context).pop(null);
@@ -229,7 +234,9 @@ class _WrappedConnect extends StatelessWidget {
   }
 
   Future<void> _onCheckWebDavUrlFailed(
-      BuildContext context, Account account) async {
+    BuildContext context,
+    Account account,
+  ) async {
     final userId = await _askWebDavUrl(context, account);
     if (userId != null) {
       context.addEvent(_SetUserId(userId));

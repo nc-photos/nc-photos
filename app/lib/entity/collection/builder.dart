@@ -15,10 +15,7 @@ class CollectionBuilder {
   static Collection byAlbum(Account account, Album album) {
     return Collection(
       name: album.name,
-      contentProvider: CollectionAlbumProvider(
-        account: account,
-        album: album,
-      ),
+      contentProvider: CollectionAlbumProvider(account: account, album: album),
     );
   }
 
@@ -55,10 +52,7 @@ class CollectionBuilder {
   static Collection byTags(Account account, List<Tag> tags) {
     return Collection(
       name: tags.first.displayName,
-      contentProvider: CollectionTagProvider(
-        account: account,
-        tags: tags,
-      ),
+      contentProvider: CollectionTagProvider(account: account, tags: tags),
     );
   }
 }

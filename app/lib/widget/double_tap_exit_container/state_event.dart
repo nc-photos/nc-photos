@@ -3,18 +3,10 @@ part of 'double_tap_exit_container.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.isDoubleTapExit,
-    required this.canPop,
-  });
+  const _State({required this.isDoubleTapExit, required this.canPop});
 
-  factory _State.init({
-    required bool isDoubleTapExit,
-  }) =>
-      _State(
-        isDoubleTapExit: isDoubleTapExit,
-        canPop: false,
-      );
+  factory _State.init({required bool isDoubleTapExit}) =>
+      _State(isDoubleTapExit: isDoubleTapExit, canPop: false);
 
   @override
   String toString() => _$toString();

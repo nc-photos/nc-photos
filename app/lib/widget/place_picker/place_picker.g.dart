@@ -22,10 +22,12 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic position = copyWithNull, dynamic isDone}) {
     return _State(
-        position: position == copyWithNull
-            ? that.position
-            : position as CameraPosition?,
-        isDone: isDone as bool? ?? that.isDone);
+      position:
+          position == copyWithNull
+              ? that.position
+              : position as CameraPosition?,
+      isDone: isDone as bool? ?? that.isDone,
+    );
   }
 
   final _State that;
@@ -44,8 +46,9 @@ extension _$_WrappedPlacePickerNpLog on _WrappedPlacePicker {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.place_picker.place_picker._WrappedPlacePicker");
+  static final log = Logger(
+    "widget.place_picker.place_picker._WrappedPlacePicker",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

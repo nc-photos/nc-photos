@@ -96,9 +96,7 @@ Future<void> _filesIsArchived() async {
     lastModified: DateTime.utc(2021, 1, 1, 2, 3, 4),
     hasPreview: true,
     isCollection: false,
-    customProperties: {
-      "com.nkming.nc_photos:is-archived": "true",
-    },
+    customProperties: {"com.nkming.nc_photos:is-archived": "true"},
   );
   expect(
     ApiFileConverter.fromApi(apiFile),
@@ -170,38 +168,35 @@ Future<void> _filesMultiple() async {
       },
     ),
   ];
-  expect(
-    apiFiles.map(ApiFileConverter.fromApi).toList(),
-    [
-      File(
-        path: "remote.php/dav/files/admin/Nextcloud intro.mp4",
-        contentLength: 3963036,
-        contentType: "video/mp4",
-        etag: "1324f58d4d5c8d81bed6e4ed9d5ea862",
-        lastModified: DateTime.utc(2021, 1, 1, 2, 3, 4),
-        hasPreview: false,
-        fileId: 123,
-        isCollection: false,
+  expect(apiFiles.map(ApiFileConverter.fromApi).toList(), [
+    File(
+      path: "remote.php/dav/files/admin/Nextcloud intro.mp4",
+      contentLength: 3963036,
+      contentType: "video/mp4",
+      etag: "1324f58d4d5c8d81bed6e4ed9d5ea862",
+      lastModified: DateTime.utc(2021, 1, 1, 2, 3, 4),
+      hasPreview: false,
+      fileId: 123,
+      isCollection: false,
+    ),
+    File(
+      path: "remote.php/dav/files/admin/Nextcloud.png",
+      contentLength: 50598,
+      contentType: "image/png",
+      etag: "48689d5b17c449d9db492ffe8f7ab8a6",
+      lastModified: DateTime.utc(2021, 1, 2, 3, 4, 5),
+      hasPreview: true,
+      fileId: 124,
+      isCollection: false,
+      metadata: Metadata(
+        fileEtag: "48689d5b17c449d9db492ffe8f7ab8a6",
+        imageWidth: 500,
+        imageHeight: 500,
+        lastUpdated: DateTime.utc(2021, 1, 2, 3, 4, 5, 678),
+        src: MetadataSrc.legacy,
       ),
-      File(
-        path: "remote.php/dav/files/admin/Nextcloud.png",
-        contentLength: 50598,
-        contentType: "image/png",
-        etag: "48689d5b17c449d9db492ffe8f7ab8a6",
-        lastModified: DateTime.utc(2021, 1, 2, 3, 4, 5),
-        hasPreview: true,
-        fileId: 124,
-        isCollection: false,
-        metadata: Metadata(
-          fileEtag: "48689d5b17c449d9db492ffe8f7ab8a6",
-          imageWidth: 500,
-          imageHeight: 500,
-          lastUpdated: DateTime.utc(2021, 1, 2, 3, 4, 5, 678),
-          src: MetadataSrc.legacy,
-        ),
-      ),
-    ],
-  );
+    ),
+  ]);
 }
 
 Future<void> _filesDir() async {
@@ -270,10 +265,7 @@ void _recognizeFaceItemSize() {
   const apiItem = api.RecognizeFaceItem(
     href: "/remote.php/dav/recognize/admin/faces/test/test1.jpg",
     fileId: 123,
-    fileMetadataSize: {
-      "width": 1024,
-      "height": 768,
-    },
+    fileMetadataSize: {"width": 1024, "height": 768},
   );
   expect(
     ApiRecognizeFaceItemConverter.fromApi(apiItem),

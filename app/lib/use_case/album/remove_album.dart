@@ -18,8 +18,8 @@ part 'remove_album.g.dart';
 @npLog
 class RemoveAlbum {
   RemoveAlbum(this._c)
-      : assert(require(_c)),
-        assert(UnshareFileFromAlbum.require(_c));
+    : assert(require(_c)),
+      assert(UnshareFileFromAlbum.require(_c));
 
   static bool require(DiContainer c) =>
       DiContainer.has(c, DiType.albumRepo) &&
@@ -34,9 +34,7 @@ class RemoveAlbum {
       // needed to make sure the album is not shared after recovering from trash
       await UpdateAlbum(_c.albumRepo)(
         account,
-        album.copyWith(
-          shares: const OrNull(null),
-        ),
+        album.copyWith(shares: const OrNull(null)),
       );
       // remove file shares
       await _unshareFiles(account, album);
@@ -52,18 +50,18 @@ class RemoveAlbum {
     if (album.provider is! AlbumStaticProvider) {
       return;
     }
-    final albumShares = (album.shares!.map((e) => e.userId).toList()
-          ..add(album.albumFile!.ownerId ?? account.userId))
-        .where((element) => element != account.userId)
-        .toList();
+    final albumShares =
+        (album.shares!.map((e) => e.userId).toList()
+              ..add(album.albumFile!.ownerId ?? account.userId))
+            .where((element) => element != account.userId)
+            .toList();
     if (albumShares.isEmpty) {
       return;
     }
-    final files = AlbumStaticProvider.of(album)
-        .items
-        .whereType<AlbumFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final files =
+        AlbumStaticProvider.of(
+          album,
+        ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
     if (files.isEmpty) {
       return;
     }
@@ -71,19 +69,27 @@ class RemoveAlbum {
       await UnshareFileFromAlbum(_c)(account, album, files, albumShares);
     } catch (e, stackTrace) {
       _log.shout(
-          "[_unshareFiles] Failed while UnshareFileFromAlbum", e, stackTrace);
+        "[_unshareFiles] Failed while UnshareFileFromAlbum",
+        e,
+        stackTrace,
+      );
     }
   }
 
   Future<void> _unshareAlbumFile(Account account, Album album) async {
-    final shares = (await ListShare(_c)(account, album.albumFile!))
-        .where((s) => s.shareType == ShareType.user);
+    final shares = (await ListShare(_c)(
+      account,
+      album.albumFile!,
+    )).where((s) => s.shareType == ShareType.user);
     for (final s in shares) {
       try {
         await RemoveShare(_c.shareRepo)(account, s);
       } catch (e, stackTrace) {
         _log.shout(
-            "[_unshareAlbumFile] Failed while RemoveShare: $s", e, stackTrace);
+          "[_unshareAlbumFile] Failed while RemoveShare: $s",
+          e,
+          stackTrace,
+        );
       }
     }
   }

@@ -2,18 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
-enum ShareMethod {
-  file,
-  preview,
-  publicLink,
-  passwordLink,
-}
+enum ShareMethod { file, preview, publicLink, passwordLink }
 
 class ShareMethodDialog extends StatelessWidget {
-  const ShareMethodDialog({
-    super.key,
-    required this.isSupportPerview,
-  });
+  const ShareMethodDialog({super.key, required this.isSupportPerview});
 
   @override
   build(BuildContext context) {

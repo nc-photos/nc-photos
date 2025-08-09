@@ -3,13 +3,14 @@ part of '../metadata_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State(
+  _Bloc({required this.prefController})
+    : super(
+        _State(
           isEnable: prefController.isEnableClientExifValue,
           isWifiOnly: prefController.shouldProcessExifWifiOnlyValue,
           isFallback: prefController.isFallbackClientExifValue,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_SetEnable>(_onSetEnable);
     on<_SetWifiOnly>(_onSetWifiOnly);

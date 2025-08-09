@@ -3,17 +3,10 @@ part of '../collections_nav_bar_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.buttons,
-    this.error,
-  });
+  const _State({required this.buttons, this.error});
 
-  factory _State.init({
-    required List<PrefHomeCollectionsNavButton> buttons,
-  }) {
-    return _State(
-      buttons: buttons,
-    );
+  factory _State.init({required List<PrefHomeCollectionsNavButton> buttons}) {
+    return _State(buttons: buttons);
   }
 
   @override
@@ -38,15 +31,10 @@ class _Init implements _Event {
 
 @toString
 class _MoveButton implements _Event {
-  const _MoveButton._({
-    required this.which,
-    this.before,
-    this.after,
-  });
+  const _MoveButton._({required this.which, this.before, this.after});
 
-  const _MoveButton.first({
-    required HomeCollectionsNavBarButtonType which,
-  }) : this._(which: which);
+  const _MoveButton.first({required HomeCollectionsNavBarButtonType which})
+    : this._(which: which);
 
   const _MoveButton.before({
     required HomeCollectionsNavBarButtonType which,

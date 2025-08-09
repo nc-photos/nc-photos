@@ -35,19 +35,20 @@ class TrustedCertManager extends StatelessWidget {
   static const routeName = "/trusted-cert-manager";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (_) => const TrustedCertManager(),
-        settings: settings,
-      );
+    builder: (_) => const TrustedCertManager(),
+    settings: settings,
+  );
 
   const TrustedCertManager({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        trustedCertController: context.read(),
-        prefController: context.read(),
-      )..add(const _Load()),
+      create:
+          (_) => _Bloc(
+            trustedCertController: context.read(),
+            prefController: context.read(),
+          )..add(const _Load()),
       child: const _WrappedTrustedCertManager(),
     );
   }
@@ -72,11 +73,14 @@ class _WrappedTrustedCertManagerState extends State<_WrappedTrustedCertManager>
           listener: (context, state) {
             if (state.error != null && isPageVisible()) {
               if (state.error is TrustedCertControllerRemoveError) {
-                SnackBarManager().showSnackBar(SnackBar(
-                  content: Text(
-                      L10n.global().trustedCertManagerFailedToRemoveCertError),
-                  duration: k.snackBarDurationNormal,
-                ));
+                SnackBarManager().showSnackBar(
+                  SnackBar(
+                    content: Text(
+                      L10n.global().trustedCertManagerFailedToRemoveCertError,
+                    ),
+                    duration: k.snackBarDurationNormal,
+                  ),
+                );
               } else {
                 SnackBarManager().showSnackBarForException(state.error!.error);
               }
@@ -96,8 +100,9 @@ class _WrappedTrustedCertManagerState extends State<_WrappedTrustedCertManager>
         ),
         body: _BlocSelector<bool>(
           selector: (state) => state.isCertsReady,
-          builder: (context, isCertsReady) =>
-              isCertsReady ? const _ContentView() : const _InitView(),
+          builder:
+              (context, isCertsReady) =>
+                  isCertsReady ? const _ContentView() : const _InitView(),
         ),
       ),
     );
@@ -106,10 +111,11 @@ class _WrappedTrustedCertManagerState extends State<_WrappedTrustedCertManager>
   Future<void> _onAddPressed(BuildContext context) async {
     final result = await showDialog<Account>(
       context: context,
-      builder: (_) => BlocProvider.value(
-        value: context.bloc,
-        child: const _AccountDialog(),
-      ),
+      builder:
+          (_) => BlocProvider.value(
+            value: context.bloc,
+            child: const _AccountDialog(),
+          ),
     );
     if (result == null) {
       return;
@@ -117,10 +123,12 @@ class _WrappedTrustedCertManagerState extends State<_WrappedTrustedCertManager>
     try {
       await ApiUtil.fromAccount(result).status().get();
       // no exception == cert trusted either by system or by us
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().trustedCertManagerAlreadyTrustedError),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().trustedCertManagerAlreadyTrustedError),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     } on HandshakeException {
       _onSelfSignedCert(context);
     }

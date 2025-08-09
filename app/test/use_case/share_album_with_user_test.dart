@@ -40,17 +40,18 @@ Future<void> _shareWithoutFile() async {
     albumRepo
         .findAlbumByPath(albumFile.path)
         .shares
-        ?.map((s) => s.copyWith(
-              // we need to set a known value to sharedAt
-              sharedAt: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        ?.map(
+          (s) => s.copyWith(
+            // we need to set a known value to sharedAt
+            sharedAt: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [util.buildAlbumShare(userId: "user1")],
   );
-  expect(
-    shareRepo.shares,
-    [util.buildShare(id: "0", file: albumFile, shareWith: "user1")],
-  );
+  expect(shareRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+  ]);
 }
 
 /// Share an album with files to a user (user1)
@@ -77,20 +78,19 @@ Future<void> _shareWithFile() async {
     albumRepo
         .findAlbumByPath(albumFile.path)
         .shares
-        ?.map((s) => s.copyWith(
-              // we need to set a known value to sharedAt
-              sharedAt: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        ?.map(
+          (s) => s.copyWith(
+            // we need to set a known value to sharedAt
+            sharedAt: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [util.buildAlbumShare(userId: "user1")],
   );
-  expect(
-    shareRepo.shares,
-    [
-      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-      util.buildShare(id: "1", file: file1, shareWith: "user1"),
-    ],
-  );
+  expect(shareRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    util.buildShare(id: "1", file: file1, shareWith: "user1"),
+  ]);
 }
 
 /// Share an album with files owned by user (user1) to that user (user1)
@@ -100,9 +100,9 @@ Future<void> _shareWithFile() async {
 Future<void> _shareWithFileOwnedByUser() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final files = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg", ownerId: "user1"))
-        .build();
+    final files =
+        (util.FilesBuilder(initialFileId: 1)
+          ..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
     final album = (util.AlbumBuilder()..addFileItem(files[0])).build();
     final albumFile = album.albumFile!;
     final albumRepo = MockAlbumMemoryRepo([album]);
@@ -113,14 +113,12 @@ Future<void> _shareWithFileOwnedByUser() async {
       albumRepo.findAlbumByPath(albumFile.path),
       util.buildSharee(shareWith: "user1".toCi()),
     );
-    expect(
-      albumRepo.findAlbumByPath(albumFile.path).shares?.toList(),
-      [util.buildAlbumShare(userId: "user1")],
-    );
-    expect(
-      shareRepo.shares,
-      [util.buildShare(id: "0", file: albumFile, shareWith: "user1")],
-    );
+    expect(albumRepo.findAlbumByPath(albumFile.path).shares?.toList(), [
+      util.buildAlbumShare(userId: "user1"),
+    ]);
+    expect(shareRepo.shares, [
+      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    ]);
   });
 }
 
@@ -146,21 +144,20 @@ Future<void> _shareSharedAlbum() async {
     albumRepo
         .findAlbumByPath(albumFile.path)
         .shares
-        ?.map((s) => s.copyWith(
-              // we need to set a known value to sharedAt
-              sharedAt: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        ?.map(
+          (s) => s.copyWith(
+            // we need to set a known value to sharedAt
+            sharedAt: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       util.buildAlbumShare(userId: "user1"),
       util.buildAlbumShare(userId: "user2"),
     ],
   );
-  expect(
-    shareRepo.shares,
-    [
-      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-      util.buildShare(id: "1", file: albumFile, shareWith: "user2")
-    ],
-  );
+  expect(shareRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+  ]);
 }

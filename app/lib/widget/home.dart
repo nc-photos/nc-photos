@@ -42,16 +42,10 @@ class Home extends StatefulWidget {
         settings: settings,
       );
 
-  const Home({
-    super.key,
-    required this.account,
-  });
+  const Home({super.key, required this.account});
 
   Home.fromArgs(HomeArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-        );
+    : this(key: key, account: args.account);
 
   @override
   createState() => _HomeState();
@@ -78,14 +72,13 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
     _animationController.value = 1;
 
     // call once to pre-cache the value
-    unawaited(context
-        .read<AccountController>()
-        .serverController
-        .status
-        .first
-        .then((value) {
-      _log.info("Server status: $value");
-    }));
+    unawaited(
+      context.read<AccountController>().serverController.status.first.then((
+        value,
+      ) {
+        _log.info("Server status: $value");
+      }),
+    );
   }
 
   @override
@@ -134,16 +127,17 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       controller: _pageController,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: 3,
-      itemBuilder: (context, index) => SlideTransition(
-        position: Tween(
-          begin: const Offset(0, .05),
-          end: Offset.zero,
-        ).animate(_animation),
-        child: FadeTransition(
-          opacity: _animation,
-          child: _buildPage(context, index),
-        ),
-      ),
+      itemBuilder:
+          (context, index) => SlideTransition(
+            position: Tween(
+              begin: const Offset(0, .05),
+              end: Offset.zero,
+            ).animate(_animation),
+            child: FadeTransition(
+              opacity: _animation,
+              child: _buildPage(context, index),
+            ),
+          ),
     );
   }
 
@@ -153,9 +147,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
         return const HomePhotos2();
 
       case 1:
-        return HomeSearch(
-          account: widget.account,
-        );
+        return HomeSearch(account: widget.account);
 
       case 2:
         return const HomeCollections();
@@ -168,9 +160,9 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   void _onTapNavItem(int index) {
     if (index == _nextPage) {
       if (index == 0) {
-        KiwiContainer()
-            .resolve<EventBus>()
-            .fire(const HomePhotos2BackToTopEvent());
+        KiwiContainer().resolve<EventBus>().fire(
+          const HomePhotos2BackToTopEvent(),
+        );
       }
       return;
     }
@@ -186,10 +178,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   Future<List<Album>> _importPotentialSharedAlbum() async {
     final c = KiwiContainer().resolve<DiContainer>().copyWith(
-          // don't want the potential albums to be cached at this moment
-          fileRepo: const OrNull(FileRepo(FileWebdavDataSource())),
-          albumRepo: OrNull(AlbumRepo(AlbumRemoteDataSource())),
-        );
+      // don't want the potential albums to be cached at this moment
+      fileRepo: const OrNull(FileRepo(FileWebdavDataSource())),
+      albumRepo: OrNull(AlbumRepo(AlbumRemoteDataSource())),
+    );
     try {
       return await ImportPotentialSharedAlbum(c)(
         widget.account,
@@ -200,9 +192,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
       );
     } catch (e, stacktrace) {
       _log.shout(
-          "[_importPotentialSharedAlbum] Failed while ImportPotentialSharedAlbum",
-          e,
-          stacktrace);
+        "[_importPotentialSharedAlbum] Failed while ImportPotentialSharedAlbum",
+        e,
+        stacktrace,
+      );
       return [];
     }
   }

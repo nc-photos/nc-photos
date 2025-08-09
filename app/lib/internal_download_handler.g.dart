@@ -10,6 +10,7 @@ extension _$InternalDownloadHandlerNpLog on InternalDownloadHandler {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("internal_download_handler.InternalDownloadHandler");
+  static final log = Logger(
+    "internal_download_handler.InternalDownloadHandler",
+  );
 }

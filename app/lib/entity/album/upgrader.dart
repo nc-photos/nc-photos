@@ -20,9 +20,7 @@ abstract class AlbumUpgrader {
 /// Upgrade v1 Album to v2
 @npLog
 class AlbumUpgraderV1 implements AlbumUpgrader {
-  AlbumUpgraderV1({
-    this.logFilePath,
-  });
+  AlbumUpgraderV1({this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -43,9 +41,7 @@ class AlbumUpgraderV1 implements AlbumUpgrader {
 /// Upgrade v2 Album to v3
 @npLog
 class AlbumUpgraderV2 implements AlbumUpgrader {
-  AlbumUpgraderV2({
-    this.logFilePath,
-  });
+  AlbumUpgraderV2({this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -54,17 +50,12 @@ class AlbumUpgraderV2 implements AlbumUpgrader {
     final result = JsonObj.from(json);
     result["provider"] = <String, dynamic>{
       "type": "static",
-      "content": <String, dynamic>{
-        "items": result["items"],
-      }
+      "content": <String, dynamic>{"items": result["items"]},
     };
     result.remove("items");
 
     // add the auto cover provider
-    result["coverProvider"] = <String, dynamic>{
-      "type": "auto",
-      "content": {},
-    };
+    result["coverProvider"] = <String, dynamic>{"type": "auto", "content": {}};
     return result;
   }
 
@@ -78,9 +69,7 @@ class AlbumUpgraderV2 implements AlbumUpgrader {
 /// Upgrade v3 Album to v4
 @npLog
 class AlbumUpgraderV3 implements AlbumUpgrader {
-  AlbumUpgraderV3({
-    this.logFilePath,
-  });
+  AlbumUpgraderV3({this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -90,9 +79,7 @@ class AlbumUpgraderV3 implements AlbumUpgrader {
     // add the descending time sort provider
     result["sortProvider"] = <String, dynamic>{
       "type": "time",
-      "content": {
-        "isAscending": false,
-      },
+      "content": {"isAscending": false},
     };
     return result;
   }
@@ -107,9 +94,7 @@ class AlbumUpgraderV3 implements AlbumUpgrader {
 /// Upgrade v4 Album to v5
 @npLog
 class AlbumUpgraderV4 implements AlbumUpgrader {
-  AlbumUpgraderV4({
-    this.logFilePath,
-  });
+  AlbumUpgraderV4({this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -119,45 +104,51 @@ class AlbumUpgraderV4 implements AlbumUpgrader {
       if (result["provider"]["type"] != "static") {
         return result;
       }
-      final latestItem = (result["provider"]["content"]["items"] as List)
-          .map((e) => e.cast<String, dynamic>())
-          .where((e) => e["type"] == "file")
-          .map((e) => e["content"]["file"] as JsonObj)
-          .map((e) {
-            final overrideDateTime = e["overrideDateTime"] == null
-                ? null
-                : DateTime.parse(e["overrideDateTime"]);
-            final String? dateTimeOriginalStr =
-                e["metadata"]?["exif"]?["DateTimeOriginal"];
-            final dateTimeOriginal =
-                dateTimeOriginalStr == null || dateTimeOriginalStr.isEmpty
-                    ? null
-                    : Exif.dateTimeFormat.parse(dateTimeOriginalStr).toUtc();
-            final lastModified = e["lastModified"] == null
-                ? null
-                : DateTime.parse(e["lastModified"]);
-            final latestItemTime =
-                overrideDateTime ?? dateTimeOriginal ?? lastModified;
+      final latestItem =
+          (result["provider"]["content"]["items"] as List)
+              .map((e) => e.cast<String, dynamic>())
+              .where((e) => e["type"] == "file")
+              .map((e) => e["content"]["file"] as JsonObj)
+              .map((e) {
+                final overrideDateTime =
+                    e["overrideDateTime"] == null
+                        ? null
+                        : DateTime.parse(e["overrideDateTime"]);
+                final String? dateTimeOriginalStr =
+                    e["metadata"]?["exif"]?["DateTimeOriginal"];
+                final dateTimeOriginal =
+                    dateTimeOriginalStr == null || dateTimeOriginalStr.isEmpty
+                        ? null
+                        : Exif.dateTimeFormat
+                            .parse(dateTimeOriginalStr)
+                            .toUtc();
+                final lastModified =
+                    e["lastModified"] == null
+                        ? null
+                        : DateTime.parse(e["lastModified"]);
+                final latestItemTime =
+                    overrideDateTime ?? dateTimeOriginal ?? lastModified;
 
-            // remove metadata
-            e.remove("metadata");
-            if (latestItemTime != null) {
-              return (latestItemTime: latestItemTime, item: e);
-            } else {
-              return null;
-            }
-          })
-          .whereType<({DateTime latestItemTime, JsonObj item})>()
-          .sorted((a, b) => a.latestItemTime.compareTo(b.latestItemTime))
-          .lastOrNull;
+                // remove metadata
+                e.remove("metadata");
+                if (latestItemTime != null) {
+                  return (latestItemTime: latestItemTime, item: e);
+                } else {
+                  return null;
+                }
+              })
+              .whereType<({DateTime latestItemTime, JsonObj item})>()
+              .sorted((a, b) => a.latestItemTime.compareTo(b.latestItemTime))
+              .lastOrNull;
       if (latestItem != null) {
         // save the latest item time
         result["provider"]["content"]["latestItemTime"] =
             latestItem.latestItemTime.toIso8601String();
         if (result["coverProvider"]["type"] == "auto") {
           // save the cover
-          result["coverProvider"]["content"]["coverFile"] =
-              Map.of(latestItem.item);
+          result["coverProvider"]["content"]["coverFile"] = Map.of(
+            latestItem.item,
+          );
         }
       }
     } catch (e, stackTrace) {
@@ -178,11 +169,7 @@ class AlbumUpgraderV4 implements AlbumUpgrader {
 /// Upgrade v5 Album to v6
 @npLog
 class AlbumUpgraderV5 implements AlbumUpgrader {
-  const AlbumUpgraderV5(
-    this.account, {
-    this.albumFile,
-    this.logFilePath,
-  });
+  const AlbumUpgraderV5(this.account, {this.albumFile, this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -195,9 +182,10 @@ class AlbumUpgraderV5 implements AlbumUpgrader {
       for (final item in (result["provider"]["content"]["items"] as List)) {
         final CiString addedBy;
         if (result.containsKey("albumFile")) {
-          addedBy = result["albumFile"]["ownerId"] == null
-              ? account.userId
-              : CiString(result["albumFile"]["ownerId"]);
+          addedBy =
+              result["albumFile"]["ownerId"] == null
+                  ? account.userId
+                  : CiString(result["albumFile"]["ownerId"]);
         } else {
           addedBy = albumFile?.ownerId ?? account.userId;
         }
@@ -225,9 +213,7 @@ class AlbumUpgraderV5 implements AlbumUpgrader {
 /// Upgrade v6 Album to v7
 @npLog
 class AlbumUpgraderV6 implements AlbumUpgrader {
-  const AlbumUpgraderV6({
-    this.logFilePath,
-  });
+  const AlbumUpgraderV6({this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -245,9 +231,7 @@ class AlbumUpgraderV6 implements AlbumUpgrader {
 /// Upgrade v7 Album to v8
 @npLog
 class AlbumUpgraderV7 implements AlbumUpgrader {
-  const AlbumUpgraderV7({
-    this.logFilePath,
-  });
+  const AlbumUpgraderV7({this.logFilePath});
 
   @override
   doJson(JsonObj json) {
@@ -265,17 +249,16 @@ class AlbumUpgraderV7 implements AlbumUpgrader {
 /// Upgrade v8 Album to v9
 @npLog
 class AlbumUpgraderV8 implements AlbumUpgrader {
-  const AlbumUpgraderV8({
-    this.logFilePath,
-  });
+  const AlbumUpgraderV8({this.logFilePath});
 
   @override
   JsonObj? doJson(JsonObj json) {
     _log.fine("[doJson] Upgrade v8 Album for file: $logFilePath");
     final result = JsonObj.from(json);
     if (result["coverProvider"]["type"] == "manual") {
-      final content = (result["coverProvider"]["content"]["coverFile"] as Map)
-          .cast<String, dynamic>();
+      final content =
+          (result["coverProvider"]["content"]["coverFile"] as Map)
+              .cast<String, dynamic>();
       final fd = _fileJsonToFileDescriptorJson(content);
       // some very old album file may contain files w/o id
       if (fd["fdId"] != null) {
@@ -284,8 +267,9 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
         result["coverProvider"]["content"] = {};
       }
     } else if (result["coverProvider"]["type"] == "auto") {
-      final content = (result["coverProvider"]["content"]["coverFile"] as Map?)
-          ?.cast<String, dynamic>();
+      final content =
+          (result["coverProvider"]["content"]["coverFile"] as Map?)
+              ?.cast<String, dynamic>();
       if (content != null) {
         final fd = _fileJsonToFileDescriptorJson(content);
         if (fd["fdId"] != null) {
@@ -304,11 +288,10 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
     if (dbObj.coverProviderType == "manual") {
       final content = dbObj.coverProviderContent;
       final converted = _fileJsonToFileDescriptorJson(
-          (content["coverFile"] as Map).cast<String, dynamic>());
+        (content["coverFile"] as Map).cast<String, dynamic>(),
+      );
       if (converted["fdId"] != null) {
-        return dbObj.copyWith(
-          coverProviderContent: {"coverFile": converted},
-        );
+        return dbObj.copyWith(coverProviderContent: {"coverFile": converted});
       } else {
         return dbObj.copyWith(coverProviderContent: const {});
       }
@@ -316,11 +299,10 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
       final content = dbObj.coverProviderContent;
       if (content["coverFile"] != null) {
         final converted = _fileJsonToFileDescriptorJson(
-            (content["coverFile"] as Map).cast<String, dynamic>());
+          (content["coverFile"] as Map).cast<String, dynamic>(),
+        );
         if (converted["fdId"] != null) {
-          return dbObj.copyWith(
-            coverProviderContent: {"coverFile": converted},
-          );
+          return dbObj.copyWith(coverProviderContent: {"coverFile": converted});
         } else {
           return dbObj.copyWith(coverProviderContent: const {});
         }
@@ -337,9 +319,11 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
       "fdIsArchived": json["isArchived"] ?? false,
       // File.isFavorite is serialized as int
       "fdIsFavorite": json["isFavorite"] == 1,
-      "fdDateTime": json["overrideDateTime"] ??
+      "fdDateTime":
+          json["overrideDateTime"] ??
           (json["metadata"]?["exif"]?["DateTimeOriginal"] as String?)?.run(
-              (d) => Exif.dateTimeFormat.parse(d).toUtc().toIso8601String()) ??
+            (d) => Exif.dateTimeFormat.parse(d).toUtc().toIso8601String(),
+          ) ??
           json["lastModified"] ??
           clock.now().toUtc().toIso8601String(),
     };
@@ -354,10 +338,7 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
 /// In v10, file items are now stored as FileDescriptor instead of File
 @npLog
 class AlbumUpgraderV9 implements AlbumUpgrader {
-  const AlbumUpgraderV9({
-    required this.account,
-    this.logFilePath,
-  });
+  const AlbumUpgraderV9({required this.account, this.logFilePath});
 
   @override
   JsonObj? doJson(JsonObj json) {
@@ -372,8 +353,9 @@ class AlbumUpgraderV9 implements AlbumUpgrader {
       }
       final originalFile =
           (item["content"]["file"] as Map).cast<String, dynamic>();
-      item["content"]["file"] =
-          AlbumUpgraderV8._fileJsonToFileDescriptorJson(originalFile);
+      item["content"]["file"] = AlbumUpgraderV8._fileJsonToFileDescriptorJson(
+        originalFile,
+      );
       item["content"]["ownerId"] =
           originalFile["ownerId"] ?? account.userId.raw;
     }
@@ -393,8 +375,9 @@ class AlbumUpgraderV9 implements AlbumUpgrader {
       }
       final originalFile =
           (item["content"]["file"] as Map).cast<String, dynamic>();
-      item["content"]["file"] =
-          AlbumUpgraderV8._fileJsonToFileDescriptorJson(originalFile);
+      item["content"]["file"] = AlbumUpgraderV8._fileJsonToFileDescriptorJson(
+        originalFile,
+      );
       item["content"]["ownerId"] =
           originalFile["ownerId"] ?? account.userId.raw;
     }
@@ -441,11 +424,8 @@ class DefaultAlbumUpgraderFactory extends AlbumUpgraderFactory {
   AlbumUpgraderV4 buildV4() => AlbumUpgraderV4(logFilePath: logFilePath);
 
   @override
-  AlbumUpgraderV5 buildV5() => AlbumUpgraderV5(
-        account,
-        albumFile: albumFile,
-        logFilePath: logFilePath,
-      );
+  AlbumUpgraderV5 buildV5() =>
+      AlbumUpgraderV5(account, albumFile: albumFile, logFilePath: logFilePath);
 
   @override
   AlbumUpgraderV6 buildV6() => AlbumUpgraderV6(logFilePath: logFilePath);
@@ -457,10 +437,8 @@ class DefaultAlbumUpgraderFactory extends AlbumUpgraderFactory {
   AlbumUpgraderV8 buildV8() => AlbumUpgraderV8(logFilePath: logFilePath);
 
   @override
-  AlbumUpgraderV9 buildV9() => AlbumUpgraderV9(
-        account: account,
-        logFilePath: logFilePath,
-      );
+  AlbumUpgraderV9 buildV9() =>
+      AlbumUpgraderV9(account: account, logFilePath: logFilePath);
 
   final Account account;
   final File? albumFile;

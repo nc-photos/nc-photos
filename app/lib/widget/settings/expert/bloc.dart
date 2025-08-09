@@ -11,12 +11,8 @@ class _Error {
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.db,
-    required this.prefController,
-  }) : super(_State.init(
-          isNewHttpEngine: prefController.isNewHttpEngineValue,
-        )) {
+  _Bloc({required this.db, required this.prefController})
+    : super(_State.init(isNewHttpEngine: prefController.isNewHttpEngineValue)) {
     on<_Init>(_onInit);
     on<_ClearCacheDatabase>(_onClearCacheDatabase);
     on<_SetNewHttpEngine>(_onSetNewHttpEngine);
@@ -37,7 +33,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _onClearCacheDatabase(
-      _ClearCacheDatabase ev, Emitter<_State> emit) async {
+    _ClearCacheDatabase ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
     try {
       final accounts = prefController.accountsValue;

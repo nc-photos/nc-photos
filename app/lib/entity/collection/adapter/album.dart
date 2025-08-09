@@ -41,8 +41,8 @@ part 'album.g.dart';
 @npLog
 class CollectionAlbumAdapter implements CollectionAdapter {
   CollectionAlbumAdapter(this._c, this.account, this.collection)
-      : assert(require(_c)),
-        _provider = collection.contentProvider as CollectionAlbumProvider;
+    : assert(require(_c)),
+      _provider = collection.contentProvider as CollectionAlbumProvider;
 
   static bool require(DiContainer c) => PreProcessAlbum.require(c);
 
@@ -70,8 +70,11 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     required ValueChanged<Collection> onCollectionUpdated,
   }) async {
     try {
-      final newAlbum =
-          await AddFileToAlbum(_c)(account, _provider.album, files);
+      final newAlbum = await AddFileToAlbum(_c)(
+        account,
+        _provider.album,
+        files,
+      );
       onCollectionUpdated(CollectionBuilder.byAlbum(account, newAlbum));
       return files.length;
     } catch (e, stackTrace) {
@@ -91,30 +94,33 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     List<CollectionItem>? knownItems,
   }) async {
     assert(name != null || items != null || itemSort != null || cover != null);
-    final newItems = items?.run((items) => items
-        .map((e) {
-          if (e is AlbumAdaptedCollectionItem) {
-            return e.albumItem;
-          } else if (e is NewCollectionLabelItem) {
-            // new labels
-            return AlbumLabelItem(
-              addedBy: account.userId,
-              addedAt: e.createdAt,
-              text: e.text,
-            );
-          } else if (e is NewCollectionMapItem) {
-            return AlbumMapItem(
-              addedBy: account.userId,
-              addedAt: e.createdAt,
-              location: e.location,
-            );
-          } else {
-            _log.severe("[edit] Unsupported type: ${e.runtimeType}");
-            return null;
-          }
-        })
-        .whereNotNull()
-        .toList());
+    final newItems = items?.run(
+      (items) =>
+          items
+              .map((e) {
+                if (e is AlbumAdaptedCollectionItem) {
+                  return e.albumItem;
+                } else if (e is NewCollectionLabelItem) {
+                  // new labels
+                  return AlbumLabelItem(
+                    addedBy: account.userId,
+                    addedAt: e.createdAt,
+                    text: e.text,
+                  );
+                } else if (e is NewCollectionMapItem) {
+                  return AlbumMapItem(
+                    addedBy: account.userId,
+                    addedAt: e.createdAt,
+                    location: e.location,
+                  );
+                } else {
+                  _log.severe("[edit] Unsupported type: ${e.runtimeType}");
+                  return null;
+                }
+              })
+              .nonNulls
+              .toList(),
+    );
     final newAlbum = await EditAlbum(_c)(
       account,
       _provider.album,
@@ -122,10 +128,11 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       items: newItems,
       itemSort: itemSort,
       cover: cover,
-      knownItems: knownItems
-          ?.whereType<AlbumAdaptedCollectionItem>()
-          .map((e) => e.albumItem)
-          .toList(),
+      knownItems:
+          knownItems
+              ?.whereType<AlbumAdaptedCollectionItem>()
+              .map((e) => e.albumItem)
+              .toList(),
     );
     return collection.copyWith(
       name: name,
@@ -140,9 +147,9 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     required ValueChanged<Collection> onCollectionUpdated,
   }) async {
     try {
-      final group = items
-          .withIndex()
-          .groupListsBy((e) => e.e is AlbumAdaptedCollectionItem);
+      final group = items.withIndex().groupListsBy(
+        (e) => e.e is AlbumAdaptedCollectionItem,
+      );
       var failed = 0;
       if (group[true]?.isNotEmpty ?? false) {
         final newAlbum = await RemoveFromAlbum(_c)(
@@ -163,11 +170,11 @@ class CollectionAlbumAdapter implements CollectionAdapter {
             }
           },
         );
-        onCollectionUpdated(collection.copyWith(
-          contentProvider: _provider.copyWith(
-            album: newAlbum,
+        onCollectionUpdated(
+          collection.copyWith(
+            contentProvider: _provider.copyWith(album: newAlbum),
           ),
-        ));
+        );
       }
       for (final (:i, e: _)
           in (group[false] ?? const <({int i, CollectionItem e})>[])) {
@@ -176,7 +183,8 @@ class CollectionAlbumAdapter implements CollectionAdapter {
           actualIndex,
           items[actualIndex],
           UnsupportedError(
-              "Unsupported item type: ${items[actualIndex].runtimeType}"),
+            "Unsupported item type: ${items[actualIndex].runtimeType}",
+          ),
           StackTrace.current,
         );
       }
@@ -200,8 +208,11 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       _provider.album,
       sharee,
       onShareFileFailed: (f, e, stackTrace) {
-        _log.severe("[share] Failed to share file: ${logFilename(f.fdPath)}", e,
-            stackTrace);
+        _log.severe(
+          "[share] Failed to share file: ${logFilename(f.fdPath)}",
+          e,
+          stackTrace,
+        );
         fileFailed = true;
       },
     );
@@ -222,8 +233,11 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       _provider.album,
       userId,
       onUnshareFileFailed: (f, e, stackTrace) {
-        _log.severe("[unshare] Failed to unshare file: ${logFilename(f.path)}",
-            e, stackTrace);
+        _log.severe(
+          "[unshare] Failed to unshare file: ${logFilename(f.path)}",
+          e,
+          stackTrace,
+        );
         fileFailed = true;
       },
     );
@@ -235,36 +249,37 @@ class CollectionAlbumAdapter implements CollectionAdapter {
 
   @override
   Future<Collection> importPendingShared() async {
-    final newAlbum =
-        await ImportPendingSharedAlbum(_c)(account, _provider.album);
+    final newAlbum = await ImportPendingSharedAlbum(_c)(
+      account,
+      _provider.album,
+    );
     return CollectionBuilder.byAlbum(account, newAlbum);
   }
 
   @override
   Future<CollectionItem> adaptToNewItem(NewCollectionItem original) async {
     if (original is NewCollectionFileItem) {
-      final item = AlbumStaticProvider.of(_provider.album)
-          .items
+      final item = AlbumStaticProvider.of(_provider.album).items
           .whereType<AlbumFileItem>()
           .firstWhere((e) => e.file.compareServerIdentity(original.file));
       return CollectionFileItemAlbumAdapter(item);
     } else if (original is NewCollectionLabelItem) {
-      final item = AlbumStaticProvider.of(_provider.album)
-          .items
+      final item = AlbumStaticProvider.of(_provider.album).items
           .whereType<AlbumLabelItem>()
           .sorted((a, b) => a.addedAt.compareTo(b.addedAt))
           .reversed
           .firstWhere((e) => e.text == original.text);
       return CollectionLabelItemAlbumAdapter(item);
     } else if (original is NewCollectionMapItem) {
-      final item = AlbumStaticProvider.of(_provider.album)
-          .items
+      final item = AlbumStaticProvider.of(_provider.album).items
           .whereType<AlbumMapItem>()
           .sorted((a, b) => a.addedAt.compareTo(b.addedAt))
           .reversed
-          .firstWhere((e) =>
-              e.location == original.location &&
-              e.addedAt == original.createdAt);
+          .firstWhere(
+            (e) =>
+                e.location == original.location &&
+                e.addedAt == original.createdAt,
+          );
       return CollectionMapItemAlbumAdapter(item);
     } else {
       throw UnsupportedError("Unsupported type: ${original.runtimeType}");

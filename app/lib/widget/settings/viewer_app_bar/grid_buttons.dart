@@ -1,10 +1,7 @@
 part of '../viewer_app_bar_settings.dart';
 
 class _GridButton extends StatelessWidget {
-  const _GridButton({
-    required this.tooltip,
-    required this.icon,
-  });
+  const _GridButton({required this.tooltip, required this.icon});
 
   @override
   Widget build(BuildContext context) {

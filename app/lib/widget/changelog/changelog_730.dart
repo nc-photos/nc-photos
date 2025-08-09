@@ -13,13 +13,13 @@ class _Changelog730 extends StatelessWidget {
         _bulletGroup(const Text("Improve scrolling performance in Photos tab")),
         _bulletGroup(
           const Text(
-              "Option to enable client side EXIF fallback for files not processed by server"),
-          [
-            const Text("Settings > File metadata"),
-          ],
+            "Option to enable client side EXIF fallback for files not processed by server",
+          ),
+          [const Text("Settings > File metadata")],
         ),
-        _bulletGroup(const Text(
-            "Added Slovak, updated French, German, Spanish, Turkish")),
+        _bulletGroup(
+          const Text("Added Slovak, updated French, German, Spanish, Turkish"),
+        ),
         _sectionPadding(),
         _subSection("Contributors"),
         _bulletGroup(

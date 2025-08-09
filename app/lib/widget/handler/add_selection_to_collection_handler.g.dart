@@ -12,5 +12,6 @@ extension _$AddSelectionToCollectionHandlerNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.handler.add_selection_to_collection_handler.AddSelectionToCollectionHandler");
+    "widget.handler.add_selection_to_collection_handler.AddSelectionToCollectionHandler",
+  );
 }

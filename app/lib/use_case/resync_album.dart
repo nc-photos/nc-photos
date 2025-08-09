@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/debug_util.dart';
@@ -20,7 +19,8 @@ class ResyncAlbum {
     _log.info("[call] Resync album: ${album.name}");
     if (album.provider is! AlbumStaticProvider) {
       throw ArgumentError(
-          "Resync only make sense for static albums: ${album.name}");
+        "Resync only make sense for static albums: ${album.name}",
+      );
     }
     final items = AlbumStaticProvider.of(album).items;
 
@@ -29,7 +29,7 @@ class ResyncAlbum {
       items
           .whereType<AlbumFileItem>()
           .map((i) => i.file.fdId)
-          .whereNotNull()
+          .nonNulls
           .toList(),
       onFileNotFound: (_) {},
     );
@@ -44,14 +44,16 @@ class ResyncAlbum {
             return newItem;
           } else {
             _log.warning(
-                "[call] File not found: ${logFilename(i.file.fdPath)}");
+              "[call] File not found: ${logFilename(i.file.fdPath)}",
+            );
             return i;
           }
         } catch (e, stackTrace) {
           _log.shout(
-              "[call] Failed syncing file in album: ${logFilename(i.file.fdPath)}",
-              e,
-              stackTrace);
+            "[call] Failed syncing file in album: ${logFilename(i.file.fdPath)}",
+            e,
+            stackTrace,
+          );
           return i;
         }
       } else {

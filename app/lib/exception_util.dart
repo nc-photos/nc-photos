@@ -39,7 +39,8 @@ String toUserString(Object? exception) {
 }
 
 (String text, SnackBarAction? action) exceptionToSnackBarData(
-    Object? exception) {
+  Object? exception,
+) {
   if (exception is ApiException) {
     if (exception.response.statusCode == 401) {
       return (L10n.global().errorUnauthenticated, null);
@@ -61,15 +62,16 @@ String toUserString(Object? exception) {
       L10n.global().serverCertErrorDialogTitle,
       SnackBarAction(
         label: L10n.global().configButtonLabel,
-        onPressed: () => NavigationManager()
-            .getNavigator()
-            ?.pushNamed(TrustedCertManager.routeName),
+        onPressed:
+            () => NavigationManager().getNavigator()?.pushNamed(
+              TrustedCertManager.routeName,
+            ),
       ),
     );
   } else if (exception is UpdatePropertyFailureError) {
     return (
       "Failed to update files: ${exception.files.map((f) => f.filename).join(", ")}",
-      null
+      null,
     );
   } else if (exception is AppMessageException) {
     return (exception.message, null);

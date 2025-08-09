@@ -13,25 +13,28 @@ part of 'enhancement_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? isSaveEditResultToServer,
-      SizeInt? maxSize,
-      ExceptionEvent? error});
+  _State call({
+    bool? isSaveEditResultToServer,
+    SizeInt? maxSize,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isSaveEditResultToServer,
-      dynamic maxSize,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic isSaveEditResultToServer,
+    dynamic maxSize,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        isSaveEditResultToServer:
-            isSaveEditResultToServer as bool? ?? that.isSaveEditResultToServer,
-        maxSize: maxSize as SizeInt? ?? that.maxSize,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isSaveEditResultToServer:
+          isSaveEditResultToServer as bool? ?? that.isSaveEditResultToServer,
+      maxSize: maxSize as SizeInt? ?? that.maxSize,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

@@ -58,8 +58,8 @@ abstract class _AlbumConverter {
             "fdMime": null,
             "fdIsArchived": false,
             "fdIsFavorite": false,
-            "fdDateTime": "2020-01-02T03:04:05.678901Z"
-          }
+            "fdDateTime": "2020-01-02T03:04:05.678901Z",
+          },
         },
         sortProviderType: "null",
         sortProviderContent: const {},

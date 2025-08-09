@@ -2,10 +2,7 @@ part of '../places_browser.dart';
 
 @npLog
 class _Item {
-  _Item({
-    required Account account,
-    required this.place,
-  }) {
+  _Item({required Account account, required this.place}) {
     try {
       _coverUrl = getThumbnailUrlForImageFile(
         account,
@@ -20,7 +17,10 @@ class _Item {
       );
     } catch (e, stackTrace) {
       _log.warning(
-          "[_Item] Failed while getThumbnailUrlForImageFile", e, stackTrace);
+        "[_Item] Failed while getThumbnailUrlForImageFile",
+        e,
+        stackTrace,
+      );
     }
   }
 

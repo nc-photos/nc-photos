@@ -113,7 +113,9 @@ class HomeSearchSuggestionBlocSuccess extends HomeSearchSuggestionBlocState {
 @toString
 class HomeSearchSuggestionBlocFailure extends HomeSearchSuggestionBlocState {
   const HomeSearchSuggestionBlocFailure(
-      List<HomeSearchTagResult> super.results, this.exception);
+    List<HomeSearchTagResult> super.results,
+    this.exception,
+  );
 
   @override
   String toString() => _$toString();
@@ -142,8 +144,10 @@ class HomeSearchSuggestionBloc
 
   static bool require(DiContainer c) => true;
 
-  Future<void> _onEvent(HomeSearchSuggestionBlocEvent event,
-      Emitter<HomeSearchSuggestionBlocState> emit) async {
+  Future<void> _onEvent(
+    HomeSearchSuggestionBlocEvent event,
+    Emitter<HomeSearchSuggestionBlocState> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is HomeSearchSuggestionBlocSearch) {
       await _onEventSearch(event, emit);
@@ -152,8 +156,10 @@ class HomeSearchSuggestionBloc
     }
   }
 
-  Future<void> _onEventSearch(HomeSearchSuggestionBlocSearch ev,
-      Emitter<HomeSearchSuggestionBlocState> emit) async {
+  Future<void> _onEventSearch(
+    HomeSearchSuggestionBlocSearch ev,
+    Emitter<HomeSearchSuggestionBlocState> emit,
+  ) async {
     if (ev.phrase.raw.isEmpty) {
       emit(const HomeSearchSuggestionBlocSuccess([]));
       return;
@@ -166,43 +172,49 @@ class HomeSearchSuggestionBloc
       final str = results.map((e) => "${e.score}: ${e.text}").join("\n");
       _log.fine("[_onEventSearch] Search '${ev.phrase}':\n$str");
     }
-    final matches = results
-        .where((element) => element.score > 0)
-        .map((e) {
-          if (e.value!.toKeywords().any((k) => k.startsWith(ev.phrase))) {
-            // prefer names that start exactly with the search phrase
-            return (score: e.score + 1, item: e.value);
-          } else {
-            return (score: e.score, item: e.value);
-          }
-        })
-        .sorted((a, b) => b.score.compareTo(a.score))
-        .distinctIf(
-          (a, b) => identical(a.item, b.item),
-          (a) => a.item.hashCode,
-        )
-        .map((e) => e.item!.toResult())
-        .toList();
+    final matches =
+        results
+            .where((element) => element.score > 0)
+            .map((e) {
+              if (e.value!.toKeywords().any((k) => k.startsWith(ev.phrase))) {
+                // prefer names that start exactly with the search phrase
+                return (score: e.score + 1, item: e.value);
+              } else {
+                return (score: e.score, item: e.value);
+              }
+            })
+            .sorted((a, b) => b.score.compareTo(a.score))
+            .distinctIf(
+              (a, b) => identical(a.item, b.item),
+              (a) => a.item.hashCode,
+            )
+            .map((e) => e.item!.toResult())
+            .toList();
     emit(HomeSearchSuggestionBlocSuccess(matches));
   }
 
-  Future<void> _onEventPreloadData(HomeSearchSuggestionBlocPreloadData ev,
-      Emitter<HomeSearchSuggestionBlocState> emit) async {
+  Future<void> _onEventPreloadData(
+    HomeSearchSuggestionBlocPreloadData ev,
+    Emitter<HomeSearchSuggestionBlocState> emit,
+  ) async {
     final product = <_Searcheable>[];
     try {
-      var collections = collectionsController
-          .peekStream()
-          .data
-          .map((e) => e.collection)
-          .toList();
+      var collections =
+          collectionsController
+              .peekStream()
+              .data
+              .map((e) => e.collection)
+              .toList();
       if (collections.isEmpty) {
-        collections = await ListCollection(_c,
-                serverController: serverController)(account)
-            .last;
+        collections =
+            await ListCollection(_c, serverController: serverController)(
+              account,
+            ).last;
       }
       product.addAll(collections.map(_CollectionSearcheable.new));
       _log.info(
-          "[_onEventPreloadData] Loaded ${collections.length} collections");
+        "[_onEventPreloadData] Loaded ${collections.length} collections",
+      );
     } catch (e) {
       _log.warning("[_onEventPreloadData] Failed while ListCollection", e);
     }
@@ -214,9 +226,11 @@ class HomeSearchSuggestionBloc
       _log.warning("[_onEventPreloadData] Failed while ListTag", e);
     }
     try {
-      final persons = await ListPerson(_c)(
-              account, accountPrefController.personProviderValue)
-          .last;
+      final persons =
+          await ListPerson(_c)(
+            account,
+            accountPrefController.personProviderValue,
+          ).last;
       product.addAll(persons.map((t) => _PersonSearcheable(t)));
       _log.info("[_onEventPreloadData] Loaded ${persons.length} people");
     } catch (e) {
@@ -226,15 +240,17 @@ class HomeSearchSuggestionBloc
       final locations = await ListLocationGroup(_c)(account);
       // make sure no duplicates
       final map = <String, LocationGroup>{};
-      for (final l in locations.name +
-          locations.admin1 +
-          locations.admin2 +
-          locations.countryCode) {
+      for (final l
+          in locations.name +
+              locations.admin1 +
+              locations.admin2 +
+              locations.countryCode) {
         map[l.place] = l;
       }
       product.addAll(map.values.map((e) => _LocationSearcheable(e)));
       _log.info(
-          "[_onEventPreloadData] Loaded ${locations.name.length + locations.countryCode.length} locations");
+        "[_onEventPreloadData] Loaded ${locations.name.length + locations.countryCode.length} locations",
+      );
     } catch (e) {
       _log.warning("[_onEventPreloadData] Failed while ListLocationGroup", e);
     }

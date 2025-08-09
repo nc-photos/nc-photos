@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/pref/provider/memory.dart';
@@ -25,9 +24,11 @@ class Pref {
     _inst = pref;
   }
 
-  Future<bool> _set<T>(PrefKey key, T value,
-          Future<bool> Function(PrefKey key, T value) setFn) =>
-      setFn(key, value);
+  Future<bool> _set<T>(
+    PrefKey key,
+    T value,
+    Future<bool> Function(PrefKey key, T value) setFn,
+  ) => setFn(key, value);
 
   final PrefProvider provider;
 
@@ -39,7 +40,9 @@ class AccountPref {
 
   static AccountPref of(Account account) {
     _insts.putIfAbsent(
-        account.id, () => AccountPref.scoped(PrefMemoryProvider()));
+      account.id,
+      () => AccountPref.scoped(PrefMemoryProvider()),
+    );
     return _insts[account.id]!;
   }
 
@@ -54,9 +57,11 @@ class AccountPref {
     }
   }
 
-  Future<bool> _set<T>(AccountPrefKey key, T value,
-          Future<bool> Function(AccountPrefKey key, T value) setFn) =>
-      setFn(key, value);
+  Future<bool> _set<T>(
+    AccountPrefKey key,
+    T value,
+    Future<bool> Function(AccountPrefKey key, T value) setFn,
+  ) => setFn(key, value);
 
   Future<bool> _remove(AccountPrefKey key) => provider.remove(key);
 
@@ -118,8 +123,7 @@ enum PrefKey implements PrefKeyInterface {
   viewerAppBarButtons,
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
-  isFallbackClientExif,
-  ;
+  isFallbackClientExif;
 
   @override
   String toStringKey() {
@@ -233,8 +237,7 @@ enum AccountPrefKey implements PrefKeyInterface {
   accountLabel,
   lastNewCollectionType,
   personProvider,
-  serverStatus,
-  ;
+  serverStatus;
 
   @override
   String toStringKey() {

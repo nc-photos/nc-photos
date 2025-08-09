@@ -26,14 +26,14 @@ class LocationGroup with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        place,
-        countryCode,
-        count,
-        latestFileId,
-        latestDateTime,
-        latestFileMime,
-        latestFileRelativePath,
-      ];
+    place,
+    countryCode,
+    count,
+    latestFileId,
+    latestDateTime,
+    latestFileMime,
+    latestFileRelativePath,
+  ];
 
   final String place;
   final String countryCode;
@@ -47,18 +47,17 @@ class LocationGroup with EquatableMixin {
 @toString
 class LocationGroupResult with EquatableMixin {
   const LocationGroupResult(
-      this.name, this.admin1, this.admin2, this.countryCode);
+    this.name,
+    this.admin1,
+    this.admin2,
+    this.countryCode,
+  );
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        name,
-        admin1,
-        admin2,
-        countryCode,
-      ];
+  List<Object?> get props => [name, admin1, admin2, countryCode];
 
   final List<LocationGroup> name;
   final List<LocationGroup> admin1;
@@ -78,7 +77,7 @@ class ListLocationGroup {
         account: account.toDb(),
         includeRelativeRoots: account.roots,
         excludeRelativeRoots: [
-          remote_storage_util.remoteStorageDirRelativePath
+          remote_storage_util.remoteStorageDirRelativePath,
         ],
       );
       return LocationGroupResult(

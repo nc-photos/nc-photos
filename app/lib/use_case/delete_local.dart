@@ -20,10 +20,13 @@ class DeleteLocal {
     LocalFileOnFailureListener? onFailure,
   }) async {
     final deleted = List.of(files);
-    await _c.localFileRepo.deleteFiles(files, onFailure: (f, e, stackTrace) {
-      deleted.removeWhere((d) => d.compareIdentity(f));
-      onFailure?.call(f, e, stackTrace);
-    });
+    await _c.localFileRepo.deleteFiles(
+      files,
+      onFailure: (f, e, stackTrace) {
+        deleted.removeWhere((d) => d.compareIdentity(f));
+        onFailure?.call(f, e, stackTrace);
+      },
+    );
     if (deleted.isNotEmpty) {
       _log.info("[call] Deleted ${deleted.length} files successfully");
       KiwiContainer().resolve<EventBus>().fire(LocalFileDeletedEvent(deleted));

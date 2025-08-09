@@ -16,12 +16,11 @@ class M3 extends ThemeExtension<M3> {
     M3Checkbox? checkbox,
     M3FilterChip? filterChip,
     M3ListTile? listTile,
-  }) =>
-      M3(
-        checkbox: checkbox ?? this.checkbox,
-        filterChip: filterChip ?? this.filterChip,
-        listTile: listTile ?? this.listTile,
-      );
+  }) => M3(
+    checkbox: checkbox ?? this.checkbox,
+    filterChip: filterChip ?? this.filterChip,
+    listTile: listTile ?? this.listTile,
+  );
 
   @override
   M3 lerp(ThemeExtension<M3>? other, double t) {
@@ -41,26 +40,20 @@ class M3 extends ThemeExtension<M3> {
 }
 
 class M3Checkbox {
-  const M3Checkbox({
-    required this.disabled,
-  });
+  const M3Checkbox({required this.disabled});
 
   M3Checkbox lerp(M3Checkbox? other, double t) {
     if (other is! M3Checkbox) {
       return this;
     }
-    return M3Checkbox(
-      disabled: disabled.lerp(other.disabled, t),
-    );
+    return M3Checkbox(disabled: disabled.lerp(other.disabled, t));
   }
 
   final M3CheckboxDisabled disabled;
 }
 
 class M3CheckboxDisabled {
-  const M3CheckboxDisabled({
-    required this.container,
-  });
+  const M3CheckboxDisabled({required this.container});
 
   M3CheckboxDisabled lerp(M3CheckboxDisabled? other, double t) {
     if (other is! M3CheckboxDisabled) {
@@ -75,17 +68,13 @@ class M3CheckboxDisabled {
 }
 
 class M3FilterChip {
-  const M3FilterChip({
-    required this.disabled,
-  });
+  const M3FilterChip({required this.disabled});
 
   M3FilterChip lerp(M3FilterChip? other, double t) {
     if (other is! M3FilterChip) {
       return this;
     }
-    return M3FilterChip(
-      disabled: disabled.lerp(other.disabled, t),
-    );
+    return M3FilterChip(disabled: disabled.lerp(other.disabled, t));
   }
 
   final M3FilterChipDisabled disabled;
@@ -113,17 +102,13 @@ class M3FilterChipDisabled {
 }
 
 class M3ListTile {
-  const M3ListTile({
-    required this.enabled,
-  });
+  const M3ListTile({required this.enabled});
 
   M3ListTile lerp(M3ListTile? other, double t) {
     if (other is! M3ListTile) {
       return this;
     }
-    return M3ListTile(
-      enabled: enabled.lerp(other.enabled, t),
-    );
+    return M3ListTile(enabled: enabled.lerp(other.enabled, t));
   }
 
   final M3ListTileEnabled enabled;

@@ -15,10 +15,7 @@ part 'place_picker.g.dart';
 part 'state_event.dart';
 
 class PlacePickerArguments {
-  const PlacePickerArguments({
-    this.initialPosition,
-    this.initialZoom,
-  });
+  const PlacePickerArguments({this.initialPosition, this.initialZoom});
 
   final MapCoord? initialPosition;
   final double? initialZoom;
@@ -39,23 +36,22 @@ class PlacePicker extends StatelessWidget {
     required this.initialZoom,
   });
 
-  PlacePicker.fromArgs(
-    PlacePickerArguments? args, {
-    Key? key,
-  }) : this(
-          key: key,
-          initialPosition: args?.initialPosition,
-          initialZoom: args?.initialZoom,
-        );
+  PlacePicker.fromArgs(PlacePickerArguments? args, {Key? key})
+    : this(
+        key: key,
+        initialPosition: args?.initialPosition,
+        initialZoom: args?.initialZoom,
+      );
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        prefController: context.read(),
-        initialPosition: initialPosition,
-        initialZoom: initialZoom,
-      ),
+      create:
+          (context) => _Bloc(
+            prefController: context.read(),
+            initialPosition: initialPosition,
+            initialZoom: initialZoom,
+          ),
       child: const _WrappedPlacePicker(),
     );
   }
@@ -104,7 +100,8 @@ class _BodyView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final position = context.bloc.initialPosition ??
+    final position =
+        context.bloc.initialPosition ??
         context.bloc.prefController.mapBrowserPrevPositionValue;
     return ValueStreamBuilderEx<GpsMapProvider>(
       stream: context.read<PrefController>().gpsMapProvider,

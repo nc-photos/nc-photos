@@ -23,8 +23,9 @@ class _$CollectionItemStreamDataCopyWithWorkerImpl
   @override
   CollectionItemStreamData call({dynamic items, dynamic hasNext}) {
     return CollectionItemStreamData(
-        items: items as List<CollectionItem>? ?? that.items,
-        hasNext: hasNext as bool? ?? that.hasNext);
+      items: items as List<CollectionItem>? ?? that.items,
+      hasNext: hasNext as bool? ?? that.hasNext,
+    );
   }
 
   final CollectionItemStreamData that;
@@ -45,5 +46,6 @@ extension _$CollectionItemsControllerNpLog on CollectionItemsController {
   Logger get _log => log;
 
   static final log = Logger(
-      "controller.collection_items_controller.CollectionItemsController");
+    "controller.collection_items_controller.CollectionItemsController",
+  );
 }

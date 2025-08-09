@@ -93,41 +93,41 @@ class DiContainer {
     TouchManager? touchManager,
     NpDb? npDb,
     Pref? securePref,
-  })  : _albumRepo = albumRepo,
-        _albumRepoRemote = albumRepoRemote,
-        _albumRepoLocal = albumRepoLocal,
-        _albumRepo2 = albumRepo2,
-        _albumRepo2Remote = albumRepo2Remote,
-        _albumRepo2Local = albumRepo2Local,
-        _fileRepo = fileRepo,
-        _fileRepoRemote = fileRepoRemote,
-        _fileRepoLocal = fileRepoLocal,
-        _fileRepo2 = fileRepo2,
-        _fileRepo2Remote = fileRepo2Remote,
-        _fileRepo2Local = fileRepo2Local,
-        _shareRepo = shareRepo,
-        _shareeRepo = shareeRepo,
-        _favoriteRepo = favoriteRepo,
-        _tagRepo = tagRepo,
-        _tagRepoRemote = tagRepoRemote,
-        _tagRepoLocal = tagRepoLocal,
-        _taggedFileRepo = taggedFileRepo,
-        _localFileRepo = localFileRepo,
-        _searchRepo = searchRepo,
-        _ncAlbumRepo = ncAlbumRepo,
-        _ncAlbumRepoRemote = ncAlbumRepoRemote,
-        _ncAlbumRepoLocal = ncAlbumRepoLocal,
-        _faceRecognitionPersonRepo = faceRecognitionPersonRepo,
-        _faceRecognitionPersonRepoRemote = faceRecognitionPersonRepoRemote,
-        _faceRecognitionPersonRepoLocal = faceRecognitionPersonRepoLocal,
-        _recognizeFaceRepo = recognizeFaceRepo,
-        _recognizeFaceRepoRemote = recognizeFaceRepoRemote,
-        _recognizeFaceRepoLocal = recognizeFaceRepoLocal,
-        _imageLocationRepo = imageLocationRepo,
-        _pref = pref,
-        _touchManager = touchManager,
-        _npDb = npDb,
-        _securePref = securePref;
+  }) : _albumRepo = albumRepo,
+       _albumRepoRemote = albumRepoRemote,
+       _albumRepoLocal = albumRepoLocal,
+       _albumRepo2 = albumRepo2,
+       _albumRepo2Remote = albumRepo2Remote,
+       _albumRepo2Local = albumRepo2Local,
+       _fileRepo = fileRepo,
+       _fileRepoRemote = fileRepoRemote,
+       _fileRepoLocal = fileRepoLocal,
+       _fileRepo2 = fileRepo2,
+       _fileRepo2Remote = fileRepo2Remote,
+       _fileRepo2Local = fileRepo2Local,
+       _shareRepo = shareRepo,
+       _shareeRepo = shareeRepo,
+       _favoriteRepo = favoriteRepo,
+       _tagRepo = tagRepo,
+       _tagRepoRemote = tagRepoRemote,
+       _tagRepoLocal = tagRepoLocal,
+       _taggedFileRepo = taggedFileRepo,
+       _localFileRepo = localFileRepo,
+       _searchRepo = searchRepo,
+       _ncAlbumRepo = ncAlbumRepo,
+       _ncAlbumRepoRemote = ncAlbumRepoRemote,
+       _ncAlbumRepoLocal = ncAlbumRepoLocal,
+       _faceRecognitionPersonRepo = faceRecognitionPersonRepo,
+       _faceRecognitionPersonRepoRemote = faceRecognitionPersonRepoRemote,
+       _faceRecognitionPersonRepoLocal = faceRecognitionPersonRepoLocal,
+       _recognizeFaceRepo = recognizeFaceRepo,
+       _recognizeFaceRepoRemote = recognizeFaceRepoRemote,
+       _recognizeFaceRepoLocal = recognizeFaceRepoLocal,
+       _imageLocationRepo = imageLocationRepo,
+       _pref = pref,
+       _touchManager = touchManager,
+       _npDb = npDb,
+       _securePref = securePref;
 
   DiContainer.late();
 
@@ -241,15 +241,18 @@ class DiContainer {
       localFileRepo: localFileRepo == null ? _localFileRepo : localFileRepo.obj,
       searchRepo: searchRepo == null ? _searchRepo : searchRepo.obj,
       ncAlbumRepo: ncAlbumRepo == null ? _ncAlbumRepo : ncAlbumRepo.obj,
-      faceRecognitionPersonRepo: faceRecognitionPersonRepo == null
-          ? _faceRecognitionPersonRepo
-          : faceRecognitionPersonRepo.obj,
-      recognizeFaceRepo: recognizeFaceRepo == null
-          ? _recognizeFaceRepo
-          : recognizeFaceRepo.obj,
-      imageLocationRepo: imageLocationRepo == null
-          ? _imageLocationRepo
-          : imageLocationRepo.obj,
+      faceRecognitionPersonRepo:
+          faceRecognitionPersonRepo == null
+              ? _faceRecognitionPersonRepo
+              : faceRecognitionPersonRepo.obj,
+      recognizeFaceRepo:
+          recognizeFaceRepo == null
+              ? _recognizeFaceRepo
+              : recognizeFaceRepo.obj,
+      imageLocationRepo:
+          imageLocationRepo == null
+              ? _imageLocationRepo
+              : imageLocationRepo.obj,
       pref: pref == null ? _pref : pref.obj,
       touchManager: touchManager == null ? _touchManager : touchManager.obj,
       npDb: npDb == null ? _npDb : npDb.obj,
@@ -518,27 +521,27 @@ extension DiContainerExtension on DiContainer {
   ///
   /// Notice that not all repo support this
   DiContainer withRemoteRepo() => copyWith(
-        albumRepo: OrNull(_albumRepoRemote),
-        albumRepo2: OrNull(_albumRepo2Remote),
-        fileRepo: OrNull(_fileRepoRemote),
-        tagRepo: OrNull(_tagRepoRemote),
-        ncAlbumRepo: OrNull(_ncAlbumRepoRemote),
-        faceRecognitionPersonRepo: OrNull(_faceRecognitionPersonRepoRemote),
-        recognizeFaceRepo: OrNull(_recognizeFaceRepoRemote),
-      );
+    albumRepo: OrNull(_albumRepoRemote),
+    albumRepo2: OrNull(_albumRepo2Remote),
+    fileRepo: OrNull(_fileRepoRemote),
+    tagRepo: OrNull(_tagRepoRemote),
+    ncAlbumRepo: OrNull(_ncAlbumRepoRemote),
+    faceRecognitionPersonRepo: OrNull(_faceRecognitionPersonRepoRemote),
+    recognizeFaceRepo: OrNull(_recognizeFaceRepoRemote),
+  );
 
   /// Uses local repo if available
   ///
   /// Notice that not all repo support this
   DiContainer withLocalRepo() => copyWith(
-        albumRepo: OrNull(_albumRepoLocal),
-        albumRepo2: OrNull(_albumRepo2Local),
-        fileRepo: OrNull(_fileRepoLocal),
-        tagRepo: OrNull(_tagRepoLocal),
-        ncAlbumRepo: OrNull(_ncAlbumRepoLocal),
-        faceRecognitionPersonRepo: OrNull(_faceRecognitionPersonRepoLocal),
-        recognizeFaceRepo: OrNull(_recognizeFaceRepoLocal),
-      );
+    albumRepo: OrNull(_albumRepoLocal),
+    albumRepo2: OrNull(_albumRepo2Local),
+    fileRepo: OrNull(_fileRepoLocal),
+    tagRepo: OrNull(_tagRepoLocal),
+    ncAlbumRepo: OrNull(_ncAlbumRepoLocal),
+    faceRecognitionPersonRepo: OrNull(_faceRecognitionPersonRepoLocal),
+    recognizeFaceRepo: OrNull(_recognizeFaceRepoLocal),
+  );
 
   DiContainer withLocalAlbumRepo() =>
       copyWith(albumRepo: OrNull(albumRepoLocal));

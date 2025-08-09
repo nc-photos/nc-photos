@@ -9,8 +9,7 @@ import 'package:np_platform_permission/src/k.dart' as k;
 class Permission {
   static const READ_EXTERNAL_STORAGE =
       "android.permission.READ_EXTERNAL_STORAGE";
-  static const READ_MEDIA_IMAGES =
-      "android.permission.READ_MEDIA_IMAGES";
+  static const READ_MEDIA_IMAGES = "android.permission.READ_MEDIA_IMAGES";
   static const WRITE_EXTERNAL_STORAGE =
       "android.permission.WRITE_EXTERNAL_STORAGE";
 

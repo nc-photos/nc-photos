@@ -58,11 +58,12 @@ class FileSharerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        container: KiwiContainer().resolve(),
-        account: account,
-        files: files,
-      ),
+      create:
+          (context) => _Bloc(
+            container: KiwiContainer().resolve(),
+            account: account,
+            files: files,
+          ),
       child: const _WrappedFileSharerDialog(),
     );
   }
@@ -99,8 +100,8 @@ class _WrappedFileSharerDialog extends StatelessWidget {
           },
         ),
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.message != current.message,
+          listenWhen:
+              (previous, current) => previous.message != current.message,
           listener: (context, state) {
             if (state.message != null) {
               AppToast.showToast(
@@ -146,8 +147,9 @@ class _ShareMethodDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isSupportPerview =
-        context.bloc.files.any((f) => file_util.isSupportedImageFormat(f));
+    final isSupportPerview = context.bloc.files.any(
+      (f) => file_util.isSupportedImageFormat(f),
+    );
     return SimpleDialog(
       title: Text(L10n.global().shareMethodDialogTitle),
       children: [
@@ -229,14 +231,16 @@ class _SharePreviewDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.previewState?.index != current.previewState?.index ||
-          previous.previewState?.count != current.previewState?.count,
+      buildWhen:
+          (previous, current) =>
+              previous.previewState?.index != current.previewState?.index ||
+              previous.previewState?.count != current.previewState?.count,
       builder: (context, state) {
-        final text = state.previewState?.index != null &&
-                state.previewState?.count != null
-            ? " (${state.previewState!.index}/${state.previewState!.count})"
-            : "";
+        final text =
+            state.previewState?.index != null &&
+                    state.previewState?.count != null
+                ? " (${state.previewState!.index}/${state.previewState!.count})"
+                : "";
         return ProcessingDialog(
           text: L10n.global().shareDownloadingDialogContent + text,
         );
@@ -270,9 +274,9 @@ class _SharePublicLinkDialogState extends State<_SharePublicLinkDialog> {
     } else {
       final result = await showDialog<ShareLinkMultipleFilesDialogResult>(
         context: context,
-        builder: (context) => const ShareLinkMultipleFilesDialog(
-          shouldAskPassword: false,
-        ),
+        builder:
+            (context) =>
+                const ShareLinkMultipleFilesDialog(shouldAskPassword: false),
       );
       if (!mounted) {
         return;
@@ -281,9 +285,7 @@ class _SharePublicLinkDialogState extends State<_SharePublicLinkDialog> {
         _bloc.add(const _SetResult(false));
         return;
       } else {
-        _bloc.add(_SetPublicLinkDetails(
-          albumName: result.albumName,
-        ));
+        _bloc.add(_SetPublicLinkDetails(albumName: result.albumName));
       }
     }
   }
@@ -308,9 +310,10 @@ class _SharePasswordLinkDialogState extends State<_SharePasswordLinkDialog> {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.passwordLinkState?.password !=
-          current.passwordLinkState?.password,
+      buildWhen:
+          (previous, current) =>
+              previous.passwordLinkState?.password !=
+              current.passwordLinkState?.password,
       builder: (context, state) {
         if (state.passwordLinkState?.password == null) {
           return Container();
@@ -325,17 +328,18 @@ class _SharePasswordLinkDialogState extends State<_SharePasswordLinkDialog> {
     if (_bloc.files.length == 1) {
       final result = await showDialog<String>(
         context: context,
-        builder: (context) => SimpleInputDialog(
-          hintText: L10n.global().passwordInputHint,
-          buttonText: MaterialLocalizations.of(context).okButtonLabel,
-          validator: (value) {
-            if (value?.isNotEmpty != true) {
-              return L10n.global().passwordInputInvalidEmpty;
-            }
-            return null;
-          },
-          obscureText: true,
-        ),
+        builder:
+            (context) => SimpleInputDialog(
+              hintText: L10n.global().passwordInputHint,
+              buttonText: MaterialLocalizations.of(context).okButtonLabel,
+              validator: (value) {
+                if (value?.isNotEmpty != true) {
+                  return L10n.global().passwordInputInvalidEmpty;
+                }
+                return null;
+              },
+              obscureText: true,
+            ),
       );
       if (!mounted) {
         return;
@@ -349,9 +353,9 @@ class _SharePasswordLinkDialogState extends State<_SharePasswordLinkDialog> {
     } else {
       final result = await showDialog<ShareLinkMultipleFilesDialogResult>(
         context: context,
-        builder: (context) => const ShareLinkMultipleFilesDialog(
-          shouldAskPassword: true,
-        ),
+        builder:
+            (context) =>
+                const ShareLinkMultipleFilesDialog(shouldAskPassword: true),
       );
       if (!mounted) {
         return;
@@ -360,10 +364,12 @@ class _SharePasswordLinkDialogState extends State<_SharePasswordLinkDialog> {
         _bloc.add(const _SetResult(false));
         return;
       } else {
-        _bloc.add(_SetPasswordLinkDetails(
-          albumName: result.albumName,
-          password: result.password!,
-        ));
+        _bloc.add(
+          _SetPasswordLinkDetails(
+            albumName: result.albumName,
+            password: result.password!,
+          ),
+        );
       }
     }
   }

@@ -10,6 +10,7 @@ extension _$TaggedFileRemoteDataSourceNpLog on TaggedFileRemoteDataSource {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.tagged_file.data_source.TaggedFileRemoteDataSource");
+  static final log = Logger(
+    "entity.tagged_file.data_source.TaggedFileRemoteDataSource",
+  );
 }

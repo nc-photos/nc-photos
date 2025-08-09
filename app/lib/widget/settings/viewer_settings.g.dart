@@ -13,28 +13,30 @@ part of 'viewer_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {int? screenBrightness,
-      bool? isForceRotation,
-      GpsMapProvider? gpsMapProvider,
-      ExceptionEvent? error});
+  _State call({
+    int? screenBrightness,
+    bool? isForceRotation,
+    GpsMapProvider? gpsMapProvider,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic screenBrightness,
-      dynamic isForceRotation,
-      dynamic gpsMapProvider,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic screenBrightness,
+    dynamic isForceRotation,
+    dynamic gpsMapProvider,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        screenBrightness: screenBrightness as int? ?? that.screenBrightness,
-        isForceRotation: isForceRotation as bool? ?? that.isForceRotation,
-        gpsMapProvider:
-            gpsMapProvider as GpsMapProvider? ?? that.gpsMapProvider,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      screenBrightness: screenBrightness as int? ?? that.screenBrightness,
+      isForceRotation: isForceRotation as bool? ?? that.isForceRotation,
+      gpsMapProvider: gpsMapProvider as GpsMapProvider? ?? that.gpsMapProvider,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -53,16 +55,18 @@ extension _$_WrappedViewerSettingsStateNpLog on _WrappedViewerSettingsState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.viewer_settings._WrappedViewerSettingsState");
+  static final log = Logger(
+    "widget.settings.viewer_settings._WrappedViewerSettingsState",
+  );
 }
 
 extension _$_BrightnessDialogStateNpLog on _BrightnessDialogState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.viewer_settings._BrightnessDialogState");
+  static final log = Logger(
+    "widget.settings.viewer_settings._BrightnessDialogState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

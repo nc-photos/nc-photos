@@ -28,15 +28,12 @@ class ShareAlbumWithUser {
     ErrorWithValueHandler<FileDescriptor>? onShareFileFailed,
   }) async {
     assert(album.provider is AlbumStaticProvider);
-    final newShares = (album.shares ?? [])
-      ..add(AlbumShare(
-        userId: sharee.shareWith,
-        displayName: sharee.label,
-      ));
+    final newShares =
+        (album.shares ?? [])..add(
+          AlbumShare(userId: sharee.shareWith, displayName: sharee.label),
+        );
     // add the share to album file
-    final newAlbum = album.copyWith(
-      shares: OrNull(newShares.distinct()),
-    );
+    final newAlbum = album.copyWith(shares: OrNull(newShares.distinct()));
     await UpdateAlbum(albumRepo)(account, newAlbum);
 
     try {
@@ -58,19 +55,22 @@ class ShareAlbumWithUser {
     CiString shareWith, {
     ErrorWithValueHandler<FileDescriptor>? onShareFileFailed,
   }) async {
-    final files = AlbumStaticProvider.of(album)
-        .items
+    final files = AlbumStaticProvider.of(album).items
         .whereType<AlbumFileItem>()
         .where((item) => item.ownerId != shareWith)
         .map((e) => e.file);
     try {
       await CreateUserShare(shareRepo)(
-          account, album.albumFile!, shareWith.raw);
+        account,
+        album.albumFile!,
+        shareWith.raw,
+      );
     } catch (e, stackTrace) {
       _log.severe(
-          "[_createFileShares] Failed sharing album file '${logFilename(album.albumFile?.path)}' with '$shareWith'",
-          e,
-          stackTrace);
+        "[_createFileShares] Failed sharing album file '${logFilename(album.albumFile?.path)}' with '$shareWith'",
+        e,
+        stackTrace,
+      );
       onShareFileFailed?.call(album.albumFile!, e, stackTrace);
     }
     for (final f in files) {
@@ -79,9 +79,10 @@ class ShareAlbumWithUser {
         await CreateUserShare(shareRepo)(account, f, shareWith.raw);
       } catch (e, stackTrace) {
         _log.severe(
-            "[_createFileShares] Failed sharing file '${logFilename(f.fdPath)}' with '$shareWith'",
-            e,
-            stackTrace);
+          "[_createFileShares] Failed sharing file '${logFilename(f.fdPath)}' with '$shareWith'",
+          e,
+          stackTrace,
+        );
         onShareFileFailed?.call(f, e, stackTrace);
       }
     }

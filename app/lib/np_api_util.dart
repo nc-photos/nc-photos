@@ -3,9 +3,9 @@ import 'package:np_api/np_api.dart';
 
 class ApiUtil {
   static Api fromAccount(Account account) => Api(
-        Uri.parse(account.url),
-        BasicAuth(account.username2, account.password),
-      );
+    Uri.parse(account.url),
+    BasicAuth(account.username2, account.password),
+  );
 }
 
 class AuthUtil {

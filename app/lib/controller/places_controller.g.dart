@@ -23,8 +23,9 @@ class _$PlaceStreamEventCopyWithWorkerImpl
   @override
   PlaceStreamEvent call({dynamic data, dynamic hasNext}) {
     return PlaceStreamEvent(
-        data: data as LocationGroupResult? ?? that.data,
-        hasNext: hasNext as bool? ?? that.hasNext);
+      data: data as LocationGroupResult? ?? that.data,
+      hasNext: hasNext as bool? ?? that.hasNext,
+    );
   }
 
   final PlaceStreamEvent that;

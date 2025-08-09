@@ -33,14 +33,13 @@ class EditCollection {
     CollectionItemSort? itemSort,
     OrNull<FileDescriptor>? cover,
     List<CollectionItem>? knownItems,
-  }) =>
-      CollectionAdapter.of(_c, account, collection).edit(
-        name: name,
-        items: items,
-        itemSort: itemSort,
-        cover: cover,
-        knownItems: knownItems,
-      );
+  }) => CollectionAdapter.of(_c, account, collection).edit(
+    name: name,
+    items: items,
+    itemSort: itemSort,
+    cover: cover,
+    knownItems: knownItems,
+  );
 
   final DiContainer _c;
 }

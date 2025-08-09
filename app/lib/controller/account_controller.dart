@@ -15,9 +15,7 @@ import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/event/native_event_relay.dart';
 
 class AccountController {
-  AccountController({
-    required this.prefController,
-  });
+  AccountController({required this.prefController});
 
   void setCurrentAccount(Account account) {
     _account = account;
@@ -67,9 +65,7 @@ class AccountController {
       );
 
   AccountPrefController get accountPrefController =>
-      _accountPrefController ??= AccountPrefController(
-        account: _account!,
-      );
+      _accountPrefController ??= AccountPrefController(account: _account!);
 
   PersonsController get personsController =>
       _personsController ??= PersonsController(
@@ -78,9 +74,8 @@ class AccountController {
         accountPrefController: accountPrefController,
       );
 
-  SyncController get syncController => _syncController ??= SyncController(
-        account: _account!,
-      );
+  SyncController get syncController =>
+      _syncController ??= SyncController(account: _account!);
 
   SessionController get sessionController =>
       _sessionController ??= SessionController();
@@ -97,7 +92,8 @@ class AccountController {
         account: _account!,
       );
 
-  FilesController get filesController => _filesController ??= FilesController(
+  FilesController get filesController =>
+      _filesController ??= FilesController(
         KiwiContainer().resolve<DiContainer>(),
         account: _account!,
         accountPrefController: accountPrefController,

@@ -32,7 +32,10 @@ class _L10n {
       return AppLocalizationsEn();
     } catch (e, stackTrace) {
       _log.shout(
-          "[_queryL10n] Failed while lookupAppLocalizations", e, stackTrace);
+        "[_queryL10n] Failed while lookupAppLocalizations",
+        e,
+        stackTrace,
+      );
       return AppLocalizationsEn();
     }
   }

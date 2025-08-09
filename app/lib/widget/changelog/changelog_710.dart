@@ -19,10 +19,9 @@ class _Changelog710 extends StatelessWidget {
         ),
         _bulletGroup(
           const Text(
-              "Now support customizing the navigation bar in Collections"),
-          [
-            const Text("Settings > Collections > Customize navigation bar"),
-          ],
+            "Now support customizing the navigation bar in Collections",
+          ),
+          [const Text("Settings > Collections > Customize navigation bar")],
         ),
         _bulletGroup(const Text("Relocated Map, it's now inside Collections")),
         _bulletGroup(const Text("Various bug fixes")),

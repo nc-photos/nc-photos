@@ -24,11 +24,12 @@ class ShareFolderPicker extends StatefulWidget {
   static const routeName = "/share-folder-picker";
 
   static Route buildRoute(
-          ShareFolderPickerArguments args, RouteSettings settings) =>
-      MaterialPageRoute<String>(
-        builder: (context) => ShareFolderPicker.fromArgs(args),
-        settings: settings,
-      );
+    ShareFolderPickerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute<String>(
+    builder: (context) => ShareFolderPicker.fromArgs(args),
+    settings: settings,
+  );
 
   const ShareFolderPicker({
     super.key,
@@ -37,11 +38,7 @@ class ShareFolderPicker extends StatefulWidget {
   });
 
   ShareFolderPicker.fromArgs(ShareFolderPickerArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-          initialValue: args.initialValue,
-        );
+    : this(key: key, account: args.account, initialValue: args.initialValue);
 
   @override
   createState() => _ShareFolderPickerState();
@@ -54,9 +51,7 @@ class ShareFolderPicker extends StatefulWidget {
 class _ShareFolderPickerState extends State<ShareFolderPicker> {
   @override
   build(BuildContext context) {
-    return Scaffold(
-      body: _buildContent(context),
-    );
+    return Scaffold(body: _buildContent(context));
   }
 
   Widget _buildContent(BuildContext context) {
@@ -75,8 +70,9 @@ class _ShareFolderPickerState extends State<ShareFolderPicker> {
                 const SizedBox(height: 8),
                 Align(
                   alignment: AlignmentDirectional.topStart,
-                  child:
-                      Text(L10n.global().settingsShareFolderPickerDescription),
+                  child: Text(
+                    L10n.global().settingsShareFolderPickerDescription,
+                  ),
                 ),
               ],
             ),
@@ -90,7 +86,9 @@ class _ShareFolderPickerState extends State<ShareFolderPicker> {
                 if (widget.initialValue.isNotEmpty)
                   File(
                     path: file_util.unstripPath(
-                        widget.account, widget.initialValue),
+                      widget.account,
+                      widget.initialValue,
+                    ),
                   ),
               ],
               isMultipleSelections: false,
@@ -128,13 +126,16 @@ class _ShareFolderPickerState extends State<ShareFolderPicker> {
 
   void _onPickerConfirmed(BuildContext context, List<File> picks) {
     if (picks.isEmpty) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().albumDirPickerListEmptyNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().albumDirPickerListEmptyNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     } else {
       _log.info(
-          "[_onPickerConfirmed] Picked: ${picks.map((e) => e.strippedPath).toReadableString()}");
+        "[_onPickerConfirmed] Picked: ${picks.map((e) => e.strippedPath).toReadableString()}",
+      );
       Navigator.of(context).pop(picks.first.strippedPath);
     }
   }

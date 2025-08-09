@@ -15,10 +15,7 @@ part 'android_info.g.dart';
 class AndroidInfo {
   factory AndroidInfo() => _inst;
 
-  const AndroidInfo._({
-    required this.sdkInt,
-    required this.totalMemMb,
-  });
+  const AndroidInfo._({required this.sdkInt, required this.totalMemMb});
 
   static Future<void> init() async {
     final info = await DeviceInfoPlugin().androidInfo;
@@ -27,10 +24,7 @@ class AndroidInfo {
     final memInfo = await MemoryInfoPlugin().memoryInfo;
     final totalMemMb = memInfo.totalMem!.toDouble();
 
-    _inst = AndroidInfo._(
-      sdkInt: sdkInt,
-      totalMemMb: totalMemMb,
-    );
+    _inst = AndroidInfo._(sdkInt: sdkInt, totalMemMb: totalMemMb);
     _log.info("[init] $_inst");
   }
 

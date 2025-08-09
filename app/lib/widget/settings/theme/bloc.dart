@@ -3,14 +3,15 @@ part of '../theme_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State(
+  _Bloc({required this.prefController})
+    : super(
+        _State(
           isFollowSystemTheme: prefController.isFollowSystemThemeValue,
           isUseBlackInDarkTheme: prefController.isUseBlackInDarkThemeValue,
           seedColor: prefController.seedColorValue?.value,
           secondarySeedColor: prefController.secondarySeedColorValue?.value,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_SetFollowSystemTheme>(_onSetFollowSystemTheme);
     on<_SetUseBlackInDarkTheme>(_onSetUseBlackInDarkTheme);
@@ -68,7 +69,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _onSetUseBlackInDarkTheme(
-      _SetUseBlackInDarkTheme ev, Emitter<_State> emit) {
+    _SetUseBlackInDarkTheme ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
     prefController.setUseBlackInDarkTheme(ev.value);
   }

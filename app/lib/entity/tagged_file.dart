@@ -14,9 +14,7 @@ class TaggedFile with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  get props => [
-        fileId,
-      ];
+  get props => [fileId];
 
   final int fileId;
 }

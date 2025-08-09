@@ -13,35 +13,38 @@ part of 'theme_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? isFollowSystemTheme,
-      bool? isUseBlackInDarkTheme,
-      int? seedColor,
-      int? secondarySeedColor,
-      ExceptionEvent? error});
+  _State call({
+    bool? isFollowSystemTheme,
+    bool? isUseBlackInDarkTheme,
+    int? seedColor,
+    int? secondarySeedColor,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isFollowSystemTheme,
-      dynamic isUseBlackInDarkTheme,
-      dynamic seedColor = copyWithNull,
-      dynamic secondarySeedColor = copyWithNull,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic isFollowSystemTheme,
+    dynamic isUseBlackInDarkTheme,
+    dynamic seedColor = copyWithNull,
+    dynamic secondarySeedColor = copyWithNull,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        isFollowSystemTheme:
-            isFollowSystemTheme as bool? ?? that.isFollowSystemTheme,
-        isUseBlackInDarkTheme:
-            isUseBlackInDarkTheme as bool? ?? that.isUseBlackInDarkTheme,
-        seedColor:
-            seedColor == copyWithNull ? that.seedColor : seedColor as int?,
-        secondarySeedColor: secondarySeedColor == copyWithNull
-            ? that.secondarySeedColor
-            : secondarySeedColor as int?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isFollowSystemTheme:
+          isFollowSystemTheme as bool? ?? that.isFollowSystemTheme,
+      isUseBlackInDarkTheme:
+          isUseBlackInDarkTheme as bool? ?? that.isUseBlackInDarkTheme,
+      seedColor: seedColor == copyWithNull ? that.seedColor : seedColor as int?,
+      secondarySeedColor:
+          secondarySeedColor == copyWithNull
+              ? that.secondarySeedColor
+              : secondarySeedColor as int?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -60,8 +63,9 @@ extension _$_WrappedThemeSettingsStateNpLog on _WrappedThemeSettingsState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.theme_settings._WrappedThemeSettingsState");
+  static final log = Logger(
+    "widget.settings.theme_settings._WrappedThemeSettingsState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

@@ -17,10 +17,7 @@ class InvalidBaseUrlException implements Exception {
 }
 
 class LoginException implements Exception {
-  const LoginException({
-    required this.response,
-    this.message,
-  });
+  const LoginException({required this.response, this.message});
 
   @override
   String toString() {

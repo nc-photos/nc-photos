@@ -7,10 +7,7 @@ import 'package:np_math/np_math.dart';
 part 'photo_date_time_edit_dialog.g.dart';
 
 class PhotoDateTimeEditDialog extends StatefulWidget {
-  const PhotoDateTimeEditDialog({
-    super.key,
-    required this.initialDateTime,
-  });
+  const PhotoDateTimeEditDialog({super.key, required this.initialDateTime});
 
   @override
   createState() => _PhotoDateTimeEditDialogState();
@@ -74,8 +71,9 @@ class _PhotoDateTimeEditDialogState extends State<PhotoDateTimeEditDialog> {
                     onSaved: (value) {
                       _formValue.month = int.parse(value!);
                     },
-                    initialValue:
-                        widget.initialDateTime.month.toString().padLeft(2, "0"),
+                    initialValue: widget.initialDateTime.month
+                        .toString()
+                        .padLeft(2, "0"),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -95,8 +93,10 @@ class _PhotoDateTimeEditDialogState extends State<PhotoDateTimeEditDialog> {
                     onSaved: (value) {
                       _formValue.day = int.parse(value!);
                     },
-                    initialValue:
-                        widget.initialDateTime.day.toString().padLeft(2, "0"),
+                    initialValue: widget.initialDateTime.day.toString().padLeft(
+                      2,
+                      "0",
+                    ),
                   ),
                 ),
               ],
@@ -124,8 +124,9 @@ class _PhotoDateTimeEditDialogState extends State<PhotoDateTimeEditDialog> {
                     onSaved: (value) {
                       _formValue.hour = int.parse(value!);
                     },
-                    initialValue:
-                        widget.initialDateTime.hour.toString().padLeft(2, "0"),
+                    initialValue: widget.initialDateTime.hour
+                        .toString()
+                        .padLeft(2, "0"),
                   ),
                 ),
                 const SizedBox(width: 4),
@@ -151,10 +152,7 @@ class _PhotoDateTimeEditDialogState extends State<PhotoDateTimeEditDialog> {
                   ),
                 ),
                 const SizedBox(width: 4),
-                const Flexible(
-                  flex: 1,
-                  child: SizedBox(),
-                ),
+                const Flexible(flex: 1, child: SizedBox()),
               ],
             ),
           ],
@@ -172,8 +170,13 @@ class _PhotoDateTimeEditDialogState extends State<PhotoDateTimeEditDialog> {
   void _onSavePressed(BuildContext context) {
     if (_formKey.currentState?.validate() == true) {
       _formKey.currentState!.save();
-      final d = DateTime(_formValue.year, _formValue.month, _formValue.day,
-          _formValue.hour, _formValue.minute);
+      final d = DateTime(
+        _formValue.year,
+        _formValue.month,
+        _formValue.day,
+        _formValue.hour,
+        _formValue.minute,
+      );
       _log.info("[_onSavePressed] Set date time: $d");
       Navigator.of(context).pop(d);
     }

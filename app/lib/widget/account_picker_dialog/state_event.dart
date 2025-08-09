@@ -10,13 +10,8 @@ class _State {
     this.error,
   });
 
-  factory _State.init({
-    required List<Account> accounts,
-  }) =>
-      _State(
-        accounts: accounts,
-        isOpenDropdown: false,
-      );
+  factory _State.init({required List<Account> accounts}) =>
+      _State(accounts: accounts, isOpenDropdown: false);
 
   @override
   String toString() => _$toString();

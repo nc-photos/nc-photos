@@ -13,38 +13,41 @@ part of 'my_app.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {language_util.AppLanguage? language,
-      bool? isDarkTheme,
-      bool? isFollowSystemTheme,
-      bool? isUseBlackInDarkTheme,
-      int? seedColor,
-      int? secondarySeedColor});
+  _State call({
+    language_util.AppLanguage? language,
+    bool? isDarkTheme,
+    bool? isFollowSystemTheme,
+    bool? isUseBlackInDarkTheme,
+    int? seedColor,
+    int? secondarySeedColor,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic language,
-      dynamic isDarkTheme,
-      dynamic isFollowSystemTheme,
-      dynamic isUseBlackInDarkTheme,
-      dynamic seedColor = copyWithNull,
-      dynamic secondarySeedColor = copyWithNull}) {
+  _State call({
+    dynamic language,
+    dynamic isDarkTheme,
+    dynamic isFollowSystemTheme,
+    dynamic isUseBlackInDarkTheme,
+    dynamic seedColor = copyWithNull,
+    dynamic secondarySeedColor = copyWithNull,
+  }) {
     return _State(
-        language: language as language_util.AppLanguage? ?? that.language,
-        isDarkTheme: isDarkTheme as bool? ?? that.isDarkTheme,
-        isFollowSystemTheme:
-            isFollowSystemTheme as bool? ?? that.isFollowSystemTheme,
-        isUseBlackInDarkTheme:
-            isUseBlackInDarkTheme as bool? ?? that.isUseBlackInDarkTheme,
-        seedColor:
-            seedColor == copyWithNull ? that.seedColor : seedColor as int?,
-        secondarySeedColor: secondarySeedColor == copyWithNull
-            ? that.secondarySeedColor
-            : secondarySeedColor as int?);
+      language: language as language_util.AppLanguage? ?? that.language,
+      isDarkTheme: isDarkTheme as bool? ?? that.isDarkTheme,
+      isFollowSystemTheme:
+          isFollowSystemTheme as bool? ?? that.isFollowSystemTheme,
+      isUseBlackInDarkTheme:
+          isUseBlackInDarkTheme as bool? ?? that.isUseBlackInDarkTheme,
+      seedColor: seedColor == copyWithNull ? that.seedColor : seedColor as int?,
+      secondarySeedColor:
+          secondarySeedColor == copyWithNull
+              ? that.secondarySeedColor
+              : secondarySeedColor as int?,
+    );
   }
 
   final _State that;

@@ -20,12 +20,8 @@ class ApiOcsFacerecognitionPersons {
       return await _facerecognition._ocs._api.request(
         "GET",
         "ocs/v2.php/apps/facerecognition/api/v1/persons",
-        header: {
-          "OCS-APIRequest": "true",
-        },
-        queryParameters: {
-          "format": "json",
-        },
+        header: {"OCS-APIRequest": "true"},
+        queryParameters: {"format": "json"},
       );
     } catch (e) {
       _log.severe("[get] Failed while get", e);
@@ -55,12 +51,8 @@ class ApiOcsFacerecognitionPersonFaces {
       return await _person._facerecognition._ocs._api.request(
         "GET",
         "ocs/v2.php/apps/facerecognition/api/v1/person/${_person._name}/faces",
-        header: {
-          "OCS-APIRequest": "true",
-        },
-        queryParameters: {
-          "format": "json",
-        },
+        header: {"OCS-APIRequest": "true"},
+        queryParameters: {"format": "json"},
       );
     } catch (e) {
       _log.severe("[get] Failed while get", e);

@@ -39,21 +39,23 @@ class PersonRecognizeProvider
     int width,
     int height, {
     bool? isKeepAspectRatio,
-  }) =>
-      items?.firstOrNull?.let((i) => PersonCoverResult(
-            url: getStaticViewUrlForImageFile(
-              account,
-              i.toFile(),
-              size: SizeInt(width, height),
-              isKeepAspectRatio: isKeepAspectRatio ?? false,
-            ),
-            mime: i.contentType,
-          ));
+  }) => items?.firstOrNull?.let(
+    (i) => PersonCoverResult(
+      url: getStaticViewUrlForImageFile(
+        account,
+        i.toFile(),
+        size: SizeInt(width, height),
+        isKeepAspectRatio: isKeepAspectRatio ?? false,
+      ),
+      mime: i.contentType,
+    ),
+  );
 
   @override
   Matrix4? getCoverTransform(int viewportSize, int imgW, int imgH) {
-    final detection = items?.firstOrNull?.faceDetections
-        ?.firstWhereOrNull((e) => e["title"] == face.label);
+    final detection = items?.firstOrNull?.faceDetections?.firstWhereOrNull(
+      (e) => e["title"] == face.label,
+    );
     if (detection == null) {
       return null;
     }

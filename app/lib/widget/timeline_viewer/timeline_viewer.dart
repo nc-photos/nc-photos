@@ -38,13 +38,14 @@ class TimelineViewer extends StatelessWidget {
   static const routeName = "/timeline-viewer";
 
   static Route buildRoute(
-          TimelineViewerArguments args, RouteSettings settings) =>
-      CustomizableMaterialPageRoute(
-        transitionDuration: k.heroDurationNormal,
-        reverseTransitionDuration: k.heroDurationNormal,
-        builder: (_) => TimelineViewer.fromArgs(args),
-        settings: settings,
-      );
+    TimelineViewerArguments args,
+    RouteSettings settings,
+  ) => CustomizableMaterialPageRoute(
+    transitionDuration: k.heroDurationNormal,
+    reverseTransitionDuration: k.heroDurationNormal,
+    builder: (_) => TimelineViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const TimelineViewer({
     super.key,
@@ -54,12 +55,12 @@ class TimelineViewer extends StatelessWidget {
   });
 
   TimelineViewer.fromArgs(TimelineViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          initialFile: args.initialFile,
-          initialIndex: args.initialIndex,
-          allFilesCount: args.allFilesCount,
-        );
+    : this(
+        key: key,
+        initialFile: args.initialFile,
+        initialIndex: args.initialIndex,
+        allFilesCount: args.allFilesCount,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -68,8 +69,10 @@ class TimelineViewer extends StatelessWidget {
       contentProvider: _TimelineViewerContentProvider(
         KiwiContainer().resolve(),
         account: accountController.account,
-        shareDirPath: file_util.unstripPath(accountController.account,
-            accountController.accountPrefController.shareFolderValue),
+        shareDirPath: file_util.unstripPath(
+          accountController.account,
+          accountController.accountPrefController.shareFolderValue,
+        ),
       ),
       allFilesCount: allFilesCount,
       initialFile: initialFile,
@@ -92,24 +95,33 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
 
   @override
   Future<ViewerContentProviderResult> getFiles(
-      ViewerPositionInfo at, int count) async {
+    ViewerPositionInfo at,
+    int count,
+  ) async {
     _log.info("[getFiles] at: ${at.pageIndex}, count: $count");
     final files = await c.npDb.getFileDescriptors(
       account: account.toDb(),
       // need this because this arg expect empty string for root instead of "."
-      includeRelativeRoots: account.roots
-          .map((e) => File(path: file_util.unstripPath(account, e))
-              .strippedPathWithEmpty)
-          .toList(),
+      includeRelativeRoots:
+          account.roots
+              .map(
+                (e) =>
+                    File(
+                      path: file_util.unstripPath(account, e),
+                    ).strippedPathWithEmpty,
+              )
+              .toList(),
       includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       isArchived: false,
       mimes: file_util.supportedFormatMimes,
-      timeRange: count < 0
-          ? TimeRange(from: at.originalFile.fdDateTime)
-          : TimeRange(
-              to: at.originalFile.fdDateTime,
-              toBound: TimeRangeBound.inclusive),
+      timeRange:
+          count < 0
+              ? TimeRange(from: at.originalFile.fdDateTime)
+              : TimeRange(
+                to: at.originalFile.fdDateTime,
+                toBound: TimeRangeBound.inclusive,
+              ),
       isAscending: count < 0,
       limit: count.abs(),
     );
@@ -121,11 +133,16 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
       _log.severe("[getFiles] No results");
       return const ViewerContentProviderResult(files: []);
     }
-    final results = files
-        .pySlice(pos + 1)
-        .map((e) =>
-            DbFileDescriptorConverter.fromDb(account.userId.toString(), e))
-        .toList();
+    final results =
+        files
+            .pySlice(pos + 1)
+            .map(
+              (e) => DbFileDescriptorConverter.fromDb(
+                account.userId.toString(),
+                e,
+              ),
+            )
+            .toList();
     if (results.isEmpty) {
       return const ViewerContentProviderResult(files: []);
     }

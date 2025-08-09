@@ -7,9 +7,7 @@ import 'package:np_platform_util/np_platform_util.dart';
 
 // Client may extend this class to add custom data
 class DataPoint {
-  const DataPoint({
-    required this.position,
-  });
+  const DataPoint({required this.position});
 
   final MapCoord position;
 }

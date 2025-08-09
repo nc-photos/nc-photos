@@ -27,13 +27,14 @@ class CollectionViewer extends StatelessWidget {
   static const routeName = "/collection-viewer";
 
   static Route buildRoute(
-          CollectionViewerArguments args, RouteSettings settings) =>
-      CustomizableMaterialPageRoute(
-        transitionDuration: k.heroDurationNormal,
-        reverseTransitionDuration: k.heroDurationNormal,
-        builder: (_) => CollectionViewer.fromArgs(args),
-        settings: settings,
-      );
+    CollectionViewerArguments args,
+    RouteSettings settings,
+  ) => CustomizableMaterialPageRoute(
+    transitionDuration: k.heroDurationNormal,
+    reverseTransitionDuration: k.heroDurationNormal,
+    builder: (_) => CollectionViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const CollectionViewer({
     super.key,
@@ -43,12 +44,12 @@ class CollectionViewer extends StatelessWidget {
   });
 
   CollectionViewer.fromArgs(CollectionViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          files: args.files,
-          initialIndex: args.initialIndex,
-          collectionId: args.collectionId,
-        );
+    : this(
+        key: key,
+        files: args.files,
+        initialIndex: args.initialIndex,
+        collectionId: args.collectionId,
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -74,13 +75,17 @@ class _CollectionViewerContentProvider implements ViewerContentProvider {
 
   @override
   Future<ViewerContentProviderResult> getFiles(
-      ViewerPositionInfo at, int count) async {
+    ViewerPositionInfo at,
+    int count,
+  ) async {
     if (count > 0) {
       final results = files.pySlice(at.pageIndex + 1, at.pageIndex + 1 + count);
       return ViewerContentProviderResult(files: results);
     } else {
-      final results =
-          files.pySlice(max(at.pageIndex - count.abs(), 0), at.pageIndex);
+      final results = files.pySlice(
+        max(at.pageIndex - count.abs(), 0),
+        at.pageIndex,
+      );
       return ViewerContentProviderResult(files: results.reversed.toList());
     }
   }
@@ -94,7 +99,8 @@ class _CollectionViewerContentProvider implements ViewerContentProvider {
   void notifyFileRemoved(int page, FileDescriptor file) {
     if (files[page].fdId != file.fdId) {
       _log.warning(
-          "[notifyFileRemoved] Removed file does not match record, page: $page, expected: ${files[page].fdId}, actual: ${file.fdId}");
+        "[notifyFileRemoved] Removed file does not match record, page: $page, expected: ${files[page].fdId}, actual: ${file.fdId}",
+      );
     }
     files.removeAt(page);
   }

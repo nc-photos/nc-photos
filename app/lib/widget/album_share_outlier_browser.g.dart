@@ -12,5 +12,6 @@ extension _$_AlbumShareOutlierBrowserStateNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.album_share_outlier_browser._AlbumShareOutlierBrowserState");
+    "widget.album_share_outlier_browser._AlbumShareOutlierBrowserState",
+  );
 }

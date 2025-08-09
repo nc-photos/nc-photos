@@ -17,6 +17,7 @@ extension _$FileSqliteCacheUpdaterNpLog on FileSqliteCacheUpdater {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.file.file_cache_manager.FileSqliteCacheUpdater");
+  static final log = Logger(
+    "entity.file.file_cache_manager.FileSqliteCacheUpdater",
+  );
 }

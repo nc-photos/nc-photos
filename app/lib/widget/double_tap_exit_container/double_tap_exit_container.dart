@@ -17,17 +17,12 @@ part 'double_tap_exit_container.g.dart';
 part 'state_event.dart';
 
 class DoubleTapExitContainer extends StatelessWidget {
-  const DoubleTapExitContainer({
-    super.key,
-    required this.child,
-  });
+  const DoubleTapExitContainer({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(prefController: context.read()),
       child: _WrappedDoubleTapExitContainer(child: child),
     );
   }
@@ -36,23 +31,23 @@ class DoubleTapExitContainer extends StatelessWidget {
 }
 
 class _WrappedDoubleTapExitContainer extends StatelessWidget {
-  const _WrappedDoubleTapExitContainer({
-    required this.child,
-  });
+  const _WrappedDoubleTapExitContainer({required this.child});
 
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.isDoubleTapExit != current.isDoubleTapExit ||
-          previous.canPop != current.canPop,
-      builder: (context, state) => PopScope(
-        canPop: !state.isDoubleTapExit || state.canPop,
-        onPopInvokedWithResult: (didPop, result) {
-          context.addEvent(_OnPopInvoked(didPop));
-        },
-        child: child,
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.isDoubleTapExit != current.isDoubleTapExit ||
+              previous.canPop != current.canPop,
+      builder:
+          (context, state) => PopScope(
+            canPop: !state.isDoubleTapExit || state.canPop,
+            onPopInvokedWithResult: (didPop, result) {
+              context.addEvent(_OnPopInvoked(didPop));
+            },
+            child: child,
+          ),
     );
   }
 

@@ -24,16 +24,20 @@ void main() {
 /// other: {15/1/2024: 7 ,14/1/2024: 6, 13/1/2024: 5, 12/1/2024: 4}
 /// Expect: {}, {15/1/2024: 7 ,14/1/2024: 6}, {}
 void _diffExtraOtherBegin() {
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-  });
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 15): const DbFilesSummaryItem(count: 7),
-    Date(2024, 1, 14): const DbFilesSummaryItem(count: 6),
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-  });
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+    },
+  );
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 15): const DbFilesSummaryItem(count: 7),
+      Date(2024, 1, 14): const DbFilesSummaryItem(count: 6),
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -53,16 +57,20 @@ void _diffExtraOtherBegin() {
 /// other: {13/1/2024: 5, 12/1/2024: 4, 11/1/2024: 3, 10/1/2024: 2}
 /// Expect: {}, {11/1/2024: 3, 10/1/2024: 2}, {}
 void _diffExtraOtherEnd() {
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-  });
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-    Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
-  });
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+    },
+  );
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+      Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -82,18 +90,22 @@ void _diffExtraOtherEnd() {
 /// other: {13/1/2024: 5, 12/1/2024: 4, 11/1/2024: 3, 10/1/2024: 2, 9/1/2024: 1}
 /// Expect: {}, {11/1/2024: 3, 10/1/2024: 2}, {}
 void _diffExtraOtherMid() {
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
-  });
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-    Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
-    Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
-  });
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
+    },
+  );
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+      Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
+      Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -114,11 +126,13 @@ void _diffExtraOtherMid() {
 /// Expect: {}, {11/1/2024: 3, 10/1/2024: 2}, {}
 void _diffThisEmpty() {
   const obj = DbFilesSummary(items: {});
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-  });
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -139,16 +153,20 @@ void _diffThisEmpty() {
 /// other: {13/1/2024: 5, 12/1/2024: 4}
 /// Expect: {15/1/2024: 7 ,14/1/2024: 6}, {}, {}
 void _diffExtraThisBegin() {
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-  });
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 15): const DbFilesSummaryItem(count: 7),
-    Date(2024, 1, 14): const DbFilesSummaryItem(count: 6),
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-  });
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+    },
+  );
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 15): const DbFilesSummaryItem(count: 7),
+      Date(2024, 1, 14): const DbFilesSummaryItem(count: 6),
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -168,16 +186,20 @@ void _diffExtraThisBegin() {
 /// other: {13/1/2024: 5, 12/1/2024: 4}
 /// Expect: {11/1/2024: 3, 10/1/2024: 2}, {}, {}
 void _diffExtraThisEnd() {
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-  });
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-    Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
-  });
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+    },
+  );
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+      Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -197,18 +219,22 @@ void _diffExtraThisEnd() {
 /// other: {13/1/2024: 5, 12/1/2024: 4, 9/1/2024: 1}
 /// Expect: {11/1/2024: 3, 10/1/2024: 2}, {}, {}
 void _diffExtraThisMid() {
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
-  });
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-    Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
-    Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
-  });
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
+    },
+  );
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+      Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
+      Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -229,11 +255,13 @@ void _diffExtraThisMid() {
 /// Expect: {11/1/2024: 3, 10/1/2024: 2}, {}, {}
 void _diffOtherEmpty() {
   const other = DbFilesSummary(items: {});
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-  });
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(
@@ -254,15 +282,19 @@ void _diffOtherEmpty() {
 /// other: {12/1/2024: 4, 10/1/2024: 2}
 /// Expect: [2, 4], [1, 3, 5]
 void _diffNoMatches() {
-  final other = DbFilesSummary(items: {
-    Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
-    Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
-    Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
-  });
-  final obj = DbFilesSummary(items: {
-    Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
-    Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
-  });
+  final other = DbFilesSummary(
+    items: {
+      Date(2024, 1, 13): const DbFilesSummaryItem(count: 5),
+      Date(2024, 1, 11): const DbFilesSummaryItem(count: 3),
+      Date(2024, 1, 9): const DbFilesSummaryItem(count: 1),
+    },
+  );
+  final obj = DbFilesSummary(
+    items: {
+      Date(2024, 1, 12): const DbFilesSummaryItem(count: 4),
+      Date(2024, 1, 10): const DbFilesSummaryItem(count: 2),
+    },
+  );
   expect(
     obj.diff(other),
     DbFilesSummaryDiff(

@@ -23,22 +23,17 @@ class AlbumDirPicker extends StatefulWidget {
   static const routeName = "/album-dir-picker";
 
   static Route buildRoute(
-          AlbumDirPickerArguments args, RouteSettings settings) =>
-      MaterialPageRoute<List<File>>(
-        builder: (context) => AlbumDirPicker.fromArgs(args),
-        settings: settings,
-      );
+    AlbumDirPickerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute<List<File>>(
+    builder: (context) => AlbumDirPicker.fromArgs(args),
+    settings: settings,
+  );
 
-  const AlbumDirPicker({
-    super.key,
-    required this.account,
-  });
+  const AlbumDirPicker({super.key, required this.account});
 
   AlbumDirPicker.fromArgs(AlbumDirPickerArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-        );
+    : this(key: key, account: args.account);
 
   @override
   createState() => _AlbumDirPickerState();
@@ -50,9 +45,7 @@ class AlbumDirPicker extends StatefulWidget {
 class _AlbumDirPickerState extends State<AlbumDirPicker> {
   @override
   build(BuildContext context) {
-    return Scaffold(
-      body: _buildContent(context),
-    );
+    return Scaffold(body: _buildContent(context));
   }
 
   Widget _buildContent(BuildContext context) {
@@ -71,9 +64,7 @@ class _AlbumDirPickerState extends State<AlbumDirPicker> {
                 const SizedBox(height: 8),
                 Align(
                   alignment: AlignmentDirectional.topStart,
-                  child: Text(
-                    L10n.global().albumDirPickerSubHeaderText,
-                  ),
+                  child: Text(L10n.global().albumDirPickerSubHeaderText),
                 ),
               ],
             ),
@@ -88,8 +79,11 @@ class _AlbumDirPickerState extends State<AlbumDirPicker> {
                   return true;
                 }
                 final root = api_util.getWebdavRootUrlRelative(widget.account);
-                return widget.account.roots.any((r) =>
-                    dir.path == "$root/$r" || dir.path.startsWith("$root/$r/"));
+                return widget.account.roots.any(
+                  (r) =>
+                      dir.path == "$root/$r" ||
+                      dir.path.startsWith("$root/$r/"),
+                );
               },
               onConfirmed: (picks) => _onPickerConfirmed(context, picks),
             ),
@@ -103,8 +97,9 @@ class _AlbumDirPickerState extends State<AlbumDirPicker> {
                   onPressed: () {
                     Navigator.of(context).pop();
                   },
-                  child:
-                      Text(MaterialLocalizations.of(context).cancelButtonLabel),
+                  child: Text(
+                    MaterialLocalizations.of(context).cancelButtonLabel,
+                  ),
                 ),
                 ElevatedButton(
                   onPressed: _onConfirmPressed,
@@ -124,13 +119,16 @@ class _AlbumDirPickerState extends State<AlbumDirPicker> {
 
   void _onPickerConfirmed(BuildContext context, List<File> picks) {
     if (picks.isEmpty) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().albumDirPickerListEmptyNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().albumDirPickerListEmptyNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     } else {
       _log.info(
-          "[_onPickerConfirmed] Picked: ${picks.map((e) => e.strippedPath).toReadableString()}");
+        "[_onPickerConfirmed] Picked: ${picks.map((e) => e.strippedPath).toReadableString()}",
+      );
       Navigator.of(context).pop(picks);
     }
   }

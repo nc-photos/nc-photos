@@ -23,8 +23,9 @@ class _$PersonStreamEventCopyWithWorkerImpl
   @override
   PersonStreamEvent call({dynamic data, dynamic hasNext}) {
     return PersonStreamEvent(
-        data: data as List<Person>? ?? that.data,
-        hasNext: hasNext as bool? ?? that.hasNext);
+      data: data as List<Person>? ?? that.data,
+      hasNext: hasNext as bool? ?? that.hasNext,
+    );
   }
 
   final PersonStreamEvent that;

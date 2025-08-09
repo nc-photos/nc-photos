@@ -2,11 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class EmptyListIndicator extends StatelessWidget {
-  const EmptyListIndicator({
-    super.key,
-    required this.icon,
-    required this.text,
-  });
+  const EmptyListIndicator({super.key, required this.icon, required this.text});
 
   @override
   build(BuildContext context) {
@@ -16,10 +12,7 @@ class EmptyListIndicator extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            size: 72,
-          ),
+          Icon(icon, size: 72),
           const SizedBox(height: 8),
           Text(
             text,

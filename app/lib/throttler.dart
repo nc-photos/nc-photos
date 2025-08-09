@@ -14,10 +14,7 @@ part 'throttler.g.dart';
 /// 2. Number of events
 @npLog
 class Throttler<T> {
-  Throttler({
-    required this.onTriggered,
-    this.logTag,
-  });
+  Throttler({required this.onTriggered, this.logTag});
 
   /// Post an event
   ///
@@ -43,7 +40,9 @@ class Throttler<T> {
       _doTrigger();
     } else {
       final responseTime = _minDuration(
-          maxResponceTime, _currentResponseTime ?? const Duration(days: 1));
+        maxResponceTime,
+        _currentResponseTime ?? const Duration(days: 1),
+      );
       _subscription = Future.delayed(responseTime).asStream().listen((event) {
         _log.info("[trigger]$_logTag Triggered after $responseTime");
         _doTrigger();

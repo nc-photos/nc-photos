@@ -17,7 +17,7 @@ class CollectionMemoryAdapter
         CollectionAdapterUnshareableTag
     implements CollectionAdapter {
   CollectionMemoryAdapter(this._c, this.account, this.collection)
-      : _provider = collection.contentProvider as CollectionMemoryProvider;
+    : _provider = collection.contentProvider as CollectionMemoryProvider;
 
   @override
   Stream<List<CollectionItem>> listItem() async* {
@@ -26,7 +26,10 @@ class CollectionMemoryAdapter
     final from = date.subtract(Duration(days: dayRange));
     final to = date.add(Duration(days: dayRange + 1));
     final files = await FileSqliteDbDataSource(_c).listByDate(
-        account, from.millisecondsSinceEpoch, to.millisecondsSinceEpoch);
+      account,
+      from.millisecondsSinceEpoch,
+      to.millisecondsSinceEpoch,
+    );
     yield files
         .where((f) => file_util.isSupportedFormat(f))
         .map((f) => BasicCollectionFileItem(f))

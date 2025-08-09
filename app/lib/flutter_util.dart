@@ -33,8 +33,9 @@ Widget defaultHeroFlightShuttleBuilder(
   final Hero toHero = toHeroContext.widget as Hero;
 
   final MediaQueryData? toMediaQueryData = MediaQuery.maybeOf(toHeroContext);
-  final MediaQueryData? fromMediaQueryData =
-      MediaQuery.maybeOf(fromHeroContext);
+  final MediaQueryData? fromMediaQueryData = MediaQuery.maybeOf(
+    fromHeroContext,
+  );
 
   if (toMediaQueryData == null || fromMediaQueryData == null) {
     return toHero.child;
@@ -47,18 +48,20 @@ Widget defaultHeroFlightShuttleBuilder(
     animation: animation,
     builder: (BuildContext context, Widget? child) {
       return MediaQuery(
-          data: toMediaQueryData.copyWith(
-            padding: (flightDirection == HeroFlightDirection.push)
-                ? EdgeInsetsTween(
+        data: toMediaQueryData.copyWith(
+          padding:
+              (flightDirection == HeroFlightDirection.push)
+                  ? EdgeInsetsTween(
                     begin: fromHeroPadding,
                     end: toHeroPadding,
                   ).evaluate(animation)
-                : EdgeInsetsTween(
+                  : EdgeInsetsTween(
                     begin: toHeroPadding,
                     end: fromHeroPadding,
                   ).evaluate(animation),
-          ),
-          child: toHero.child);
+        ),
+        child: toHero.child,
+      );
     },
   );
 }

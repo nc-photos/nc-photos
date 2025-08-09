@@ -7,9 +7,7 @@ void _upgradeV9JsonNonStatic() {
     "lastUpdated": "2020-01-02T03:04:05.678901Z",
     "provider": <String, dynamic>{
       "type": "tag",
-      "content": <String, dynamic>{
-        "tags": [],
-      },
+      "content": <String, dynamic>{"tags": []},
     },
     "coverProvider": <String, dynamic>{
       "type": "auto",
@@ -63,45 +61,42 @@ void _upgradeV9JsonStaticNormal() {
       "path": "remote.php/dav/files/admin/test1.json",
     },
   };
-  expect(
-    AlbumUpgraderV9(account: account).doJson(json),
-    <String, dynamic>{
-      "version": 9,
-      "lastUpdated": "2020-01-02T03:04:05.678901Z",
-      "provider": <String, dynamic>{
-        "type": "static",
-        "content": <String, dynamic>{
-          "items": [
-            <String, dynamic>{
-              "type": "file",
-              "content": <String, dynamic>{
-                "file": <String, dynamic>{
-                  "fdPath": "remote.php/dav/files/admin/test1.jpg",
-                  "fdId": 1,
-                  "fdMime": "image/jpeg",
-                  "fdIsArchived": false,
-                  "fdIsFavorite": false,
-                  "fdDateTime": "2020-01-02T03:04:05.678901Z",
-                },
-                "ownerId": "admin",
+  expect(AlbumUpgraderV9(account: account).doJson(json), <String, dynamic>{
+    "version": 9,
+    "lastUpdated": "2020-01-02T03:04:05.678901Z",
+    "provider": <String, dynamic>{
+      "type": "static",
+      "content": <String, dynamic>{
+        "items": [
+          <String, dynamic>{
+            "type": "file",
+            "content": <String, dynamic>{
+              "file": <String, dynamic>{
+                "fdPath": "remote.php/dav/files/admin/test1.jpg",
+                "fdId": 1,
+                "fdMime": "image/jpeg",
+                "fdIsArchived": false,
+                "fdIsFavorite": false,
+                "fdDateTime": "2020-01-02T03:04:05.678901Z",
               },
+              "ownerId": "admin",
             },
-          ],
-        },
-      },
-      "coverProvider": <String, dynamic>{
-        "type": "auto",
-        "content": <String, dynamic>{},
-      },
-      "sortProvider": <String, dynamic>{
-        "type": "null",
-        "content": <String, dynamic>{},
-      },
-      "albumFile": <String, dynamic>{
-        "path": "remote.php/dav/files/admin/test1.json",
+          },
+        ],
       },
     },
-  );
+    "coverProvider": <String, dynamic>{
+      "type": "auto",
+      "content": <String, dynamic>{},
+    },
+    "sortProvider": <String, dynamic>{
+      "type": "null",
+      "content": <String, dynamic>{},
+    },
+    "albumFile": <String, dynamic>{
+      "path": "remote.php/dav/files/admin/test1.json",
+    },
+  });
 }
 
 void _upgradeV9JsonStaticNoOwnerId() {
@@ -140,45 +135,42 @@ void _upgradeV9JsonStaticNoOwnerId() {
       "path": "remote.php/dav/files/admin/test1.json",
     },
   };
-  expect(
-    AlbumUpgraderV9(account: account).doJson(json),
-    <String, dynamic>{
-      "version": 9,
-      "lastUpdated": "2020-01-02T03:04:05.678901Z",
-      "provider": <String, dynamic>{
-        "type": "static",
-        "content": <String, dynamic>{
-          "items": [
-            <String, dynamic>{
-              "type": "file",
-              "content": <String, dynamic>{
-                "file": <String, dynamic>{
-                  "fdPath": "remote.php/dav/files/admin/test1.jpg",
-                  "fdId": 1,
-                  "fdMime": "image/jpeg",
-                  "fdIsArchived": false,
-                  "fdIsFavorite": false,
-                  "fdDateTime": "2020-01-02T03:04:05.678901Z",
-                },
-                "ownerId": "admin",
+  expect(AlbumUpgraderV9(account: account).doJson(json), <String, dynamic>{
+    "version": 9,
+    "lastUpdated": "2020-01-02T03:04:05.678901Z",
+    "provider": <String, dynamic>{
+      "type": "static",
+      "content": <String, dynamic>{
+        "items": [
+          <String, dynamic>{
+            "type": "file",
+            "content": <String, dynamic>{
+              "file": <String, dynamic>{
+                "fdPath": "remote.php/dav/files/admin/test1.jpg",
+                "fdId": 1,
+                "fdMime": "image/jpeg",
+                "fdIsArchived": false,
+                "fdIsFavorite": false,
+                "fdDateTime": "2020-01-02T03:04:05.678901Z",
               },
+              "ownerId": "admin",
             },
-          ],
-        },
-      },
-      "coverProvider": <String, dynamic>{
-        "type": "auto",
-        "content": <String, dynamic>{},
-      },
-      "sortProvider": <String, dynamic>{
-        "type": "null",
-        "content": <String, dynamic>{},
-      },
-      "albumFile": <String, dynamic>{
-        "path": "remote.php/dav/files/admin/test1.json",
+          },
+        ],
       },
     },
-  );
+    "coverProvider": <String, dynamic>{
+      "type": "auto",
+      "content": <String, dynamic>{},
+    },
+    "sortProvider": <String, dynamic>{
+      "type": "null",
+      "content": <String, dynamic>{},
+    },
+    "albumFile": <String, dynamic>{
+      "path": "remote.php/dav/files/admin/test1.json",
+    },
+  });
 }
 
 void _upgradeV9JsonStaticOtherOwnerId() {
@@ -218,45 +210,42 @@ void _upgradeV9JsonStaticOtherOwnerId() {
       "path": "remote.php/dav/files/admin/test1.json",
     },
   };
-  expect(
-    AlbumUpgraderV9(account: account).doJson(json),
-    <String, dynamic>{
-      "version": 9,
-      "lastUpdated": "2020-01-02T03:04:05.678901Z",
-      "provider": <String, dynamic>{
-        "type": "static",
-        "content": <String, dynamic>{
-          "items": [
-            <String, dynamic>{
-              "type": "file",
-              "content": <String, dynamic>{
-                "file": <String, dynamic>{
-                  "fdPath": "remote.php/dav/files/admin/test1.jpg",
-                  "fdId": 1,
-                  "fdMime": "image/jpeg",
-                  "fdIsArchived": false,
-                  "fdIsFavorite": false,
-                  "fdDateTime": "2020-01-02T03:04:05.678901Z",
-                },
-                "ownerId": "user1",
+  expect(AlbumUpgraderV9(account: account).doJson(json), <String, dynamic>{
+    "version": 9,
+    "lastUpdated": "2020-01-02T03:04:05.678901Z",
+    "provider": <String, dynamic>{
+      "type": "static",
+      "content": <String, dynamic>{
+        "items": [
+          <String, dynamic>{
+            "type": "file",
+            "content": <String, dynamic>{
+              "file": <String, dynamic>{
+                "fdPath": "remote.php/dav/files/admin/test1.jpg",
+                "fdId": 1,
+                "fdMime": "image/jpeg",
+                "fdIsArchived": false,
+                "fdIsFavorite": false,
+                "fdDateTime": "2020-01-02T03:04:05.678901Z",
               },
+              "ownerId": "user1",
             },
-          ],
-        },
-      },
-      "coverProvider": <String, dynamic>{
-        "type": "auto",
-        "content": <String, dynamic>{},
-      },
-      "sortProvider": <String, dynamic>{
-        "type": "null",
-        "content": <String, dynamic>{},
-      },
-      "albumFile": <String, dynamic>{
-        "path": "remote.php/dav/files/admin/test1.json",
+          },
+        ],
       },
     },
-  );
+    "coverProvider": <String, dynamic>{
+      "type": "auto",
+      "content": <String, dynamic>{},
+    },
+    "sortProvider": <String, dynamic>{
+      "type": "null",
+      "content": <String, dynamic>{},
+    },
+    "albumFile": <String, dynamic>{
+      "path": "remote.php/dav/files/admin/test1.json",
+    },
+  });
 }
 
 void _upgradeV9DbNonStatic() {
@@ -351,7 +340,7 @@ void _upgradeV9DbStaticNormal() {
               "ownerId": "admin",
             },
           },
-        ]
+        ],
       },
       coverProviderType: "auto",
       coverProviderContent: {},
@@ -418,7 +407,7 @@ void _upgradeV9DbStaticNoOwnerId() {
               "ownerId": "admin",
             },
           },
-        ]
+        ],
       },
       coverProviderType: "auto",
       coverProviderContent: {},
@@ -486,7 +475,7 @@ void _upgradeV9DbStaticOtherOwnerId() {
               "ownerId": "user1",
             },
           },
-        ]
+        ],
       },
       coverProviderType: "auto",
       coverProviderContent: {},

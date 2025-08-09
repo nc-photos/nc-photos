@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 
 class ProcessingDialog extends StatelessWidget {
-  const ProcessingDialog({
-    super.key,
-    required this.text,
-  });
+  const ProcessingDialog({super.key, required this.text});
 
   @override
   build(BuildContext context) {
@@ -28,10 +25,7 @@ class ProcessingDialog extends StatelessWidget {
 }
 
 class ProcessingOverlay extends StatelessWidget {
-  const ProcessingOverlay({
-    super.key,
-    required this.text,
-  });
+  const ProcessingOverlay({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

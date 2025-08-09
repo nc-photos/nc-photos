@@ -13,47 +13,52 @@ part of 'file_sharer_dialog.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {ShareMethod? method,
-      _PreviewState? previewState,
-      _FileState? fileState,
-      _PublicLinkState? publicLinkState,
-      _PasswordLinkState? passwordLinkState,
-      bool? result,
-      ExceptionEvent? error,
-      String? message});
+  _State call({
+    ShareMethod? method,
+    _PreviewState? previewState,
+    _FileState? fileState,
+    _PublicLinkState? publicLinkState,
+    _PasswordLinkState? passwordLinkState,
+    bool? result,
+    ExceptionEvent? error,
+    String? message,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic method = copyWithNull,
-      dynamic previewState = copyWithNull,
-      dynamic fileState = copyWithNull,
-      dynamic publicLinkState = copyWithNull,
-      dynamic passwordLinkState = copyWithNull,
-      dynamic result = copyWithNull,
-      dynamic error = copyWithNull,
-      dynamic message = copyWithNull}) {
+  _State call({
+    dynamic method = copyWithNull,
+    dynamic previewState = copyWithNull,
+    dynamic fileState = copyWithNull,
+    dynamic publicLinkState = copyWithNull,
+    dynamic passwordLinkState = copyWithNull,
+    dynamic result = copyWithNull,
+    dynamic error = copyWithNull,
+    dynamic message = copyWithNull,
+  }) {
     return _State(
-        method: method == copyWithNull ? that.method : method as ShareMethod?,
-        previewState: previewState == copyWithNull
-            ? that.previewState
-            : previewState as _PreviewState?,
-        fileState: fileState == copyWithNull
-            ? that.fileState
-            : fileState as _FileState?,
-        publicLinkState: publicLinkState == copyWithNull
-            ? that.publicLinkState
-            : publicLinkState as _PublicLinkState?,
-        passwordLinkState: passwordLinkState == copyWithNull
-            ? that.passwordLinkState
-            : passwordLinkState as _PasswordLinkState?,
-        result: result == copyWithNull ? that.result : result as bool?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-        message: message == copyWithNull ? that.message : message as String?);
+      method: method == copyWithNull ? that.method : method as ShareMethod?,
+      previewState:
+          previewState == copyWithNull
+              ? that.previewState
+              : previewState as _PreviewState?,
+      fileState:
+          fileState == copyWithNull ? that.fileState : fileState as _FileState?,
+      publicLinkState:
+          publicLinkState == copyWithNull
+              ? that.publicLinkState
+              : publicLinkState as _PublicLinkState?,
+      passwordLinkState:
+          passwordLinkState == copyWithNull
+              ? that.passwordLinkState
+              : passwordLinkState as _PasswordLinkState?,
+      result: result == copyWithNull ? that.result : result as bool?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      message: message == copyWithNull ? that.message : message as String?,
+    );
   }
 
   final _State that;
@@ -75,7 +80,9 @@ class _$_PreviewStateCopyWithWorkerImpl
   @override
   _PreviewState call({dynamic index, dynamic count}) {
     return _PreviewState(
-        index: index as int? ?? that.index, count: count as int? ?? that.count);
+      index: index as int? ?? that.index,
+      count: count as int? ?? that.count,
+    );
   }
 
   final _PreviewState that;
@@ -88,32 +95,34 @@ extension $_PreviewStateCopyWith on _PreviewState {
 }
 
 abstract class $_FileStateCopyWithWorker {
-  _FileState call(
-      {int? index,
-      double? progress,
-      int? count,
-      Download? download,
-      bool? shouldRun});
+  _FileState call({
+    int? index,
+    double? progress,
+    int? count,
+    Download? download,
+    bool? shouldRun,
+  });
 }
 
 class _$_FileStateCopyWithWorkerImpl implements $_FileStateCopyWithWorker {
   _$_FileStateCopyWithWorkerImpl(this.that);
 
   @override
-  _FileState call(
-      {dynamic index,
-      dynamic progress = copyWithNull,
-      dynamic count,
-      dynamic download = copyWithNull,
-      dynamic shouldRun}) {
+  _FileState call({
+    dynamic index,
+    dynamic progress = copyWithNull,
+    dynamic count,
+    dynamic download = copyWithNull,
+    dynamic shouldRun,
+  }) {
     return _FileState(
-        index: index as int? ?? that.index,
-        progress:
-            progress == copyWithNull ? that.progress : progress as double?,
-        count: count as int? ?? that.count,
-        download:
-            download == copyWithNull ? that.download : download as Download?,
-        shouldRun: shouldRun as bool? ?? that.shouldRun);
+      index: index as int? ?? that.index,
+      progress: progress == copyWithNull ? that.progress : progress as double?,
+      count: count as int? ?? that.count,
+      download:
+          download == copyWithNull ? that.download : download as Download?,
+      shouldRun: shouldRun as bool? ?? that.shouldRun,
+    );
   }
 
   final _FileState that;
@@ -136,8 +145,8 @@ class _$_PasswordLinkStateCopyWithWorkerImpl
   @override
   _PasswordLinkState call({dynamic password = copyWithNull}) {
     return _PasswordLinkState(
-        password:
-            password == copyWithNull ? that.password : password as String?);
+      password: password == copyWithNull ? that.password : password as String?,
+    );
   }
 
   final _PasswordLinkState that;

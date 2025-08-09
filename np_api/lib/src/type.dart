@@ -23,7 +23,8 @@ class Response {
   /// Content of the response body, String if isResponseString == true during
   /// request, Uint8List otherwise
   @Format(
-      r"${isDevMode ? $?.toString().replaceAll(RegExp(r'\n\t'), '').slice(0, 200) : '...'}")
+    r"${isDevMode ? $?.toString().replaceAll(RegExp(r'\n\t'), '').slice(0, 200) : '...'}",
+  )
   final dynamic body;
 }
 

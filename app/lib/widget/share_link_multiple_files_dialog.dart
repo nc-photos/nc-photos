@@ -3,10 +3,7 @@ import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/app_localizations.dart';
 
 class ShareLinkMultipleFilesDialogResult {
-  ShareLinkMultipleFilesDialogResult(
-    this.albumName,
-    this.password,
-  );
+  ShareLinkMultipleFilesDialogResult(this.albumName, this.password);
 
   final String albumName;
   final String? password;
@@ -37,8 +34,9 @@ class _ShareLinkMultipleFilesDialogState
             Text(L10n.global().multipleFilesLinkShareDialogContent),
             const SizedBox(height: 16),
             TextFormField(
-              decoration:
-                  InputDecoration(hintText: L10n.global().folderNameInputHint),
+              decoration: InputDecoration(
+                hintText: L10n.global().folderNameInputHint,
+              ),
               validator: (value) {
                 if (value?.isNotEmpty != true) {
                   return L10n.global().folderNameInputInvalidEmpty;
@@ -55,8 +53,9 @@ class _ShareLinkMultipleFilesDialogState
             if (widget.shouldAskPassword == true) const SizedBox(height: 8),
             if (widget.shouldAskPassword == true)
               TextFormField(
-                decoration:
-                    InputDecoration(hintText: L10n.global().passwordInputHint),
+                decoration: InputDecoration(
+                  hintText: L10n.global().passwordInputHint,
+                ),
                 validator: (value) {
                   if (value?.isNotEmpty != true) {
                     return L10n.global().passwordInputInvalidEmpty;
@@ -73,13 +72,15 @@ class _ShareLinkMultipleFilesDialogState
       ),
       actions: [
         TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel)),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+        ),
         TextButton(
-            onPressed: _onOkPressed,
-            child: Text(MaterialLocalizations.of(context).okButtonLabel)),
+          onPressed: _onOkPressed,
+          child: Text(MaterialLocalizations.of(context).okButtonLabel),
+        ),
       ],
     );
   }
@@ -88,8 +89,12 @@ class _ShareLinkMultipleFilesDialogState
     if (_formKey.currentState?.validate() == true) {
       _formValue = _FormValue();
       _formKey.currentState!.save();
-      Navigator.of(context).pop(ShareLinkMultipleFilesDialogResult(
-          _formValue.name, _formValue.password));
+      Navigator.of(context).pop(
+        ShareLinkMultipleFilesDialogResult(
+          _formValue.name,
+          _formValue.password,
+        ),
+      );
     }
   }
 

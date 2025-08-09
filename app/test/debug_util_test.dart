@@ -5,10 +5,7 @@ void main() {
   group("debug_util", () {
     group("logFilename", () {
       test("null", () {
-        expect(
-          logFilename(null, shouldLogFileName: false),
-          "null",
-        );
+        expect(logFilename(null, shouldLogFileName: false), "null");
       });
       test("path + name + ext", () {
         expect(

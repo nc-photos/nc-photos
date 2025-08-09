@@ -34,25 +34,25 @@ class Selectable extends StatelessWidget {
           scale: isSelected ? .85 : 1,
           curve: Curves.easeInOut,
           duration: k.animationDurationNormal,
-          child: childBorderRadius != BorderRadius.zero
-              ? AnimatedSmoothClipRRect(
-                  smoothness: 1,
-                  borderRadius:
-                      isSelected ? childBorderRadius : BorderRadius.zero,
-                  side: BorderSide(
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : Theme.of(context)
-                            .colorScheme
-                            .secondaryContainer
-                            .withOpacity(0),
-                    width: isSelected ? 4 : 0,
-                  ),
-                  curve: Curves.easeInOut,
-                  duration: k.animationDurationNormal,
-                  child: child,
-                )
-              : child,
+          child:
+              childBorderRadius != BorderRadius.zero
+                  ? AnimatedSmoothClipRRect(
+                    smoothness: 1,
+                    borderRadius:
+                        isSelected ? childBorderRadius : BorderRadius.zero,
+                    side: BorderSide(
+                      color:
+                          isSelected
+                              ? Theme.of(context).colorScheme.secondaryContainer
+                              : Theme.of(context).colorScheme.secondaryContainer
+                                  .withValues(alpha: 0),
+                      width: isSelected ? 4 : 0,
+                    ),
+                    curve: Curves.easeInOut,
+                    duration: k.animationDurationNormal,
+                    child: child,
+                  )
+                  : child,
         ),
         Align(
           alignment: indicatorAlignment,

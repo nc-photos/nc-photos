@@ -184,9 +184,7 @@ class _WrappedFileContentView extends StatelessWidget {
           if (shouldPlayLivePhoto) {
             final livePhotoType = getLivePhotoTypeFromFile(file);
             if (livePhotoType != null) {
-              return _LivePhotoPageContentView(
-                livePhotoType: livePhotoType,
-              );
+              return _LivePhotoPageContentView(livePhotoType: livePhotoType);
             } else {
               _log.warning("[build] Not a live photo");
               return const _PhotoPageContentView();

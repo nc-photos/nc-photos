@@ -7,9 +7,7 @@ import 'package:nc_photos/use_case/move.dart';
 
 /// Unimport a shared album from the library
 class UnimportSharedAlbum {
-  UnimportSharedAlbum(this._c)
-      : assert(require(_c)),
-        assert(Move.require(_c));
+  UnimportSharedAlbum(this._c) : assert(require(_c)), assert(Move.require(_c));
 
   static bool require(DiContainer c) => true;
 

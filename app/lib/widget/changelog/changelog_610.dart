@@ -12,11 +12,13 @@ class _Changelog610 extends StatelessWidget {
         _subSection("Changes"),
         _bulletGroup(
           const Text(
-              "Added \"Set as\" in viewer to set the current opened photo as phone wallpaper"),
+            "Added \"Set as\" in viewer to set the current opened photo as phone wallpaper",
+          ),
         ),
         _bulletGroup(
           const Text(
-              "(Recognize) Fixed a bug where changes to faces are not synced correctly"),
+            "(Recognize) Fixed a bug where changes to faces are not synced correctly",
+          ),
         ),
         _bulletGroup(const Text("Various UI tweaks and bug fixes")),
       ],

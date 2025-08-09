@@ -24,10 +24,11 @@ class MiscSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        prefController: context.read(),
-        securePrefController: context.read(),
-      ),
+      create:
+          (_) => _Bloc(
+            prefController: context.read(),
+            securePrefController: context.read(),
+          ),
       child: const _WrappedMiscSettings(),
     );
   }
@@ -69,38 +70,39 @@ class _WrappedMiscSettingsState extends State<_WrappedMiscSettings>
               title: Text(L10n.global().photosTabLabel),
             ),
             SliverList(
-              delegate: SliverChildListDelegate(
-                [
-                  _BlocSelector<bool>(
-                    selector: (state) => state.isDoubleTapExit,
-                    builder: (_, state) {
-                      return SwitchListTile(
-                        title: Text(L10n.global().settingsDoubleTapExitTitle),
-                        value: state,
-                        onChanged: (value) {
-                          _bloc.add(_SetDoubleTapExit(value));
-                        },
-                      );
-                    },
-                  ),
-                  _BlocSelector<ProtectedPageAuthType?>(
-                    selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => ListTile(
-                      title: Text(L10n.global().settingsAppLock),
-                      subtitle:
-                          appLockType?.let((e) => Text(e.toDisplayString())) ??
-                              Text(L10n.global().disabledText),
-                      onTap: () {
-                        Navigator.of(context).pushProtected(
-                          MaterialPageRoute(
-                            builder: (_) => const AppLockSettings(),
-                          ),
-                        );
+              delegate: SliverChildListDelegate([
+                _BlocSelector<bool>(
+                  selector: (state) => state.isDoubleTapExit,
+                  builder: (_, state) {
+                    return SwitchListTile(
+                      title: Text(L10n.global().settingsDoubleTapExitTitle),
+                      value: state,
+                      onChanged: (value) {
+                        _bloc.add(_SetDoubleTapExit(value));
                       },
-                    ),
-                  ),
-                ],
-              ),
+                    );
+                  },
+                ),
+                _BlocSelector<ProtectedPageAuthType?>(
+                  selector: (state) => state.appLockType,
+                  builder:
+                      (context, appLockType) => ListTile(
+                        title: Text(L10n.global().settingsAppLock),
+                        subtitle:
+                            appLockType?.let(
+                              (e) => Text(e.toDisplayString()),
+                            ) ??
+                            Text(L10n.global().disabledText),
+                        onTap: () {
+                          Navigator.of(context).pushProtected(
+                            MaterialPageRoute(
+                              builder: (_) => const AppLockSettings(),
+                            ),
+                          );
+                        },
+                      ),
+                ),
+              ]),
             ),
           ],
         ),

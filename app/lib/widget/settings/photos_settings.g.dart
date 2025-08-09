@@ -13,22 +13,27 @@ part of 'photos_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? isEnableMemories, int? memoriesRange, ExceptionEvent? error});
+  _State call({
+    bool? isEnableMemories,
+    int? memoriesRange,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic isEnableMemories,
-      dynamic memoriesRange,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic isEnableMemories,
+    dynamic memoriesRange,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        isEnableMemories: isEnableMemories as bool? ?? that.isEnableMemories,
-        memoriesRange: memoriesRange as int? ?? that.memoriesRange,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isEnableMemories: isEnableMemories as bool? ?? that.isEnableMemories,
+      memoriesRange: memoriesRange as int? ?? that.memoriesRange,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

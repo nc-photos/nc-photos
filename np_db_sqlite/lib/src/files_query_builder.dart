@@ -5,14 +5,10 @@ import 'package:np_db_sqlite/src/database_extension.dart';
 import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_string/np_string.dart';
 
-enum FilesQueryMode {
-  file,
-  completeFile,
-  expression,
-}
+enum FilesQueryMode { file, completeFile, expression }
 
-typedef FilesQueryRelativePathBuilder = Expression<bool> Function(
-    GeneratedColumn<String> relativePath);
+typedef FilesQueryRelativePathBuilder =
+    Expression<bool> Function(GeneratedColumn<String> relativePath);
 
 /// Build a Files table query
 ///
@@ -26,12 +22,10 @@ class FilesQueryBuilder {
   ///
   /// If [mode] == FilesQueryMode.expression, [expressions] must be defined and
   /// not empty
-  void setQueryMode(
-    FilesQueryMode mode, {
-    Iterable<Expression>? expressions,
-  }) {
+  void setQueryMode(FilesQueryMode mode, {Iterable<Expression>? expressions}) {
     assert(
-        (mode == FilesQueryMode.expression) != (expressions?.isEmpty != false));
+      (mode == FilesQueryMode.expression) != (expressions?.isEmpty != false),
+    );
     _queryMode = mode;
     _selectExpressions = expressions;
   }
@@ -111,32 +105,56 @@ class FilesQueryBuilder {
     if (_sqlAccount == null && _dbAccount == null && !_isAccountless) {
       throw StateError("Invalid query: missing account");
     }
-    final dynamic select = _queryMode == FilesQueryMode.expression
-        ? db.selectOnly(db.files)
-        : db.select(db.files);
-    final query = select.join([
-      innerJoin(db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId),
-          useColumns: _queryMode == FilesQueryMode.completeFile),
-      if (_dbAccount != null) ...[
-        innerJoin(
-            db.accounts, db.accounts.rowId.equalsExp(db.accountFiles.account),
-            useColumns: false),
-        innerJoin(db.servers, db.servers.rowId.equalsExp(db.accounts.server),
-            useColumns: false),
-      ],
-      if (_byDirRowId != null || _byOrDirRowIds?.isNotEmpty == true)
-        innerJoin(db.dirFiles, db.dirFiles.child.equalsExp(db.files.rowId),
-            useColumns: false),
-      if (_queryMode == FilesQueryMode.completeFile) ...[
-        leftOuterJoin(
-            db.images, db.images.accountFile.equalsExp(db.accountFiles.rowId)),
-        leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
-      ],
-      if (_queryMode == FilesQueryMode.completeFile || _byLocation != null)
-        leftOuterJoin(db.imageLocations,
-            db.imageLocations.accountFile.equalsExp(db.accountFiles.rowId)),
-      if (_extraJoins != null) ..._extraJoins!,
-    ]) as JoinedSelectStatement;
+    final dynamic select =
+        _queryMode == FilesQueryMode.expression
+            ? db.selectOnly(db.files)
+            : db.select(db.files);
+    final query =
+        select.join([
+              innerJoin(
+                db.accountFiles,
+                db.accountFiles.file.equalsExp(db.files.rowId),
+                useColumns: _queryMode == FilesQueryMode.completeFile,
+              ),
+              if (_dbAccount != null) ...[
+                innerJoin(
+                  db.accounts,
+                  db.accounts.rowId.equalsExp(db.accountFiles.account),
+                  useColumns: false,
+                ),
+                innerJoin(
+                  db.servers,
+                  db.servers.rowId.equalsExp(db.accounts.server),
+                  useColumns: false,
+                ),
+              ],
+              if (_byDirRowId != null || _byOrDirRowIds?.isNotEmpty == true)
+                innerJoin(
+                  db.dirFiles,
+                  db.dirFiles.child.equalsExp(db.files.rowId),
+                  useColumns: false,
+                ),
+              if (_queryMode == FilesQueryMode.completeFile) ...[
+                leftOuterJoin(
+                  db.images,
+                  db.images.accountFile.equalsExp(db.accountFiles.rowId),
+                ),
+                leftOuterJoin(
+                  db.trashes,
+                  db.trashes.file.equalsExp(db.files.rowId),
+                ),
+              ],
+              if (_queryMode == FilesQueryMode.completeFile ||
+                  _byLocation != null)
+                leftOuterJoin(
+                  db.imageLocations,
+                  db.imageLocations.accountFile.equalsExp(
+                    db.accountFiles.rowId,
+                  ),
+                ),
+              if (_extraJoins != null) ..._extraJoins!,
+            ])
+            as JoinedSelectStatement;
     if (_queryMode == FilesQueryMode.expression) {
       query.addColumns(_selectExpressions!);
     }
@@ -146,8 +164,11 @@ class FilesQueryBuilder {
     } else if (_dbAccount != null) {
       query
         ..where(db.servers.address.equals(_dbAccount!.serverAddress))
-        ..where(db.accounts.userId
-            .equals(_dbAccount!.userId.toCaseInsensitiveString()));
+        ..where(
+          db.accounts.userId.equals(
+            _dbAccount!.userId.toCaseInsensitiveString(),
+          ),
+        );
     }
 
     if (_byRowId != null) {
@@ -169,23 +190,30 @@ class FilesQueryBuilder {
         expression = _byOrRelativePathBuilders!
             .sublist(1)
             .fold<Expression<bool>>(
-                _byOrRelativePathBuilders![0](db.accountFiles.relativePath),
-                (previousValue, builder) =>
-                    previousValue | builder(db.accountFiles.relativePath));
+              _byOrRelativePathBuilders![0](db.accountFiles.relativePath),
+              (previousValue, builder) =>
+                  previousValue | builder(db.accountFiles.relativePath),
+            );
       }
       if (_byOrDirRowIds?.isNotEmpty == true) {
-        final e = _byOrDirRowIds!.sublist(1).fold<Expression<bool>>(
-            db.dirFiles.dir.equals(_byOrDirRowIds![0]),
-            (previousValue, id) => previousValue | db.dirFiles.dir.equals(id));
+        final e = _byOrDirRowIds!
+            .sublist(1)
+            .fold<Expression<bool>>(
+              db.dirFiles.dir.equals(_byOrDirRowIds![0]),
+              (previousValue, id) => previousValue | db.dirFiles.dir.equals(id),
+            );
         expression = (expression == null) ? e : (expression | e);
       }
       query.where(expression!);
     }
     if (_byMimePatterns?.isNotEmpty == true) {
-      final expression = _byMimePatterns!.sublist(1).fold<Expression<bool>>(
-          db.files.contentType.like(_byMimePatterns![0]),
-          (previousValue, element) =>
-              previousValue | db.files.contentType.like(element));
+      final expression = _byMimePatterns!
+          .sublist(1)
+          .fold<Expression<bool>>(
+            db.files.contentType.like(_byMimePatterns![0]),
+            (previousValue, element) =>
+                previousValue | db.files.contentType.like(element),
+          );
       query.where(expression);
     }
     if (_byFavorite != null) {
@@ -193,8 +221,10 @@ class FilesQueryBuilder {
         query.where(db.accountFiles.isFavorite.equals(true));
       } else {
         // null are treated as false
-        query.where(db.accountFiles.isFavorite.equals(false) |
-            db.accountFiles.isFavorite.isNull());
+        query.where(
+          db.accountFiles.isFavorite.equals(false) |
+              db.accountFiles.isFavorite.isNull(),
+        );
       }
     }
     if (_byArchived != null) {
@@ -202,8 +232,10 @@ class FilesQueryBuilder {
         query.where(db.accountFiles.isArchived.equals(true));
       } else {
         // null are treated as false
-        query.where(db.accountFiles.isArchived.equals(false) |
-            db.accountFiles.isArchived.isNull());
+        query.where(
+          db.accountFiles.isArchived.equals(false) |
+              db.accountFiles.isArchived.isNull(),
+        );
       }
     }
     if (_byDirRowId != null) {
@@ -213,7 +245,8 @@ class FilesQueryBuilder {
       query.where(db.files.server.equals(_byServerRowId!));
     }
     if (_byLocation != null) {
-      var clause = db.imageLocations.name.like(_byLocation!) |
+      var clause =
+          db.imageLocations.name.like(_byLocation!) |
           db.imageLocations.admin1.like(_byLocation!) |
           db.imageLocations.admin2.like(_byLocation!);
       final countryCode = nameToAlpha2Code(_byLocation!.toCi());
@@ -221,7 +254,8 @@ class FilesQueryBuilder {
         clause = clause | db.imageLocations.countryCode.equals(countryCode);
       } else if (_byLocation!.length == 2 &&
           alpha2CodeToName(_byLocation!.toUpperCase()) != null) {
-        clause = clause |
+        clause =
+            clause |
             db.imageLocations.countryCode.equals(_byLocation!.toUpperCase());
       }
       query.where(clause);

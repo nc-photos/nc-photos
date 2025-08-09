@@ -2,10 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nc_photos/theme.dart';
 
 class NavigationBarBlurFilter extends StatelessWidget {
-  const NavigationBarBlurFilter({
-    super.key,
-    this.height,
-  });
+  const NavigationBarBlurFilter({super.key, this.height});
 
   @override
   Widget build(BuildContext context) {
@@ -15,9 +12,7 @@ class NavigationBarBlurFilter extends StatelessWidget {
       child: ClipRect(
         child: BackdropFilter(
           filter: Theme.of(context).appBarBlurFilter,
-          child: const ColoredBox(
-            color: Colors.transparent,
-          ),
+          child: const ColoredBox(color: Colors.transparent),
         ),
       ),
     );

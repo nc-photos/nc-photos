@@ -54,7 +54,8 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
     });
 
     final share = AndroidFileShare(
-        uriFiles.map((e) => AndroidFileShareFile(e.uri, e.mime)).toList());
+      uriFiles.map((e) => AndroidFileShareFile(e.uri, e.mime)).toList(),
+    );
     try {
       await share.share();
     } catch (e, stackTrace) {
@@ -65,7 +66,9 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   Future<void> _deleteFiles30(
-      List<LocalUriFile> files, LocalFileOnFailureListener? onFailure) async {
+    List<LocalUriFile> files,
+    LocalFileOnFailureListener? onFailure,
+  ) async {
     assert(AndroidInfo().sdkInt >= AndroidVersion.R);
     int? resultCode;
     final resultFuture = MediaStore.stream
@@ -83,13 +86,17 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   Future<void> _deleteFiles0(
-      List<LocalUriFile> files, LocalFileOnFailureListener? onFailure) async {
+    List<LocalUriFile> files,
+    LocalFileOnFailureListener? onFailure,
+  ) async {
     assert(AndroidInfo().sdkInt < AndroidVersion.R);
-    final failedUris =
-        await MediaStore.deleteFiles(files.map((f) => f.uri).toList());
-    final failedFilesIt = failedUris!
-        .map((uri) => files.firstWhereOrNull((f) => f.uri == uri))
-        .whereNotNull();
+    final failedUris = await MediaStore.deleteFiles(
+      files.map((f) => f.uri).toList(),
+    );
+    final failedFilesIt =
+        failedUris!
+            .map((uri) => files.firstWhereOrNull((f) => f.uri == uri))
+            .nonNulls;
     for (final f in failedFilesIt) {
       onFailure?.call(f, null, null);
     }
@@ -103,7 +110,8 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
         .where((f) {
           if (f is! LocalUriFile) {
             _log.warning(
-                "[deleteFiles] Can't remove file not returned by this data source: $f");
+              "[deleteFiles] Can't remove file not returned by this data source: $f",
+            );
             nonUriFileCallback?.call(f);
             return false;
           } else {
@@ -115,11 +123,11 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   static LocalFile _toLocalFile(MediaStoreQueryResult r) => LocalUriFile(
-        uri: r.uri,
-        displayName: r.displayName,
-        path: r.path,
-        lastModified: DateTime.fromMillisecondsSinceEpoch(r.dateModified),
-        mime: r.mimeType,
-        dateTaken: r.dateTaken?.run(DateTime.fromMillisecondsSinceEpoch),
-      );
+    uri: r.uri,
+    displayName: r.displayName,
+    path: r.path,
+    lastModified: DateTime.fromMillisecondsSinceEpoch(r.dateModified),
+    mime: r.mimeType,
+    dateTaken: r.dateTaken?.run(DateTime.fromMillisecondsSinceEpoch),
+  );
 }

@@ -33,17 +33,14 @@ class AlbumRemoteDataSource implements AlbumDataSource {
   @override
   getAll(Account account, List<File> albumFiles) async* {
     _log.info(
-        "[getAll] ${albumFiles.map((f) => f.filename).toReadableString()}");
+      "[getAll] ${albumFiles.map((f) => f.filename).toReadableString()}",
+    );
     final failed = <String, Map>{};
     final albums = await const AlbumRemoteDataSource2().getAlbums(
       account,
       albumFiles,
       onError: (v, error, stackTrace) {
-        failed[v.path] = {
-          "file": v,
-          "error": error,
-          "stackTrace": stackTrace,
-        };
+        failed[v.path] = {"file": v, "error": error, "stackTrace": stackTrace};
       },
     );
     var i = 0;
@@ -88,17 +85,14 @@ class AlbumSqliteDbDataSource implements AlbumDataSource {
   @override
   getAll(Account account, List<File> albumFiles) async* {
     _log.info(
-        "[getAll] ${albumFiles.map((f) => f.filename).toReadableString()}");
+      "[getAll] ${albumFiles.map((f) => f.filename).toReadableString()}",
+    );
     final failed = <String, Map>{};
     final albums = await AlbumSqliteDbDataSource2(_c.npDb).getAlbums(
       account,
       albumFiles,
       onError: (v, error, stackTrace) {
-        failed[v.path] = {
-          "file": v,
-          "error": error,
-          "stackTrace": stackTrace,
-        };
+        failed[v.path] = {"file": v, "error": error, "stackTrace": stackTrace};
       },
     );
     var i = 0;

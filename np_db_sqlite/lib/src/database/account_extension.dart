@@ -37,10 +37,11 @@ extension SqliteDbAccountExtension on SqliteDb {
   Future<void> deleteAccount(DbAccount account) async {
     final sqlAccount = await accountOf(ByAccount.db(account));
     _log.info("[deleteAccount] Remove account: ${sqlAccount.rowId}");
-    await (delete(accounts)..where((t) => t.rowId.equals(sqlAccount.rowId)))
-        .go();
-    final accountCountExp =
-        accounts.rowId.count(filter: accounts.server.equals(sqlAccount.server));
+    await (delete(accounts)
+      ..where((t) => t.rowId.equals(sqlAccount.rowId))).go();
+    final accountCountExp = accounts.rowId.count(
+      filter: accounts.server.equals(sqlAccount.server),
+    );
     final accountCountQuery = selectOnly(accounts)
       ..addColumns([accountCountExp]);
     final accountCount =
@@ -48,8 +49,8 @@ extension SqliteDbAccountExtension on SqliteDb {
     _log.info("[deleteAccount] Remaining accounts in server: $accountCount");
     if (accountCount == 0) {
       _log.info("[deleteAccount] Remove server: ${sqlAccount.server}");
-      await (delete(servers)..where((t) => t.rowId.equals(sqlAccount.server)))
-          .go();
+      await (delete(servers)
+        ..where((t) => t.rowId.equals(sqlAccount.server))).go();
     }
     await cleanUpDanglingFiles();
   }

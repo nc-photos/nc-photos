@@ -6,10 +6,7 @@ class ValueStreamBuilder<T> extends StreamBuilder<T> {
     super.key,
     ValueStream<T>? stream,
     required super.builder,
-  }) : super(
-          stream: stream,
-          initialData: stream?.value,
-        );
+  }) : super(stream: stream, initialData: stream?.value);
 }
 
 class ValueStreamBuilderEx<T> extends StreamBuilder<T> {
@@ -18,26 +15,24 @@ class ValueStreamBuilderEx<T> extends StreamBuilder<T> {
     ValueStream<T>? stream,
     required StreamWidgetBuilder<T> builder,
   }) : super(
-          stream: stream,
-          initialData: stream?.value,
-          builder: builder.snapshotBuilder ??
-              (context, snapshot) {
-                return builder.valueBuilder!(context, snapshot.requireData);
-              },
-        );
+         stream: stream,
+         initialData: stream?.value,
+         builder:
+             builder.snapshotBuilder ??
+             (context, snapshot) {
+               return builder.valueBuilder!(context, snapshot.requireData);
+             },
+       );
 }
 
 class StreamWidgetBuilder<T> {
-  const StreamWidgetBuilder._({
-    this.snapshotBuilder,
-    this.valueBuilder,
-  });
+  const StreamWidgetBuilder._({this.snapshotBuilder, this.valueBuilder});
 
   const StreamWidgetBuilder.snapshot(AsyncWidgetBuilder<T> builder)
-      : this._(snapshotBuilder: builder);
+    : this._(snapshotBuilder: builder);
   const StreamWidgetBuilder.value(
-      Widget Function(BuildContext context, T value) builder)
-      : this._(valueBuilder: builder);
+    Widget Function(BuildContext context, T value) builder,
+  ) : this._(valueBuilder: builder);
 
   final AsyncWidgetBuilder<T>? snapshotBuilder;
   final Widget Function(BuildContext context, T value)? valueBuilder;

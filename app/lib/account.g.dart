@@ -13,36 +13,39 @@ part of 'account.dart';
 // **************************************************************************
 
 abstract class $AccountCopyWithWorker {
-  Account call(
-      {String? id,
-      String? scheme,
-      String? address,
-      CiString? userId,
-      String? username2,
-      String? password,
-      List<String>? roots});
+  Account call({
+    String? id,
+    String? scheme,
+    String? address,
+    CiString? userId,
+    String? username2,
+    String? password,
+    List<String>? roots,
+  });
 }
 
 class _$AccountCopyWithWorkerImpl implements $AccountCopyWithWorker {
   _$AccountCopyWithWorkerImpl(this.that);
 
   @override
-  Account call(
-      {dynamic id,
-      dynamic scheme,
-      dynamic address,
-      dynamic userId,
-      dynamic username2,
-      dynamic password,
-      dynamic roots}) {
+  Account call({
+    dynamic id,
+    dynamic scheme,
+    dynamic address,
+    dynamic userId,
+    dynamic username2,
+    dynamic password,
+    dynamic roots,
+  }) {
     return Account(
-        id: id as String? ?? that.id,
-        scheme: scheme as String? ?? that.scheme,
-        address: address as String? ?? that.address,
-        userId: userId as CiString? ?? that.userId,
-        username2: username2 as String? ?? that.username2,
-        password: password as String? ?? that.password,
-        roots: roots as List<String>? ?? List.of(that.roots));
+      id: id as String? ?? that.id,
+      scheme: scheme as String? ?? that.scheme,
+      address: address as String? ?? that.address,
+      userId: userId as CiString? ?? that.userId,
+      username2: username2 as String? ?? that.username2,
+      password: password as String? ?? that.password,
+      roots: roots as List<String>? ?? List.of(that.roots),
+    );
   }
 
   final Account that;

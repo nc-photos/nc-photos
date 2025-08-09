@@ -18,10 +18,12 @@ void main() {
         await tester.pumpAndSettle();
         expect(find.text("test1"), findsOneWidget);
 
-        manager.showSnackBar(const SnackBar(
-          content: Text("test2"),
-          duration: Duration(seconds: 1),
-        ));
+        manager.showSnackBar(
+          const SnackBar(
+            content: Text("test2"),
+            duration: Duration(seconds: 1),
+          ),
+        );
         await tester.pumpAndSettle();
         expect(find.text("test1"), findsNothing);
         expect(find.text("test2"), findsOneWidget);
@@ -50,9 +52,7 @@ class _TestWidgetState extends State<_TestWidget> implements SnackBarHandler {
   build(BuildContext context) {
     return MaterialApp(
       scaffoldMessengerKey: _scaffoldMessengerKey,
-      home: Scaffold(
-        body: Container(),
-      ),
+      home: Scaffold(body: Container()),
     );
   }
 

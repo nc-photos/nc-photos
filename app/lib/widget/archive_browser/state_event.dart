@@ -14,17 +14,14 @@ class _State {
     this.error,
   });
 
-  factory _State.init({
-    required int zoom,
-  }) =>
-      _State(
-        files: const [],
-        isLoading: false,
-        transformedItems: const [],
-        selectedItems: const {},
-        visibleItems: const {},
-        zoom: zoom,
-      );
+  factory _State.init({required int zoom}) => _State(
+    files: const [],
+    isLoading: false,
+    transformedItems: const [],
+    selectedItems: const {},
+    visibleItems: const {},
+    zoom: zoom,
+  );
 
   @override
   String toString() => _$toString();
@@ -84,9 +81,7 @@ class _OnItemTransformed implements _Event {
 /// Set the currently selected items
 @toString
 class _SetSelectedItems implements _Event {
-  const _SetSelectedItems({
-    required this.items,
-  });
+  const _SetSelectedItems({required this.items});
 
   @override
   String toString() => _$toString();

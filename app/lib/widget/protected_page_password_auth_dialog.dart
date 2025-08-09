@@ -19,17 +19,12 @@ part 'protected_page_password_auth_dialog/state_event.dart';
 part 'protected_page_password_auth_dialog/view.dart';
 
 class ProtectedPagePasswordAuthDialog extends StatelessWidget {
-  const ProtectedPagePasswordAuthDialog({
-    super.key,
-    required this.password,
-  });
+  const ProtectedPagePasswordAuthDialog({super.key, required this.password});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        password: password,
-      ),
+      create: (context) => _Bloc(password: password),
       child: _WrappedProtectedPagePasswordAuthDialog(),
     );
   }
@@ -65,9 +60,7 @@ class ProtectedPagePasswordSetupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        password: null,
-      ),
+      create: (context) => _Bloc(password: null),
       child: _WrappedProtectedPagePasswordSetupDialog(),
     );
   }
@@ -96,17 +89,12 @@ class _WrappedProtectedPagePasswordSetupDialog extends StatelessWidget {
 }
 
 class ProtectedPagePasswordConfirmDialog extends StatelessWidget {
-  const ProtectedPagePasswordConfirmDialog({
-    super.key,
-    required this.password,
-  });
+  const ProtectedPagePasswordConfirmDialog({super.key, required this.password});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        password: password,
-      ),
+      create: (context) => _Bloc(password: password),
       child: _WrappedProtectedPagePasswordConfirmDialog(),
     );
   }

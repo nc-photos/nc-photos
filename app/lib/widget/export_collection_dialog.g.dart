@@ -22,8 +22,9 @@ class _$_FormValueCopyWithWorkerImpl implements $_FormValueCopyWithWorker {
   @override
   _FormValue call({dynamic name, dynamic provider}) {
     return _FormValue(
-        name: name as String? ?? that.name,
-        provider: provider as _ProviderOption? ?? that.provider);
+      name: name as String? ?? that.name,
+      provider: provider as _ProviderOption? ?? that.provider,
+    );
   }
 
   final _FormValue that;
@@ -36,27 +37,30 @@ extension $_FormValueCopyWith on _FormValue {
 }
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {_FormValue? formValue,
-      Collection? result,
-      bool? isExporting,
-      ExceptionEvent? error});
+  _State call({
+    _FormValue? formValue,
+    Collection? result,
+    bool? isExporting,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic formValue,
-      dynamic result = copyWithNull,
-      dynamic isExporting,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic formValue,
+    dynamic result = copyWithNull,
+    dynamic isExporting,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        formValue: formValue as _FormValue? ?? that.formValue,
-        result: result == copyWithNull ? that.result : result as Collection?,
-        isExporting: isExporting as bool? ?? that.isExporting,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      formValue: formValue as _FormValue? ?? that.formValue,
+      result: result == copyWithNull ? that.result : result as Collection?,
+      isExporting: isExporting as bool? ?? that.isExporting,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -77,7 +81,8 @@ extension _$_WrappedExportCollectionDialogStateNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.export_collection_dialog._WrappedExportCollectionDialogState");
+    "widget.export_collection_dialog._WrappedExportCollectionDialogState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

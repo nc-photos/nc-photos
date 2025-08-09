@@ -20,10 +20,7 @@ enum CollectionSort {
 
 @toString
 class CollectionShare with EquatableMixin {
-  const CollectionShare({
-    required this.userId,
-    required this.username,
-  });
+  const CollectionShare({required this.userId, required this.username});
 
   @override
   String toString() => _$toString();
@@ -35,24 +32,24 @@ class CollectionShare with EquatableMixin {
   final String username;
 }
 
-enum CollectionShareResult {
-  ok,
-  partial,
-}
+enum CollectionShareResult { ok, partial }
 
 extension CollectionListExtension on Iterable<Collection> {
   List<Collection> sortedBy(CollectionSort by) {
     return map<({Comparable comparable, Collection collection})>((e) {
-      switch (by) {
-        case CollectionSort.nameAscending:
-        case CollectionSort.nameDescending:
-          return (comparable: e.name.toLowerCase(), collection: e);
+          switch (by) {
+            case CollectionSort.nameAscending:
+            case CollectionSort.nameDescending:
+              return (comparable: e.name.toLowerCase(), collection: e);
 
-        case CollectionSort.dateAscending:
-        case CollectionSort.dateDescending:
-          return (comparable: e.contentProvider.lastModified, collection: e);
-      }
-    })
+            case CollectionSort.dateAscending:
+            case CollectionSort.dateDescending:
+              return (
+                comparable: e.contentProvider.lastModified,
+                collection: e,
+              );
+          }
+        })
         .sorted((a, b) {
           final x = by.isAscending() ? a : b;
           final y = by.isAscending() ? b : a;

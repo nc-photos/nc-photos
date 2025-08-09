@@ -10,8 +10,9 @@ extension _$_DraggableItemListStateNpLog on _DraggableItemListState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.draggable_item_list._DraggableItemListState");
+  static final log = Logger(
+    "widget.draggable_item_list._DraggableItemListState",
+  );
 }
 
 // **************************************************************************

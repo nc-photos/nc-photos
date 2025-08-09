@@ -14,8 +14,9 @@ class _ContentBodyState extends State<_ContentBody> {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.pendingRemoveFile != current.pendingRemoveFile,
+          listenWhen:
+              (previous, current) =>
+                  previous.pendingRemoveFile != current.pendingRemoveFile,
           listener: (context, state) {
             final file = state.pendingRemoveFile.value;
             if (file == null) {
@@ -32,25 +33,25 @@ class _ContentBodyState extends State<_ContentBody> {
                 // removing the last item, go back
                 _pageViewController
                     .previousPage(
-                  duration: k.animationDurationNormal,
-                  curve: Curves.easeInOut,
-                )
+                      duration: k.animationDurationNormal,
+                      curve: Curves.easeInOut,
+                    )
                     .then((_) {
-                  if (mounted) {
-                    context.addEvent(_RemoveFile(file));
-                  }
-                });
+                      if (mounted) {
+                        context.addEvent(_RemoveFile(file));
+                      }
+                    });
               } else {
                 _pageViewController
                     .nextPage(
-                  duration: k.animationDurationNormal,
-                  curve: Curves.easeInOut,
-                )
+                      duration: k.animationDurationNormal,
+                      curve: Curves.easeInOut,
+                    )
                     .then((_) {
-                  if (mounted) {
-                    context.addEvent(_RemoveFile(file));
-                  }
-                });
+                      if (mounted) {
+                        context.addEvent(_RemoveFile(file));
+                      }
+                    });
               }
             } else {
               context.addEvent(_RemoveFile(file));
@@ -62,7 +63,8 @@ class _ContentBodyState extends State<_ContentBody> {
           listener: (context, index) {
             if (index != _pageViewController.currentPage) {
               _log.info(
-                  "[build] Page out sync, correcting: ${_pageViewController.currentPage} -> $index");
+                "[build] Page out sync, correcting: ${_pageViewController.currentPage} -> $index",
+              );
               _pageViewController.jumpToPage(index);
             }
           },
@@ -74,57 +76,66 @@ class _ContentBodyState extends State<_ContentBody> {
         },
         child: Stack(
           children: [
-            const Positioned.fill(
-              child: ColoredBox(color: Colors.black),
-            ),
+            const Positioned.fill(child: ColoredBox(color: Colors.black)),
             _BlocBuilder(
-              buildWhen: (previous, current) =>
-                  previous.isZoomed != current.isZoomed ||
-                  previous.removedFileIds != current.removedFileIds,
-              builder: (context, state) => HorizontalPageViewer(
-                key: _key,
-                pageCount:
-                    context.bloc.allFilesCount - state.removedFileIds.length,
-                pageBuilder: (context, i) => _BlocSelector(
-                  selector: (state) => state.pageFileIdMap[i],
-                  builder: (context, fileId) => fileId == null
-                      ? const Center(
-                          child: AppIntermediateCircularProgressIndicator(),
-                        )
-                      : _PageView(
-                          key: Key("Viewer-$fileId"),
-                          fileId: fileId,
-                          pageHeight: MediaQuery.of(context).size.height,
+              buildWhen:
+                  (previous, current) =>
+                      previous.isZoomed != current.isZoomed ||
+                      previous.removedFileIds != current.removedFileIds,
+              builder:
+                  (context, state) => HorizontalPageViewer(
+                    key: _key,
+                    pageCount:
+                        context.bloc.allFilesCount -
+                        state.removedFileIds.length,
+                    pageBuilder:
+                        (context, i) => _BlocSelector(
+                          selector: (state) => state.pageFileIdMap[i],
+                          builder:
+                              (context, fileId) =>
+                                  fileId == null
+                                      ? const Center(
+                                        child:
+                                            AppIntermediateCircularProgressIndicator(),
+                                      )
+                                      : _PageView(
+                                        key: Key("Viewer-$fileId"),
+                                        fileId: fileId,
+                                        pageHeight:
+                                            MediaQuery.of(context).size.height,
+                                      ),
                         ),
-                ),
-                initialPage: context.bloc.initialIndex,
-                controller: _pageViewController,
-                viewportFraction: _viewportFraction,
-                canSwitchPage: !state.isZoomed,
-                onPageChanged: (from, to) {
-                  context.addEvent(_SetIndex(to));
-                },
-              ),
+                    initialPage: context.bloc.initialIndex,
+                    controller: _pageViewController,
+                    viewportFraction: _viewportFraction,
+                    canSwitchPage: !state.isZoomed,
+                    onPageChanged: (from, to) {
+                      context.addEvent(_SetIndex(to));
+                    },
+                  ),
             ),
             _BlocSelector<bool>(
               selector: (state) => state.isShowAppBar,
-              builder: (context, isShowAppBar) => isShowAppBar
-                  ? Container(
-                      // + status bar height
-                      height:
-                          kToolbarHeight + MediaQuery.of(context).padding.top,
-                      decoration: const BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment(0, -1),
-                          end: Alignment(0, 1),
-                          colors: [
-                            Color.fromARGB(192, 0, 0, 0),
-                            Color.fromARGB(0, 0, 0, 0),
-                          ],
-                        ),
-                      ),
-                    )
-                  : const SizedBox.shrink(),
+              builder:
+                  (context, isShowAppBar) =>
+                      isShowAppBar
+                          ? Container(
+                            // + status bar height
+                            height:
+                                kToolbarHeight +
+                                MediaQuery.of(context).padding.top,
+                            decoration: const BoxDecoration(
+                              gradient: LinearGradient(
+                                begin: Alignment(0, -1),
+                                end: Alignment(0, 1),
+                                colors: [
+                                  Color.fromARGB(192, 0, 0, 0),
+                                  Color.fromARGB(0, 0, 0, 0),
+                                ],
+                              ),
+                            ),
+                          )
+                          : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -138,11 +149,7 @@ class _ContentBodyState extends State<_ContentBody> {
 }
 
 class _PageView extends StatefulWidget {
-  const _PageView({
-    super.key,
-    required this.fileId,
-    required this.pageHeight,
-  });
+  const _PageView({super.key, required this.fileId, required this.pageHeight});
 
   @override
   State<StatefulWidget> createState() => _PageViewState();
@@ -160,7 +167,9 @@ class _PageViewState extends State<_PageView> {
       initialScrollOffset:
           context.state.isShowDetailPane && !context.state.isClosingDetailPane
               ? _calcDetailPaneOpenedScrollPosition(
-                  context.state.fileStates[widget.fileId], widget.pageHeight)
+                context.state.fileStates[widget.fileId],
+                widget.pageHeight,
+              )
               : 0,
     );
     if (context.state.isShowDetailPane && !context.state.isClosingDetailPane) {
@@ -191,8 +200,10 @@ class _PageViewState extends State<_PageView> {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.openDetailPaneRequest != current.openDetailPaneRequest,
+          listenWhen:
+              (previous, current) =>
+                  previous.openDetailPaneRequest !=
+                  current.openDetailPaneRequest,
           listener: (context, state) {
             if (!state.canOpenDetailPane) {
               _log.warning("[build] Can't open detail pane right now");
@@ -201,13 +212,19 @@ class _PageViewState extends State<_PageView> {
             if (state.openDetailPaneRequest.value.shouldAnimate) {
               _scrollController.animateTo(
                 _calcDetailPaneOpenedScrollPosition(
-                    context.state.fileStates[widget.fileId], widget.pageHeight),
+                  context.state.fileStates[widget.fileId],
+                  widget.pageHeight,
+                ),
                 duration: k.animationDurationNormal,
                 curve: Curves.easeOut,
               );
             } else {
-              _scrollController.jumpTo(_calcDetailPaneOpenedScrollPosition(
-                  context.state.fileStates[widget.fileId], widget.pageHeight));
+              _scrollController.jumpTo(
+                _calcDetailPaneOpenedScrollPosition(
+                  context.state.fileStates[widget.fileId],
+                  widget.pageHeight,
+                ),
+              );
             }
           },
         ),
@@ -247,63 +264,80 @@ class _PageViewState extends State<_PageView> {
               child: NotificationListener<ScrollNotification>(
                 onNotification: _onPageContentScrolled,
                 child: ScrollConfiguration(
-                  behavior: ScrollConfiguration.of(context)
-                      .copyWith(scrollbars: false),
+                  behavior: ScrollConfiguration.of(
+                    context,
+                  ).copyWith(scrollbars: false),
                   child: _BlocBuilder(
-                    buildWhen: (previous, current) =>
-                        previous.isZoomed != current.isZoomed,
-                    builder: (context, state) => SingleChildScrollView(
-                      controller: _scrollController,
-                      physics: !state.isZoomed
-                          ? null
-                          : const NeverScrollableScrollPhysics(),
-                      child: Stack(
-                        children: [
-                          _BlocBuilder(
-                            buildWhen: (previous, current) =>
-                                previous.fileStates[widget.fileId] !=
-                                    current.fileStates[widget.fileId] ||
-                                previous.isShowAppBar != current.isShowAppBar ||
-                                previous.isDetailPaneActive !=
-                                    current.isDetailPaneActive,
-                            builder: (context, state) => FileContentView(
-                              file: file,
-                              shouldPlayLivePhoto: state
-                                      .fileStates[widget.fileId]
-                                      ?.shouldPlayLivePhoto ??
-                                  false,
-                              canZoom: !state.isDetailPaneActive,
-                              canPlay: !state.isDetailPaneActive,
-                              isPlayControlVisible: state.isShowAppBar &&
-                                  !state.isDetailPaneActive,
-                              onContentHeightChanged: (contentHeight) {
-                                context.addEvent(_SetFileContentHeight(
-                                    widget.fileId, contentHeight));
-                              },
-                              onZoomChanged: (isZoomed) {
-                                context.addEvent(_SetIsZoomed(isZoomed));
-                              },
-                              onVideoPlayingChanged: (isPlaying) {
-                                if (isPlaying) {
-                                  context.addEvent(const _HideAppBar());
-                                } else {
-                                  context.addEvent(const _ShowAppBar());
-                                }
-                              },
-                              onLoadFailure: () {
-                                if (state.fileStates[widget.fileId]
-                                        ?.shouldPlayLivePhoto ==
-                                    true) {
-                                  context
-                                      .addEvent(_PauseLivePhoto(widget.fileId));
-                                }
-                              },
-                            ),
+                    buildWhen:
+                        (previous, current) =>
+                            previous.isZoomed != current.isZoomed,
+                    builder:
+                        (context, state) => SingleChildScrollView(
+                          controller: _scrollController,
+                          physics:
+                              !state.isZoomed
+                                  ? null
+                                  : const NeverScrollableScrollPhysics(),
+                          child: Stack(
+                            children: [
+                              _BlocBuilder(
+                                buildWhen:
+                                    (previous, current) =>
+                                        previous.fileStates[widget.fileId] !=
+                                            current.fileStates[widget.fileId] ||
+                                        previous.isShowAppBar !=
+                                            current.isShowAppBar ||
+                                        previous.isDetailPaneActive !=
+                                            current.isDetailPaneActive,
+                                builder:
+                                    (context, state) => FileContentView(
+                                      file: file,
+                                      shouldPlayLivePhoto:
+                                          state
+                                              .fileStates[widget.fileId]
+                                              ?.shouldPlayLivePhoto ??
+                                          false,
+                                      canZoom: !state.isDetailPaneActive,
+                                      canPlay: !state.isDetailPaneActive,
+                                      isPlayControlVisible:
+                                          state.isShowAppBar &&
+                                          !state.isDetailPaneActive,
+                                      onContentHeightChanged: (contentHeight) {
+                                        context.addEvent(
+                                          _SetFileContentHeight(
+                                            widget.fileId,
+                                            contentHeight,
+                                          ),
+                                        );
+                                      },
+                                      onZoomChanged: (isZoomed) {
+                                        context.addEvent(
+                                          _SetIsZoomed(isZoomed),
+                                        );
+                                      },
+                                      onVideoPlayingChanged: (isPlaying) {
+                                        if (isPlaying) {
+                                          context.addEvent(const _HideAppBar());
+                                        } else {
+                                          context.addEvent(const _ShowAppBar());
+                                        }
+                                      },
+                                      onLoadFailure: () {
+                                        if (state
+                                                .fileStates[widget.fileId]
+                                                ?.shouldPlayLivePhoto ==
+                                            true) {
+                                          context.addEvent(
+                                            _PauseLivePhoto(widget.fileId),
+                                          );
+                                        }
+                                      },
+                                    ),
+                              ),
+                              _DetailPaneContainer(fileId: widget.fileId),
+                            ],
                           ),
-                          _DetailPaneContainer(fileId: widget.fileId),
-                        ],
-                      ),
-                    ),
+                        ),
                   ),
                 ),
               ),
@@ -328,7 +362,9 @@ class _PageViewState extends State<_PageView> {
         context.addEvent(const _DetailPaneClosed());
       } else if (scrollPos.pixels <
           _calcDetailPaneOpenedScrollPosition(
-                  context.state.fileStates[widget.fileId], widget.pageHeight) -
+                context.state.fileStates[widget.fileId],
+                widget.pageHeight,
+              ) -
               1) {
         if (scrollPos.userScrollDirection == ScrollDirection.reverse) {
           // upward, open the pane to its minimal size
@@ -367,7 +403,9 @@ class _PageViewState extends State<_PageView> {
 }
 
 double _calcDetailPaneOpenedScrollPosition(
-    _PageState? pageState, double pageHeight) {
+  _PageState? pageState,
+  double pageHeight,
+) {
   // distance of the detail pane from the top edge
   const distanceFromTop = 196;
   return max(_calcDetailPaneOffset(pageState, pageHeight) - distanceFromTop, 0);

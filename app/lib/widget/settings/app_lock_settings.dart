@@ -25,9 +25,7 @@ class AppLockSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        securePrefController: context.read(),
-      ),
+      create: (_) => _Bloc(securePrefController: context.read()),
       child: const _WrappedAppLockSettings(),
     );
   }
@@ -51,12 +49,13 @@ class _WrappedAppLockSettings extends StatelessWidget {
                   alignment: Alignment.centerRight,
                   child: _BlocSelector<ProtectedPageAuthType?>(
                     selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => Icon(
-                      appLockType == null
-                          ? Icons.lock_open_outlined
-                          : Icons.lock_outlined,
-                      size: 24,
-                    ),
+                    builder:
+                        (context, appLockType) => Icon(
+                          appLockType == null
+                              ? Icons.lock_open_outlined
+                              : Icons.lock_outlined,
+                          size: 24,
+                        ),
                   ),
                 ),
               ),
@@ -67,24 +66,26 @@ class _WrappedAppLockSettings extends StatelessWidget {
                   alignment: Alignment.centerLeft,
                   child: _BlocSelector<ProtectedPageAuthType?>(
                     selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => Text(
-                      appLockType == null
-                          ? L10n.global().disabledText
-                          : L10n.global().enabledText,
-                      textAlign: TextAlign.center,
-                      style: Theme.of(context).textStyleColored(
-                        (textTheme) => textTheme.titleSmall,
-                        (colorScheme) => appLockType == null
-                            ? colorScheme.error
-                            : colorScheme.primary,
-                      ),
-                    ),
+                    builder:
+                        (context, appLockType) => Text(
+                          appLockType == null
+                              ? L10n.global().disabledText
+                              : L10n.global().enabledText,
+                          textAlign: TextAlign.center,
+                          style: Theme.of(context).textStyleColored(
+                            (textTheme) => textTheme.titleSmall,
+                            (colorScheme) =>
+                                appLockType == null
+                                    ? colorScheme.error
+                                    : colorScheme.primary,
+                          ),
+                        ),
                   ),
                 ),
               ),
               const SizedBox(width: 16),
             ],
-          )
+          ),
         ],
       ),
       body: Column(
@@ -102,55 +103,63 @@ class _WrappedAppLockSettings extends StatelessWidget {
                   const SizedBox(height: 16),
                   _BlocSelector<ProtectedPageAuthType?>(
                     selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: null,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().disabledText),
-                      onChanged: (value) async {
-                        if (await _confirmDisable(context)) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
+                    builder:
+                        (context, appLockType) => RadioListTile(
+                          value: null,
+                          groupValue: appLockType,
+                          title: Text(L10n.global().disabledText),
+                          onChanged: (value) async {
+                            if (await _confirmDisable(context)) {
+                              context.addEvent(_SetAppLockType(value));
+                            }
+                          },
+                        ),
                   ),
                   _BlocSelector<ProtectedPageAuthType?>(
                     selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: ProtectedPageAuthType.biometric,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().settingsAppLockTypeBiometric),
-                      onChanged: (value) async {
-                        if (await _confirmBiometric(context) == true) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
+                    builder:
+                        (context, appLockType) => RadioListTile(
+                          value: ProtectedPageAuthType.biometric,
+                          groupValue: appLockType,
+                          title: Text(
+                            L10n.global().settingsAppLockTypeBiometric,
+                          ),
+                          onChanged: (value) async {
+                            if (await _confirmBiometric(context) == true) {
+                              context.addEvent(_SetAppLockType(value));
+                            }
+                          },
+                        ),
                   ),
                   _BlocSelector<ProtectedPageAuthType?>(
                     selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: ProtectedPageAuthType.pin,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().settingsAppLockTypePin),
-                      onChanged: (value) async {
-                        if (await _confirmPin(context) == true) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
+                    builder:
+                        (context, appLockType) => RadioListTile(
+                          value: ProtectedPageAuthType.pin,
+                          groupValue: appLockType,
+                          title: Text(L10n.global().settingsAppLockTypePin),
+                          onChanged: (value) async {
+                            if (await _confirmPin(context) == true) {
+                              context.addEvent(_SetAppLockType(value));
+                            }
+                          },
+                        ),
                   ),
                   _BlocSelector<ProtectedPageAuthType?>(
                     selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: ProtectedPageAuthType.password,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().settingsAppLockTypePassword),
-                      onChanged: (value) async {
-                        if (await _confirmPassword(context) == true) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
+                    builder:
+                        (context, appLockType) => RadioListTile(
+                          value: ProtectedPageAuthType.password,
+                          groupValue: appLockType,
+                          title: Text(
+                            L10n.global().settingsAppLockTypePassword,
+                          ),
+                          onChanged: (value) async {
+                            if (await _confirmPassword(context) == true) {
+                              context.addEvent(_SetAppLockType(value));
+                            }
+                          },
+                        ),
                   ),
                 ],
               ),
@@ -167,10 +176,12 @@ class _WrappedAppLockSettings extends StatelessWidget {
     if (result) {
       return true;
     } else {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().writePreferenceFailureNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().writePreferenceFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       return false;
     }
   }
@@ -178,69 +189,81 @@ class _WrappedAppLockSettings extends StatelessWidget {
   Future<bool?> _confirmBiometric(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (_) => SimpleDialog(
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
-            child: Text(
-              L10n.global().settingsAppLockSetupBiometricFallbackDialogTitle,
-              style: Theme.of(context).textTheme.titleLarge,
-            ),
+      builder:
+          (_) => SimpleDialog(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(24, 12, 24, 0),
+                child: Text(
+                  L10n.global()
+                      .settingsAppLockSetupBiometricFallbackDialogTitle,
+                  style: Theme.of(context).textTheme.titleLarge,
+                ),
+              ),
+              SimpleDialogOption(
+                child: ListTile(
+                  title: Text(L10n.global().settingsAppLockTypePin),
+                ),
+                onPressed: () async {
+                  final result = await _enterPin(context);
+                  if (result == true) {
+                    Navigator.of(context).pop(true);
+                  } else if (result == false) {
+                    SnackBarManager().showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          L10n.global().writePreferenceFailureNotification,
+                        ),
+                        duration: k.snackBarDurationNormal,
+                      ),
+                    );
+                  }
+                },
+              ),
+              SimpleDialogOption(
+                child: ListTile(
+                  title: Text(L10n.global().settingsAppLockTypePassword),
+                ),
+                onPressed: () async {
+                  final result = await _enterPassword(context);
+                  if (result == true) {
+                    Navigator.of(context).pop(true);
+                  } else if (result == false) {
+                    SnackBarManager().showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          L10n.global().writePreferenceFailureNotification,
+                        ),
+                        duration: k.snackBarDurationNormal,
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
           ),
-          SimpleDialogOption(
-            child: ListTile(
-              title: Text(L10n.global().settingsAppLockTypePin),
-            ),
-            onPressed: () async {
-              final result = await _enterPin(context);
-              if (result == true) {
-                Navigator.of(context).pop(true);
-              } else if (result == false) {
-                SnackBarManager().showSnackBar(SnackBar(
-                  content:
-                      Text(L10n.global().writePreferenceFailureNotification),
-                  duration: k.snackBarDurationNormal,
-                ));
-              }
-            },
-          ),
-          SimpleDialogOption(
-            child: ListTile(
-              title: Text(L10n.global().settingsAppLockTypePassword),
-            ),
-            onPressed: () async {
-              final result = await _enterPassword(context);
-              if (result == true) {
-                Navigator.of(context).pop(true);
-              } else if (result == false) {
-                SnackBarManager().showSnackBar(SnackBar(
-                  content:
-                      Text(L10n.global().writePreferenceFailureNotification),
-                  duration: k.snackBarDurationNormal,
-                ));
-              }
-            },
-          ),
-        ],
-      ),
     );
     if (result != true) {
       return result;
     }
-    return context.bloc.securePrefController
-        .setProtectedPageAuthType(ProtectedPageAuthType.biometric);
+    return context.bloc.securePrefController.setProtectedPageAuthType(
+      ProtectedPageAuthType.biometric,
+    );
   }
 
   Future<bool?> _confirmPin(BuildContext context) async {
     final result = await _enterPin(context);
     if (result == true) {
-      return context.bloc.securePrefController
-          .setProtectedPageAuthType(ProtectedPageAuthType.pin);
+      return context.bloc.securePrefController.setProtectedPageAuthType(
+        ProtectedPageAuthType.pin,
+      );
     } else if (result == false) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().writePreferenceFailureNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().writePreferenceFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       return false;
     } else {
       return null;
@@ -250,13 +273,16 @@ class _WrappedAppLockSettings extends StatelessWidget {
   Future<bool?> _confirmPassword(BuildContext context) async {
     final result = await _enterPassword(context);
     if (result == true) {
-      return context.bloc.securePrefController
-          .setProtectedPageAuthType(ProtectedPageAuthType.password);
+      return context.bloc.securePrefController.setProtectedPageAuthType(
+        ProtectedPageAuthType.password,
+      );
     } else if (result == false) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().writePreferenceFailureNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().writePreferenceFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       return false;
     } else {
       return null;
@@ -296,8 +322,9 @@ class _WrappedAppLockSettings extends StatelessWidget {
     if (isConfirmed != true) {
       return null;
     }
-    return context.bloc.securePrefController
-        .setProtectedPageAuthPassword(result);
+    return context.bloc.securePrefController.setProtectedPageAuthPassword(
+      result,
+    );
   }
 }
 

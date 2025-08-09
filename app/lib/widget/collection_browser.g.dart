@@ -13,109 +13,115 @@ part of 'collection_browser.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {Collection? collection,
-      CollectionCoverResult? cover,
-      List<CollectionItem>? items,
-      List<CollectionItem>? rawItems,
-      Set<int>? itemsWhitelist,
-      bool? isLoading,
-      List<_Item>? transformedItems,
-      Set<_Item>? selectedItems,
-      bool? isSelectionRemovable,
-      bool? isSelectionManageableFile,
-      bool? isSelectionDeletable,
-      bool? isEditMode,
-      bool? isEditBusy,
-      String? editName,
-      List<CollectionItem>? editItems,
-      List<_Item>? editTransformedItems,
-      CollectionItemSort? editSort,
-      bool? isAddMapBusy,
-      Unique<_PlacePickerRequest?>? placePickerRequest,
-      bool? isDragging,
-      int? zoom,
-      double? scale,
-      Collection? importResult,
-      ExceptionEvent? error,
-      String? message});
+  _State call({
+    Collection? collection,
+    CollectionCoverResult? cover,
+    List<CollectionItem>? items,
+    List<CollectionItem>? rawItems,
+    Set<int>? itemsWhitelist,
+    bool? isLoading,
+    List<_Item>? transformedItems,
+    Set<_Item>? selectedItems,
+    bool? isSelectionRemovable,
+    bool? isSelectionManageableFile,
+    bool? isSelectionDeletable,
+    bool? isEditMode,
+    bool? isEditBusy,
+    String? editName,
+    List<CollectionItem>? editItems,
+    List<_Item>? editTransformedItems,
+    CollectionItemSort? editSort,
+    bool? isAddMapBusy,
+    Unique<_PlacePickerRequest?>? placePickerRequest,
+    bool? isDragging,
+    int? zoom,
+    double? scale,
+    Collection? importResult,
+    ExceptionEvent? error,
+    String? message,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic collection,
-      dynamic cover = copyWithNull,
-      dynamic items,
-      dynamic rawItems,
-      dynamic itemsWhitelist = copyWithNull,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic selectedItems,
-      dynamic isSelectionRemovable,
-      dynamic isSelectionManageableFile,
-      dynamic isSelectionDeletable,
-      dynamic isEditMode,
-      dynamic isEditBusy,
-      dynamic editName = copyWithNull,
-      dynamic editItems = copyWithNull,
-      dynamic editTransformedItems = copyWithNull,
-      dynamic editSort = copyWithNull,
-      dynamic isAddMapBusy,
-      dynamic placePickerRequest,
-      dynamic isDragging,
-      dynamic zoom,
-      dynamic scale = copyWithNull,
-      dynamic importResult = copyWithNull,
-      dynamic error = copyWithNull,
-      dynamic message = copyWithNull}) {
+  _State call({
+    dynamic collection,
+    dynamic cover = copyWithNull,
+    dynamic items,
+    dynamic rawItems,
+    dynamic itemsWhitelist = copyWithNull,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic selectedItems,
+    dynamic isSelectionRemovable,
+    dynamic isSelectionManageableFile,
+    dynamic isSelectionDeletable,
+    dynamic isEditMode,
+    dynamic isEditBusy,
+    dynamic editName = copyWithNull,
+    dynamic editItems = copyWithNull,
+    dynamic editTransformedItems = copyWithNull,
+    dynamic editSort = copyWithNull,
+    dynamic isAddMapBusy,
+    dynamic placePickerRequest,
+    dynamic isDragging,
+    dynamic zoom,
+    dynamic scale = copyWithNull,
+    dynamic importResult = copyWithNull,
+    dynamic error = copyWithNull,
+    dynamic message = copyWithNull,
+  }) {
     return _State(
-        collection: collection as Collection? ?? that.collection,
-        cover: cover == copyWithNull
-            ? that.cover
-            : cover as CollectionCoverResult?,
-        items: items as List<CollectionItem>? ?? that.items,
-        rawItems: rawItems as List<CollectionItem>? ?? that.rawItems,
-        itemsWhitelist: itemsWhitelist == copyWithNull
-            ? that.itemsWhitelist
-            : itemsWhitelist as Set<int>?,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
-        selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
-        isSelectionRemovable:
-            isSelectionRemovable as bool? ?? that.isSelectionRemovable,
-        isSelectionManageableFile: isSelectionManageableFile as bool? ??
-            that.isSelectionManageableFile,
-        isSelectionDeletable:
-            isSelectionDeletable as bool? ?? that.isSelectionDeletable,
-        isEditMode: isEditMode as bool? ?? that.isEditMode,
-        isEditBusy: isEditBusy as bool? ?? that.isEditBusy,
-        editName:
-            editName == copyWithNull ? that.editName : editName as String?,
-        editItems: editItems == copyWithNull
-            ? that.editItems
-            : editItems as List<CollectionItem>?,
-        editTransformedItems: editTransformedItems == copyWithNull
-            ? that.editTransformedItems
-            : editTransformedItems as List<_Item>?,
-        editSort: editSort == copyWithNull
-            ? that.editSort
-            : editSort as CollectionItemSort?,
-        isAddMapBusy: isAddMapBusy as bool? ?? that.isAddMapBusy,
-        placePickerRequest:
-            placePickerRequest as Unique<_PlacePickerRequest?>? ??
-                that.placePickerRequest,
-        isDragging: isDragging as bool? ?? that.isDragging,
-        zoom: zoom as int? ?? that.zoom,
-        scale: scale == copyWithNull ? that.scale : scale as double?,
-        importResult: importResult == copyWithNull
-            ? that.importResult
-            : importResult as Collection?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-        message: message == copyWithNull ? that.message : message as String?);
+      collection: collection as Collection? ?? that.collection,
+      cover:
+          cover == copyWithNull ? that.cover : cover as CollectionCoverResult?,
+      items: items as List<CollectionItem>? ?? that.items,
+      rawItems: rawItems as List<CollectionItem>? ?? that.rawItems,
+      itemsWhitelist:
+          itemsWhitelist == copyWithNull
+              ? that.itemsWhitelist
+              : itemsWhitelist as Set<int>?,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<_Item>? ?? that.transformedItems,
+      selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
+      isSelectionRemovable:
+          isSelectionRemovable as bool? ?? that.isSelectionRemovable,
+      isSelectionManageableFile:
+          isSelectionManageableFile as bool? ?? that.isSelectionManageableFile,
+      isSelectionDeletable:
+          isSelectionDeletable as bool? ?? that.isSelectionDeletable,
+      isEditMode: isEditMode as bool? ?? that.isEditMode,
+      isEditBusy: isEditBusy as bool? ?? that.isEditBusy,
+      editName: editName == copyWithNull ? that.editName : editName as String?,
+      editItems:
+          editItems == copyWithNull
+              ? that.editItems
+              : editItems as List<CollectionItem>?,
+      editTransformedItems:
+          editTransformedItems == copyWithNull
+              ? that.editTransformedItems
+              : editTransformedItems as List<_Item>?,
+      editSort:
+          editSort == copyWithNull
+              ? that.editSort
+              : editSort as CollectionItemSort?,
+      isAddMapBusy: isAddMapBusy as bool? ?? that.isAddMapBusy,
+      placePickerRequest:
+          placePickerRequest as Unique<_PlacePickerRequest?>? ??
+          that.placePickerRequest,
+      isDragging: isDragging as bool? ?? that.isDragging,
+      zoom: zoom as int? ?? that.zoom,
+      scale: scale == copyWithNull ? that.scale : scale as double?,
+      importResult:
+          importResult == copyWithNull
+              ? that.importResult
+              : importResult as Collection?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      message: message == copyWithNull ? that.message : message as String?,
+    );
   }
 
   final _State that;
@@ -135,8 +141,9 @@ extension _$_WrappedCollectionBrowserStateNpLog
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.collection_browser._WrappedCollectionBrowserState");
+  static final log = Logger(
+    "widget.collection_browser._WrappedCollectionBrowserState",
+  );
 }
 
 extension _$_SelectionAppBarNpLog on _SelectionAppBar {

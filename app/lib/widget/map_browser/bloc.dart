@@ -3,11 +3,8 @@ part of '../map_browser.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc(
-    this._c, {
-    required this.account,
-    required this.prefController,
-  }) : super(_Bloc._getInitialState(prefController)) {
+  _Bloc(this._c, {required this.account, required this.prefController})
+    : super(_Bloc._getInitialState(prefController)) {
     on<_LoadData>(_onLoadData);
     on<_OpenDataRangeControlPanel>(_onOpenDataRangeControlPanel);
     on<_CloseControlPanel>(_onCloseControlPanel);
@@ -17,14 +14,18 @@ class _Bloc extends Bloc<_Event, _State>
     on<_SetAsDefaultRange>(_onSetAsDefaultRange);
     on<_SetError>(_onSetError);
 
-    _subscriptions.add(stream
-        .distinctByIgnoreFirst((state) => state.localDateRange)
-        .listen((state) {
-      add(const _LoadData());
-    }));
-    _subscriptions.add(prefController.mapDefaultRangeTypeChange.listen((state) {
-      add(_SetPrefDateRangeType(_DateRangeType.fromPref(state)));
-    }));
+    _subscriptions.add(
+      stream.distinctByIgnoreFirst((state) => state.localDateRange).listen((
+        state,
+      ) {
+        add(const _LoadData());
+      }),
+    );
+    _subscriptions.add(
+      prefController.mapDefaultRangeTypeChange.listen((state) {
+        add(_SetPrefDateRangeType(_DateRangeType.fromPref(state)));
+      }),
+    );
   }
 
   @override
@@ -52,8 +53,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   static _State _getInitialState(PrefController prefController) {
-    final dateRangeType =
-        _DateRangeType.fromPref(prefController.mapDefaultRangeTypeValue);
+    final dateRangeType = _DateRangeType.fromPref(
+      prefController.mapDefaultRangeTypeValue,
+    );
     if (dateRangeType == _DateRangeType.custom) {
       final today = clock.now().toDate();
       return _State.init(
@@ -85,53 +87,57 @@ class _Bloc extends Bloc<_Event, _State>
     final raw = await _c.imageLocationRepo.getLocations(account, utcTimeRange);
     _log.info("[_onLoadData] Loaded ${raw.length} markers");
     if (state.initialPoint == null) {
-      final initialPoint =
-          raw.firstOrNull?.let((obj) => MapCoord(obj.latitude, obj.longitude));
+      final initialPoint = raw.firstOrNull?.let(
+        (obj) => MapCoord(obj.latitude, obj.longitude),
+      );
       if (initialPoint != null) {
         unawaited(prefController.setMapBrowserPrevPosition(initialPoint));
       }
-      emit(state.copyWith(
-        data: raw.map(_DataPoint.fromImageLatLng).toList(),
-        initialPoint: initialPoint,
-      ));
+      emit(
+        state.copyWith(
+          data: raw.map(_DataPoint.fromImageLatLng).toList(),
+          initialPoint: initialPoint,
+        ),
+      );
     } else {
-      emit(state.copyWith(
-        data: raw.map(_DataPoint.fromImageLatLng).toList(),
-      ));
+      emit(state.copyWith(data: raw.map(_DataPoint.fromImageLatLng).toList()));
     }
   }
 
   void _onOpenDataRangeControlPanel(
-      _OpenDataRangeControlPanel ev, Emitter<_State> emit) {
+    _OpenDataRangeControlPanel ev,
+    Emitter<_State> emit,
+  ) {
     _log.info(ev);
-    emit(state.copyWith(
-      isShowDataRangeControlPanel: true,
-    ));
+    emit(state.copyWith(isShowDataRangeControlPanel: true));
   }
 
   void _onCloseControlPanel(_CloseControlPanel ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isShowDataRangeControlPanel: false,
-    ));
+    emit(state.copyWith(isShowDataRangeControlPanel: false));
   }
 
   void _onSetDateRangeType(_SetDateRangeType ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      dateRangeType: ev.value,
-      localDateRange: ev.value == _DateRangeType.custom
-          ? null
-          : _calcDateRange(clock.now().toDate(), ev.value),
-    ));
+    emit(
+      state.copyWith(
+        dateRangeType: ev.value,
+        localDateRange:
+            ev.value == _DateRangeType.custom
+                ? null
+                : _calcDateRange(clock.now().toDate(), ev.value),
+      ),
+    );
   }
 
   void _onSetDateRange(_SetLocalDateRange ev, Emitter<_State> emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      dateRangeType: _DateRangeType.custom,
-      localDateRange: ev.value,
-    ));
+    emit(
+      state.copyWith(
+        dateRangeType: _DateRangeType.custom,
+        localDateRange: ev.value,
+      ),
+    );
     if (prefController.mapDefaultRangeTypeValue ==
         PrefMapDefaultRangeType.custom) {
       _updatePrefDefaultCustomRange(ev.value);

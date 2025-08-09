@@ -12,11 +12,11 @@ class _State {
   });
 
   factory _State.init() => const _State(
-        places: LocationGroupResult([], [], [], []),
-        isLoading: false,
-        transformedPlaceItems: [],
-        transformedCountryItems: [],
-      );
+    places: LocationGroupResult([], [], [], []),
+    isLoading: false,
+    transformedPlaceItems: [],
+    transformedCountryItems: [],
+  );
 
   @override
   String toString() => _$toString();

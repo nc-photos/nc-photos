@@ -2,16 +2,17 @@ part of '../my_app.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
-  _Bloc({
-    required this.prefController,
-  }) : super(_State(
+  _Bloc({required this.prefController})
+    : super(
+        _State(
           language: prefController.languageValue,
           isDarkTheme: prefController.isDarkThemeValue,
           isFollowSystemTheme: prefController.isFollowSystemThemeValue,
           isUseBlackInDarkTheme: prefController.isUseBlackInDarkThemeValue,
           seedColor: prefController.seedColorValue?.value,
           secondarySeedColor: prefController.secondarySeedColorValue?.value,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
   }
 
@@ -37,11 +38,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         prefController.isUseBlackInDarkThemeChange,
         onData: (data) => state.copyWith(isUseBlackInDarkTheme: data),
       ),
-      emit.forEachIgnoreError<Color?>(
+      emit.forEachIgnoreError<ColorInt?>(
         prefController.seedColorChange,
         onData: (data) => state.copyWith(seedColor: data?.value),
       ),
-      emit.forEachIgnoreError<Color?>(
+      emit.forEachIgnoreError<ColorInt?>(
         prefController.secondarySeedColorChange,
         onData: (data) => state.copyWith(secondarySeedColor: data?.value),
       ),

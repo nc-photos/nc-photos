@@ -15,8 +15,8 @@ class CollectionTagAdapter
         CollectionAdapterUnshareableTag
     implements CollectionAdapter {
   CollectionTagAdapter(this._c, this.account, this.collection)
-      : assert(require(_c)),
-        _provider = collection.contentProvider as CollectionTagProvider;
+    : assert(require(_c)),
+      _provider = collection.contentProvider as CollectionTagProvider;
 
   static bool require(DiContainer c) => true;
 

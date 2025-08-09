@@ -42,10 +42,7 @@ import 'package:np_ui/np_ui.dart';
 part 'home_search.g.dart';
 
 class HomeSearch extends StatefulWidget {
-  const HomeSearch({
-    super.key,
-    required this.account,
-  });
+  const HomeSearch({super.key, required this.account});
 
   @override
   createState() => _HomeSearchState();
@@ -125,9 +122,10 @@ class _HomeSearchState extends State<HomeSearch>
                 child: Stack(
                   children: [
                     CustomScrollView(
-                      physics: _isSearchMode
-                          ? const NeverScrollableScrollPhysics()
-                          : null,
+                      physics:
+                          _isSearchMode
+                              ? const NeverScrollableScrollPhysics()
+                              : null,
                       slivers: [
                         _buildAppBar(context, state),
                         if (_isShowLanding(state))
@@ -149,9 +147,7 @@ class _HomeSearchState extends State<HomeSearch>
                             ),
                           )
                         else
-                          buildItemStreamList(
-                            maxCrossAxisExtent: _thumbSize,
-                          ),
+                          buildItemStreamList(maxCrossAxisExtent: _thumbSize),
                         SliverToBoxAdapter(
                           child: SizedBox(
                             height:
@@ -240,20 +236,21 @@ class _HomeSearchState extends State<HomeSearch>
         ),
         PopupMenuButton<_SelectionMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: _SelectionMenuOption.download,
-              child: Text(L10n.global().downloadTooltip),
-            ),
-            PopupMenuItem(
-              value: _SelectionMenuOption.archive,
-              child: Text(L10n.global().archiveTooltip),
-            ),
-            PopupMenuItem(
-              value: _SelectionMenuOption.delete,
-              child: Text(L10n.global().deleteTooltip),
-            ),
-          ],
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: _SelectionMenuOption.download,
+                  child: Text(L10n.global().downloadTooltip),
+                ),
+                PopupMenuItem(
+                  value: _SelectionMenuOption.archive,
+                  child: Text(L10n.global().archiveTooltip),
+                ),
+                PopupMenuItem(
+                  value: _SelectionMenuOption.delete,
+                  child: Text(L10n.global().deleteTooltip),
+                ),
+              ],
           onSelected: (option) => _onSelectionMenuSelected(context, option),
         ),
       ],
@@ -276,9 +273,7 @@ class _HomeSearchState extends State<HomeSearch>
         child: TextFormField(
           focusNode: _inputFocus,
           controller: _inputController,
-          decoration: InputDecoration(
-            hintText: L10n.global().searchTooltip,
-          ),
+          decoration: InputDecoration(hintText: L10n.global().searchTooltip),
           onFieldSubmitted: (_) {
             _onSearchPressed();
           },
@@ -301,21 +296,22 @@ class _HomeSearchState extends State<HomeSearch>
           icon: const Icon(Icons.search_outlined),
         ),
       ],
-      bottom: _isShowLanding(state)
-          ? null
-          : PreferredSize(
-              preferredSize: const Size.fromHeight(40),
-              child: SizedBox(
-                height: 40,
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: _FilterBubbleList(
-                    filters: state.criteria.filters,
-                    onEditPressed: () => _onEditFilterPressed(state),
+      bottom:
+          _isShowLanding(state)
+              ? null
+              : PreferredSize(
+                preferredSize: const Size.fromHeight(40),
+                child: SizedBox(
+                  height: 40,
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: _FilterBubbleList(
+                      filters: state.criteria.filters,
+                      onEditPressed: () => _onEditFilterPressed(state),
+                    ),
                   ),
                 ),
               ),
-            ),
     );
   }
 
@@ -384,16 +380,12 @@ class _HomeSearchState extends State<HomeSearch>
   }
 
   void _onLandingFavoritePressed() {
-    _activeFilters = [
-      const SearchFavoriteFilter(true),
-    ];
+    _activeFilters = [const SearchFavoriteFilter(true)];
     _reqQuery(_activeInput, _activeFilters);
   }
 
   void _onLandingVideoPressed() {
-    _activeFilters = [
-      const SearchFileTypeFilter(SearchFileType.video),
-    ];
+    _activeFilters = [const SearchFileTypeFilter(SearchFileType.video)];
     _reqQuery(_activeInput, _activeFilters);
   }
 
@@ -411,7 +403,9 @@ class _HomeSearchState extends State<HomeSearch>
   }
 
   void _onSelectionMenuSelected(
-      BuildContext context, _SelectionMenuOption option) {
+    BuildContext context,
+    _SelectionMenuOption option,
+  ) {
     switch (option) {
       case _SelectionMenuOption.archive:
         _onSelectionArchivePressed(context);
@@ -422,18 +416,16 @@ class _HomeSearchState extends State<HomeSearch>
       case _SelectionMenuOption.download:
         _onSelectionDownloadPressed();
         break;
-      default:
-        _log.shout("[_onSelectionMenuSelected] Unknown option: $option");
-        break;
     }
   }
 
   void _onSelectionSharePressed(BuildContext context) {
     final c = KiwiContainer().resolve<DiContainer>();
-    final selected = selectedListItems
-        .whereType<PhotoListFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selected =
+        selectedListItems
+            .whereType<PhotoListFileItem>()
+            .map((e) => e.file)
+            .toList();
     ShareHandler(
       c,
       context: context,
@@ -448,10 +440,11 @@ class _HomeSearchState extends State<HomeSearch>
   Future<void> _onSelectionAddToAlbumPressed(BuildContext context) {
     return const AddSelectionToCollectionHandler()(
       context: context,
-      selection: selectedListItems
-          .whereType<PhotoListFileItem>()
-          .map((e) => e.file)
-          .toList(),
+      selection:
+          selectedListItems
+              .whereType<PhotoListFileItem>()
+              .map((e) => e.file)
+              .toList(),
       clearSelection: () {
         if (mounted) {
           setState(() {
@@ -464,10 +457,11 @@ class _HomeSearchState extends State<HomeSearch>
 
   void _onSelectionDownloadPressed() {
     final c = KiwiContainer().resolve<DiContainer>();
-    final selected = selectedListItems
-        .whereType<PhotoListFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selected =
+        selectedListItems
+            .whereType<PhotoListFileItem>()
+            .map((e) => e.file)
+            .toList();
     DownloadHandler(c).downloadFiles(widget.account, selected);
     setState(() {
       clearSelectedItems();
@@ -475,10 +469,11 @@ class _HomeSearchState extends State<HomeSearch>
   }
 
   Future<void> _onSelectionArchivePressed(BuildContext context) async {
-    final selectedFiles = selectedListItems
-        .whereType<PhotoListFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selectedFiles =
+        selectedListItems
+            .whereType<PhotoListFileItem>()
+            .map((e) => e.file)
+            .toList();
     setState(() {
       clearSelectedItems();
     });
@@ -487,11 +482,16 @@ class _HomeSearchState extends State<HomeSearch>
       isArchived: const OrNull(true),
       errorBuilder: (fileIds) {
         if (mounted) {
-          SnackBarManager().showSnackBar(SnackBar(
-            content: Text(L10n.global()
-                .archiveSelectedFailureNotification(fileIds.length)),
-            duration: k.snackBarDurationNormal,
-          ));
+          SnackBarManager().showSnackBar(
+            SnackBar(
+              content: Text(
+                L10n.global().archiveSelectedFailureNotification(
+                  fileIds.length,
+                ),
+              ),
+              duration: k.snackBarDurationNormal,
+            ),
+          );
         }
         return null;
       },
@@ -499,20 +499,17 @@ class _HomeSearchState extends State<HomeSearch>
   }
 
   Future<void> _onSelectionDeletePressed(BuildContext context) async {
-    final selectedFiles = selectedListItems
-        .whereType<PhotoListFileItem>()
-        .map((e) => e.file)
-        .toList();
+    final selectedFiles =
+        selectedListItems
+            .whereType<PhotoListFileItem>()
+            .map((e) => e.file)
+            .toList();
     setState(() {
       clearSelectedItems();
     });
     await RemoveSelectionHandler(
       filesController: context.read<AccountController>().filesController,
-    )(
-      account: widget.account,
-      selection: selectedFiles,
-      isMoveToTrash: true,
-    );
+    )(account: widget.account, selection: selectedFiles, isMoveToTrash: true);
   }
 
   void _transformItems(List<FileDescriptor> files) {
@@ -523,7 +520,8 @@ class _HomeSearchState extends State<HomeSearch>
         sorter: photoListFileDateTimeSorter,
         grouper: PhotoListFileDateGrouper(isMonthOnly: _thumbZoomLevel < 0),
         shouldShowFavoriteBadge: true,
-        locale: language_util.getSelectedLocale() ??
+        locale:
+            language_util.getSelectedLocale() ??
             PlatformDispatcher.instance.locale,
       ),
       buildPhotoListItem,
@@ -606,10 +604,7 @@ extension on SearchFileType {
 }
 
 class _FilterBubbleList extends StatelessWidget {
-  const _FilterBubbleList({
-    required this.filters,
-    this.onEditPressed,
-  });
+  const _FilterBubbleList({required this.filters, this.onEditPressed});
 
   @override
   build(BuildContext context) {
@@ -624,8 +619,9 @@ class _FilterBubbleList extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const SizedBox(width: 16),
-                  ...filters
-                      .map((f) => _buildBubble(context, _toUserString(f))),
+                  ...filters.map(
+                    (f) => _buildBubble(context, _toUserString(f)),
+                  ),
                   const SizedBox(width: 8),
                 ],
               ),
@@ -677,9 +673,7 @@ class _FilterBubbleList extends StatelessWidget {
 }
 
 class _FilterEditDialog extends StatefulWidget {
-  const _FilterEditDialog({
-    required this.searchState,
-  });
+  const _FilterEditDialog({required this.searchState});
 
   @override
   createState() => _FilterEditDialogState();
@@ -701,10 +695,11 @@ class _FilterEditDialogState extends State<_FilterEditDialog> {
                 label: L10n.global().searchFilterTypeLabel,
                 items: SearchFileType.values,
                 itemStringifier: (item) => item.toUserString(),
-                initialValue: widget.searchState.criteria.filters
-                    .whereType<SearchFileTypeFilter>()
-                    .firstOrNull
-                    ?.type,
+                initialValue:
+                    widget.searchState.criteria.filters
+                        .whereType<SearchFileTypeFilter>()
+                        .firstOrNull
+                        ?.type,
                 onSaved: (value) {
                   if (value != null) {
                     _formValue?.filters.add(SearchFileTypeFilter(value));
@@ -715,13 +710,16 @@ class _FilterEditDialogState extends State<_FilterEditDialog> {
               _FilterDropdown<bool>(
                 label: L10n.global().searchFilterFavoriteLabel,
                 items: const [true, false],
-                itemStringifier: (item) => item
-                    ? L10n.global().searchFilterOptionTrueLabel
-                    : L10n.global().searchFilterOptionFalseLabel,
-                initialValue: widget.searchState.criteria.filters
-                    .whereType<SearchFavoriteFilter>()
-                    .firstOrNull
-                    ?.value,
+                itemStringifier:
+                    (item) =>
+                        item
+                            ? L10n.global().searchFilterOptionTrueLabel
+                            : L10n.global().searchFilterOptionFalseLabel,
+                initialValue:
+                    widget.searchState.criteria.filters
+                        .whereType<SearchFavoriteFilter>()
+                        .firstOrNull
+                        ?.value,
                 onSaved: (value) {
                   if (value != null) {
                     _formValue?.filters.add(SearchFavoriteFilter(value));
@@ -805,10 +803,12 @@ class _FilterDropdownState<T> extends State<_FilterDropdown<T>> {
                 value: null,
                 child: Text(L10n.global().searchFilterOptionAnyLabel),
               ),
-              ...widget.items.map((e) => DropdownMenuItem(
-                    value: e,
-                    child: Text(widget.itemStringifier(e)),
-                  )),
+              ...widget.items.map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(widget.itemStringifier(e)),
+                ),
+              ),
             ],
             onChanged: (value) {
               setState(() {
@@ -826,8 +826,4 @@ class _FilterDropdownState<T> extends State<_FilterDropdown<T>> {
   T? _value;
 }
 
-enum _SelectionMenuOption {
-  archive,
-  delete,
-  download,
-}
+enum _SelectionMenuOption { archive, delete, download }

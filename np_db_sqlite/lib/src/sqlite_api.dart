@@ -26,9 +26,7 @@ class NpDbSqlite implements NpDb {
   NpDbSqlite();
 
   @override
-  Future<void> initMainIsolate({
-    required int? androidSdk,
-  }) async {
+  Future<void> initMainIsolate({required int? androidSdk}) async {
     initDrift();
     if (getRawPlatform() == NpPlatform.android && androidSdk! < 24) {
       _log.info("[initMainIsolate] Workaround Android 6- bug");
@@ -47,18 +45,14 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<void> initBackgroundIsolate({
-    required int? androidSdk,
-  }) async {
+  Future<void> initBackgroundIsolate({required int? androidSdk}) async {
     initDrift();
     // service already runs in an isolate
     _db = SqliteDb();
   }
 
   @visibleForTesting
-  Future<void> initWithDb({
-    required SqliteDb db,
-  }) async {
+  Future<void> initWithDb({required SqliteDb db}) async {
     initDrift();
     _db = db;
   }
@@ -170,21 +164,26 @@ class NpDbSqlite implements NpDb {
       final sqlObjs = await db.queryFaceRecognitionPersons(
         account: ByAccount.db(account),
       );
-      final from =
-          sqlObjs.map(FaceRecognitionPersonConverter.fromSql).sorted(sorter);
+      final from = sqlObjs
+          .map(FaceRecognitionPersonConverter.fromSql)
+          .sorted(sorter);
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info(
-          "[replaceFaceRecognitionPersons] New persons: ${inserts.toReadableString()}");
+        "[replaceFaceRecognitionPersons] New persons: ${inserts.toReadableString()}",
+      );
       final deletes = diff.onlyInA;
       _log.info(
-          "[replaceFaceRecognitionPersons] Removed persons: ${deletes.toReadableString()}");
-      final updates = to.where((t) {
-        final f = from.firstWhereOrNull((e) => e.name == t.name);
-        return f != null && f != t;
-      }).toList();
+        "[replaceFaceRecognitionPersons] Removed persons: ${deletes.toReadableString()}",
+      );
+      final updates =
+          to.where((t) {
+            final f = from.firstWhereOrNull((e) => e.name == t.name);
+            return f != null && f != t;
+          }).toList();
       _log.info(
-          "[replaceFaceRecognitionPersons] Updated persons: ${updates.toReadableString()}");
+        "[replaceFaceRecognitionPersons] Updated persons: ${updates.toReadableString()}",
+      );
       if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
         await db.replaceFaceRecognitionPersons(
           account: ByAccount.db(account),
@@ -330,10 +329,7 @@ class NpDbSqlite implements NpDb {
   }) async {
     final sqlFile = FileConverter.toSql(file);
     await _db.use((db) async {
-      await db.syncFile(
-        account: ByAccount.db(account),
-        obj: sqlFile,
-      );
+      await db.syncFile(account: ByAccount.db(account), obj: sqlFile);
     });
   }
 
@@ -353,10 +349,12 @@ class NpDbSqlite implements NpDb {
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info(
-          "[syncFavoriteFiles] New favorites: ${inserts.toReadableString()}");
+        "[syncFavoriteFiles] New favorites: ${inserts.toReadableString()}",
+      );
       final deletes = diff.onlyInA;
       _log.info(
-          "[syncFavoriteFiles] Removed favorites: ${deletes.toReadableString()}");
+        "[syncFavoriteFiles] Removed favorites: ${deletes.toReadableString()}",
+      );
       if (inserts.isNotEmpty) {
         await db.updateFilesByFileIds(
           account: ByAccount.db(account),
@@ -371,11 +369,7 @@ class NpDbSqlite implements NpDb {
           isFavorite: const OrNull(false),
         );
       }
-      return DbSyncIdResult(
-        insert: inserts,
-        delete: deletes,
-        update: const [],
-      );
+      return DbSyncIdResult(insert: inserts, delete: deletes, update: const []);
     });
   }
 
@@ -429,10 +423,7 @@ class NpDbSqlite implements NpDb {
     required DbFileKey file,
   }) async {
     await _db.use((db) async {
-      return await db.deleteFile(
-        account: ByAccount.db(account),
-        file: file,
-      );
+      return await db.deleteFile(account: ByAccount.db(account), file: file);
     });
   }
 
@@ -455,10 +446,7 @@ class NpDbSqlite implements NpDb {
     required DbFileKey dir,
   }) async {
     await _db.use((db) async {
-      return await db.truncateDir(
-        account: ByAccount.db(account),
-        dir: dir,
-      );
+      return await db.truncateDir(account: ByAccount.db(account), dir: dir);
     });
   }
 
@@ -519,8 +507,9 @@ class NpDbSqlite implements NpDb {
       );
     });
     return DbFilesSummary(
-      items: result.dateCount
-          .map((key, value) => MapEntry(key, DbFilesSummaryItem(count: value))),
+      items: result.dateCount.map(
+        (key, value) => MapEntry(key, DbFilesSummaryItem(count: value)),
+      ),
     );
   }
 
@@ -591,8 +580,11 @@ class NpDbSqlite implements NpDb {
           excludeRelativeRoots: excludeRelativeRoots,
         );
       } catch (e, stackTrace) {
-        _log.shout("[groupLocation] Failed while groupImageLocationsByName", e,
-            stackTrace);
+        _log.shout(
+          "[groupLocation] Failed while groupImageLocationsByName",
+          e,
+          stackTrace,
+        );
       }
       try {
         admin1Result = await db.groupImageLocationsByAdmin1(
@@ -601,8 +593,11 @@ class NpDbSqlite implements NpDb {
           excludeRelativeRoots: excludeRelativeRoots,
         );
       } catch (e, stackTrace) {
-        _log.shout("[groupLocation] Failed while groupImageLocationsByAdmin1",
-            e, stackTrace);
+        _log.shout(
+          "[groupLocation] Failed while groupImageLocationsByAdmin1",
+          e,
+          stackTrace,
+        );
       }
       try {
         admin2Result = await db.groupImageLocationsByAdmin2(
@@ -611,8 +606,11 @@ class NpDbSqlite implements NpDb {
           excludeRelativeRoots: excludeRelativeRoots,
         );
       } catch (e, stackTrace) {
-        _log.shout("[groupLocation] Failed while groupImageLocationsByAdmin2",
-            e, stackTrace);
+        _log.shout(
+          "[groupLocation] Failed while groupImageLocationsByAdmin2",
+          e,
+          stackTrace,
+        );
       }
       try {
         ccResult = await db.groupImageLocationsByCountryCode(
@@ -622,9 +620,10 @@ class NpDbSqlite implements NpDb {
         );
       } catch (e, stackTrace) {
         _log.shout(
-            "[groupLocation] Failed while groupImageLocationsByCountryCode",
-            e,
-            stackTrace);
+          "[groupLocation] Failed while groupImageLocationsByCountryCode",
+          e,
+          stackTrace,
+        );
       }
     });
     return DbLocationGroupResult(
@@ -666,23 +665,21 @@ class NpDbSqlite implements NpDb {
         mimes: mimes,
       );
     });
-    return sqlObjs.computeAll((e) => DbImageLatLng(
-          lat: e.lat,
-          lng: e.lng,
-          fileId: e.fileId,
-          fileRelativePath: e.fileRelativePath,
-          mime: e.mime,
-        ));
+    return sqlObjs.computeAll(
+      (e) => DbImageLatLng(
+        lat: e.lat,
+        lng: e.lng,
+        fileId: e.fileId,
+        fileRelativePath: e.fileRelativePath,
+        mime: e.mime,
+      ),
+    );
   }
 
   @override
-  Future<List<DbNcAlbum>> getNcAlbums({
-    required DbAccount account,
-  }) async {
+  Future<List<DbNcAlbum>> getNcAlbums({required DbAccount account}) async {
     final sqlObjs = await _db.use((db) async {
-      return await db.queryNcAlbums(
-        account: ByAccount.db(account),
-      );
+      return await db.queryNcAlbums(account: ByAccount.db(account));
     });
     return sqlObjs.toDbNcAlbums();
   }
@@ -716,23 +713,25 @@ class NpDbSqlite implements NpDb {
         a.relativePath.compareTo(b.relativePath);
     final to = albums.sorted(sorter);
     return await _db.use((db) async {
-      final sqlObjs = await db.queryNcAlbums(
-        account: ByAccount.db(account),
-      );
+      final sqlObjs = await db.queryNcAlbums(account: ByAccount.db(account));
       final from = sqlObjs.map(NcAlbumConverter.fromSql).sorted(sorter);
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info("[syncNcAlbums] New nc albums: ${inserts.toReadableString()}");
       final deletes = diff.onlyInA;
       _log.info(
-          "[syncNcAlbums] Removed nc albums: ${deletes.toReadableString()}");
-      final updates = to.where((t) {
-        final f =
-            from.firstWhereOrNull((e) => e.relativePath == t.relativePath);
-        return f != null && f != t;
-      }).toList();
+        "[syncNcAlbums] Removed nc albums: ${deletes.toReadableString()}",
+      );
+      final updates =
+          to.where((t) {
+            final f = from.firstWhereOrNull(
+              (e) => e.relativePath == t.relativePath,
+            );
+            return f != null && f != t;
+          }).toList();
       _log.info(
-          "[syncNcAlbums] Updated nc albums: ${updates.toReadableString()}");
+        "[syncNcAlbums] Updated nc albums: ${updates.toReadableString()}",
+      );
       if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
         await db.replaceNcAlbums(
           account: ByAccount.db(account),
@@ -792,16 +791,20 @@ class NpDbSqlite implements NpDb {
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info(
-          "[syncNcAlbumItems] New nc album items: ${inserts.toReadableString()}");
+        "[syncNcAlbumItems] New nc album items: ${inserts.toReadableString()}",
+      );
       final deletes = diff.onlyInA;
       _log.info(
-          "[syncNcAlbumItems] Removed nc album items: ${deletes.toReadableString()}");
-      final updates = to.where((t) {
-        final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
-        return f != null && f != t;
-      }).toList();
+        "[syncNcAlbumItems] Removed nc album items: ${deletes.toReadableString()}",
+      );
+      final updates =
+          to.where((t) {
+            final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
+            return f != null && f != t;
+          }).toList();
       _log.info(
-          "[syncNcAlbumItems] Updated nc album items: ${updates.toReadableString()}");
+        "[syncNcAlbumItems] Updated nc album items: ${updates.toReadableString()}",
+      );
       if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
         await db.replaceNcAlbumItems(
           parentRowId: parentRowId,
@@ -823,9 +826,7 @@ class NpDbSqlite implements NpDb {
     required DbAccount account,
   }) async {
     final sqlObjs = await _db.use((db) async {
-      return await db.queryRecognizeFaces(
-        account: ByAccount.db(account),
-      );
+      return await db.queryRecognizeFaces(account: ByAccount.db(account));
     });
     return sqlObjs.toDbRecognizeFaces();
   }
@@ -846,7 +847,7 @@ class NpDbSqlite implements NpDb {
 
   @override
   Future<Map<String, List<DbRecognizeFaceItem>>>
-      getRecognizeFaceItemsByFaceLabels({
+  getRecognizeFaceItemsByFaceLabels({
     required DbAccount account,
     required List<String> labels,
     ErrorWithValueHandler<String>? onError,
@@ -864,13 +865,15 @@ class NpDbSqlite implements NpDb {
         }
       }
     });
-    return results.asyncMap((key, value) =>
-        value.toDbRecognizeFaceItems().then((v) => MapEntry(key, v)));
+    return results.asyncMap(
+      (key, value) =>
+          value.toDbRecognizeFaceItems().then((v) => MapEntry(key, v)),
+    );
   }
 
   @override
   Future<Map<String, DbRecognizeFaceItem>>
-      getLatestRecognizeFaceItemsByFaceLabels({
+  getLatestRecognizeFaceItemsByFaceLabels({
     required DbAccount account,
     required List<String> labels,
     ErrorWithValueHandler<String>? onError,
@@ -890,8 +893,10 @@ class NpDbSqlite implements NpDb {
         }
       }
     });
-    return results.asyncMap((key, value) =>
-        value.toDbRecognizeFaceItems().then((v) => MapEntry(key, v.first)));
+    return results.asyncMap(
+      (key, value) =>
+          value.toDbRecognizeFaceItems().then((v) => MapEntry(key, v.first)),
+    );
   }
 
   @override
@@ -905,8 +910,9 @@ class NpDbSqlite implements NpDb {
         a.fileId.compareTo(b.fileId);
     final faces = data.keys;
     final to = faces.sorted(sorter);
-    final toItems =
-        data.map((key, value) => MapEntry(key, value.sorted(itemSorter)));
+    final toItems = data.map(
+      (key, value) => MapEntry(key, value.sorted(itemSorter)),
+    );
     return await _db.use((db) async {
       var result = false;
       final sqlAccount = await db.accountOf(ByAccount.db(account));
@@ -917,16 +923,20 @@ class NpDbSqlite implements NpDb {
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info(
-          "[syncRecognizeFacesAndItems] New faces: ${inserts.toReadableString()}");
+        "[syncRecognizeFacesAndItems] New faces: ${inserts.toReadableString()}",
+      );
       final deletes = diff.onlyInA;
       _log.info(
-          "[syncRecognizeFacesAndItems] Removed faces: ${deletes.toReadableString()}");
-      final updates = to.where((t) {
-        final f = from.firstWhereOrNull((e) => e.label == t.label);
-        return f != null && f != t;
-      }).toList();
+        "[syncRecognizeFacesAndItems] Removed faces: ${deletes.toReadableString()}",
+      );
+      final updates =
+          to.where((t) {
+            final f = from.firstWhereOrNull((e) => e.label == t.label);
+            return f != null && f != t;
+          }).toList();
       _log.info(
-          "[syncRecognizeFacesAndItems] Updated faces: ${updates.toReadableString()}");
+        "[syncRecognizeFacesAndItems] Updated faces: ${updates.toReadableString()}",
+      );
       if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
         await db.replaceRecognizeFaces(
           account: ByAccount.sql(sqlAccount),
@@ -936,10 +946,12 @@ class NpDbSqlite implements NpDb {
         );
         result = true;
       }
-      sqlObjs.addAll(await db.queryRecognizeFaces(
-        account: ByAccount.sql(sqlAccount),
-        labels: inserts.map((e) => e.label).toList(),
-      ));
+      sqlObjs.addAll(
+        await db.queryRecognizeFaces(
+          account: ByAccount.sql(sqlAccount),
+          labels: inserts.map((e) => e.label).toList(),
+        ),
+      );
 
       for (final d in data.entries) {
         try {
@@ -963,13 +975,9 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<DbTag>> getTags({
-    required DbAccount account,
-  }) async {
+  Future<List<DbTag>> getTags({required DbAccount account}) async {
     final sqlObjs = await _db.use((db) async {
-      return await db.queryTags(
-        account: ByAccount.db(account),
-      );
+      return await db.queryTags(account: ByAccount.db(account));
     });
     return sqlObjs.toDbTags();
   }
@@ -996,19 +1004,18 @@ class NpDbSqlite implements NpDb {
     int sorter(DbTag a, DbTag b) => a.id.compareTo(b.id);
     final to = tags.sorted(sorter);
     return await _db.use((db) async {
-      final sqlObjs = await db.queryTags(
-        account: ByAccount.db(account),
-      );
+      final sqlObjs = await db.queryTags(account: ByAccount.db(account));
       final from = sqlObjs.map(TagConverter.fromSql).sorted(sorter);
       final diff = getDiffWith(from, to, sorter);
       final inserts = diff.onlyInB;
       _log.info("[syncTags] New tags: ${inserts.toReadableString()}");
       final deletes = diff.onlyInA;
       _log.info("[syncTags] Removed tags: ${deletes.toReadableString()}");
-      final updates = to.where((t) {
-        final f = from.firstWhereOrNull((e) => e.id == t.id);
-        return f != null && f != t;
-      }).toList();
+      final updates =
+          to.where((t) {
+            final f = from.firstWhereOrNull((e) => e.id == t.id);
+            return f != null && f != t;
+          }).toList();
       _log.info("[syncTags] Updated tags: ${updates.toReadableString()}");
       if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
         await db.replaceTags(
@@ -1028,7 +1035,8 @@ class NpDbSqlite implements NpDb {
 
   @override
   Future<void> migrateV55(
-      void Function(int current, int count)? onProgress) async {
+    void Function(int current, int count)? onProgress,
+  ) async {
     await _db.use((db) async {
       await db.migrateV55(onProgress);
     });
@@ -1064,16 +1072,20 @@ class NpDbSqlite implements NpDb {
     final diff = getDiffWith(from, to, sorter);
     final inserts = diff.onlyInB;
     _log.info(
-        "[_replaceRecognizeFaceItems] New faces: ${inserts.toReadableString()}");
+      "[_replaceRecognizeFaceItems] New faces: ${inserts.toReadableString()}",
+    );
     final deletes = diff.onlyInA;
     _log.info(
-        "[_replaceRecognizeFaceItems] Removed faces: ${deletes.toReadableString()}");
-    final updates = to.where((t) {
-      final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
-      return f != null && f != t;
-    }).toList();
+      "[_replaceRecognizeFaceItems] Removed faces: ${deletes.toReadableString()}",
+    );
+    final updates =
+        to.where((t) {
+          final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
+          return f != null && f != t;
+        }).toList();
     _log.info(
-        "[_replaceRecognizeFaceItems] Updated faces: ${updates.toReadableString()}");
+      "[_replaceRecognizeFaceItems] Updated faces: ${updates.toReadableString()}",
+    );
     if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
       await db.replaceRecognizeFaceItems(
         face: face,

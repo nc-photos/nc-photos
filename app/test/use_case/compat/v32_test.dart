@@ -16,9 +16,7 @@ void main() {
       });
 
       test("w/o accounts", () async {
-        SharedPreferences.setMockInitialValues({
-          "hello": "world",
-        });
+        SharedPreferences.setMockInitialValues({"hello": "world"});
         expect(await CompatV32.isPrefNeedMigration(), false);
       });
     });
@@ -53,9 +51,7 @@ void main() {
       });
 
       test("w/o migration", () async {
-        final exif = Exif(<String, dynamic>{
-          "Maker": "Super",
-        });
+        final exif = Exif(<String, dynamic>{"Maker": "Super"});
         expect(CompatV32.isExifNeedMigration(exif), false);
       });
     });
@@ -67,10 +63,9 @@ void main() {
           "UserComment": [1, 2, 3],
         });
         expect(
-            CompatV32.migrateExif(exif, ""),
-            Exif(<String, dynamic>{
-              "Maker": "Super",
-            }));
+          CompatV32.migrateExif(exif, ""),
+          Exif(<String, dynamic>{"Maker": "Super"}),
+        );
       });
 
       test("w/ MakerNote", () async {
@@ -79,21 +74,17 @@ void main() {
           "MakerNote": [1, 2, 3],
         });
         expect(
-            CompatV32.migrateExif(exif, ""),
-            Exif(<String, dynamic>{
-              "Maker": "Super",
-            }));
+          CompatV32.migrateExif(exif, ""),
+          Exif(<String, dynamic>{"Maker": "Super"}),
+        );
       });
 
       test("w/o migration", () async {
-        final exif = Exif(<String, dynamic>{
-          "Maker": "Super",
-        });
+        final exif = Exif(<String, dynamic>{"Maker": "Super"});
         expect(
-            CompatV32.migrateExif(exif, ""),
-            Exif(<String, dynamic>{
-              "Maker": "Super",
-            }));
+          CompatV32.migrateExif(exif, ""),
+          Exif(<String, dynamic>{"Maker": "Super"}),
+        );
       });
     });
   });

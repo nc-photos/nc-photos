@@ -10,9 +10,11 @@ class ListFile {
     Account account,
     String shareDirPath, {
     TimeRange? timeRange,
-  }) =>
-      _c.fileRepo2
-          .getFileDescriptors(account, shareDirPath, timeRange: timeRange);
+  }) => _c.fileRepo2.getFileDescriptors(
+    account,
+    shareDirPath,
+    timeRange: timeRange,
+  );
 
   final DiContainer _c;
 }

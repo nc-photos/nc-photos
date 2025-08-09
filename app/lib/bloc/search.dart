@@ -76,7 +76,11 @@ class SearchBlocSuccess extends SearchBlocState {
 @toString
 class SearchBlocFailure extends SearchBlocState {
   const SearchBlocFailure(
-      super.account, super.criteria, super.items, this.exception);
+    super.account,
+    super.criteria,
+    super.items,
+    this.exception,
+  );
 
   @override
   String toString() => _$toString();
@@ -93,9 +97,9 @@ class SearchBlocInconsistent extends SearchBlocState {
 @npLog
 class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   SearchBloc(this._c)
-      : assert(require(_c)),
-        assert(Search.require(_c)),
-        super(SearchBlocInit()) {
+    : assert(require(_c)),
+      assert(Search.require(_c)),
+      super(SearchBlocInit()) {
     _fileRemovedEventListener.begin();
     _filePropertyUpdatedEventListener.begin();
     // not listening to restore event because search works only with local data
@@ -114,7 +118,9 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   }
 
   Future<void> _onEvent(
-      SearchBlocEvent event, Emitter<SearchBlocState> emit) async {
+    SearchBlocEvent event,
+    Emitter<SearchBlocState> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is SearchBlocQuery) {
       await _onEventQuery(event, emit);
@@ -126,7 +132,9 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   }
 
   Future<void> _onEventQuery(
-      SearchBlocQuery ev, Emitter<SearchBlocState> emit) async {
+    SearchBlocQuery ev,
+    Emitter<SearchBlocState> emit,
+  ) async {
     try {
       emit(SearchBlocLoading(ev.account, ev.criteria, state.items));
       emit(SearchBlocSuccess(ev.account, ev.criteria, await _query(ev)));
@@ -137,7 +145,9 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   }
 
   Future<void> _onExternalEvent(
-      _SearchBlocExternalEvent ev, Emitter<SearchBlocState> emit) async {
+    _SearchBlocExternalEvent ev,
+    Emitter<SearchBlocState> emit,
+  ) async {
     emit(SearchBlocInconsistent(state.account, state.criteria, state.items));
   }
 
@@ -208,8 +218,9 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
 
   final DiContainer _c;
 
-  late final _fileRemovedEventListener =
-      AppEventListener<FileRemovedEvent>(_onFileRemovedEvent);
+  late final _fileRemovedEventListener = AppEventListener<FileRemovedEvent>(
+    _onFileRemovedEvent,
+  );
   late final _filePropertyUpdatedEventListener =
       AppEventListener<FilePropertyUpdatedEvent>(_onFilePropertyUpdatedEvent);
 

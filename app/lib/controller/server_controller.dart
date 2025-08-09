@@ -12,10 +12,7 @@ import 'package:rxdart/rxdart.dart';
 
 part 'server_controller.g.dart';
 
-enum ServerFeature {
-  ncAlbum,
-  ncMetadata,
-}
+enum ServerFeature { ncAlbum, ncMetadata }
 
 @npLog
 class ServerController {

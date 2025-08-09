@@ -36,8 +36,8 @@ class Album with EquatableMixin {
     this.shares,
     this.albumFile,
     int? savedVersion,
-  })  : lastUpdated = (lastUpdated ?? clock.now()).toUtc(),
-        savedVersion = savedVersion ?? version;
+  }) : lastUpdated = (lastUpdated ?? clock.now()).toUtc(),
+       savedVersion = savedVersion ?? version;
 
   static Album? fromJson(
     JsonObj json, {
@@ -110,25 +110,32 @@ class Album with EquatableMixin {
     }
     if (jsonVersion > version) {
       _log.warning(
-          "[fromJson] Reading album with newer version: $jsonVersion > $version");
+        "[fromJson] Reading album with newer version: $jsonVersion > $version",
+      );
     }
     return Album(
-      lastUpdated: result["lastUpdated"] == null
-          ? null
-          : DateTime.parse(result["lastUpdated"]),
+      lastUpdated:
+          result["lastUpdated"] == null
+              ? null
+              : DateTime.parse(result["lastUpdated"]),
       name: result["name"],
-      provider:
-          AlbumProvider.fromJson(result["provider"].cast<String, dynamic>()),
+      provider: AlbumProvider.fromJson(
+        result["provider"].cast<String, dynamic>(),
+      ),
       coverProvider: AlbumCoverProvider.fromJson(
-          result["coverProvider"].cast<String, dynamic>()),
+        result["coverProvider"].cast<String, dynamic>(),
+      ),
       sortProvider: AlbumSortProvider.fromJson(
-          result["sortProvider"].cast<String, dynamic>()),
-      shares: (result["shares"] as List?)
-          ?.map((e) => AlbumShare.fromJson(e.cast<String, dynamic>()))
-          .toList(),
-      albumFile: result["albumFile"] == null
-          ? null
-          : File.fromJson(result["albumFile"].cast<String, dynamic>()),
+        result["sortProvider"].cast<String, dynamic>(),
+      ),
+      shares:
+          (result["shares"] as List?)
+              ?.map((e) => AlbumShare.fromJson(e.cast<String, dynamic>()))
+              .toList(),
+      albumFile:
+          result["albumFile"] == null
+              ? null
+              : File.fromJson(result["albumFile"].cast<String, dynamic>()),
       savedVersion: result["version"],
     );
   }
@@ -202,15 +209,15 @@ class Album with EquatableMixin {
 
   @override
   get props => [
-        lastUpdated,
-        name,
-        provider,
-        coverProvider,
-        sortProvider,
-        shares,
-        albumFile,
-        savedVersion,
-      ];
+    lastUpdated,
+    name,
+    provider,
+    coverProvider,
+    sortProvider,
+    shares,
+    albumFile,
+    savedVersion,
+  ];
 
   final DateTime lastUpdated;
   final String name;
@@ -238,11 +245,8 @@ class Album with EquatableMixin {
 
 @toString
 class AlbumShare with EquatableMixin {
-  AlbumShare({
-    required this.userId,
-    this.displayName,
-    DateTime? sharedAt,
-  }) : sharedAt = (sharedAt ?? clock.now()).toUtc();
+  AlbumShare({required this.userId, this.displayName, DateTime? sharedAt})
+    : sharedAt = (sharedAt ?? clock.now()).toUtc();
 
   factory AlbumShare.fromJson(JsonObj json) {
     return AlbumShare(
@@ -281,10 +285,7 @@ class AlbumShare with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  get props => [
-        userId,
-        sharedAt,
-      ];
+  get props => [userId, sharedAt];
 
   /// User ID or username, case insensitive
   final CiString userId;

@@ -23,21 +23,21 @@ class _State {
   });
 
   factory _State.init() => const _State(
-        hasInit: false,
-        page: 0,
-        nextPage: 0,
-        shouldAnimateNextPage: true,
-        rawFiles: {},
-        files: [],
-        isShowUi: false,
-        isPlay: true,
-        isVideoCompleted: false,
-        hasPrev: false,
-        hasNext: false,
-        isShowTimeline: false,
-        hasShownTimeline: false,
-        hasRequestExit: false,
-      );
+    hasInit: false,
+    page: 0,
+    nextPage: 0,
+    shouldAnimateNextPage: true,
+    rawFiles: {},
+    files: [],
+    isShowUi: false,
+    isPlay: true,
+    isVideoCompleted: false,
+    hasPrev: false,
+    hasNext: false,
+    isShowTimeline: false,
+    hasShownTimeline: false,
+    hasRequestExit: false,
+  );
 
   @override
   String toString() => _$toString();

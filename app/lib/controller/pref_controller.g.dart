@@ -23,47 +23,47 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<List<Account>> get accountsNew => accounts.skip(1);
   Stream<List<Account>> get accountsChange => accounts.distinct().skip(1);
   List<Account> get accountsValue => _accountsController.value;
-// _currentAccountIndexController
+  // _currentAccountIndexController
   ValueStream<int?> get currentAccountIndex =>
       _currentAccountIndexController.stream;
   Stream<int?> get currentAccountIndexNew => currentAccountIndex.skip(1);
   Stream<int?> get currentAccountIndexChange =>
       currentAccountIndex.distinct().skip(1);
   int? get currentAccountIndexValue => _currentAccountIndexController.value;
-// _languageController
+  // _languageController
   ValueStream<AppLanguage> get language => _languageController.stream;
   Stream<AppLanguage> get languageNew => language.skip(1);
   Stream<AppLanguage> get languageChange => language.distinct().skip(1);
   AppLanguage get languageValue => _languageController.value;
-// _homePhotosZoomLevelController
+  // _homePhotosZoomLevelController
   ValueStream<int> get homePhotosZoomLevel =>
       _homePhotosZoomLevelController.stream;
   Stream<int> get homePhotosZoomLevelNew => homePhotosZoomLevel.skip(1);
   Stream<int> get homePhotosZoomLevelChange =>
       homePhotosZoomLevel.distinct().skip(1);
   int get homePhotosZoomLevelValue => _homePhotosZoomLevelController.value;
-// _albumBrowserZoomLevelController
+  // _albumBrowserZoomLevelController
   ValueStream<int> get albumBrowserZoomLevel =>
       _albumBrowserZoomLevelController.stream;
   Stream<int> get albumBrowserZoomLevelNew => albumBrowserZoomLevel.skip(1);
   Stream<int> get albumBrowserZoomLevelChange =>
       albumBrowserZoomLevel.distinct().skip(1);
   int get albumBrowserZoomLevelValue => _albumBrowserZoomLevelController.value;
-// _homeAlbumsSortController
+  // _homeAlbumsSortController
   ValueStream<CollectionSort> get homeAlbumsSort =>
       _homeAlbumsSortController.stream;
   Stream<CollectionSort> get homeAlbumsSortNew => homeAlbumsSort.skip(1);
   Stream<CollectionSort> get homeAlbumsSortChange =>
       homeAlbumsSort.distinct().skip(1);
   CollectionSort get homeAlbumsSortValue => _homeAlbumsSortController.value;
-// _isEnableClientExifController
+  // _isEnableClientExifController
   ValueStream<bool> get isEnableClientExif =>
       _isEnableClientExifController.stream;
   Stream<bool> get isEnableClientExifNew => isEnableClientExif.skip(1);
   Stream<bool> get isEnableClientExifChange =>
       isEnableClientExif.distinct().skip(1);
   bool get isEnableClientExifValue => _isEnableClientExifController.value;
-// _shouldProcessExifWifiOnlyController
+  // _shouldProcessExifWifiOnlyController
   ValueStream<bool> get shouldProcessExifWifiOnly =>
       _shouldProcessExifWifiOnlyController.stream;
   Stream<bool> get shouldProcessExifWifiOnlyNew =>
@@ -72,12 +72,12 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       shouldProcessExifWifiOnly.distinct().skip(1);
   bool get shouldProcessExifWifiOnlyValue =>
       _shouldProcessExifWifiOnlyController.value;
-// _memoriesRangeController
+  // _memoriesRangeController
   ValueStream<int> get memoriesRange => _memoriesRangeController.stream;
   Stream<int> get memoriesRangeNew => memoriesRange.skip(1);
   Stream<int> get memoriesRangeChange => memoriesRange.distinct().skip(1);
   int get memoriesRangeValue => _memoriesRangeController.value;
-// _viewerScreenBrightnessController
+  // _viewerScreenBrightnessController
   ValueStream<int> get viewerScreenBrightness =>
       _viewerScreenBrightnessController.stream;
   Stream<int> get viewerScreenBrightnessNew => viewerScreenBrightness.skip(1);
@@ -85,21 +85,21 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       viewerScreenBrightness.distinct().skip(1);
   int get viewerScreenBrightnessValue =>
       _viewerScreenBrightnessController.value;
-// _isViewerForceRotationController
+  // _isViewerForceRotationController
   ValueStream<bool> get isViewerForceRotation =>
       _isViewerForceRotationController.stream;
   Stream<bool> get isViewerForceRotationNew => isViewerForceRotation.skip(1);
   Stream<bool> get isViewerForceRotationChange =>
       isViewerForceRotation.distinct().skip(1);
   bool get isViewerForceRotationValue => _isViewerForceRotationController.value;
-// _gpsMapProviderController
+  // _gpsMapProviderController
   ValueStream<GpsMapProvider> get gpsMapProvider =>
       _gpsMapProviderController.stream;
   Stream<GpsMapProvider> get gpsMapProviderNew => gpsMapProvider.skip(1);
   Stream<GpsMapProvider> get gpsMapProviderChange =>
       gpsMapProvider.distinct().skip(1);
   GpsMapProvider get gpsMapProviderValue => _gpsMapProviderController.value;
-// _isAlbumBrowserShowDateController
+  // _isAlbumBrowserShowDateController
   ValueStream<bool> get isAlbumBrowserShowDate =>
       _isAlbumBrowserShowDateController.stream;
   Stream<bool> get isAlbumBrowserShowDateNew => isAlbumBrowserShowDate.skip(1);
@@ -107,12 +107,12 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isAlbumBrowserShowDate.distinct().skip(1);
   bool get isAlbumBrowserShowDateValue =>
       _isAlbumBrowserShowDateController.value;
-// _isDoubleTapExitController
+  // _isDoubleTapExitController
   ValueStream<bool> get isDoubleTapExit => _isDoubleTapExitController.stream;
   Stream<bool> get isDoubleTapExitNew => isDoubleTapExit.skip(1);
   Stream<bool> get isDoubleTapExitChange => isDoubleTapExit.distinct().skip(1);
   bool get isDoubleTapExitValue => _isDoubleTapExitController.value;
-// _isSaveEditResultToServerController
+  // _isSaveEditResultToServerController
   ValueStream<bool> get isSaveEditResultToServer =>
       _isSaveEditResultToServerController.stream;
   Stream<bool> get isSaveEditResultToServerNew =>
@@ -121,43 +121,43 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isSaveEditResultToServer.distinct().skip(1);
   bool get isSaveEditResultToServerValue =>
       _isSaveEditResultToServerController.value;
-// _enhanceMaxSizeController
+  // _enhanceMaxSizeController
   ValueStream<SizeInt> get enhanceMaxSize => _enhanceMaxSizeController.stream;
   Stream<SizeInt> get enhanceMaxSizeNew => enhanceMaxSize.skip(1);
   Stream<SizeInt> get enhanceMaxSizeChange => enhanceMaxSize.distinct().skip(1);
   SizeInt get enhanceMaxSizeValue => _enhanceMaxSizeController.value;
-// _isDarkThemeController
+  // _isDarkThemeController
   ValueStream<bool> get isDarkTheme => _isDarkThemeController.stream;
   Stream<bool> get isDarkThemeNew => isDarkTheme.skip(1);
   Stream<bool> get isDarkThemeChange => isDarkTheme.distinct().skip(1);
   bool get isDarkThemeValue => _isDarkThemeController.value;
-// _isFollowSystemThemeController
+  // _isFollowSystemThemeController
   ValueStream<bool> get isFollowSystemTheme =>
       _isFollowSystemThemeController.stream;
   Stream<bool> get isFollowSystemThemeNew => isFollowSystemTheme.skip(1);
   Stream<bool> get isFollowSystemThemeChange =>
       isFollowSystemTheme.distinct().skip(1);
   bool get isFollowSystemThemeValue => _isFollowSystemThemeController.value;
-// _isUseBlackInDarkThemeController
+  // _isUseBlackInDarkThemeController
   ValueStream<bool> get isUseBlackInDarkTheme =>
       _isUseBlackInDarkThemeController.stream;
   Stream<bool> get isUseBlackInDarkThemeNew => isUseBlackInDarkTheme.skip(1);
   Stream<bool> get isUseBlackInDarkThemeChange =>
       isUseBlackInDarkTheme.distinct().skip(1);
   bool get isUseBlackInDarkThemeValue => _isUseBlackInDarkThemeController.value;
-// _seedColorController
-  ValueStream<Color?> get seedColor => _seedColorController.stream;
-  Stream<Color?> get seedColorNew => seedColor.skip(1);
-  Stream<Color?> get seedColorChange => seedColor.distinct().skip(1);
-  Color? get seedColorValue => _seedColorController.value;
-// _secondarySeedColorController
-  ValueStream<Color?> get secondarySeedColor =>
+  // _seedColorController
+  ValueStream<ColorInt?> get seedColor => _seedColorController.stream;
+  Stream<ColorInt?> get seedColorNew => seedColor.skip(1);
+  Stream<ColorInt?> get seedColorChange => seedColor.distinct().skip(1);
+  ColorInt? get seedColorValue => _seedColorController.value;
+  // _secondarySeedColorController
+  ValueStream<ColorInt?> get secondarySeedColor =>
       _secondarySeedColorController.stream;
-  Stream<Color?> get secondarySeedColorNew => secondarySeedColor.skip(1);
-  Stream<Color?> get secondarySeedColorChange =>
+  Stream<ColorInt?> get secondarySeedColorNew => secondarySeedColor.skip(1);
+  Stream<ColorInt?> get secondarySeedColorChange =>
       secondarySeedColor.distinct().skip(1);
-  Color? get secondarySeedColorValue => _secondarySeedColorController.value;
-// _isDontShowVideoPreviewHintController
+  ColorInt? get secondarySeedColorValue => _secondarySeedColorController.value;
+  // _isDontShowVideoPreviewHintController
   ValueStream<bool> get isDontShowVideoPreviewHint =>
       _isDontShowVideoPreviewHintController.stream;
   Stream<bool> get isDontShowVideoPreviewHintNew =>
@@ -166,7 +166,7 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isDontShowVideoPreviewHint.distinct().skip(1);
   bool get isDontShowVideoPreviewHintValue =>
       _isDontShowVideoPreviewHintController.value;
-// _mapBrowserPrevPositionController
+  // _mapBrowserPrevPositionController
   ValueStream<MapCoord?> get mapBrowserPrevPosition =>
       _mapBrowserPrevPositionController.stream;
   Stream<MapCoord?> get mapBrowserPrevPositionNew =>
@@ -175,22 +175,22 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       mapBrowserPrevPosition.distinct().skip(1);
   MapCoord? get mapBrowserPrevPositionValue =>
       _mapBrowserPrevPositionController.value;
-// _isNewHttpEngineController
+  // _isNewHttpEngineController
   ValueStream<bool> get isNewHttpEngine => _isNewHttpEngineController.stream;
   Stream<bool> get isNewHttpEngineNew => isNewHttpEngine.skip(1);
   Stream<bool> get isNewHttpEngineChange => isNewHttpEngine.distinct().skip(1);
   bool get isNewHttpEngineValue => _isNewHttpEngineController.value;
-// _firstRunTimeController
+  // _firstRunTimeController
   ValueStream<DateTime?> get firstRunTime => _firstRunTimeController.stream;
   Stream<DateTime?> get firstRunTimeNew => firstRunTime.skip(1);
   Stream<DateTime?> get firstRunTimeChange => firstRunTime.distinct().skip(1);
   DateTime? get firstRunTimeValue => _firstRunTimeController.value;
-// _lastVersionController
+  // _lastVersionController
   ValueStream<int> get lastVersion => _lastVersionController.stream;
   Stream<int> get lastVersionNew => lastVersion.skip(1);
   Stream<int> get lastVersionChange => lastVersion.distinct().skip(1);
   int get lastVersionValue => _lastVersionController.value;
-// _mapDefaultRangeTypeController
+  // _mapDefaultRangeTypeController
   ValueStream<PrefMapDefaultRangeType> get mapDefaultRangeType =>
       _mapDefaultRangeTypeController.stream;
   Stream<PrefMapDefaultRangeType> get mapDefaultRangeTypeNew =>
@@ -199,7 +199,7 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       mapDefaultRangeType.distinct().skip(1);
   PrefMapDefaultRangeType get mapDefaultRangeTypeValue =>
       _mapDefaultRangeTypeController.value;
-// _mapDefaultCustomRangeController
+  // _mapDefaultCustomRangeController
   ValueStream<Duration> get mapDefaultCustomRange =>
       _mapDefaultCustomRangeController.stream;
   Stream<Duration> get mapDefaultCustomRangeNew =>
@@ -208,35 +208,35 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       mapDefaultCustomRange.distinct().skip(1);
   Duration get mapDefaultCustomRangeValue =>
       _mapDefaultCustomRangeController.value;
-// _slideshowDurationController
+  // _slideshowDurationController
   ValueStream<Duration> get slideshowDuration =>
       _slideshowDurationController.stream;
   Stream<Duration> get slideshowDurationNew => slideshowDuration.skip(1);
   Stream<Duration> get slideshowDurationChange =>
       slideshowDuration.distinct().skip(1);
   Duration get slideshowDurationValue => _slideshowDurationController.value;
-// _isSlideshowShuffleController
+  // _isSlideshowShuffleController
   ValueStream<bool> get isSlideshowShuffle =>
       _isSlideshowShuffleController.stream;
   Stream<bool> get isSlideshowShuffleNew => isSlideshowShuffle.skip(1);
   Stream<bool> get isSlideshowShuffleChange =>
       isSlideshowShuffle.distinct().skip(1);
   bool get isSlideshowShuffleValue => _isSlideshowShuffleController.value;
-// _isSlideshowRepeatController
+  // _isSlideshowRepeatController
   ValueStream<bool> get isSlideshowRepeat =>
       _isSlideshowRepeatController.stream;
   Stream<bool> get isSlideshowRepeatNew => isSlideshowRepeat.skip(1);
   Stream<bool> get isSlideshowRepeatChange =>
       isSlideshowRepeat.distinct().skip(1);
   bool get isSlideshowRepeatValue => _isSlideshowRepeatController.value;
-// _isSlideshowReverseController
+  // _isSlideshowReverseController
   ValueStream<bool> get isSlideshowReverse =>
       _isSlideshowReverseController.stream;
   Stream<bool> get isSlideshowReverseNew => isSlideshowReverse.skip(1);
   Stream<bool> get isSlideshowReverseChange =>
       isSlideshowReverse.distinct().skip(1);
   bool get isSlideshowReverseValue => _isSlideshowReverseController.value;
-// _viewerAppBarButtonsController
+  // _viewerAppBarButtonsController
   ValueStream<List<ViewerAppBarButtonType>> get viewerAppBarButtons =>
       _viewerAppBarButtonsController.stream;
   Stream<List<ViewerAppBarButtonType>> get viewerAppBarButtonsNew =>
@@ -245,7 +245,7 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       viewerAppBarButtons.distinct().skip(1);
   List<ViewerAppBarButtonType> get viewerAppBarButtonsValue =>
       _viewerAppBarButtonsController.value;
-// _viewerBottomAppBarButtonsController
+  // _viewerBottomAppBarButtonsController
   ValueStream<List<ViewerAppBarButtonType>> get viewerBottomAppBarButtons =>
       _viewerBottomAppBarButtonsController.stream;
   Stream<List<ViewerAppBarButtonType>> get viewerBottomAppBarButtonsNew =>
@@ -254,33 +254,32 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       viewerBottomAppBarButtons.distinct().skip(1);
   List<ViewerAppBarButtonType> get viewerBottomAppBarButtonsValue =>
       _viewerBottomAppBarButtonsController.value;
-// _homeCollectionsNavBarButtonsController
+  // _homeCollectionsNavBarButtonsController
   ValueStream<List<PrefHomeCollectionsNavButton>>
-      get homeCollectionsNavBarButtons =>
-          _homeCollectionsNavBarButtonsController.stream;
+  get homeCollectionsNavBarButtons =>
+      _homeCollectionsNavBarButtonsController.stream;
   Stream<List<PrefHomeCollectionsNavButton>>
-      get homeCollectionsNavBarButtonsNew =>
-          homeCollectionsNavBarButtons.skip(1);
+  get homeCollectionsNavBarButtonsNew => homeCollectionsNavBarButtons.skip(1);
   Stream<List<PrefHomeCollectionsNavButton>>
-      get homeCollectionsNavBarButtonsChange =>
-          homeCollectionsNavBarButtons.distinct().skip(1);
+  get homeCollectionsNavBarButtonsChange =>
+      homeCollectionsNavBarButtons.distinct().skip(1);
   List<PrefHomeCollectionsNavButton> get homeCollectionsNavBarButtonsValue =>
       _homeCollectionsNavBarButtonsController.value;
-// _isFallbackClientExifController
+  // _isFallbackClientExifController
   ValueStream<bool> get isFallbackClientExif =>
       _isFallbackClientExifController.stream;
   Stream<bool> get isFallbackClientExifNew => isFallbackClientExif.skip(1);
   Stream<bool> get isFallbackClientExifChange =>
       isFallbackClientExif.distinct().skip(1);
   bool get isFallbackClientExifValue => _isFallbackClientExifController.value;
-// _isVideoPlayerMuteController
+  // _isVideoPlayerMuteController
   ValueStream<bool> get isVideoPlayerMute =>
       _isVideoPlayerMuteController.stream;
   Stream<bool> get isVideoPlayerMuteNew => isVideoPlayerMute.skip(1);
   Stream<bool> get isVideoPlayerMuteChange =>
       isVideoPlayerMute.distinct().skip(1);
   bool get isVideoPlayerMuteValue => _isVideoPlayerMuteController.value;
-// _isVideoPlayerLoopController
+  // _isVideoPlayerLoopController
   ValueStream<bool> get isVideoPlayerLoop =>
       _isVideoPlayerLoopController.stream;
   Stream<bool> get isVideoPlayerLoopNew => isVideoPlayerLoop.skip(1);
@@ -299,7 +298,7 @@ extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {
       protectedPageAuthType.distinct().skip(1);
   ProtectedPageAuthType? get protectedPageAuthTypeValue =>
       _protectedPageAuthTypeController.value;
-// _protectedPageAuthPinController
+  // _protectedPageAuthPinController
   ValueStream<CiString?> get protectedPageAuthPin =>
       _protectedPageAuthPinController.stream;
   Stream<CiString?> get protectedPageAuthPinNew => protectedPageAuthPin.skip(1);
@@ -307,7 +306,7 @@ extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {
       protectedPageAuthPin.distinct().skip(1);
   CiString? get protectedPageAuthPinValue =>
       _protectedPageAuthPinController.value;
-// _protectedPageAuthPasswordController
+  // _protectedPageAuthPasswordController
   ValueStream<CiString?> get protectedPageAuthPassword =>
       _protectedPageAuthPasswordController.stream;
   Stream<CiString?> get protectedPageAuthPasswordNew =>

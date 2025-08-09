@@ -32,11 +32,7 @@ class FileWebdavDataSource implements FileDataSource {
   const FileWebdavDataSource();
 
   @override
-  list(
-    Account account,
-    File dir, {
-    int? depth,
-  }) async {
+  list(Account account, File dir, {int? depth}) async {
     _log.fine("[list] ${dir.path}");
     return _listWithArgs(
       account,
@@ -59,9 +55,7 @@ class FileWebdavDataSource implements FileDataSource {
       metadataPhotosExif: 1,
       metadataPhotosGps: 1,
       metadataPhotosSize: 1,
-      customNamespaces: {
-        "com.nkming.nc_photos": "app",
-      },
+      customNamespaces: {"com.nkming.nc_photos": "app"},
       customProperties: [
         "app:metadata",
         "app:is-archived",
@@ -78,11 +72,7 @@ class FileWebdavDataSource implements FileDataSource {
   }
 
   @override
-  listMinimal(
-    Account account,
-    File dir, {
-    int? depth,
-  }) {
+  listMinimal(Account account, File dir, {int? depth}) {
     _log.fine("[listMinimal] ${dir.path}");
     return _listWithArgs(
       account,
@@ -98,8 +88,9 @@ class FileWebdavDataSource implements FileDataSource {
   @override
   remove(Account account, FileDescriptor f) async {
     _log.info("[remove] ${f.fdPath}");
-    final response =
-        await ApiUtil.fromAccount(account).files().delete(path: f.fdPath);
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().delete(path: f.fdPath);
     if (!response.isGood) {
       _log.severe("[remove] Failed requesting server: $response");
       throw ApiException(
@@ -112,14 +103,15 @@ class FileWebdavDataSource implements FileDataSource {
   @override
   getBinary(Account account, File f) async {
     _log.info("[getBinary] ${f.path}");
-    final response =
-        await ApiUtil.fromAccount(account).files().get(path: f.path);
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().get(path: f.path);
     if (!response.isGood) {
       _log.severe("[getBinary] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
     return response.body;
   }
@@ -127,15 +119,15 @@ class FileWebdavDataSource implements FileDataSource {
   @override
   putBinary(Account account, String path, Uint8List content) async {
     _log.info("[putBinary] $path");
-    final response = await ApiUtil.fromAccount(account)
-        .files()
-        .put(path: path, content: content);
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().put(path: path, content: content);
     if (!response.isGood) {
       _log.severe("[putBinary] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
   }
 
@@ -152,7 +144,8 @@ class FileWebdavDataSource implements FileDataSource {
     _log.info("[updateProperty] ${f.path}");
     if (metadata?.obj != null && metadata!.obj!.fileEtag != f.etag) {
       _log.warning(
-          "[updateProperty] Metadata etag mismatch (metadata: ${metadata.obj!.fileEtag}, file: ${f.etag})");
+        "[updateProperty] Metadata etag mismatch (metadata: ${metadata.obj!.fileEtag}, file: ${f.etag})",
+      );
     }
     final setProps = {
       if (metadata?.obj != null)
@@ -172,20 +165,20 @@ class FileWebdavDataSource implements FileDataSource {
       if (OrNull.isSetNull(location)) "app:location",
     ];
     final response = await ApiUtil.fromAccount(account).files().proppatch(
-          path: f.path,
-          namespaces: {
-            "com.nkming.nc_photos": "app",
-            "http://owncloud.org/ns": "oc",
-          },
-          set: setProps.isNotEmpty ? setProps : null,
-          remove: removeProps.isNotEmpty ? removeProps : null,
-        );
+      path: f.path,
+      namespaces: {
+        "com.nkming.nc_photos": "app",
+        "http://owncloud.org/ns": "oc",
+      },
+      set: setProps.isNotEmpty ? setProps : null,
+      remove: removeProps.isNotEmpty ? removeProps : null,
+    );
     if (!response.isGood) {
       _log.severe("[updateProperty] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
   }
 
@@ -198,22 +191,22 @@ class FileWebdavDataSource implements FileDataSource {
   }) async {
     _log.info("[copy] ${f.path} to $destination");
     final response = await ApiUtil.fromAccount(account).files().copy(
-          path: f.path,
-          destinationUrl: "${account.url}/$destination",
-          overwrite: shouldOverwrite,
-        );
+      path: f.path,
+      destinationUrl: "${account.url}/$destination",
+      overwrite: shouldOverwrite,
+    );
     if (!response.isGood) {
       _log.severe("[copy] Failed requesting sever: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     } else if (response.statusCode == 204) {
       // conflict
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
   }
 
@@ -226,31 +219,31 @@ class FileWebdavDataSource implements FileDataSource {
   }) async {
     _log.info("[move] ${f.path} to $destination");
     final response = await ApiUtil.fromAccount(account).files().move(
-          path: f.path,
-          destinationUrl: "${account.url}/$destination",
-          overwrite: shouldOverwrite,
-        );
+      path: f.path,
+      destinationUrl: "${account.url}/$destination",
+      overwrite: shouldOverwrite,
+    );
     if (!response.isGood) {
       _log.severe("[move] Failed requesting sever: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
   }
 
   @override
   createDir(Account account, String path) async {
     _log.info("[createDir] $path");
-    final response = await ApiUtil.fromAccount(account).files().mkcol(
-          path: path,
-        );
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().mkcol(path: path);
     if (!response.isGood) {
       _log.severe("[createDir] Failed requesting sever: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
   }
 
@@ -287,72 +280,74 @@ class FileWebdavDataSource implements FileDataSource {
     List<String>? customProperties,
   }) async {
     final response = await ApiUtil.fromAccount(account).files().propfind(
-          path: dir.path,
-          depth: depth,
-          getlastmodified: getlastmodified,
-          getetag: getetag,
-          getcontenttype: getcontenttype,
-          resourcetype: resourcetype,
-          getcontentlength: getcontentlength,
-          id: id,
-          fileid: fileid,
-          favorite: favorite,
-          commentsHref: commentsHref,
-          commentsCount: commentsCount,
-          commentsUnread: commentsUnread,
-          ownerId: ownerId,
-          ownerDisplayName: ownerDisplayName,
-          shareTypes: shareTypes,
-          checksums: checksums,
-          hasPreview: hasPreview,
-          size: size,
-          richWorkspace: richWorkspace,
-          trashbinFilename: trashbinFilename,
-          trashbinOriginalLocation: trashbinOriginalLocation,
-          trashbinDeletionTime: trashbinDeletionTime,
-          metadataPhotosIfd0: metadataPhotosIfd0,
-          metadataPhotosExif: metadataPhotosExif,
-          metadataPhotosGps: metadataPhotosGps,
-          metadataPhotosSize: metadataPhotosSize,
-          customNamespaces: customNamespaces,
-          customProperties: customProperties,
-        );
+      path: dir.path,
+      depth: depth,
+      getlastmodified: getlastmodified,
+      getetag: getetag,
+      getcontenttype: getcontenttype,
+      resourcetype: resourcetype,
+      getcontentlength: getcontentlength,
+      id: id,
+      fileid: fileid,
+      favorite: favorite,
+      commentsHref: commentsHref,
+      commentsCount: commentsCount,
+      commentsUnread: commentsUnread,
+      ownerId: ownerId,
+      ownerDisplayName: ownerDisplayName,
+      shareTypes: shareTypes,
+      checksums: checksums,
+      hasPreview: hasPreview,
+      size: size,
+      richWorkspace: richWorkspace,
+      trashbinFilename: trashbinFilename,
+      trashbinOriginalLocation: trashbinOriginalLocation,
+      trashbinDeletionTime: trashbinDeletionTime,
+      metadataPhotosIfd0: metadataPhotosIfd0,
+      metadataPhotosExif: metadataPhotosExif,
+      metadataPhotosGps: metadataPhotosGps,
+      metadataPhotosSize: metadataPhotosSize,
+      customNamespaces: customNamespaces,
+      customProperties: customProperties,
+    );
     if (!response.isGood) {
       _log.severe("[list] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiFiles = await api.FileParser().parse(response.body);
     // _log.fine("[list] Parsed files: [$files]");
     bool hasNoMediaMarker = false;
-    final files = apiFiles
-        .map(ApiFileConverter.fromApi)
-        .forEachLazy((f) {
-          if (file_util.isNoMediaMarker(f)) {
-            hasNoMediaMarker = true;
-          }
-        })
-        .where((f) => _validateFile(f))
-        .map((e) {
-          if (e.metadata == null || e.metadata!.fileEtag == e.etag) {
-            return e;
-          } else {
-            _log.info("[list] Ignore outdated metadata for ${e.path}");
-            return e.copyWith(metadata: const OrNull(null));
-          }
-        })
-        .toList();
+    final files =
+        apiFiles
+            .map(ApiFileConverter.fromApi)
+            .forEachLazy((f) {
+              if (file_util.isNoMediaMarker(f)) {
+                hasNoMediaMarker = true;
+              }
+            })
+            .where((f) => _validateFile(f))
+            .map((e) {
+              if (e.metadata == null || e.metadata!.fileEtag == e.etag) {
+                return e;
+              } else {
+                _log.info("[list] Ignore outdated metadata for ${e.path}");
+                return e.copyWith(metadata: const OrNull(null));
+              }
+            })
+            .toList();
 
     await _compatUpgrade(account, files);
 
     if (hasNoMediaMarker) {
       // return only the marker and the dir itself
       return files
-          .where((f) =>
-              dir.compareServerIdentity(f) || file_util.isNoMediaMarker(f))
+          .where(
+            (f) => dir.compareServerIdentity(f) || file_util.isNoMediaMarker(f),
+          )
           .toList();
     } else {
       return files;
@@ -366,9 +361,7 @@ class FileWebdavDataSource implements FileDataSource {
         await updateProperty(
           account,
           f,
-          metadata: OrNull(f.metadata!.copyWith(
-            exif: newExif,
-          )),
+          metadata: OrNull(f.metadata!.copyWith(exif: newExif)),
         );
       }
     }
@@ -391,10 +384,11 @@ class FileSqliteDbDataSource implements FileDataSource {
     } on DbNotFoundException catch (_) {
       throw CacheNotFoundException("No entry: ${dir.path}");
     }
-    final results = dbFiles
-        .map((f) => DbFileConverter.fromDb(account.userId.toString(), f))
-        .where((f) => _validateFile(f))
-        .toList();
+    final results =
+        dbFiles
+            .map((f) => DbFileConverter.fromDb(account.userId.toString(), f))
+            .where((f) => _validateFile(f))
+            .toList();
     _log.fine("[list] Queried ${results.length} files");
     if (results.isEmpty) {
       // each dir will at least contain its own entry, so an empty list here
@@ -416,7 +410,10 @@ class FileSqliteDbDataSource implements FileDataSource {
   /// List files with date between [fromEpochMs] (inclusive) and [toEpochMs]
   /// (exclusive)
   Future<List<File>> listByDate(
-      Account account, int fromEpochMs, int toEpochMs) async {
+    Account account,
+    int fromEpochMs,
+    int toEpochMs,
+  ) async {
     _log.info("[listByDate] [$fromEpochMs, $toEpochMs]");
     final results = await _c.npDb.getFilesByTimeRange(
       account: account.toDb(),
@@ -466,17 +463,20 @@ class FileSqliteDbDataSource implements FileDataSource {
       isFavorite: favorite?.let(OrNull.new),
       isArchived: isArchived,
       overrideDateTime: overrideDateTime,
-      bestDateTime: overrideDateTime == null && metadata == null
-          ? null
-          : file_util.getBestDateTime(
-              overrideDateTime: overrideDateTime == null
-                  ? f.overrideDateTime
-                  : overrideDateTime.obj,
-              dateTimeOriginal: metadata == null
-                  ? f.metadata?.exif?.dateTimeOriginal
-                  : metadata.obj?.exif?.dateTimeOriginal,
-              lastModified: f.lastModified,
-            ),
+      bestDateTime:
+          overrideDateTime == null && metadata == null
+              ? null
+              : file_util.getBestDateTime(
+                overrideDateTime:
+                    overrideDateTime == null
+                        ? f.overrideDateTime
+                        : overrideDateTime.obj,
+                dateTimeOriginal:
+                    metadata == null
+                        ? f.metadata?.exif?.dateTimeOriginal
+                        : metadata.obj?.exif?.dateTimeOriginal,
+                lastModified: f.lastModified,
+              ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),
       location: location?.let((e) => OrNull(e.obj?.toDb())),
     );
@@ -539,10 +539,8 @@ class IntermediateSyncState {
 
 @npLog
 class FileCachedDataSource implements FileDataSource {
-  FileCachedDataSource(
-    this._c, {
-    this.shouldCheckCache = false,
-  }) : _sqliteDbSrc = FileSqliteDbDataSource(_c);
+  FileCachedDataSource(this._c, {this.shouldCheckCache = false})
+    : _sqliteDbSrc = FileSqliteDbDataSource(_c);
 
   @override
   Future<List<File>> list(Account account, File dir) async {
@@ -558,8 +556,11 @@ class FileCachedDataSource implements FileDataSource {
     }
 
     // no cache or outdated
-    return await sync(account, dir,
-        remoteTouchEtag: cacheLoader.remoteTouchEtag);
+    return await sync(
+      account,
+      dir,
+      remoteTouchEtag: cacheLoader.remoteTouchEtag,
+    );
   }
 
   /// Sync [dir] with remote content, and set the local touch etag as
@@ -598,7 +599,9 @@ class FileCachedDataSource implements FileDataSource {
           await _sqliteDbSrc.remove(account, dir);
         } catch (e) {
           _log.warning(
-              "[list] Failed while remove from db, file not cached?", e);
+            "[list] Failed while remove from db, file not cached?",
+            e,
+          );
         }
         return IntermediateSyncState(
           account: account,
@@ -615,7 +618,9 @@ class FileCachedDataSource implements FileDataSource {
           await _sqliteDbSrc.emptyDir(account, dir);
         } catch (e) {
           _log.warning(
-              "[list] Failed while emptying from db, file not cached?", e);
+            "[list] Failed while emptying from db, file not cached?",
+            e,
+          );
         }
         return IntermediateSyncState(
           account: account,
@@ -635,14 +640,20 @@ class FileCachedDataSource implements FileDataSource {
       return state.files;
     }
 
-    await FileSqliteCacheUpdater(_c.npDb)(state.account, state.dir,
-        remote: state.files);
+    await FileSqliteCacheUpdater(_c.npDb)(
+      state.account,
+      state.dir,
+      remote: state.files,
+    );
     if (shouldCheckCache) {
       // update our local touch token to match the remote one
       try {
         _log.info("[list] Update outdated local etag: ${state.dir.path}");
-        await _c.touchManager
-            .setLocalEtag(state.account, state.dir, state.remoteTouchEtag);
+        await _c.touchManager.setLocalEtag(
+          state.account,
+          state.dir,
+          state.remoteTouchEtag,
+        );
       } catch (e, stacktrace) {
         _log.shout("[list] Failed while setLocalToken", e, stacktrace);
         // ignore error
@@ -675,7 +686,10 @@ class FileCachedDataSource implements FileDataSource {
     } catch (e, stackTrace) {
       // ignore cache failure
       _log.warning(
-          "Failed while remove: ${logFilename(f.strippedPath)}", e, stackTrace);
+        "Failed while remove: ${logFilename(f.strippedPath)}",
+        e,
+        stackTrace,
+      );
     }
   }
 
@@ -730,8 +744,12 @@ class FileCachedDataSource implements FileDataSource {
     String destination, {
     bool? shouldOverwrite,
   }) async {
-    await _remoteSrc.copy(account, f, destination,
-        shouldOverwrite: shouldOverwrite);
+    await _remoteSrc.copy(
+      account,
+      f,
+      destination,
+      shouldOverwrite: shouldOverwrite,
+    );
   }
 
   @override
@@ -741,14 +759,21 @@ class FileCachedDataSource implements FileDataSource {
     String destination, {
     bool? shouldOverwrite,
   }) async {
-    await _remoteSrc.move(account, f, destination,
-        shouldOverwrite: shouldOverwrite);
+    await _remoteSrc.move(
+      account,
+      f,
+      destination,
+      shouldOverwrite: shouldOverwrite,
+    );
     try {
       await _sqliteDbSrc.move(account, f, destination);
     } catch (e, stackTrace) {
       // ignore cache failure
       _log.warning(
-          "Failed while move: ${logFilename(f.strippedPath)}", e, stackTrace);
+        "Failed while move: ${logFilename(f.strippedPath)}",
+        e,
+        stackTrace,
+      );
     }
   }
 

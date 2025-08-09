@@ -13,8 +13,9 @@ class UpdateAlbumTime {
     if (album.provider is! AlbumProviderBase) {
       return album;
     } else {
-      final sortedItems =
-          const AlbumTimeSortProvider(isAscending: false).sort(items);
+      final sortedItems = const AlbumTimeSortProvider(
+        isAscending: false,
+      ).sort(items);
       return _updateWithSortedItems(album, sortedItems);
     }
   }
@@ -43,11 +44,12 @@ class UpdateAlbumTime {
 
     DateTime? latestItemTime;
     try {
-      final latestFile = sortedItems
-          .whereType<AlbumFileItem>()
-          .map((e) => e.file)
-          .where((element) => file_util.isSupportedFormat(element))
-          .first;
+      final latestFile =
+          sortedItems
+              .whereType<AlbumFileItem>()
+              .map((e) => e.file)
+              .where((element) => file_util.isSupportedFormat(element))
+              .first;
       latestItemTime = latestFile.fdDateTime;
     } catch (_) {
       latestItemTime = null;

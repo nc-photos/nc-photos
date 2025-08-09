@@ -36,7 +36,9 @@ class BasicRecognizeFaceRepo implements RecognizeFaceRepo {
 
   @override
   Stream<List<RecognizeFaceItem>> getItems(
-      Account account, RecognizeFace face) async* {
+    Account account,
+    RecognizeFace face,
+  ) async* {
     yield await dataSrc.getItems(account, face);
   }
 

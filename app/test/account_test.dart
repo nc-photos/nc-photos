@@ -31,10 +31,7 @@ void _fromJson() {
     "roots": ["test1", "test2"],
   };
   expect(
-    Account.fromJson(
-      json,
-      upgraderV1: null,
-    ),
+    Account.fromJson(json, upgraderV1: null),
     Account(
       id: "123456",
       scheme: "https",
@@ -61,19 +58,16 @@ void _upgraderV1() {
     "password": "123456",
     "roots": ["test1", "test2"],
   };
-  expect(
-    const AccountUpgraderV1()(json),
-    <String, dynamic>{
-      "version": 1,
-      "id": "123456",
-      "scheme": "https",
-      "address": "example.com",
-      "userId": "admin",
-      "username2": "admin",
-      "password": "123456",
-      "roots": ["test1", "test2"],
-    },
-  );
+  expect(const AccountUpgraderV1()(json), <String, dynamic>{
+    "version": 1,
+    "id": "123456",
+    "scheme": "https",
+    "address": "example.com",
+    "userId": "admin",
+    "username2": "admin",
+    "password": "123456",
+    "roots": ["test1", "test2"],
+  });
 }
 
 /// Upgrade v1 Account json to v2 Account json for a LDAP account
@@ -91,19 +85,16 @@ void _upgraderV1Ldap() {
     "password": "123456",
     "roots": ["test1", "test2"],
   };
-  expect(
-    const AccountUpgraderV1()(json),
-    <String, dynamic>{
-      "version": 1,
-      "id": "123456",
-      "scheme": "https",
-      "address": "example.com",
-      "userId": "00000000-1111-aaaa-bbbb-223344ccddee",
-      "username2": "admin",
-      "password": "123456",
-      "roots": ["test1", "test2"],
-    },
-  );
+  expect(const AccountUpgraderV1()(json), <String, dynamic>{
+    "version": 1,
+    "id": "123456",
+    "scheme": "https",
+    "address": "example.com",
+    "userId": "00000000-1111-aaaa-bbbb-223344ccddee",
+    "username2": "admin",
+    "password": "123456",
+    "roots": ["test1", "test2"],
+  });
 }
 
 /// Construct a new Account, with address ending with /

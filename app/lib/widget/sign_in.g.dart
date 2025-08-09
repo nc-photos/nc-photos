@@ -13,53 +13,58 @@ part of 'sign_in.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {_Scheme? scheme,
-      String? serverUrl,
-      String? username,
-      String? password,
-      bool? shouldObscurePassword,
-      _ConnectArg? connectArg,
-      Account? connectedAccount,
-      bool? isConnecting,
-      bool? isCompleted,
-      _SignInMethod? method,
-      ExceptionEvent? error});
+  _State call({
+    _Scheme? scheme,
+    String? serverUrl,
+    String? username,
+    String? password,
+    bool? shouldObscurePassword,
+    _ConnectArg? connectArg,
+    Account? connectedAccount,
+    bool? isConnecting,
+    bool? isCompleted,
+    _SignInMethod? method,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic scheme,
-      dynamic serverUrl,
-      dynamic username,
-      dynamic password,
-      dynamic shouldObscurePassword,
-      dynamic connectArg = copyWithNull,
-      dynamic connectedAccount = copyWithNull,
-      dynamic isConnecting,
-      dynamic isCompleted,
-      dynamic method,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic scheme,
+    dynamic serverUrl,
+    dynamic username,
+    dynamic password,
+    dynamic shouldObscurePassword,
+    dynamic connectArg = copyWithNull,
+    dynamic connectedAccount = copyWithNull,
+    dynamic isConnecting,
+    dynamic isCompleted,
+    dynamic method,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        scheme: scheme as _Scheme? ?? that.scheme,
-        serverUrl: serverUrl as String? ?? that.serverUrl,
-        username: username as String? ?? that.username,
-        password: password as String? ?? that.password,
-        shouldObscurePassword:
-            shouldObscurePassword as bool? ?? that.shouldObscurePassword,
-        connectArg: connectArg == copyWithNull
-            ? that.connectArg
-            : connectArg as _ConnectArg?,
-        connectedAccount: connectedAccount == copyWithNull
-            ? that.connectedAccount
-            : connectedAccount as Account?,
-        isConnecting: isConnecting as bool? ?? that.isConnecting,
-        isCompleted: isCompleted as bool? ?? that.isCompleted,
-        method: method as _SignInMethod? ?? that.method,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      scheme: scheme as _Scheme? ?? that.scheme,
+      serverUrl: serverUrl as String? ?? that.serverUrl,
+      username: username as String? ?? that.username,
+      password: password as String? ?? that.password,
+      shouldObscurePassword:
+          shouldObscurePassword as bool? ?? that.shouldObscurePassword,
+      connectArg:
+          connectArg == copyWithNull
+              ? that.connectArg
+              : connectArg as _ConnectArg?,
+      connectedAccount:
+          connectedAccount == copyWithNull
+              ? that.connectedAccount
+              : connectedAccount as Account?,
+      isConnecting: isConnecting as bool? ?? that.isConnecting,
+      isCompleted: isCompleted as bool? ?? that.isCompleted,
+      method: method as _SignInMethod? ?? that.method,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

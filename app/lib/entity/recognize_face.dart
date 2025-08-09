@@ -10,9 +10,7 @@ part 'recognize_face.g.dart';
 /// a person in FaceRecognition and this app
 @toString
 class RecognizeFace with EquatableMixin {
-  const RecognizeFace({
-    required this.label,
-  });
+  const RecognizeFace({required this.label});
 
   bool get isNamed => int.tryParse(label) == null;
 

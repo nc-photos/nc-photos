@@ -23,8 +23,9 @@ class _$SharingStreamEventCopyWithWorkerImpl
   @override
   SharingStreamEvent call({dynamic data, dynamic hasNext}) {
     return SharingStreamEvent(
-        data: data as List<SharingStreamData>? ?? that.data,
-        hasNext: hasNext as bool? ?? that.hasNext);
+      data: data as List<SharingStreamData>? ?? that.data,
+      hasNext: hasNext as bool? ?? that.hasNext,
+    );
   }
 
   final SharingStreamEvent that;
@@ -44,6 +45,7 @@ extension _$SharingsControllerNpLog on SharingsController {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("controller.sharings_controller.SharingsController");
+  static final log = Logger(
+    "controller.sharings_controller.SharingsController",
+  );
 }

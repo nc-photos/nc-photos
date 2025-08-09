@@ -10,8 +10,9 @@ extension _$_EnhancedPhotoBrowserStateNpLog on _EnhancedPhotoBrowserState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.enhanced_photo_browser._EnhancedPhotoBrowserState");
+  static final log = Logger(
+    "widget.enhanced_photo_browser._EnhancedPhotoBrowserState",
+  );
 }
 
 extension _$_BuilderNpLog on _Builder {

@@ -11,13 +11,8 @@ class _State {
     this.error,
   });
 
-  factory _State.init({
-    required Collection collection,
-  }) {
-    return _State(
-      collection: collection,
-      processingShares: const [],
-    );
+  factory _State.init({required Collection collection}) {
+    return _State(collection: collection, processingShares: const []);
   }
 
   @override

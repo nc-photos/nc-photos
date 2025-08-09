@@ -57,12 +57,12 @@ class PhotoListImageItem extends PhotoListFileItem {
 
   @override
   Widget buildWidget(BuildContext context) => PhotoListImage(
-        account: account,
-        previewUrl: previewUrl,
-        mime: file.fdMime,
-        isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
-        heroKey: flutter_util.getImageHeroTag(file),
-      );
+    account: account,
+    previewUrl: previewUrl,
+    mime: file.fdMime,
+    isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
+    heroKey: flutter_util.getImageHeroTag(file),
+  );
 
   final Account account;
   final String previewUrl;
@@ -79,21 +79,18 @@ class PhotoListVideoItem extends PhotoListFileItem {
 
   @override
   Widget buildWidget(BuildContext context) => PhotoListVideo(
-        account: account,
-        previewUrl: previewUrl,
-        mime: file.fdMime,
-        isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
-      );
+    account: account,
+    previewUrl: previewUrl,
+    mime: file.fdMime,
+    isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
+  );
 
   final Account account;
   final String previewUrl;
 }
 
 class PhotoListDateItem extends SelectableItem {
-  const PhotoListDateItem({
-    required this.date,
-    this.isMonthOnly = false,
-  });
+  const PhotoListDateItem({required this.date, this.isMonthOnly = false});
 
   @override
   get isTappable => false;
@@ -105,20 +102,15 @@ class PhotoListDateItem extends SelectableItem {
   get staggeredTile => const StaggeredTile.extent(99, 32);
 
   @override
-  buildWidget(BuildContext context) => PhotoListDate(
-        date: date,
-        isMonthOnly: isMonthOnly,
-      );
+  buildWidget(BuildContext context) =>
+      PhotoListDate(date: date, isMonthOnly: isMonthOnly);
 
   final Date date;
   final bool isMonthOnly;
 }
 
 abstract class PhotoListLocalFileItem extends SelectableItem {
-  const PhotoListLocalFileItem({
-    required this.fileIndex,
-    required this.file,
-  });
+  const PhotoListLocalFileItem({required this.fileIndex, required this.file});
 
   @override
   get isTappable => true;
@@ -165,7 +157,10 @@ class PhotoListLocalImageItem extends PhotoListLocalFileItem {
               color: Theme.of(context).listPlaceholderBackgroundColor,
               child: Image(
                 image: ResizeImage.resizeIfNeeded(
-                    k.photoThumbSize, null, provider),
+                  k.photoThumbSize,
+                  null,
+                  provider,
+                ),
                 filterQuality: FilterQuality.high,
                 fit: BoxFit.cover,
                 errorBuilder: (context, e, stackTrace) {
@@ -184,11 +179,7 @@ class PhotoListLocalImageItem extends PhotoListLocalFileItem {
               constraints: BoxConstraints.tight(const Size(128, 128)),
               alignment: AlignmentDirectional.bottomEnd,
               padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Icons.cloud_off,
-                size: 20,
-                color: Colors.white,
-              ),
+              child: const Icon(Icons.cloud_off, size: 20, color: Colors.white),
             ),
           ],
         ),
@@ -211,17 +202,15 @@ class PhotoListImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget buildPlaceholder() => Padding(
-          padding: const EdgeInsets.all(12),
-          child: Icon(
-            Icons.image_not_supported,
-            color: Theme.of(context).listPlaceholderForegroundColor,
-          ),
-        );
+      padding: const EdgeInsets.all(12),
+      child: Icon(
+        Icons.image_not_supported,
+        color: Theme.of(context).listPlaceholderForegroundColor,
+      ),
+    );
     Widget child;
     if (previewUrl == null) {
-      child = FittedBox(
-        child: buildPlaceholder(),
-      );
+      child = FittedBox(child: buildPlaceholder());
     } else {
       child = NetworkRectThumbnail(
         account: account,
@@ -230,10 +219,7 @@ class PhotoListImage extends StatelessWidget {
         errorBuilder: (_) => buildPlaceholder(),
       );
       if (heroKey != null) {
-        child = Hero(
-          tag: heroKey!,
-          child: child,
-        );
+        child = Hero(tag: heroKey!, child: child);
       }
     }
 
@@ -337,10 +323,7 @@ class PhotoListVideo extends StatelessWidget {
 }
 
 class PhotoListLabel extends StatelessWidget {
-  const PhotoListLabel({
-    super.key,
-    required this.text,
-  });
+  const PhotoListLabel({super.key, required this.text});
 
   @override
   build(BuildContext context) {
@@ -371,9 +354,7 @@ class PhotoListLabelEdit extends PhotoListLabel {
     return Stack(
       children: [
         // needed to expand the touch sensitive area to the whole row
-        Container(
-          color: Colors.transparent,
-        ),
+        Container(color: Colors.transparent),
         super.build(context),
         PositionedDirectional(
           top: 0,
@@ -403,17 +384,15 @@ class PhotoListDate extends StatelessWidget {
   Widget build(BuildContext context) {
     final pattern =
         isMonthOnly ? DateFormat.YEAR_MONTH : DateFormat.YEAR_MONTH_DAY;
-    final subtitle =
-        DateFormat(pattern, Localizations.localeOf(context).languageCode)
-            .format(date.toUtcDateTime());
+    final subtitle = DateFormat(
+      pattern,
+      Localizations.localeOf(context).languageCode,
+    ).format(date.toUtcDateTime());
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Text(
-          subtitle,
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
+        child: Text(subtitle, style: Theme.of(context).textTheme.labelMedium),
       ),
     );
   }

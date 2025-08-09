@@ -14,18 +14,19 @@ class SwitchFormField extends FormField<bool> {
     super.enabled,
     super.autovalidateMode,
   }) : super(
-          builder: (field) {
-            final value = field.value ?? initialValue;
-            return SwitchListTile(
-              value: value,
-              contentPadding: const EdgeInsets.all(0),
-              title: title,
-              subtitle: value
-                  ? (subtitleTrue ?? subtitle)
-                  : (subtitleFalse ?? subtitle),
-              dense: dense,
-              onChanged: field.didChange,
-            );
-          },
-        );
+         builder: (field) {
+           final value = field.value ?? initialValue;
+           return SwitchListTile(
+             value: value,
+             contentPadding: const EdgeInsets.all(0),
+             title: title,
+             subtitle:
+                 value
+                     ? (subtitleTrue ?? subtitle)
+                     : (subtitleFalse ?? subtitle),
+             dense: dense,
+             onChanged: field.didChange,
+           );
+         },
+       );
 }

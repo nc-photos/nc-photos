@@ -7,8 +7,11 @@ import 'package:np_common/object_util.dart';
 import 'package:np_gps_map/src/interactive_map.dart';
 import 'package:np_gps_map/src/type.dart' as type;
 
-typedef GoogleClusterBuilder = FutureOr<BitmapDescriptor> Function(
-    BuildContext context, List<DataPoint> dataPoints);
+typedef GoogleClusterBuilder =
+    FutureOr<BitmapDescriptor> Function(
+      BuildContext context,
+      List<DataPoint> dataPoints,
+    );
 
 class GoogleInteractiveMap extends StatefulWidget {
   const GoogleInteractiveMap({
@@ -41,10 +44,10 @@ class _GoogleInteractiveMapState extends State<GoogleInteractiveMap> {
   void didUpdateWidget(covariant GoogleInteractiveMap oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.dataPoints != oldWidget.dataPoints) {
-      _clusterManager.setItems(widget.dataPoints
-              ?.map((e) => _GoogleDataPoint(original: e))
-              .toList() ??
-          []);
+      _clusterManager.setItems(
+        widget.dataPoints?.map((e) => _GoogleDataPoint(original: e)).toList() ??
+            [],
+      );
     }
   }
 
@@ -52,20 +55,25 @@ class _GoogleInteractiveMapState extends State<GoogleInteractiveMap> {
   Widget build(BuildContext context) {
     return GoogleMap(
       mapType: MapType.normal,
-      initialCameraPosition: widget.initialPosition?.let((e) => CameraPosition(
-                target: widget.initialPosition!.toLatLng(),
-                zoom: widget.initialZoom ?? 10,
-              )) ??
+      initialCameraPosition:
+          widget.initialPosition?.let(
+            (e) => CameraPosition(
+              target: widget.initialPosition!.toLatLng(),
+              zoom: widget.initialZoom ?? 10,
+            ),
+          ) ??
           const CameraPosition(target: LatLng(0, 0)),
       markers: _markers,
       onMapCreated: _onMapCreated,
       onCameraMove: (position) {
         _clusterManager.onCameraMove(position);
-        widget.onCameraMove?.call(type.CameraPosition(
-          center: position.target.toMapCoord(),
-          zoom: position.zoom,
-          rotation: position.bearing,
-        ));
+        widget.onCameraMove?.call(
+          type.CameraPosition(
+            center: position.target.toMapCoord(),
+            zoom: position.zoom,
+            rotation: position.bearing,
+          ),
+        );
       },
       onCameraIdle: _clusterManager.updateMap,
       padding: widget.contentPadding ?? EdgeInsets.zero,
@@ -100,7 +108,8 @@ class _GoogleInteractiveMapState extends State<GoogleInteractiveMap> {
         onTap: () {
           widget.onClusterTap?.call(dataPoints);
         },
-        icon: await widget.clusterBuilder?.call(context, dataPoints) ??
+        icon:
+            await widget.clusterBuilder?.call(context, dataPoints) ??
             BitmapDescriptor.defaultMarker,
       );
     },
@@ -111,9 +120,7 @@ class _GoogleInteractiveMapState extends State<GoogleInteractiveMap> {
 }
 
 class _GoogleDataPoint implements ClusterItem {
-  const _GoogleDataPoint({
-    required this.original,
-  });
+  const _GoogleDataPoint({required this.original});
 
   @override
   LatLng get location => original.position.toLatLng();
@@ -130,8 +137,9 @@ class _ParentController implements InteractiveMapController {
 
   @override
   void setPosition(type.MapCoord position) {
-    controller
-        .animateCamera(CameraUpdate.newLatLngZoom(position.toLatLng(), 10));
+    controller.animateCamera(
+      CameraUpdate.newLatLngZoom(position.toLatLng(), 10),
+    );
   }
 
   final GoogleMapController controller;

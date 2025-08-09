@@ -34,11 +34,12 @@ class AlbumShareOutlierBrowser extends StatefulWidget {
   static const routeName = "/album-share-outlier-browser";
 
   static Route buildRoute(
-          AlbumShareOutlierBrowserArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => AlbumShareOutlierBrowser.fromArgs(args),
-        settings: settings,
-      );
+    AlbumShareOutlierBrowserArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => AlbumShareOutlierBrowser.fromArgs(args),
+    settings: settings,
+  );
 
   const AlbumShareOutlierBrowser({
     super.key,
@@ -46,13 +47,10 @@ class AlbumShareOutlierBrowser extends StatefulWidget {
     required this.album,
   });
 
-  AlbumShareOutlierBrowser.fromArgs(AlbumShareOutlierBrowserArguments args,
-      {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-          album: args.album,
-        );
+  AlbumShareOutlierBrowser.fromArgs(
+    AlbumShareOutlierBrowserArguments args, {
+    Key? key,
+  }) : this(key: key, account: args.account, album: args.album);
 
   @override
   createState() => _AlbumShareOutlierBrowserState();
@@ -72,12 +70,16 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   @override
   build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<ListAlbumShareOutlierBloc,
-          ListAlbumShareOutlierBlocState>(
+      body: BlocListener<
+        ListAlbumShareOutlierBloc,
+        ListAlbumShareOutlierBlocState
+      >(
         bloc: _bloc,
         listener: (context, state) => _onStateChange(context, state),
-        child: BlocBuilder<ListAlbumShareOutlierBloc,
-            ListAlbumShareOutlierBlocState>(
+        child: BlocBuilder<
+          ListAlbumShareOutlierBloc,
+          ListAlbumShareOutlierBlocState
+        >(
           bloc: _bloc,
           builder: (context, state) => _buildContent(context, state),
         ),
@@ -102,7 +104,9 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   }
 
   Widget _buildContent(
-      BuildContext context, ListAlbumShareOutlierBlocState state) {
+    BuildContext context,
+    ListAlbumShareOutlierBlocState state,
+  ) {
     if ((state is ListAlbumShareOutlierBlocSuccess ||
             state is ListAlbumShareOutlierBlocFailure) &&
         state.items.isEmpty) {
@@ -138,20 +142,17 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
       actions: [
         PopupMenuButton<_MenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder: (context) => [
-            PopupMenuItem(
-              value: _MenuOption.fixAll,
-              child: Text(L10n.global().fixAllTooltip),
-            ),
-          ],
+          itemBuilder:
+              (context) => [
+                PopupMenuItem(
+                  value: _MenuOption.fixAll,
+                  child: Text(L10n.global().fixAllTooltip),
+                ),
+              ],
           onSelected: (option) {
             switch (option) {
               case _MenuOption.fixAll:
                 _onFixAllPressed(context);
-                break;
-
-              default:
-                _log.shout("[_buildAppBar] Unknown option: $option");
                 break;
             }
           },
@@ -163,10 +164,7 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   Widget _buildEmptyContent(BuildContext context) {
     return Column(
       children: [
-        AppBar(
-          title: Text(L10n.global().fixSharesTooltip),
-          elevation: 0,
-        ),
+        AppBar(title: Text(L10n.global().fixSharesTooltip), elevation: 0),
         Expanded(
           child: EmptyListIndicator(
             icon: Icons.share_outlined,
@@ -188,7 +186,9 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   }
 
   Widget _buildMissingShareeItem(
-      BuildContext context, _MissingShareeItem item) {
+    BuildContext context,
+    _MissingShareeItem item,
+  ) {
     final Widget trailing;
     switch (_getItemStatus(item.file.fdPath, item.shareWith)) {
       case null:
@@ -215,8 +215,11 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
         maxLines: 1,
         overflow: TextOverflow.ellipsis,
       ),
-      subtitle: Text(L10n.global().missingShareDescription(
-          item.shareWithDisplayName ?? item.shareWith)),
+      subtitle: Text(
+        L10n.global().missingShareDescription(
+          item.shareWithDisplayName ?? item.shareWith,
+        ),
+      ),
       trailing: trailing,
     );
   }
@@ -249,7 +252,8 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
         overflow: TextOverflow.ellipsis,
       ),
       subtitle: Text(
-          L10n.global().extraShareDescription(item.share.shareWithDisplayName)),
+        L10n.global().extraShareDescription(item.share.shareWithDisplayName),
+      ),
       trailing: trailing,
     );
   }
@@ -279,9 +283,7 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
     }
   }
 
-  Widget _buildFixButton({
-    required VoidCallback onPressed,
-  }) {
+  Widget _buildFixButton({required VoidCallback onPressed}) {
     return IconButton(
       onPressed: onPressed,
       icon: const Icon(Icons.handyman_outlined),
@@ -301,14 +303,13 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   }
 
   Widget _buildFixedIcon(BuildContext context) {
-    return const Padding(
-      padding: EdgeInsets.all(12),
-      child: Icon(Icons.check),
-    );
+    return const Padding(padding: EdgeInsets.all(12), child: Icon(Icons.check));
   }
 
   void _onStateChange(
-      BuildContext context, ListAlbumShareOutlierBlocState state) {
+    BuildContext context,
+    ListAlbumShareOutlierBlocState state,
+  ) {
     if (state is ListAlbumShareOutlierBlocInit) {
       _items = [];
     } else if (state is ListAlbumShareOutlierBlocSuccess ||
@@ -322,23 +323,27 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
 
   Future<void> _onFixAllPressed(BuildContext context) async {
     // select only items that are not fixed/being fixed
-    final items = _items.where((i) {
-      if (i is _MissingShareeItem) {
-        return _getItemStatus(i.file.fdPath, i.shareWith) == null;
-      } else if (i is _ExtraShareItem) {
-        return _getItemStatus(i.file.fdPath, i.share.shareWith!) == null;
-      } else {
-        // ?
-        return false;
-      }
-    }).toList();
+    final items =
+        _items.where((i) {
+          if (i is _MissingShareeItem) {
+            return _getItemStatus(i.file.fdPath, i.shareWith) == null;
+          } else if (i is _ExtraShareItem) {
+            return _getItemStatus(i.file.fdPath, i.share.shareWith!) == null;
+          } else {
+            // ?
+            return false;
+          }
+        }).toList();
     setState(() {
       for (final i in items) {
         if (i is _MissingShareeItem) {
           _setItemStatus(i.file.fdPath, i.shareWith, _ItemStatus.processing);
         } else if (i is _ExtraShareItem) {
           _setItemStatus(
-              i.file.fdPath, i.share.shareWith!, _ItemStatus.processing);
+            i.file.fdPath,
+            i.share.shareWith!,
+            _ItemStatus.processing,
+          );
         }
       }
     });
@@ -352,19 +357,22 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   }
 
   void _transformItems(List<ListAlbumShareOutlierItem> items) {
-    _items = () sync* {
-      for (final item in items) {
-        for (final si in item.shareItems) {
-          if (si is ListAlbumShareOutlierMissingShareItem) {
-            yield _MissingShareeItem(
-                item.file, si.shareWith, si.shareWithDisplayName);
-          } else if (si is ListAlbumShareOutlierExtraShareItem) {
-            yield _ExtraShareItem(item.file, si.share);
+    _items =
+        () sync* {
+          for (final item in items) {
+            for (final si in item.shareItems) {
+              if (si is ListAlbumShareOutlierMissingShareItem) {
+                yield _MissingShareeItem(
+                  item.file,
+                  si.shareWith,
+                  si.shareWithDisplayName,
+                );
+              } else if (si is ListAlbumShareOutlierExtraShareItem) {
+                yield _ExtraShareItem(item.file, si.share);
+              }
+            }
           }
-        }
-      }
-    }()
-        .toList();
+        }().toList();
   }
 
   Future<void> _fixMissingSharee(_MissingShareeItem item) async {
@@ -374,7 +382,10 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
     });
     try {
       await CreateUserShare(shareRepo)(
-          widget.account, item.file, item.shareWith.raw);
+        widget.account,
+        item.file,
+        item.shareWith.raw,
+      );
       if (mounted) {
         setState(() {
           _setItemStatus(item.file.fdPath, item.shareWith, _ItemStatus.fixed);
@@ -382,7 +393,10 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
       }
     } catch (e, stackTrace) {
       _log.shout(
-          "[_fixMissingSharee] Failed while CreateUserShare", e, stackTrace);
+        "[_fixMissingSharee] Failed while CreateUserShare",
+        e,
+        stackTrace,
+      );
       SnackBarManager().showSnackBarForException(e);
       if (mounted) {
         setState(() {
@@ -396,14 +410,20 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
     final shareRepo = ShareRepo(ShareRemoteDataSource());
     setState(() {
       _setItemStatus(
-          item.file.fdPath, item.share.shareWith!, _ItemStatus.processing);
+        item.file.fdPath,
+        item.share.shareWith!,
+        _ItemStatus.processing,
+      );
     });
     try {
       await RemoveShare(shareRepo)(widget.account, item.share);
       if (mounted) {
         setState(() {
           _setItemStatus(
-              item.file.fdPath, item.share.shareWith!, _ItemStatus.fixed);
+            item.file.fdPath,
+            item.share.shareWith!,
+            _ItemStatus.fixed,
+          );
         });
       }
     } catch (e, stackTrace) {
@@ -444,8 +464,9 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
     _itemStatuses[fileKey]!.remove(shareeKey);
   }
 
-  late final _bloc =
-      ListAlbumShareOutlierBloc(KiwiContainer().resolve<DiContainer>());
+  late final _bloc = ListAlbumShareOutlierBloc(
+    KiwiContainer().resolve<DiContainer>(),
+  );
 
   var _items = <_ListItem>[];
   final _itemStatuses = <String, Map<CiString, _ItemStatus>>{};
@@ -464,18 +485,16 @@ class _ExtraShareItem extends _ListItem {
 
 class _MissingShareeItem extends _ListItem {
   const _MissingShareeItem(
-      this.file, this.shareWith, this.shareWithDisplayName);
+    this.file,
+    this.shareWith,
+    this.shareWithDisplayName,
+  );
 
   final FileDescriptor file;
   final CiString shareWith;
   final String? shareWithDisplayName;
 }
 
-enum _ItemStatus {
-  processing,
-  fixed,
-}
+enum _ItemStatus { processing, fixed }
 
-enum _MenuOption {
-  fixAll,
-}
+enum _MenuOption { fixAll }

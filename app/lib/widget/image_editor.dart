@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:kiwi/kiwi.dart';
@@ -41,18 +40,10 @@ class ImageEditor extends StatefulWidget {
         settings: settings,
       );
 
-  const ImageEditor({
-    super.key,
-    required this.account,
-    required this.file,
-  });
+  const ImageEditor({super.key, required this.account, required this.file});
 
   ImageEditor.fromArgs(ImageEditorArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-          file: args.file,
-        );
+    : this(key: key, account: args.account, file: args.file);
 
   @override
   createState() => _ImageEditorState();
@@ -89,19 +80,15 @@ class _ImageEditorState extends State<ImageEditor> {
 
   @override
   build(BuildContext context) => Theme(
-        data: buildDarkTheme(context),
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(
-            systemNavigationBarColor: Colors.black,
-            systemNavigationBarIconBrightness: Brightness.dark,
-          ),
-          child: Scaffold(
-            body: Builder(
-              builder: _buildContent,
-            ),
-          ),
-        ),
-      );
+    data: buildDarkTheme(context),
+    child: AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.black,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(body: Builder(builder: _buildContent)),
+    ),
+  );
 
   Future<void> _initImage() async {
     final fileInfo = await getFileFromCache(
@@ -139,25 +126,28 @@ class _ImageEditorState extends State<ImageEditor> {
           children: [
             _buildAppBar(context),
             Expanded(
-              child: _isDoneInit
-                  ? _isCropMode
-                      ? CropController(
-                          // crop always work on the src, otherwise we'll be
-                          // cropping repeatedly
-                          image: _src,
-                          initialState: _cropFilter,
-                          onCropChanged: (cropFilter) {
-                            _cropFilter = cropFilter;
-                            _applyFilters();
-                          },
-                        )
-                      : Image(
-                          image: (_dst ?? _src).run((obj) =>
-                              PixelImage(obj.pixel, obj.width, obj.height)),
-                          fit: BoxFit.contain,
-                          gaplessPlayback: true,
-                        )
-                  : Container(),
+              child:
+                  _isDoneInit
+                      ? _isCropMode
+                          ? CropController(
+                            // crop always work on the src, otherwise we'll be
+                            // cropping repeatedly
+                            image: _src,
+                            initialState: _cropFilter,
+                            onCropChanged: (cropFilter) {
+                              _cropFilter = cropFilter;
+                              _applyFilters();
+                            },
+                          )
+                          : Image(
+                            image: (_dst ?? _src).run(
+                              (obj) =>
+                                  PixelImage(obj.pixel, obj.width, obj.height),
+                            ),
+                            fit: BoxFit.contain,
+                            gaplessPlayback: true,
+                          )
+                      : Container(),
             ),
             if (_activeTool == _ToolType.color)
               ColorToolbar(
@@ -193,26 +183,26 @@ class _ImageEditorState extends State<ImageEditor> {
   }
 
   Widget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: BackButton(onPressed: () => _onBackButton(context)),
-        title: Text(L10n.global().imageEditTitle),
-        actions: [
-          if (_isModified)
-            IconButton(
-              icon: const Icon(Icons.save_outlined),
-              tooltip: L10n.global().saveTooltip,
-              onPressed: () => _onSavePressed(context),
-            ),
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            tooltip: L10n.global().helpTooltip,
-            onPressed: () {
-              launch(help_util.editPhotosUrl);
-            },
-          ),
-        ],
-      );
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    leading: BackButton(onPressed: () => _onBackButton(context)),
+    title: Text(L10n.global().imageEditTitle),
+    actions: [
+      if (_isModified)
+        IconButton(
+          icon: const Icon(Icons.save_outlined),
+          tooltip: L10n.global().saveTooltip,
+          onPressed: () => _onSavePressed(context),
+        ),
+      IconButton(
+        icon: const Icon(Icons.help_outline),
+        tooltip: L10n.global().helpTooltip,
+        onPressed: () {
+          launch(help_util.editPhotosUrl);
+        },
+      ),
+    ],
+  );
 
   Widget _buildToolBar(BuildContext context) {
     return Align(
@@ -257,24 +247,27 @@ class _ImageEditorState extends State<ImageEditor> {
 
     final result = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().imageEditDiscardDialogTitle),
-        content: Text(L10n.global().imageEditDiscardDialogContent),
-        actions: [
-          TextButton(
-            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
-            onPressed: () {
-              Navigator.of(context).pop(false);
-            },
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().imageEditDiscardDialogTitle),
+            content: Text(L10n.global().imageEditDiscardDialogContent),
+            actions: [
+              TextButton(
+                child: Text(
+                  MaterialLocalizations.of(context).cancelButtonLabel,
+                ),
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+              ),
+              TextButton(
+                child: Text(L10n.global().discardButtonLabel),
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+              ),
+            ],
           ),
-          TextButton(
-            child: Text(L10n.global().discardButtonLabel),
-            onPressed: () {
-              Navigator.of(context).pop(true);
-            },
-          ),
-        ],
-      ),
     );
     if (result == true) {
       Navigator.of(context).pop();
@@ -301,8 +294,8 @@ class _ImageEditorState extends State<ImageEditor> {
     await showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) =>
-          const ImageEditorPersistOptionDialog(isFromEditor: true),
+      builder:
+          (context) => const ImageEditorPersistOptionDialog(isFromEditor: true),
     );
   }
 
@@ -314,7 +307,7 @@ class _ImageEditorState extends State<ImageEditor> {
   List<ImageFilter> _buildFilterList() {
     return [
       if (_cropFilter != null) _cropFilter!.toImageFilter()!,
-      ..._transformFilters.map((f) => f.toImageFilter()).whereNotNull(),
+      ..._transformFilters.map((f) => f.toImageFilter()).nonNulls,
       ..._colorFilters.map((f) => f.toImageFilter()),
     ];
   }
@@ -342,10 +335,7 @@ class _ImageEditorState extends State<ImageEditor> {
   TransformArguments? _cropFilter;
 }
 
-enum _ToolType {
-  color,
-  transform,
-}
+enum _ToolType { color, transform }
 
 class _ToolButton extends StatelessWidget {
   const _ToolButton({
@@ -367,9 +357,10 @@ class _ToolButton extends StatelessWidget {
             onTap: onPressed,
             child: Container(
               decoration: BoxDecoration(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : null,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.secondaryContainer
+                        : null,
                 // borderRadius: const BorderRadius.all(Radius.circular(24)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -379,18 +370,22 @@ class _ToolButton extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color: isSelected
-                        ? Theme.of(context).colorScheme.onSecondaryContainer
-                        : M3.of(context).filterChip.disabled.labelText,
+                    color:
+                        isSelected
+                            ? Theme.of(context).colorScheme.onSecondaryContainer
+                            : M3.of(context).filterChip.disabled.labelText,
                     size: 18,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     label,
                     style: TextStyle(
-                      color: isSelected
-                          ? Theme.of(context).colorScheme.onSecondaryContainer
-                          : Theme.of(context).colorScheme.onSurface,
+                      color:
+                          isSelected
+                              ? Theme.of(
+                                context,
+                              ).colorScheme.onSecondaryContainer
+                              : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],

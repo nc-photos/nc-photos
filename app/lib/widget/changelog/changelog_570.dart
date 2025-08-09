@@ -12,7 +12,8 @@ class _Changelog570 extends StatelessWidget {
         _subSection("Changes"),
         _bulletGroup(
           const Text(
-              "Fixed broken enhancements that did nothing or produced weird results"),
+            "Fixed broken enhancements that did nothing or produced weird results",
+          ),
           [
             const Text("Color pop"),
             const Text("Low-light enhancement"),

@@ -11,5 +11,6 @@ extension _$DeleteLocalSelectionHandlerNpLog on DeleteLocalSelectionHandler {
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.handler.delete_local_selection_handler.DeleteLocalSelectionHandler");
+    "widget.handler.delete_local_selection_handler.DeleteLocalSelectionHandler",
+  );
 }

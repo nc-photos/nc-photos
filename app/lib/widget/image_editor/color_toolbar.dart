@@ -47,12 +47,8 @@ class _ColorToolbarState extends State<ColorToolbar> {
   }
 
   @override
-  build(BuildContext context) => Column(
-        children: [
-          _buildFilterOption(context),
-          _buildFilterBar(context),
-        ],
-      );
+  build(BuildContext context) =>
+      Column(children: [_buildFilterOption(context), _buildFilterBar(context)]);
 
   Widget _buildFilterOption(BuildContext context) {
     Widget? child;
@@ -223,80 +219,98 @@ class _ColorToolbarState extends State<ColorToolbar> {
   }
 
   Widget _buildBrightnessOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.brightness.name),
-        min: -100,
-        max: 100,
-        initialValue:
-            (_filters[ColorToolType.brightness] as _BrightnessArguments).value,
-        onChangeEnd: (value) => _onOptionValueChanged(
-            ColorToolType.brightness, _BrightnessArguments(value)),
-      );
+    context,
+    key: Key(ColorToolType.brightness.name),
+    min: -100,
+    max: 100,
+    initialValue:
+        (_filters[ColorToolType.brightness] as _BrightnessArguments).value,
+    onChangeEnd:
+        (value) => _onOptionValueChanged(
+          ColorToolType.brightness,
+          _BrightnessArguments(value),
+        ),
+  );
 
   Widget _buildContrastOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.contrast.name),
-        min: -100,
-        max: 100,
-        initialValue:
-            (_filters[ColorToolType.contrast] as _ContrastArguments).value,
-        onChangeEnd: (value) => _onOptionValueChanged(
-            ColorToolType.contrast, _ContrastArguments(value)),
-      );
+    context,
+    key: Key(ColorToolType.contrast.name),
+    min: -100,
+    max: 100,
+    initialValue:
+        (_filters[ColorToolType.contrast] as _ContrastArguments).value,
+    onChangeEnd:
+        (value) => _onOptionValueChanged(
+          ColorToolType.contrast,
+          _ContrastArguments(value),
+        ),
+  );
 
   Widget _buildWhitePointOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.whitePoint.name),
-        min: -100,
-        max: 100,
-        initialValue:
-            (_filters[ColorToolType.whitePoint] as _WhitePointArguments).value,
-        onChangeEnd: (value) => _onOptionValueChanged(
-            ColorToolType.whitePoint, _WhitePointArguments(value)),
-      );
+    context,
+    key: Key(ColorToolType.whitePoint.name),
+    min: -100,
+    max: 100,
+    initialValue:
+        (_filters[ColorToolType.whitePoint] as _WhitePointArguments).value,
+    onChangeEnd:
+        (value) => _onOptionValueChanged(
+          ColorToolType.whitePoint,
+          _WhitePointArguments(value),
+        ),
+  );
 
   Widget _buildBlackPointOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.blackPoint.name),
-        min: -100,
-        max: 100,
-        initialValue:
-            (_filters[ColorToolType.blackPoint] as _BlackPointArguments).value,
-        onChangeEnd: (value) => _onOptionValueChanged(
-            ColorToolType.blackPoint, _BlackPointArguments(value)),
-      );
+    context,
+    key: Key(ColorToolType.blackPoint.name),
+    min: -100,
+    max: 100,
+    initialValue:
+        (_filters[ColorToolType.blackPoint] as _BlackPointArguments).value,
+    onChangeEnd:
+        (value) => _onOptionValueChanged(
+          ColorToolType.blackPoint,
+          _BlackPointArguments(value),
+        ),
+  );
 
   Widget _buildSaturationOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.saturation.name),
-        min: -100,
-        max: 100,
-        initialValue:
-            (_filters[ColorToolType.saturation] as _SaturationArguments).value,
-        onChangeEnd: (value) => _onOptionValueChanged(
-            ColorToolType.saturation, _SaturationArguments(value)),
-      );
+    context,
+    key: Key(ColorToolType.saturation.name),
+    min: -100,
+    max: 100,
+    initialValue:
+        (_filters[ColorToolType.saturation] as _SaturationArguments).value,
+    onChangeEnd:
+        (value) => _onOptionValueChanged(
+          ColorToolType.saturation,
+          _SaturationArguments(value),
+        ),
+  );
 
   Widget _buildWarmthOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.warmth.name),
-        min: -100,
-        max: 100,
-        initialValue:
-            (_filters[ColorToolType.warmth] as _WarmthArguments).value,
-        onChangeEnd: (value) => _onOptionValueChanged(
-            ColorToolType.warmth, _WarmthArguments(value)),
-      );
+    context,
+    key: Key(ColorToolType.warmth.name),
+    min: -100,
+    max: 100,
+    initialValue: (_filters[ColorToolType.warmth] as _WarmthArguments).value,
+    onChangeEnd:
+        (value) => _onOptionValueChanged(
+          ColorToolType.warmth,
+          _WarmthArguments(value),
+        ),
+  );
 
   Widget _buildTintOption(BuildContext context) => _buildSliderOption(
-        context,
-        key: Key(ColorToolType.tint.name),
-        min: -100,
-        max: 100,
-        initialValue: (_filters[ColorToolType.tint] as _TintArguments).value,
-        onChangeEnd: (value) =>
+    context,
+    key: Key(ColorToolType.tint.name),
+    min: -100,
+    max: 100,
+    initialValue: (_filters[ColorToolType.tint] as _TintArguments).value,
+    onChangeEnd:
+        (value) =>
             _onOptionValueChanged(ColorToolType.tint, _TintArguments(value)),
-      );
+  );
 
   void _onFilterPressed(ColorToolType type, ColorArguments defArgs) {
     if (_selectedFilter == type) {

@@ -22,8 +22,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic buttons, dynamic error = copyWithNull}) {
     return _State(
-        buttons: buttons as List<ViewerAppBarButtonType>? ?? that.buttons,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      buttons: buttons as List<ViewerAppBarButtonType>? ?? that.buttons,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -44,7 +45,8 @@ extension _$_WrappedViewerAppBarSettingsStateNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.settings.viewer_app_bar_settings._WrappedViewerAppBarSettingsState");
+    "widget.settings.viewer_app_bar_settings._WrappedViewerAppBarSettingsState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

@@ -10,6 +10,7 @@ extension _$_HomeSearchSuggestionStateNpLog on _HomeSearchSuggestionState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.home_search_suggestion._HomeSearchSuggestionState");
+  static final log = Logger(
+    "widget.home_search_suggestion._HomeSearchSuggestionState",
+  );
 }

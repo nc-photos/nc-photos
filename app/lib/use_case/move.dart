@@ -27,15 +27,14 @@ class Move {
     bool shouldCreateMissingDir = false,
     bool shouldOverwrite = false,
     bool shouldRenameOnOverwrite = false,
-  }) =>
-      _doWork(
-        account,
-        file,
-        destination,
-        shouldCreateMissingDir: shouldCreateMissingDir,
-        shouldOverwrite: shouldOverwrite,
-        shouldRenameOnOverwrite: shouldRenameOnOverwrite,
-      );
+  }) => _doWork(
+    account,
+    file,
+    destination,
+    shouldCreateMissingDir: shouldCreateMissingDir,
+    shouldOverwrite: shouldOverwrite,
+    shouldRenameOnOverwrite: shouldRenameOnOverwrite,
+  );
 
   Future<void> _doWork(
     Account account,
@@ -51,16 +50,24 @@ class Move {
       _log.info("[call] Retry with: '$to'");
     }
     try {
-      await _c.fileRepo
-          .move(account, file, to, shouldOverwrite: shouldOverwrite);
+      await _c.fileRepo.move(
+        account,
+        file,
+        to,
+        shouldOverwrite: shouldOverwrite,
+      );
     } catch (e) {
       if (e is ApiException) {
         if (e.response.statusCode == 409 && shouldCreateMissingDir) {
           // no dir
           _log.info("[call] Auto creating parent dirs");
           await CreateDir(_c.fileRepo)(account, path_lib.dirname(to));
-          await _c.fileRepo
-              .move(account, file, to, shouldOverwrite: shouldOverwrite);
+          await _c.fileRepo.move(
+            account,
+            file,
+            to,
+            shouldOverwrite: shouldOverwrite,
+          );
         } else if (e.response.statusCode == 412 && shouldRenameOnOverwrite) {
           return _doWork(
             account,
@@ -78,17 +85,19 @@ class Move {
         rethrow;
       }
     }
-    KiwiContainer()
-        .resolve<EventBus>()
-        .fire(FileMovedEvent(account, file, destination));
+    KiwiContainer().resolve<EventBus>().fire(
+      FileMovedEvent(account, file, destination),
+    );
   }
 
   String _renameDestination(String destination, int retryCount) {
     if (retryCount < 2) {
       return destination;
     }
-    final newName =
-        file_util.renameConflict(path_lib.basename(destination), retryCount);
+    final newName = file_util.renameConflict(
+      path_lib.basename(destination),
+      retryCount,
+    );
     return "${path_lib.dirname(destination)}/$newName";
   }
 

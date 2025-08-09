@@ -22,9 +22,10 @@ class _$PersonCopyWithWorkerImpl implements $PersonCopyWithWorker {
   @override
   Person call({dynamic name, dynamic contentProvider}) {
     return Person(
-        name: name as String? ?? that.name,
-        contentProvider:
-            contentProvider as PersonContentProvider? ?? that.contentProvider);
+      name: name as String? ?? that.name,
+      contentProvider:
+          contentProvider as PersonContentProvider? ?? that.contentProvider,
+    );
   }
 
   final Person that;

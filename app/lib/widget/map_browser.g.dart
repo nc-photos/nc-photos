@@ -13,40 +13,45 @@ part of 'map_browser.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<_DataPoint>? data,
-      MapCoord? initialPoint,
-      bool? isShowDataRangeControlPanel,
-      _DateRangeType? dateRangeType,
-      DateRange? localDateRange,
-      _DateRangeType? prefDateRangeType,
-      ExceptionEvent? error});
+  _State call({
+    List<_DataPoint>? data,
+    MapCoord? initialPoint,
+    bool? isShowDataRangeControlPanel,
+    _DateRangeType? dateRangeType,
+    DateRange? localDateRange,
+    _DateRangeType? prefDateRangeType,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic data,
-      dynamic initialPoint = copyWithNull,
-      dynamic isShowDataRangeControlPanel,
-      dynamic dateRangeType,
-      dynamic localDateRange,
-      dynamic prefDateRangeType,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic data,
+    dynamic initialPoint = copyWithNull,
+    dynamic isShowDataRangeControlPanel,
+    dynamic dateRangeType,
+    dynamic localDateRange,
+    dynamic prefDateRangeType,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        data: data as List<_DataPoint>? ?? that.data,
-        initialPoint: initialPoint == copyWithNull
-            ? that.initialPoint
-            : initialPoint as MapCoord?,
-        isShowDataRangeControlPanel: isShowDataRangeControlPanel as bool? ??
-            that.isShowDataRangeControlPanel,
-        dateRangeType: dateRangeType as _DateRangeType? ?? that.dateRangeType,
-        localDateRange: localDateRange as DateRange? ?? that.localDateRange,
-        prefDateRangeType:
-            prefDateRangeType as _DateRangeType? ?? that.prefDateRangeType,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      data: data as List<_DataPoint>? ?? that.data,
+      initialPoint:
+          initialPoint == copyWithNull
+              ? that.initialPoint
+              : initialPoint as MapCoord?,
+      isShowDataRangeControlPanel:
+          isShowDataRangeControlPanel as bool? ??
+          that.isShowDataRangeControlPanel,
+      dateRangeType: dateRangeType as _DateRangeType? ?? that.dateRangeType,
+      localDateRange: localDateRange as DateRange? ?? that.localDateRange,
+      prefDateRangeType:
+          prefDateRangeType as _DateRangeType? ?? that.prefDateRangeType,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

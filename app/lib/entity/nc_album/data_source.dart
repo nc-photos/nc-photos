@@ -31,10 +31,10 @@ class NcAlbumRemoteDataSource implements NcAlbumDataSource {
   @override
   Future<void> create(Account account, NcAlbum album) async {
     _log.info("[create] account: ${account.userId}, album: ${album.path}");
-    final response = await ApiUtil.fromAccount(account)
-        .photos(account.userId.toString())
-        .album(album.strippedPath)
-        .mkcol();
+    final response =
+        await ApiUtil.fromAccount(
+          account,
+        ).photos(account.userId.toString()).album(album.strippedPath).mkcol();
     if (!response.isGood) {
       _log.severe("[create] Failed requesting server: $response");
       throw ApiException(
@@ -47,10 +47,10 @@ class NcAlbumRemoteDataSource implements NcAlbumDataSource {
   @override
   Future<void> remove(Account account, NcAlbum album) async {
     _log.info("[remove] account: ${account.userId}, album: ${album.path}");
-    final response = await ApiUtil.fromAccount(account)
-        .photos(account.userId.toString())
-        .album(album.strippedPath)
-        .delete();
+    final response =
+        await ApiUtil.fromAccount(
+          account,
+        ).photos(account.userId.toString()).album(album.strippedPath).delete();
     if (!response.isGood) {
       _log.severe("[remove] Failed requesting server: $response");
       throw ApiException(
@@ -63,7 +63,8 @@ class NcAlbumRemoteDataSource implements NcAlbumDataSource {
   @override
   Future<List<NcAlbumItem>> getItems(Account account, NcAlbum album) async {
     _log.info(
-        "[getItems] account: ${account.userId}, album: ${album.strippedPath}");
+      "[getItems] account: ${account.userId}, album: ${album.strippedPath}",
+    );
     final response = await ApiUtil.fromAccount(account).files().propfind(
       path: album.path,
       getlastmodified: 1,
@@ -162,11 +163,14 @@ class NcAlbumSqliteDbDataSource implements NcAlbumCacheDataSource {
             return DbNcAlbumConverter.fromDb(account.userId.toString(), e);
           } catch (e, stackTrace) {
             _log.severe(
-                "[getAlbums] Failed while converting DB entry", e, stackTrace);
+              "[getAlbums] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 
@@ -185,7 +189,8 @@ class NcAlbumSqliteDbDataSource implements NcAlbumCacheDataSource {
   @override
   Future<List<NcAlbumItem>> getItems(Account account, NcAlbum album) async {
     _log.info(
-        "[getItems] account: ${account.userId}, album: ${album.strippedPath}");
+      "[getItems] account: ${account.userId}, album: ${album.strippedPath}",
+    );
     final results = await npDb.getNcAlbumItemsByParent(
       account: account.toDb(),
       parent: album.toDb(),
@@ -193,22 +198,30 @@ class NcAlbumSqliteDbDataSource implements NcAlbumCacheDataSource {
     return results
         .map((e) {
           try {
-            return DbNcAlbumItemConverter.fromDb(account.userId.toString(),
-                album.strippedPath, album.isOwned, e);
+            return DbNcAlbumItemConverter.fromDb(
+              account.userId.toString(),
+              album.strippedPath,
+              album.isOwned,
+              e,
+            );
           } catch (e, stackTrace) {
             _log.severe(
-                "[getItems] Failed while converting DB entry", e, stackTrace);
+              "[getItems] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 
   @override
   Future<void> updateAlbumsCache(Account account, List<NcAlbum> remote) async {
     _log.info(
-        "[updateAlbumsCache] account: ${account.userId}, remote: ${remote.map((e) => e.strippedPath)}");
+      "[updateAlbumsCache] account: ${account.userId}, remote: ${remote.map((e) => e.strippedPath)}",
+    );
     await npDb.syncNcAlbums(
       account: account.toDb(),
       albums: remote.map(DbNcAlbumConverter.toDb).toList(),
@@ -217,9 +230,13 @@ class NcAlbumSqliteDbDataSource implements NcAlbumCacheDataSource {
 
   @override
   Future<void> updateItemsCache(
-      Account account, NcAlbum album, List<NcAlbumItem> remote) async {
+    Account account,
+    NcAlbum album,
+    List<NcAlbumItem> remote,
+  ) async {
     _log.info(
-        "[updateItemsCache] account: ${account.userId}, album: ${album.name}, remote: ${remote.map((e) => e.strippedPath)}");
+      "[updateItemsCache] account: ${account.userId}, album: ${album.name}, remote: ${remote.map((e) => e.strippedPath)}",
+    );
     await npDb.syncNcAlbumItems(
       account: account.toDb(),
       album: album.toDb(),

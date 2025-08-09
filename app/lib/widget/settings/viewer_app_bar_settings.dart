@@ -34,10 +34,7 @@ class ViewerAppBarSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        isBottom: false,
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(isBottom: false, prefController: context.read()),
       child: const _WrappedViewerAppBarSettings(isBottom: false),
     );
   }
@@ -49,19 +46,14 @@ class ViewerBottomAppBarSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        isBottom: true,
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(isBottom: true, prefController: context.read()),
       child: const _WrappedViewerAppBarSettings(isBottom: true),
     );
   }
 }
 
 class _WrappedViewerAppBarSettings extends StatefulWidget {
-  const _WrappedViewerAppBarSettings({
-    required this.isBottom,
-  });
+  const _WrappedViewerAppBarSettings({required this.isBottom});
 
   @override
   State<StatefulWidget> createState() => _WrappedViewerAppBarSettingsState();
@@ -79,9 +71,10 @@ class _WrappedViewerAppBarSettingsState
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
         final prefController = context.bloc.prefController;
-        final from = widget.isBottom
-            ? prefController.viewerBottomAppBarButtonsValue
-            : prefController.viewerAppBarButtonsValue;
+        final from =
+            widget.isBottom
+                ? prefController.viewerBottomAppBarButtonsValue
+                : prefController.viewerAppBarButtonsValue;
         final to = context.state.buttons;
         if (!listEquals(from, to)) {
           _log.info("[build] Updated: ${to.toReadableString()}");
@@ -94,9 +87,11 @@ class _WrappedViewerAppBarSettingsState
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(widget.isBottom
-              ? L10n.global().settingsViewerCustomizeBottomAppBarTitle
-              : L10n.global().settingsViewerCustomizeAppBarTitle),
+          title: Text(
+            widget.isBottom
+                ? L10n.global().settingsViewerCustomizeBottomAppBarTitle
+                : L10n.global().settingsViewerCustomizeAppBarTitle,
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -109,12 +104,13 @@ class _WrappedViewerAppBarSettingsState
         body: MultiBlocListener(
           listeners: [
             _BlocListener(
-              listenWhen: (previous, current) =>
-                  previous.error != current.error,
+              listenWhen:
+                  (previous, current) => previous.error != current.error,
               listener: (context, state) {
                 if (state.error != null && isPageVisible()) {
-                  SnackBarManager()
-                      .showSnackBarForException(state.error!.error);
+                  SnackBarManager().showSnackBarForException(
+                    state.error!.error,
+                  );
                 }
               },
             ),
@@ -123,8 +119,10 @@ class _WrappedViewerAppBarSettingsState
             children: [
               widget.isBottom ? const _DemoBottomView() : const _DemoView(),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
                 child: Text(L10n.global().dragAndDropRearrangeButtons),
               ),
               const Expanded(child: _CandidateGrid()),

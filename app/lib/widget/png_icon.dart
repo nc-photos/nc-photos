@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 
 class PngIcon extends StatelessWidget {
-  const PngIcon(
-    this.asset, {
-    super.key,
-    this.size = 24,
-  });
+  const PngIcon(this.asset, {super.key, this.size = 24});
 
   @override
   Widget build(BuildContext context) {

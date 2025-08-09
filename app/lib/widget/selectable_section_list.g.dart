@@ -10,6 +10,7 @@ extension _$_SelectableSectionListStateNpLog on _SelectableSectionListState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.selectable_section_list._SelectableSectionListState");
+  static final log = Logger(
+    "widget.selectable_section_list._SelectableSectionListState",
+  );
 }

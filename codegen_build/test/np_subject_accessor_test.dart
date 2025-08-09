@@ -79,7 +79,8 @@ $src
 }
 
 String _genExpected(String src) {
-  return """// GENERATED CODE - DO NOT MODIFY BY HAND
+  return """// dart format width=80
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'test.dart';
 
@@ -105,8 +106,11 @@ Future<void> _resolveCompilationUnit(String filePath) async {
   final files =
       Directory(p.dirname(filePath)).listSync().whereType<File>().toList();
 
-  final fileMap = Map<String, String>.fromEntries(files.map(
-      (f) => MapEntry('a|lib/${p.basename(f.path)}', f.readAsStringSync())));
+  final fileMap = Map<String, String>.fromEntries(
+    files.map(
+      (f) => MapEntry('a|lib/${p.basename(f.path)}', f.readAsStringSync()),
+    ),
+  );
 
   await resolveSources(fileMap, (item) async {
     return await item.libraryFor(assetId);

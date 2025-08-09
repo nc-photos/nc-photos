@@ -41,7 +41,8 @@ $src
 }
 
 String _genExpected(String src) {
-  return """// GENERATED CODE - DO NOT MODIFY BY HAND
+  return """// dart format width=80
+// GENERATED CODE - DO NOT MODIFY BY HAND
 
 part of 'test.dart';
 
@@ -53,11 +54,11 @@ $src""";
 }
 
 Future _buildTest(String src, String expected) => buildTest(
-      generators: [const NpLogGenerator()],
-      pkgName: _pkgName,
-      src: src,
-      expected: expected,
-    );
+  generators: [const NpLogGenerator()],
+  pkgName: _pkgName,
+  src: src,
+  expected: expected,
+);
 
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;

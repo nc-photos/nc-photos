@@ -20,17 +20,17 @@ class TagRemoteDataSource implements TagDataSource {
   list(Account account) async {
     _log.info("[list] $account");
     final response = await ApiUtil.fromAccount(account).systemtags().propfind(
-          id: 1,
-          displayName: 1,
-          userVisible: 1,
-          userAssignable: 1,
-        );
+      id: 1,
+      displayName: 1,
+      userVisible: 1,
+      userAssignable: 1,
+    );
     if (!response.isGood) {
       _log.severe("[list] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiTags = await api.TagParser().parse(response.body);
@@ -43,18 +43,13 @@ class TagRemoteDataSource implements TagDataSource {
     final response = await ApiUtil.fromAccount(account)
         .systemtagsRelations()
         .files(file.fileId!)
-        .propfind(
-          id: 1,
-          displayName: 1,
-          userVisible: 1,
-          userAssignable: 1,
-        );
+        .propfind(id: 1, displayName: 1, userVisible: 1, userAssignable: 1);
     if (!response.isGood) {
       _log.severe("[listByFile] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiTags = await api.TagParser().parse(response.body);

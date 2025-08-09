@@ -16,9 +16,7 @@ class NewCollectionFileItem implements CollectionFileItem, NewCollectionItem {
   const NewCollectionFileItem(this.file);
 
   @override
-  NewCollectionFileItem copyWith({
-    FileDescriptor? file,
-  }) {
+  NewCollectionFileItem copyWith({FileDescriptor? file}) {
     return NewCollectionFileItem(file ?? this.file);
   }
 

@@ -21,9 +21,7 @@ class _SyncByApp {
     await _geocoder.init();
   }
 
-  Stream<File> syncFiles({
-    required List<int> fileIds,
-  }) async* {
+  Stream<File> syncFiles({required List<int> fileIds}) async* {
     for (final ids in partition(fileIds, 100)) {
       yield* _syncGroup(ids);
     }
@@ -64,10 +62,11 @@ class _SyncByApp {
         }
         _log.fine("[syncOne] Updating metadata for ${file.path}");
         final binary = await GetFileBinary(fileRepo)(account, file);
-        final metadata =
-            (await LoadMetadata().loadRemote(account, file, binary)).copyWith(
-          fileEtag: file.etag,
-        );
+        final metadata = (await LoadMetadata().loadRemote(
+          account,
+          file,
+          binary,
+        )).copyWith(fileEtag: file.etag);
         metadataUpdate = OrNull(metadata);
       }
 
@@ -84,8 +83,11 @@ class _SyncByApp {
         }
         locationUpdate = OrNull(location ?? ImageLocation.empty());
       } catch (e, stackTrace) {
-        _log.severe("[syncOne] Failed while reverse geocoding: ${file.path}", e,
-            stackTrace);
+        _log.severe(
+          "[syncOne] Failed while reverse geocoding: ${file.path}",
+          e,
+          stackTrace,
+        );
         // if failed, we skip updating the location
       }
 
@@ -101,8 +103,11 @@ class _SyncByApp {
         return null;
       }
     } catch (e, stackTrace) {
-      _log.severe("[syncOne] Failed while updating metadata: ${file.path}", e,
-          stackTrace);
+      _log.severe(
+        "[syncOne] Failed while updating metadata: ${file.path}",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }

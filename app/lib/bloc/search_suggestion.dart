@@ -60,14 +60,15 @@ class SearchSuggestionBlocSuccess<T> extends SearchSuggestionBlocState<T> {
 @npLog
 class SearchSuggestionBloc<T>
     extends Bloc<SearchSuggestionBlocEvent, SearchSuggestionBlocState<T>> {
-  SearchSuggestionBloc({
-    required this.itemToKeywords,
-  }) : super(SearchSuggestionBlocInit<T>()) {
+  SearchSuggestionBloc({required this.itemToKeywords})
+    : super(SearchSuggestionBlocInit<T>()) {
     on<SearchSuggestionBlocEvent>(_onEvent);
   }
 
-  Future<void> _onEvent(SearchSuggestionBlocEvent event,
-      Emitter<SearchSuggestionBlocState<T>> emit) async {
+  Future<void> _onEvent(
+    SearchSuggestionBlocEvent event,
+    Emitter<SearchSuggestionBlocState<T>> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is SearchSuggestionBlocSearchEvent) {
       await _onEventSearch(event, emit);
@@ -76,8 +77,10 @@ class SearchSuggestionBloc<T>
     }
   }
 
-  Future<void> _onEventSearch(SearchSuggestionBlocSearchEvent ev,
-      Emitter<SearchSuggestionBlocState<T>> emit) async {
+  Future<void> _onEventSearch(
+    SearchSuggestionBlocSearchEvent ev,
+    Emitter<SearchSuggestionBlocState<T>> emit,
+  ) async {
     emit(SearchSuggestionBlocLoading(state.results));
     // doesn't work with upper case
     final results = _search.search(ev.phrase.toCaseInsensitiveString());
@@ -85,31 +88,35 @@ class SearchSuggestionBloc<T>
       final str = results.map((e) => "${e.score}: ${e.text}").join("\n");
       _log.info("[_onEventSearch] Search '${ev.phrase}':\n$str");
     }
-    final matches = results
-        .where((element) => element.score > 0)
-        .map((e) {
-          if (itemToKeywords(e.value as T)
-              .any((k) => k.startsWith(ev.phrase))) {
-            // prefer names that start exactly with the search phrase
-            return (score: e.score + 1, item: e.value as T);
-          } else {
-            return (score: e.score, item: e.value as T);
-          }
-        })
-        .sorted((a, b) => a.score.compareTo(b.score))
-        .reversed
-        .distinctIf(
-          (a, b) => identical(a.item, b.item),
-          (a) => a.item.hashCode,
-        )
-        .map((e) => e.item)
-        .toList();
+    final matches =
+        results
+            .where((element) => element.score > 0)
+            .map((e) {
+              if (itemToKeywords(
+                e.value as T,
+              ).any((k) => k.startsWith(ev.phrase))) {
+                // prefer names that start exactly with the search phrase
+                return (score: e.score + 1, item: e.value as T);
+              } else {
+                return (score: e.score, item: e.value as T);
+              }
+            })
+            .sorted((a, b) => a.score.compareTo(b.score))
+            .reversed
+            .distinctIf(
+              (a, b) => identical(a.item, b.item),
+              (a) => a.item.hashCode,
+            )
+            .map((e) => e.item)
+            .toList();
     emit(SearchSuggestionBlocSuccess(matches));
     _lastSearch = ev;
   }
 
-  Future<void> _onEventUpdateItems(SearchSuggestionBlocUpdateItemsEvent<T> ev,
-      Emitter<SearchSuggestionBlocState<T>> emit) async {
+  Future<void> _onEventUpdateItems(
+    SearchSuggestionBlocUpdateItemsEvent<T> ev,
+    Emitter<SearchSuggestionBlocState<T>> emit,
+  ) async {
     _search.setEntries([]);
     for (final a in ev.items) {
       for (final k in itemToKeywords(a)) {
