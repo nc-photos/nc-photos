@@ -185,11 +185,13 @@ class MediaStore {
     ))?.cast<String>();
   }
 
-  static Future<List<String>?> trashFiles(List<String> uris) async {
+  /// Request MediaStore to move files to trash and return the actual requested
+  /// files (some uris are not supported)
+  static Future<List<String>> trashFiles(List<String> uris) async {
     return (await _methodChannel.invokeMethod<List>(
       "trashFiles",
       <String, dynamic>{"uris": uris},
-    ))?.cast<String>();
+    ))!.cast<String>();
   }
 
   static Future<Map<Date, int>> getFilesSummary() async {

@@ -539,14 +539,17 @@ internal class MediaStoreChannelHandler(context: Context) :
 	@RequiresApi(Build.VERSION_CODES.R)
 	private fun trashFiles(uris: List<String>, result: MethodChannel.Result) {
 		val urisTyped = uris.map(Uri::parse)
+		// MediaStore does not support deleting files via their file uris
+		// (seriously why?!), we need to first convert them to image/video uris
+		val convertedUris = MediaStoreUtil.convertFileUrisToConcreteUris(context, urisTyped)
 		val pi = MediaStore.createTrashRequest(
-			context.contentResolver, urisTyped, true
+			context.contentResolver, convertedUris.values, true
 		)
 		activity!!.startIntentSenderForResult(
 			pi.intentSender, K.MEDIA_STORE_TRASH_REQUEST_CODE, null, 0, 0,
 			0
 		)
-		result.success(null)
+		result.success(convertedUris.keys.map { it.toString() })
 	}
 
 	@RequiresApi(Build.VERSION_CODES.R)
