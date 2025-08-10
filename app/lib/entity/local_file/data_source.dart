@@ -182,12 +182,22 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
         .whereType<MediaStoreTrashRequestResultEvent>()
         .first
         .then((ev) => resultCode = ev.resultCode);
-    await MediaStore.trashFiles(files.map((f) => f.uri).toList());
+    final requested = await MediaStore.trashFiles(
+      files.map((f) => f.uri).toList(),
+    );
     await resultFuture;
     if (resultCode != android.resultOk) {
       _log.warning("[_trashFiles30] result != OK: $resultCode");
       for (final f in files) {
         onFailure?.call(f, null, null);
+      }
+    } else {
+      // ok
+      if (requested.length != files.length) {
+        final ignored = files.where((e) => !requested.contains(e.uri)).toList();
+        for (final f in ignored) {
+          onFailure?.call(f, null, null);
+        }
       }
     }
   }
