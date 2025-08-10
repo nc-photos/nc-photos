@@ -312,6 +312,9 @@ class _SliverSectionGridView extends StatelessWidget {
     final rowCount = sectionCount + sectionRowCounts.sum;
 
     return SuperSliverList.builder(
+      // SuperSliverList does not seems to clear the cache automatically when
+      // the list content changed
+      key: Key("SelectableSectionList.SuperSliverList.$rowCount"),
       itemCount: rowCount,
       itemBuilder: (context, index) {
         final (section, row) = _listIndexToSectionAndRow(
