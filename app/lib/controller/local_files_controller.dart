@@ -196,6 +196,7 @@ class LocalFilesControllerImpl implements LocalFilesController {
         },
       );
     } catch (e, stackTrace) {
+      _log.severe("[trash] Failed while TrashLocalFile", e, stackTrace);
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
       failures.addAll(files);
     }
@@ -235,9 +236,11 @@ class LocalFilesControllerImpl implements LocalFilesController {
         return value.copyWith(data: result);
       });
     });
-    (errorBuilder ?? LocalFileRemoveFailureError.new)
-        .call(failures)
-        ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+    if (failures.isNotEmpty) {
+      (errorBuilder ?? LocalFileRemoveFailureError.new)
+          .call(failures)
+          ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+    }
   }
 
   Future<void> _initSummary() async {

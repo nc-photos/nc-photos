@@ -79,9 +79,11 @@ class AnyFilesController {
                   },
         ),
     ]);
-    (errorBuilder ?? AnyFileRemoveFailureError.new)
-        .call(failures)
-        ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+    if (failures.isNotEmpty) {
+      (errorBuilder ?? AnyFileRemoveFailureError.new)
+          .call(failures)
+          ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+    }
   }
 
   final FilesController filesController;
