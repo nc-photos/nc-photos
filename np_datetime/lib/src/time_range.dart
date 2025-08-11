@@ -1,7 +1,4 @@
-enum TimeRangeBound {
-  inclusive,
-  exclusive,
-}
+enum TimeRangeBound { inclusive, exclusive }
 
 class TimeRange {
   const TimeRange({

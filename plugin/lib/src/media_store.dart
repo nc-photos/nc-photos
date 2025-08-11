@@ -4,8 +4,14 @@ import 'package:nc_photos_plugin/src/exception.dart';
 import 'package:nc_photos_plugin/src/k.dart' as k;
 
 class MediaStoreQueryResult {
-  const MediaStoreQueryResult(this.uri, this.displayName, this.path,
-      this.dateModified, this.mimeType, this.dateTaken);
+  const MediaStoreQueryResult(
+    this.uri,
+    this.displayName,
+    this.path,
+    this.dateModified,
+    this.mimeType,
+    this.dateTaken,
+  );
 
   final String uri;
   final String displayName;
@@ -28,12 +34,14 @@ class MediaStore {
     String? subDir,
   }) async {
     try {
-      return (await _methodChannel
-          .invokeMethod<String>("saveFileToDownload", <String, dynamic>{
-        "content": content,
-        "filename": filename,
-        "subDir": subDir,
-      }))!;
+      return (await _methodChannel.invokeMethod<String>(
+        "saveFileToDownload",
+        <String, dynamic>{
+          "content": content,
+          "filename": filename,
+          "subDir": subDir,
+        },
+      ))!;
     } on PlatformException catch (e) {
       if (e.code == _exceptionCodePermissionError) {
         throw const PermissionException();
@@ -53,12 +61,14 @@ class MediaStore {
     String? subDir,
   }) async {
     try {
-      return (await _methodChannel
-          .invokeMethod<String>("copyFileToDownload", <String, dynamic>{
-        "fromFile": fromFile,
-        "filename": filename,
-        "subDir": subDir,
-      }))!;
+      return (await _methodChannel.invokeMethod<String>(
+        "copyFileToDownload",
+        <String, dynamic>{
+          "fromFile": fromFile,
+          "filename": filename,
+          "subDir": subDir,
+        },
+      ))!;
     } on PlatformException catch (e) {
       if (e.code == _exceptionCodePermissionError) {
         throw const PermissionException();
@@ -70,16 +80,25 @@ class MediaStore {
 
   /// Return files under [relativePath] and its sub dirs
   static Future<List<MediaStoreQueryResult>> queryFiles(
-      String relativePath) async {
+    String relativePath,
+  ) async {
     try {
-      final List results =
-          await _methodChannel.invokeMethod("queryFiles", <String, dynamic>{
-        "relativePath": relativePath,
-      });
+      final List results = await _methodChannel.invokeMethod(
+        "queryFiles",
+        <String, dynamic>{"relativePath": relativePath},
+      );
       return results
           .cast<Map>()
-          .map((e) => MediaStoreQueryResult(e["uri"], e["displayName"],
-              e["path"], e["dateModified"], e["mimeType"], e["dateTaken"]))
+          .map(
+            (e) => MediaStoreQueryResult(
+              e["uri"],
+              e["displayName"],
+              e["path"],
+              e["dateModified"],
+              e["mimeType"],
+              e["dateTaken"],
+            ),
+          )
           .toList();
     } on PlatformException catch (e) {
       if (e.code == _exceptionCodePermissionError) {
@@ -91,17 +110,17 @@ class MediaStore {
   }
 
   static Future<List<String>?> deleteFiles(List<String> uris) async {
-    return (await _methodChannel
-            .invokeMethod<List>("deleteFiles", <String, dynamic>{
-      "uris": uris,
-    }))
-        ?.cast<String>();
+    return (await _methodChannel.invokeMethod<List>(
+      "deleteFiles",
+      <String, dynamic>{"uris": uris},
+    ))?.cast<String>();
   }
 
   static Stream get stream => _eventStream;
 
-  static final _eventStream =
-      _eventChannel.receiveBroadcastStream().map((event) {
+  static final _eventStream = _eventChannel.receiveBroadcastStream().map((
+    event,
+  ) {
     if (event is Map) {
       switch (event["event"]) {
         case _eventDeleteRequestResult:

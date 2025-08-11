@@ -19,7 +19,9 @@ extension IterableExtension<T> on Iterable<T> {
       return [];
     } else {
       return await compute(
-          _computeAllImpl<T, U>, _ComputeAllMessage(callback, list));
+        _computeAllImpl<T, U>,
+        _ComputeAllMessage(callback, list),
+      );
     }
   }
 }
@@ -33,6 +35,7 @@ class _ComputeAllMessage<T, U> {
 
 Future<List<U>> _computeAllImpl<T, U>(_ComputeAllMessage<T, U> message) async {
   final result = await Future.wait(
-      message.data.map((e) async => await message.callback(e)));
+    message.data.map((e) async => await message.callback(e)),
+  );
   return result;
 }

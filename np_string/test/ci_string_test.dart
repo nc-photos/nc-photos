@@ -58,8 +58,10 @@ void main() {
         expect(CiString("Alice").compareTo(CiString("000")), 1);
       });
       test("Unrelated type", () {
-        expect(() => CiString("Alice").compareTo(Object()),
-            throwsA(const TypeMatcher<TypeError>()));
+        expect(
+          () => CiString("Alice").compareTo(Object()),
+          throwsA(const TypeMatcher<TypeError>()),
+        );
       });
     });
 
@@ -77,8 +79,10 @@ void main() {
         expect(CiString("Alice").endsWith(CiString("bob")), false);
       });
       test("Unrelated type", () {
-        expect(() => CiString("Alice").endsWith(Object()),
-            throwsA(const TypeMatcher<TypeError>()));
+        expect(
+          () => CiString("Alice").endsWith(Object()),
+          throwsA(const TypeMatcher<TypeError>()),
+        );
       });
     });
 
@@ -96,8 +100,10 @@ void main() {
         expect(CiString("Alice").startsWith(CiString("bob")), false);
       });
       test("Unrelated type", () {
-        expect(() => CiString("Alice").startsWith(Object()),
-            throwsA(const TypeMatcher<TypeError>()));
+        expect(
+          () => CiString("Alice").startsWith(Object()),
+          throwsA(const TypeMatcher<TypeError>()),
+        );
       });
     });
 

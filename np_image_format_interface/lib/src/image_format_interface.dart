@@ -9,9 +9,7 @@ part 'image_format_interface.g.dart';
 
 @toString
 class ImageFormatMetadata {
-  const ImageFormatMetadata({
-    required this.size,
-  });
+  const ImageFormatMetadata({required this.size});
 
   @override
   String toString() => _$toString();
@@ -23,18 +21,12 @@ abstract interface class ImageFormatInterface {
   /// Decode and return the pixel data of [file].
   ///
   /// If [resize] is not null, the image will be loaded in the specified size.
-  Future<Rgba8Image?> load(
-    File file, {
-    SizeInt? resize,
-  });
+  Future<Rgba8Image?> load(File file, {SizeInt? resize});
 
   /// Decode and return the pixel data of [bytes].
   ///
   /// If [resize] is not null, the image will be loaded in the specified size.
-  Future<Rgba8Image?> loadBytes(
-    Uint8List bytes, {
-    SizeInt? resize,
-  });
+  Future<Rgba8Image?> loadBytes(Uint8List bytes, {SizeInt? resize});
 
   /// Return metadata of [file]
   Future<ImageFormatMetadata?> loadMetadata(File file);

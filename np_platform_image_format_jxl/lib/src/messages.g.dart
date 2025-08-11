@@ -16,11 +16,7 @@ PlatformException _createConnectionError(String channelName) {
 }
 
 class Image {
-  Image({
-    required this.pixel,
-    required this.width,
-    required this.height,
-  });
+  Image({required this.pixel, required this.width, required this.height});
 
   Uint8List pixel;
 
@@ -29,11 +25,7 @@ class Image {
   int height;
 
   Object encode() {
-    return <Object?>[
-      pixel,
-      width,
-      height,
-    ];
+    return <Object?>[pixel, width, height];
   }
 
   static Image decode(Object result) {
@@ -47,28 +39,19 @@ class Image {
 }
 
 class Metadata {
-  Metadata({
-    required this.w,
-    required this.h,
-  });
+  Metadata({required this.w, required this.h});
 
   int w;
 
   int h;
 
   Object encode() {
-    return <Object?>[
-      w,
-      h,
-    ];
+    return <Object?>[w, h];
   }
 
   static Metadata decode(Object result) {
     result as List<Object?>;
-    return Metadata(
-      w: result[0]! as int,
-      h: result[1]! as int,
-    );
+    return Metadata(w: result[0]! as int, h: result[1]! as int);
   }
 }
 
@@ -107,11 +90,12 @@ class MyHostApi {
   /// Constructor for [MyHostApi].  The [binaryMessenger] named argument is
   /// available for dependency injection.  If it is left null, the default
   /// BinaryMessenger will be used which routes to the host platform.
-  MyHostApi(
-      {BinaryMessenger? binaryMessenger, String messageChannelSuffix = ''})
-      : pigeonVar_binaryMessenger = binaryMessenger,
-        pigeonVar_messageChannelSuffix =
-            messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
+  MyHostApi({
+    BinaryMessenger? binaryMessenger,
+    String messageChannelSuffix = '',
+  }) : pigeonVar_binaryMessenger = binaryMessenger,
+       pigeonVar_messageChannelSuffix =
+           messageChannelSuffix.isNotEmpty ? '.$messageChannelSuffix' : '';
   final BinaryMessenger? pigeonVar_binaryMessenger;
 
   static const MessageCodec<Object?> pigeonChannelCodec = _PigeonCodec();
@@ -123,12 +107,13 @@ class MyHostApi {
         'dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.load$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[filepath, w, h]) as List<Object?>?;
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[filepath, w, h])
+            as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {
@@ -152,10 +137,10 @@ class MyHostApi {
         'dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.loadBytes$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_channel.send(<Object?>[bytes, w, h]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -181,10 +166,10 @@ class MyHostApi {
         'dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.loadMetadata$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
     final List<Object?>? pigeonVar_replyList =
         await pigeonVar_channel.send(<Object?>[filepath]) as List<Object?>?;
     if (pigeonVar_replyList == null) {
@@ -205,12 +190,13 @@ class MyHostApi {
         'dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.save$pigeonVar_messageChannelSuffix';
     final BasicMessageChannel<Object?> pigeonVar_channel =
         BasicMessageChannel<Object?>(
-      pigeonVar_channelName,
-      pigeonChannelCodec,
-      binaryMessenger: pigeonVar_binaryMessenger,
-    );
-    final List<Object?>? pigeonVar_replyList = await pigeonVar_channel
-        .send(<Object?>[img, filepath]) as List<Object?>?;
+          pigeonVar_channelName,
+          pigeonChannelCodec,
+          binaryMessenger: pigeonVar_binaryMessenger,
+        );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[img, filepath])
+            as List<Object?>?;
     if (pigeonVar_replyList == null) {
       throw _createConnectionError(pigeonVar_channelName);
     } else if (pigeonVar_replyList.length > 1) {

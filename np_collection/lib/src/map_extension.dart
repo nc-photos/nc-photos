@@ -6,9 +6,11 @@ extension MapEntryListExtension<T, U> on Iterable<MapEntry<T, U>> {
 
 extension MapExtension<T, U> on Map<T, U> {
   Future<Map<V, W>> asyncMap<V, W>(
-      FutureOr<MapEntry<V, W>> Function(T key, U value) convert) async {
+    FutureOr<MapEntry<V, W>> Function(T key, U value) convert,
+  ) async {
     final results = await Future.wait(
-        entries.map((e) async => await convert(e.key, e.value)));
+      entries.map((e) async => await convert(e.key, e.value)),
+    );
     return Map.fromEntries(results);
   }
 

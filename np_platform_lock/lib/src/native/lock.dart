@@ -9,9 +9,7 @@ class Lock {
   }
 
   static Future<void> unlock(int lockId) =>
-      _channel.invokeMethod("unlock", <String, dynamic>{
-        "lockId": lockId,
-      });
+      _channel.invokeMethod("unlock", <String, dynamic>{"lockId": lockId});
 
   static const _channel = MethodChannel("${k.libId}/lock");
 }

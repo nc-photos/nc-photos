@@ -12,9 +12,7 @@ extension IterableExtension<T> on Iterable<T> {
 
   /// Return a string representation of this iterable by joining the result of
   /// toString for each items
-  String toReadableString({
-    int truncate = -1,
-  }) {
+  String toReadableString({int truncate = -1}) {
     return switch (truncate) {
       <= 0 => "[${join(', ')}]",
       _ => "[${take(truncate).join(', ')},...]",
@@ -34,9 +32,10 @@ extension IterableExtension<T> on Iterable<T> {
 
   Map<U, List<T>> groupBy<U>({required U Function(T e) key}) {
     return fold<Map<U, List<T>>>(
-        {},
-        (previousValue, element) =>
-            previousValue..putIfAbsent(key(element), () => []).add(element));
+      {},
+      (previousValue, element) =>
+          previousValue..putIfAbsent(key(element), () => []).add(element),
+    );
   }
 
   /// Return a new list with only distinct elements
@@ -47,7 +46,9 @@ extension IterableExtension<T> on Iterable<T> {
 
   /// Return a new list with only distinct elements determined by [equalFn]
   List<T> distinctIf(
-      bool Function(T a, T b) equalFn, int Function(T a) hashCodeFn) {
+    bool Function(T a, T b) equalFn,
+    int Function(T a) hashCodeFn,
+  ) {
     final s = LinkedHashSet(equals: equalFn, hashCode: hashCodeFn);
     return where((element) => s.add(element)).toList();
   }
@@ -112,7 +113,9 @@ extension IterableExtension<T> on Iterable<T> {
   }
 
   Future<List<U>> withPartition<U>(
-      FutureOr<Iterable<U>> Function(Iterable<T> sublist) fn, int size) async {
+    FutureOr<Iterable<U>> Function(Iterable<T> sublist) fn,
+    int size,
+  ) async {
     final products = <U>[];
     final sublists = partition(this, size);
     for (final l in sublists) {
@@ -122,7 +125,9 @@ extension IterableExtension<T> on Iterable<T> {
   }
 
   Future<void> withPartitionNoReturn(
-      FutureOr<void> Function(Iterable<T> sublist) fn, int size) async {
+    FutureOr<void> Function(Iterable<T> sublist) fn,
+    int size,
+  ) async {
     final sublists = partition(this, size);
     for (final l in sublists) {
       await fn(l);

@@ -36,8 +36,7 @@ enum TypeId {
   xmpBag,
   xmpSeq,
   langAlt,
-  invalidTypeId,
-  ;
+  invalidTypeId;
 
   factory TypeId.fromNative(Exiv2TypeId src) {
     return TypeId.values[src.index];
@@ -79,8 +78,8 @@ class Value {
     required this.typeId,
     required Uint8List data,
     required int count,
-  })  : _data = data,
-        _count = count;
+  }) : _data = data,
+       _count = count;
 
   T as<T>() => asTyped() as T;
 
@@ -98,9 +97,12 @@ class Value {
         case TypeId.tiffIfd:
           return _listOrValue(_data.buffer.asUint32List());
         case TypeId.unsignedRational:
-          return _listOrValue(partition(_data.buffer.asUint32List(), 2)
-              .map((e) => Rational(e[0], e[1]))
-              .toList());
+          return _listOrValue(
+            partition(
+              _data.buffer.asUint32List(),
+              2,
+            ).map((e) => Rational(e[0], e[1])).toList(),
+          );
         case TypeId.signedByte:
           return _listOrValue(_data.buffer.asInt8List());
         case TypeId.signedShort:
@@ -108,9 +110,12 @@ class Value {
         case TypeId.signedLong:
           return _listOrValue(_data.buffer.asInt32List());
         case TypeId.signedRational:
-          return _listOrValue(partition(_data.buffer.asInt32List(), 2)
-              .map((e) => Rational(e[0], e[1]))
-              .toList());
+          return _listOrValue(
+            partition(
+              _data.buffer.asInt32List(),
+              2,
+            ).map((e) => Rational(e[0], e[1])).toList(),
+          );
         case TypeId.tiffFloat:
           return _listOrValue(_data.buffer.asFloat32List());
         case TypeId.tiffDouble:
@@ -125,9 +130,9 @@ class Value {
         case TypeId.date:
           return _data.buffer.asInt32List().let((e) => Date(e[0], e[1], e[2]));
         case TypeId.time:
-          return _data.buffer
-              .asInt32List()
-              .let((e) => Time(e[0], e[1], e[2], e[3], e[4]));
+          return _data.buffer.asInt32List().let(
+            (e) => Time(e[0], e[1], e[2], e[3], e[4]),
+          );
         case TypeId.comment:
           return _convertCommentValue();
         case TypeId.undefined:
@@ -142,8 +147,11 @@ class Value {
           throw UnsupportedError("XMP not supported");
       }
     } catch (e, stackTrace) {
-      _log.severe("[asTyped] Failed to convert data to type: $typeId, $_data",
-          e, stackTrace);
+      _log.severe(
+        "[asTyped] Failed to convert data to type: $typeId, $_data",
+        e,
+        stackTrace,
+      );
       rethrow;
     }
   }
@@ -177,7 +185,8 @@ class Value {
       } else if (charset == "UNICODE") {
         // UTF16
         return _removeNullTerminator(
-            String.fromCharCodes(data.buffer.asUint16List()));
+          String.fromCharCodes(data.buffer.asUint16List()),
+        );
       } else {
         // unknown, treat as utf8
         return _removeNullTerminator(utf8.decode(data));
@@ -211,10 +220,7 @@ class Value {
 }
 
 class Metadatum {
-  const Metadatum({
-    required this.tagKey,
-    required this.value,
-  });
+  const Metadatum({required this.tagKey, required this.value});
 
   factory Metadatum.fromNative(Exiv2Metadatum src) {
     return Metadatum(
@@ -236,7 +242,8 @@ class ReadResult {
 
   factory ReadResult.fromNative(Exiv2ReadResult src) {
     _log.fine(
-        "[fromNative] w: ${src.width}, h: ${src.height}, iptcCount: ${src.iptc_count}, exifCount: ${src.exif_count}");
+      "[fromNative] w: ${src.width}, h: ${src.height}, iptcCount: ${src.iptc_count}, exifCount: ${src.exif_count}",
+    );
     final iptcData = <Metadatum>[];
     for (var i = 0; i < src.iptc_count; ++i) {
       iptcData.add(Metadatum.fromNative(src.iptc_data[i]));

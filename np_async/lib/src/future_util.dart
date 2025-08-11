@@ -30,13 +30,15 @@ Future<List<T>> waitOr<T>(
 
   for (final (:i, :e) in futures.withIndex()) {
     unawaited(
-      e.then((value) {
-        results[i] = value;
-        onResult();
-      }).onError((error, stackTrace) {
-        results[i] = onError(error!, stackTrace);
-        onResult();
-      }),
+      e
+          .then((value) {
+            results[i] = value;
+            onResult();
+          })
+          .onError((error, stackTrace) {
+            results[i] = onError(error!, stackTrace);
+            onResult();
+          }),
     );
   }
   return completer.future;

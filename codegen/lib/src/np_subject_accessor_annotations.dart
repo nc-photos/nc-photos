@@ -1,7 +1,5 @@
 class NpSubjectAccessor {
-  const NpSubjectAccessor({
-    this.type,
-  });
+  const NpSubjectAccessor({this.type});
 
   final String? type;
 }

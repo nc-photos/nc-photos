@@ -23,10 +23,7 @@ Future<void> initHttp({
           enableBrotli: true,
           userAgent: userAgent,
         );
-        client = CronetClient.fromCronetEngine(
-          cronetEngine,
-          closeEngine: true,
-        );
+        client = CronetClient.fromCronetEngine(cronetEngine, closeEngine: true);
         _log.info("Using cronet backend");
       } catch (e, stackTrace) {
         _log.severe("Failed creating CronetEngine", e, stackTrace);

@@ -74,7 +74,8 @@ extension ListExtension<T> on List<T> {
   /// Does not work well with nullable elements as prev and next return null for
   /// the first and last element
   Iterable<U> expand3<U>(
-      Iterable<U> Function(T e, T? prev, T? next) toElements) sync* {
+    Iterable<U> Function(T e, T? prev, T? next) toElements,
+  ) sync* {
     for (var i = 0; i < length; ++i) {
       yield* toElements(
         this[i],

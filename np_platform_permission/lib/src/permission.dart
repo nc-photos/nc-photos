@@ -13,14 +13,13 @@ class Permission {
   static const WRITE_EXTERNAL_STORAGE =
       "android.permission.WRITE_EXTERNAL_STORAGE";
 
-  static Future<void> request(List<String> permissions) =>
-      _methodChannel.invokeMethod("request", <String, dynamic>{
-        "permissions": permissions,
-      });
+  static Future<void> request(List<String> permissions) => _methodChannel
+      .invokeMethod("request", <String, dynamic>{"permissions": permissions});
 
   static Future<bool> hasWriteExternalStorage() async {
-    return (await _methodChannel
-        .invokeMethod<bool>("hasWriteExternalStorage"))!;
+    return (await _methodChannel.invokeMethod<bool>(
+      "hasWriteExternalStorage",
+    ))!;
   }
 
   static Future<bool> hasReadExternalStorage() async {
@@ -39,13 +38,15 @@ class Permission {
 
   static Stream get stream => _eventStream;
 
-  static final _eventStream =
-      _eventChannel.receiveBroadcastStream().map((event) {
+  static final _eventStream = _eventChannel.receiveBroadcastStream().map((
+    event,
+  ) {
     if (event is Map) {
       switch (event["event"]) {
         case _eventRequestPermissionsResult:
           return PermissionRequestResult(
-              (event["grantResults"] as Map).cast<String, int>());
+            (event["grantResults"] as Map).cast<String, int>(),
+          );
 
         default:
           _log.shout("[_eventStream] Unknown event: ${event["event"]}");
