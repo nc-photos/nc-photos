@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:equatable/equatable.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/di_container.dart';
@@ -83,6 +86,9 @@ Future<void> init(InitIsolateType isolateType) async {
   initGpsMap();
   // init session storage
   SessionStorage();
+  if (getRawPlatform() == NpPlatform.android) {
+    unawaited(_initRefreshRate());
+  }
 
   _hasInitedInThisIsolate = true;
 }
@@ -228,6 +234,18 @@ Future<void> _initDiContainer(InitIsolateType isolateType) async {
 
 void _initVisibilityDetector() {
   VisibilityDetectorController.instance.updateInterval = Duration.zero;
+}
+
+Future<void> _initRefreshRate() async {
+  try {
+    await FlutterDisplayMode.setHighRefreshRate();
+  } catch (e, stackTrace) {
+    _log.severe(
+      "[_initRefreshRate] Failed while setHighRefreshRate",
+      e,
+      stackTrace,
+    );
+  }
 }
 
 Future<NpDb> _createDb(InitIsolateType isolateType) async {
