@@ -16,5 +16,6 @@ dependencies:
     path: ../np_platform_util
 
 dev_dependencies:
+  dart_style: 3.0.1
   np_lints:
     path: ../np_lints

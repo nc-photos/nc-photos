@@ -16,6 +16,7 @@ dependencies:
   synchronized: ^3.1.0+1
 
 dev_dependencies:
+  dart_style: 3.0.1
   np_lints:
     path: ../np_lints
 
