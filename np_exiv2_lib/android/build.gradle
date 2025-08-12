@@ -26,7 +26,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.nkming.nc_photos.np_exiv2_lib'
-    compileSdk 34
+    compileSdk 35
 
     defaultConfig {
    		minSdk 23

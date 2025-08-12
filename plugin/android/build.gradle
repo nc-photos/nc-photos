@@ -28,7 +28,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.nkming.nc_photos.plugin'
-   	compileSdk 34
+   	compileSdk 35
 
     compileOptions {
         coreLibraryDesugaringEnabled true

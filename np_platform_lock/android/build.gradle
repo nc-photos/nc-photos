@@ -27,7 +27,7 @@ apply plugin: 'kotlin-android'
 
 android {
     namespace 'com.nkming.nc_photos.np_platform_lock'
-   	compileSdk 34
+   	compileSdk 35
 
     defaultConfig {
    		minSdk 23
