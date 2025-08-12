@@ -382,11 +382,7 @@ class PhotoListLocalImage extends StatelessWidget {
               child: Hero(
                 tag: flutter_util.HeroTag.fromLocalFile(file),
                 child: Image(
-                  image: ResizeImage.resizeIfNeeded(
-                    k.photoThumbSize,
-                    null,
-                    provider,
-                  ),
+                  image: provider,
                   filterQuality: FilterQuality.high,
                   fit: BoxFit.cover,
                   errorBuilder: (context, e, stackTrace) {
