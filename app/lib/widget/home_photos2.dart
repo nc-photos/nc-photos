@@ -469,9 +469,7 @@ class _BodyState extends State<_Body> {
                                       opacity: isScrolling ? 1 : 0,
                                       duration: k.animationDurationNormal,
                                       curve: Curves.fastOutSlowIn,
-                                      child: const _MinimapPadding(
-                                        child: _MinimapBackground(),
-                                      ),
+                                      child: const _MinimapBackground(),
                                     ),
                               ),
                             ],
