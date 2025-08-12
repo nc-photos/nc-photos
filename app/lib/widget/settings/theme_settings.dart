@@ -141,7 +141,7 @@ class _SeedColorOption extends StatelessWidget {
         return ListTile(
           title: Text(L10n.global().settingsSeedColorTitle),
           subtitle: Text(
-            state.seedColor == null || SessionStorage().isSupportDynamicColor
+            state.seedColor == null && SessionStorage().isSupportDynamicColor
                 ? L10n.global().settingsSeedColorSystemColorDescription
                 : L10n.global().settingsSeedColorDescription,
           ),
