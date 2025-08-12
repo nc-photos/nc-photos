@@ -43,10 +43,10 @@ class _State {
     required List<ViewerAppBarButtonType> appBarButtons,
     required List<ViewerAppBarButtonType> bottomAppBarButtons,
   }) => _State(
-    pageAfIdMap: const {},
+    pageAfIdMap: {initialIndex: initialFile.id},
     remoteFiles: const [],
     localFiles: const [],
-    mergedAfIdFileMap: const {},
+    mergedAfIdFileMap: {initialFile.id: initialFile},
     fileStates: const {},
     index: initialIndex,
     currentFile: initialFile,

@@ -290,7 +290,7 @@ class _Bloc extends Bloc<_Event, _State>
       // collection not ready
       return;
     }
-    final merged = {
+    var merged = {
       ...state.remoteFiles
           .map((e) => e.toAnyFile())
           .map((e) => MapEntry(e.id, e))
@@ -304,6 +304,9 @@ class _Bloc extends Bloc<_Event, _State>
           (_, e) => e.file.toAnyFile().let((f) => MapEntry(f.id, f)),
         ),
     };
+    if (merged.isEmpty) {
+      merged = {initialFile.id: initialFile};
+    }
 
     var newState = state.copyWith(
       mergedAfIdFileMap: merged,
