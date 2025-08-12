@@ -23,8 +23,9 @@ Screenshots contain photos by:
 - and others
 
 ## Features
-- EXIF support (JPEG and HEIC only)
-- Organize photos with actual albums that are NOT folders
+- JPEG XL support
+- Client-side EXIF extraction (for formats not supported by the server)
+- [More flexible albums](https://github.com/nc-photos/nc-photos/wiki/Differences-between-collections#client-side-album)
 - Reverse geocoding
 - [Enhance photos with machine learning models](https://gitlab.com/nkming2/nc-photos/-/wikis/help/enhance)
 - [Edit photos with built-in editor](https://gitlab.com/nkming2/nc-photos/-/wikis/help/edit-photos)
@@ -32,7 +33,7 @@ Screenshots contain photos by:
 - [Create shared albums with users on the same server (experimental)](https://gitlab.com/nkming2/nc-photos/-/wikis/help/shared-album)
 
 ## Supported formats
-- JPEG, PNG, WebP, HEIC, GIF
+- JPEG, PNG, WebP, HEIC, GIF, JPEG XL
 - MP4, WebM (codec support may vary between devices)
 
 ## Supported Nextcloud apps
@@ -49,6 +50,7 @@ Screenshots contain photos by:
 - German/Deutsch (contributed by Andreas, MrNobody, Niclas H, Odious, PhilProg, shagn)
 - Greek/Ελληνικά (contributed by Chris Karasoulis)
 - Italian/Italiano (contributed by Albe)
+- Japanese/日本語 (contributed by yoking)
 - Polish/Polski (contributed by Shieldziak, szymok)
 - Portuguese/Português (contributed by fernosan)
 - Russian/Русский (contributed by kvasenok, meixnt & eriane, RandomRoot)
