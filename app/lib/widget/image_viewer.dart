@@ -1,4 +1,4 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/cache_manager_util.dart';
@@ -54,6 +54,10 @@ class LocalImageViewer extends StatelessWidget {
               image: heroProvider,
               fit: BoxFit.contain,
               filterQuality: FilterQuality.high,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                const SizeChangedLayoutNotification().dispatch(context);
+                return child;
+              },
             ),
         imageBuilder:
             (context, onLoaded) => Image(
@@ -63,6 +67,7 @@ class LocalImageViewer extends StatelessWidget {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   onLoaded();
                 });
+                const SizeChangedLayoutNotification().dispatch(context);
                 return child;
               },
             ),
