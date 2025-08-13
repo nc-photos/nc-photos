@@ -86,7 +86,8 @@ Future<void> init(InitIsolateType isolateType) async {
   initGpsMap();
   // init session storage
   SessionStorage();
-  if (getRawPlatform() == NpPlatform.android) {
+  if (isolateType == InitIsolateType.main &&
+      getRawPlatform() == NpPlatform.android) {
     unawaited(_initRefreshRate());
   }
 
