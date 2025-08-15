@@ -12,7 +12,7 @@ part 'put_file_binary.g.dart';
 
 @npLog
 class PutFileBinary {
-  PutFileBinary(this.fileRepo);
+  const PutFileBinary(this.fileRepo);
 
   /// Upload file to [path]
   Future<void> call(
