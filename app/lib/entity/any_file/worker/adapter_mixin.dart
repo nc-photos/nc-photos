@@ -37,3 +37,10 @@ mixin AnyFileWorkerNoDeleteTag implements AnyFileDeleteWorker {
     throw UnsupportedError("Operation not supported");
   }
 }
+
+mixin AnyFileWorkerNoUploadTag implements AnyFileUploadWorker {
+  @override
+  Future<void> upload(String relativePath) {
+    throw UnsupportedError("Operation not supported");
+  }
+}

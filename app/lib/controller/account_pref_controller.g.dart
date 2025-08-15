@@ -57,4 +57,11 @@ extension $AccountPrefControllerNpSubjectAccessor on AccountPrefController {
   Stream<ServerStatus?> get serverStatusChange =>
       serverStatus.distinct().skip(1);
   ServerStatus? get serverStatusValue => _serverStatusController.value;
+  // _uploadRelativePathController
+  ValueStream<String> get uploadRelativePath =>
+      _uploadRelativePathController.stream;
+  Stream<String> get uploadRelativePathNew => uploadRelativePath.skip(1);
+  Stream<String> get uploadRelativePathChange =>
+      uploadRelativePath.distinct().skip(1);
+  String get uploadRelativePathValue => _uploadRelativePathController.value;
 }

@@ -59,6 +59,7 @@ import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/upload_folder_picker.dart';
 import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
@@ -249,6 +250,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handlePlacePickerRoute(settings);
     route ??= _handleTimelineViewerRoute(settings);
     route ??= _handleCollectionViewerRoute(settings);
+    route ??= _handleUploadFolderPickerRoute(settings);
     return route;
   }
 
@@ -596,6 +598,22 @@ class _WrappedAppState extends State<_WrappedApp>
     } catch (e) {
       _log.severe(
         "[_handleCollectionViewerRoute] Failed while handling route",
+        e,
+      );
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleUploadFolderPickerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == UploadFolderPicker.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as UploadFolderPickerArguments;
+        return UploadFolderPicker.buildRoute(args, settings);
+      }
+    } catch (e) {
+      _log.severe(
+        "[_handleUploadFolderPickerRoute] Failed while handling route",
         e,
       );
     }

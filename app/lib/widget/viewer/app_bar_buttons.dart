@@ -11,7 +11,8 @@ enum ViewerAppBarButtonType {
   delete,
   archive,
   slideshow,
-  setAs;
+  setAs,
+  upload;
 
   static ViewerAppBarButtonType fromValue(int value) =>
       ViewerAppBarButtonType.values[value];
@@ -230,6 +231,23 @@ class _AppBarSetAsButton extends StatelessWidget {
       tooltip: L10n.global().setAsTooltip,
       onPressed: () {
         context.state.currentFile?.id.let((id) => context.addEvent(_SetAs(id)));
+      },
+    );
+  }
+}
+
+class _AppBarUploadButton extends StatelessWidget {
+  const _AppBarUploadButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      icon: const Icon(Icons.upload_outlined),
+      tooltip: L10n.global().uploadTooltip,
+      onPressed: () {
+        context.state.currentFile?.id.let(
+          (id) => context.addEvent(_Upload(id)),
+        );
       },
     );
   }

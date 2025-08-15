@@ -26,6 +26,7 @@ class DirPicker extends StatefulWidget {
     this.isMultipleSelections = true,
     this.validator,
     this.onConfirmed,
+    this.onChanged,
   });
 
   @override
@@ -39,6 +40,7 @@ class DirPicker extends StatefulWidget {
   /// Return whether [dir] is a valid target to be picked
   final bool Function(File dir)? validator;
   final ValueChanged<List<File>>? onConfirmed;
+  final ValueChanged<List<File>>? onChanged;
 }
 
 @npLog
@@ -276,6 +278,7 @@ class DirPickerState extends State<DirPicker> {
       _picks = _optimizePicks(_root);
     });
     _log.fine("[_pick] Picked: ${_pickListToString(_picks)}");
+    widget.onChanged?.call(_picks);
   }
 
   /// Optimize the picked array
@@ -344,6 +347,7 @@ class DirPickerState extends State<DirPicker> {
       }
     });
     _log.fine("[_unpick] Picked: ${_pickListToString(_picks)}");
+    widget.onChanged?.call(_picks);
   }
 
   /// Return a list where all children of [path] or [item], except [exclude],

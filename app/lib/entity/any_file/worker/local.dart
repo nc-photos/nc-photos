@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
+import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/mobile/share.dart';
+import 'package:nc_photos/use_case/upload_file.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
 class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
@@ -13,7 +16,9 @@ class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
   @override
   bool isPermitted(AnyFileCapability capability) {
     return switch (capability) {
-      AnyFileCapability.delete || AnyFileCapability.edit => true,
+      AnyFileCapability.delete ||
+      AnyFileCapability.edit ||
+      AnyFileCapability.upload => true,
       AnyFileCapability.favorite ||
       AnyFileCapability.archive ||
       AnyFileCapability.download => false,
@@ -95,6 +100,25 @@ class AnyFileLocalSetAsWorker implements AnyFileSetAsWorker {
     }
     throw ArgumentError("Unsupported file");
   }
+
+  final AnyFileLocalProvider _provider;
+}
+
+class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
+  AnyFileLocalUploadWorker(
+    AnyFile file, {
+    required this.account,
+    required this.c,
+  }) : _provider = file.provider as AnyFileLocalProvider;
+
+  @override
+  Future<void> upload(String relativePath) async {
+    final f = _provider.file;
+    return UploadFile(c, account: account)(f, relativePath: relativePath);
+  }
+
+  final Account account;
+  final DiContainer c;
 
   final AnyFileLocalProvider _provider;
 }

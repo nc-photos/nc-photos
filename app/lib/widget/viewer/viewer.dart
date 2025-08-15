@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -32,6 +33,7 @@ import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/exception_event.dart';
+import 'package:nc_photos/exception_util.dart' as exception_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/live_photo_util.dart';
 import 'package:nc_photos/platform/features.dart' as features;
@@ -49,6 +51,7 @@ import 'package:nc_photos/widget/png_icon.dart';
 import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/slideshow_dialog.dart';
 import 'package:nc_photos/widget/slideshow_viewer.dart';
+import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
 import 'package:nc_photos/widget/viewer_detail_pane/viewer_detail_pane.dart';
 import 'package:nc_photos/widget/viewer_mixin.dart';
 import 'package:np_collection/np_collection.dart';
@@ -256,6 +259,10 @@ class _WrappedViewerState extends State<_WrappedViewer>
               listener: _onSetAsRequest,
             ),
             _BlocListenerT(
+              selector: (state) => state.uploadRequest,
+              listener: _onUploadRequest,
+            ),
+            _BlocListenerT(
               selector: (state) => state.error,
               listener: (context, error) {
                 if (error != null && isPageVisible()) {
@@ -392,6 +399,42 @@ class _WrappedViewerState extends State<_WrappedViewer>
       account: context.bloc.account,
       c: context.bloc._c,
     ).setAs(context);
+  }
+
+  Future<void> _onUploadRequest(
+    BuildContext context,
+    Unique<_UploadRequest?> uploadRequest,
+  ) async {
+    if (uploadRequest.value == null) {
+      return;
+    }
+    final f = uploadRequest.value!.file;
+    final config = await showDialog<UploadConfig>(
+      context: context,
+      builder: (context) => const UploadDialog(),
+    );
+    if (config == null || !context.mounted) {
+      return;
+    }
+    try {
+      await AnyFileWorkerFactory.upload(
+        f,
+        account: context.bloc.account,
+        c: context.bloc._c,
+      ).upload(config.relativePath);
+      unawaited(Fluttertoast.showToast(msg: "File uploaded"));
+    } catch (e, stackTrace) {
+      _log.severe(
+        "[_onUploadRequest] Failed to upload file to ${config.relativePath}",
+        e,
+        stackTrace,
+      );
+      unawaited(
+        Fluttertoast.showToast(
+          msg: "Failed to upload file: ${exception_util.toUserString(e)}",
+        ),
+      );
+    }
   }
 }
 

@@ -33,6 +33,7 @@ class _State {
     required this.startSlideshowRequest,
     required this.slideshowRequest,
     required this.setAsRequest,
+    required this.uploadRequest,
     required this.isBusy,
     this.error,
   });
@@ -68,6 +69,7 @@ class _State {
     startSlideshowRequest: Unique(null),
     slideshowRequest: Unique(null),
     setAsRequest: Unique(null),
+    uploadRequest: Unique(null),
     isBusy: false,
   );
 
@@ -108,6 +110,7 @@ class _State {
   final Unique<_StartSlideshowRequest?> startSlideshowRequest;
   final Unique<_SlideshowRequest?> slideshowRequest;
   final Unique<_SetAsRequest?> setAsRequest;
+  final Unique<_UploadRequest?> uploadRequest;
 
   final bool isBusy;
   final ExceptionEvent? error;
@@ -399,6 +402,16 @@ class _StartSlideshowResult implements _Event {
 @toString
 class _SetAs implements _Event {
   const _SetAs(this.afId);
+
+  @override
+  String toString() => _$toString();
+
+  final String afId;
+}
+
+@toString
+class _Upload implements _Event {
+  const _Upload(this.afId);
 
   @override
   String toString() => _$toString();

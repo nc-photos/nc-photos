@@ -161,3 +161,15 @@ class _DemoSetAsButton extends StatelessWidget {
     );
   }
 }
+
+class _DemoUploadButton extends StatelessWidget {
+  const _DemoUploadButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return _DemoButton(
+      tooltip: L10n.global().uploadTooltip,
+      icon: const Icon(Icons.upload_outlined),
+    );
+  }
+}

@@ -38,3 +38,10 @@ class _SetAsRequest {
   final Account account;
   final AnyFile file;
 }
+
+class _UploadRequest {
+  const _UploadRequest({required this.account, required this.file});
+
+  final Account account;
+  final AnyFile file;
+}
