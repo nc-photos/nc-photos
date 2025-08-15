@@ -14,4 +14,9 @@ extension on AccountPref {
       return provider.setString(AccountPrefKey.serverStatus, value);
     }
   }
+
+  String? getUploadRelativePath() =>
+      provider.getString(AccountPrefKey.uploadRelativePath);
+  Future<bool> setUploadRelativePath(String value) =>
+      provider.setString(AccountPrefKey.uploadRelativePath, value);
 }

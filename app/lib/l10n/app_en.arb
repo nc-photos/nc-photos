@@ -1545,6 +1545,14 @@
 	"@fileOnCloud": {
 		"description": "Filed uploaded to your Nextcloud server"
 	},
+	"uploadTooltip": "Upload",
+	"@uploadTooltip": {
+		"description": "Upload files to your Nextcloud server"
+	},
+	"uploadFolderPickerTitle": "Upload to",
+	"@uploadFolderPickerTitle": {
+		"description": "Pick a folder on your server where the files will be uploaded to"
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

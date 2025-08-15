@@ -4,6 +4,7 @@ import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/download_handler.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/set_as_handler.dart';
 import 'package:nc_photos/share_handler.dart';
@@ -20,6 +21,7 @@ class AnyFileNextcloudCapabilityWorker implements AnyFileCapabilityWorker {
       AnyFileCapability.edit ||
       AnyFileCapability.download ||
       AnyFileCapability.delete => true,
+      AnyFileCapability.upload => false,
     };
   }
 }
@@ -145,4 +147,10 @@ class AnyFileNextcloudSetAsWorker implements AnyFileSetAsWorker {
   final DiContainer c;
 
   final AnyFileNextcloudProvider _provider;
+}
+
+class AnyFileNextcloudUploadWorker
+    with AnyFileWorkerNoUploadTag
+    implements AnyFileUploadWorker {
+  const AnyFileNextcloudUploadWorker();
 }

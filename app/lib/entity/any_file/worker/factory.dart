@@ -104,6 +104,19 @@ abstract interface class AnyFileWorkerFactory {
         return AnyFileLocalSetAsWorker(file);
     }
   }
+
+  static AnyFileUploadWorker upload(
+    AnyFile file, {
+    required Account account,
+    required DiContainer c,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return const AnyFileNextcloudUploadWorker();
+      case AnyFileLocalProvider _:
+        return AnyFileLocalUploadWorker(file, account: account, c: c);
+    }
+  }
 }
 
 abstract interface class AnyFileCapabilityWorker {
@@ -135,4 +148,8 @@ abstract interface class AnyFileShareWorker {
 
 abstract interface class AnyFileSetAsWorker {
   Future<void> setAs(BuildContext context);
+}
+
+abstract interface class AnyFileUploadWorker {
+  Future<void> upload(String relativePath);
 }

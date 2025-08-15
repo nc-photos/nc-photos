@@ -60,6 +60,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_StartSlideshow>(_onStartSlideshow);
     on<_StartSlideshowResult>(_onStartSlideshowResult);
     on<_SetAs>(_onSetAs);
+    on<_Upload>(_onUpload);
 
     on<_OpenDetailPane>(_onOpenDetailPane);
     on<_CloseDetailPane>(_onCloseDetailPane);
@@ -610,6 +611,22 @@ class _Bloc extends Bloc<_Event, _State>
     }
     final req = _SetAsRequest(account: account, file: f);
     emit(state.copyWith(setAsRequest: Unique(req)));
+  }
+
+  void _onUpload(_Upload ev, _Emitter emit) {
+    _log.info(ev);
+    final f = state.mergedAfIdFileMap[ev.afId];
+    if (f == null) {
+      _log.severe("[_onUpload] file is null: ${ev.afId}");
+      return;
+    }
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.upload)) {
+      _log.severe("[_onUpload] Op not supported: $f");
+      return;
+    }
+    final req = _UploadRequest(account: account, file: f);
+    emit(state.copyWith(uploadRequest: Unique(req)));
   }
 
   void _onOpenDetailPane(_OpenDetailPane ev, _Emitter emit) {

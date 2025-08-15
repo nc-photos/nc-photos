@@ -189,7 +189,8 @@ enum AccountPrefKey implements PrefKeyInterface {
   accountLabel,
   lastNewCollectionType,
   personProvider,
-  serverStatus;
+  serverStatus,
+  uploadRelativePath;
 
   @override
   String toStringKey() {
@@ -202,6 +203,7 @@ enum AccountPrefKey implements PrefKeyInterface {
       AccountPrefKey.lastNewCollectionType => "lastNewCollectionType",
       AccountPrefKey.personProvider => "personProvider",
       AccountPrefKey.serverStatus => "serverStatus",
+      AccountPrefKey.uploadRelativePath => "uploadRelativePath",
     };
   }
 }

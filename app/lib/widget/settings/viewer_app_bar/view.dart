@@ -185,28 +185,19 @@ class _DemoButtonDelegate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (type) {
-      case ViewerAppBarButtonType.livePhoto:
-        return const _DemoLivePhotoButton();
-      case ViewerAppBarButtonType.favorite:
-        return const _DemoFavoriteButton();
-      case ViewerAppBarButtonType.share:
-        return const _DemoShareButton();
-      case ViewerAppBarButtonType.edit:
-        return const _DemoEditButton();
-      case ViewerAppBarButtonType.enhance:
-        return const _DemoEnhanceButton();
-      case ViewerAppBarButtonType.download:
-        return const _DemoDownloadButton();
-      case ViewerAppBarButtonType.delete:
-        return const _DemoDeleteButton();
-      case ViewerAppBarButtonType.archive:
-        return const _DemoArchiveButton();
-      case ViewerAppBarButtonType.slideshow:
-        return const _DemoSlideshowButton();
-      case ViewerAppBarButtonType.setAs:
-        return const _DemoSetAsButton();
-    }
+    return switch (type) {
+      ViewerAppBarButtonType.livePhoto => const _DemoLivePhotoButton(),
+      ViewerAppBarButtonType.favorite => const _DemoFavoriteButton(),
+      ViewerAppBarButtonType.share => const _DemoShareButton(),
+      ViewerAppBarButtonType.edit => const _DemoEditButton(),
+      ViewerAppBarButtonType.enhance => const _DemoEnhanceButton(),
+      ViewerAppBarButtonType.download => const _DemoDownloadButton(),
+      ViewerAppBarButtonType.delete => const _DemoDeleteButton(),
+      ViewerAppBarButtonType.archive => const _DemoArchiveButton(),
+      ViewerAppBarButtonType.slideshow => const _DemoSlideshowButton(),
+      ViewerAppBarButtonType.setAs => const _DemoSetAsButton(),
+      ViewerAppBarButtonType.upload => const _DemoUploadButton(),
+    };
   }
 
   final ViewerAppBarButtonType type;
@@ -276,28 +267,19 @@ class _CandidateButtonDelegate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    switch (type) {
-      case ViewerAppBarButtonType.livePhoto:
-        return const _GridLivePhotoButton();
-      case ViewerAppBarButtonType.favorite:
-        return const _GridFavoriteButton();
-      case ViewerAppBarButtonType.share:
-        return const _GridShareButton();
-      case ViewerAppBarButtonType.edit:
-        return const _GridEditButton();
-      case ViewerAppBarButtonType.enhance:
-        return const _GridEnhanceButton();
-      case ViewerAppBarButtonType.download:
-        return const _GridDownloadButton();
-      case ViewerAppBarButtonType.delete:
-        return const _GridDeleteButton();
-      case ViewerAppBarButtonType.archive:
-        return const _GridArchiveButton();
-      case ViewerAppBarButtonType.slideshow:
-        return const _GridSlideshowButton();
-      case ViewerAppBarButtonType.setAs:
-        return const _GridSetAsButton();
-    }
+    return switch (type) {
+      ViewerAppBarButtonType.livePhoto => const _GridLivePhotoButton(),
+      ViewerAppBarButtonType.favorite => const _GridFavoriteButton(),
+      ViewerAppBarButtonType.share => const _GridShareButton(),
+      ViewerAppBarButtonType.edit => const _GridEditButton(),
+      ViewerAppBarButtonType.enhance => const _GridEnhanceButton(),
+      ViewerAppBarButtonType.download => const _GridDownloadButton(),
+      ViewerAppBarButtonType.delete => const _GridDeleteButton(),
+      ViewerAppBarButtonType.archive => const _GridArchiveButton(),
+      ViewerAppBarButtonType.slideshow => const _GridSlideshowButton(),
+      ViewerAppBarButtonType.setAs => const _GridSetAsButton(),
+      ViewerAppBarButtonType.upload => const _GridUploadButton(),
+    };
   }
 
   final ViewerAppBarButtonType type;

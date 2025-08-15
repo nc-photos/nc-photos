@@ -192,5 +192,10 @@ Widget? _buildAppBarButton(
       return const _AppBarSlideshowButton();
     case ViewerAppBarButtonType.setAs:
       return const _AppBarSetAsButton();
+    case ViewerAppBarButtonType.upload:
+      return capability?.isPermitted(AnyFileCapability.upload) == true &&
+              collection == null
+          ? const _AppBarUploadButton()
+          : null;
   }
 }

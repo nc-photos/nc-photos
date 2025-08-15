@@ -68,6 +68,7 @@ abstract class $_StateCopyWithWorker {
     Unique<_StartSlideshowRequest?>? startSlideshowRequest,
     Unique<_SlideshowRequest?>? slideshowRequest,
     Unique<_SetAsRequest?>? setAsRequest,
+    Unique<_UploadRequest?>? uploadRequest,
     bool? isBusy,
     ExceptionEvent? error,
   });
@@ -107,6 +108,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic startSlideshowRequest,
     dynamic slideshowRequest,
     dynamic setAsRequest,
+    dynamic uploadRequest,
     dynamic isBusy,
     dynamic error = copyWithNull,
   }) {
@@ -174,6 +176,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           that.slideshowRequest,
       setAsRequest:
           setAsRequest as Unique<_SetAsRequest?>? ?? that.setAsRequest,
+      uploadRequest:
+          uploadRequest as Unique<_UploadRequest?>? ?? that.uploadRequest,
       isBusy: isBusy as bool? ?? that.isBusy,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
@@ -275,7 +279,7 @@ extension _$ViewerContentProviderResultToString on ViewerContentProviderResult {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, remoteFiles: [length: ${remoteFiles.length}], localFiles: [length: ${localFiles.length}], mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, isBusy: $isBusy, error: $error}";
+    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, remoteFiles: [length: ${remoteFiles.length}], localFiles: [length: ${localFiles.length}], mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, uploadRequest: $uploadRequest, isBusy: $isBusy, error: $error}";
   }
 }
 
@@ -472,6 +476,13 @@ extension _$_SetAsToString on _SetAs {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetAs {afId: $afId}";
+  }
+}
+
+extension _$_UploadToString on _Upload {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_Upload {afId: $afId}";
   }
 }
 
