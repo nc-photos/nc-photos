@@ -79,7 +79,7 @@ class AnyFileLocalShareWorker implements AnyFileShareWorker {
         return share.share();
       }
     }
-    throw ArgumentError("Unsupported file");
+    throw UnsupportedError("Unsupported file");
   }
 
   final AnyFileLocalProvider _provider;
@@ -98,7 +98,7 @@ class AnyFileLocalSetAsWorker implements AnyFileSetAsWorker {
         return share.setAs();
       }
     }
-    throw ArgumentError("Unsupported file");
+    throw UnsupportedError("Unsupported file");
   }
 
   final AnyFileLocalProvider _provider;
