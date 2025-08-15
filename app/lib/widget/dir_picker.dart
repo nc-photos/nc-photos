@@ -405,13 +405,21 @@ class DirPickerState extends State<DirPicker> {
     var product = _PickState.notPicked;
     for (final p in _picks) {
       // exact match, or parent is picked
-      if (file_util.isOrUnderDir(item.file, p)) {
-        product = _PickState.picked;
-        // no need to check the remaining ones
-        break;
-      }
-      if (file_util.isUnderDir(p, item.file)) {
-        product = _PickState.childPicked;
+      if (widget.isMultipleSelections) {
+        if (file_util.isOrUnderDir(item.file, p)) {
+          product = _PickState.picked;
+          // no need to check the remaining ones
+          break;
+        }
+        if (file_util.isUnderDir(p, item.file)) {
+          product = _PickState.childPicked;
+        }
+      } else {
+        if (item.file.fdPath == p.fdPath) {
+          product = _PickState.picked;
+          // no need to check the remaining ones
+          break;
+        }
       }
     }
     if (product == _PickState.childPicked) {}
