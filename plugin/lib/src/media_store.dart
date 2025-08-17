@@ -43,6 +43,18 @@ class MediaStoreTrashRequestResultEvent {
   final int resultCode;
 }
 
+class MediaStoreNotifyInsertEvent {
+  const MediaStoreNotifyInsertEvent();
+}
+
+class MediaStoreNotifyDeleteEvent {
+  const MediaStoreNotifyDeleteEvent();
+}
+
+class MediaStoreNotifyUpdateEvent {
+  const MediaStoreNotifyUpdateEvent();
+}
+
 class MediaStore {
   static Future<String> saveFileToDownload(
     Uint8List content,
@@ -249,6 +261,15 @@ class MediaStore {
         case _eventTrashRequestResult:
           return MediaStoreTrashRequestResultEvent(event["resultCode"]);
 
+        case _eventNotifyInsert:
+          return const MediaStoreNotifyInsertEvent();
+
+        case _eventNotifyDelete:
+          return const MediaStoreNotifyDeleteEvent();
+
+        case _eventNotifyUpdate:
+          return const MediaStoreNotifyUpdateEvent();
+
         default:
           _log.shout("[_eventStream] Unknown event: ${event["event"]}");
       }
@@ -263,6 +284,9 @@ class MediaStore {
   static const _exceptionCodePermissionError = "permissionError";
   static const _eventDeleteRequestResult = "DeleteRequestResult";
   static const _eventTrashRequestResult = "TrashRequestResult";
+  static const _eventNotifyInsert = "NotifyInsert";
+  static const _eventNotifyDelete = "NotifyDelete";
+  static const _eventNotifyUpdate = "NotifyUpdate";
 
   static final _log = Logger("media_store.MediaStore");
 }

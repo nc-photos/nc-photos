@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
@@ -141,6 +143,17 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
           ),
         )
         .toList();
+  }
+
+  @override
+  Stream<void> watchFileChanges() {
+    return MediaStore.stream.where(
+      (e) =>
+          e is MediaStoreNotifyInsertEvent ||
+          e is MediaStoreNotifyDeleteEvent ||
+          // putting a file to trash will trigger update instead of delete
+          e is MediaStoreNotifyUpdateEvent,
+    );
   }
 
   Future<void> _deleteFiles30(

@@ -57,6 +57,8 @@ class LocalFileRepo {
   Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps() =>
       dataSrc.getFileIdWithTimestamps();
 
+  Stream<void> watchFileChanges() => dataSrc.watchFileChanges();
+
   final LocalFileDataSource dataSrc;
 }
 
@@ -96,4 +98,8 @@ abstract class LocalFileDataSource {
   Future<LocalFilesSummary> getFilesSummary();
 
   Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps();
+
+  /// Get notified when a new file is added to, or a file is removed from local
+  /// storage
+  Stream<void> watchFileChanges();
 }

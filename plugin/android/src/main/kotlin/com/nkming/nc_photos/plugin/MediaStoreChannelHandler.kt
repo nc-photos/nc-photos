@@ -5,9 +5,12 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
 import androidx.annotation.RequiresApi
 import androidx.core.database.getLongOrNull
@@ -53,8 +56,38 @@ internal class MediaStoreChannelHandler(context: Context) :
 		private const val TAG = "MediaStoreChannelHandler"
 	}
 
+	private inner class MyContentObserver : ContentObserver(handler) {
+		override fun onChange(selfChange: Boolean, uri: Uri?, flags: Int) {
+			if ((flags and ContentResolver.NOTIFY_INSERT) != 0) {
+				eventSink?.success(buildMap {
+					put("event", "NotifyInsert")
+				})
+			} else if ((flags and ContentResolver.NOTIFY_DELETE) != 0) {
+				eventSink?.success(buildMap {
+					put("event", "NotifyDelete")
+				})
+			} else if ((flags and ContentResolver.NOTIFY_UPDATE) != 0) {
+				eventSink?.success(buildMap {
+					put("event", "NotifyUpdate")
+				})
+			}
+		}
+	}
+
 	override fun onAttachedToActivity(binding: ActivityPluginBinding) {
 		activity = binding.activity
+
+		val cr = binding.activity.applicationContext.contentResolver
+		cr.registerContentObserver(
+			MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+			true,
+			imageObserver
+		)
+		cr.registerContentObserver(
+			MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+			true,
+			videoObserver
+		)
 	}
 
 	override fun onReattachedToActivityForConfigChanges(
@@ -64,6 +97,12 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	override fun onDetachedFromActivity() {
+		activity?.applicationContext?.contentResolver?.unregisterContentObserver(
+			imageObserver
+		)
+		activity?.applicationContext?.contentResolver?.unregisterContentObserver(
+			videoObserver
+		)
 		activity = null
 	}
 
@@ -541,7 +580,8 @@ internal class MediaStoreChannelHandler(context: Context) :
 		val urisTyped = uris.map(Uri::parse)
 		// MediaStore does not support deleting files via their file uris
 		// (seriously why?!), we need to first convert them to image/video uris
-		val convertedUris = MediaStoreUtil.convertFileUrisToConcreteUris(context, urisTyped)
+		val convertedUris =
+			MediaStoreUtil.convertFileUrisToConcreteUris(context, urisTyped)
 		val pi = MediaStore.createTrashRequest(
 			context.contentResolver, convertedUris.values, true
 		)
@@ -701,4 +741,8 @@ internal class MediaStoreChannelHandler(context: Context) :
 	private val context = context
 	private var activity: Activity? = null
 	private var eventSink: EventChannel.EventSink? = null
+
+	private val handler = Handler(Looper.getMainLooper())
+	private val imageObserver = MyContentObserver()
+	private val videoObserver = MyContentObserver()
 }

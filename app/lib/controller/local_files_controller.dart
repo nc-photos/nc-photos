@@ -1,7 +1,9 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:copy_with/copy_with.dart';
+import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:mutex/mutex.dart';
 import 'package:nc_photos/debug_util.dart';
@@ -21,6 +23,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:to_string/to_string.dart';
 
 part 'local_files_controller.g.dart';
+part 'local_files_controller/util.dart';
 
 abstract class LocalFilesStreamEvent {
   /// All files as a ordered list
@@ -99,7 +102,9 @@ class LocalFilesControllerImpl implements LocalFilesController {
   LocalFilesControllerImpl(this._c);
 
   @override
-  void dispose() {}
+  void dispose() {
+    _fileChangeListener?.cancel();
+  }
 
   @override
   ValueStream<LocalFilesStreamEvent> get stream => _dataStreamController.stream;
@@ -119,7 +124,8 @@ class LocalFilesControllerImpl implements LocalFilesController {
   ValueStream<LocalFilesSummaryStreamEvent> get summaryStream2 {
     if (!_isSummaryStreamInited) {
       _isSummaryStreamInited = true;
-      _initSummary();
+      _reloadSummary();
+      _initObserver();
     }
     return _summaryStreamController.stream;
   }
@@ -243,11 +249,58 @@ class LocalFilesControllerImpl implements LocalFilesController {
     }
   }
 
-  Future<void> _initSummary() async {
+  Future<_LocalFilesSummaryDiff> _reloadSummary() async {
+    final original =
+        _summaryStreamController.valueOrNull?.summary ??
+        const LocalFilesSummary(items: {});
     final results = await _c.localFileRepo.getFilesSummary();
+    final diff = original.diff(results);
     _summaryStreamController.add(
       LocalFilesSummaryStreamEvent(summary: results),
     );
+    return diff;
+  }
+
+  void _initObserver() {
+    _fileChangeListener?.cancel();
+    _fileChangeListener = _c.localFileRepo
+        .watchFileChanges()
+        .debounceTime(const Duration(seconds: 2))
+        .listen((_) {
+          _reload();
+        });
+  }
+
+  Future<void> _reload() async {
+    _log.info("[_reload] File changed, refreshing");
+    // Take the ids of loaded files
+    final ids = _dataStreamController.value.data.map((e) => e.id).toList();
+    final newFiles = await FindLocalFile(_c)(
+      ids,
+      onFileNotFound: (_) {
+        // file removed, can be ignored
+      },
+    );
+    _dataStreamController.add(
+      _LocalFilesStreamEvent(files: _toFileMap(newFiles)),
+    );
+    final diff = await _reloadSummary();
+    final dropDates = [
+      ...diff.onlyInThis.keys,
+      ...diff.onlyInOther.keys,
+      ...diff.updated.keys,
+    ];
+    if (dropDates.isNotEmpty) {
+      _timelineStreamController.addWithValue((value) {
+        final next = <String, LocalFile>{};
+        for (final e in value.data.entries) {
+          if (!dropDates.contains(e.value.bestDateTime.toLocal().toDate())) {
+            next[e.key] = e.value;
+          }
+        }
+        return value.copyWith(data: next);
+      });
+    }
   }
 
   Map<String, LocalFile> _toFileMap(List<LocalFile> results) {
@@ -307,6 +360,8 @@ class LocalFilesControllerImpl implements LocalFilesController {
       BehaviorSubject<LocalFilesSummaryStreamEvent>();
   final _summaryErrorStreamController =
       StreamController<ExceptionEvent>.broadcast();
+
+  StreamSubscription? _fileChangeListener;
 
   final _mutex = Mutex();
 }
