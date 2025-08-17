@@ -37,15 +37,23 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
       "offset: $offset, "
       "limit: $limit",
     );
-    // TODO partition
-    final results = await MediaStore.queryFiles2(
-      fileIds: fileIds?.map(int.parse).toList(),
-      timeRange: timeRange,
-      isAscending: isAscending,
-      offset: offset,
-      limit: limit,
-    );
-    return results.map(_toLocalFile).toList();
+
+    Future<List<LocalFile>> queryFiles(Iterable<String>? ids) async {
+      final results = await MediaStore.queryFiles2(
+        fileIds: ids?.map(int.parse).toList(),
+        timeRange: timeRange,
+        isAscending: isAscending,
+        offset: offset,
+        limit: limit,
+      );
+      return results.map(_toLocalFile).toList();
+    }
+
+    if (fileIds != null) {
+      return fileIds.withPartition(queryFiles, 30000);
+    } else {
+      return queryFiles(fileIds);
+    }
   }
 
   @override
