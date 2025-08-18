@@ -13,7 +13,6 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.nkming.nc_photos.np_android_core.getPendingIntentFlagImmutable
-import com.nkming.nc_photos.np_android_core.logD
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
 import com.nkming.nc_photos.np_android_core.use
@@ -23,6 +22,8 @@ import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
+import java.util.LinkedList
+import java.util.Queue
 
 internal class UploadService : Service(), CoroutineScope by MainScope() {
 	companion object {
@@ -33,6 +34,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		const val EXTRA_HEADERS = "headers"
 
 		private const val TAG = "UploadService"
+
+		private val workQueue: Queue<UploadJob> = LinkedList()
 	}
 
 	override fun onBind(intent: Intent?): IBinder? = null
@@ -63,7 +66,11 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 					K.KILLED_NOTIFICATION_ID, buildKilledNotification()
 				)
 			}
-			stopSelf()
+			synchronized(workQueue) {
+				if (workQueue.isEmpty()) {
+					stopSelf()
+				}
+			}
 			return START_STICKY
 		}
 		if (!isForeground) {
@@ -89,56 +96,73 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		val headers = intent.extras!!.getSerializable(
 			EXTRA_HEADERS
 		) as HashMap<String, String>
+		synchronized(workQueue) {
+			workQueue.add(UploadJob(contentUris, endPoints, headers))
+			if (workQueue.size == 1) {
+				startJobRunner()
+			}
+		}
+	}
 
+	private fun startJobRunner() {
+		logI(TAG, "[startJobRunner] Begin")
 		launch(Dispatchers.IO) {
-			val products = hashMapOf<String, Boolean>()
-			for ((uri, endPoint) in contentUris.zip(endPoints)) {
-				val basename = endPoint.substringAfterLast("/")
-				logI(TAG, "[doWork] Uploading $basename")
-				if (notificationManager.areNotificationsEnabled()) {
-					notificationManager.notify(
-						K.FG_SERVICE_NOTIFICATION_ID,
-						buildNotification(content = basename)
-					)
+			while (workQueue.isNotEmpty()) {
+				val job = workQueue.peek()
+				if (job != null) {
+					workOnce(job)
 				}
-				try {
-					(URL(
-						endPoint
-					).openConnection() as HttpURLConnection).apply {
-						requestMethod = "PUT"
-						instanceFollowRedirects = true
-						connectTimeout = 8000
-						for (e in headers.entries) {
-							setRequestProperty(e.key, e.value)
-						}
-						doOutput = true
-					}.use { conn ->
-						val cr = contentResolver
-						cr.openInputStream(Uri.parse(uri))!!.use { iStream ->
-							conn.outputStream.use { oStream ->
-								iStream.copyTo(oStream)
-							}
-						}
-						val responseCode = conn.responseCode
-						if (responseCode / 100 != 2) {
-							logE(
-								TAG,
-								"[doWork] Failed uploading file: HTTP$responseCode"
-							)
-							throw HttpException(
-								responseCode,
-								"Failed uploading file (HTTP$responseCode)"
-							)
-						}
-						products[uri] = true
-					}
-				} catch (e: Throwable) {
-					logE(TAG, "[doWork] Exception", e)
-					products[uri] = false
+				synchronized(workQueue) {
+					workQueue.remove()
 				}
 			}
+			logI(TAG, "[startJobRunner] All job finished, terminating service")
 			notificationManager.cancel(K.FG_SERVICE_NOTIFICATION_ID)
-			stopSelf(startId)
+			stopSelf()
+		}
+	}
+
+	private fun workOnce(job: UploadJob) {
+		for ((uri, endPoint) in job.contentUris.zip(job.endPoints)) {
+			val basename = endPoint.substringAfterLast("/")
+			logI(TAG, "[workOnce] Uploading $basename")
+			if (notificationManager.areNotificationsEnabled()) {
+				notificationManager.notify(
+					K.FG_SERVICE_NOTIFICATION_ID,
+					buildNotification(content = basename)
+				)
+			}
+			try {
+				(URL(endPoint).openConnection() as HttpURLConnection).apply {
+					requestMethod = "PUT"
+					instanceFollowRedirects = true
+					connectTimeout = 8000
+					for (e in job.headers.entries) {
+						setRequestProperty(e.key, e.value)
+					}
+					doOutput = true
+				}.use { conn ->
+					val cr = contentResolver
+					cr.openInputStream(Uri.parse(uri))!!.use { iStream ->
+						conn.outputStream.use { oStream ->
+							iStream.copyTo(oStream)
+						}
+					}
+					val responseCode = conn.responseCode
+					if (responseCode / 100 != 2) {
+						logE(
+							TAG,
+							"[workOnce] Failed uploading file: HTTP$responseCode"
+						)
+						throw HttpException(
+							responseCode,
+							"Failed uploading file (HTTP$responseCode)"
+						)
+					}
+				}
+			} catch (e: Throwable) {
+				logE(TAG, "[workOnce] Exception", e)
+			}
 		}
 	}
 
@@ -193,3 +217,9 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		}
 	}
 }
+
+private data class UploadJob(
+	val contentUris: List<String>,
+	val endPoints: List<String>,
+	val headers: Map<String, String>,
+)
