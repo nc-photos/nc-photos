@@ -143,6 +143,8 @@ dependencies:
     path: ../np_platform_permission
   np_platform_raw_image:
     path: ../np_platform_raw_image
+  np_platform_uploader:
+    path: ../np_platform_uploader
   np_platform_util:
     path: ../np_platform_util
   np_string:

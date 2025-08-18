@@ -114,7 +114,7 @@ class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
   @override
   Future<void> upload(String relativePath) async {
     final f = _provider.file;
-    return UploadFile(c, account: account)(f, relativePath: relativePath);
+    return UploadFile(account: account)(f, relativePath: relativePath);
   }
 
   final Account account;

@@ -8,11 +8,13 @@ import 'http_stub.dart'
     if (dart.library.js_interop) 'http_browser.dart'
     if (dart.library.io) 'http_io.dart';
 
+String getAppUserAgent() => _userAgent;
+
 Future<void> initHttp({
   required String appVersion,
   required bool isNewHttpEngine,
 }) async {
-  final userAgent = "nc-photos $appVersion";
+  _userAgent = "nc-photos $appVersion";
   Client? client;
   if (isNewHttpEngine) {
     if (getRawPlatform() == NpPlatform.android) {
@@ -21,7 +23,7 @@ Future<void> initHttp({
           enableHttp2: true,
           enableQuic: true,
           enableBrotli: true,
-          userAgent: userAgent,
+          userAgent: _userAgent,
         );
         client = CronetClient.fromCronetEngine(cronetEngine, closeEngine: true);
         _log.info("Using cronet backend");
@@ -32,7 +34,7 @@ Future<void> initHttp({
       try {
         final urlConfig =
             URLSessionConfiguration.ephemeralSessionConfiguration()
-              ..httpAdditionalHeaders = {"User-Agent": userAgent};
+              ..httpAdditionalHeaders = {"User-Agent": _userAgent};
         client = CupertinoClient.fromSessionConfiguration(urlConfig);
         _log.info("Using cupertino backend");
       } catch (e, stackTrace) {
@@ -41,7 +43,7 @@ Future<void> initHttp({
     }
   }
   if (client == null) {
-    _httpClient = makeHttpClientImpl(userAgent: userAgent);
+    _httpClient = makeHttpClientImpl(userAgent: _userAgent);
     _log.info("Using dart backend");
   } else {
     _httpClient = client;
@@ -53,5 +55,6 @@ Client getHttpClient() {
 }
 
 late final Client _httpClient;
+late String _userAgent;
 
 final _log = Logger("np_http");

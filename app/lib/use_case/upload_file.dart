@@ -1,12 +1,12 @@
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
-import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/local_file.dart';
-import 'package:nc_photos/use_case/put_file_binary.dart';
-import 'package:nc_photos_plugin/nc_photos_plugin.dart';
+import 'package:nc_photos/np_api_util.dart';
+import 'package:np_http/np_http.dart';
+import 'package:np_platform_uploader/np_platform_uploader.dart';
 
 class UploadFile {
-  const UploadFile(this._c, {required this.account});
+  const UploadFile({required this.account});
 
   Future<void> call(LocalFile file, {required String relativePath}) {
     if (file is LocalUriFile) {
@@ -17,15 +17,34 @@ class UploadFile {
   }
 
   Future<void> _uploadUriFile(LocalUriFile file, String relativePath) async {
-    final bytes = await ContentUri.readUri(file.uri);
     if (relativePath.startsWith("/")) {
       relativePath = relativePath.substring(1);
     }
-    final dir = "${api_util.getWebdavRootUrlRelative(account)}/$relativePath";
+    final dir = "${api_util.getWebdavRootUrl(account)}/$relativePath";
     final path = "$dir/${file.filename}";
-    await PutFileBinary(_c.fileRepo)(account, path, bytes);
+    await Uploader.asyncUpload(
+      uploadables: [
+        _LocalUriUploadable(uploadPath: path, contentUri: file.uri),
+      ],
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "User-Agent": getAppUserAgent(),
+        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+      },
+    );
   }
 
-  final DiContainer _c;
   final Account account;
+}
+
+class _LocalUriUploadable implements AndroidUploadable {
+  const _LocalUriUploadable({
+    required this.uploadPath,
+    required this.contentUri,
+  });
+
+  @override
+  final String uploadPath;
+  @override
+  final String contentUri;
 }
