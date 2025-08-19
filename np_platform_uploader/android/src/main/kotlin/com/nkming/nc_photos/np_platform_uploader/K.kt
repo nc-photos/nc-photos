@@ -6,5 +6,6 @@ internal interface K {
 
 		const val FG_SERVICE_NOTIFICATION_ID = 6000
 		const val KILLED_NOTIFICATION_ID = 6001
+		const val RESULT_NOTIFICATION_ID = 6002
 	}
 }

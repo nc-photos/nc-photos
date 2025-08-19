@@ -19,6 +19,7 @@ import com.nkming.nc_photos.np_android_core.use
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
@@ -84,22 +85,32 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 				logE(TAG, "[onStartCommand] Failed while startForeground", e)
 			}
 		}
-		doWork(intent, startId)
+		doWork(intent)
 		return START_STICKY
 	}
 
-	private fun doWork(intent: Intent, startId: Int) {
-		val contentUris =
-			intent.extras!!.getStringArrayList(EXTRA_CONTENT_URIS)!!
-		val endPoints = intent.extras!!.getStringArrayList(EXTRA_END_POINTS)!!
-		assert(contentUris.size == endPoints.size)
-		val headers = intent.extras!!.getSerializable(
-			EXTRA_HEADERS
-		) as HashMap<String, String>
-		synchronized(workQueue) {
-			workQueue.add(UploadJob(contentUris, endPoints, headers))
-			if (workQueue.size == 1) {
-				startJobRunner()
+	private fun doWork(intent: Intent) {
+		if (intent.action == ACTION_CANCEL) {
+			if (notificationManager.areNotificationsEnabled()) {
+				notificationManager.notify(
+					K.FG_SERVICE_NOTIFICATION_ID, buildCanceledNotification()
+				)
+			}
+			shouldCancel = true
+		} else {
+			val contentUris =
+				intent.extras!!.getStringArrayList(EXTRA_CONTENT_URIS)!!
+			val endPoints =
+				intent.extras!!.getStringArrayList(EXTRA_END_POINTS)!!
+			assert(contentUris.size == endPoints.size)
+			val headers = intent.extras!!.getSerializable(
+				EXTRA_HEADERS
+			) as HashMap<String, String>
+			synchronized(workQueue) {
+				workQueue.add(UploadJob(contentUris, endPoints, headers))
+				if (workQueue.size == 1) {
+					startJobRunner()
+				}
 			}
 		}
 	}
@@ -107,23 +118,61 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 	private fun startJobRunner() {
 		logI(TAG, "[startJobRunner] Begin")
 		launch(Dispatchers.IO) {
-			while (workQueue.isNotEmpty()) {
+			var okCount = 0
+			var failureCount = 0
+			while (workQueue.isNotEmpty() && !shouldCancel) {
 				val job = workQueue.peek()
 				if (job != null) {
-					workOnce(job)
+					val count = workOnce(job)
+					okCount += count
+					failureCount += job.contentUris.size - count
 				}
 				synchronized(workQueue) {
 					workQueue.remove()
 				}
 			}
-			logI(TAG, "[startJobRunner] All job finished, terminating service")
+			if (shouldCancel) {
+				if (okCount > 0) {
+					if (notificationManager.areNotificationsEnabled()) {
+						notificationManager.notify(
+							K.RESULT_NOTIFICATION_ID,
+							buildResultCanceledNotification(okCount)
+						)
+					}
+				}
+			} else {
+				logI(
+					TAG,
+					"[startJobRunner] All job finished, terminating service"
+				)
+				if (notificationManager.areNotificationsEnabled()) {
+					if (failureCount == 0) {
+						notificationManager.notify(
+							K.RESULT_NOTIFICATION_ID,
+							buildResultSuccessfulNotification(okCount)
+						)
+					} else {
+						notificationManager.notify(
+							K.RESULT_NOTIFICATION_ID,
+							buildResultPartialNotification(
+								okCount, failureCount
+							)
+						)
+					}
+				}
+			}
 			notificationManager.cancel(K.FG_SERVICE_NOTIFICATION_ID)
 			stopSelf()
 		}
 	}
 
-	private fun workOnce(job: UploadJob) {
+	private suspend fun workOnce(job: UploadJob): Int {
+		var count = 0
 		for ((uri, endPoint) in job.contentUris.zip(job.endPoints)) {
+			if (shouldCancel) {
+				logI(TAG, "[workOnce] Canceled")
+				return count
+			}
 			val basename = endPoint.substringAfterLast("/")
 			logI(TAG, "[workOnce] Uploading $basename")
 			if (notificationManager.areNotificationsEnabled()) {
@@ -133,6 +182,7 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 				)
 			}
 			try {
+				delay(5*1000)
 				(URL(endPoint).openConnection() as HttpURLConnection).apply {
 					requestMethod = "PUT"
 					instanceFollowRedirects = true
@@ -159,11 +209,13 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 							"Failed uploading file (HTTP$responseCode)"
 						)
 					}
+					count += 1
 				}
 			} catch (e: Throwable) {
 				logE(TAG, "[workOnce] Exception", e)
 			}
 		}
+		return count
 	}
 
 	private fun createNotificationChannel() {
@@ -204,7 +256,60 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		}
 	}
 
+	private fun buildCanceledNotification(): Notification {
+		return NotificationCompat.Builder(this, CHANNEL_ID).run {
+			setSmallIcon(android.R.drawable.stat_sys_upload)
+			setContentTitle("Canceling upload")
+			build()
+		}
+	}
+
+	private fun buildResultSuccessfulNotification(count: Int): Notification {
+		return NotificationCompat.Builder(this, CHANNEL_ID).run {
+			setSmallIcon(android.R.drawable.stat_sys_upload_done)
+			if (count == 1) {
+				setContentTitle("Uploaded file successfully")
+			} else {
+				setContentTitle("Uploaded $count files successfully")
+			}
+			build()
+		}
+	}
+
+	private fun buildResultPartialNotification(
+		okCount: Int, failureCount: Int
+	): Notification {
+		return NotificationCompat.Builder(this, CHANNEL_ID).run {
+			setSmallIcon(android.R.drawable.stat_sys_upload_done)
+			if (okCount == 0 && failureCount == 1) {
+				setContentTitle("Failed to upload file")
+			} else {
+				setContentTitle(
+					"Uploaded $okCount out of ${okCount + failureCount} files successfully"
+				)
+			}
+			build()
+		}
+	}
+
+	private fun buildResultCanceledNotification(count: Int): Notification {
+		return NotificationCompat.Builder(this, CHANNEL_ID).run {
+			setSmallIcon(android.R.drawable.stat_sys_upload_done)
+			if (count == 1) {
+				setContentTitle(
+					"Uploaded 1 file successfully before canceled by user"
+				)
+			} else {
+				setContentTitle(
+					"Uploaded $count files successfully before canceled by user"
+				)
+			}
+			build()
+		}
+	}
+
 	private var isForeground = false
+	private var shouldCancel = false
 
 	private val notificationManager by lazy {
 		NotificationManagerCompat.from(this)
