@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
-import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/mobile/share.dart';
-import 'package:nc_photos/use_case/upload_file.dart';
+import 'package:nc_photos/use_case/local_file/upload_local_file.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
 class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
@@ -105,20 +104,16 @@ class AnyFileLocalSetAsWorker implements AnyFileSetAsWorker {
 }
 
 class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
-  AnyFileLocalUploadWorker(
-    AnyFile file, {
-    required this.account,
-    required this.c,
-  }) : _provider = file.provider as AnyFileLocalProvider;
+  AnyFileLocalUploadWorker(AnyFile file, {required this.account})
+    : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  Future<void> upload(String relativePath) async {
+  void upload(String relativePath) {
     final f = _provider.file;
-    return UploadFile(account: account)(f, relativePath: relativePath);
+    UploadLocalFile(account: account)(f, relativePath: relativePath);
   }
 
   final Account account;
-  final DiContainer c;
 
   final AnyFileLocalProvider _provider;
 }

@@ -40,7 +40,7 @@ mixin AnyFileWorkerNoDeleteTag implements AnyFileDeleteWorker {
 
 mixin AnyFileWorkerNoUploadTag implements AnyFileUploadWorker {
   @override
-  Future<void> upload(String relativePath) {
+  void upload(String relativePath) {
     throw UnsupportedError("Operation not supported");
   }
 }

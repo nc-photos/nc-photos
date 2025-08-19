@@ -5,8 +5,8 @@ import 'package:nc_photos/np_api_util.dart';
 import 'package:np_http/np_http.dart';
 import 'package:np_platform_uploader/np_platform_uploader.dart';
 
-class UploadFile {
-  const UploadFile({required this.account});
+class UploadLocalFile {
+  const UploadLocalFile({required this.account});
 
   Future<void> call(LocalFile file, {required String relativePath}) {
     if (file is LocalUriFile) {
