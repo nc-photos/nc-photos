@@ -70,7 +70,7 @@ class AlbumRemoteDataSource2 implements AlbumDataSource2 {
   Future<void> update(Account account, Album album) async {
     _log.info("[update] ${album.albumFile!.path}");
     const fileRepo = FileRepo(FileWebdavDataSource());
-    await PutFileBinary(fileRepo)(
+    await const PutFileBinary(fileRepo)(
       account,
       album.albumFile!.path,
       const Utf8Encoder().convert(jsonEncode(album.toRemoteJson())),
