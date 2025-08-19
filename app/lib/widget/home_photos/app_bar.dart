@@ -46,6 +46,12 @@ class _SelectionAppBar extends StatelessWidget {
                   tooltip: L10n.global().addItemToCollectionTooltip,
                   onPressed: () => _onAddPressed(context),
                 ),
+              if (state.selectedCanUpload)
+                IconButton(
+                  icon: const Icon(Icons.cloud_upload_outlined),
+                  tooltip: L10n.global().uploadTooltip,
+                  onPressed: () => _onUploadPressed(context),
+                ),
               const _SelectionAppBarMenu(),
             ],
           ),
@@ -87,6 +93,10 @@ class _SelectionAppBar extends StatelessWidget {
     if (result ?? false) {
       bloc.add(const _SetSelectedItems(items: {}));
     }
+  }
+
+  void _onUploadPressed(BuildContext context) {
+    context.addEvent(const _UploadSelectedItems());
   }
 }
 

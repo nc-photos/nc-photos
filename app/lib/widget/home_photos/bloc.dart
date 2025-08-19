@@ -35,6 +35,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
     on<_DownloadSelectedItems>(_onDownloadSelectedItems);
+    on<_UploadSelectedItems>(_onUploadSelectedItems);
 
     on<_AddVisibleDate>(_onAddVisibleDate);
     on<_RemoveVisibleDate>(_onRemoveVisibleDate);
@@ -277,6 +278,11 @@ class _Bloc extends Bloc<_Event, _State>
     // TODO let collection to make this decision
     final canAddToCollection =
         ev.items.whereType<_NextcloudFileItem>().isNotEmpty;
+    final canUpload = ev.items.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.upload),
+    );
     emit(
       state.copyWith(
         selectedItems: ev.items,
@@ -284,6 +290,7 @@ class _Bloc extends Bloc<_Event, _State>
         selectedCanDownload: canDownload,
         selectedCanDelete: canDelete,
         selectedCanAddToCollection: canAddToCollection,
+        selectedCanUpload: canUpload,
       ),
     );
   }
@@ -357,6 +364,21 @@ class _Bloc extends Bloc<_Event, _State>
             .toList();
     if (selectedFiles.isNotEmpty) {
       unawaited(DownloadHandler(_c).downloadFiles(account, selectedFiles));
+    }
+  }
+
+  void _onUploadSelectedItems(_UploadSelectedItems ev, Emitter<_State> emit) {
+    _log.info(ev);
+    final selected = state.selectedItems;
+    _clearSelection(emit);
+    final selectedFiles =
+        selected.whereType<_FileItem>().map((e) => e.file).where((f) {
+          final capability = AnyFileWorkerFactory.capability(f);
+          return capability.isPermitted(AnyFileCapability.upload);
+        }).toList();
+    if (selectedFiles.isNotEmpty) {
+      final req = _UploadRequest(files: selectedFiles);
+      emit(state.copyWith(uploadRequest: Unique(req)));
     }
   }
 

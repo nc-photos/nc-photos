@@ -239,3 +239,9 @@ class _SummaryFileItem extends _Item {
   final Date date;
   final int index;
 }
+
+class _UploadRequest {
+  const _UploadRequest({required this.files});
+
+  final List<AnyFile> files;
+}

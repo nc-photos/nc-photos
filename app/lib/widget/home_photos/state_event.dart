@@ -29,10 +29,12 @@ class _State {
     required this.minimapYRatio,
     this.scrollDate,
     required this.hasMissingVideoPreview,
+    required this.uploadRequest,
     required this.selectedCanArchive,
     required this.selectedCanDownload,
     required this.selectedCanDelete,
     required this.selectedCanAddToCollection,
+    required this.selectedCanUpload,
     this.error,
   });
 
@@ -56,10 +58,12 @@ class _State {
     localFilesSummary: const LocalFilesSummary(items: {}),
     minimapYRatio: 1,
     hasMissingVideoPreview: false,
+    uploadRequest: Unique(null),
     selectedCanArchive: false,
     selectedCanDownload: false,
     selectedCanDelete: false,
     selectedCanAddToCollection: false,
+    selectedCanUpload: false,
   );
 
   @override
@@ -96,10 +100,13 @@ class _State {
 
   final bool hasMissingVideoPreview;
 
+  final Unique<_UploadRequest?> uploadRequest;
+
   final bool selectedCanArchive;
   final bool selectedCanDownload;
   final bool selectedCanDelete;
   final bool selectedCanAddToCollection;
+  final bool selectedCanUpload;
 
   final ExceptionEvent? error;
 }
@@ -195,6 +202,14 @@ class _DeleteSelectedItems implements _Event {
 @toString
 class _DownloadSelectedItems implements _Event {
   const _DownloadSelectedItems();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _UploadSelectedItems implements _Event {
+  const _UploadSelectedItems();
 
   @override
   String toString() => _$toString();

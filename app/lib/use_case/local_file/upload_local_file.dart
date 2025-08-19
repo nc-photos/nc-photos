@@ -10,22 +10,31 @@ class UploadLocalFile {
 
   Future<void> call(LocalFile file, {required String relativePath}) {
     if (file is LocalUriFile) {
-      return _uploadUriFile(file, relativePath);
+      return _uploadUriFile([file], relativePath);
     } else {
       throw UnsupportedError("Unsupported local file");
     }
   }
 
-  Future<void> _uploadUriFile(LocalUriFile file, String relativePath) async {
+  Future<void> multiple(List<LocalFile> files, {required String relativePath}) {
+    final uriFiles = files.whereType<LocalUriFile>().toList();
+    return _uploadUriFile(uriFiles, relativePath);
+  }
+
+  Future<void> _uploadUriFile(
+    List<LocalUriFile> files,
+    String relativePath,
+  ) async {
     if (relativePath.startsWith("/")) {
       relativePath = relativePath.substring(1);
     }
     final dir = "${api_util.getWebdavRootUrl(account)}/$relativePath";
-    final path = "$dir/${file.filename}";
     await Uploader.asyncUpload(
-      uploadables: [
-        _LocalUriUploadable(uploadPath: path, contentUri: file.uri),
-      ],
+      uploadables:
+          files.map((e) {
+            final path = "$dir/${e.filename}";
+            return _LocalUriUploadable(uploadPath: path, contentUri: e.uri);
+          }).toList(),
       headers: {
         "Content-Type": "application/octet-stream",
         "User-Agent": getAppUserAgent(),

@@ -49,6 +49,7 @@ import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/url_launcher_util.dart';
+import 'package:nc_photos/use_case/any_file/upload_any_file.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker.dart';
 import 'package:nc_photos/widget/double_tap_exit_container/double_tap_exit_container.dart';
@@ -63,10 +64,12 @@ import 'package:nc_photos/widget/selectable_section_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
 import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
+import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_common/unique.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
@@ -164,6 +167,10 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
               }
             },
           ),
+          _BlocListenerT(
+            selector: (state) => state.uploadRequest,
+            listener: _onUploadRequest,
+          ),
           _BlocListenerT<ExceptionEvent?>(
             selector: (state) => state.error,
             listener: (context, error) {
@@ -212,6 +219,28 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
                       ),
         ),
       ),
+    );
+  }
+
+  Future<void> _onUploadRequest(
+    BuildContext context,
+    Unique<_UploadRequest?> uploadRequest,
+  ) async {
+    if (uploadRequest.value == null) {
+      return;
+    }
+    final files = uploadRequest.value!.files;
+    final config = await showDialog<UploadConfig>(
+      context: context,
+      builder: (context) => const UploadDialog(),
+    );
+    if (config == null || !context.mounted) {
+      return;
+    }
+    UploadAnyFile()(
+      files,
+      account: context.bloc.account,
+      relativePath: config.relativePath,
     );
   }
 
