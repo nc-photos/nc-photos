@@ -770,6 +770,8 @@ class _Bloc extends Bloc<_Event, _State>
                   state.localFilesSummary.items.containsKey(d),
             )
             .toSet();
+    // remove dates no longer missing
+    _queryCount.removeWhere((k, v) => !missingDates.contains(k));
     if (missingDates.isNotEmpty && !_isQueryingFiles) {
       final missingDatesSorted = missingDates.sortedBySelf();
       for (final d in missingDatesSorted.reversed) {
