@@ -29,6 +29,7 @@ class _State {
     required this.minimapYRatio,
     this.scrollDate,
     required this.hasMissingVideoPreview,
+    required this.shareRequest,
     required this.uploadRequest,
     required this.selectedCanArchive,
     required this.selectedCanDownload,
@@ -58,6 +59,7 @@ class _State {
     localFilesSummary: const LocalFilesSummary(items: {}),
     minimapYRatio: 1,
     hasMissingVideoPreview: false,
+    shareRequest: Unique(null),
     uploadRequest: Unique(null),
     selectedCanArchive: false,
     selectedCanDownload: false,
@@ -100,6 +102,7 @@ class _State {
 
   final bool hasMissingVideoPreview;
 
+  final Unique<_ShareRequest?> shareRequest;
   final Unique<_UploadRequest?> uploadRequest;
 
   final bool selectedCanArchive;
@@ -202,6 +205,14 @@ class _DeleteSelectedItems implements _Event {
 @toString
 class _DownloadSelectedItems implements _Event {
   const _DownloadSelectedItems();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _ShareSelectedItems implements _Event {
+  const _ShareSelectedItems();
 
   @override
   String toString() => _$toString();

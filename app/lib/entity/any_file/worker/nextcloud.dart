@@ -20,7 +20,8 @@ class AnyFileNextcloudCapabilityWorker implements AnyFileCapabilityWorker {
       AnyFileCapability.archive ||
       AnyFileCapability.edit ||
       AnyFileCapability.download ||
-      AnyFileCapability.delete => true,
+      AnyFileCapability.delete ||
+      AnyFileCapability.remoteShare => true,
       AnyFileCapability.upload => false,
     };
   }

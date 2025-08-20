@@ -69,30 +69,7 @@ class _SelectionAppBar extends StatelessWidget {
   }
 
   Future<void> _onSharePressed(BuildContext context) async {
-    final bloc = context.read<_Bloc>();
-    // TODO should allow sharing local files
-    final selected =
-        bloc.state.selectedItems
-            .whereType<_NextcloudFileItem>()
-            .map((e) => e.remoteFile)
-            .toList();
-    if (selected.isEmpty) {
-      SnackBarManager().showSnackBar(
-        SnackBar(
-          content: Text(L10n.global().shareSelectedEmptyNotification),
-          duration: k.snackBarDurationNormal,
-        ),
-      );
-      return;
-    }
-    final result = await showDialog(
-      context: context,
-      builder:
-          (context) => FileSharerDialog(account: bloc.account, files: selected),
-    );
-    if (result ?? false) {
-      bloc.add(const _SetSelectedItems(items: {}));
-    }
+    context.addEvent(const _ShareSelectedItems());
   }
 
   void _onUploadPressed(BuildContext context) {

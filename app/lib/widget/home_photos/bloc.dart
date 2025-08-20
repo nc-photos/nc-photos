@@ -35,6 +35,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
     on<_DownloadSelectedItems>(_onDownloadSelectedItems);
+    on<_ShareSelectedItems>(_onShareSelectedItems);
     on<_UploadSelectedItems>(_onUploadSelectedItems);
 
     on<_AddVisibleDate>(_onAddVisibleDate);
@@ -364,6 +365,30 @@ class _Bloc extends Bloc<_Event, _State>
             .toList();
     if (selectedFiles.isNotEmpty) {
       unawaited(DownloadHandler(_c).downloadFiles(account, selectedFiles));
+    }
+  }
+
+  void _onShareSelectedItems(_ShareSelectedItems ev, Emitter<_State> emit) {
+    _log.info(ev);
+    final selected = state.selectedItems;
+    _clearSelection(emit);
+    final selectedFiles =
+        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    if (selectedFiles.isNotEmpty) {
+      final isRemoteShareOnly = selectedFiles.every((f) {
+        final capability = AnyFileWorkerFactory.capability(f);
+        return capability.isPermitted(AnyFileCapability.remoteShare);
+      });
+      final isLocalShareOnly = selectedFiles.every((f) {
+        final capability = AnyFileWorkerFactory.capability(f);
+        return !capability.isPermitted(AnyFileCapability.remoteShare);
+      });
+      final req = _ShareRequest(
+        files: selectedFiles,
+        isRemoteShareOnly: isRemoteShareOnly,
+        isLocalShareOnly: isLocalShareOnly,
+      );
+      emit(state.copyWith(shareRequest: Unique(req)));
     }
   }
 

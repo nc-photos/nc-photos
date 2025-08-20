@@ -42,7 +42,15 @@ class AnyFile {
   final AnyFileProvider provider;
 }
 
-enum AnyFileCapability { favorite, archive, edit, download, delete, upload }
+enum AnyFileCapability {
+  favorite,
+  archive,
+  edit,
+  download,
+  delete,
+  upload,
+  remoteShare,
+}
 
 mixin ArchivableAnyFile {
   bool get isArchived;
