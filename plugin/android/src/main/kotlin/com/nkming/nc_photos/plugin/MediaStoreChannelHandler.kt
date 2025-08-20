@@ -394,7 +394,6 @@ internal class MediaStoreChannelHandler(context: Context) :
 		}
 
 		val wheres = mutableListOf<String>()
-		val whereArgs = arrayListOf<String>()
 		wheres.add(
 			"(" +
 					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
@@ -403,9 +402,8 @@ internal class MediaStoreChannelHandler(context: Context) :
 					")"
 		)
 		if (fileIds != null) {
-			val args = List(fileIds.size) { "?" }.joinToString(",")
+			val args = fileIds.joinToString(",", transform = { it.toString() })
 			wheres.add("${MediaStore.MediaColumns._ID} IN (${args})")
-			whereArgs.addAll(fileIds.map { it.toString() })
 		}
 		if (timeRangeBeg != null) {
 			if (isTimeRangeBegInclusive == false) {
@@ -449,12 +447,6 @@ internal class MediaStoreChannelHandler(context: Context) :
 						putString(
 							ContentResolver.QUERY_ARG_SQL_SELECTION,
 							wheres.joinToString(" AND "),
-						)
-					}
-					if (whereArgs.isNotEmpty()) {
-						putStringArrayList(
-							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
-							whereArgs
 						)
 					}
 					val order = if (isAscending) "ASC" else "DESC"
