@@ -64,9 +64,11 @@ class LocalImageViewer extends StatelessWidget {
               image: provider,
               fit: BoxFit.contain,
               frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  onLoaded();
-                });
+                if (frame != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onLoaded();
+                  });
+                }
                 const SizeChangedLayoutNotification().dispatch(context);
                 return child;
               },
@@ -263,7 +265,9 @@ class _ImageViewHeroContainerState extends State<_ImageViewHeroContainer> {
   void _onItemLoaded() {
     if (!_isLoaded) {
       _log.info("[_onItemLoaded]");
-      _isLoaded = true;
+      setState(() {
+        _isLoaded = true;
+      });
       widget.onLoaded?.call();
     }
   }
