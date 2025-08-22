@@ -296,6 +296,12 @@ class PrefController {
     value: value,
   );
 
+  Future<bool> setLocalDirs(List<String> value) => _set<List<String>>(
+    controller: _localDirsController,
+    setter: (pref, value) => pref.setLocalDirs(value),
+    value: value,
+  );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -493,6 +499,10 @@ class PrefController {
   @npSubjectAccessor
   late final _isVideoPlayerLoopController = BehaviorSubject.seeded(
     pref.isVideoPlayerLoop() ?? false,
+  );
+  @npSubjectAccessor
+  late final _localDirsController = BehaviorSubject.seeded(
+    pref.getLocalDirs() ?? [],
   );
 }
 

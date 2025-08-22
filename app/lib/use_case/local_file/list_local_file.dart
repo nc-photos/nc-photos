@@ -7,11 +7,13 @@ class ListLocalFile {
 
   Future<List<LocalFile>> call({
     TimeRange? timeRange,
+    List<String>? dirWhitelist,
     bool? isAscending,
     int? offset,
     int? limit,
   }) => localFileRepo.getFiles(
     timeRange: timeRange,
+    dirWhitelist: dirWhitelist,
     isAscending: isAscending,
     offset: offset,
     limit: limit,

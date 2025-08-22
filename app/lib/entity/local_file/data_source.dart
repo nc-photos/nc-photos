@@ -27,6 +27,7 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   Future<List<LocalFile>> getFiles({
     List<String>? fileIds,
     TimeRange? timeRange,
+    List<String>? dirWhitelist,
     bool? isAscending,
     int? offset,
     int? limit,
@@ -35,6 +36,7 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
       "[getFiles] "
       "fileIds: ${fileIds?.toReadableString(truncate: 10)}, "
       "timeRange: $timeRange, "
+      "dirWhitelist: $dirWhitelist, "
       "isAscending: $isAscending, "
       "offset: $offset, "
       "limit: $limit",
@@ -44,6 +46,7 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
       final results = await MediaStore.queryFiles2(
         fileIds: ids?.map(int.parse).toList(),
         timeRange: timeRange,
+        dirWhitelist: dirWhitelist,
         isAscending: isAscending,
         offset: offset,
         limit: limit,
@@ -125,16 +128,24 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   @override
-  Future<LocalFilesSummary> getFilesSummary() async {
-    _log.info("[getFilesSummary]");
-    final results = await MediaStore.getFilesSummary();
+  Future<LocalFilesSummary> getFilesSummary({
+    List<String>? dirWhitelist,
+  }) async {
+    _log.info("[getFilesSummary] dirWhitelist: $dirWhitelist");
+    final results = await MediaStore.getFilesSummary(
+      dirWhitelist: dirWhitelist,
+    );
     return LocalFilesSummary(items: results);
   }
 
   @override
-  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps() async {
-    _log.info("[getFileIdWithTimestamps]");
-    final results = await MediaStore.getFileIdWithTimestamps();
+  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps({
+    List<String>? dirWhitelist,
+  }) async {
+    _log.info("[getFileIdWithTimestamps] dirWhitelist: $dirWhitelist");
+    final results = await MediaStore.getFileIdWithTimestamps(
+      dirWhitelist: dirWhitelist,
+    );
     return results
         .map(
           (e) => LocalFileIdWithTimestamp(

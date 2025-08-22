@@ -6,6 +6,7 @@ import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
 import 'package:mutex/mutex.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/local_file.dart';
@@ -99,10 +100,19 @@ abstract interface class LocalFilesController {
 
 @npLog
 class LocalFilesControllerImpl implements LocalFilesController {
-  LocalFilesControllerImpl(this._c);
+  LocalFilesControllerImpl(this._c, {required this.prefController}) {
+    _subscriptions.add(
+      prefController.localDirsChange.listen((_) {
+        _reload();
+      }),
+    );
+  }
 
   @override
   void dispose() {
+    for (final s in _subscriptions) {
+      s.cancel();
+    }
     _fileChangeListener?.cancel();
   }
 
@@ -164,6 +174,7 @@ class LocalFilesControllerImpl implements LocalFilesController {
     try {
       final files = await ListLocalFile(_c.localFileRepo)(
         timeRange: dateRange.toLocalTimeRange(),
+        dirWhitelist: ["DCIM", ...prefController.localDirsValue],
       );
       final data = _toFileMap(files);
       _timelineStreamController.addWithValue(
@@ -253,7 +264,9 @@ class LocalFilesControllerImpl implements LocalFilesController {
     final original =
         _summaryStreamController.valueOrNull?.summary ??
         const LocalFilesSummary(items: {});
-    final results = await _c.localFileRepo.getFilesSummary();
+    final results = await _c.localFileRepo.getFilesSummary(
+      dirWhitelist: ["DCIM", ...prefController.localDirsValue],
+    );
     final diff = original.diff(results);
     _summaryStreamController.add(
       LocalFilesSummaryStreamEvent(summary: results),
@@ -340,6 +353,7 @@ class LocalFilesControllerImpl implements LocalFilesController {
   }
 
   final DiContainer _c;
+  final PrefController prefController;
 
   final _dataStreamController = BehaviorSubject.seeded(
     _LocalFilesStreamEvent(files: {}),
@@ -362,6 +376,7 @@ class LocalFilesControllerImpl implements LocalFilesController {
       StreamController<ExceptionEvent>.broadcast();
 
   StreamSubscription? _fileChangeListener;
+  final _subscriptions = <StreamSubscription>[];
 
   final _mutex = Mutex();
 }

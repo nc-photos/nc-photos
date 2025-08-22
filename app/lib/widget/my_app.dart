@@ -90,7 +90,10 @@ class MyApp extends StatelessWidget {
           create: (_) {
             if (getRawPlatform() == NpPlatform.android) {
               if (AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU) {
-                return LocalFilesControllerImpl(_c);
+                return LocalFilesControllerImpl(
+                  _c,
+                  prefController: context.read(),
+                );
               }
             }
             return DummyLocalFilesController();

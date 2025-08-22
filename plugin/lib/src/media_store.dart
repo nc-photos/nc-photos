@@ -144,6 +144,7 @@ class MediaStore {
   static Future<List<MediaStoreQueryResult>> queryFiles2({
     List<int>? fileIds,
     TimeRange? timeRange,
+    List<String>? dirWhitelist,
     bool? isAscending,
     int? offset,
     int? limit,
@@ -160,6 +161,7 @@ class MediaStore {
             "isTimeRangeEndInclusive": timeRange?.let(
               (e) => e.toBound == TimeRangeBound.inclusive,
             ),
+            if (dirWhitelist != null) "dirWhitelist": dirWhitelist,
             "isAscending": isAscending,
             "offset": offset,
             "limit": limit,
@@ -206,10 +208,15 @@ class MediaStore {
     ))!.cast<String>();
   }
 
-  static Future<Map<Date, int>> getFilesSummary() async {
+  static Future<Map<Date, int>> getFilesSummary({
+    List<String>? dirWhitelist,
+  }) async {
     try {
       return (await _methodChannel.invokeMethod<Map>(
         "getFilesSummary",
+        <String, dynamic>{
+          if (dirWhitelist != null) "dirWhitelist": dirWhitelist,
+        },
       ))!.cast<int, int>().map(
         (key, value) => MapEntry(
           Date.fromDateTime(DateTime.fromMillisecondsSinceEpoch(key)),
@@ -225,11 +232,15 @@ class MediaStore {
     }
   }
 
-  static Future<List<({int fileId, int timestamp})>>
-  getFileIdWithTimestamps() async {
+  static Future<List<({int fileId, int timestamp})>> getFileIdWithTimestamps({
+    List<String>? dirWhitelist,
+  }) async {
     try {
       return (await _methodChannel.invokeMethod<List>(
             "getFileIdWithTimestamps",
+            <String, dynamic>{
+              if (dirWhitelist != null) "dirWhitelist": dirWhitelist,
+            },
           ))!
           .cast<Map>()
           .map(

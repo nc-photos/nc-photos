@@ -123,7 +123,8 @@ enum PrefKey implements PrefKeyInterface {
   viewerAppBarButtons,
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
-  isFallbackClientExif;
+  isFallbackClientExif,
+  localDirs;
 
   @override
   String toStringKey() {
@@ -177,6 +178,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.viewerBottomAppBarButtons => "viewerBottomAppBarButtons",
       PrefKey.homeCollectionsNavBarButtons => "homeCollectionsNavBarButtons",
       PrefKey.isFallbackClientExif => "isFallbackClientExif",
+      PrefKey.localDirs => "localDirs",
     };
   }
 }

@@ -6,6 +6,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -77,6 +78,7 @@ class TimelineViewer extends StatelessWidget {
           accountController.account,
           accountController.accountPrefController.shareFolderValue,
         ),
+        prefController: context.read(),
       ),
       allFilesCount: allFilesCount,
       initialFile: initialFile,
@@ -94,6 +96,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
   const _TimelineViewerContentProvider(
     this.c, {
     required this.anyFilesController,
+    required this.prefController,
     required this.account,
     required this.shareDirPath,
   });
@@ -150,7 +153,12 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     final results = await ListAnyFileIdWithTimestamp(
       fileRepo: c.fileRepo2,
       localFileRepo: c.localFileRepo,
-    )(account, shareDirPath, isArchived: false);
+    )(
+      account,
+      shareDirPath,
+      localDirWhitelist: ["DCIM", ...prefController.localDirsValue],
+      isArchived: false,
+    );
     return results.map((e) => e.afId).toList();
   }
 
@@ -184,6 +192,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
                 to: at.originalFile.dateTime,
                 toBound: TimeRangeBound.inclusive,
               ),
+      dirWhitelist: ["DCIM", ...prefController.localDirsValue],
       isAscending: count < 0,
       limit: count.abs(),
     );
@@ -216,6 +225,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
 
   final DiContainer c;
   final AnyFilesController anyFilesController;
+  final PrefController prefController;
   final Account account;
   final String shareDirPath;
 }

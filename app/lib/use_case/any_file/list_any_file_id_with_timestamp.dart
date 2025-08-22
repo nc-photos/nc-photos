@@ -28,6 +28,7 @@ class ListAnyFileIdWithTimestamp {
   Future<List<AnyFileIdWithTimestamp>> call(
     Account account,
     String shareDirPath, {
+    List<String>? localDirWhitelist,
     bool? isArchived,
   }) async {
     try {
@@ -38,7 +39,9 @@ class ListAnyFileIdWithTimestamp {
               shareDirPath,
               isArchived: isArchived,
             ),
-            ListLocalFileIdWithTimestamp(localFileRepo: localFileRepo)(),
+            ListLocalFileIdWithTimestamp(localFileRepo: localFileRepo)(
+              dirWhitelist: localDirWhitelist,
+            ),
           ).wait;
       final remote2 =
           remote

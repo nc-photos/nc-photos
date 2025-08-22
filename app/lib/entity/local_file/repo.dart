@@ -19,12 +19,14 @@ class LocalFileRepo {
   Future<List<LocalFile>> getFiles({
     List<String>? fileIds,
     TimeRange? timeRange,
+    List<String>? dirWhitelist,
     bool? isAscending,
     int? offset,
     int? limit,
   }) => dataSrc.getFiles(
     fileIds: fileIds,
     timeRange: timeRange,
+    dirWhitelist: dirWhitelist,
     isAscending: isAscending,
     offset: offset,
     limit: limit,
@@ -52,10 +54,12 @@ class LocalFileRepo {
   }) => dataSrc.shareFiles(files, onFailure: onFailure);
 
   /// See [LocalFileDataSource.getFilesSummary]
-  Future<LocalFilesSummary> getFilesSummary() => dataSrc.getFilesSummary();
+  Future<LocalFilesSummary> getFilesSummary({List<String>? dirWhitelist}) =>
+      dataSrc.getFilesSummary(dirWhitelist: dirWhitelist);
 
-  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps() =>
-      dataSrc.getFileIdWithTimestamps();
+  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps({
+    List<String>? dirWhitelist,
+  }) => dataSrc.getFileIdWithTimestamps(dirWhitelist: dirWhitelist);
 
   Stream<void> watchFileChanges() => dataSrc.watchFileChanges();
 
@@ -69,6 +73,7 @@ abstract class LocalFileDataSource {
   Future<List<LocalFile>> getFiles({
     List<String>? fileIds,
     TimeRange? timeRange,
+    List<String>? dirWhitelist,
     bool? isAscending,
     int? offset,
     int? limit,
@@ -95,9 +100,11 @@ abstract class LocalFileDataSource {
     LocalFileOnFailureListener? onFailure,
   });
 
-  Future<LocalFilesSummary> getFilesSummary();
+  Future<LocalFilesSummary> getFilesSummary({List<String>? dirWhitelist});
 
-  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps();
+  Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps({
+    List<String>? dirWhitelist,
+  });
 
   /// Get notified when a new file is added to, or a file is removed from local
   /// storage

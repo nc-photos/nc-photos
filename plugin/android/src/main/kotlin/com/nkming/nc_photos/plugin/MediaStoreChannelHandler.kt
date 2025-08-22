@@ -192,6 +192,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 							isAscending = call.argument("isAscending") ?: false,
 							offset = call.argument<Number>("offset")?.toInt(),
 							limit = call.argument<Number>("limit")?.toInt(),
+							dirWhitelist = call.argument("dirWhitelist"),
 							result = result
 						)
 					} else {
@@ -231,7 +232,10 @@ internal class MediaStoreChannelHandler(context: Context) :
 			"getFilesSummary" -> {
 				try {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-						getFilesSummary(result)
+						getFilesSummary(
+							dirWhitelist = call.argument("dirWhitelist"),
+							result = result
+						)
 					} else {
 						result.success(listOf<Map<Long, Int>>())
 					}
@@ -243,7 +247,10 @@ internal class MediaStoreChannelHandler(context: Context) :
 			"getFileIdWithTimestamps" -> {
 				try {
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-						getFileIdWithTimestamps(result)
+						getFileIdWithTimestamps(
+							dirWhitelist = call.argument("dirWhitelist"),
+							result = result
+						)
 					} else {
 						result.success(listOf<Map<String, Any>>())
 					}
@@ -385,6 +392,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 		isAscending: Boolean,
 		offset: Int?,
 		limit: Int?,
+		dirWhitelist: List<String>?,
 		result: MethodChannel.Result
 	) {
 		if (!PermissionUtil.hasReadMedia(context)) {
@@ -394,6 +402,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 		}
 
 		val wheres = mutableListOf<String>()
+		val whereArgs = mutableListOf<String>()
 		wheres.add(
 			"(" +
 					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
@@ -427,6 +436,11 @@ internal class MediaStoreChannelHandler(context: Context) :
 				)
 			}
 		}
+		if (!dirWhitelist.isNullOrEmpty()) {
+			val (w, wa) = dirWhitelistToSql(dirWhitelist)
+			wheres.add(w)
+			whereArgs.addAll(wa)
+		}
 
 		doWork {
 			context.contentResolver.query(
@@ -447,6 +461,12 @@ internal class MediaStoreChannelHandler(context: Context) :
 						putString(
 							ContentResolver.QUERY_ARG_SQL_SELECTION,
 							wheres.joinToString(" AND "),
+						)
+					}
+					if (whereArgs.isNotEmpty()) {
+						putStringArray(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs.toTypedArray(),
 						)
 					}
 					val order = if (isAscending) "ASC" else "DESC"
@@ -585,7 +605,10 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	@RequiresApi(Build.VERSION_CODES.R)
-	private fun getFilesSummary(result: MethodChannel.Result) {
+	private fun getFilesSummary(
+		dirWhitelist: List<String>?,
+		result: MethodChannel.Result
+	) {
 		if (!PermissionUtil.hasReadMedia(context)) {
 			// activity?.let { PermissionUtil.requestReadMedia(it) }
 			result.error("permissionError", "Permission not granted", null)
@@ -597,21 +620,32 @@ internal class MediaStoreChannelHandler(context: Context) :
 			var thisDateBeg = 0L
 			var thisDateEnd = 0L
 			var thisDateCount = 0
+
+			val whereArgs = mutableListOf<String>()
+			var where = "(" +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+					" OR " +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+					")"
+			where += " AND ${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
+			if (!dirWhitelist.isNullOrEmpty()) {
+				val (w, wa) = dirWhitelistToSql(dirWhitelist)
+				where += " AND $w"
+				whereArgs.addAll(wa)
+			}
 			context.contentResolver.query(
 				MediaStore.Files.getContentUri("external"),
 				arrayOf(
 					MediaStore.MediaColumns.DATE_TAKEN,
 				),
 				Bundle().apply {
-					putString(
-						ContentResolver.QUERY_ARG_SQL_SELECTION,
-						"(" +
-								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
-								" OR " +
-								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
-								") AND " +
-								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
-					)
+					putString(ContentResolver.QUERY_ARG_SQL_SELECTION, where)
+					if (whereArgs.isNotEmpty()) {
+						putStringArray(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs.toTypedArray(),
+						)
+					}
 					putString(
 						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
 						"${MediaStore.MediaColumns.DATE_TAKEN} DESC"
@@ -654,7 +688,10 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	@RequiresApi(Build.VERSION_CODES.R)
-	private fun getFileIdWithTimestamps(result: MethodChannel.Result) {
+	private fun getFileIdWithTimestamps(
+		dirWhitelist: List<String>?,
+		result: MethodChannel.Result
+	) {
 		if (!PermissionUtil.hasReadMedia(context)) {
 			// activity?.let { PermissionUtil.requestReadMedia(it) }
 			result.error("permissionError", "Permission not granted", null)
@@ -663,6 +700,18 @@ internal class MediaStoreChannelHandler(context: Context) :
 
 		val results = mutableListOf<Map<String, Any>>()
 		doWork {
+			val whereArgs = mutableListOf<String>()
+			var where = "(" +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+					" OR " +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+					")"
+			where += " AND ${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
+			if (!dirWhitelist.isNullOrEmpty()) {
+				val (w, wa) = dirWhitelistToSql(dirWhitelist)
+				where += " AND $w"
+				whereArgs.addAll(wa)
+			}
 			context.contentResolver.query(
 				MediaStore.Files.getContentUri("external"),
 				arrayOf(
@@ -670,15 +719,13 @@ internal class MediaStoreChannelHandler(context: Context) :
 					MediaStore.MediaColumns.DATE_TAKEN,
 				),
 				Bundle().apply {
-					putString(
-						ContentResolver.QUERY_ARG_SQL_SELECTION,
-						"(" +
-								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
-								" OR " +
-								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
-								") AND " +
-								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
-					)
+					putString(ContentResolver.QUERY_ARG_SQL_SELECTION, where)
+					if (whereArgs.isNotEmpty()) {
+						putStringArray(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs.toTypedArray(),
+						)
+					}
 					putString(
 						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
 						"${MediaStore.MediaColumns.DATE_TAKEN} DESC, ${MediaStore.MediaColumns._ID} DESC"
@@ -728,6 +775,17 @@ internal class MediaStoreChannelHandler(context: Context) :
 		} else {
 			block()
 		}
+	}
+
+	private fun dirWhitelistToSql(dirWhitelist: List<String>)
+			: Pair<String, List<String>> {
+		val wheres = mutableListOf<String>()
+		val whereArgs = mutableListOf<String>()
+		for (w in dirWhitelist) {
+			wheres.add("${MediaStore.MediaColumns.RELATIVE_PATH} LIKE ?")
+			whereArgs.add("%$w%")
+		}
+		return Pair("(" + wheres.joinToString(" OR ") + ")", whereArgs)
 	}
 
 	private val context = context
