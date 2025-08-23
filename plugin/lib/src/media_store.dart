@@ -259,6 +259,20 @@ class MediaStore {
     }
   }
 
+  static Future<List<String>> getDirList() async {
+    try {
+      return (await _methodChannel.invokeMethod<List>(
+        "getDirList",
+      ))!.cast<String>().toList();
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   static Stream get stream => _eventStream;
 
   static final _eventStream = _eventChannel.receiveBroadcastStream().map((

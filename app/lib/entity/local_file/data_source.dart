@@ -157,6 +157,12 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
   }
 
   @override
+  Future<List<String>> getDirList() {
+    _log.info("[getDirList]");
+    return MediaStore.getDirList();
+  }
+
+  @override
   Stream<void> watchFileChanges() {
     return MediaStore.stream.where(
       (e) =>

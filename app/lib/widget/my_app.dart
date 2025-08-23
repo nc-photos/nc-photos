@@ -87,7 +87,7 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (_) => PrefController(_c.pref)),
         RepositoryProvider(create: (_) => SecurePrefController(_c.securePref)),
         RepositoryProvider<LocalFilesController>(
-          create: (_) {
+          create: (context) {
             if (getRawPlatform() == NpPlatform.android) {
               if (AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU) {
                 return LocalFilesControllerImpl(

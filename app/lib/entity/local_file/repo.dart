@@ -61,6 +61,9 @@ class LocalFileRepo {
     List<String>? dirWhitelist,
   }) => dataSrc.getFileIdWithTimestamps(dirWhitelist: dirWhitelist);
 
+  /// See [LocalFileDataSource.getDirList]
+  Future<List<String>> getDirList() => dataSrc.getDirList();
+
   Stream<void> watchFileChanges() => dataSrc.watchFileChanges();
 
   final LocalFileDataSource dataSrc;
@@ -105,6 +108,9 @@ abstract class LocalFileDataSource {
   Future<List<LocalFileIdWithTimestamp>> getFileIdWithTimestamps({
     List<String>? dirWhitelist,
   });
+
+  /// Return a list of all dirs with media files in it
+  Future<List<String>> getDirList();
 
   /// Get notified when a new file is added to, or a file is removed from local
   /// storage

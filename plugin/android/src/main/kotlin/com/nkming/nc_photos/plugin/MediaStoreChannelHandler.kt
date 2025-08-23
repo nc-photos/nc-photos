@@ -259,6 +259,18 @@ internal class MediaStoreChannelHandler(context: Context) :
 				}
 			}
 
+			"getDirList" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						getDirList(result)
+					} else {
+						result.success(listOf<Map<String, Any>>())
+					}
+				} catch (e: Throwable) {
+					result.error("systemException", e.message, null)
+				}
+			}
+
 			else -> result.notImplemented()
 		}
 	}
@@ -749,6 +761,52 @@ internal class MediaStoreChannelHandler(context: Context) :
 								"timestamp" to timestamp,
 							)
 						)
+					} while (it.moveToNext())
+				}
+			}
+			result.success(results)
+		}
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun getDirList(result: MethodChannel.Result) {
+		if (!PermissionUtil.hasReadMedia(context)) {
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
+			result.error("permissionError", "Permission not granted", null)
+			return
+		}
+
+		val results = mutableListOf<String>()
+		doWork {
+			context.contentResolver.query(
+				MediaStore.Files.getContentUri("external"),
+				arrayOf(
+					MediaStore.MediaColumns.RELATIVE_PATH,
+				),
+				Bundle().apply {
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SELECTION,
+						"(" +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+								" OR " +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+								") AND " +
+								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL",
+					)
+					putString(
+						ContentResolver.QUERY_ARG_SQL_GROUP_BY,
+						MediaStore.MediaColumns.RELATIVE_PATH,
+					)
+				},
+				null,
+			)?.use {
+				if (it.moveToFirst()) {
+					val relPathColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.RELATIVE_PATH
+					)
+					do {
+						val relPath = it.getString(relPathColumn)
+						results.add(relPath)
 					} while (it.moveToNext())
 				}
 			}

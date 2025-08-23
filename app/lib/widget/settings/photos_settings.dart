@@ -9,6 +9,7 @@ import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
+import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
@@ -75,6 +76,17 @@ class _WrappedPhotosSettingsState extends State<_WrappedPhotosSettings>
             ),
             SliverList(
               delegate: SliverChildListDelegate([
+                ListTile(
+                  title: Text(L10n.global().settingsDeviceMediaTitle),
+                  subtitle: Text(L10n.global().settingsDeviceMediaDescription),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const LocalRootPicker(),
+                      ),
+                    );
+                  },
+                ),
                 _BlocBuilder(
                   buildWhen:
                       (previous, current) =>

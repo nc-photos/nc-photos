@@ -357,6 +357,14 @@
 			}
 		}
 	},
+	"settingsDeviceMediaTitle": "Show device media",
+	"@settingsDeviceMediaTitle": {
+		"description": "Control which device folders to be included in the timeline"
+	},
+	"settingsDeviceMediaDescription": "Selected folders will be displayed",
+	"@settingsDeviceMediaDescription": {
+		"description": "Control which device folders to be included in the timeline"
+	},
 	"settingsViewerTitle": "Viewer",
 	"settingsViewerDescription": "Customize the image/video viewer",
 	"settingsScreenBrightnessTitle": "Screen brightness",
