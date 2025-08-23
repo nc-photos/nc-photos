@@ -37,6 +37,8 @@ class _State {
     required this.selectedCanAddToCollection,
     required this.selectedCanUpload,
     this.error,
+    required this.shouldShowRemoteOnlyWarning,
+    required this.shouldShowLocalOnlyWarning,
   });
 
   factory _State.init({
@@ -66,6 +68,8 @@ class _State {
     selectedCanDelete: false,
     selectedCanAddToCollection: false,
     selectedCanUpload: false,
+    shouldShowRemoteOnlyWarning: Unique(false),
+    shouldShowLocalOnlyWarning: Unique(false),
   );
 
   @override
@@ -112,6 +116,8 @@ class _State {
   final bool selectedCanUpload;
 
   final ExceptionEvent? error;
+  final Unique<bool> shouldShowRemoteOnlyWarning;
+  final Unique<bool> shouldShowLocalOnlyWarning;
 }
 
 abstract class _Event {}
@@ -391,4 +397,20 @@ class _SetError implements _Event {
 
   final Object error;
   final StackTrace? stackTrace;
+}
+
+@toString
+class _ShowRemoteOnlyWarning implements _Event {
+  const _ShowRemoteOnlyWarning();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _ShowLocalOnlyWarning implements _Event {
+  const _ShowLocalOnlyWarning();
+
+  @override
+  String toString() => _$toString();
 }

@@ -285,6 +285,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -310,6 +312,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -339,6 +343,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -516,6 +522,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -533,6 +541,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -603,6 +613,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -620,6 +632,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -695,6 +709,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -712,6 +728,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1117,6 +1135,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1199,6 +1219,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1287,6 +1309,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1357,6 +1381,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1374,6 +1400,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1386,6 +1414,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1487,6 +1517,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ],
 
@@ -1680,6 +1712,8 @@
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
+    "opOnlySupportRemoteFiles",
+    "opOnlySupportLocalFiles",
     "errorServerNoCert"
   ]
 }

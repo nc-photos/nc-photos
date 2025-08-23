@@ -62,6 +62,12 @@ class _Bloc extends Bloc<_Event, _State>
     on<_TripMissingVideoPreview>(_onTripMissingVideoPreview);
 
     on<_SetError>(_onSetError);
+    on<_ShowRemoteOnlyWarning>((ev, emit) {
+      emit(state.copyWith(shouldShowRemoteOnlyWarning: Unique(true)));
+    });
+    on<_ShowLocalOnlyWarning>((ev, emit) {
+      emit(state.copyWith(shouldShowLocalOnlyWarning: Unique(true)));
+    });
 
     _subscriptions.add(
       accountPrefController.isEnableMemoryAlbumChange.listen((event) {
@@ -308,6 +314,9 @@ class _Bloc extends Bloc<_Event, _State>
             .whereType<_NextcloudFileItem>()
             .map((e) => e.remoteFile)
             .toList();
+    if (selectedFiles.length != selected.length) {
+      add(const _ShowRemoteOnlyWarning());
+    }
     if (selectedFiles.isNotEmpty) {
       final targetController = collectionsController.stream.value
           .itemsControllerByCollection(ev.collection);
@@ -328,6 +337,9 @@ class _Bloc extends Bloc<_Event, _State>
             .whereType<_NextcloudFileItem>()
             .map((e) => e.remoteFile)
             .toList();
+    if (selectedFiles.length != selected.length) {
+      add(const _ShowRemoteOnlyWarning());
+    }
     if (selectedFiles.isNotEmpty) {
       filesController.updateProperty(
         selectedFiles,
@@ -363,6 +375,9 @@ class _Bloc extends Bloc<_Event, _State>
             .whereType<_NextcloudFileItem>()
             .map((e) => e.remoteFile)
             .toList();
+    if (selectedFiles.length != selected.length) {
+      add(const _ShowRemoteOnlyWarning());
+    }
     if (selectedFiles.isNotEmpty) {
       unawaited(DownloadHandler(_c).downloadFiles(account, selectedFiles));
     }
@@ -401,6 +416,9 @@ class _Bloc extends Bloc<_Event, _State>
           final capability = AnyFileWorkerFactory.capability(f);
           return capability.isPermitted(AnyFileCapability.upload);
         }).toList();
+    if (selectedFiles.length != selected.length) {
+      add(const _ShowLocalOnlyWarning());
+    }
     if (selectedFiles.isNotEmpty) {
       final req = _UploadRequest(files: selectedFiles);
       emit(state.copyWith(uploadRequest: Unique(req)));

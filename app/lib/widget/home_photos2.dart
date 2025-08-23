@@ -214,6 +214,32 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
               }
             },
           ),
+          _BlocListenerT(
+            selector: (state) => state.shouldShowRemoteOnlyWarning,
+            listener: (context, shouldShowRemoteOnlyWarning) {
+              if (shouldShowRemoteOnlyWarning.value) {
+                SnackBarManager().showSnackBar(
+                  SnackBar(
+                    content: Text(L10n.global().opOnlySupportRemoteFiles),
+                    duration: k.snackBarDurationNormal,
+                  ),
+                );
+              }
+            },
+          ),
+          _BlocListenerT(
+            selector: (state) => state.shouldShowLocalOnlyWarning,
+            listener: (context, shouldShowLocalOnlyWarning) {
+              if (shouldShowLocalOnlyWarning.value) {
+                SnackBarManager().showSnackBar(
+                  SnackBar(
+                    content: Text(L10n.global().opOnlySupportLocalFiles),
+                    duration: k.snackBarDurationNormal,
+                  ),
+                );
+              }
+            },
+          ),
         ],
         child: _BlocSelector(
           selector: (state) => state.selectedItems.isEmpty,

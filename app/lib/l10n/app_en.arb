@@ -1561,6 +1561,14 @@
 	"@uploadFolderPickerTitle": {
 		"description": "Pick a folder on your server where the files will be uploaded to"
 	},
+	"opOnlySupportRemoteFiles": "This feature only supports remote files on your Nextcloud server. Any selected local files are ignored",
+	"@opOnlySupportRemoteFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a remote only action"
+	},
+	"opOnlySupportLocalFiles": "This feature only supports local files on your device. Any selected remote files are ignored",
+	"@opOnlySupportLocalFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a local only action"
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
