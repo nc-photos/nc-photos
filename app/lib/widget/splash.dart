@@ -17,6 +17,7 @@ import 'package:nc_photos/use_case/compat/v29.dart';
 import 'package:nc_photos/use_case/compat/v46.dart';
 import 'package:nc_photos/use_case/compat/v55.dart';
 import 'package:nc_photos/use_case/compat/v75.dart';
+import 'package:nc_photos/use_case/compat/v77.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/changelog.dart';
 import 'package:nc_photos/widget/home/home.dart';
