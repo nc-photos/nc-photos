@@ -242,7 +242,7 @@ class _AppBarUploadButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-      icon: const Icon(Icons.upload_outlined),
+      icon: const Icon(Icons.cloud_upload_outlined),
       tooltip: L10n.global().uploadTooltip,
       onPressed: () {
         context.state.currentFile?.id.let(

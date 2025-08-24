@@ -159,7 +159,7 @@ class _GridUploadButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _GridButton(
       tooltip: L10n.global().uploadTooltip,
-      icon: const Icon(Icons.upload_outlined),
+      icon: const Icon(Icons.cloud_upload_outlined),
     );
   }
 }
