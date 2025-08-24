@@ -10,7 +10,7 @@ class _Changelog770 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _subSection("Changes"),
-        _bulletGroup(const Text("Added local files support"), [
+        _bulletGroup(const Text("Added local files support (Android 11+)"), [
           const Text(
             "Media files on your device will now appear in the photos timeline",
           ),
