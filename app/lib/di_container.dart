@@ -5,7 +5,7 @@ import 'package:nc_photos/entity/favorite.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file/repo.dart';
 import 'package:nc_photos/entity/image_location/repo.dart';
-import 'package:nc_photos/entity/local_file.dart';
+import 'package:nc_photos/entity/local_file/repo.dart';
 import 'package:nc_photos/entity/nc_album/repo.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/entity/recognize_face/repo.dart';

@@ -8,7 +8,7 @@ enum ImageLoaderResizeMethod { fit, fill }
 
 class ImageLoader {
   static Future<Rgba8Image> loadUri(
-    String fileUri,
+    Uri fileUri,
     int maxWidth,
     int maxHeight,
     ImageLoaderResizeMethod resizeMethod, {
@@ -18,7 +18,7 @@ class ImageLoader {
   }) async {
     final result = await _methodChannel
         .invokeMethod<Map>("loadUri", <String, dynamic>{
-          "fileUri": fileUri,
+          "fileUri": fileUri.toString(),
           "maxWidth": maxWidth,
           "maxHeight": maxHeight,
           "resizeMethod": resizeMethod.index,

@@ -21,6 +21,31 @@ interface PermissionUtil {
 			)
 		}
 
+		/// readExternalStorage + accessMediaLocation
+		fun hasReadMedia(context: Context): Boolean {
+			return hasReadExternalStorage(context) &&
+					hasAccessMediaLocation(context)
+		}
+
+		fun requestReadMedia(activity: Activity) {
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+				request(
+					activity,
+					Manifest.permission.READ_MEDIA_IMAGES,
+					Manifest.permission.READ_MEDIA_VIDEO,
+					Manifest.permission.ACCESS_MEDIA_LOCATION
+				)
+			} else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+				request(
+					activity,
+					Manifest.permission.READ_EXTERNAL_STORAGE,
+					Manifest.permission.ACCESS_MEDIA_LOCATION
+				)
+			} else {
+				request(activity, Manifest.permission.READ_EXTERNAL_STORAGE)
+			}
+		}
+
 		fun hasReadExternalStorage(context: Context): Boolean {
 			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
 				hasReadExternalStorage33(context)
@@ -61,10 +86,20 @@ interface PermissionUtil {
 			}
 		}
 
+		fun hasAccessMediaLocation(context: Context): Boolean {
+			return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+				hasAccessMediaLocation30(context)
+			} else {
+				true
+			}
+		}
+
 		@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 		private fun hasReadExternalStorage33(context: Context): Boolean {
 			return ContextCompat.checkSelfPermission(
 				context, Manifest.permission.READ_MEDIA_IMAGES
+			) == PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(
+				context, Manifest.permission.READ_MEDIA_VIDEO
 			) == PackageManager.PERMISSION_GRANTED
 		}
 
@@ -76,7 +111,9 @@ interface PermissionUtil {
 
 		@RequiresApi(Build.VERSION_CODES.TIRAMISU)
 		private fun requestReadExternalStorage33(activity: Activity) = request(
-			activity, Manifest.permission.READ_MEDIA_IMAGES
+			activity,
+			Manifest.permission.READ_MEDIA_IMAGES,
+			Manifest.permission.READ_MEDIA_VIDEO
 		)
 
 		private fun requestReadExternalStorage0(activity: Activity) = request(
@@ -94,5 +131,12 @@ interface PermissionUtil {
 		private fun requestPostNotifications33(activity: Activity) = request(
 			activity, Manifest.permission.POST_NOTIFICATIONS
 		)
+
+		@RequiresApi(Build.VERSION_CODES.R)
+		private fun hasAccessMediaLocation30(context: Context): Boolean {
+			return ContextCompat.checkSelfPermission(
+				context, Manifest.permission.ACCESS_MEDIA_LOCATION
+			) == PackageManager.PERMISSION_GRANTED
+		}
 	}
 }

@@ -1,20 +1,23 @@
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/cache_manager_util.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
+import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/zoomable_viewer.dart';
+import 'package:np_common/size.dart';
 import 'package:np_log/np_log.dart';
 
 part 'image_viewer.g.dart';
 
-class LocalImageViewer extends StatefulWidget {
+class LocalImageViewer extends StatelessWidget {
   const LocalImageViewer({
     super.key,
     required this.file,
@@ -26,7 +29,54 @@ class LocalImageViewer extends StatefulWidget {
   });
 
   @override
-  createState() => _LocalImageViewerState();
+  Widget build(BuildContext context) {
+    final ImageProvider provider;
+    final ImageProvider heroProvider;
+    if (file is LocalUriFile) {
+      provider = ContentUriImage((file as LocalUriFile).uri);
+      heroProvider = ContentUriImage(
+        (file as LocalUriFile).uri,
+        thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
+      );
+    } else {
+      throw ArgumentError("Invalid file");
+    }
+
+    return _ImageViewer(
+      canZoom: canZoom,
+      onHeightChanged: onHeightChanged,
+      onZoomStarted: onZoomStarted,
+      onZoomEnded: onZoomEnded,
+      child: _ImageViewHeroContainer(
+        file: file.toAnyFile(),
+        heroImageBuilder:
+            (context) => Image(
+              image: heroProvider,
+              fit: BoxFit.contain,
+              filterQuality: FilterQuality.high,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                const SizeChangedLayoutNotification().dispatch(context);
+                return child;
+              },
+            ),
+        imageBuilder:
+            (context, onLoaded) => Image(
+              image: provider,
+              fit: BoxFit.contain,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (frame != null) {
+                  WidgetsBinding.instance.addPostFrameCallback((_) {
+                    onLoaded();
+                  });
+                }
+                const SizeChangedLayoutNotification().dispatch(context);
+                return child;
+              },
+            ),
+        onLoaded: onLoaded,
+      ),
+    );
+  }
 
   final LocalFile file;
   final bool canZoom;
@@ -36,47 +86,7 @@ class LocalImageViewer extends StatefulWidget {
   final VoidCallback? onZoomEnded;
 }
 
-@npLog
-class _LocalImageViewerState extends State<LocalImageViewer> {
-  @override
-  build(BuildContext context) {
-    final ImageProvider provider;
-    if (widget.file is LocalUriFile) {
-      provider = ContentUriImage((widget.file as LocalUriFile).uri);
-    } else {
-      throw ArgumentError("Invalid file");
-    }
-
-    return _ImageViewer(
-      canZoom: widget.canZoom,
-      onHeightChanged: widget.onHeightChanged,
-      onZoomStarted: widget.onZoomStarted,
-      onZoomEnded: widget.onZoomEnded,
-      child: Image(
-        image: provider,
-        fit: BoxFit.contain,
-        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            _onItemLoaded();
-          });
-          return child;
-        },
-      ),
-    );
-  }
-
-  void _onItemLoaded() {
-    if (!_isLoaded) {
-      _log.info("[_onItemLoaded] ${widget.file.logTag}");
-      _isLoaded = true;
-      widget.onLoaded?.call();
-    }
-  }
-
-  var _isLoaded = false;
-}
-
-class RemoteImageViewer extends StatefulWidget {
+class RemoteImageViewer extends StatelessWidget {
   const RemoteImageViewer({
     super.key,
     required this.account,
@@ -87,9 +97,6 @@ class RemoteImageViewer extends StatefulWidget {
     this.onZoomStarted,
     this.onZoomEnded,
   });
-
-  @override
-  createState() => _RemoteImageViewerState();
 
   static void preloadImage(Account account, FileDescriptor file) {
     final cacheManager = getCacheManager(
@@ -102,6 +109,28 @@ class RemoteImageViewer extends StatefulWidget {
     );
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return _ImageViewer(
+      canZoom: canZoom,
+      onHeightChanged: onHeightChanged,
+      onZoomStarted: onZoomStarted,
+      onZoomEnded: onZoomEnded,
+      child: _ImageViewHeroContainer(
+        file: file.toAnyFile(),
+        heroImageBuilder:
+            (context) => _PreviewImage(account: account, file: file),
+        imageBuilder:
+            (context, onLoaded) => _FullSizedImage(
+              account: account,
+              file: file,
+              onItemLoaded: onLoaded,
+            ),
+        onLoaded: onLoaded,
+      ),
+    );
+  }
+
   final Account account;
   final FileDescriptor file;
   final bool canZoom;
@@ -109,88 +138,6 @@ class RemoteImageViewer extends StatefulWidget {
   final ValueChanged<double>? onHeightChanged;
   final VoidCallback? onZoomStarted;
   final VoidCallback? onZoomEnded;
-}
-
-@npLog
-class _RemoteImageViewerState extends State<RemoteImageViewer> {
-  @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        // needed to get rid of the large image blinking during Hero animation
-        setState(() {});
-      }
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _ImageViewer(
-      canZoom: widget.canZoom,
-      onHeightChanged: widget.onHeightChanged,
-      onZoomStarted: widget.onZoomStarted,
-      onZoomEnded: widget.onZoomEnded,
-      child: Stack(
-        fit: StackFit.expand,
-        children: [
-          Opacity(
-            opacity: !_isHeroDone || !_isLoaded ? 1 : 0,
-            child: Hero(
-              tag: flutter_util.getImageHeroTag(widget.file),
-              flightShuttleBuilder: (
-                flightContext,
-                animation,
-                flightDirection,
-                fromHeroContext,
-                toHeroContext,
-              ) {
-                _isHeroDone = false;
-                animation.addStatusListener(_animationListener);
-                return flutter_util.defaultHeroFlightShuttleBuilder(
-                  flightContext,
-                  animation,
-                  flightDirection,
-                  fromHeroContext,
-                  toHeroContext,
-                );
-              },
-              child: _PreviewImage(account: widget.account, file: widget.file),
-            ),
-          ),
-          if (_isHeroDone)
-            _FullSizedImage(
-              account: widget.account,
-              file: widget.file,
-              onItemLoaded: _onItemLoaded,
-            ),
-        ],
-      ),
-    );
-  }
-
-  void _onItemLoaded() {
-    if (!_isLoaded) {
-      _log.info("[_onItemLoaded]");
-      _isLoaded = true;
-      widget.onLoaded?.call();
-    }
-  }
-
-  void _animationListener(AnimationStatus status) {
-    if (status == AnimationStatus.completed ||
-        status == AnimationStatus.dismissed) {
-      _isHeroDone = true;
-      if (mounted) {
-        setState(() {});
-      }
-    }
-  }
-
-  var _isLoaded = false;
-  // initially set to true such that the large image will show when hero didn't
-  // run (i.e., when swiping in viewer)
-  var _isHeroDone = true;
 }
 
 class _ImageViewer extends StatefulWidget {
@@ -248,6 +195,97 @@ class _ImageViewerState extends State<_ImageViewer>
   }
 
   final _key = GlobalKey();
+}
+
+class _ImageViewHeroContainer extends StatefulWidget {
+  const _ImageViewHeroContainer({
+    required this.file,
+    required this.heroImageBuilder,
+    required this.imageBuilder,
+    this.onLoaded,
+  });
+
+  @override
+  State<StatefulWidget> createState() => _ImageViewHeroContainerState();
+
+  final AnyFile file;
+  final Widget Function(BuildContext context) heroImageBuilder;
+  final Widget Function(BuildContext context, VoidCallback onLoaded)
+  imageBuilder;
+  final VoidCallback? onLoaded;
+}
+
+@npLog
+class _ImageViewHeroContainerState extends State<_ImageViewHeroContainer> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        // needed to get rid of the large image blinking during Hero animation
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        Opacity(
+          opacity: !_isHeroDone || !_isLoaded ? 1 : 0,
+          child: Hero(
+            tag: flutter_util.HeroTag.fromAnyFile(widget.file),
+            flightShuttleBuilder: (
+              flightContext,
+              animation,
+              flightDirection,
+              fromHeroContext,
+              toHeroContext,
+            ) {
+              _isHeroDone = false;
+              animation.addStatusListener(_animationListener);
+              return flutter_util.defaultHeroFlightShuttleBuilder(
+                flightContext,
+                animation,
+                flightDirection,
+                fromHeroContext,
+                toHeroContext,
+              );
+            },
+            child: widget.heroImageBuilder(context),
+          ),
+        ),
+        if (_isHeroDone) widget.imageBuilder(context, _onItemLoaded),
+      ],
+    );
+  }
+
+  void _onItemLoaded() {
+    if (!_isLoaded) {
+      _log.info("[_onItemLoaded]");
+      setState(() {
+        _isLoaded = true;
+      });
+      widget.onLoaded?.call();
+    }
+  }
+
+  void _animationListener(AnimationStatus status) {
+    if (status == AnimationStatus.completed ||
+        status == AnimationStatus.dismissed) {
+      _isHeroDone = true;
+      if (mounted) {
+        setState(() {});
+      }
+    }
+  }
+
+  var _isLoaded = false;
+  // initially set to true such that the large image will show when hero didn't
+  // run (i.e., when swiping in viewer)
+  var _isHeroDone = true;
 }
 
 class _PreviewImage extends StatelessWidget {

@@ -26,6 +26,7 @@ class DirPicker extends StatefulWidget {
     this.isMultipleSelections = true,
     this.validator,
     this.onConfirmed,
+    this.onChanged,
   });
 
   @override
@@ -39,6 +40,7 @@ class DirPicker extends StatefulWidget {
   /// Return whether [dir] is a valid target to be picked
   final bool Function(File dir)? validator;
   final ValueChanged<List<File>>? onConfirmed;
+  final ValueChanged<List<File>>? onChanged;
 }
 
 @npLog
@@ -276,6 +278,7 @@ class DirPickerState extends State<DirPicker> {
       _picks = _optimizePicks(_root);
     });
     _log.fine("[_pick] Picked: ${_pickListToString(_picks)}");
+    widget.onChanged?.call(_picks);
   }
 
   /// Optimize the picked array
@@ -344,6 +347,7 @@ class DirPickerState extends State<DirPicker> {
       }
     });
     _log.fine("[_unpick] Picked: ${_pickListToString(_picks)}");
+    widget.onChanged?.call(_picks);
   }
 
   /// Return a list where all children of [path] or [item], except [exclude],
@@ -401,13 +405,21 @@ class DirPickerState extends State<DirPicker> {
     var product = _PickState.notPicked;
     for (final p in _picks) {
       // exact match, or parent is picked
-      if (file_util.isOrUnderDir(item.file, p)) {
-        product = _PickState.picked;
-        // no need to check the remaining ones
-        break;
-      }
-      if (file_util.isUnderDir(p, item.file)) {
-        product = _PickState.childPicked;
+      if (widget.isMultipleSelections) {
+        if (file_util.isOrUnderDir(item.file, p)) {
+          product = _PickState.picked;
+          // no need to check the remaining ones
+          break;
+        }
+        if (file_util.isUnderDir(p, item.file)) {
+          product = _PickState.childPicked;
+        }
+      } else {
+        if (item.file.fdPath == p.fdPath) {
+          product = _PickState.picked;
+          // no need to check the remaining ones
+          break;
+        }
       }
     }
     if (product == _PickState.childPicked) {}

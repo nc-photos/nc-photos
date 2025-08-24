@@ -44,6 +44,51 @@ DiffResult<T> getDiffWith<T>(
 DiffResult<T> getDiff<T extends Comparable>(Iterable<T> a, Iterable<T> b) =>
     getDiffWith(a, b, Comparable.compare);
 
+/// Merge two sorted list, [a] and [b] into one single sorted list
+///
+/// Both lists MUST be sorted in ascending order by [comparator], otherwise the
+/// behavior is undefined. If two elements are compared equally with each other,
+/// the one in [a] is preferred
+List<T> mergeSortedLists<T>(
+  Iterable<T> a,
+  Iterable<T> b,
+  int Function(T a, T b) comparator,
+) {
+  final results = <T>[];
+  var aIt = a.iterator;
+  var bIt = b.iterator;
+  var shouldMoveA = true;
+  var shouldMoveB = true;
+  while (true) {
+    if (shouldMoveA && !aIt.moveNext()) {
+      // no more elements in a
+      if (!shouldMoveB) {
+        // needed because bIt.current not yet added
+        results.add(bIt.current);
+      }
+      bIt.iterate(results.add);
+      return results;
+    }
+    if (shouldMoveB && !bIt.moveNext()) {
+      // no more elements in b
+      results.add(aIt.current);
+      aIt.iterate(results.add);
+      return results;
+    }
+    shouldMoveA = false;
+    shouldMoveB = false;
+    var diff = comparator(aIt.current, bIt.current);
+    if (diff <= 0) {
+      // a[i] < b[j]
+      results.add(aIt.current);
+      shouldMoveA = true;
+    } else {
+      results.add(bIt.current);
+      shouldMoveB = true;
+    }
+  }
+}
+
 DiffResult<T> _diffUntilEqual<T>(
   Iterator<T> aIt,
   Iterator<T> bIt,

@@ -87,6 +87,9 @@ Uri getFileUri(Account account, FileDescriptor file) {
 String getWebdavRootUrlRelative(Account account) =>
     "remote.php/dav/files/${account.userId}";
 
+String getWebdavRootUrl(Account account) =>
+    "${account.url}/${getWebdavRootUrlRelative(account)}";
+
 String getTrashbinPath(Account account) =>
     "remote.php/dav/trashbin/${account.userId}/trash";
 

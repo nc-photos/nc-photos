@@ -10,19 +10,21 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/disposable.dart';
 import 'package:nc_photos/widget/file_content_view.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
-import 'package:nc_photos/widget/image_viewer.dart';
-import 'package:nc_photos/widget/network_thumbnail.dart';
-import 'package:nc_photos/widget/photo_list_item.dart';
 import 'package:nc_photos/widget/slideshow_dialog.dart';
 import 'package:nc_photos/widget/viewer_mixin.dart';
 import 'package:nc_photos/widget/wakelock_util.dart';
@@ -40,13 +42,13 @@ part 'slideshow_viewer/view.dart';
 
 class SlideshowViewerArguments {
   const SlideshowViewerArguments(
-    this.fileIds,
+    this.afIds,
     this.startIndex,
     this.collectionId,
     this.config,
   );
 
-  final List<int> fileIds;
+  final List<String> afIds;
   final int startIndex;
   final String? collectionId;
   final SlideshowConfig config;
@@ -66,7 +68,7 @@ class SlideshowViewer extends StatelessWidget {
 
   const SlideshowViewer({
     super.key,
-    required this.fileIds,
+    required this.afIds,
     required this.startIndex,
     required this.collectionId,
     required this.config,
@@ -75,7 +77,7 @@ class SlideshowViewer extends StatelessWidget {
   SlideshowViewer.fromArgs(SlideshowViewerArguments args, {Key? key})
     : this(
         key: key,
-        fileIds: args.fileIds,
+        afIds: args.afIds,
         startIndex: args.startIndex,
         collectionId: args.collectionId,
         config: args.config,
@@ -88,9 +90,11 @@ class SlideshowViewer extends StatelessWidget {
       create:
           (context) => _Bloc(
             account: accountController.account,
+            anyFilesController: accountController.anyFilesController,
             filesController: accountController.filesController,
+            localFilesController: context.read(),
             collectionsController: accountController.collectionsController,
-            fileIds: fileIds,
+            afIds: afIds,
             startIndex: startIndex,
             collectionId: collectionId,
             config: config,
@@ -99,7 +103,7 @@ class SlideshowViewer extends StatelessWidget {
     );
   }
 
-  final List<int> fileIds;
+  final List<String> afIds;
   final int startIndex;
   final String? collectionId;
   final SlideshowConfig config;

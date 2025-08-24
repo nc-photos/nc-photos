@@ -9,6 +9,6 @@ part of 'local_file.dart';
 extension _$LocalUriFileToString on LocalUriFile {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "LocalUriFile {uri: $uri, displayName: $displayName, path: $path, lastModified: $lastModified, ${mime == null ? "" : "mime: $mime, "}${dateTaken == null ? "" : "dateTaken: $dateTaken"}}";
+    return "LocalUriFile {id: $id, uri: $uri, displayName: $displayName, path: $path, lastModified: $lastModified, ${mime == null ? "" : "mime: $mime, "}${dateTaken == null ? "" : "dateTaken: $dateTaken, "}${size == null ? "" : "size: $size, "}byteSize: $byteSize}";
   }
 }

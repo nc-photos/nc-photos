@@ -29,6 +29,7 @@ class FileRemoteDataSource implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) {
@@ -36,12 +37,12 @@ class FileRemoteDataSource implements FileDataSource2 {
   }
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) {
-    throw UnsupportedError("getFileIds not supported");
+    throw UnsupportedError("getFileIdWithTimestamps not supported");
   }
 
   @override
@@ -123,6 +124,7 @@ class FileNpDbDataSource implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) {
@@ -132,19 +134,20 @@ class FileNpDbDataSource implements FileDataSource2 {
       shareDirPath,
       timeRange: timeRange,
       isArchived: isArchived,
+      isAscending: isAscending,
       offset: offset,
       limit: limit,
     );
   }
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) async {
-    _log.info("[getFileIds] $account");
-    return await db.getFileIds(
+    _log.info("[getFileIdWithTimestamps] $account");
+    final dbObj = await db.getFileIdWithTimestamps(
       account: account.toDb(),
       // need this because this arg expect empty string for root instead of "."
       includeRelativeRoots:
@@ -161,6 +164,11 @@ class FileNpDbDataSource implements FileDataSource2 {
       mimes: file_util.supportedFormatMimes,
       isArchived: isArchived,
     );
+    return dbObj
+        .map(
+          (e) => FileIdWithTimestamp(fileId: e.fileId, timestamp: e.timestamp),
+        )
+        .toList();
   }
 
   @override
@@ -222,6 +230,7 @@ class FileNpDbDataSource implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) async {
@@ -245,6 +254,7 @@ class FileNpDbDataSource implements FileDataSource2 {
       mimes: file_util.supportedFormatMimes,
       timeRange: timeRange,
       isArchived: isArchived,
+      isAscending: isAscending,
       offset: offset,
       limit: limit,
     );

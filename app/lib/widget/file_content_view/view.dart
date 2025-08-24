@@ -36,12 +36,14 @@ class _PhotoPageContentView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final presenter = AnyFilePresenterFactory.imageViewer(
+      context.bloc.file,
+      account: context.bloc.account,
+    );
     return _BlocBuilder(
       buildWhen: (previous, current) => previous.canZoom != current.canZoom,
       builder:
-          (context, state) => RemoteImageViewer(
-            account: context.bloc.account,
-            file: context.bloc.file,
+          (context, state) => presenter.buildWidget(
             canZoom: state.canZoom,
             onLoaded: () {
               context.addEvent(const _SetLoaded());

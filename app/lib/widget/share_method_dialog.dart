@@ -5,10 +5,14 @@ import 'package:np_platform_util/np_platform_util.dart';
 enum ShareMethod { file, preview, publicLink, passwordLink }
 
 class ShareMethodDialog extends StatelessWidget {
-  const ShareMethodDialog({super.key, required this.isSupportPerview});
+  const ShareMethodDialog({
+    super.key,
+    required this.isSupportPerview,
+    required this.isSupportRemoteLink,
+  });
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     return SimpleDialog(
       title: Text(L10n.global().shareMethodDialogTitle),
       children: [
@@ -33,27 +37,30 @@ class ShareMethodDialog extends StatelessWidget {
             },
           ),
         ],
-        SimpleDialogOption(
-          child: ListTile(
-            title: Text(L10n.global().shareMethodPublicLinkTitle),
-            subtitle: Text(L10n.global().shareMethodPublicLinkDescription),
+        if (isSupportRemoteLink) ...[
+          SimpleDialogOption(
+            child: ListTile(
+              title: Text(L10n.global().shareMethodPublicLinkTitle),
+              subtitle: Text(L10n.global().shareMethodPublicLinkDescription),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(ShareMethod.publicLink);
+            },
           ),
-          onPressed: () {
-            Navigator.of(context).pop(ShareMethod.publicLink);
-          },
-        ),
-        SimpleDialogOption(
-          child: ListTile(
-            title: Text(L10n.global().shareMethodPasswordLinkTitle),
-            subtitle: Text(L10n.global().shareMethodPasswordLinkDescription),
+          SimpleDialogOption(
+            child: ListTile(
+              title: Text(L10n.global().shareMethodPasswordLinkTitle),
+              subtitle: Text(L10n.global().shareMethodPasswordLinkDescription),
+            ),
+            onPressed: () {
+              Navigator.of(context).pop(ShareMethod.passwordLink);
+            },
           ),
-          onPressed: () {
-            Navigator.of(context).pop(ShareMethod.passwordLink);
-          },
-        ),
+        ],
       ],
     );
   }
 
   final bool isSupportPerview;
+  final bool isSupportRemoteLink;
 }

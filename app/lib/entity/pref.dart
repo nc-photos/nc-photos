@@ -123,7 +123,8 @@ enum PrefKey implements PrefKeyInterface {
   viewerAppBarButtons,
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
-  isFallbackClientExif;
+  isFallbackClientExif,
+  localDirs;
 
   @override
   String toStringKey() {
@@ -177,6 +178,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.viewerBottomAppBarButtons => "viewerBottomAppBarButtons",
       PrefKey.homeCollectionsNavBarButtons => "homeCollectionsNavBarButtons",
       PrefKey.isFallbackClientExif => "isFallbackClientExif",
+      PrefKey.localDirs => "localDirs",
     };
   }
 }
@@ -189,7 +191,8 @@ enum AccountPrefKey implements PrefKeyInterface {
   accountLabel,
   lastNewCollectionType,
   personProvider,
-  serverStatus;
+  serverStatus,
+  uploadRelativePath;
 
   @override
   String toStringKey() {
@@ -202,6 +205,7 @@ enum AccountPrefKey implements PrefKeyInterface {
       AccountPrefKey.lastNewCollectionType => "lastNewCollectionType",
       AccountPrefKey.personProvider => "personProvider",
       AccountPrefKey.serverStatus => "serverStatus",
+      AccountPrefKey.uploadRelativePath => "uploadRelativePath",
     };
   }
 }

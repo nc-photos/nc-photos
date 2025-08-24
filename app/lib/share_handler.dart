@@ -101,6 +101,7 @@ class ShareHandler {
             isSupportPerview: files.any(
               (f) => file_util.isSupportedImageFormat(f),
             ),
+            isSupportRemoteLink: true,
           ),
     );
   }

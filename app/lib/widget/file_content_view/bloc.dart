@@ -69,7 +69,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _onInit(_Init ev, _Emitter emit) async {
     _log.info(ev);
-    if (file_util.isSupportedVideoFormat(file)) {
+    if (file_util.isSupportedVideoMime(file.mime ?? "")) {
       return _initVideo(emit);
     }
   }
@@ -236,49 +236,18 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<VideoPlayerController> _initVideoController() async {
-    if (getRawPlatform() != NpPlatform.web) {
-      try {
-        return await _initVideoControllerWithFileUrl();
-      } catch (e, stackTrace) {
-        _log.warning(
-          "[_initVideoController] Failed while _initVideoControllerWithFileUrl",
-          e,
-          stackTrace,
-        );
-      }
-    }
-    return await _initVideoControllerWithPublicUrl();
-  }
-
-  Future<VideoPlayerController> _initVideoControllerWithFileUrl() async {
-    final uri = api_util.getFileUri(account, file);
-    _log.fine("[_initVideoWithFileUrl] URI: $uri");
-    final controller = VideoPlayerController.networkUrl(
-      uri,
-      httpHeaders: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
-    );
-    await controller.initialize();
-    return controller;
-  }
-
-  Future<VideoPlayerController> _initVideoControllerWithPublicUrl() async {
-    final url = await RequestPublicLink()(account, file);
-    _log.fine("[_initVideoControllerWithPublicUrl] URL: $url");
-    final controller = VideoPlayerController.networkUrl(
-      Uri.parse(url),
-      httpHeaders: {
-        "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-      },
-    );
+    final controller =
+        await AnyFilePresenterFactory.videoPlayerController(
+          file,
+          account: account,
+        ).build();
     await controller.initialize();
     return controller;
   }
 
   final PrefController prefController;
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
 
   final _subscriptions = <StreamSubscription>[];
   var _isHandlingError = false;

@@ -25,7 +25,7 @@ import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/toast.dart';
 import 'package:nc_photos/url_launcher_util.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/settings.dart';
 import 'package:nc_photos/widget/settings/account_settings.dart';
 import 'package:nc_photos/widget/sign_in.dart';

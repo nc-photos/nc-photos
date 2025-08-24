@@ -340,8 +340,8 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
   Future<bool> _ensurePermission() async {
     if (getRawPlatform() == NpPlatform.android) {
       if (AndroidInfo().sdkInt >= AndroidVersion.R) {
-        if (!await Permission.hasReadExternalStorage()) {
-          final results = await requestReadExternalStorageForResult();
+        if (!await Permission.hasReadMedia()) {
+          final results = await requestReadMediaForResult();
           return results[Permission.READ_EXTERNAL_STORAGE] ==
                   PermissionRequestResult.granted ||
               results[Permission.READ_MEDIA_IMAGES] ==

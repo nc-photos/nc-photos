@@ -12,10 +12,12 @@ import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/controller/trusted_cert_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/language_util.dart' as language_util;
+import 'package:nc_photos/mobile/android/android_info.dart';
 import 'package:nc_photos/mobile/self_signed_cert_manager.dart';
 import 'package:nc_photos/navigation_manager.dart';
 import 'package:nc_photos/protected_page_handler.dart';
@@ -32,7 +34,7 @@ import 'package:nc_photos/widget/collection_picker.dart';
 import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/connect2/connect.dart';
 import 'package:nc_photos/widget/enhanced_photo_browser.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/image_editor.dart';
 import 'package:nc_photos/widget/image_enhancer.dart';
 import 'package:nc_photos/widget/local_file_viewer.dart';
@@ -57,9 +59,11 @@ import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/upload_folder_picker.dart';
 import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 
 part 'my_app.g.dart';
@@ -82,9 +86,25 @@ class MyApp extends StatelessWidget {
       providers: [
         RepositoryProvider(create: (_) => PrefController(_c.pref)),
         RepositoryProvider(create: (_) => SecurePrefController(_c.securePref)),
+        RepositoryProvider<LocalFilesController>(
+          create: (context) {
+            if (getRawPlatform() == NpPlatform.android) {
+              if (AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU) {
+                return LocalFilesControllerImpl(
+                  _c,
+                  prefController: context.read(),
+                );
+              }
+            }
+            return DummyLocalFilesController();
+          },
+        ),
         RepositoryProvider(
           create:
-              (context) => AccountController(prefController: context.read()),
+              (context) => AccountController(
+                prefController: context.read(),
+                localFilesController: context.read(),
+              ),
         ),
         RepositoryProvider<NpDb>(create: (_) => _c.npDb),
         RepositoryProvider<TrustedCertController>(
@@ -233,6 +253,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handlePlacePickerRoute(settings);
     route ??= _handleTimelineViewerRoute(settings);
     route ??= _handleCollectionViewerRoute(settings);
+    route ??= _handleUploadFolderPickerRoute(settings);
     return route;
   }
 
@@ -580,6 +601,22 @@ class _WrappedAppState extends State<_WrappedApp>
     } catch (e) {
       _log.severe(
         "[_handleCollectionViewerRoute] Failed while handling route",
+        e,
+      );
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleUploadFolderPickerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == UploadFolderPicker.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as UploadFolderPickerArguments;
+        return UploadFolderPicker.buildRoute(args, settings);
+      }
+    } catch (e) {
+      _log.severe(
+        "[_handleUploadFolderPickerRoute] Failed while handling route",
         e,
       );
     }

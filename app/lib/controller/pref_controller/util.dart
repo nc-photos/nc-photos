@@ -210,6 +210,10 @@ extension on Pref {
       provider.getBool(PrefKey.isFallbackClientExif);
   Future<bool> setFallbackClientExif(bool value) =>
       provider.setBool(PrefKey.isFallbackClientExif, value);
+
+  List<String>? getLocalDirs() => provider.getStringList(PrefKey.localDirs);
+  Future<bool> setLocalDirs(List<String> value) =>
+      provider.setStringList(PrefKey.localDirs, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

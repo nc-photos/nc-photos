@@ -41,6 +41,7 @@ class _AppBar extends StatelessWidget {
                       ...state.appBarButtons
                           .map(
                             (e) => _buildAppBarButton(
+                              context,
                               e,
                               currentFile: state.currentFile,
                               collection: state.collection,
@@ -67,7 +68,7 @@ class _AppBarTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final locale = Localizations.localeOf(context).languageCode;
-    final localTime = file.fdDateTime.toLocal();
+    final localTime = file.dateTime.toLocal();
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment:
@@ -88,7 +89,7 @@ class _AppBarTitle extends StatelessWidget {
     );
   }
 
-  final FileDescriptor file;
+  final AnyFile file;
   final bool isCentered;
 }
 
@@ -121,6 +122,7 @@ class _BottomAppBar extends StatelessWidget {
                   state.bottomAppBarButtons
                       .map(
                         (e) => _buildAppBarButton(
+                          context,
                           e,
                           currentFile: state.currentFile,
                           collection: state.collection,
@@ -138,40 +140,62 @@ class _BottomAppBar extends StatelessWidget {
 /// Build app bar buttons based on [type]. May return null if this button type
 /// is not supported in the current context
 Widget? _buildAppBarButton(
+  BuildContext context,
   ViewerAppBarButtonType type, {
-  required FileDescriptor? currentFile,
+  required AnyFile? currentFile,
   required Collection? collection,
 }) {
+  final capability = currentFile?.let(
+    (f) => AnyFileWorkerFactory.capability(f),
+  );
   switch (type) {
     case ViewerAppBarButtonType.livePhoto:
       return currentFile?.let(getLivePhotoTypeFromFile) != null
           ? const _AppBarLivePhotoButton()
           : null;
     case ViewerAppBarButtonType.favorite:
-      return const _AppBarFavoriteButton();
+      return capability?.isPermitted(AnyFileCapability.favorite) == true
+          ? const _AppBarFavoriteButton()
+          : null;
     case ViewerAppBarButtonType.share:
       return const _AppBarShareButton();
     case ViewerAppBarButtonType.edit:
-      return features.isSupportEnhancement &&
-              currentFile?.let(ImageEnhancer.isSupportedFormat) == true
+      return capability?.isPermitted(AnyFileCapability.edit) == true &&
+              features.isSupportEnhancement &&
+              currentFile?.mime?.let(ImageEnhancer.isSupportedMime) == true
           ? const _AppBarEditButton()
           : null;
     case ViewerAppBarButtonType.enhance:
-      return features.isSupportEnhancement &&
-              currentFile?.let(ImageEnhancer.isSupportedFormat) == true
+      return capability?.isPermitted(AnyFileCapability.edit) == true &&
+              features.isSupportEnhancement &&
+              currentFile?.mime?.let(ImageEnhancer.isSupportedMime) == true
           ? const _AppBarEnhanceButton()
           : null;
     case ViewerAppBarButtonType.download:
-      return const _AppBarDownloadButton();
+      return capability?.isPermitted(AnyFileCapability.download) == true
+          ? const _AppBarDownloadButton()
+          : null;
     case ViewerAppBarButtonType.delete:
-      return collection == null ? const _AppBarDeleteButton() : null;
+      return capability?.isPermitted(AnyFileCapability.delete) == true &&
+              collection == null
+          ? const _AppBarDeleteButton()
+          : null;
     case ViewerAppBarButtonType.archive:
-      return currentFile?.fdIsArchived == true
-          ? const _AppBarUnarchiveButton()
-          : const _AppBarArchiveButton();
+      if (capability?.isPermitted(AnyFileCapability.archive) == true) {
+        return (currentFile?.provider as ArchivableAnyFile?)?.isArchived == true
+            ? const _AppBarUnarchiveButton()
+            : const _AppBarArchiveButton();
+      } else {
+        return null;
+      }
     case ViewerAppBarButtonType.slideshow:
       return const _AppBarSlideshowButton();
     case ViewerAppBarButtonType.setAs:
       return const _AppBarSetAsButton();
+    case ViewerAppBarButtonType.upload:
+      return capability?.isPermitted(AnyFileCapability.upload) == true &&
+              collection == null
+          ? const _AppBarUploadButton()
+          : null;
   }
 }

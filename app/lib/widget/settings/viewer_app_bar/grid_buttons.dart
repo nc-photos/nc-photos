@@ -151,3 +151,15 @@ class _GridSetAsButton extends StatelessWidget {
     );
   }
 }
+
+class _GridUploadButton extends StatelessWidget {
+  const _GridUploadButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return _GridButton(
+      tooltip: L10n.global().uploadTooltip,
+      icon: const Icon(Icons.cloud_upload_outlined),
+    );
+  }
+}

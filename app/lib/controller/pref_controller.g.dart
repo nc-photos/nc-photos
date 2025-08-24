@@ -286,6 +286,11 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<bool> get isVideoPlayerLoopChange =>
       isVideoPlayerLoop.distinct().skip(1);
   bool get isVideoPlayerLoopValue => _isVideoPlayerLoopController.value;
+  // _localDirsController
+  ValueStream<List<String>> get localDirs => _localDirsController.stream;
+  Stream<List<String>> get localDirsNew => localDirs.skip(1);
+  Stream<List<String>> get localDirsChange => localDirs.distinct().skip(1);
+  List<String> get localDirsValue => _localDirsController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

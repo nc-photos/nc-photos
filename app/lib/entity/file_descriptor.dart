@@ -1,5 +1,6 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/type.dart';
 import 'package:np_string/np_string.dart';
@@ -74,6 +75,8 @@ class FileDescriptor with EquatableMixin {
   final DateTime fdDateTime;
 }
 
+typedef RemoteFile = FileDescriptor;
+
 extension FileDescriptorExtension on FileDescriptor {
   /// Return the path of this file with the DAV part stripped
   ///
@@ -144,6 +147,10 @@ extension FileDescriptorExtension on FileDescriptor {
     } else {
       return copyWith(fdPath: newPath);
     }
+  }
+
+  AnyFile toAnyFile() {
+    return AnyFile(provider: AnyFileNextcloudProvider(file: this));
   }
 }
 

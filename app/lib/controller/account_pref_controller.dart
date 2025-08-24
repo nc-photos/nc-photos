@@ -62,6 +62,12 @@ class AccountPrefController {
     value: value,
   );
 
+  Future<void> setUploadRelativePath(String value) => _set<String>(
+    controller: _uploadRelativePathController,
+    setter: (pref, value) => pref.setUploadRelativePath(value),
+    value: value,
+  );
+
   Future<void> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(AccountPref pref, T value) setter,
@@ -109,5 +115,9 @@ class AccountPrefController {
     _accountPref.getServerStatus()?.let(
       (e) => ServerStatus.fromJson(jsonDecode(e)),
     ),
+  );
+  @npSubjectAccessor
+  late final _uploadRelativePathController = BehaviorSubject.seeded(
+    _accountPref.getUploadRelativePath() ?? "",
   );
 }

@@ -325,8 +325,7 @@ class FilesController {
 
   Future<void> remove(
     List<FileDescriptor> files, {
-    Exception? Function(List<FileDescriptor> files) errorBuilder =
-        RemoveFailureError.new,
+    Exception? Function(List<FileDescriptor> files)? errorBuilder,
   }) async {
     final dataBackups = <int, FileDescriptor>{};
     final timelineBackups = <int, FileDescriptor>{};
@@ -418,9 +417,9 @@ class FilesController {
         }
         return value.copyWith(data: next);
       });
-      errorBuilder(
-        failures,
-      )?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
+      (errorBuilder ?? RemoveFailureError.new)
+          .call(failures)
+          ?.let((e) => _dataErrorStreamController.add(ExceptionEvent(e)));
     }
   }
 

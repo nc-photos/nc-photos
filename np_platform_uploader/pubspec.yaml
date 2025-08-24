@@ -1,0 +1,28 @@
+name: np_platform_uploader
+description: "A new Flutter plugin project."
+version: 0.0.1
+homepage:
+publish_to: none
+
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.29.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  np_platform_util:
+    path: ../np_platform_util
+  plugin_platform_interface: ^2.0.2
+
+dev_dependencies:
+  dart_style: 3.0.1
+  np_lints:
+    path: ../np_lints
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: com.nkming.nc_photos.np_platform_uploader
+        pluginClass: NpPlatformUploaderPlugin
