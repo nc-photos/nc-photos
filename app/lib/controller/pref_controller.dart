@@ -664,6 +664,7 @@ const _viewerBottomAppBarButtonsDefault = [
   ViewerAppBarButtonType.edit,
   ViewerAppBarButtonType.enhance,
   ViewerAppBarButtonType.download,
+  ViewerAppBarButtonType.upload,
   ViewerAppBarButtonType.delete,
 ];
 const _homeCollectionsNavBarButtonsDefault = [
