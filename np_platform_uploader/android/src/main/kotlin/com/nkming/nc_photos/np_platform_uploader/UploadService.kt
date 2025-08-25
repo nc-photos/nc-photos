@@ -19,7 +19,6 @@ import com.nkming.nc_photos.np_android_core.use
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.net.HttpURLConnection
 import java.net.URL
@@ -166,7 +165,7 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		}
 	}
 
-	private suspend fun workOnce(job: UploadJob): Int {
+	private fun workOnce(job: UploadJob): Int {
 		var count = 0
 		for ((uri, endPoint) in job.contentUris.zip(job.endPoints)) {
 			if (shouldCancel) {
@@ -182,7 +181,6 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 				)
 			}
 			try {
-				delay(5*1000)
 				(URL(endPoint).openConnection() as HttpURLConnection).apply {
 					requestMethod = "PUT"
 					instanceFollowRedirects = true
