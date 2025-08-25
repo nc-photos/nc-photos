@@ -83,7 +83,7 @@ class Changelog extends StatelessWidget {
       final version = _changelogs.keys.elementAt(i);
       return ExpansionTile(
         key: PageStorageKey(i),
-        title: Text((version / 10).toStringAsFixed(1)),
+        title: Text((version / (version > 1000 ? 100 : 10)).toStringAsFixed(1)),
         initiallyExpanded:
             fromVersion == null ? (i == 0) : (version > fromVersion!),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
