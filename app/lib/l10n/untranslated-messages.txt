@@ -1408,15 +1408,12 @@
   "tr": [
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
-    "signInViaNextcloudLoginFlowV2",
-    "signInViaUsernamePassword",
     "fileOnDevice",
     "fileOnCloud",
     "uploadTooltip",
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
-    "opOnlySupportLocalFiles",
-    "errorServerNoCert"
+    "opOnlySupportLocalFiles"
   ],
 
   "zh": [
