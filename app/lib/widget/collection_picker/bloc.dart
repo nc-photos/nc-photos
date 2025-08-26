@@ -3,10 +3,8 @@ part of '../collection_picker.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.account,
-    required this.controller,
-  }) : super(_State.init()) {
+  _Bloc({required this.account, required this.controller})
+    : super(_State.init()) {
     on<_LoadCollections>(_onLoad);
     on<_TransformItems>(_onTransformItems);
     on<_SelectCollection>(_onSelectCollection);
@@ -36,18 +34,16 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         controller.stream,
-        onData: (data) => state.copyWith(
-          collections: data.data.map((e) => e.collection).toList(),
-          isLoading: data.hasNext,
-        ),
+        onData:
+            (data) => state.copyWith(
+              collections: data.data.map((e) => e.collection).toList(),
+              isLoading: data.hasNext,
+            ),
       ),
       forEach(
         emit,
         controller.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isLoading: false, error: data),
       ),
     ]);
   }
@@ -70,9 +66,13 @@ class _Bloc extends Bloc<_Event, _State>
 
   List<_Item> _transformCollections(List<Collection> collections) {
     final sorted = collections
-        .where((c) => CollectionAdapter.of(
-                KiwiContainer().resolve<DiContainer>(), account, c)
-            .isPermitted(CollectionCapability.manualItem))
+        .where(
+          (c) => CollectionAdapter.of(
+            KiwiContainer().resolve<DiContainer>(),
+            account,
+            c,
+          ).isPermitted(CollectionCapability.manualItem),
+        )
         .sortedBy(collection_util.CollectionSort.dateDescending);
     return sorted.map(_Item.fromCollection).toList();
   }

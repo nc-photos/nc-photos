@@ -17,9 +17,10 @@ import 'package:nc_photos/use_case/compat/v29.dart';
 import 'package:nc_photos/use_case/compat/v46.dart';
 import 'package:nc_photos/use_case/compat/v55.dart';
 import 'package:nc_photos/use_case/compat/v75.dart';
+import 'package:nc_photos/use_case/compat/v77.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/changelog.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/setup.dart';
 import 'package:nc_photos/widget/sign_in.dart';
 import 'package:np_db/np_db.dart';
@@ -37,19 +38,19 @@ class Splash extends StatelessWidget {
   static const routeName = "/splash";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (context) => const Splash(),
-        settings: settings,
-      );
+    builder: (context) => const Splash(),
+    settings: settings,
+  );
 
   const Splash({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        prefController: context.read(),
-        npDb: context.read(),
-      )..add(const _Init()),
+      create:
+          (context) =>
+              _Bloc(prefController: context.read(), npDb: context.read())
+                ..add(const _Init()),
       child: const _WrappedSplash(),
     );
   }
@@ -71,13 +72,15 @@ class _WrappedSplash extends StatelessWidget {
               listener: (context, changelogFromVersion) {
                 if (changelogFromVersion != null) {
                   Navigator.of(context)
-                      .pushNamed(Changelog.routeName,
-                          arguments: ChangelogArguments(changelogFromVersion))
+                      .pushNamed(
+                        Changelog.routeName,
+                        arguments: ChangelogArguments(changelogFromVersion),
+                      )
                       .whenComplete(() {
-                    if (context.mounted) {
-                      context.addEvent(const _ChangelogDismissed());
-                    }
-                  });
+                        if (context.mounted) {
+                          context.addEvent(const _ChangelogDismissed());
+                        }
+                      });
                 }
               },
             ),
@@ -135,23 +138,26 @@ class _WrappedSplash extends StatelessWidget {
       Navigator.of(context).pushReplacementNamed(SignIn.routeName);
     } else {
       Navigator.of(context)
-          .pushReplacementNamedProtected(Home.routeName,
-              arguments: HomeArguments(account))
+          .pushReplacementNamedProtected(
+            Home.routeName,
+            arguments: HomeArguments(account),
+          )
           .then((value) async {
-        if (getRawPlatform() == NpPlatform.android) {
-          final initialRoute = await Activity.consumeInitialRoute();
-          if (initialRoute != null) {
-            unawaited(Navigator.of(context).pushNamed(initialRoute));
-          }
-        }
-      }).onError<ProtectedPageAuthException>((_, __) async {
-        _log.warning("[_exit] Auth failed");
-        await Future.delayed(const Duration(seconds: 2));
-        if (context.mounted) {
-          _exit(context);
-        }
-        return null;
-      });
+            if (getRawPlatform() == NpPlatform.android) {
+              final initialRoute = await Activity.consumeInitialRoute();
+              if (initialRoute != null) {
+                unawaited(Navigator.of(context).pushNamed(initialRoute));
+              }
+            }
+          })
+          .onError<ProtectedPageAuthException>((_, __) async {
+            _log.warning("[_exit] Auth failed");
+            await Future.delayed(const Duration(seconds: 2));
+            if (context.mounted) {
+              _exit(context);
+            }
+            return null;
+          });
     }
   }
 }

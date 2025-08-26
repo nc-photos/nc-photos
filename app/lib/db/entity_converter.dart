@@ -24,10 +24,8 @@ import 'package:np_db/np_db.dart';
 import 'package:np_string/np_string.dart';
 
 abstract class DbAccountConverter {
-  static DbAccount toDb(Account src) => DbAccount(
-        serverAddress: src.url,
-        userId: src.userId,
-      );
+  static DbAccount toDb(Account src) =>
+      DbAccount(serverAddress: src.url, userId: src.userId);
 }
 
 extension AccountExtension on Account {
@@ -55,15 +53,18 @@ abstract class DbAlbumConverter {
         "type": src.sortProviderType,
         "content": src.sortProviderContent,
       }),
-      shares: src.shares.isEmpty
-          ? null
-          : src.shares
-              .map((e) => AlbumShare(
-                    userId: e.userId.toCi(),
-                    displayName: e.displayName,
-                    sharedAt: e.sharedAt.toUtc(),
-                  ))
-              .toList(),
+      shares:
+          src.shares.isEmpty
+              ? null
+              : src.shares
+                  .map(
+                    (e) => AlbumShare(
+                      userId: e.userId.toCi(),
+                      displayName: e.displayName,
+                      sharedAt: e.sharedAt.toUtc(),
+                    ),
+                  )
+                  .toList(),
       // replace with the original etag when this album was cached
       albumFile: albumFile.copyWith(etag: OrNull(src.fileEtag)),
       savedVersion: src.version,
@@ -86,12 +87,15 @@ abstract class DbAlbumConverter {
       coverProviderContent: coverProviderJson["content"],
       sortProviderType: sortProviderJson["type"],
       sortProviderContent: sortProviderJson["content"],
-      shares: src.shares
-              ?.map((e) => DbAlbumShare(
-                    userId: e.userId.toCaseInsensitiveString(),
-                    displayName: e.displayName,
-                    sharedAt: e.sharedAt,
-                  ))
+      shares:
+          src.shares
+              ?.map(
+                (e) => DbAlbumShare(
+                  userId: e.userId.toCaseInsensitiveString(),
+                  displayName: e.displayName,
+                  sharedAt: e.sharedAt,
+                ),
+              )
               .toList() ??
           [],
     );
@@ -162,31 +166,36 @@ abstract class DbFileConverter {
       isArchived: src.isArchived,
       overrideDateTime: src.overrideDateTime,
       bestDateTime: src.bestDateTime,
-      imageData: src.metadata?.let((s) => DbImageData(
-            lastUpdated: s.lastUpdated,
-            fileEtag: s.fileEtag,
-            width: s.imageWidth,
-            height: s.imageHeight,
-            exif: s.exif?.toJson(),
-            exifDateTimeOriginal: s.exif?.dateTimeOriginal,
-            src: s.src.index,
-          )),
-      location: src.location?.let((s) => DbLocation(
-            version: s.version,
-            name: s.name,
-            latitude: s.latitude,
-            longitude: s.longitude,
-            countryCode: s.countryCode,
-            admin1: s.admin1,
-            admin2: s.admin2,
-          )),
-      trashData: src.trashbinDeletionTime == null
-          ? null
-          : DbTrashData(
-              filename: src.trashbinFilename!,
-              originalLocation: src.trashbinOriginalLocation!,
-              deletionTime: src.trashbinDeletionTime!,
-            ),
+      imageData: src.metadata?.let(
+        (s) => DbImageData(
+          lastUpdated: s.lastUpdated,
+          fileEtag: s.fileEtag,
+          width: s.imageWidth,
+          height: s.imageHeight,
+          exif: s.exif?.toJson(),
+          exifDateTimeOriginal: s.exif?.dateTimeOriginal,
+          src: s.src.index,
+        ),
+      ),
+      location: src.location?.let(
+        (s) => DbLocation(
+          version: s.version,
+          name: s.name,
+          latitude: s.latitude,
+          longitude: s.longitude,
+          countryCode: s.countryCode,
+          admin1: s.admin1,
+          admin2: s.admin2,
+        ),
+      ),
+      trashData:
+          src.trashbinDeletionTime == null
+              ? null
+              : DbTrashData(
+                filename: src.trashbinFilename!,
+                originalLocation: src.trashbinOriginalLocation!,
+                deletionTime: src.trashbinDeletionTime!,
+              ),
     );
   }
 }
@@ -339,8 +348,12 @@ extension NcAlbumExtension on NcAlbum {
 }
 
 abstract class DbNcAlbumItemConverter {
-  static NcAlbumItem fromDb(String userId, String albumRelativePath,
-      bool isAlbumOwned, DbNcAlbumItem src) {
+  static NcAlbumItem fromDb(
+    String userId,
+    String albumRelativePath,
+    bool isAlbumOwned,
+    DbNcAlbumItem src,
+  ) {
     return NcAlbumItem(
       path:
           "${api.ApiPhotos.path}/$userId/${isAlbumOwned ? "albums" : "sharedalbums"}/$albumRelativePath/${src.relativePath}",
@@ -378,9 +391,7 @@ abstract class DbRecognizeFaceConverter {
   }
 
   static DbRecognizeFace toDb(RecognizeFace src) {
-    return DbRecognizeFace(
-      label: src.label,
-    );
+    return DbRecognizeFace(label: src.label);
   }
 }
 
@@ -390,7 +401,10 @@ extension RecognizeFaceExtension on RecognizeFace {
 
 abstract class DbRecognizeFaceItemConverter {
   static RecognizeFaceItem fromDb(
-      String userId, String faceLabel, DbRecognizeFaceItem src) {
+    String userId,
+    String faceLabel,
+    DbRecognizeFaceItem src,
+  ) {
     return RecognizeFaceItem(
       path:
           "${api.ApiRecognize.path}/$userId/faces/$faceLabel/${src.relativePath}",
@@ -404,8 +418,9 @@ abstract class DbRecognizeFaceItemConverter {
       isFavorite: src.isFavorite,
       fileMetadataWidth: src.fileMetadataWidth,
       fileMetadataHeight: src.fileMetadataHeight,
-      faceDetections: src.faceDetections
-          ?.let((obj) => (jsonDecode(obj) as List).cast<JsonObj>()),
+      faceDetections: src.faceDetections?.let(
+        (obj) => (jsonDecode(obj) as List).cast<JsonObj>(),
+      ),
     );
   }
 

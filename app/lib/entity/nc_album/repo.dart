@@ -136,5 +136,8 @@ abstract class NcAlbumCacheDataSource extends NcAlbumDataSource {
 
   /// Update cache to match [remote]
   Future<void> updateItemsCache(
-      Account account, NcAlbum album, List<NcAlbumItem> remote);
+    Account account,
+    NcAlbum album,
+    List<NcAlbumItem> remote,
+  );
 }

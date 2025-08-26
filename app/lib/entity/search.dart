@@ -11,14 +11,8 @@ part 'search.g.dart';
 class SearchCriteria {
   SearchCriteria(String input, this.filters) : input = input.trim();
 
-  SearchCriteria copyWith({
-    String? input,
-    List<SearchFilter>? filters,
-  }) =>
-      SearchCriteria(
-        input ?? this.input,
-        filters ?? List.of(this.filters),
-      );
+  SearchCriteria copyWith({String? input, List<SearchFilter>? filters}) =>
+      SearchCriteria(input ?? this.input, filters ?? List.of(this.filters));
 
   @override
   String toString() => _$toString();
@@ -33,10 +27,7 @@ abstract class SearchFilter {
   bool isSatisfy(File file);
 }
 
-enum SearchFileType {
-  image,
-  video,
-}
+enum SearchFileType { image, video }
 
 @toString
 class SearchFileTypeFilter implements SearchFilter {

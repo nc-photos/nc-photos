@@ -3,17 +3,10 @@ part of '../language_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.selected,
-    this.error,
-  });
+  const _State({required this.selected, this.error});
 
-  factory _State.init({
-    required language_util.AppLanguage selected,
-  }) {
-    return _State(
-      selected: selected,
-    );
+  factory _State.init({required language_util.AppLanguage selected}) {
+    return _State(selected: selected);
   }
 
   @override

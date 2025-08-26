@@ -3,16 +3,9 @@ part of '../trusted_cert_manager.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.isCertsReady,
-    required this.certs,
-    this.error,
-  });
+  const _State({required this.isCertsReady, required this.certs, this.error});
 
-  factory _State.init() => const _State(
-        isCertsReady: false,
-        certs: [],
-      );
+  factory _State.init() => const _State(isCertsReady: false, certs: []);
 
   @override
   String toString() => _$toString();

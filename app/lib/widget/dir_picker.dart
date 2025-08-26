@@ -26,6 +26,7 @@ class DirPicker extends StatefulWidget {
     this.isMultipleSelections = true,
     this.validator,
     this.onConfirmed,
+    this.onChanged,
   });
 
   @override
@@ -39,6 +40,7 @@ class DirPicker extends StatefulWidget {
   /// Return whether [dir] is a valid target to be picked
   final bool Function(File dir)? validator;
   final ValueChanged<List<File>>? onConfirmed;
+  final ValueChanged<List<File>>? onChanged;
 }
 
 @npLog
@@ -80,9 +82,10 @@ class DirPickerState extends State<DirPicker> {
       children: [
         Align(
           alignment: Alignment.center,
-          child: state is LsDirBlocLoading
-              ? Container()
-              : _buildList(context, state),
+          child:
+              state is LsDirBlocLoading
+                  ? Container()
+                  : _buildList(context, state),
         ),
         if (state is LsDirBlocLoading)
           const Align(
@@ -98,13 +101,14 @@ class DirPickerState extends State<DirPicker> {
     return AnimatedSwitcher(
       duration: k.animationDurationNormal,
       // see AnimatedSwitcher.defaultLayoutBuilder
-      layoutBuilder: (currentChild, previousChildren) => Stack(
-        alignment: Alignment.topLeft,
-        children: <Widget>[
-          ...previousChildren,
-          if (currentChild != null) currentChild,
-        ],
-      ),
+      layoutBuilder:
+          (currentChild, previousChildren) => Stack(
+            alignment: Alignment.topLeft,
+            children: <Widget>[
+              ...previousChildren,
+              if (currentChild != null) currentChild,
+            ],
+          ),
       // needed to prevent background color overflowing the parent bound, see:
       // https://github.com/flutter/flutter/issues/86584
       child: Material(
@@ -127,7 +131,9 @@ class DirPickerState extends State<DirPicker> {
               );
             } else {
               return _buildItem(
-                  context, state.items[index - (isTopLevel ? 0 : 1)]);
+                context,
+                state.items[index - (isTopLevel ? 0 : 1)],
+              );
             }
           },
           separatorBuilder: (context, index) => const Divider(height: 2),
@@ -146,28 +152,30 @@ class DirPickerState extends State<DirPicker> {
     if (canPick) {
       switch (pickState) {
         case _PickState.picked:
-          iconData = widget.isMultipleSelections
-              ? Icons.check_box
-              : Icons.radio_button_checked;
-          iconColor = CheckboxTheme.of(context)
-              .fillColor!
-              .resolve({WidgetState.selected});
+          iconData =
+              widget.isMultipleSelections
+                  ? Icons.check_box
+                  : Icons.radio_button_checked;
+          iconColor = CheckboxTheme.of(
+            context,
+          ).fillColor!.resolve({WidgetState.selected});
           break;
 
         case _PickState.childPicked:
-          iconData = widget.isMultipleSelections
-              ? Icons.indeterminate_check_box
-              : Icons.remove_circle_outline;
-          iconColor = CheckboxTheme.of(context)
-              .fillColor!
-              .resolve({WidgetState.selected});
+          iconData =
+              widget.isMultipleSelections
+                  ? Icons.indeterminate_check_box
+                  : Icons.remove_circle_outline;
+          iconColor = CheckboxTheme.of(
+            context,
+          ).fillColor!.resolve({WidgetState.selected});
           break;
 
         case _PickState.notPicked:
-        default:
-          iconData = widget.isMultipleSelections
-              ? Icons.check_box_outline_blank
-              : Icons.radio_button_unchecked;
+          iconData =
+              widget.isMultipleSelections
+                  ? Icons.check_box_outline_blank
+                  : Icons.radio_button_unchecked;
           iconColor = Theme.of(context).colorScheme.onSurface;
           break;
       }
@@ -179,55 +187,61 @@ class DirPickerState extends State<DirPicker> {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       dense: true,
-      leading: canPick
-          ? IconButton(
-              icon: AnimatedSwitcher(
-                duration: k.animationDurationShort,
-                transitionBuilder: (child, animation) =>
-                    ScaleTransition(scale: animation, child: child),
-                child: Icon(
-                  iconData,
-                  key: ValueKey(pickState),
-                  color: iconColor,
+      leading:
+          canPick
+              ? IconButton(
+                icon: AnimatedSwitcher(
+                  duration: k.animationDurationShort,
+                  transitionBuilder:
+                      (child, animation) =>
+                          ScaleTransition(scale: animation, child: child),
+                  child: Icon(
+                    iconData,
+                    key: ValueKey(pickState),
+                    color: iconColor,
+                  ),
                 ),
+                onPressed: () {
+                  if (pickState == _PickState.picked) {
+                    _unpick(item);
+                  } else {
+                    _pick(item);
+                  }
+                },
+              )
+              : IconButton(
+                icon: Icon(iconData, color: iconColor),
+                onPressed: null,
               ),
-              onPressed: () {
-                if (pickState == _PickState.picked) {
-                  _unpick(item);
-                } else {
-                  _pick(item);
-                }
-              },
-            )
-          : IconButton(
-              icon: Icon(iconData, color: iconColor),
-              onPressed: null,
-            ),
       title: Text(item.file.filename),
-      trailing: item.children?.isNotEmpty == true
-          ? const Icon(Icons.arrow_forward_ios)
-          : null,
+      trailing:
+          item.children?.isNotEmpty == true
+              ? const Icon(Icons.arrow_forward_ios)
+              : null,
       textColor:
           item.isE2ee ? M3.of(context).checkbox.disabled.container : null,
-      onTap: item.children?.isNotEmpty == true
-          ? () {
-              try {
-                _navigateInto(item.file);
-              } catch (e) {
-                SnackBarManager().showSnackBarForException(e);
+      onTap:
+          item.children?.isNotEmpty == true
+              ? () {
+                try {
+                  _navigateInto(item.file);
+                } catch (e) {
+                  SnackBarManager().showSnackBarForException(e);
+                }
               }
-            }
-          : null,
+              : null,
     );
   }
 
   void _onStateChange(BuildContext context, LsDirBlocState state) {
     if (state is LsDirBlocSuccess) {
       if (!_fillResult(_root, state)) {
-        _log.shout("[_onStateChange] Failed while _fillResult" +
-            (isDevMode
-                ? ", root:\n${_root.toString(isDeep: true)}\nstate: ${state.root.path}"
-                : ""));
+        _log.shout(
+          "[_onStateChange] Failed while _fillResult" +
+              (isDevMode
+                  ? ", root:\n${_root.toString(isDeep: true)}\nstate: ${state.root.path}"
+                  : ""),
+        );
       }
     } else if (state is LsDirBlocFailure) {
       SnackBarManager().showSnackBarForException(state.exception);
@@ -264,6 +278,7 @@ class DirPickerState extends State<DirPicker> {
       _picks = _optimizePicks(_root);
     });
     _log.fine("[_pick] Picked: ${_pickListToString(_picks)}");
+    widget.onChanged?.call(_picks);
   }
 
   /// Optimize the picked array
@@ -307,24 +322,32 @@ class DirPickerState extends State<DirPicker> {
             _picks.where((element) => element.path != item.file.path).toList();
       } else {
         // Look for the closest picked dir
-        final parents = _picks
-            .where((element) => item.file.path.startsWith(element.path))
-            .toList()
-          ..sort((a, b) => b.path.length.compareTo(a.path.length));
+        final parents =
+            _picks
+                .where((element) => item.file.path.startsWith(element.path))
+                .toList()
+              ..sort((a, b) => b.path.length.compareTo(a.path.length));
         final parent = parents.first;
         try {
-          _picks.addAll(_pickedAllExclude(path: parent.path, exclude: item)
-              .map((e) => e.file));
+          _picks.addAll(
+            _pickedAllExclude(
+              path: parent.path,
+              exclude: item,
+            ).map((e) => e.file),
+          );
           _picks.removeWhere((element) => identical(element, parent));
         } catch (_) {
-          SnackBarManager().showSnackBar(SnackBar(
-            content: Text(L10n.global().rootPickerUnpickFailureNotification),
-            duration: k.snackBarDurationNormal,
-          ));
+          SnackBarManager().showSnackBar(
+            SnackBar(
+              content: Text(L10n.global().rootPickerUnpickFailureNotification),
+              duration: k.snackBarDurationNormal,
+            ),
+          );
         }
       }
     });
     _log.fine("[_unpick] Picked: ${_pickListToString(_picks)}");
+    widget.onChanged?.call(_picks);
   }
 
   /// Return a list where all children of [path] or [item], except [exclude],
@@ -347,7 +370,8 @@ class DirPickerState extends State<DirPicker> {
       return [];
     }
     _log.fine(
-        "[_pickedAllExclude] Unpicking '${item.file.path}' and picking children");
+      "[_pickedAllExclude] Unpicking '${item.file.path}' and picking children",
+    );
     final products = <LsDirBlocItem>[];
     for (final i in item.children ?? <LsDirBlocItem>[]) {
       if (file_util.isOrUnderDir(exclude.file, i.file)) {
@@ -372,7 +396,8 @@ class DirPickerState extends State<DirPicker> {
     }
     // ???
     _log.shout(
-        "[_findChildItemByPath] Failed finding child item for '$path' under '${parent.file.path}'");
+      "[_findChildItemByPath] Failed finding child item for '$path' under '${parent.file.path}'",
+    );
     throw ArgumentError("Path not found");
   }
 
@@ -380,13 +405,21 @@ class DirPickerState extends State<DirPicker> {
     var product = _PickState.notPicked;
     for (final p in _picks) {
       // exact match, or parent is picked
-      if (file_util.isOrUnderDir(item.file, p)) {
-        product = _PickState.picked;
-        // no need to check the remaining ones
-        break;
-      }
-      if (file_util.isUnderDir(p, item.file)) {
-        product = _PickState.childPicked;
+      if (widget.isMultipleSelections) {
+        if (file_util.isOrUnderDir(item.file, p)) {
+          product = _PickState.picked;
+          // no need to check the remaining ones
+          break;
+        }
+        if (file_util.isUnderDir(p, item.file)) {
+          product = _PickState.childPicked;
+        }
+      } else {
+        if (item.file.fdPath == p.fdPath) {
+          product = _PickState.picked;
+          // no need to check the remaining ones
+          break;
+        }
       }
     }
     if (product == _PickState.childPicked) {}
@@ -402,8 +435,10 @@ class DirPickerState extends State<DirPicker> {
     _bloc.add(LsDirBlocQuery(widget.account, file, depth: 2));
   }
 
-  late final String _rootDir =
-      file_util.unstripPath(widget.account, widget.strippedRootDir);
+  late final String _rootDir = file_util.unstripPath(
+    widget.account,
+    widget.strippedRootDir,
+  );
 
   late final _bloc = LsDirBloc(
     KiwiContainer().resolve<DiContainer>().fileRepoRemote,
@@ -415,8 +450,4 @@ class DirPickerState extends State<DirPicker> {
   var _picks = <File>[];
 }
 
-enum _PickState {
-  notPicked,
-  picked,
-  childPicked,
-}
+enum _PickState { notPicked, picked, childPicked }

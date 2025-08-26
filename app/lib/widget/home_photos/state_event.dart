@@ -23,33 +23,54 @@ class _State {
     this.itemSize,
     required this.isScrolling,
     required this.filesSummary,
+    required this.localFiles,
+    required this.localFilesSummary,
     this.minimapItems,
     required this.minimapYRatio,
     this.scrollDate,
     required this.hasMissingVideoPreview,
+    required this.shareRequest,
+    required this.uploadRequest,
+    required this.selectedCanArchive,
+    required this.selectedCanDownload,
+    required this.selectedCanDelete,
+    required this.selectedCanAddToCollection,
+    required this.selectedCanUpload,
     this.error,
+    required this.shouldShowRemoteOnlyWarning,
+    required this.shouldShowLocalOnlyWarning,
   });
 
   factory _State.init({
     required bool isEnableMemoryCollection,
     required int zoom,
-  }) =>
-      _State(
-        files: const [],
-        isLoading: false,
-        transformedItems: const [],
-        selectedItems: const {},
-        visibleDates: const {},
-        queriedDates: const {},
-        isEnableMemoryCollection: isEnableMemoryCollection,
-        memoryCollections: const [],
-        zoom: zoom,
-        finger: 0,
-        isScrolling: false,
-        filesSummary: const DbFilesSummary(items: {}),
-        minimapYRatio: 1,
-        hasMissingVideoPreview: false,
-      );
+  }) => _State(
+    files: const [],
+    isLoading: false,
+    transformedItems: const [],
+    selectedItems: const {},
+    visibleDates: const {},
+    queriedDates: const {},
+    isEnableMemoryCollection: isEnableMemoryCollection,
+    memoryCollections: const [],
+    zoom: zoom,
+    finger: 0,
+    isScrolling: false,
+    filesSummary: const DbFilesSummary(items: {}),
+    localFiles: const [],
+    localFilesSummary: const LocalFilesSummary(items: {}),
+    minimapYRatio: 1,
+    hasMissingVideoPreview: false,
+    shareRequest: Unique(null),
+    uploadRequest: Unique(null),
+    selectedCanArchive: false,
+    selectedCanDownload: false,
+    selectedCanDelete: false,
+    selectedCanAddToCollection: false,
+    selectedCanUpload: false,
+    shouldShowRemoteOnlyWarning: Unique(false),
+    shouldShowLocalOnlyWarning: Unique(false),
+  );
 
   @override
   String toString() => _$toString();
@@ -59,6 +80,8 @@ class _State {
   final List<List<_Item>> transformedItems;
   final Set<_Item> selectedItems;
   final DbFilesSummary filesSummary;
+  final List<LocalFile> localFiles;
+  final LocalFilesSummary localFilesSummary;
   final Set<_VisibleDate> visibleDates;
   final Set<Date> queriedDates;
 
@@ -83,7 +106,18 @@ class _State {
 
   final bool hasMissingVideoPreview;
 
+  final Unique<_ShareRequest?> shareRequest;
+  final Unique<_UploadRequest?> uploadRequest;
+
+  final bool selectedCanArchive;
+  final bool selectedCanDownload;
+  final bool selectedCanDelete;
+  final bool selectedCanAddToCollection;
+  final bool selectedCanUpload;
+
   final ExceptionEvent? error;
+  final Unique<bool> shouldShowRemoteOnlyWarning;
+  final Unique<bool> shouldShowLocalOnlyWarning;
 }
 
 abstract class _Event {}
@@ -110,13 +144,20 @@ class _RequestRefresh implements _Event {
 /// Transform the file list (e.g., filtering, sorting, etc)
 @toString
 class _TransformItems implements _Event {
-  const _TransformItems(this.files, this.summary);
+  const _TransformItems(
+    this.files,
+    this.summary,
+    this.localFiles,
+    this.localSummary,
+  );
 
   @override
   String toString() => _$toString();
 
   final List<FileDescriptor> files;
   final DbFilesSummary summary;
+  final List<LocalFile> localFiles;
+  final LocalFilesSummary localSummary;
 }
 
 @toString
@@ -133,9 +174,7 @@ class _OnItemTransformed implements _Event {
 /// Set the currently selected items
 @toString
 class _SetSelectedItems implements _Event {
-  const _SetSelectedItems({
-    required this.items,
-  });
+  const _SetSelectedItems({required this.items});
 
   @override
   String toString() => _$toString();
@@ -172,6 +211,22 @@ class _DeleteSelectedItems implements _Event {
 @toString
 class _DownloadSelectedItems implements _Event {
   const _DownloadSelectedItems();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _ShareSelectedItems implements _Event {
+  const _ShareSelectedItems();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _UploadSelectedItems implements _Event {
+  const _UploadSelectedItems();
 
   @override
   String toString() => _$toString();
@@ -262,7 +317,10 @@ class _EndScrolling implements _Event {
 @toString
 class _SetLayoutConstraint implements _Event {
   const _SetLayoutConstraint(
-      this.viewWidth, this.viewHeight, this.viewOverlayPadding);
+    this.viewWidth,
+    this.viewHeight,
+    this.viewOverlayPadding,
+  );
 
   @override
   String toString() => _$toString();
@@ -339,4 +397,20 @@ class _SetError implements _Event {
 
   final Object error;
   final StackTrace? stackTrace;
+}
+
+@toString
+class _ShowRemoteOnlyWarning implements _Event {
+  const _ShowRemoteOnlyWarning();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _ShowLocalOnlyWarning implements _Event {
+  const _ShowLocalOnlyWarning();
+
+  @override
+  String toString() => _$toString();
 }

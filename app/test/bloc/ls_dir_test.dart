@@ -18,115 +18,159 @@ void main() {
         expect(bloc.state.items, []);
       });
 
-      blocTest(
-        "inital",
-        build: _buildBloc,
-        expect: () => [],
-      );
+      blocTest("inital", build: _buildBloc, expect: () => []);
 
       blocTest<LsDirBloc, LsDirBlocState>(
         "query 1 subdir",
         build: _buildBloc,
-        act: (bloc) => bloc.add(LsDirBlocQuery(
-            util.buildAccount(), File(path: "remote.php/dav/files/admin"))),
-        expect: () => [
-          LsDirBlocLoading(util.buildAccount(),
-              File(path: "remote.php/dav/files/admin"), []),
-          LsDirBlocSuccess(
-              util.buildAccount(), File(path: "remote.php/dav/files/admin"), [
-            LsDirBlocItem(
-              File(
-                path: "remote.php/dav/files/admin/d1",
-                isCollection: true,
+        act:
+            (bloc) => bloc.add(
+              LsDirBlocQuery(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin"),
               ),
-              false,
-              null,
             ),
-          ]),
-        ],
+        expect:
+            () => [
+              LsDirBlocLoading(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin"),
+                [],
+              ),
+              LsDirBlocSuccess(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin"),
+                [
+                  LsDirBlocItem(
+                    File(
+                      path: "remote.php/dav/files/admin/d1",
+                      isCollection: true,
+                    ),
+                    false,
+                    null,
+                  ),
+                ],
+              ),
+            ],
       );
 
       blocTest<LsDirBloc, LsDirBlocState>(
         "query n subdir",
         build: _buildBloc,
-        act: (bloc) => bloc.add(LsDirBlocQuery(
-            util.buildAccount(), File(path: "remote.php/dav/files/admin/d1"))),
-        expect: () => [
-          LsDirBlocLoading(util.buildAccount(),
-              File(path: "remote.php/dav/files/admin/d1"), []),
-          LsDirBlocSuccess(util.buildAccount(),
-              File(path: "remote.php/dav/files/admin/d1"), [
-            LsDirBlocItem(
-              File(
-                path: "remote.php/dav/files/admin/d1/d2-1",
-                isCollection: true,
+        act:
+            (bloc) => bloc.add(
+              LsDirBlocQuery(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin/d1"),
               ),
-              false,
-              null,
             ),
-            LsDirBlocItem(
-              File(
-                path: "remote.php/dav/files/admin/d1/d2-2",
-                isCollection: true,
+        expect:
+            () => [
+              LsDirBlocLoading(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin/d1"),
+                [],
               ),
-              false,
-              null,
-            ),
-          ]),
-        ],
+              LsDirBlocSuccess(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin/d1"),
+                [
+                  LsDirBlocItem(
+                    File(
+                      path: "remote.php/dav/files/admin/d1/d2-1",
+                      isCollection: true,
+                    ),
+                    false,
+                    null,
+                  ),
+                  LsDirBlocItem(
+                    File(
+                      path: "remote.php/dav/files/admin/d1/d2-2",
+                      isCollection: true,
+                    ),
+                    false,
+                    null,
+                  ),
+                ],
+              ),
+            ],
       );
 
       blocTest<LsDirBloc, LsDirBlocState>(
         "query 0 subdir",
         build: _buildBloc,
-        act: (bloc) => bloc.add(LsDirBlocQuery(util.buildAccount(),
-            File(path: "remote.php/dav/files/admin/d1/d2-2"))),
-        expect: () => [
-          LsDirBlocLoading(util.buildAccount(),
-              File(path: "remote.php/dav/files/admin/d1/d2-2"), []),
-          LsDirBlocSuccess(util.buildAccount(),
-              File(path: "remote.php/dav/files/admin/d1/d2-2"), []),
-        ],
+        act:
+            (bloc) => bloc.add(
+              LsDirBlocQuery(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin/d1/d2-2"),
+              ),
+            ),
+        expect:
+            () => [
+              LsDirBlocLoading(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin/d1/d2-2"),
+                [],
+              ),
+              LsDirBlocSuccess(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin/d1/d2-2"),
+                [],
+              ),
+            ],
       );
 
       blocTest<LsDirBloc, LsDirBlocState>(
         "query depth 2",
         build: _buildBloc,
-        act: (bloc) => bloc.add(LsDirBlocQuery(
-            util.buildAccount(), File(path: "remote.php/dav/files/admin"),
-            depth: 2)),
-        expect: () => [
-          LsDirBlocLoading(util.buildAccount(),
-              File(path: "remote.php/dav/files/admin"), []),
-          LsDirBlocSuccess(
-              util.buildAccount(), File(path: "remote.php/dav/files/admin"), [
-            LsDirBlocItem(
-              File(
-                path: "remote.php/dav/files/admin/d1",
-                isCollection: true,
+        act:
+            (bloc) => bloc.add(
+              LsDirBlocQuery(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin"),
+                depth: 2,
               ),
-              false,
-              [
-                LsDirBlocItem(
-                  File(
-                    path: "remote.php/dav/files/admin/d1/d2-1",
-                    isCollection: true,
-                  ),
-                  false,
-                  null,
-                ),
-                LsDirBlocItem(
-                  File(
-                    path: "remote.php/dav/files/admin/d1/d2-2",
-                    isCollection: true,
-                  ),
-                  false,
-                  null,
-                ),
-              ],
             ),
-          ]),
-        ],
+        expect:
+            () => [
+              LsDirBlocLoading(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin"),
+                [],
+              ),
+              LsDirBlocSuccess(
+                util.buildAccount(),
+                File(path: "remote.php/dav/files/admin"),
+                [
+                  LsDirBlocItem(
+                    File(
+                      path: "remote.php/dav/files/admin/d1",
+                      isCollection: true,
+                    ),
+                    false,
+                    [
+                      LsDirBlocItem(
+                        File(
+                          path: "remote.php/dav/files/admin/d1/d2-1",
+                          isCollection: true,
+                        ),
+                        false,
+                        null,
+                      ),
+                      LsDirBlocItem(
+                        File(
+                          path: "remote.php/dav/files/admin/d1/d2-2",
+                          isCollection: true,
+                        ),
+                        false,
+                        null,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ],
       );
     });
   });
@@ -134,28 +178,12 @@ void main() {
 
 class _MockFileRepo extends MockFileMemoryRepo {
   _MockFileRepo()
-      : super([
-          File(
-            path: "remote.php/dav/files/admin/test1.jpg",
-          ),
-          File(
-            path: "remote.php/dav/files/admin/d1",
-            isCollection: true,
-          ),
-          File(
-            path: "remote.php/dav/files/admin/d1/test2.jpg",
-          ),
-          File(
-            path: "remote.php/dav/files/admin/d1/d2-1",
-            isCollection: true,
-          ),
-          File(
-            path: "remote.php/dav/files/admin/d1/d2-2",
-            isCollection: true,
-          ),
-          File(
-            path: "remote.php/dav/files/admin/d1/d2-1/d3",
-            isCollection: true,
-          ),
-        ]);
+    : super([
+        File(path: "remote.php/dav/files/admin/test1.jpg"),
+        File(path: "remote.php/dav/files/admin/d1", isCollection: true),
+        File(path: "remote.php/dav/files/admin/d1/test2.jpg"),
+        File(path: "remote.php/dav/files/admin/d1/d2-1", isCollection: true),
+        File(path: "remote.php/dav/files/admin/d1/d2-2", isCollection: true),
+        File(path: "remote.php/dav/files/admin/d1/d2-1/d3", isCollection: true),
+      ]);
 }

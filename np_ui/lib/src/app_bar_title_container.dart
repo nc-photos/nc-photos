@@ -36,11 +36,12 @@ class AppBarTitleContainer extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               DefaultTextStyle(
-                style: subtitle == null
-                    ? Theme.of(context).textTheme.titleLarge!.copyWith(
+                style:
+                    subtitle == null
+                        ? Theme.of(context).textTheme.titleLarge!.copyWith(
                           color: Theme.of(context).appBarTheme.foregroundColor,
                         )
-                    : Theme.of(context).textTheme.titleMedium!.copyWith(
+                        : Theme.of(context).textTheme.titleMedium!.copyWith(
                           color: Theme.of(context).appBarTheme.foregroundColor,
                         ),
                 maxLines: 1,
@@ -51,8 +52,8 @@ class AppBarTitleContainer extends StatelessWidget {
               if (subtitle != null)
                 DefaultTextStyle(
                   style: Theme.of(context).textTheme.bodySmall!.copyWith(
-                        color: M3.of(context).listTile.enabled.supportingText,
-                      ),
+                    color: M3.of(context).listTile.enabled.supportingText,
+                  ),
                   maxLines: 1,
                   softWrap: false,
                   overflow: TextOverflow.clip,

@@ -3,10 +3,7 @@ part of 'connect.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocErrorCatcher<_Event, _State> {
-  _Bloc({
-    required this.uri,
-    required this.login,
-  }) : super(_State.init()) {
+  _Bloc({required this.uri, required this.login}) : super(_State.init()) {
     on<_Login>(_onLogin);
     on<_SetUserId>(_onSetUserId);
     on<_SetError>(_onSetError);
@@ -50,9 +47,11 @@ class _Bloc extends Bloc<_Event, _State>
     } on LoginInterruptedException catch (_) {
       // do nothing
     } on _InvalidWevDavUrlException catch (e) {
-      emit(state.copyWith(
-        askWebDavUrlRequest: Unique(_AskWebDavUrlRequest(e.account)),
-      ));
+      emit(
+        state.copyWith(
+          askWebDavUrlRequest: Unique(_AskWebDavUrlRequest(e.account)),
+        ),
+      );
     } catch (e, stackTrace) {
       emit(state.copyWith(error: (error: e, stackTrace: stackTrace)));
     }
@@ -67,9 +66,11 @@ class _Bloc extends Bloc<_Event, _State>
       await _checkWebDavUrl(account);
       emit(state.copyWith(result: account));
     } on _InvalidWevDavUrlException catch (e) {
-      emit(state.copyWith(
-        askWebDavUrlRequest: Unique(_AskWebDavUrlRequest(e.account)),
-      ));
+      emit(
+        state.copyWith(
+          askWebDavUrlRequest: Unique(_AskWebDavUrlRequest(e.account)),
+        ),
+      );
     } catch (e, stackTrace) {
       emit(state.copyWith(error: (error: e, stackTrace: stackTrace)));
     }
@@ -92,7 +93,9 @@ class _Bloc extends Bloc<_Event, _State>
     try {
       final c = KiwiContainer().resolve<DiContainer>();
       await LsSingleFile(c.withRemoteFileRepo())(
-          account, file_util.unstripPath(account, ""));
+        account,
+        file_util.unstripPath(account, ""),
+      );
       _log.info("[_checkWebDavUrl] Account is good: $account");
     } on ApiException catch (e) {
       if (e.response.statusCode == 404) {

@@ -27,7 +27,9 @@ class CompatV34 {
   }
 
   static Future<void> _migratePrefV2(
-      SharedPreferences pref, UniversalStorage storage) async {
+    SharedPreferences pref,
+    UniversalStorage storage,
+  ) async {
     final jsons = pref.getStringList("accounts2");
     if (jsons == null) {
       return;
@@ -40,10 +42,14 @@ class CompatV34 {
       account2["account"]["id"] = id;
       newJsons.add(account2["account"]);
       await storage.putString(
-          "accounts/$id/pref", jsonEncode(account2["settings"]));
+        "accounts/$id/pref",
+        jsonEncode(account2["settings"]),
+      );
     }
     if (await pref.setStringList(
-        "accounts3", newJsons.map((e) => jsonEncode(e)).toList())) {
+      "accounts3",
+      newJsons.map((e) => jsonEncode(e)).toList(),
+    )) {
       _log.info("[migratePref] Migrated ${newJsons.length} accounts2");
       await pref.remove("accounts2");
     } else {
@@ -52,7 +58,9 @@ class CompatV34 {
   }
 
   static Future<void> _migratePrefV1(
-      SharedPreferences pref, UniversalStorage storage) async {
+    SharedPreferences pref,
+    UniversalStorage storage,
+  ) async {
     final jsons = pref.getStringList("accounts");
     if (jsons == null) {
       return;
@@ -64,11 +72,15 @@ class CompatV34 {
       final id = Account.newId();
       account["id"] = id;
       newJsons.add(account);
-      await storage.putString("accounts/$id/pref",
-          """{"isEnableFaceRecognitionApp":true,"shareFolder":""}""");
+      await storage.putString(
+        "accounts/$id/pref",
+        """{"isEnableFaceRecognitionApp":true,"shareFolder":""}""",
+      );
     }
     if (await pref.setStringList(
-        "accounts3", newJsons.map((e) => jsonEncode(e)).toList())) {
+      "accounts3",
+      newJsons.map((e) => jsonEncode(e)).toList(),
+    )) {
       _log.info("[migratePref] Migrated ${newJsons.length} accounts");
       await pref.remove("accounts");
     } else {

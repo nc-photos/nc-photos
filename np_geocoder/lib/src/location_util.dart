@@ -8,12 +8,12 @@ String? nameToAlpha2Code(CiString name) => _ccMap.byCiName(name);
 
 class _CcMap {
   _CcMap(this._ccMap)
-      : _nameMap = _ccMap.map(
-            (cc, name) => MapEntry(name.toCi().toCaseInsensitiveString(), cc));
+    : _nameMap = _ccMap.map(
+        (cc, name) => MapEntry(name.toCi().toCaseInsensitiveString(), cc),
+      );
 
   String? byCc(String cc) => _ccMap[cc];
-  String? byCiName(CiString name) =>
-      _nameMap[name.toCaseInsensitiveString()];
+  String? byCiName(CiString name) => _nameMap[name.toCaseInsensitiveString()];
 
   final Map<String, String> _ccMap;
   final Map<String, String> _nameMap;

@@ -3,15 +3,10 @@ part of '../protected_page_password_auth_dialog.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.isAuthorized,
-    required this.setupResult,
-  });
+  const _State({required this.isAuthorized, required this.setupResult});
 
-  factory _State.init() => _State(
-        isAuthorized: Unique(null),
-        setupResult: null,
-      );
+  factory _State.init() =>
+      _State(isAuthorized: Unique(null), setupResult: null);
 
   @override
   String toString() => _$toString();

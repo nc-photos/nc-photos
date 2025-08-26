@@ -10,8 +10,7 @@ enum NpPlatform {
   linux,
   macOs,
   web,
-  windows,
-  ;
+  windows;
 
   bool get isMobile => this == android || this == iOs;
   bool get isDesktop =>

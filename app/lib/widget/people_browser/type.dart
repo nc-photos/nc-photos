@@ -21,13 +21,12 @@ class _Item {
         coverMime: result?.mime,
       );
     } catch (e, stackTrace) {
-      _$_ItemNpLog.log
-          .warning("[fromPerson] Failed while getCoverUrl", e, stackTrace);
-      return _Item._(
-        person: person,
-        coverUrl: null,
-        coverMime: null,
+      _$_ItemNpLog.log.warning(
+        "[fromPerson] Failed while getCoverUrl",
+        e,
+        stackTrace,
       );
+      return _Item._(person: person, coverUrl: null, coverMime: null);
     }
   }
 

@@ -48,12 +48,9 @@ Future<void> _empty() async {
 </d:multistatus>
 """;
   final results = await RecognizeFaceItemParser().parse(xml);
-  expect(
-    results,
-    const [
-      RecognizeFaceItem(href: "/remote.php/dav/recognize/admin/faces/test/"),
-    ],
-  );
+  expect(results, const [
+    RecognizeFaceItem(href: "/remote.php/dav/recognize/admin/faces/test/"),
+  ]);
 }
 
 Future<void> _image() async {
@@ -118,39 +115,37 @@ Future<void> _image() async {
 </d:multistatus>
 """;
   final results = await RecognizeFaceItemParser().parse(xml);
-  expect(
-    results,
-    [
-      const RecognizeFaceItem(
-          href: "/remote.php/dav/recognize/admin/faces/test/"),
-      RecognizeFaceItem(
-        href: "/remote.php/dav/recognize/admin/faces/test/test1.jpg",
-        contentLength: 12345,
-        contentType: "image/jpeg",
-        etag: "00000000000000000000000000000000",
-        lastModified: DateTime.utc(2023, 1, 1, 1, 2, 3),
-        faceDetections: [
-          {
-            "id": 1,
-            "userId": "test",
-            "fileId": 2,
-            "x": 0.5,
-            "y": 0.5,
-            "height": 0.1,
-            "width": 0.1,
-            "vector": [-0.1, 0.1, 0.1, -0.01],
-            "clusterId": 10,
-            "title": "test",
-          },
-        ],
-        fileMetadataSize: null,
-        hasPreview: true,
-        realPath: "/admin/files/test1.jpg",
-        favorite: false,
-        fileId: 2,
-      ),
-    ],
-  );
+  expect(results, [
+    const RecognizeFaceItem(
+      href: "/remote.php/dav/recognize/admin/faces/test/",
+    ),
+    RecognizeFaceItem(
+      href: "/remote.php/dav/recognize/admin/faces/test/test1.jpg",
+      contentLength: 12345,
+      contentType: "image/jpeg",
+      etag: "00000000000000000000000000000000",
+      lastModified: DateTime.utc(2023, 1, 1, 1, 2, 3),
+      faceDetections: [
+        {
+          "id": 1,
+          "userId": "test",
+          "fileId": 2,
+          "x": 0.5,
+          "y": 0.5,
+          "height": 0.1,
+          "width": 0.1,
+          "vector": [-0.1, 0.1, 0.1, -0.01],
+          "clusterId": 10,
+          "title": "test",
+        },
+      ],
+      fileMetadataSize: null,
+      hasPreview: true,
+      realPath: "/admin/files/test1.jpg",
+      favorite: false,
+      fileId: 2,
+    ),
+  ]);
 }
 
 Future<void> _imageWithSize() async {
@@ -178,18 +173,13 @@ Future<void> _imageWithSize() async {
 </d:multistatus>
 """;
   final results = await RecognizeFaceItemParser().parse(xml);
-  expect(
-    results,
-    [
-      const RecognizeFaceItem(
-          href: "/remote.php/dav/recognize/admin/faces/test/"),
-      const RecognizeFaceItem(
-        href: "/remote.php/dav/recognize/admin/faces/test/test1.jpg",
-        fileMetadataSize: {
-          "width": 1024,
-          "height": 768,
-        },
-      ),
-    ],
-  );
+  expect(results, [
+    const RecognizeFaceItem(
+      href: "/remote.php/dav/recognize/admin/faces/test/",
+    ),
+    const RecognizeFaceItem(
+      href: "/remote.php/dav/recognize/admin/faces/test/test1.jpg",
+      fileMetadataSize: {"width": 1024, "height": 768},
+    ),
+  ]);
 }

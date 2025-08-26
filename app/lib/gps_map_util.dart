@@ -18,7 +18,8 @@ void launchExternalMap(CameraPosition location) {
     final intent = AndroidIntent(
       action: "action_view",
       data: Uri.encodeFull(
-          "geo:${location.center.latitude},${location.center.longitude}?z=${location.zoom}"),
+        "geo:${location.center.latitude},${location.center.longitude}?z=${location.zoom}",
+      ),
     );
     intent.launch();
   }

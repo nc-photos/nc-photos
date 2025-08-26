@@ -13,32 +13,36 @@ part of 'protected_page_pin_auth_dialog.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {String? input,
-      List<int>? obsecuredInput,
-      bool? isAuthorized,
-      Unique<bool?>? isPinError,
-      CiString? setupResult});
+  _State call({
+    String? input,
+    List<int>? obsecuredInput,
+    bool? isAuthorized,
+    Unique<bool?>? isPinError,
+    CiString? setupResult,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic input,
-      dynamic obsecuredInput,
-      dynamic isAuthorized,
-      dynamic isPinError,
-      dynamic setupResult = copyWithNull}) {
+  _State call({
+    dynamic input,
+    dynamic obsecuredInput,
+    dynamic isAuthorized,
+    dynamic isPinError,
+    dynamic setupResult = copyWithNull,
+  }) {
     return _State(
-        input: input as String? ?? that.input,
-        obsecuredInput: obsecuredInput as List<int>? ?? that.obsecuredInput,
-        isAuthorized: isAuthorized as bool? ?? that.isAuthorized,
-        isPinError: isPinError as Unique<bool?>? ?? that.isPinError,
-        setupResult: setupResult == copyWithNull
-            ? that.setupResult
-            : setupResult as CiString?);
+      input: input as String? ?? that.input,
+      obsecuredInput: obsecuredInput as List<int>? ?? that.obsecuredInput,
+      isAuthorized: isAuthorized as bool? ?? that.isAuthorized,
+      isPinError: isPinError as Unique<bool?>? ?? that.isPinError,
+      setupResult:
+          setupResult == copyWithNull
+              ? that.setupResult
+              : setupResult as CiString?,
+    );
   }
 
   final _State that;

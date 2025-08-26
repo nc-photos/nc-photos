@@ -19,15 +19,22 @@ class ImageLocationNpDbDataSource implements ImageLocationDataSource {
 
   @override
   Future<List<ImageLatLng>> getLocations(
-      Account account, TimeRange timeRange) async {
+    Account account,
+    TimeRange timeRange,
+  ) async {
     _log.info("[getLocations] timeRange: $timeRange");
     final results = await db.getImageLatLngWithFileIds(
       account: account.toDb(),
       timeRange: timeRange,
-      includeRelativeRoots: account.roots
-          .map((e) => File(path: file_util.unstripPath(account, e))
-              .strippedPathWithEmpty)
-          .toList(),
+      includeRelativeRoots:
+          account.roots
+              .map(
+                (e) =>
+                    File(
+                      path: file_util.unstripPath(account, e),
+                    ).strippedPathWithEmpty,
+              )
+              .toList(),
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
     );

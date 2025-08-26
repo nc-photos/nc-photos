@@ -9,89 +9,70 @@ void main() {
   group("Exif", () {
     group("equals", () {
       test("deep equal", () {
-        final exif = Exif(<String, dynamic>{
-          "ImageWidth": 1024,
-        });
+        final exif = Exif(<String, dynamic>{"ImageWidth": 1024});
         expect(
-            exif.equals(
-                Exif(<String, dynamic>{
-                  "ImageWidth": 1024,
-                }),
-                isDeep: true),
-            true);
+          exif.equals(
+            Exif(<String, dynamic>{"ImageWidth": 1024}),
+            isDeep: true,
+          ),
+          true,
+        );
       });
 
       test("deep unequal", () {
-        final exif = Exif(<String, dynamic>{
-          "ImageWidth": 1024,
-        });
+        final exif = Exif(<String, dynamic>{"ImageWidth": 1024});
         expect(
-            exif.equals(
-                Exif(<String, dynamic>{
-                  "ImageWidth": 2048,
-                }),
-                isDeep: true),
-            false);
+          exif.equals(
+            Exif(<String, dynamic>{"ImageWidth": 2048}),
+            isDeep: true,
+          ),
+          false,
+        );
       });
 
       test("shallow equal", () {
-        final exif = Exif(<String, dynamic>{
-          "ImageWidth": 1024,
-        });
+        final exif = Exif(<String, dynamic>{"ImageWidth": 1024});
         expect(
-            exif.equals(
-                Exif(<String, dynamic>{
-                  "ImageWidth": 1024,
-                }),
-                isDeep: false),
-            true);
+          exif.equals(
+            Exif(<String, dynamic>{"ImageWidth": 1024}),
+            isDeep: false,
+          ),
+          true,
+        );
       });
 
       test("shallow equal (different value)", () {
-        final exif = Exif(<String, dynamic>{
-          "ImageWidth": 1024,
-        });
+        final exif = Exif(<String, dynamic>{"ImageWidth": 1024});
         expect(
-            exif.equals(
-                Exif(<String, dynamic>{
-                  "ImageWidth": 2048,
-                }),
-                isDeep: false),
-            true);
+          exif.equals(
+            Exif(<String, dynamic>{"ImageWidth": 2048}),
+            isDeep: false,
+          ),
+          true,
+        );
       });
 
       test("shallow unequal", () {
-        final exif = Exif(<String, dynamic>{
-          "ImageWidth": 1024,
-        });
+        final exif = Exif(<String, dynamic>{"ImageWidth": 1024});
         expect(
-            exif.equals(
-                Exif(<String, dynamic>{
-                  "ImageWidth": 1024,
-                  "ImageHeight": 1024,
-                }),
-                isDeep: false),
-            false);
+          exif.equals(
+            Exif(<String, dynamic>{"ImageWidth": 1024, "ImageHeight": 1024}),
+            isDeep: false,
+          ),
+          false,
+        );
       });
     });
 
     group("toJson", () {
       test("int", () {
-        final exif = Exif(<String, dynamic>{
-          "ImageWidth": 1024,
-        });
-        expect(exif.toJson(), <String, dynamic>{
-          "ImageWidth": 1024,
-        });
+        final exif = Exif(<String, dynamic>{"ImageWidth": 1024});
+        expect(exif.toJson(), <String, dynamic>{"ImageWidth": 1024});
       });
 
       test("String", () {
-        final exif = Exif(<String, dynamic>{
-          "Make": "dummy",
-        });
-        expect(exif.toJson(), <String, dynamic>{
-          "Make": "dummy",
-        });
+        final exif = Exif(<String, dynamic>{"Make": "dummy"});
+        expect(exif.toJson(), <String, dynamic>{"Make": "dummy"});
       });
 
       test("Rational", () {
@@ -138,8 +119,14 @@ void main() {
 
       test("UserComment", () {
         final exif = Exif(<String, dynamic>{
-          "UserComment":
-              Uint8List.fromList([0x00, 0x33, 0x66, 0x99, 0xCC, 0xFF]),
+          "UserComment": Uint8List.fromList([
+            0x00,
+            0x33,
+            0x66,
+            0x99,
+            0xCC,
+            0xFF,
+          ]),
         });
         expect(exif.toJson(), <String, dynamic>{});
       });
@@ -147,25 +134,16 @@ void main() {
 
     group("fromJson", () {
       test("int", () {
-        final json = <String, dynamic>{
-          "ImageWidth": 1024,
-        };
+        final json = <String, dynamic>{"ImageWidth": 1024};
         expect(
-            Exif.fromJson(json),
-            Exif(<String, dynamic>{
-              "ImageWidth": 1024,
-            }));
+          Exif.fromJson(json),
+          Exif(<String, dynamic>{"ImageWidth": 1024}),
+        );
       });
 
       test("String", () {
-        final json = <String, dynamic>{
-          "Make": "dummy",
-        };
-        expect(
-            Exif.fromJson(json),
-            Exif(<String, dynamic>{
-              "Make": "dummy",
-            }));
+        final json = <String, dynamic>{"Make": "dummy"};
+        expect(Exif.fromJson(json), Exif(<String, dynamic>{"Make": "dummy"}));
       });
 
       test("Rational (legacy)", () {
@@ -189,10 +167,11 @@ void main() {
           "YCbCrSubSampling": [2, 2],
         };
         expect(
-            Exif.fromJson(json),
-            Exif(<String, dynamic>{
-              "YCbCrSubSampling": [2, 2],
-            }));
+          Exif.fromJson(json),
+          Exif(<String, dynamic>{
+            "YCbCrSubSampling": [2, 2],
+          }),
+        );
       });
 
       test("List<Rational>", () {
@@ -208,37 +187,29 @@ void main() {
         expect(exif.map((e) => e.makeComparable()).toList(), [
           const _Rational(2, 1),
           const _Rational(3, 1),
-          const _Rational(4, 100)
+          const _Rational(4, 100),
         ]);
       });
     });
 
     group("dateTimeOriginal", () {
       test("problematic value", () {
-        final exif = Exif({
-          "DateTimeOriginal": " ",
-        });
+        final exif = Exif({"DateTimeOriginal": " "});
         expect(exif.dateTimeOriginal, null);
       });
       test("empty value", () {
-        final exif = Exif({
-          "DateTimeOriginal": "",
-        });
+        final exif = Exif({"DateTimeOriginal": ""});
         expect(exif.dateTimeOriginal, null);
       });
     });
 
     group("from Nextcloud", () {
       test("Rational", () {
-        final exif = Exif({
-          "ExposureTime": "123/456",
-        });
+        final exif = Exif({"ExposureTime": "123/456"});
         expect(exif.exposureTime?.makeComparable(), const _Rational(123, 456));
       });
       test("int", () {
-        final exif = Exif({
-          "ISOSpeedRatings": "1234",
-        });
+        final exif = Exif({"ISOSpeedRatings": "1234"});
         expect(exif.isoSpeedRatings, 1234);
       });
     });
@@ -257,8 +228,5 @@ class _Rational extends Rational with EquatableMixin {
   }
 
   @override
-  get props => [
-        numerator,
-        denominator,
-      ];
+  get props => [numerator, denominator];
 }

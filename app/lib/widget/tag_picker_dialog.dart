@@ -13,10 +13,7 @@ import 'package:np_async/np_async.dart';
 import 'package:np_string/np_string.dart';
 
 class TagPickerDialog extends StatefulWidget {
-  const TagPickerDialog({
-    super.key,
-    required this.account,
-  });
+  const TagPickerDialog({super.key, required this.account});
 
   @override
   createState() => _TagPickerDialogState();
@@ -72,10 +69,7 @@ class _TagPickerDialogState extends State<TagPickerDialog> {
         title: Text(tag.displayName),
         // pass through the tap event
         trailing: IgnorePointer(
-          child: Checkbox(
-            value: true,
-            onChanged: (_) {},
-          ),
+          child: Checkbox(value: true, onChanged: (_) {}),
         ),
       ),
       onPressed: () => _onItemPressed(tag),
@@ -88,20 +82,20 @@ class _TagPickerDialogState extends State<TagPickerDialog> {
       child: TypeAheadField<Tag>(
         controller: _searchController,
         suggestionsCallback: _onSearch,
-        itemBuilder: (_, suggestion) => ListTile(
-          title: Text(suggestion.displayName),
-        ),
+        itemBuilder:
+            (_, suggestion) => ListTile(title: Text(suggestion.displayName)),
         onSelected: _onSearchSuggestionSelected,
         hideOnEmpty: true,
         hideOnLoading: true,
         autoFlipDirection: true,
-        builder: (context, controller, focusNode) => TextField(
-          controller: controller,
-          focusNode: focusNode,
-          decoration: InputDecoration(
-            hintText: L10n.global().addTagInputHint,
-          ),
-        ),
+        builder:
+            (context, controller, focusNode) => TextField(
+              controller: controller,
+              focusNode: focusNode,
+              decoration: InputDecoration(
+                hintText: L10n.global().addTagInputHint,
+              ),
+            ),
       ),
     );
   }
@@ -123,10 +117,12 @@ class _TagPickerDialogState extends State<TagPickerDialog> {
 
   void _onOkPressed() {
     if (_selected.isEmpty) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().tagPickerNoTagSelectedNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().tagPickerNoTagSelectedNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       return;
     }
     Navigator.of(context).pop(_selected);

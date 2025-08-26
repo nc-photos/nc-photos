@@ -15,11 +15,11 @@ class UnshareCollection {
     Collection collection,
     CiString userId, {
     required ValueChanged<Collection> onCollectionUpdated,
-  }) =>
-      CollectionAdapter.of(_c, account, collection).unshare(
-        userId,
-        onCollectionUpdated: onCollectionUpdated,
-      );
+  }) => CollectionAdapter.of(
+    _c,
+    account,
+    collection,
+  ).unshare(userId, onCollectionUpdated: onCollectionUpdated);
 
   final DiContainer _c;
 }

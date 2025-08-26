@@ -11,7 +11,8 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/help_utils.dart';
@@ -39,7 +40,7 @@ class ImageEnhancerArguments {
   const ImageEnhancerArguments(this.account, this.file, this.isSaveToServer);
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
   final bool isSaveToServer;
 }
 
@@ -47,14 +48,15 @@ class ImageEnhancer extends StatefulWidget {
   static const routeName = "/image-enhancer";
 
   static Route buildRoute(
-          ImageEnhancerArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => ImageEnhancer.fromArgs(args),
-        settings: settings,
-      );
+    ImageEnhancerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => ImageEnhancer.fromArgs(args),
+    settings: settings,
+  );
 
-  static bool isSupportedFormat(FileDescriptor file) =>
-      file_util.isSupportedImageFormat(file) && file.fdMime != "image/gif";
+  static bool isSupportedMime(String mime) =>
+      file_util.isSupportedImageMime(mime) && mime != "image/gif";
 
   const ImageEnhancer({
     super.key,
@@ -64,18 +66,18 @@ class ImageEnhancer extends StatefulWidget {
   });
 
   ImageEnhancer.fromArgs(ImageEnhancerArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-          file: args.file,
-          isSaveToServer: args.isSaveToServer,
-        );
+    : this(
+        key: key,
+        account: args.account,
+        file: args.file,
+        isSaveToServer: args.isSaveToServer,
+      );
 
   @override
   createState() => _ImageEnhancerState();
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
   final bool isSaveToServer;
 }
 
@@ -92,19 +94,15 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
 
   @override
   build(BuildContext context) => Theme(
-        data: buildDarkTheme(context),
-        child: AnnotatedRegion<SystemUiOverlayStyle>(
-          value: const SystemUiOverlayStyle(
-            systemNavigationBarColor: Colors.black,
-            systemNavigationBarIconBrightness: Brightness.dark,
-          ),
-          child: Scaffold(
-            body: Builder(
-              builder: _buildContent,
-            ),
-          ),
-        ),
-      );
+    data: buildDarkTheme(context),
+    child: AnnotatedRegion<SystemUiOverlayStyle>(
+      value: const SystemUiOverlayStyle(
+        systemNavigationBarColor: Colors.black,
+        systemNavigationBarIconBrightness: Brightness.dark,
+      ),
+      child: Scaffold(body: Builder(builder: _buildContent)),
+    ),
+  );
 
   Widget _buildContent(BuildContext context) {
     return ColoredBox(
@@ -117,17 +115,19 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _options.length,
-              itemBuilder: (context, i) => Padding(
-                padding: const EdgeInsets.all(48),
-                child: _options[i].showcaseBuilder(context),
-              ),
+              itemBuilder:
+                  (context, i) => Padding(
+                    padding: const EdgeInsets.all(48),
+                    child: _options[i].showcaseBuilder(context),
+                  ),
             ),
           ),
           SizedBox(
             height: 36,
             child: ListView.builder(
               padding: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width / 2 - 80),
+                horizontal: MediaQuery.of(context).size.width / 2 - 80,
+              ),
               scrollDirection: Axis.horizontal,
               itemCount: _options.length,
               itemBuilder: _buildItem,
@@ -146,28 +146,26 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
   }
 
   Widget _buildAppBar(BuildContext context) => AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Text(L10n.global().enhanceTooltip),
-        actions: [
-          TextButton(
-            child: Text(
-              L10n.global().applyButtonLabel,
-              style: const TextStyle(
-                color: Colors.white,
-              ),
-            ),
-            onPressed: () => _onSavePressed(context),
-          ),
-          IconButton(
-            icon: const Icon(Icons.help_outline),
-            tooltip: L10n.global().helpTooltip,
-            onPressed: () {
-              launch(_selectedOption.link);
-            },
-          ),
-        ],
-      );
+    backgroundColor: Colors.transparent,
+    elevation: 0,
+    title: Text(L10n.global().enhanceTooltip),
+    actions: [
+      TextButton(
+        child: Text(
+          L10n.global().applyButtonLabel,
+          style: const TextStyle(color: Colors.white),
+        ),
+        onPressed: () => _onSavePressed(context),
+      ),
+      IconButton(
+        icon: const Icon(Icons.help_outline),
+        tooltip: L10n.global().helpTooltip,
+        onPressed: () {
+          launch(_selectedOption.link);
+        },
+      ),
+    ],
+  );
 
   Widget _buildItem(BuildContext context, int index) {
     final opt = _options[index];
@@ -193,11 +191,15 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
       // user canceled
       return;
     }
+    final uriGetter = AnyFileContentGetterFactory.uri(
+      widget.file,
+      account: widget.account,
+    );
     switch (_selectedOption.algorithm) {
       case _Algorithm.zeroDce:
         await ImageProcessor.zeroDce(
-          "${widget.account.url}/${widget.file.fdPath}",
-          widget.file.filename,
+          await uriGetter.get(),
+          widget.file.name,
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           args["iteration"] ?? 8,
@@ -211,8 +213,8 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
 
       case _Algorithm.deepLab3Portrait:
         await ImageProcessor.deepLab3Portrait(
-          "${widget.account.url}/${widget.file.fdPath}",
-          widget.file.filename,
+          await uriGetter.get(),
+          widget.file.name,
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           args["radius"] ?? 16,
@@ -226,8 +228,8 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
 
       case _Algorithm.esrgan:
         await ImageProcessor.esrgan(
-          "${widget.account.url}/${widget.file.fdPath}",
-          widget.file.filename,
+          await uriGetter.get(),
+          widget.file.name,
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           headers: {
@@ -240,12 +242,16 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
 
       case _Algorithm.arbitraryStyleTransfer:
         await ImageProcessor.arbitraryStyleTransfer(
-          "${widget.account.url}/${widget.file.fdPath}",
-          widget.file.filename,
+          await uriGetter.get(),
+          widget.file.name,
           math.min(
-              _c.pref.getEnhanceMaxWidthOr(), _isAtLeast5GbRam() ? 1600 : 1280),
+            _c.pref.getEnhanceMaxWidthOr(),
+            _isAtLeast5GbRam() ? 1600 : 1280,
+          ),
           math.min(
-              _c.pref.getEnhanceMaxHeightOr(), _isAtLeast5GbRam() ? 1200 : 960),
+            _c.pref.getEnhanceMaxHeightOr(),
+            _isAtLeast5GbRam() ? 1200 : 960,
+          ),
           args["styleUri"],
           args["weight"],
           headers: {
@@ -258,8 +264,8 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
 
       case _Algorithm.deepLab3ColorPop:
         await ImageProcessor.deepLab3ColorPop(
-          "${widget.account.url}/${widget.file.fdPath}",
-          widget.file.filename,
+          await uriGetter.get(),
+          widget.file.name,
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           args["weight"],
@@ -273,8 +279,8 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
 
       case _Algorithm.neurOp:
         await ImageProcessor.neurOp(
-          "${widget.account.url}/${widget.file.fdPath}",
-          widget.file.filename,
+          await uriGetter.get(),
+          widget.file.name,
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           headers: {
@@ -318,30 +324,33 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
   Future<void> _showInfo(BuildContext context) async {
     await showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().enhanceIntroDialogTitle),
-        content: Text(L10n.global().enhanceIntroDialogDescription),
-        actions: [
-          TextButton(
-            onPressed: () {
-              launch(enhanceUrl);
-            },
-            child: Text(L10n.global().learnMoreButtonLabel),
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().enhanceIntroDialogTitle),
+            content: Text(L10n.global().enhanceIntroDialogDescription),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  launch(enhanceUrl);
+                },
+                child: Text(L10n.global().learnMoreButtonLabel),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(
+                    context,
+                  ).pushNamed(EnhancementSettings.routeName);
+                },
+                child: Text(L10n.global().configButtonLabel),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pushNamed(EnhancementSettings.routeName);
-            },
-            child: Text(L10n.global().configButtonLabel),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
-          ),
-        ],
-      ),
     );
     unawaited(_c.pref.setHasShownEnhanceInfo(true));
   }
@@ -350,13 +359,16 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     await showDialog(
       context: context,
       barrierDismissible: false,
-      builder: (context) =>
-          const ImageEditorPersistOptionDialog(isFromEditor: false),
+      builder:
+          (context) =>
+              const ImageEditorPersistOptionDialog(isFromEditor: false),
     );
   }
 
   Future<Map<String, dynamic>?> _getArgs(
-      BuildContext context, _Algorithm selected) async {
+    BuildContext context,
+    _Algorithm selected,
+  ) async {
     switch (selected) {
       case _Algorithm.zeroDce:
         return _getZeroDceArgs(context);
@@ -382,91 +394,95 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     var current = .8;
     final iteration = await showDialog<int>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().enhanceLowLightParamBrightnessLabel),
-        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().enhanceLowLightParamBrightnessLabel),
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.brightness_low),
-                Expanded(
-                  child: StatefulSlider(
-                    initialValue: current,
-                    onChangeEnd: (value) {
-                      current = value;
-                    },
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Icon(Icons.brightness_low),
+                    Expanded(
+                      child: StatefulSlider(
+                        initialValue: current,
+                        onChangeEnd: (value) {
+                          current = value;
+                        },
+                      ),
+                    ),
+                    const Icon(Icons.brightness_high),
+                  ],
                 ),
-                const Icon(Icons.brightness_high),
               ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              final iteration = (current * 10).round().clamp(1, 10);
-              Navigator.of(context).pop(iteration);
-            },
-            child: Text(L10n.global().enhanceButtonLabel),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  final iteration = (current * 10).round().clamp(1, 10);
+                  Navigator.of(context).pop(iteration);
+                },
+                child: Text(L10n.global().enhanceButtonLabel),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     _log.info("[_getZeroDceArgs] iteration: $iteration");
     return iteration?.run((it) => {"iteration": it});
   }
 
   Future<Map<String, dynamic>?> _getDeepLab3PortraitArgs(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     var current = .5;
     final radius = await showDialog<int>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().enhancePortraitBlurParamBlurLabel),
-        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().enhancePortraitBlurParamBlurLabel),
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.circle, size: 20),
-                Expanded(
-                  child: StatefulSlider(
-                    initialValue: current,
-                    onChangeEnd: (value) {
-                      current = value;
-                    },
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Icon(Icons.circle, size: 20),
+                    Expanded(
+                      child: StatefulSlider(
+                        initialValue: current,
+                        onChangeEnd: (value) {
+                          current = value;
+                        },
+                      ),
+                    ),
+                    const Icon(Icons.blur_on),
+                  ],
                 ),
-                const Icon(Icons.blur_on),
               ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              final radius = (current * 25).round().clamp(1, 25);
-              Navigator.of(context).pop(radius);
-            },
-            child: Text(L10n.global().enhanceButtonLabel),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  final radius = (current * 25).round().clamp(1, 25);
+                  Navigator.of(context).pop(radius);
+                },
+                child: Text(L10n.global().enhanceButtonLabel),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     _log.info("[_getDeepLab3PortraitArgs] radius: $radius");
     return radius?.run((it) => {"radius": it});
   }
 
   Future<Map<String, dynamic>?> _getArbitraryStyleTransferArgs(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     final result = await showDialog<_StylePickerResult>(
       context: context,
       builder: (_) => const _StylePicker(),
@@ -475,51 +491,50 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
       // user canceled
       return null;
     } else {
-      return {
-        "styleUri": result.styleUri,
-        "weight": result.weight,
-      };
+      return {"styleUri": result.styleUri, "weight": result.weight};
     }
   }
 
   Future<Map<String, dynamic>?> _getDeepLab3ColorPopArgs(
-      BuildContext context) async {
+    BuildContext context,
+  ) async {
     var current = 1.0;
     final weight = await showDialog<double>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(L10n.global().enhanceGenericParamWeightLabel),
-        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
-        content: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Row(
-              mainAxisSize: MainAxisSize.max,
+      builder:
+          (context) => AlertDialog(
+            title: Text(L10n.global().enhanceGenericParamWeightLabel),
+            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.water_drop, size: 20),
-                Expanded(
-                  child: StatefulSlider(
-                    initialValue: current,
-                    onChangeEnd: (value) {
-                      current = value;
-                    },
-                  ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    const Icon(Icons.water_drop, size: 20),
+                    Expanded(
+                      child: StatefulSlider(
+                        initialValue: current,
+                        onChangeEnd: (value) {
+                          current = value;
+                        },
+                      ),
+                    ),
+                    const Icon(Icons.water_drop_outlined),
+                  ],
                 ),
-                const Icon(Icons.water_drop_outlined),
               ],
             ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(current);
-            },
-            child: Text(L10n.global().enhanceButtonLabel),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(current);
+                },
+                child: Text(L10n.global().enhanceButtonLabel),
+              ),
+            ],
           ),
-        ],
-      ),
     );
     _log.info("[_getDeepLab3ColorPopArgs] weight: $weight");
     return weight?.run((it) => {"weight": it});
@@ -628,17 +643,19 @@ class _ListChild extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            color: isSelected
-                ? Theme.of(context).colorScheme.secondaryContainer
-                : null,
+            color:
+                isSelected
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               title,
               style: TextStyle(
-                color: isSelected
-                    ? Theme.of(context).colorScheme.onSecondaryContainer
-                    : Theme.of(context).colorScheme.onSurface,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.onSecondaryContainer
+                        : Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),
@@ -691,24 +708,24 @@ class _RetouchShowcaseState extends State<_RetouchShowcase>
     with TickerProviderStateMixin, _ShowcaseStateMixin {
   @override
   build(BuildContext context) => Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "assets/retouch0.jpg",
-            fit: BoxFit.contain,
-            gaplessPlayback: true,
-          ),
-          CircularRevealAnimation(
-            animation: anim,
-            centerAlignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/retouch1.jpg",
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-          ),
-        ],
-      );
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        "assets/retouch0.jpg",
+        fit: BoxFit.contain,
+        gaplessPlayback: true,
+      ),
+      CircularRevealAnimation(
+        animation: anim,
+        centerAlignment: Alignment.bottomCenter,
+        child: Image.asset(
+          "assets/retouch1.jpg",
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
+        ),
+      ),
+    ],
+  );
 }
 
 class _ColorPopShowcase extends StatefulWidget {
@@ -722,24 +739,24 @@ class _ColorPopShowcaseState extends State<_ColorPopShowcase>
     with TickerProviderStateMixin, _ShowcaseStateMixin {
   @override
   build(BuildContext context) => Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "assets/color-pop0.jpg",
-            fit: BoxFit.contain,
-            gaplessPlayback: true,
-          ),
-          CircularRevealAnimation(
-            animation: anim,
-            centerAlignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/color-pop1.jpg",
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-          ),
-        ],
-      );
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        "assets/color-pop0.jpg",
+        fit: BoxFit.contain,
+        gaplessPlayback: true,
+      ),
+      CircularRevealAnimation(
+        animation: anim,
+        centerAlignment: Alignment.bottomCenter,
+        child: Image.asset(
+          "assets/color-pop1.jpg",
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
+        ),
+      ),
+    ],
+  );
 }
 
 class _LowLightShowcase extends StatefulWidget {
@@ -753,24 +770,24 @@ class _LowLightShowcaseState extends State<_LowLightShowcase>
     with TickerProviderStateMixin, _ShowcaseStateMixin {
   @override
   build(BuildContext context) => Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "assets/low-light0.jpg",
-            fit: BoxFit.contain,
-            gaplessPlayback: true,
-          ),
-          CircularRevealAnimation(
-            animation: anim,
-            centerAlignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/low-light1.jpg",
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-          ),
-        ],
-      );
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        "assets/low-light0.jpg",
+        fit: BoxFit.contain,
+        gaplessPlayback: true,
+      ),
+      CircularRevealAnimation(
+        animation: anim,
+        centerAlignment: Alignment.bottomCenter,
+        child: Image.asset(
+          "assets/low-light1.jpg",
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
+        ),
+      ),
+    ],
+  );
 }
 
 class _PortraitBlurShowcase extends StatefulWidget {
@@ -784,24 +801,24 @@ class _PortraitBlurShowcaseState extends State<_PortraitBlurShowcase>
     with TickerProviderStateMixin, _ShowcaseStateMixin {
   @override
   build(BuildContext context) => Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "assets/portrait-blur0.jpg",
-            fit: BoxFit.contain,
-            gaplessPlayback: true,
-          ),
-          CircularRevealAnimation(
-            animation: anim,
-            centerAlignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/portrait-blur1.jpg",
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-          ),
-        ],
-      );
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        "assets/portrait-blur0.jpg",
+        fit: BoxFit.contain,
+        gaplessPlayback: true,
+      ),
+      CircularRevealAnimation(
+        animation: anim,
+        centerAlignment: Alignment.bottomCenter,
+        child: Image.asset(
+          "assets/portrait-blur1.jpg",
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
+        ),
+      ),
+    ],
+  );
 }
 
 class _SuperResolutionShowcase extends StatefulWidget {
@@ -815,24 +832,24 @@ class _SuperResolutionShowcaseState extends State<_SuperResolutionShowcase>
     with TickerProviderStateMixin, _ShowcaseStateMixin {
   @override
   build(BuildContext context) => Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "assets/super-resolution0.jpg",
-            fit: BoxFit.contain,
-            gaplessPlayback: true,
-          ),
-          CircularRevealAnimation(
-            animation: anim,
-            centerAlignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/super-resolution1.jpg",
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-          ),
-        ],
-      );
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        "assets/super-resolution0.jpg",
+        fit: BoxFit.contain,
+        gaplessPlayback: true,
+      ),
+      CircularRevealAnimation(
+        animation: anim,
+        centerAlignment: Alignment.bottomCenter,
+        child: Image.asset(
+          "assets/super-resolution1.jpg",
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
+        ),
+      ),
+    ],
+  );
 }
 
 class _StyleTransferShowcase extends StatefulWidget {
@@ -846,24 +863,24 @@ class _StyleTransferShowcaseState extends State<_StyleTransferShowcase>
     with TickerProviderStateMixin, _ShowcaseStateMixin {
   @override
   build(BuildContext context) => Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.asset(
-            "assets/style-transfer0.jpg",
-            fit: BoxFit.contain,
-            gaplessPlayback: true,
-          ),
-          CircularRevealAnimation(
-            animation: anim,
-            centerAlignment: Alignment.bottomCenter,
-            child: Image.asset(
-              "assets/style-transfer1.jpg",
-              fit: BoxFit.contain,
-              gaplessPlayback: true,
-            ),
-          ),
-        ],
-      );
+    fit: StackFit.expand,
+    children: [
+      Image.asset(
+        "assets/style-transfer0.jpg",
+        fit: BoxFit.contain,
+        gaplessPlayback: true,
+      ),
+      CircularRevealAnimation(
+        animation: anim,
+        centerAlignment: Alignment.bottomCenter,
+        child: Image.asset(
+          "assets/style-transfer1.jpg",
+          fit: BoxFit.contain,
+          gaplessPlayback: true,
+        ),
+      ),
+    ],
+  );
 }
 
 class _StylePickerResult {
@@ -899,7 +916,10 @@ class _StylePickerState extends State<_StylePicker> {
                 height: 128,
                 child: Image(
                   image: ResizeImage.resizeIfNeeded(
-                      128, null, ContentUriImage(_getSelectedUri())),
+                    128,
+                    null,
+                    ContentUriImage(_getSelectedUri()),
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -910,20 +930,28 @@ class _StylePickerState extends State<_StylePicker> {
             runSpacing: 8,
             spacing: 8,
             children: [
-              ..._bundledStyles.mapIndexed((i, e) => _buildItem(
-                    i,
-                    Image(
-                      image: ResizeImage.resizeIfNeeded(
-                          _thumbSize, null, ContentUriImage(e)),
-                      fit: BoxFit.cover,
+              ..._bundledStyles.mapIndexed(
+                (i, e) => _buildItem(
+                  i,
+                  Image(
+                    image: ResizeImage.resizeIfNeeded(
+                      _thumbSize,
+                      null,
+                      ContentUriImage(e),
                     ),
-                  )),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
               if (_customUri != null)
                 _buildItem(
                   _bundledStyles.length,
                   Image(
                     image: ResizeImage.resizeIfNeeded(
-                        _thumbSize, null, ContentUriImage(_customUri!)),
+                      _thumbSize,
+                      null,
+                      ContentUriImage(_customUri!),
+                    ),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -960,11 +988,15 @@ class _StylePickerState extends State<_StylePicker> {
         TextButton(
           onPressed: () {
             if (_selected == null) {
-              SnackBarManager().showSnackBar(SnackBar(
-                content: Text(L10n.global()
-                    .enhanceStyleTransferNoStyleSelectedNotification),
-                duration: k.snackBarDurationNormal,
-              ));
+              SnackBarManager().showSnackBar(
+                SnackBar(
+                  content: Text(
+                    L10n.global()
+                        .enhanceStyleTransferNoStyleSelectedNotification,
+                  ),
+                  duration: k.snackBarDurationNormal,
+                ),
+              );
             } else {
               final result = _StylePickerResult(_getSelectedUri(), _weight);
               Navigator.of(context).pop(result);
@@ -999,9 +1031,7 @@ class _StylePickerState extends State<_StylePicker> {
       action: android.ACTION_GET_CONTENT,
       type: "image/*",
       category: android.CATEGORY_OPENABLE,
-      arguments: {
-        android.EXTRA_LOCAL_ONLY: true,
-      },
+      arguments: {android.EXTRA_LOCAL_ONLY: true},
     );
     final result = await intent.launchForResult();
     _log.info("[onCustomTap] Intent result: $result");

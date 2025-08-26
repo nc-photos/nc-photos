@@ -17,8 +17,6 @@ extension Rgba8ImageExtension on Rgba8Image {
 
 extension MetadataExtension on Metadata {
   ImageFormatMetadata toInterfaceType() {
-    return ImageFormatMetadata(
-      size: SizeInt(w, h),
-    );
+    return ImageFormatMetadata(size: SizeInt(w, h));
   }
 }

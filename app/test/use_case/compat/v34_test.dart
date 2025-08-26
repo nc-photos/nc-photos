@@ -27,9 +27,7 @@ void main() {
       });
 
       test("w/o accounts(2)", () async {
-        SharedPreferences.setMockInitialValues({
-          "hello": "world",
-        });
+        SharedPreferences.setMockInitialValues({"hello": "world"});
         expect(await CompatV34.isPrefNeedMigration(), false);
       });
     });
@@ -48,8 +46,11 @@ void main() {
         expect(result?.length, 1);
         expect(
           result![0],
-          matches(RegExp(
-              r"""\{"scheme":"http","address":"example.com","username":"admin","password":"123456","roots":\["dir","dir2"\],"id":"[0-9a-f]+-[0-9a-f]+"\}""")),
+          matches(
+            RegExp(
+              r"""\{"scheme":"http","address":"example.com","username":"admin","password":"123456","roots":\["dir","dir2"\],"id":"[0-9a-f]+-[0-9a-f]+"\}""",
+            ),
+          ),
         );
         expect(pref.containsKey("accounts"), false);
         final id = jsonDecode(result[0])["id"];
@@ -72,8 +73,11 @@ void main() {
         expect(result?.length, 1);
         expect(
           result![0],
-          matches(RegExp(
-              r"""\{"scheme":"http","address":"example.com","username":"admin","password":"123456","roots":\["dir","dir2"\],"id":"[0-9a-f]+-[0-9a-f]+"\}""")),
+          matches(
+            RegExp(
+              r"""\{"scheme":"http","address":"example.com","username":"admin","password":"123456","roots":\["dir","dir2"\],"id":"[0-9a-f]+-[0-9a-f]+"\}""",
+            ),
+          ),
         );
         expect(pref.containsKey("accounts2"), false);
         final id = jsonDecode(result[0])["id"];

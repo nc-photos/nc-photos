@@ -27,13 +27,13 @@ class CompatV32 {
     for (final j in jsons) {
       newJsons.add(<String, dynamic>{
         "account": jsonDecode(j),
-        "settings": <String, dynamic>{
-          "isEnableFaceRecognitionApp": true,
-        },
+        "settings": <String, dynamic>{"isEnableFaceRecognitionApp": true},
       });
     }
     if (await pref.setStringList(
-        "accounts2", newJsons.map((e) => jsonEncode(e)).toList())) {
+      "accounts2",
+      newJsons.map((e) => jsonEncode(e)).toList(),
+    )) {
       _log.info("[migratePref] Migrated ${newJsons.length} accounts");
       await pref.remove("accounts");
     } else {
@@ -49,7 +49,8 @@ class CompatV32 {
     _log.info("[migrateExif] Migrate EXIF for file: $logFilename");
     final newData = Map.of(exif.data);
     newData.removeWhere(
-        (key, value) => key == "UserComment" || key == "MakerNote");
+      (key, value) => key == "UserComment" || key == "MakerNote",
+    );
     return Exif(newData);
   }
 

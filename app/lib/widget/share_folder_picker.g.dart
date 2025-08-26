@@ -10,6 +10,7 @@ extension _$_ShareFolderPickerStateNpLog on _ShareFolderPickerState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.share_folder_picker._ShareFolderPickerState");
+  static final log = Logger(
+    "widget.share_folder_picker._ShareFolderPickerState",
+  );
 }

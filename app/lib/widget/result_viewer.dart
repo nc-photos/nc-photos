@@ -28,16 +28,10 @@ class ResultViewerArguments {
 class ResultViewer extends StatefulWidget {
   static const routeName = "/result-viewer";
 
-  const ResultViewer({
-    super.key,
-    required this.resultUrl,
-  });
+  const ResultViewer({super.key, required this.resultUrl});
 
   ResultViewer.fromArgs(ResultViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          resultUrl: args.resultUrl,
-        );
+    : this(key: key, resultUrl: args.resultUrl);
 
   static Route buildRoute(ResultViewerArguments args, RouteSettings settings) =>
       MaterialPageRoute(
@@ -66,10 +60,7 @@ class _ResultViewerState extends State<ResultViewer> {
       return Theme(
         data: buildDarkTheme(context),
         child: Scaffold(
-          appBar: AppBar(
-            backgroundColor: Colors.black,
-            elevation: 0,
-          ),
+          appBar: AppBar(backgroundColor: Colors.black, elevation: 0),
           body: Container(
             color: Colors.black,
             alignment: Alignment.topCenter,
@@ -90,20 +81,25 @@ class _ResultViewerState extends State<ResultViewer> {
     _log.info("[_doWork] URL: ${widget.resultUrl}");
     _account = context.read<PrefController>().currentAccountValue;
     if (_account == null) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().errorUnauthenticated),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().errorUnauthenticated),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       Navigator.of(context).pop();
       return;
     }
-    if (!widget.resultUrl
-        .startsWith(RegExp(_account!.url, caseSensitive: false))) {
+    if (!widget.resultUrl.startsWith(
+      RegExp(_account!.url, caseSensitive: false),
+    )) {
       _log.severe("[_doWork] File url and current account does not match");
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().errorUnauthenticated),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().errorUnauthenticated),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       Navigator.of(context).pop();
       return;
     }

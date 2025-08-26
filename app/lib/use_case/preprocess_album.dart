@@ -13,8 +13,8 @@ import 'package:nc_photos/use_case/resync_album.dart';
 /// - with AlbumDynamicProvider/AlbumSmartProvider: [PopulateAlbum]
 class PreProcessAlbum {
   PreProcessAlbum(this._c)
-      : assert(require(_c)),
-        assert(PopulateAlbum.require(_c));
+    : assert(require(_c)),
+      assert(PopulateAlbum.require(_c));
 
   static bool require(DiContainer c) => true;
 
@@ -25,7 +25,8 @@ class PreProcessAlbum {
       return PopulateAlbum(_c)(account, album);
     } else {
       throw ArgumentError(
-          "Unknown album provider: ${album.provider.runtimeType}");
+        "Unknown album provider: ${album.provider.runtimeType}",
+      );
     }
   }
 

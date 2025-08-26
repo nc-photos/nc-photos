@@ -15,11 +15,7 @@ class FaceRecognitionPerson with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        name,
-        thumbFaceId,
-        count,
-      ];
+  List<Object?> get props => [name, thumbFaceId, count];
 
   final String name;
   final int thumbFaceId;

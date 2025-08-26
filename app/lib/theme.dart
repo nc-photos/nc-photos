@@ -6,21 +6,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/theme/dimension.dart';
+import 'package:np_common/color.dart';
 import 'package:np_ui/np_ui.dart';
 
-const defaultSeedColor = Color(0xFF2196F3);
+const defaultSeedColor = ColorInt(0xFF2196F3);
 
 extension ThemeExtension on ThemeData {
   double get widthLimitedContentMaxWidth => 550.0;
 
   Color get listPlaceholderBackgroundColor =>
-      colorScheme.primaryContainer.withOpacity(.6);
+      colorScheme.primaryContainer.withValues(alpha: .6);
 
   Color get listPlaceholderForegroundColor =>
-      colorScheme.onPrimaryContainer.withOpacity(.7);
+      colorScheme.onPrimaryContainer.withValues(alpha: .7);
 
   Color get homeNavigationBarBackgroundColor =>
-      elevate(colorScheme.surface, 2).withOpacity(.55);
+      elevate(colorScheme.surface, 2).withValues(alpha: .55);
 
   Color get onDarkSurface {
     return brightness == Brightness.light
@@ -28,26 +29,23 @@ extension ThemeExtension on ThemeData {
         : colorScheme.onSurface;
   }
 
-  ImageFilter get appBarBlurFilter => ImageFilter.blur(
-        sigmaX: 12,
-        sigmaY: 12,
-        tileMode: TileMode.mirror,
-      );
+  ImageFilter get appBarBlurFilter =>
+      ImageFilter.blur(sigmaX: 12, sigmaY: 12, tileMode: TileMode.mirror);
 
   Color get nextcloudBlue => const Color(0xFF0082C9);
 
   LinearGradient get photoGridShimmerGradient {
     final Color color;
     if (brightness == Brightness.light) {
-      color = Colors.white.withOpacity(.85);
+      color = Colors.white.withValues(alpha: .85);
     } else {
-      color = Colors.white.withOpacity(.25);
+      color = Colors.white.withValues(alpha: .25);
     }
     return LinearGradient(
       colors: [
-        listPlaceholderBackgroundColor.withOpacity(0),
+        listPlaceholderBackgroundColor.withValues(alpha: 0),
         color,
-        listPlaceholderBackgroundColor.withOpacity(0),
+        listPlaceholderBackgroundColor.withValues(alpha: 0),
       ],
       stops: const [0.1, 0.3, 0.4],
       begin: const Alignment(-1.0, -0.3),
@@ -58,10 +56,7 @@ extension ThemeExtension on ThemeData {
 }
 
 class DarkModeSwitchTheme extends StatelessWidget {
-  const DarkModeSwitchTheme({
-    super.key,
-    required this.child,
-  });
+  const DarkModeSwitchTheme({super.key, required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -72,9 +67,7 @@ class DarkModeSwitchTheme extends StatelessWidget {
           trackColor: WidgetStateProperty.all(theme.colorScheme.surface),
           thumbColor: WidgetStateProperty.all(Colors.black87),
         ),
-        colorScheme: theme.colorScheme.copyWith(
-          outline: Colors.transparent,
-        ),
+        colorScheme: theme.colorScheme.copyWith(outline: Colors.transparent),
       ),
       child: child,
     );
@@ -105,21 +98,25 @@ ThemeData buildDarkTheme(BuildContext context, [ColorScheme? dynamicScheme]) {
     Brightness.dark,
   );
   if (context.read<PrefController>().isUseBlackInDarkTheme.value) {
-    return _applyColorScheme(colorScheme.copyWith(
-      surface: Colors.black,
-    ));
+    return _applyColorScheme(colorScheme.copyWith(surface: Colors.black));
   } else {
     return _applyColorScheme(colorScheme);
   }
 }
 
 ColorScheme _getColorScheme(
-    BuildContext context, ColorScheme? dynamicScheme, Brightness brightness) {
+  BuildContext context,
+  ColorScheme? dynamicScheme,
+  Brightness brightness,
+) {
   var primary = context.read<PrefController>().seedColorValue;
-  Color? secondary;
+  ColorInt? secondary;
   if (primary == null) {
     if (dynamicScheme != null) {
-      return dynamicScheme;
+      // dynamic scheme is currently bugged with broken colors
+      // return dynamicScheme;
+      primary = dynamicScheme.primary.toColorInt();
+      secondary = dynamicScheme.secondary.toColorInt();
     } else {
       primary = defaultSeedColor;
     }
@@ -129,8 +126,8 @@ ColorScheme _getColorScheme(
   return SeedColorScheme.fromSeeds(
     brightness: brightness,
     tones: FlexTones.material(brightness),
-    primaryKey: primary,
-    secondaryKey: secondary,
+    primaryKey: primary.toColor(),
+    secondaryKey: secondary?.toColor(),
   );
 }
 
@@ -139,15 +136,8 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     useMaterial3: true,
     brightness: colorScheme.brightness,
     colorScheme: colorScheme,
-    listTileTheme: ListTileThemeData(
-      iconColor: colorScheme.onSurfaceVariant,
-    ),
-    iconTheme: IconThemeData(
-      color: colorScheme.onSurfaceVariant,
-    ),
-    // remove after dialog supports m3
-    dialogBackgroundColor:
-        Color.lerp(colorScheme.surface, colorScheme.surfaceTint, 0.11),
+    listTileTheme: ListTileThemeData(iconColor: colorScheme.onSurfaceVariant),
+    iconTheme: IconThemeData(color: colorScheme.onSurfaceVariant),
     popupMenuTheme: PopupMenuThemeData(
       // remove after menu supports m3
       color: Color.lerp(colorScheme.surface, colorScheme.surfaceTint, 0.08),
@@ -174,9 +164,7 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     ),
     snackBarTheme: SnackBarThemeData(
       backgroundColor: colorScheme.inverseSurface,
-      contentTextStyle: TextStyle(
-        color: colorScheme.onInverseSurface,
-      ),
+      contentTextStyle: TextStyle(color: colorScheme.onInverseSurface),
       actionTextColor: colorScheme.inversePrimary,
       behavior: SnackBarBehavior.floating,
     ),
@@ -187,24 +175,27 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     ),
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
-        backgroundColor:
-            WidgetStateProperty.all(colorScheme.secondaryContainer),
+        backgroundColor: WidgetStateProperty.all(
+          colorScheme.secondaryContainer,
+        ),
         foregroundColor: WidgetStateProperty.all(colorScheme.secondary),
-        overlayColor:
-            WidgetStateProperty.all(colorScheme.secondary.withOpacity(.1)),
+        overlayColor: WidgetStateProperty.all(
+          colorScheme.secondary.withValues(alpha: .1),
+        ),
       ),
     ),
     textButtonTheme: TextButtonThemeData(
       style: ButtonStyle(
         foregroundColor: WidgetStateProperty.all(colorScheme.secondary),
-        overlayColor:
-            WidgetStateProperty.all(colorScheme.secondary.withOpacity(.1)),
+        overlayColor: WidgetStateProperty.all(
+          colorScheme.secondary.withValues(alpha: .1),
+        ),
       ),
     ),
     textSelectionTheme: TextSelectionThemeData(
       cursorColor: colorScheme.secondary,
       selectionHandleColor: colorScheme.secondary,
-      selectionColor: colorScheme.secondary.withOpacity(.4),
+      selectionColor: colorScheme.secondary.withValues(alpha: .4),
     ),
     inputDecorationTheme: InputDecorationTheme(
       focusedBorder: UnderlineInputBorder(
@@ -213,24 +204,26 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     ),
     chipTheme: ChipThemeData(
       selectedColor: Color.lerp(
-          colorScheme.secondaryContainer, colorScheme.surfaceTint, .14),
-      iconTheme: IconThemeData(
-        color: colorScheme.secondary,
+        colorScheme.secondaryContainer,
+        colorScheme.surfaceTint,
+        .14,
       ),
+      iconTheme: IconThemeData(color: colorScheme.secondary),
     ),
-    progressIndicatorTheme:
-        ProgressIndicatorThemeData(color: colorScheme.secondary),
+    progressIndicatorTheme: ProgressIndicatorThemeData(
+      color: colorScheme.secondary,
+    ),
     extensions: [
       M3(
         checkbox: M3Checkbox(
           disabled: M3CheckboxDisabled(
-            container: colorScheme.onSurface.withOpacity(.38),
+            container: colorScheme.onSurface.withValues(alpha: .38),
           ),
         ),
         filterChip: M3FilterChip(
           disabled: M3FilterChipDisabled(
-            containerSelected: colorScheme.onSurface.withOpacity(.12),
-            labelText: colorScheme.onSurface.withOpacity(.38),
+            containerSelected: colorScheme.onSurface.withValues(alpha: .12),
+            labelText: colorScheme.onSurface.withValues(alpha: .38),
           ),
         ),
         listTile: M3ListTile(

@@ -36,11 +36,12 @@ class SharedFileViewer extends StatefulWidget {
   static const routeName = "/shared-file-viewer";
 
   static Route buildRoute(
-          SharedFileViewerArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => SharedFileViewer.fromArgs(args),
-        settings: settings,
-      );
+    SharedFileViewerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => SharedFileViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const SharedFileViewer({
     super.key,
@@ -50,12 +51,12 @@ class SharedFileViewer extends StatefulWidget {
   });
 
   SharedFileViewer.fromArgs(SharedFileViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-          file: args.file,
-          shares: args.shares,
-        );
+    : this(
+        key: key,
+        account: args.account,
+        file: args.file,
+        shares: args.shares,
+      );
 
   @override
   createState() => _SharedFileViewerState();
@@ -69,9 +70,7 @@ class SharedFileViewer extends StatefulWidget {
 class _SharedFileViewerState extends State<SharedFileViewer> {
   @override
   build(BuildContext context) {
-    return Scaffold(
-      body: _buildContent(context),
-    );
+    return Scaffold(body: _buildContent(context));
   }
 
   Widget _buildContent(BuildContext context) {
@@ -89,17 +88,20 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
                 alignment: Alignment.center,
                 fit: BoxFit.cover,
                 clipBehavior: Clip.hardEdge,
-                child: CachedNetworkImageBuilder(
-                  type: CachedNetworkImageType.largeImage,
-                  imageUrl:
-                      getViewerUrlForImageFile(widget.account, widget.file),
-                  mime: widget.file.fdMime,
-                  account: widget.account,
-                  errorWidget: (context, url, error) {
-                    // just leave it empty
-                    return Container();
-                  },
-                ).build(),
+                child:
+                    CachedNetworkImageBuilder(
+                      type: CachedNetworkImageType.largeImage,
+                      imageUrl: getViewerUrlForImageFile(
+                        widget.account,
+                        widget.file,
+                      ),
+                      mime: widget.file.fdMime,
+                      account: widget.account,
+                      errorWidget: (context, url, error) {
+                        // just leave it empty
+                        return Container();
+                      },
+                    ).build(),
               ),
             ),
           ),
@@ -108,16 +110,12 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
             padding: const EdgeInsets.all(16),
             child: Text(
               L10n.global().locationLabel,
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-              ),
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
             ),
           ),
         ),
         SliverToBoxAdapter(
-          child: ListTile(
-            title: Text(widget.file.strippedPath),
-          ),
+          child: ListTile(title: Text(widget.file.strippedPath)),
         ),
         if (widget.shares.first.uidOwner == widget.account.userId) ...[
           SliverToBoxAdapter(
@@ -125,9 +123,7 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
               padding: const EdgeInsets.all(16),
               child: Text(
                 L10n.global().sharedWithLabel,
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                ),
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
               ),
             ),
           ),
@@ -143,15 +139,14 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
   }
 
   Widget _buildShareItem(BuildContext context, Share share) {
-    final dateStr = DateFormat(DateFormat.YEAR_ABBR_MONTH_DAY,
-            Localizations.localeOf(context).languageCode)
-        .format(share.stime.toLocal());
+    final dateStr = DateFormat(
+      DateFormat.YEAR_ABBR_MONTH_DAY,
+      Localizations.localeOf(context).languageCode,
+    ).format(share.stime.toLocal());
     return ListTile(
       title: Text(_getShareTitle(share)),
       subtitle: Text(dateStr),
-      leading: ListTileCenterLeading(
-        child: Icon(_getShareIcon(share)),
-      ),
+      leading: ListTileCenterLeading(child: Icon(_getShareIcon(share))),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -165,14 +160,15 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
             ),
           PopupMenuButton<_ItemMenuOption>(
             tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-            itemBuilder: (_) => [
-              PopupMenuItem(
-                value: _ItemMenuOption.unshare,
-                child: Text(L10n.global().unshareTooltip),
-              ),
-            ],
-            onSelected: (option) =>
-                _onItemMenuOptionSelected(context, share, option),
+            itemBuilder:
+                (_) => [
+                  PopupMenuItem(
+                    value: _ItemMenuOption.unshare,
+                    child: Text(L10n.global().unshareTooltip),
+                  ),
+                ],
+            onSelected:
+                (option) => _onItemMenuOptionSelected(context, share, option),
           ),
         ],
       ),
@@ -181,14 +177,19 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
 
   Future<void> _onItemCopyPressed(Share share) async {
     await Clipboard.setData(ClipboardData(text: share.url!));
-    SnackBarManager().showSnackBar(SnackBar(
-      content: Text(L10n.global().linkCopiedNotification),
-      duration: k.snackBarDurationNormal,
-    ));
+    SnackBarManager().showSnackBar(
+      SnackBar(
+        content: Text(L10n.global().linkCopiedNotification),
+        duration: k.snackBarDurationNormal,
+      ),
+    );
   }
 
   void _onItemMenuOptionSelected(
-      BuildContext context, Share share, _ItemMenuOption option) {
+    BuildContext context,
+    Share share,
+    _ItemMenuOption option,
+  ) {
     switch (option) {
       case _ItemMenuOption.unshare:
         _onItemUnsharePressed(context, share);
@@ -200,16 +201,18 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
     final shareRepo = ShareRepo(ShareRemoteDataSource());
     try {
       await RemoveShare(shareRepo)(widget.account, share);
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().unshareSuccessNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().unshareSuccessNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       if (_shares.length == 1) {
         // removing last share
         try {
           if (widget.file.path.startsWith(
-              remote_storage_util.getRemoteLinkSharesDir(widget.account) +
-                  "/")) {
+            remote_storage_util.getRemoteLinkSharesDir(widget.account) + "/",
+          )) {
             // file is a link share dir created by us
             if (await _askDeleteLinkShareDir()) {
               await _deleteLinkShareDir();
@@ -227,7 +230,10 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
       }
     } catch (e, stackTrace) {
       _log.shout(
-          "[_onItemUnsharePressed] Failed while RemoveShare", e, stackTrace);
+        "[_onItemUnsharePressed] Failed while RemoveShare",
+        e,
+        stackTrace,
+      );
       SnackBarManager().showSnackBarForException(e);
     }
   }
@@ -235,22 +241,27 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
   Future<bool> _askDeleteLinkShareDir() async {
     final result = await showDialog<bool>(
       context: context,
-      builder: (_) => AlertDialog(
-        title: Text(L10n.global().unshareLinkShareDirDialogTitle),
-        content: Text(L10n.global().unshareLinkShareDirDialogContent),
-        actions: [
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(MaterialLocalizations.of(context).cancelButtonLabel)),
-          TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child: Text(MaterialLocalizations.of(context).okButtonLabel)),
-        ],
-      ),
+      builder:
+          (_) => AlertDialog(
+            title: Text(L10n.global().unshareLinkShareDirDialogTitle),
+            content: Text(L10n.global().unshareLinkShareDirDialogContent),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(false);
+                },
+                child: Text(
+                  MaterialLocalizations.of(context).cancelButtonLabel,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
+              ),
+            ],
+          ),
     );
     return result == true;
   }
@@ -260,17 +271,17 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
     var dirPath = path_lib.dirname(widget.file.path);
     // make sure we are not accidentally deleting other dirs
     if (!dirPath.startsWith(
-        remote_storage_util.getRemoteLinkSharesDir(widget.account) + "/")) {
+      remote_storage_util.getRemoteLinkSharesDir(widget.account) + "/",
+    )) {
       _log.shout(
-          "[_deleteLinkShareDir] Invalid upper dir to be deleted: $dirPath");
+        "[_deleteLinkShareDir] Invalid upper dir to be deleted: $dirPath",
+      );
       dirPath = widget.file.path;
     }
 
-    return Remove(KiwiContainer().resolve<DiContainer>())(
-      widget.account,
-      [widget.file.copyWith(path: dirPath)],
-      shouldCleanUp: false,
-    );
+    return Remove(KiwiContainer().resolve<DiContainer>())(widget.account, [
+      widget.file.copyWith(path: dirPath),
+    ], shouldCleanUp: false);
   }
 
   IconData? _getShareIcon(Share share) {
@@ -286,8 +297,6 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
         return Icons.link_outlined;
       case ShareType.talk:
         return Icons.sms_outlined;
-      default:
-        return null;
     }
   }
 
@@ -306,6 +315,4 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
   late final List<Share> _shares = List.of(widget.shares);
 }
 
-enum _ItemMenuOption {
-  unshare,
-}
+enum _ItemMenuOption { unshare }

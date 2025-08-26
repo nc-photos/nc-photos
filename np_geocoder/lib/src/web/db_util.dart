@@ -19,10 +19,14 @@ Future<CommonDatabase> openRawSqliteDbFromAsset(
     // copy file from assets
     final blob = await rootBundle.load("assets/$assetRelativePath");
     final buffer = blob.buffer;
-    final f = fs.xOpen(Sqlite3Filename("/app-file/$outputFilename"),
-        SqlFlag.SQLITE_OPEN_CREATE | SqlFlag.SQLITE_OPEN_READWRITE);
-    f.file
-        .xWrite(buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes), 0);
+    final f = fs.xOpen(
+      Sqlite3Filename("/app-file/$outputFilename"),
+      SqlFlag.SQLITE_OPEN_CREATE | SqlFlag.SQLITE_OPEN_READWRITE,
+    );
+    f.file.xWrite(
+      buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes),
+      0,
+    );
     await fs.flush();
   }
   return sqlite3.open("/app-file/$outputFilename");

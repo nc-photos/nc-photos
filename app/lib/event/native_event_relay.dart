@@ -19,22 +19,26 @@ class NativeEventRelay {
     required this.filesController,
     required this.metadataController,
   }) {
-    _subscriptions.add(MessageRelay.stream.whereType<Message>().listen((event) {
-      switch (event.event) {
-        case FileExifUpdatedEvent.id:
-          _onFileExifUpdatedEvent(FileExifUpdatedEvent.fromEvent(event));
-          break;
+    _subscriptions.add(
+      MessageRelay.stream.whereType<Message>().listen((event) {
+        switch (event.event) {
+          case FileExifUpdatedEvent.id:
+            _onFileExifUpdatedEvent(FileExifUpdatedEvent.fromEvent(event));
+            break;
 
-        default:
-          _log.severe('Unknown event: ${event.event}');
-          break;
-      }
-    }));
+          default:
+            _log.severe('Unknown event: ${event.event}');
+            break;
+        }
+      }),
+    );
 
     if (features.isSupportEnhancement) {
-      _subscriptions.add(ImageProcessor.stream
-          .whereType<ImageProcessorUploadSuccessEvent>()
-          .listen(_onImageProcessorUploadSuccessEvent));
+      _subscriptions.add(
+        ImageProcessor.stream
+            .whereType<ImageProcessorUploadSuccessEvent>()
+            .listen(_onImageProcessorUploadSuccessEvent),
+      );
     }
   }
 
@@ -50,7 +54,8 @@ class NativeEventRelay {
   }
 
   void _onImageProcessorUploadSuccessEvent(
-      ImageProcessorUploadSuccessEvent ev) {
+    ImageProcessorUploadSuccessEvent ev,
+  ) {
     _log.info(ev);
     filesController.syncRemote();
     metadataController.scheduleNext();

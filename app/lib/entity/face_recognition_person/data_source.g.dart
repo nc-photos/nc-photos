@@ -12,7 +12,8 @@ extension _$FaceRecognitionPersonRemoteDataSourceNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "entity.face_recognition_person.data_source.FaceRecognitionPersonRemoteDataSource");
+    "entity.face_recognition_person.data_source.FaceRecognitionPersonRemoteDataSource",
+  );
 }
 
 extension _$FaceRecognitionPersonSqliteDbDataSourceNpLog
@@ -21,5 +22,6 @@ extension _$FaceRecognitionPersonSqliteDbDataSourceNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "entity.face_recognition_person.data_source.FaceRecognitionPersonSqliteDbDataSource");
+    "entity.face_recognition_person.data_source.FaceRecognitionPersonSqliteDbDataSource",
+  );
 }

@@ -31,10 +31,7 @@ class CollectionsNavBarSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        isBottom: true,
-        prefController: context.read(),
-      ),
+      create: (_) => _Bloc(isBottom: true, prefController: context.read()),
       child: const _WrappedCollectionsNavBarSettings(),
     );
   }
@@ -68,7 +65,8 @@ class _WrappedCollectionsNavBarSettingsState
       child: Scaffold(
         appBar: AppBar(
           title: Text(
-              L10n.global().settingsCollectionsCustomizeNavigationBarTitle),
+            L10n.global().settingsCollectionsCustomizeNavigationBarTitle,
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -81,12 +79,13 @@ class _WrappedCollectionsNavBarSettingsState
         body: MultiBlocListener(
           listeners: [
             _BlocListener(
-              listenWhen: (previous, current) =>
-                  previous.error != current.error,
+              listenWhen:
+                  (previous, current) => previous.error != current.error,
               listener: (context, state) {
                 if (state.error != null && isPageVisible()) {
-                  SnackBarManager()
-                      .showSnackBarForException(state.error!.error);
+                  SnackBarManager().showSnackBarForException(
+                    state.error!.error,
+                  );
                 }
               },
             ),
@@ -95,10 +94,13 @@ class _WrappedCollectionsNavBarSettingsState
             children: [
               const _DemoView(),
               Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                child:
-                    Text(L10n.global().customizeCollectionsNavBarDescription),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 16,
+                ),
+                child: Text(
+                  L10n.global().customizeCollectionsNavBarDescription,
+                ),
               ),
               const Expanded(child: _CandidateGrid()),
             ],

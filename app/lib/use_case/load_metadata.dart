@@ -17,7 +17,10 @@ part 'load_metadata.g.dart';
 class LoadMetadata {
   /// Load metadata of [binary], which is the content of [file]
   Future<app.Metadata> loadRemote(
-      Account account, app.File file, Uint8List binary) {
+    Account account,
+    app.File file,
+    Uint8List binary,
+  ) {
     return _loadMetadata(
       mime: file.contentType ?? "",
       reader: () => exiv2.readBuffer(binary),
@@ -25,10 +28,7 @@ class LoadMetadata {
     );
   }
 
-  Future<app.Metadata> loadLocal(
-    io.File file, {
-    String? mime,
-  }) async {
+  Future<app.Metadata> loadLocal(io.File file, {String? mime}) async {
     mime = mime ?? await file.readMime();
     return _loadMetadata(
       mime: mime ?? "",
@@ -47,9 +47,10 @@ class LoadMetadata {
       result = reader();
     } catch (e, stacktrace) {
       _log.shout(
-          "[_loadMetadata] Failed while readMetadata for $mime file: ${logFilename(filename)}",
-          e,
-          stacktrace);
+        "[_loadMetadata] Failed while readMetadata for $mime file: ${logFilename(filename)}",
+        e,
+        stacktrace,
+      );
       rethrow;
     }
     final metadata = {
@@ -59,7 +60,8 @@ class LoadMetadata {
               return MapEntry(e.tagKey, e.value.asTyped());
             } catch (_) {
               _log.shout(
-                  "[_loadMetadata] Unable to convert IPTC tag: ${e.tagKey}, ${e.value.toDebugString()}");
+                "[_loadMetadata] Unable to convert IPTC tag: ${e.tagKey}, ${e.value.toDebugString()}",
+              );
               return null;
             }
           })
@@ -71,7 +73,8 @@ class LoadMetadata {
               return MapEntry(e.tagKey, e.value.asTyped());
             } catch (_) {
               _log.shout(
-                  "[_loadMetadata] Unable to convert EXIF tag: ${e.tagKey}, ${e.value.toDebugString()}");
+                "[_loadMetadata] Unable to convert EXIF tag: ${e.tagKey}, ${e.value.toDebugString()}",
+              );
               return null;
             }
           })

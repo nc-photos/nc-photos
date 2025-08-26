@@ -8,10 +8,7 @@ import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/use_case/startup_sync.dart';
 
 class SyncController {
-  SyncController({
-    required this.account,
-    this.onPeopleUpdated,
-  });
+  SyncController({required this.account, this.onPeopleUpdated});
 
   void dispose() {
     _isDisposed = true;
@@ -29,7 +26,11 @@ class SyncController {
     if (_syncCompleter == null) {
       _syncCompleter = Completer();
       final result = await StartupSync.runInIsolate(
-          account, filesController, personsController, personProvider);
+        account,
+        filesController,
+        personsController,
+        personProvider,
+      );
       if (!_isDisposed && result.isSyncPersonUpdated) {
         onPeopleUpdated?.call();
       }

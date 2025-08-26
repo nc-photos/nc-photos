@@ -30,22 +30,38 @@ class RecognizeFaceItemParser extends XmlResponseParser {
     int? fileId;
 
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("href",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "href",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         href = Uri.decodeComponent(child.innerText);
-      } else if (child.matchQualifiedName("propstat",
-          prefix: "DAV:", namespaces: namespaces)) {
-        final status = child.children
-            .whereType<XmlElement>()
-            .firstWhere((element) => element.matchQualifiedName("status",
-                prefix: "DAV:", namespaces: namespaces))
-            .innerText;
+      } else if (child.matchQualifiedName(
+        "propstat",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
+        final status =
+            child.children
+                .whereType<XmlElement>()
+                .firstWhere(
+                  (element) => element.matchQualifiedName(
+                    "status",
+                    prefix: "DAV:",
+                    namespaces: namespaces,
+                  ),
+                )
+                .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
         final prop = child.children.whereType<XmlElement>().firstWhere(
-            (element) => element.matchQualifiedName("prop",
-                prefix: "DAV:", namespaces: namespaces));
+          (element) => element.matchQualifiedName(
+            "prop",
+            prefix: "DAV:",
+            namespaces: namespaces,
+          ),
+        );
         final propParser = _PropParser(namespaces: namespaces);
         propParser.parse(prop);
         contentLength = propParser.contentLength;
@@ -68,9 +84,10 @@ class RecognizeFaceItemParser extends XmlResponseParser {
       etag: etag,
       lastModified: lastModified,
       faceDetections: faceDetections,
-      fileMetadataSize: fileMetadataSize is Map
-          ? fileMetadataSize.cast<String, dynamic>()
-          : null,
+      fileMetadataSize:
+          fileMetadataSize is Map
+              ? fileMetadataSize.cast<String, dynamic>()
+              : null,
       hasPreview: hasPreview,
       realPath: realPath,
       favorite: favorite,
@@ -80,45 +97,74 @@ class RecognizeFaceItemParser extends XmlResponseParser {
 }
 
 class _PropParser {
-  _PropParser({
-    this.namespaces = const {},
-  });
+  _PropParser({this.namespaces = const {}});
 
   /// Parse <DAV:prop> element contents
   void parse(XmlElement element) {
     for (final child in element.children.whereType<XmlElement>()) {
-      if (child.matchQualifiedName("getcontentlength",
-          prefix: "DAV:", namespaces: namespaces)) {
+      if (child.matchQualifiedName(
+        "getcontentlength",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _contentLength = int.parse(child.innerText);
-      } else if (child.matchQualifiedName("getcontenttype",
-          prefix: "DAV:", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "getcontenttype",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _contentType = child.innerText;
-      } else if (child.matchQualifiedName("getetag",
-          prefix: "DAV:", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "getetag",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _etag = child.innerText.replaceAll("\"", "");
-      } else if (child.matchQualifiedName("getlastmodified",
-          prefix: "DAV:", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "getlastmodified",
+        prefix: "DAV:",
+        namespaces: namespaces,
+      )) {
         _lastModified = HttpDate.parse(child.innerText);
-      } else if (child.matchQualifiedName("face-detections",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
-        _faceDetections = child.innerText.isEmpty
-            ? null
-            : (jsonDecode(child.innerText) as List).cast<JsonObj>();
-      } else if (child.matchQualifiedName("file-metadata-size",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "face-detections",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
+        _faceDetections =
+            child.innerText.isEmpty
+                ? null
+                : (jsonDecode(child.innerText) as List).cast<JsonObj>();
+      } else if (child.matchQualifiedName(
+        "file-metadata-size",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _fileMetadataSize =
             child.innerText.isEmpty ? null : jsonDecode(child.innerText);
-      } else if (child.matchQualifiedName("has-preview",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "has-preview",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _hasPreview = child.innerText == "true";
-      } else if (child.matchQualifiedName("realpath",
-          prefix: "http://nextcloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "realpath",
+        prefix: "http://nextcloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _realPath = child.innerText;
-      } else if (child.matchQualifiedName("favorite",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "favorite",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _favorite = child.innerText != "0";
-      } else if (child.matchQualifiedName("fileid",
-          prefix: "http://owncloud.org/ns", namespaces: namespaces)) {
+      } else if (child.matchQualifiedName(
+        "fileid",
+        prefix: "http://owncloud.org/ns",
+        namespaces: namespaces,
+      )) {
         _fileId = int.parse(child.innerText);
       }
     }

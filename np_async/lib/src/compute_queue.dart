@@ -6,8 +6,11 @@ typedef ComputeQueueCallback<U> = void Function(U result);
 
 /// Compute the jobs in the queue one by one sequentially in isolate
 class ComputeQueue<T, U> {
-  void addJob(T event, ComputeCallback<T, U> callback,
-      ComputeQueueCallback<U> onResult) {
+  void addJob(
+    T event,
+    ComputeCallback<T, U> callback,
+    ComputeQueueCallback<U> onResult,
+  ) {
     _queue.addLast(_Job(event, callback, onResult));
     if (_queue.length == 1) {
       _startProcessing();

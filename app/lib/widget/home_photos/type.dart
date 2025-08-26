@@ -12,12 +12,10 @@ abstract class _Item implements SelectableItemMetadata {
 }
 
 abstract class _FileItem extends _Item {
-  const _FileItem({
-    required this.file,
-  });
+  const _FileItem({required this.file});
 
   @override
-  String get id => "file-${file.fdId}";
+  String get id => "file-${file.id}";
 
   @override
   bool get isSelectable => true;
@@ -25,19 +23,24 @@ abstract class _FileItem extends _Item {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is _FileItem && file.compareServerIdentity(other.file));
+      (other is _FileItem && file.compareIdentity(other.file));
 
   @override
   int get hashCode => file.identityHashCode;
 
-  final FileDescriptor file;
+  final AnyFile file;
 }
 
-class _PhotoItem extends _FileItem {
-  _PhotoItem({
-    required super.file,
-    required this.account,
-  }) : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
+abstract class _NextcloudFileItem extends _FileItem {
+  _NextcloudFileItem({required this.remoteFile})
+    : super(file: remoteFile.toAnyFile());
+
+  final FileDescriptor remoteFile;
+}
+
+class _NextcloudPhotoItem extends _NextcloudFileItem {
+  _NextcloudPhotoItem({required super.remoteFile, required this.account})
+    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, remoteFile);
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
@@ -47,9 +50,9 @@ class _PhotoItem extends _FileItem {
     return PhotoListImage(
       account: account,
       previewUrl: _previewUrl,
-      mime: file.fdMime,
-      isFavorite: file.fdIsFavorite,
-      heroKey: flutter_util.getImageHeroTag(file),
+      mime: file.mime,
+      isFavorite: remoteFile.fdIsFavorite,
+      heroKey: flutter_util.HeroTag.fromAnyFile(file),
     );
   }
 
@@ -57,11 +60,9 @@ class _PhotoItem extends _FileItem {
   final String _previewUrl;
 }
 
-class _VideoItem extends _FileItem {
-  _VideoItem({
-    required super.file,
-    required this.account,
-  }) : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
+class _NextcloudVideoItem extends _NextcloudFileItem {
+  _NextcloudVideoItem({required super.remoteFile, required this.account})
+    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, remoteFile);
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
@@ -71,8 +72,8 @@ class _VideoItem extends _FileItem {
     return PhotoListVideo(
       account: account,
       previewUrl: _previewUrl,
-      mime: file.fdMime,
-      isFavorite: file.fdIsFavorite,
+      mime: file.mime,
+      isFavorite: remoteFile.fdIsFavorite,
       onError: () {
         context.addEvent(const _TripMissingVideoPreview());
       },
@@ -84,10 +85,7 @@ class _VideoItem extends _FileItem {
 }
 
 class _DateItem extends _Item {
-  const _DateItem({
-    required this.date,
-    required this.isMonthOnly,
-  });
+  const _DateItem({required this.date, required this.isMonthOnly});
 
   @override
   String get id => "date-$date";
@@ -102,10 +100,7 @@ class _DateItem extends _Item {
   Widget buildWidget(BuildContext context) {
     return SizedBox(
       height: AppDimension.of(context).timelineDateItemHeight,
-      child: PhotoListDate(
-        date: date,
-        isMonthOnly: isMonthOnly,
-      ),
+      child: PhotoListDate(date: date, isMonthOnly: isMonthOnly),
     );
   }
 
@@ -113,11 +108,44 @@ class _DateItem extends _Item {
   final bool isMonthOnly;
 }
 
+abstract class _LocalFileItem extends _FileItem {
+  _LocalFileItem({required this.localFile})
+    : super(file: localFile.toAnyFile());
+
+  final LocalFile localFile;
+}
+
+class _LocalPhotoItem extends _LocalFileItem {
+  _LocalPhotoItem({required super.localFile});
+
+  @override
+  StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return PhotoListLocalImage(file: localFile);
+  }
+}
+
+class _LocalVideoItem extends _LocalFileItem {
+  _LocalVideoItem({required super.localFile});
+
+  @override
+  StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
+
+  @override
+  Widget buildWidget(BuildContext context) {
+    return PhotoListLocalVideo(file: localFile);
+  }
+}
+
 class _ItemTransformerArgument {
   const _ItemTransformerArgument({
     required this.account,
     required this.files,
-    this.summary,
+    required this.summary,
+    required this.localFiles,
+    required this.localSummary,
     this.itemPerRow,
     this.itemSize,
     required this.isGroupByDay,
@@ -125,17 +153,16 @@ class _ItemTransformerArgument {
 
   final Account account;
   final List<FileDescriptor> files;
-  final DbFilesSummary? summary;
+  final DbFilesSummary summary;
+  final List<LocalFile> localFiles;
+  final LocalFilesSummary localSummary;
   final int? itemPerRow;
   final double? itemSize;
   final bool isGroupByDay;
 }
 
 class _ItemTransformerResult {
-  const _ItemTransformerResult({
-    required this.items,
-    required this.dates,
-  });
+  const _ItemTransformerResult({required this.items, required this.dates});
 
   final List<List<_Item>> items;
   final Set<Date> dates;
@@ -161,11 +188,7 @@ class _VisibleDate implements Comparable<_VisibleDate> {
   final Date date;
 }
 
-enum _SelectionMenuOption {
-  archive,
-  delete,
-  download,
-}
+enum _SelectionMenuOption { archive, delete, download }
 
 @toString
 class _ArchiveFailedError implements Exception {
@@ -188,10 +211,7 @@ class _RemoveFailedError implements Exception {
 }
 
 class _SummaryFileItem extends _Item {
-  const _SummaryFileItem({
-    required this.date,
-    required this.index,
-  });
+  const _SummaryFileItem({required this.date, required this.index});
 
   @override
   String get id => "summary-file-$date-$index";
@@ -218,4 +238,26 @@ class _SummaryFileItem extends _Item {
 
   final Date date;
   final int index;
+}
+
+@toString
+class _ShareRequest {
+  const _ShareRequest({
+    required this.files,
+    required this.isRemoteShareOnly,
+    required this.isLocalShareOnly,
+  });
+
+  @override
+  String toString() => _$toString();
+
+  final List<AnyFile> files;
+  final bool isRemoteShareOnly;
+  final bool isLocalShareOnly;
+}
+
+class _UploadRequest {
+  const _UploadRequest({required this.files});
+
+  final List<AnyFile> files;
 }

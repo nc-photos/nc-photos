@@ -22,14 +22,15 @@ void main() {
 
 Future<void> _new() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder(initialFileId: 100)
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg", isFavorite: true)
-        ..addJpeg("admin/test2.jpg", isFavorite: true)
-        ..addJpeg("admin/test3.jpg")
-        ..addJpeg("admin/test4.jpg")
-        ..addJpeg("admin/test5.jpg"))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 100)
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg", isFavorite: true)
+            ..addJpeg("admin/test2.jpg", isFavorite: true)
+            ..addJpeg("admin/test3.jpg")
+            ..addJpeg("admin/test4.jpg")
+            ..addJpeg("admin/test5.jpg"))
+          .build();
   final c = DiContainer(
     favoriteRepo: MockFavoriteMemoryRepo([
       const Favorite(fileId: 101),
@@ -46,22 +47,20 @@ Future<void> _new() async {
   });
 
   await SyncFavorite(c)(account);
-  expect(
-    await _listSqliteDbFavoriteFileIds(c.sqliteDb),
-    {101, 102, 103, 104},
-  );
+  expect(await _listSqliteDbFavoriteFileIds(c.sqliteDb), {101, 102, 103, 104});
 }
 
 Future<void> _remove() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder(initialFileId: 100)
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg", isFavorite: true)
-        ..addJpeg("admin/test2.jpg", isFavorite: true)
-        ..addJpeg("admin/test3.jpg", isFavorite: true)
-        ..addJpeg("admin/test4.jpg", isFavorite: true)
-        ..addJpeg("admin/test5.jpg"))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 100)
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg", isFavorite: true)
+            ..addJpeg("admin/test2.jpg", isFavorite: true)
+            ..addJpeg("admin/test3.jpg", isFavorite: true)
+            ..addJpeg("admin/test4.jpg", isFavorite: true)
+            ..addJpeg("admin/test5.jpg"))
+          .build();
   final c = DiContainer(
     favoriteRepo: MockFavoriteMemoryRepo([
       const Favorite(fileId: 103),
@@ -76,18 +75,18 @@ Future<void> _remove() async {
   });
 
   await SyncFavorite(c)(account);
-  expect(
-    await _listSqliteDbFavoriteFileIds(c.sqliteDb),
-    {103, 104},
-  );
+  expect(await _listSqliteDbFavoriteFileIds(c.sqliteDb), {103, 104});
 }
 
 Future<Set<int>> _listSqliteDbFavoriteFileIds(compat.SqliteDb db) async {
-  final query = db.selectOnly(db.files).join([
-    sql.innerJoin(
-        db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId)),
-  ])
-    ..addColumns([db.files.fileId])
-    ..where(db.accountFiles.isFavorite.equals(true));
+  final query =
+      db.selectOnly(db.files).join([
+          sql.innerJoin(
+            db.accountFiles,
+            db.accountFiles.file.equalsExp(db.files.rowId),
+          ),
+        ])
+        ..addColumns([db.files.fileId])
+        ..where(db.accountFiles.isFavorite.equals(true));
   return (await query.map((r) => r.read(db.files.fileId)!).get()).toSet();
 }

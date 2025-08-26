@@ -3,9 +3,7 @@ import 'package:nc_photos/exception.dart';
 import 'package:rxdart/rxdart.dart';
 
 class BatteryEnsurer {
-  BatteryEnsurer({
-    this.interrupter,
-  }) {
+  BatteryEnsurer({this.interrupter}) {
     interrupter?.listen((event) {
       _shouldRun = false;
     });

@@ -25,7 +25,7 @@ import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/toast.dart';
 import 'package:nc_photos/url_launcher_util.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/settings.dart';
 import 'package:nc_photos/widget/settings/account_settings.dart';
 import 'package:nc_photos/widget/sign_in.dart';
@@ -46,11 +46,12 @@ class AccountPickerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        accountController: context.read(),
-        prefController: context.read(),
-        db: context.read(),
-      ),
+      create:
+          (context) => _Bloc(
+            accountController: context.read(),
+            prefController: context.read(),
+            db: context.read(),
+          ),
       child: const _WrappedAccountPickerDialog(),
     );
   }
@@ -64,8 +65,9 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.newSelectAccount != current.newSelectAccount,
+          listenWhen:
+              (previous, current) =>
+                  previous.newSelectAccount != current.newSelectAccount,
           listener: (context, state) {
             if (state.newSelectAccount != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
@@ -113,18 +115,19 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                           ),
                         ),
                         ValueStreamBuilder<bool>(
-                          stream: context
-                              .read<PrefController>()
-                              .isFollowSystemTheme,
+                          stream:
+                              context
+                                  .read<PrefController>()
+                                  .isFollowSystemTheme,
                           builder: (_, isFollowSystemTheme) {
                             if (!isFollowSystemTheme.requireData) {
                               return Align(
                                 alignment: AlignmentDirectional.centerEnd,
                                 child: _DarkModeSwitch(
                                   onChanged: (value) {
-                                    context
-                                        .read<_Bloc>()
-                                        .add(_SetDarkTheme(value));
+                                    context.read<_Bloc>().add(
+                                      _SetDarkTheme(value),
+                                    );
                                   },
                                 ),
                               );
@@ -143,10 +146,11 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                         child: Material(
                           type: MaterialType.transparency,
                           child: _BlocBuilder(
-                            buildWhen: (previous, current) =>
-                                previous.isOpenDropdown !=
-                                    current.isOpenDropdown ||
-                                previous.accounts != current.accounts,
+                            buildWhen:
+                                (previous, current) =>
+                                    previous.isOpenDropdown !=
+                                        current.isOpenDropdown ||
+                                    previous.accounts != current.accounts,
                             builder: (context, state) {
                               final bloc = context.read<_Bloc>();
                               return Column(
@@ -155,8 +159,9 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                                   const _AccountDropdown(),
                                   if (state.isOpenDropdown) ...[
                                     ...state.accounts
-                                        .where((a) =>
-                                            a.id != bloc.activeAccount.id)
+                                        .where(
+                                          (a) => a.id != bloc.activeAccount.id,
+                                        )
                                         .map((a) => _AccountView(account: a)),
                                     const _NewAccountView(),
                                   ] else
@@ -209,9 +214,7 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
 }
 
 class _DarkModeSwitch extends StatelessWidget {
-  const _DarkModeSwitch({
-    this.onChanged,
-  });
+  const _DarkModeSwitch({this.onChanged});
 
   @override
   Widget build(BuildContext context) {
@@ -219,10 +222,12 @@ class _DarkModeSwitch extends StatelessWidget {
       child: Switch(
         value: Theme.of(context).brightness == Brightness.dark,
         onChanged: onChanged,
-        activeThumbImage:
-            const AssetImage("assets/ic_dark_mode_switch_24dp.png"),
-        inactiveThumbImage:
-            const AssetImage("assets/ic_dark_mode_switch_24dp.png"),
+        activeThumbImage: const AssetImage(
+          "assets/ic_dark_mode_switch_24dp.png",
+        ),
+        inactiveThumbImage: const AssetImage(
+          "assets/ic_dark_mode_switch_24dp.png",
+        ),
       ),
     );
   }
@@ -246,9 +251,10 @@ class _AccountDropdown extends StatelessWidget {
               ignoring: true,
               child: IconButton(
                 onPressed: () {},
-                color: state.isOpenDropdown
-                    ? Theme.of(context).colorScheme.primary
-                    : null,
+                color:
+                    state.isOpenDropdown
+                        ? Theme.of(context).colorScheme.primary
+                        : null,
                 icon: const Icon(Icons.keyboard_arrow_down_outlined),
               ),
             ),
@@ -263,11 +269,7 @@ class _AccountDropdown extends StatelessWidget {
 }
 
 class _AccountTile extends StatelessWidget {
-  const _AccountTile({
-    required this.account,
-    this.trailing,
-    this.onTap,
-  });
+  const _AccountTile({required this.account, this.trailing, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -278,23 +280,20 @@ class _AccountTile extends StatelessWidget {
         dimension: 40,
         child: Center(child: _AccountIcon(account)),
       ),
-      title: accountLabel != null
-          ? SizedBox(
-              height: 64,
-              child: Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Text(
-                  accountLabel,
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
+      title:
+          accountLabel != null
+              ? SizedBox(
+                height: 64,
+                child: Align(
+                  alignment: AlignmentDirectional.centerStart,
+                  child: Text(
+                    accountLabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.clip,
+                  ),
                 ),
-              ),
-            )
-          : Text(
-              account.address,
-              maxLines: 1,
-              overflow: TextOverflow.clip,
-            ),
+              )
+              : Text(account.address, maxLines: 1, overflow: TextOverflow.clip),
       subtitle: accountLabel == null ? Text(account.username2) : null,
       trailing: trailing,
       onTap: onTap,
@@ -336,20 +335,14 @@ class _IconTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final content = ListTile(
       dense: true,
-      leading: SizedBox.square(
-        dimension: 40,
-        child: Center(child: icon),
-      ),
+      leading: SizedBox.square(dimension: 40, child: Center(child: icon)),
       title: title,
       onTap: onTap,
     );
     if (isCircularSplash) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(24),
-        child: Material(
-          type: MaterialType.transparency,
-          child: content,
-        ),
+        child: Material(type: MaterialType.transparency, child: content),
       );
     } else {
       return content;
@@ -363,9 +356,7 @@ class _IconTile extends StatelessWidget {
 }
 
 class _AccountView extends StatelessWidget {
-  const _AccountView({
-    required this.account,
-  });
+  const _AccountView({required this.account});
 
   @override
   Widget build(BuildContext context) {
@@ -378,9 +369,10 @@ class _AccountView extends StatelessWidget {
         onPressed: () async {
           final result = await showDialog<bool>(
             context: context,
-            builder: (_) => _DeleteAccountConfirmDialog(
-              accountLabel: accountLabel ?? account.address,
-            ),
+            builder:
+                (_) => _DeleteAccountConfirmDialog(
+                  accountLabel: accountLabel ?? account.address,
+                ),
           );
           if (!context.mounted || result != true) {
             return;
@@ -438,12 +430,13 @@ class _AboutChin extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<ServerStatus?>(
       stream: context.read<_Bloc>().accountController.serverController.status,
-      initialData: context
-          .read<_Bloc>()
-          .accountController
-          .serverController
-          .status
-          .valueOrNull,
+      initialData:
+          context
+              .read<_Bloc>()
+              .accountController
+              .serverController
+              .status
+              .valueOrNull,
       builder: (context, snapshot) {
         var text = "${L10n.global().appTitle} ${k.versionStr}";
         if (snapshot.hasData) {
@@ -453,10 +446,7 @@ class _AboutChin extends StatelessWidget {
         }
         return Padding(
           padding: const EdgeInsets.symmetric(vertical: 8),
-          child: Text(
-            text,
-            style: Theme.of(context).textTheme.bodySmall,
-          ),
+          child: Text(text, style: Theme.of(context).textTheme.bodySmall),
         );
       },
     );
@@ -497,9 +487,7 @@ class _AboutChin extends StatelessWidget {
 }
 
 class _DeleteAccountConfirmDialog extends StatelessWidget {
-  const _DeleteAccountConfirmDialog({
-    required this.accountLabel,
-  });
+  const _DeleteAccountConfirmDialog({required this.accountLabel});
 
   @override
   Widget build(BuildContext context) {

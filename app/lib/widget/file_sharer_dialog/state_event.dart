@@ -34,10 +34,7 @@ class _State {
 @genCopyWith
 @toString
 class _PreviewState {
-  const _PreviewState({
-    required this.index,
-    required this.count,
-  });
+  const _PreviewState({required this.index, required this.count});
 
   @override
   String toString() => _$toString();
@@ -57,16 +54,13 @@ class _FileState {
     required this.shouldRun,
   });
 
-  factory _FileState.init({
-    required int count,
-  }) =>
-      _FileState(
-        index: 0,
-        progress: null,
-        count: count,
-        download: null,
-        shouldRun: true,
-      );
+  factory _FileState.init({required int count}) => _FileState(
+    index: 0,
+    progress: null,
+    count: count,
+    download: null,
+    shouldRun: true,
+  );
 
   @override
   String toString() => _$toString();
@@ -89,9 +83,7 @@ class _PublicLinkState {
 @genCopyWith
 @toString
 class _PasswordLinkState {
-  const _PasswordLinkState({
-    this.password,
-  });
+  const _PasswordLinkState({this.password});
 
   @override
   String toString() => _$toString();
@@ -136,9 +128,7 @@ class _CancelFileDownload implements _Event {
 /// Set the details needed to share files as public link
 @toString
 class _SetPublicLinkDetails implements _Event {
-  const _SetPublicLinkDetails({
-    this.albumName,
-  });
+  const _SetPublicLinkDetails({this.albumName});
 
   @override
   String toString() => _$toString();
@@ -149,10 +139,7 @@ class _SetPublicLinkDetails implements _Event {
 /// Set the details needed to share files as password protected link
 @toString
 class _SetPasswordLinkDetails implements _Event {
-  const _SetPasswordLinkDetails({
-    this.albumName,
-    required this.password,
-  });
+  const _SetPasswordLinkDetails({this.albumName, required this.password});
 
   @override
   String toString() => _$toString();

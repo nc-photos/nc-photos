@@ -18,15 +18,13 @@ typedef NpDbComputeCallback<T, U> = Future<U> Function(NpDb db, T message);
 /// A data structure that identify a File in db
 @ToString(ignoreNull: true)
 class DbFileKey {
-  const DbFileKey({
-    this.fileId,
-    this.relativePath,
-  }) : assert(fileId != null || relativePath != null);
+  const DbFileKey({this.fileId, this.relativePath})
+    : assert(fileId != null || relativePath != null);
 
   const DbFileKey.byId(int fileId) : this(fileId: fileId);
 
   const DbFileKey.byPath(String relativePath)
-      : this(relativePath: relativePath);
+    : this(relativePath: relativePath);
 
   @override
   String toString() => _$toString();
@@ -62,16 +60,12 @@ class DbSyncIdResult {
   });
 
   factory DbSyncIdResult.fromJson(JsonObj json) => DbSyncIdResult(
-        insert: (json["insert"] as List).cast<int>(),
-        delete: (json["delete"] as List).cast<int>(),
-        update: (json["update"] as List).cast<int>(),
-      );
+    insert: (json["insert"] as List).cast<int>(),
+    delete: (json["delete"] as List).cast<int>(),
+    update: (json["update"] as List).cast<int>(),
+  );
 
-  JsonObj toJson() => {
-        "insert": insert,
-        "delete": delete,
-        "update": update,
-      };
+  JsonObj toJson() => {"insert": insert, "delete": delete, "update": update};
 
   bool get isEmpty => insert.isEmpty && delete.isEmpty && update.isEmpty;
   bool get isNotEmpty => !isEmpty;
@@ -101,14 +95,14 @@ class DbLocationGroup with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        place,
-        countryCode,
-        count,
-        latestFileId,
-        latestDateTime,
-        latestFileMime,
-        latestFileRelativePath,
-      ];
+    place,
+    countryCode,
+    count,
+    latestFileId,
+    latestDateTime,
+    latestFileMime,
+    latestFileRelativePath,
+  ];
 
   final String place;
   final String countryCode;
@@ -151,13 +145,7 @@ class DbImageLatLng with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        lat,
-        lng,
-        fileId,
-        fileRelativePath,
-        mime,
-      ];
+  List<Object?> get props => [lat, lng, fileId, fileRelativePath, mime];
 
   final double lat;
   final double lng;
@@ -169,17 +157,13 @@ class DbImageLatLng with EquatableMixin {
 @genCopyWith
 @toString
 class DbFilesSummaryItem with EquatableMixin {
-  const DbFilesSummaryItem({
-    required this.count,
-  });
+  const DbFilesSummaryItem({required this.count});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        count,
-      ];
+  List<Object?> get props => [count];
 
   final int count;
 }
@@ -187,9 +171,7 @@ class DbFilesSummaryItem with EquatableMixin {
 @genCopyWith
 @toString
 class DbFilesSummary {
-  const DbFilesSummary({
-    required this.items,
-  });
+  const DbFilesSummary({required this.items});
 
   @override
   String toString() => _$toString();
@@ -202,9 +184,7 @@ class DbFilesSummary {
 @genCopyWith
 @toString
 class DbFilesMemory {
-  const DbFilesMemory({
-    required this.memories,
-  });
+  const DbFilesMemory({required this.memories});
 
   @override
   String toString() => _$toString();
@@ -216,9 +196,7 @@ class DbFilesMemory {
 @genCopyWith
 @toString
 class DbFileMissingMetadataResult {
-  const DbFileMissingMetadataResult({
-    required this.items,
-  });
+  const DbFileMissingMetadataResult({required this.items});
 
   @override
   String toString() => _$toString();
@@ -235,18 +213,14 @@ abstract class NpDb {
   /// If running on android, you must pass the current SDK int to [androidSdk].
   /// If running on other platforms, this value will be ignored, you can pass
   /// null in such case
-  Future<void> initMainIsolate({
-    required int? androidSdk,
-  });
+  Future<void> initMainIsolate({required int? androidSdk});
 
   /// Initialize the db for a background isolate
   ///
   /// If running on android, you must pass the current SDK int to [androidSdk].
   /// If running on other platforms, this value will be ignored, you can pass
   /// null in such case
-  Future<void> initBackgroundIsolate({
-    required int? androidSdk,
-  });
+  Future<void> initBackgroundIsolate({required int? androidSdk});
 
   /// Dispose the db
   ///
@@ -359,10 +333,7 @@ abstract class NpDb {
   });
 
   /// Replace a file in db
-  Future<void> syncFile({
-    required DbAccount account,
-    required DbFile file,
-  });
+  Future<void> syncFile({required DbAccount account, required DbFile file});
 
   /// Add or replace nc albums in db
   ///
@@ -461,7 +432,7 @@ abstract class NpDb {
     List<String>? mimes,
   });
 
-  Future<List<int>> getFileIds({
+  Future<List<({int fileId, int timestamp})>> getFileIdWithTimestamps({
     required DbAccount account,
     List<String>? includeRelativeRoots,
     List<String>? includeRelativeDirs,
@@ -492,9 +463,7 @@ abstract class NpDb {
     List<String>? mimes,
   });
 
-  Future<List<DbNcAlbum>> getNcAlbums({
-    required DbAccount account,
-  });
+  Future<List<DbNcAlbum>> getNcAlbums({required DbAccount account});
 
   Future<void> addNcAlbum({
     required DbAccount account,
@@ -525,9 +494,7 @@ abstract class NpDb {
   });
 
   /// Return all faces provided by the Recognize app
-  Future<List<DbRecognizeFace>> getRecognizeFaces({
-    required DbAccount account,
-  });
+  Future<List<DbRecognizeFace>> getRecognizeFaces({required DbAccount account});
 
   Future<List<DbRecognizeFaceItem>> getRecognizeFaceItemsByFaceLabel({
     required DbAccount account,
@@ -535,14 +502,14 @@ abstract class NpDb {
   });
 
   Future<Map<String, List<DbRecognizeFaceItem>>>
-      getRecognizeFaceItemsByFaceLabels({
+  getRecognizeFaceItemsByFaceLabels({
     required DbAccount account,
     required List<String> labels,
     ErrorWithValueHandler<String>? onError,
   });
 
   Future<Map<String, DbRecognizeFaceItem>>
-      getLatestRecognizeFaceItemsByFaceLabels({
+  getLatestRecognizeFaceItemsByFaceLabels({
     required DbAccount account,
     required List<String> labels,
     ErrorWithValueHandler<String>? onError,
@@ -557,9 +524,7 @@ abstract class NpDb {
   });
 
   /// Return all tags
-  Future<List<DbTag>> getTags({
-    required DbAccount account,
-  });
+  Future<List<DbTag>> getTags({required DbAccount account});
 
   /// Return the tag matching [displayName]
   Future<DbTag?> getTagByDisplayName({

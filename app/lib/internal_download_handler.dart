@@ -28,30 +28,35 @@ class InternalDownloadHandler {
   const InternalDownloadHandler(this.account);
 
   Future<Map<File, dynamic>> downloadPreviews(
-      BuildContext context, List<File> files) async {
+    BuildContext context,
+    List<File> files,
+  ) async {
     if (files.isEmpty) {
       return {};
     }
-    final controller =
-        BehaviorSubject.seeded(const _DownloadProgress(current: 0));
+    final controller = BehaviorSubject.seeded(
+      const _DownloadProgress(current: 0),
+    );
     bool shouldRun = true;
     Download? download;
     unawaited(
       showDialog(
         context: context,
-        builder: (context) => ValueStreamBuilder<_DownloadProgress>(
-          stream: controller.stream,
-          builder: (_, snapshot) => DownloadProgressDialog(
-            max: files.length,
-            current: snapshot.requireData.current,
-            progress: snapshot.requireData.progress,
-            label: files[snapshot.requireData.current].filename,
-            onCancel: () {
-              download?.cancel();
-              shouldRun = false;
-            },
-          ),
-        ),
+        builder:
+            (context) => ValueStreamBuilder<_DownloadProgress>(
+              stream: controller.stream,
+              builder:
+                  (_, snapshot) => DownloadProgressDialog(
+                    max: files.length,
+                    current: snapshot.requireData.current,
+                    progress: snapshot.requireData.progress,
+                    label: files[snapshot.requireData.current].filename,
+                    onCancel: () {
+                      download?.cancel();
+                      shouldRun = false;
+                    },
+                  ),
+            ),
       ),
     );
     try {
@@ -69,8 +74,9 @@ class InternalDownloadHandler {
               f,
               shouldNotify: false,
               onProgress: (progress) {
-                controller
-                    .add(_DownloadProgress(current: i, progress: progress));
+                controller.add(
+                  _DownloadProgress(current: i, progress: progress),
+                );
               },
             );
             result = await download();
@@ -81,7 +87,10 @@ class InternalDownloadHandler {
           results.add(MapEntry(f, result));
         } catch (e, stacktrace) {
           _log.shout(
-              "[downloadPreviews] Failed while DownloadPreview", e, stacktrace);
+            "[downloadPreviews] Failed while DownloadPreview",
+            e,
+            stacktrace,
+          );
           SnackBarManager().showSnackBarForException(e);
         }
       }
@@ -93,30 +102,35 @@ class InternalDownloadHandler {
   }
 
   Future<Map<File, dynamic>> downloadFiles(
-      BuildContext context, List<File> files) async {
+    BuildContext context,
+    List<File> files,
+  ) async {
     if (files.isEmpty) {
       return {};
     }
-    final controller =
-        BehaviorSubject.seeded(const _DownloadProgress(current: 0));
+    final controller = BehaviorSubject.seeded(
+      const _DownloadProgress(current: 0),
+    );
     bool shouldRun = true;
     Download? download;
     unawaited(
       showDialog(
         context: context,
-        builder: (context) => ValueStreamBuilder<_DownloadProgress>(
-          stream: controller.stream,
-          builder: (_, snapshot) => DownloadProgressDialog(
-            max: files.length,
-            current: snapshot.requireData.current,
-            progress: snapshot.requireData.progress,
-            label: files[snapshot.requireData.current].filename,
-            onCancel: () {
-              download?.cancel();
-              shouldRun = false;
-            },
-          ),
-        ),
+        builder:
+            (context) => ValueStreamBuilder<_DownloadProgress>(
+              stream: controller.stream,
+              builder:
+                  (_, snapshot) => DownloadProgressDialog(
+                    max: files.length,
+                    current: snapshot.requireData.current,
+                    progress: snapshot.requireData.progress,
+                    label: files[snapshot.requireData.current].filename,
+                    onCancel: () {
+                      download?.cancel();
+                      shouldRun = false;
+                    },
+                  ),
+            ),
       ),
     );
     try {
@@ -139,17 +153,22 @@ class InternalDownloadHandler {
           results.add(MapEntry(f, result));
         } on PermissionException catch (_) {
           _log.warning("[downloadFiles] Permission not granted");
-          SnackBarManager().showSnackBar(SnackBar(
-            content: Text(L10n.global().errorNoStoragePermission),
-            duration: k.snackBarDurationNormal,
-          ));
+          SnackBarManager().showSnackBar(
+            SnackBar(
+              content: Text(L10n.global().errorNoStoragePermission),
+              duration: k.snackBarDurationNormal,
+            ),
+          );
           rethrow;
         } on JobCanceledException catch (_) {
           _log.info("[downloadFiles] Job canceled");
           return {};
         } catch (e, stacktrace) {
           _log.shout(
-              "[downloadFiles] Failed while downloadFile", e, stacktrace);
+            "[downloadFiles] Failed while downloadFile",
+            e,
+            stacktrace,
+          );
           SnackBarManager().showSnackBarForException(e);
         }
       }
@@ -164,10 +183,7 @@ class InternalDownloadHandler {
 }
 
 class _DownloadProgress {
-  const _DownloadProgress({
-    required this.current,
-    this.progress,
-  });
+  const _DownloadProgress({required this.current, this.progress});
 
   final int current;
   final double? progress;

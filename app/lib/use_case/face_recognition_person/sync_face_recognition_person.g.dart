@@ -11,5 +11,6 @@ extension _$SyncFaceRecognitionPersonNpLog on SyncFaceRecognitionPerson {
   Logger get _log => log;
 
   static final log = Logger(
-      "use_case.face_recognition_person.sync_face_recognition_person.SyncFaceRecognitionPerson");
+    "use_case.face_recognition_person.sync_face_recognition_person.SyncFaceRecognitionPerson",
+  );
 }

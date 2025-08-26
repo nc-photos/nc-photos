@@ -7,10 +7,12 @@ class _Bloc extends Bloc<_Event, _State>
     required this.account,
     required this.controller,
     required this.prefController,
-  }) : super(_State.init(
-          sort: prefController.homeAlbumsSortValue,
-          navBarButtons: prefController.homeCollectionsNavBarButtonsValue,
-        )) {
+  }) : super(
+         _State.init(
+           sort: prefController.homeAlbumsSortValue,
+           navBarButtons: prefController.homeCollectionsNavBarButtonsValue,
+         ),
+       ) {
     on<_LoadCollections>(_onLoad);
     on<_ReloadCollections>(_onReload);
     on<_TransformItems>(_onTransformItems);
@@ -26,26 +28,33 @@ class _Bloc extends Bloc<_Event, _State>
 
     on<_SetError>(_onSetError);
 
-    _subscriptions.add(prefController.homeAlbumsSortChange.listen((event) {
-      add(_UpdateCollectionSort(event));
-    }));
-    _subscriptions.add(controller.stream.listen((event) {
-      for (final s in _itemSubscriptions) {
-        s.cancel();
-      }
-      _itemSubscriptions.clear();
-      for (final d in event.data) {
-        _itemSubscriptions.add(d.controller.countStream.listen((event) {
-          if (event != null) {
-            add(_SetItemCount(d.collection, event));
-          }
-        }));
-      }
-    }));
-    _subscriptions
-        .add(prefController.homeCollectionsNavBarButtonsChange.listen((event) {
-      add(_SetNavBarButtons(event));
-    }));
+    _subscriptions.add(
+      prefController.homeAlbumsSortChange.listen((event) {
+        add(_UpdateCollectionSort(event));
+      }),
+    );
+    _subscriptions.add(
+      controller.stream.listen((event) {
+        for (final s in _itemSubscriptions) {
+          s.cancel();
+        }
+        _itemSubscriptions.clear();
+        for (final d in event.data) {
+          _itemSubscriptions.add(
+            d.controller.countStream.listen((event) {
+              if (event != null) {
+                add(_SetItemCount(d.collection, event));
+              }
+            }),
+          );
+        }
+      }),
+    );
+    _subscriptions.add(
+      prefController.homeCollectionsNavBarButtonsChange.listen((event) {
+        add(_SetNavBarButtons(event));
+      }),
+    );
   }
 
   @override
@@ -81,18 +90,16 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         controller.stream,
-        onData: (data) => state.copyWith(
-          collections: data.data.map((d) => d.collection).toList(),
-          isLoading: data.hasNext,
-        ),
+        onData:
+            (data) => state.copyWith(
+              collections: data.data.map((d) => d.collection).toList(),
+              isLoading: data.hasNext,
+            ),
       ),
       forEach(
         emit,
         controller.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isLoading: false, error: data),
       ),
     ]);
   }
@@ -103,7 +110,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _onTransformItems(
-      _TransformItems ev, Emitter<_State> emit) async {
+    _TransformItems ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
     final transformed = _transformCollections(ev.collections, state.sort);
     emit(state.copyWith(transformedItems: transformed));
@@ -125,10 +134,7 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     if (ev.sort != state.sort) {
       final transformed = _transformCollections(state.collections, ev.sort);
-      emit(state.copyWith(
-        transformedItems: transformed,
-        sort: ev.sort,
-      ));
+      emit(state.copyWith(transformedItems: transformed, sort: ev.sort));
     }
   }
 

@@ -24,10 +24,7 @@ part 'entity_converter.g.dart';
 
 class ApiFaceRecognitionFaceConverter {
   static FaceRecognitionFace fromApi(api.FaceRecognitionFace face) {
-    return FaceRecognitionFace(
-      id: face.id,
-      fileId: face.fileId,
-    );
+    return FaceRecognitionFace(id: face.id, fileId: face.fileId);
   }
 }
 
@@ -43,9 +40,7 @@ class ApiFaceRecognitionPersonConverter {
 
 class ApiFavoriteConverter {
   static Favorite fromApi(api.Favorite favorite) {
-    return Favorite(
-      fileId: favorite.fileId,
-    );
+    return Favorite(fileId: favorite.fileId);
   }
 }
 
@@ -60,34 +55,36 @@ class ApiFileConverter {
         size: file.metadataPhotosSize!,
       );
     } else {
-      return file.customProperties?["com.nkming.nc_photos:metadata"]
-          ?.let((obj) => Metadata.fromJson(
-                jsonDecode(obj),
-                upgraderV1: MetadataUpgraderV1(
-                  fileContentType: file.contentType,
-                  logFilePath: file.href,
-                ),
-                upgraderV2: MetadataUpgraderV2(
-                  fileContentType: file.contentType,
-                  logFilePath: file.href,
-                ),
-                upgraderV3: MetadataUpgraderV3(
-                  fileContentType: file.contentType,
-                  logFilePath: file.href,
-                ),
-                upgraderV4: MetadataUpgraderV4(
-                  fileContentType: file.contentType,
-                  logFilePath: file.href,
-                ),
-              ));
+      return file.customProperties?["com.nkming.nc_photos:metadata"]?.let(
+        (obj) => Metadata.fromJson(
+          jsonDecode(obj),
+          upgraderV1: MetadataUpgraderV1(
+            fileContentType: file.contentType,
+            logFilePath: file.href,
+          ),
+          upgraderV2: MetadataUpgraderV2(
+            fileContentType: file.contentType,
+            logFilePath: file.href,
+          ),
+          upgraderV3: MetadataUpgraderV3(
+            fileContentType: file.contentType,
+            logFilePath: file.href,
+          ),
+          upgraderV4: MetadataUpgraderV4(
+            fileContentType: file.contentType,
+            logFilePath: file.href,
+          ),
+        ),
+      );
     }
   }
 
   static File fromApi(api.File file) {
-    final mime = file.contentType == "application/octet-stream" &&
-            file.href.toLowerCase().endsWith(".jxl")
-        ? "image/jxl"
-        : file.contentType;
+    final mime =
+        file.contentType == "application/octet-stream" &&
+                file.href.toLowerCase().endsWith(".jxl")
+            ? "image/jxl"
+            : file.contentType;
     return File(
       path: _hrefToPath(file.href),
       contentLength: file.contentLength,
@@ -109,8 +106,9 @@ class ApiFileConverter {
       overrideDateTime: file
           .customProperties?["com.nkming.nc_photos:override-date-time"]
           ?.run((obj) => DateTime.parse(obj)),
-      location: file.customProperties?["com.nkming.nc_photos:location"]
-          ?.run((obj) => ImageLocation.fromJson(jsonDecode(obj))),
+      location: file.customProperties?["com.nkming.nc_photos:location"]?.run(
+        (obj) => ImageLocation.fromJson(jsonDecode(obj)),
+      ),
     );
   }
 }
@@ -122,17 +120,22 @@ class ApiNcAlbumConverter {
       lastPhoto: (album.lastPhoto ?? -1) < 0 ? null : album.lastPhoto,
       nbItems: album.nbItems ?? 0,
       location: album.location,
-      dateStart: (album.dateRange?["start"] as int?)
-          ?.run((d) => DateTime.fromMillisecondsSinceEpoch(d * 1000)),
-      dateEnd: (album.dateRange?["end"] as int?)
-          ?.run((d) => DateTime.fromMillisecondsSinceEpoch(d * 1000)),
-      collaborators: album.collaborators
-          .map((c) => NcAlbumCollaborator(
-                id: c.id.toCi(),
-                label: c.label,
-                type: c.type,
-              ))
-          .toList(),
+      dateStart: (album.dateRange?["start"] as int?)?.run(
+        (d) => DateTime.fromMillisecondsSinceEpoch(d * 1000),
+      ),
+      dateEnd: (album.dateRange?["end"] as int?)?.run(
+        (d) => DateTime.fromMillisecondsSinceEpoch(d * 1000),
+      ),
+      collaborators:
+          album.collaborators
+              .map(
+                (c) => NcAlbumCollaborator(
+                  id: c.id.toCi(),
+                  label: c.label,
+                  type: c.type,
+                ),
+              )
+              .toList(),
     );
   }
 }
@@ -270,9 +273,7 @@ class ApiTagConverter {
 
 class ApiTaggedFileConverter {
   static TaggedFile fromApi(api.TaggedFile taggedFile) {
-    return TaggedFile(
-      fileId: taggedFile.fileId,
-    );
+    return TaggedFile(fileId: taggedFile.fileId);
   }
 }
 

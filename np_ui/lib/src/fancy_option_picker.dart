@@ -21,28 +21,27 @@ class FancyOptionPickerItem {
 
 /// A fancy looking dialog to pick an option
 class FancyOptionPicker extends StatelessWidget {
-  const FancyOptionPicker({
-    super.key,
-    this.title,
-    required this.items,
-  });
+  const FancyOptionPicker({super.key, this.title, required this.items});
 
   @override
   Widget build(BuildContext context) {
     return SimpleDialog(
       title: title,
-      children: items
-          .map((e) => SimpleDialogOption(
-                child: FancyOptionPickerItemView(
-                  label: e.label,
-                  description: e.description,
-                  isSelected: e.isSelected,
-                  onSelect: e.onSelect,
-                  onUnselect: e.onUnselect,
-                  dense: e.dense,
+      children:
+          items
+              .map(
+                (e) => SimpleDialogOption(
+                  child: FancyOptionPickerItemView(
+                    label: e.label,
+                    description: e.description,
+                    isSelected: e.isSelected,
+                    onSelect: e.onSelect,
+                    onUnselect: e.onUnselect,
+                    dense: e.dense,
+                  ),
                 ),
-              ))
-          .toList(),
+              )
+              .toList(),
     );
   }
 
@@ -70,11 +69,10 @@ class FancyOptionPickerItemView extends StatelessWidget {
       ),
       title: Text(
         label,
-        style: isSelected
-            ? TextStyle(
-                color: Theme.of(context).colorScheme.secondary,
-              )
-            : null,
+        style:
+            isSelected
+                ? TextStyle(color: Theme.of(context).colorScheme.secondary)
+                : null,
       ),
       subtitle: description?.let(Text.new),
       onTap: isSelected ? onUnselect : onSelect,

@@ -6,7 +6,9 @@ class _Bloc extends Bloc<_Event, _State>
   _Bloc(
     this._c, {
     required this.account,
+    required this.anyFilesController,
     required this.filesController,
+    required this.localFilesController,
     required this.collectionsController,
     required this.prefController,
     required this.accountPrefController,
@@ -16,18 +18,20 @@ class _Bloc extends Bloc<_Event, _State>
     required this.initialFile,
     required this.initialIndex,
     this.collectionId,
-  })  : contentController = _ViewerContentController(
-          contentProvider: contentProvider,
-          allFilesCount: allFilesCount,
-          initialFile: initialFile,
-          initialIndex: initialIndex,
-        ),
-        super(_State.init(
-          initialFile: initialFile,
-          initialIndex: initialIndex,
-          appBarButtons: prefController.viewerAppBarButtonsValue,
-          bottomAppBarButtons: prefController.viewerBottomAppBarButtonsValue,
-        )) {
+  }) : contentController = _ViewerContentController(
+         contentProvider: contentProvider,
+         allFilesCount: allFilesCount,
+         initialFile: initialFile,
+         initialIndex: initialIndex,
+       ),
+       super(
+         _State.init(
+           initialFile: initialFile,
+           initialIndex: initialIndex,
+           appBarButtons: prefController.viewerAppBarButtonsValue,
+           bottomAppBarButtons: prefController.viewerBottomAppBarButtonsValue,
+         ),
+       ) {
     on<_Init>(_onInit);
     on<_SetIndex>(_onSetIndex);
     on<_JumpToLastSlideshow>(_onJumpToLastSlideshow);
@@ -56,6 +60,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_StartSlideshow>(_onStartSlideshow);
     on<_StartSlideshowResult>(_onStartSlideshowResult);
     on<_SetAs>(_onSetAs);
+    on<_Upload>(_onUpload);
 
     on<_OpenDetailPane>(_onOpenDetailPane);
     on<_CloseDetailPane>(_onCloseDetailPane);
@@ -72,37 +77,49 @@ class _Bloc extends Bloc<_Event, _State>
     on<_SetError>(_onSetError);
 
     if (collectionId != null) {
-      _subscriptions.add(collectionsController.stream.listen((event) {
-        for (final c in event.data) {
-          if (c.collection.id == collectionId) {
-            add(_SetCollection(c.collection, c.controller));
-            _collectionItemsSubscription?.cancel();
-            _collectionItemsSubscription = c.controller.stream.listen((event) {
-              add(_SetCollectionItems(event.items));
-            });
-            return;
+      _subscriptions.add(
+        collectionsController.stream.listen((event) {
+          for (final c in event.data) {
+            if (c.collection.id == collectionId) {
+              add(_SetCollection(c.collection, c.controller));
+              _collectionItemsSubscription?.cancel();
+              _collectionItemsSubscription = c.controller.stream.listen((
+                event,
+              ) {
+                add(_SetCollectionItems(event.items));
+              });
+              return;
+            }
           }
-        }
-        _log.warning("[_Bloc] Collection not found: $collectionId");
-        add(const _SetCollection(null, null));
-        add(const _SetCollectionItems(null));
-        _collectionItemsSubscription?.cancel();
-      }));
+          _log.warning("[_Bloc] Collection not found: $collectionId");
+          add(const _SetCollection(null, null));
+          add(const _SetCollectionItems(null));
+          _collectionItemsSubscription?.cancel();
+        }),
+      );
     }
-    _subscriptions.add(prefController.viewerAppBarButtonsChange.listen((event) {
-      add(_SetAppBarButtons(event));
-    }));
-    _subscriptions
-        .add(prefController.viewerBottomAppBarButtonsChange.listen((event) {
-      add(_SetBottomAppBarButtons(event));
-    }));
-    _subscriptions.add(stream
-        .distinct((a, b) =>
-            identical(a.fileIdFileMap, b.fileIdFileMap) &&
-            identical(a.collectionItems, b.collectionItems))
-        .listen((event) {
-      add(const _MergeFiles());
-    }));
+    _subscriptions.add(
+      prefController.viewerAppBarButtonsChange.listen((event) {
+        add(_SetAppBarButtons(event));
+      }),
+    );
+    _subscriptions.add(
+      prefController.viewerBottomAppBarButtonsChange.listen((event) {
+        add(_SetBottomAppBarButtons(event));
+      }),
+    );
+    _subscriptions.add(
+      stream
+          .distinct(
+            (a, b) =>
+                identical(a.remoteFiles, b.remoteFiles) &&
+                identical(a.localFiles, b.localFiles) &&
+                identical(a.collectionItems, b.collectionItems),
+          )
+          .listen((event) {
+            add(const _MergeFiles());
+          }),
+    );
 
     add(_SetIndex(initialIndex));
   }
@@ -137,38 +154,47 @@ class _Bloc extends Bloc<_Event, _State>
       contentController.getForwardContent(),
       contentController.getBackwardContent(),
     ]);
-    emit(state.copyWith(
-      pageFileIdMap: {
-        ...results[0].map((k, v) => MapEntry(k, v.fdId)),
-        initialIndex: initialFile.fdId,
-        ...results[1].map((k, v) => MapEntry(k, v.fdId)),
-      },
-      fileIdFileMap: {
-        ...results[0].map((k, v) => MapEntry(v.fdId, v)),
-        ...results[1].map((k, v) => MapEntry(v.fdId, v)),
-        initialFile.fdId: initialFile,
-      },
-    ));
-    unawaited(filesController.queryByFileId([
-      ...results[0].values.map((e) => e.fdId),
-      ...results[1].values.map((e) => e.fdId),
-      initialFile.fdId,
-    ]));
+    emit(
+      state.copyWith(
+        pageAfIdMap: {
+          ...results[0].map((k, v) => MapEntry(k, v.id)),
+          initialIndex: initialFile.id,
+          ...results[1].map((k, v) => MapEntry(k, v.id)),
+        },
+        // is this needed?
+        // afIdFileMap: {
+        //   ...results[0].map((k, v) => MapEntry(v.id, v)),
+        //   ...results[1].map((k, v) => MapEntry(v.id, v)),
+        //   initialFile.id: initialFile,
+        // },
+      ),
+    );
+    unawaited(
+      anyFilesController.queryByAfId([
+        ...results[0].values.map((e) => e.id),
+        ...results[1].values.map((e) => e.id),
+        initialFile.id,
+      ]),
+    );
 
     await Future.wait([
       forEach(
         emit,
         filesController.stream,
-        onData: (data) => state.copyWith(
-          fileIdFileMap: data.dataMap,
-        ),
+        onData: (data) => state.copyWith(remoteFiles: data.data),
+      ),
+      forEach(
+        emit,
+        localFilesController.stream,
+        onData: (data) => state.copyWith(localFiles: data.data),
       ),
       forEach(
         emit,
         filesController.errorStream,
-        onData: (data) => state.copyWith(
-          error: ExceptionEvent(data.error, data.stackTrace),
-        ),
+        onData:
+            (data) => state.copyWith(
+              error: ExceptionEvent(data.error, data.stackTrace),
+            ),
       ),
     ]);
   }
@@ -189,87 +215,112 @@ class _Bloc extends Bloc<_Event, _State>
         }
       });
     }
-    final fileId = state.pageFileIdMap[ev.index];
-    if (fileId == null) {
-      emit(state.copyWith(
-        index: ev.index,
-        currentFile: null,
-        currentFileState: null,
-        isInitialLoad: false,
-      ));
+    final afId = state.pageAfIdMap[ev.index];
+    if (afId == null) {
+      emit(
+        state.copyWith(
+          index: ev.index,
+          currentFile: null,
+          currentFileState: null,
+          isInitialLoad: false,
+        ),
+      );
     } else {
-      final fileState = state.fileStates[fileId] ?? _PageState.create();
-      final file = state.mergedFileIdFileMap[fileId];
-      emit(state.copyWith(
-        index: ev.index,
-        currentFile: file,
-        fileStates: state.fileStates[fileId] == null
-            ? state.fileStates.addedAll({fileId: fileState})
-            : null,
-        currentFileState: fileState,
-        isInitialLoad: false,
-      ));
+      final fileState = state.fileStates[afId] ?? _PageState.create();
+      final file = state.mergedAfIdFileMap[afId];
+      emit(
+        state.copyWith(
+          index: ev.index,
+          currentFile: file,
+          fileStates:
+              state.fileStates[afId] == null
+                  ? state.fileStates.addedAll({afId: fileState})
+                  : null,
+          currentFileState: fileState,
+          isInitialLoad: false,
+        ),
+      );
       if (file == null) {
-        filesController.queryByFileId([fileId]);
+        anyFilesController.queryByAfId([afId]);
       }
     }
   }
 
   Future<void> _onJumpToLastSlideshow(
-      _JumpToLastSlideshow ev, _Emitter emit) async {
+    _JumpToLastSlideshow ev,
+    _Emitter emit,
+  ) async {
     _log.info(ev);
-    await contentController.fastJump(page: ev.index, fileId: ev.fileId);
-    emit(state.copyWith(
-      index: ev.index,
-      pageFileIdMap: state.pageFileIdMap.containsKey(ev.index)
-          ? null
-          : state.pageFileIdMap.addedAll({ev.index: ev.fileId}),
-    ));
+    await contentController.fastJump(page: ev.index, afId: ev.afId);
+    emit(
+      state.copyWith(
+        index: ev.index,
+        pageAfIdMap:
+            state.pageAfIdMap.containsKey(ev.index)
+                ? null
+                : state.pageAfIdMap.addedAll({ev.index: ev.afId}),
+      ),
+    );
   }
 
   void _onSetCollection(_SetCollection ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      collection: ev.collection,
-      collectionItemsController: ev.itemsController,
-    ));
+    emit(
+      state.copyWith(
+        collection: ev.collection,
+        collectionItemsController: ev.itemsController,
+      ),
+    );
   }
 
   void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
     _log.info(ev);
-    final itemMap = ev.value
-        ?.whereType<CollectionFileItem>()
-        .map((e) => MapEntry(e.file.fdId, e))
-        .toMap();
+    final itemMap =
+        ev.value
+            ?.whereType<CollectionFileItem>()
+            .map(
+              (e) => MapEntry(AnyFileNextcloudProvider.toAfId(e.file.fdId), e),
+            )
+            .toMap();
     emit(state.copyWith(collectionItems: itemMap));
   }
 
   void _onMergeFiles(_MergeFiles ev, _Emitter emit) {
     _log.info(ev);
-    final Map<int, FileDescriptor> merged;
-    if (collectionId == null) {
-      // not collection, nothing to merge
-      merged = state.fileIdFileMap;
-    } else {
-      if (state.collectionItems == null) {
-        // collection not ready
-        return;
-      }
-      merged = state.fileIdFileMap.addedAll(state.collectionItems!
-          .map((key, value) => MapEntry(key, value.file)));
+    if (collectionId != null && state.collectionItems == null) {
+      // collection not ready
+      return;
+    }
+    var merged = {
+      ...state.remoteFiles
+          .map((e) => e.toAnyFile())
+          .map((e) => MapEntry(e.id, e))
+          .toMap(),
+      ...state.localFiles
+          .map((e) => e.toAnyFile())
+          .map((e) => MapEntry(e.id, e))
+          .toMap(),
+      if (collectionId != null)
+        ...state.collectionItems!.map(
+          (_, e) => e.file.toAnyFile().let((f) => MapEntry(f.id, f)),
+        ),
+    };
+    if (merged.isEmpty) {
+      merged = {initialFile.id: initialFile};
     }
 
     var newState = state.copyWith(
-      mergedFileIdFileMap: merged,
-      currentFile: merged[state.pageFileIdMap[state.index]],
+      mergedAfIdFileMap: merged,
+      currentFile: merged[state.pageAfIdMap[state.index]],
     );
-    final fileId = state.pageFileIdMap[state.index];
+    final fileId = state.pageAfIdMap[state.index];
     if (state.currentFileState == null && fileId != null) {
       final fileState = state.fileStates[fileId] ?? _PageState.create();
       newState = newState.copyWith(
-        fileStates: state.fileStates[fileId] == null
-            ? state.fileStates.addedAll({fileId: fileState})
-            : null,
+        fileStates:
+            state.fileStates[fileId] == null
+                ? state.fileStates.addedAll({fileId: fileState})
+                : null,
         currentFileState: fileState,
       );
     }
@@ -278,13 +329,13 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onNewPageContent(_NewPageContent ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      pageFileIdMap: state.pageFileIdMap
-          .addedAll(ev.value.map((k, v) => MapEntry(k, v.fdId))),
-      fileIdFileMap: state.fileIdFileMap
-          .addedAll(ev.value.map((k, v) => MapEntry(v.fdId, v))),
-    ));
-    unawaited(filesController.queryByFileId(ev.value.keys.toList()));
+    emit(
+      state.copyWith(
+        pageAfIdMap: state.pageAfIdMap.addedAll(
+          ev.value.map((k, v) => MapEntry(k, v.id)),
+        ),
+      ),
+    );
   }
 
   void _onToggleAppBar(_ToggleAppBar ev, _Emitter emit) {
@@ -328,61 +379,90 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onPauseLivePhoto(_PauseLivePhoto ev, _Emitter emit) {
     _log.info(ev);
-    _updateFileState(ev.fileId, emit, shouldPlayLivePhoto: false);
+    _updateFileState(ev.afId, emit, shouldPlayLivePhoto: false);
   }
 
   void _onPlayLivePhoto(_PlayLivePhoto ev, _Emitter emit) {
     _log.info(ev);
-    _updateFileState(ev.fileId, emit, shouldPlayLivePhoto: true);
+    _updateFileState(ev.afId, emit, shouldPlayLivePhoto: true);
   }
 
   void _onUnfavorite(_Unfavorite ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onUnfavorite] file is null: ${ev.fileId}");
+      _log.severe("[_onUnfavorite] file is null: ${ev.afId}");
       return;
     }
-    filesController.updateProperty([f], isFavorite: false);
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.favorite)) {
+      _log.severe("[_onUnfavorite] Op not supported: $f");
+      return;
+    }
+    AnyFileWorkerFactory.favorite(
+      f,
+      filesController: filesController,
+    ).unfavorite();
   }
 
   void _onFavorite(_Favorite ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onFavorite] file is null: ${ev.fileId}");
+      _log.severe("[_onFavorite] file is null: ${ev.afId}");
       return;
     }
-    filesController.updateProperty([f], isFavorite: true);
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.favorite)) {
+      _log.severe("[_onFavorite] Op not supported: $f");
+      return;
+    }
+    AnyFileWorkerFactory.favorite(
+      f,
+      filesController: filesController,
+    ).favorite();
   }
 
   void _onUnarchive(_Unarchive ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onUnarchive] file is null: ${ev.fileId}");
+      _log.severe("[_onUnarchive] file is null: ${ev.afId}");
       return;
     }
-    filesController.updateProperty([f], isArchived: const OrNull(false));
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.archive)) {
+      _log.severe("[_onUnarchive] Op not supported: $f");
+      return;
+    }
+    AnyFileWorkerFactory.archive(
+      f,
+      filesController: filesController,
+    ).unarchive();
     _removeFileFromStream(f, emit);
   }
 
   void _onArchive(_Archive ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onArchive] file is null: ${ev.fileId}");
+      _log.severe("[_onArchive] file is null: ${ev.afId}");
       return;
     }
-    filesController.updateProperty([f], isArchived: const OrNull(true));
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.archive)) {
+      _log.severe("[_onArchive] Op not supported: $f");
+      return;
+    }
+    AnyFileWorkerFactory.archive(f, filesController: filesController).archive();
     _removeFileFromStream(f, emit);
   }
 
   void _onShare(_Share ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onShare] file is null: ${ev.fileId}");
+      _log.severe("[_onShare] file is null: ${ev.afId}");
       return;
     }
     emit(state.copyWith(shareRequest: Unique(_ShareRequest(f))));
@@ -390,84 +470,125 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onEdit(_Edit ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onEdit] file is null: ${ev.fileId}");
+      _log.severe("[_onEdit] file is null: ${ev.afId}");
       return;
     }
-    emit(state.copyWith(
-      imageEditorRequest: Unique(ImageEditorArguments(account, f)),
-    ));
+    emit(
+      state.copyWith(
+        imageEditorRequest: Unique(ImageEditorArguments(account, f)),
+      ),
+    );
   }
 
   void _onEnhance(_Enhance ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onEnhance] file is null: ${ev.fileId}");
+      _log.severe("[_onEnhance] file is null: ${ev.afId}");
       return;
     }
-    emit(state.copyWith(
-      imageEnhancerRequest: Unique(ImageEnhancerArguments(
-        account,
-        f,
-        prefController.isSaveEditResultToServerValue,
-      )),
-    ));
+    emit(
+      state.copyWith(
+        imageEnhancerRequest: Unique(
+          ImageEnhancerArguments(
+            account,
+            f,
+            prefController.isSaveEditResultToServerValue,
+          ),
+        ),
+      ),
+    );
   }
 
   void _onDownload(_Download ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onDownload] file is null: ${ev.fileId}");
+      _log.severe("[_onDownload] file is null: ${ev.afId}");
       return;
     }
-    DownloadHandler(_c).downloadFiles(account, [f]);
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.download)) {
+      _log.severe("[_onDownload] Op not supported: $f");
+      return;
+    }
+    AnyFileWorkerFactory.download(f, account: account, c: _c).download();
   }
 
   void _onDelete(_Delete ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onDelete] file is null: ${ev.fileId}");
+      _log.severe("[_onDelete] file is null: ${ev.afId}");
       return;
     }
-    RemoveSelectionHandler(filesController: filesController)(
-      account: account,
-      selection: [f],
-      isRemoveOpened: true,
-      isMoveToTrash: true,
-    );
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.delete)) {
+      _log.severe("[_onDelete] Op not supported: $f");
+      return;
+    }
+    AnyFileWorkerFactory.delete(
+      f,
+      filesController: filesController,
+      localFilesController: localFilesController,
+    ).delete().then((isSuccess) {
+      SnackBarManager().showSnackBar(
+        buildDeleteResultSnackBar(
+          account,
+          failureCount: isSuccess ? 0 : 1,
+          isMoveToTrash: true,
+          isRemoveSingle: true,
+        ),
+      );
+    });
     _removeFileFromStream(f, emit);
   }
 
   void _onRemoveFromCollection(_RemoveFromCollection ev, _Emitter emit) {
     _log.info(ev);
-    if (!CollectionAdapter.of(_c, account, state.collection!)
-        .isPermitted(CollectionCapability.manualItem)) {
+    if (!CollectionAdapter.of(
+      _c,
+      account,
+      state.collection!,
+    ).isPermitted(CollectionCapability.manualItem)) {
       throw UnsupportedError("Operation not supported by this collection");
     }
     state.collectionItemsController!.removeItems([ev.value]);
-    _removeFileFromStream((ev.value as CollectionFileItem).file, emit);
+    _removeFileFromStream(
+      (ev.value as CollectionFileItem).file.toAnyFile(),
+      emit,
+    );
   }
 
   void _onStartSlideshow(_StartSlideshow ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      startSlideshowRequest: Unique(_StartSlideshowRequest(fileId: ev.fileId)),
-    ));
+    emit(
+      state.copyWith(
+        startSlideshowRequest: Unique(_StartSlideshowRequest(afId: ev.afId)),
+      ),
+    );
   }
 
   Future<void> _onStartSlideshowResult(
-      _StartSlideshowResult ev, _Emitter emit) async {
+    _StartSlideshowResult ev,
+    _Emitter emit,
+  ) async {
     _log.info(ev);
     emit(state.copyWith(isBusy: true));
     try {
-      final fileIds = await contentProvider.listFileIds();
+      final afIds = await contentProvider.listAfIds();
+      var index = afIds.indexOf(ev.request.afId);
+      if (index == -1) {
+        _log.warning(
+          "[_onStartSlideshowResult] Initial id not found: ${ev.request.afId}",
+        );
+        index = 0;
+      }
       final req = _SlideshowRequest(
-        fileIds: fileIds,
-        startIndex: fileIds.indexOf(ev.request.fileId),
+        afIds: afIds,
+        startIndex: afIds.indexOf(ev.request.afId),
         collectionId: collectionId,
         config: ev.config,
       );
@@ -483,47 +604,55 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetAs(_SetAs ev, _Emitter emit) {
     _log.info(ev);
-    final f = state.mergedFileIdFileMap[ev.fileId];
+    final f = state.mergedAfIdFileMap[ev.afId];
     if (f == null) {
-      _log.severe("[_onSetAs] file is null: ${ev.fileId}");
+      _log.severe("[_onSetAs] file is null: ${ev.afId}");
       return;
     }
-    final req = _SetAsRequest(
-      account: account,
-      file: f,
-    );
+    final req = _SetAsRequest(account: account, file: f);
     emit(state.copyWith(setAsRequest: Unique(req)));
+  }
+
+  void _onUpload(_Upload ev, _Emitter emit) {
+    _log.info(ev);
+    final f = state.mergedAfIdFileMap[ev.afId];
+    if (f == null) {
+      _log.severe("[_onUpload] file is null: ${ev.afId}");
+      return;
+    }
+    final capability = AnyFileWorkerFactory.capability(f);
+    if (!capability.isPermitted(AnyFileCapability.upload)) {
+      _log.severe("[_onUpload] Op not supported: $f");
+      return;
+    }
+    final req = _UploadRequest(account: account, file: f);
+    emit(state.copyWith(uploadRequest: Unique(req)));
   }
 
   void _onOpenDetailPane(_OpenDetailPane ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      openDetailPaneRequest: Unique(_OpenDetailPaneRequest(ev.shouldAnimate)),
-    ));
+    emit(
+      state.copyWith(
+        openDetailPaneRequest: Unique(_OpenDetailPaneRequest(ev.shouldAnimate)),
+      ),
+    );
   }
 
   void _onCloseDetailPane(_CloseDetailPane ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      closeDetailPane: Unique(true),
-      isClosingDetailPane: true,
-    ));
+    emit(
+      state.copyWith(closeDetailPane: Unique(true), isClosingDetailPane: true),
+    );
   }
 
   void _onDetailPaneClosed(_DetailPaneClosed ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isShowDetailPane: false,
-      isClosingDetailPane: false,
-    ));
+    emit(state.copyWith(isShowDetailPane: false, isClosingDetailPane: false));
   }
 
   void _onShowDetailPane(_ShowDetailPane ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(
-      isShowDetailPane: true,
-      isDetailPaneActive: true,
-    ));
+    emit(state.copyWith(isShowDetailPane: true, isDetailPaneActive: true));
   }
 
   void _onSetDetailPaneInactive(_SetDetailPaneInactive ev, _Emitter emit) {
@@ -538,7 +667,7 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetFileContentHeight(_SetFileContentHeight ev, _Emitter emit) {
     _log.info(ev);
-    _updateFileState(ev.fileId, emit, itemHeight: ev.value);
+    _updateFileState(ev.afId, emit, itemHeight: ev.value);
   }
 
   void _onSetIsZoomed(_SetIsZoomed ev, _Emitter emit) {
@@ -548,34 +677,39 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onRemoveFile(_RemoveFile ev, _Emitter emit) {
     _log.info(ev);
-    final removePage = state.pageFileIdMap.entries
-        .firstWhereOrNull((e) => e.value == ev.file.fdId)
-        ?.key;
+    final removePage =
+        state.pageAfIdMap.entries
+            .firstWhereOrNull((e) => e.value == ev.file.id)
+            ?.key;
     if (removePage == null) {
-      _log.warning("[_onRemoveFile] File id not found: ${ev.file.fdId}");
+      _log.warning("[_onRemoveFile] File id not found: ${ev.file.id}");
       return;
     }
-    contentController.notifyFileRemoved(removePage, ev.file.fdId);
-    final nextPageFileIdMap = <int, int>{};
-    for (final e in state.pageFileIdMap.entries) {
+    contentController.notifyFileRemoved(removePage, ev.file.id);
+    final nextPageAfIdMap = <int, String>{};
+    for (final e in state.pageAfIdMap.entries) {
       if (e.key < removePage) {
-        nextPageFileIdMap[e.key] = e.value;
+        nextPageAfIdMap[e.key] = e.value;
       } else if (e.key > removePage) {
-        nextPageFileIdMap[e.key - 1] = e.value;
+        nextPageAfIdMap[e.key - 1] = e.value;
       }
     }
-    final currentPage = state.pageFileIdMap.entries
-        .firstWhereOrNull((e) => e.value == state.currentFile?.fdId)
-        ?.key;
-    emit(state.copyWith(
-      removedFileIds: state.removedFileIds.added(ev.file.fdId),
-      // if removed file is found first, a page has been removed before us so we
-      // need to deduct index by 1
-      pageFileIdMap: nextPageFileIdMap,
-      index: currentPage == null || removePage <= currentPage
-          ? max(state.index - 1, 0)
-          : state.index,
-    ));
+    final currentPage =
+        state.pageAfIdMap.entries
+            .firstWhereOrNull((e) => e.value == state.currentFile?.id)
+            ?.key;
+    emit(
+      state.copyWith(
+        removedAfIds: state.removedAfIds.added(ev.file.id),
+        // if removed file is found first, a page has been removed before us so we
+        // need to deduct index by 1
+        pageAfIdMap: nextPageAfIdMap,
+        index:
+            currentPage == null || removePage <= currentPage
+                ? max(state.index - 1, 0)
+                : state.index,
+      ),
+    );
   }
 
   void _onSetError(_SetError ev, _Emitter emit) {
@@ -584,14 +718,14 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   void _updateFileState(
-    int fileId,
+    String afId,
     _Emitter emit, {
     double? itemHeight,
     bool? hasLoaded,
     bool? shouldPlayLivePhoto,
   }) {
     final newStates = Map.of(state.fileStates);
-    var newState = state.fileStates[fileId] ?? _PageState.create();
+    var newState = state.fileStates[afId] ?? _PageState.create();
     newState = newState.copyWith(
       hasLoaded: hasLoaded,
       shouldPlayLivePhoto: shouldPlayLivePhoto,
@@ -600,31 +734,30 @@ class _Bloc extends Bloc<_Event, _State>
       // we don't support resetting itemHeight to null
       newState = newState.copyWith(itemHeight: itemHeight);
     }
-    newStates[fileId] = newState;
-    if (fileId == state.currentFile?.fdId) {
-      emit(state.copyWith(
-        fileStates: newStates,
-        currentFileState: newState,
-      ));
+    newStates[afId] = newState;
+    if (afId == state.currentFile?.id) {
+      emit(state.copyWith(fileStates: newStates, currentFileState: newState));
     } else {
       emit(state.copyWith(fileStates: newStates));
     }
   }
 
-  void _removeFileFromStream(FileDescriptor file, _Emitter emit) {
+  void _removeFileFromStream(AnyFile file, _Emitter emit) {
     emit(state.copyWith(pendingRemoveFile: Unique(file)));
   }
 
   final DiContainer _c;
   final Account account;
+  final AnyFilesController anyFilesController;
   final FilesController filesController;
+  final LocalFilesController localFilesController;
   final CollectionsController collectionsController;
   final PrefController prefController;
   final AccountPrefController accountPrefController;
   final _ViewerContentController contentController;
   final ViewerContentProvider contentProvider;
   final int allFilesCount;
-  final FileDescriptor initialFile;
+  final AnyFile initialFile;
   final int initialIndex;
   final Brightness brightness;
   final String? collectionId;

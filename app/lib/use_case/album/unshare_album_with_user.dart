@@ -20,8 +20,8 @@ part 'unshare_album_with_user.g.dart';
 @npLog
 class UnshareAlbumWithUser {
   UnshareAlbumWithUser(this._c)
-      : assert(require(_c)),
-        assert(UnshareFileFromAlbum.require(_c));
+    : assert(require(_c)),
+      assert(UnshareFileFromAlbum.require(_c));
 
   static bool require(DiContainer c) =>
       DiContainer.has(c, DiType.albumRepo) &&
@@ -68,21 +68,22 @@ class UnshareAlbumWithUser {
         await RemoveShare(_c.shareRepo)(account, s);
       } catch (e, stackTrace) {
         _log.severe(
-            "[_deleteFileShares] Failed unsharing album file '${logFilename(album.albumFile?.path)}' with '$shareWith'",
-            e,
-            stackTrace);
+          "[_deleteFileShares] Failed unsharing album file '${logFilename(album.albumFile?.path)}' with '$shareWith'",
+          e,
+          stackTrace,
+        );
         onUnshareFileFailed?.call(s, e, stackTrace);
       }
     }
 
     // then remove shares from all files in this album
-    final files = AlbumStaticProvider.of(album)
-        .items
-        .whereType<AlbumFileItem>()
-        .map((e) => e.file)
-        .toList();
-    await UnshareFileFromAlbum(_c)(account, album, files, [shareWith],
-        onUnshareFileFailed: onUnshareFileFailed);
+    final files =
+        AlbumStaticProvider.of(
+          album,
+        ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
+    await UnshareFileFromAlbum(_c)(account, album, files, [
+      shareWith,
+    ], onUnshareFileFailed: onUnshareFileFailed);
   }
 
   final DiContainer _c;

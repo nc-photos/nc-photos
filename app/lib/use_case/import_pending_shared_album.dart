@@ -9,9 +9,9 @@ import 'package:nc_photos/use_case/move.dart';
 /// Import a shared album from the pending dir to the library
 class ImportPendingSharedAlbum {
   ImportPendingSharedAlbum(this._c)
-      : assert(require(_c)),
-        assert(LsSingleFile.require(_c)),
-        assert(Move.require(_c));
+    : assert(require(_c)),
+      assert(LsSingleFile.require(_c)),
+      assert(Move.require(_c));
 
   static bool require(DiContainer c) => DiContainer.has(c, DiType.albumRepo);
 

@@ -45,7 +45,9 @@ class StartupSync {
         // we can't use regular isolate here because self-signed cert support
         // requires native plugins
         final resultJson = await flutterCompute(
-            _isolateMain, _IsolateMessage(account, personProvider).toJson());
+          _isolateMain,
+          _IsolateMessage(account, personProvider).toJson(),
+        );
         final result = SyncResult.fromJson(resultJson);
         // events fired in background isolate won't be noticed by the main isolate,
         // so we fire them again here
@@ -56,7 +58,9 @@ class StartupSync {
   }
 
   Future<SyncResult> call(
-      Account account, PersonProvider personProvider) async {
+    Account account,
+    PersonProvider personProvider,
+  ) async {
     _log.info("[_run] Begin sync");
     final stopwatch = Stopwatch()..start();
     DbSyncIdResult? syncFavoriteResult;
@@ -114,20 +118,20 @@ class SyncResult {
   });
 
   factory SyncResult.fromJson(JsonObj json) => SyncResult(
-        syncFavoriteResult: (json["syncFavoriteResult"] as Map?)
-            ?.cast<String, dynamic>()
-            .let(DbSyncIdResult.fromJson),
-        syncTagResult: (json["syncTagResult"] as Map?)
-            ?.cast<String, dynamic>()
-            .let(DbSyncIdResult.fromJson),
-        isSyncPersonUpdated: json["isSyncPersonUpdated"],
-      );
+    syncFavoriteResult: (json["syncFavoriteResult"] as Map?)
+        ?.cast<String, dynamic>()
+        .let(DbSyncIdResult.fromJson),
+    syncTagResult: (json["syncTagResult"] as Map?)?.cast<String, dynamic>().let(
+      DbSyncIdResult.fromJson,
+    ),
+    isSyncPersonUpdated: json["isSyncPersonUpdated"],
+  );
 
   JsonObj toJson() => {
-        "syncFavoriteResult": syncFavoriteResult?.toJson(),
-        "syncTagResult": syncTagResult?.toJson(),
-        "isSyncPersonUpdated": isSyncPersonUpdated,
-      };
+    "syncFavoriteResult": syncFavoriteResult?.toJson(),
+    "syncTagResult": syncTagResult?.toJson(),
+    "isSyncPersonUpdated": isSyncPersonUpdated,
+  };
 
   @override
   String toString() => _$toString();
@@ -141,17 +145,17 @@ class _IsolateMessage {
   const _IsolateMessage(this.account, this.personProvider);
 
   factory _IsolateMessage.fromJson(JsonObj json) => _IsolateMessage(
-        Account.fromJson(
-          json["account"].cast<String, dynamic>(),
-          upgraderV1: const AccountUpgraderV1(),
-        )!,
-        PersonProvider.fromValue(json["personProvider"]),
-      );
+    Account.fromJson(
+      json["account"].cast<String, dynamic>(),
+      upgraderV1: const AccountUpgraderV1(),
+    )!,
+    PersonProvider.fromValue(json["personProvider"]),
+  );
 
   JsonObj toJson() => <String, dynamic>{
-        "account": account.toJson(),
-        "personProvider": personProvider.index,
-      };
+    "account": account.toJson(),
+    "personProvider": personProvider.index,
+  };
 
   final Account account;
   final PersonProvider personProvider;

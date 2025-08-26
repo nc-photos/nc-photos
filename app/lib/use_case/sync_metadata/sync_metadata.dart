@@ -66,7 +66,9 @@ class SyncMetadata {
   }
 
   Stream<File> _doWithApp(
-      Account account, DbFileMissingMetadataResult files) async* {
+    Account account,
+    DbFileMissingMetadataResult files,
+  ) async* {
     final op = _SyncByApp(
       account: account,
       fileRepo: fileRepo,
@@ -84,7 +86,9 @@ class SyncMetadata {
   }
 
   Stream<File> _doWithServer(
-      Account account, DbFileMissingMetadataResult files) async* {
+    Account account,
+    DbFileMissingMetadataResult files,
+  ) async* {
     final fallback = _SyncByApp(
       account: account,
       fileRepo: fileRepo,
@@ -110,10 +114,7 @@ class SyncMetadata {
       fileIds.add(f.fileId);
       relativePaths.add(f.relativePath);
     }
-    final stream = op.syncFiles(
-      fileIds: fileIds,
-      relativePaths: relativePaths,
-    );
+    final stream = op.syncFiles(fileIds: fileIds, relativePaths: relativePaths);
     yield* stream;
   }
 

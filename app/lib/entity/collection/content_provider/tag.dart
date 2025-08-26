@@ -9,10 +9,8 @@ import 'package:nc_photos/entity/tag.dart';
 class CollectionTagProvider
     with EquatableMixin
     implements CollectionContentProvider {
-  CollectionTagProvider({
-    required this.account,
-    required this.tags,
-  }) : assert(tags.isNotEmpty);
+  CollectionTagProvider({required this.account, required this.tags})
+    : assert(tags.isNotEmpty);
 
   @override
   String get fourCc => "TAG-";
@@ -28,8 +26,8 @@ class CollectionTagProvider
 
   @override
   List<CollectionCapability> get capabilities => [
-        CollectionCapability.deleteItem,
-      ];
+    CollectionCapability.deleteItem,
+  ];
 
   @override
   CollectionItemSort get itemSort => CollectionItemSort.dateDescending;
@@ -42,8 +40,7 @@ class CollectionTagProvider
     int width,
     int height, {
     bool? isKeepAspectRatio,
-  }) =>
-      null;
+  }) => null;
 
   @override
   bool get isDynamicCollection => true;

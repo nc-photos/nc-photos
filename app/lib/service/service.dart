@@ -28,65 +28,61 @@ part 'l10n.dart';
 part 'service.g.dart';
 
 /// Start the background service
-Future<void> startService({
-  required PrefController prefController,
-}) async {
+Future<void> startService({required PrefController prefController}) async {
   _$__NpLog.log.info("[startService] Starting service");
   final service = FlutterBackgroundService();
   await service.configure(
     androidConfiguration: AndroidConfiguration(
-      onStart: serviceMain,
+      onStart: serviceAndroidMain,
       autoStart: false,
       isForegroundMode: true,
-      foregroundServiceNotificationTitle:
+      initialNotificationTitle:
           L10n.global().metadataTaskProcessingNotification,
     ),
     iosConfiguration: IosConfiguration(
-      onForeground: () => throw UnimplementedError(),
-      onBackground: () => throw UnimplementedError(),
+      onForeground: (_) => throw UnimplementedError(),
+      onBackground: (_) => throw UnimplementedError(),
     ),
   );
   // sync settings
   await ServiceConfig.setProcessExifWifiOnly(
-      prefController.shouldProcessExifWifiOnlyValue);
+    prefController.shouldProcessExifWifiOnlyValue,
+  );
   await ServiceConfig.setEnableClientExif(
-      prefController.isEnableClientExifValue);
+    prefController.isEnableClientExifValue,
+  );
   await ServiceConfig.setFallbackClientExif(
-      prefController.isFallbackClientExifValue);
-  await service.start();
+    prefController.isFallbackClientExifValue,
+  );
+  await service.startService();
 }
 
 /// Ask the background service to stop ASAP
 void stopService() {
   _$__NpLog.log.info("[stopService] Stopping service");
-  FlutterBackgroundService().sendData({
-    _dataKeyEvent: _eventStop,
-  });
+  FlutterBackgroundService().invoke("stop");
 }
 
 @visibleForTesting
 @pragma("vm:entry-point")
-Future<void> serviceMain() async {
+Future<void> serviceAndroidMain(ServiceInstance service) async {
   WidgetsFlutterBinding.ensureInitialized();
-  await _Service()();
+  await _Service(service as AndroidServiceInstance)();
 }
 
 @npLog
 class _Service {
+  _Service(this.service);
+
   Future<void> call() async {
-    final service = FlutterBackgroundService();
-    service.setForegroundMode(true);
+    await service.setAsForegroundService();
 
     await app_init.init(app_init.InitIsolateType.flutterIsolate);
     await _L10n().init();
 
     _log.info("[call] Service started");
-    final onCancelSubscription = service.onCancel.listen((_) {
-      _log.info("[call] User canceled");
-      _stopSelf();
-    });
-    final onDataSubscription =
-        service.onDataReceived.listen((event) => _onNotifAction(event ?? {}));
+    final onStopSubscription = service.on("stop").listen(_onRecvStop);
+    final onCancelSubscription = service.on("cancel").listen(_onRecvCancel);
 
     try {
       await _doWork();
@@ -94,9 +90,9 @@ class _Service {
       _log.shout("[call] Uncaught exception", e, stackTrace);
     }
     await onCancelSubscription.cancel();
-    await onDataSubscription.cancel();
+    await onStopSubscription.cancel();
     await KiwiContainer().resolve<DiContainer>().npDb.dispose();
-    service.stopBackgroundService();
+    await service.stopSelf();
     _log.info("[call] Service stopped");
   }
 
@@ -110,36 +106,31 @@ class _Service {
     }
     final accountPrefController = AccountPrefController(account: account);
 
-    final wifiEnsurer = WifiEnsurer(
-      interrupter: _shouldRun.stream,
-    );
+    final wifiEnsurer = WifiEnsurer(interrupter: _shouldRun.stream);
     wifiEnsurer.isWaiting.listen((event) {
       if (event) {
-        FlutterBackgroundService()
-          ..setNotificationInfo(
+        service
+          ..setForegroundNotificationInfo(
             title: _L10n.global().metadataTaskPauseNoWiFiNotification,
           )
           ..pauseWakeLock();
       } else {
-        FlutterBackgroundService().resumeWakeLock();
+        service.resumeWakeLock();
       }
     });
-    final batteryEnsurer = BatteryEnsurer(
-      interrupter: _shouldRun.stream,
-    );
+    final batteryEnsurer = BatteryEnsurer(interrupter: _shouldRun.stream);
     batteryEnsurer.isWaiting.listen((event) {
       if (event) {
-        FlutterBackgroundService()
-          ..setNotificationInfo(
+        service
+          ..setForegroundNotificationInfo(
             title: _L10n.global().metadataTaskPauseLowBatteryNotification,
           )
           ..pauseWakeLock();
       } else {
-        FlutterBackgroundService().resumeWakeLock();
+        service.resumeWakeLock();
       }
     });
 
-    final service = FlutterBackgroundService();
     final syncOp = SyncMetadata(
       fileRepo: c.fileRepo,
       fileRepo2: c.fileRepo2,
@@ -152,41 +143,46 @@ class _Service {
     final processedIds = <int>[];
     await for (final f in syncOp.syncAccount(account, accountPrefController)) {
       processedIds.add(f.fdId);
-      service.setNotificationInfo(
-        title: _L10n.global().metadataTaskProcessingNotification,
-        content: f.strippedPath,
+      unawaited(
+        service.setForegroundNotificationInfo(
+          title: _L10n.global().metadataTaskProcessingNotification,
+          content: f.strippedPath,
+        ),
       );
     }
     if (processedIds.isNotEmpty) {
       await MessageRelay.broadcast(
-          FileExifUpdatedEvent(processedIds).toEvent());
+        FileExifUpdatedEvent(processedIds).toEvent(),
+      );
     }
   }
 
-  void _onNotifAction(Map<String, dynamic> data) {
+  void _onRecvStop(Map<String, dynamic>? arg) {
     try {
-      final event = data[_dataKeyEvent];
-      switch (event) {
-        case _eventStop:
-          _stopSelf();
-          break;
-
-        default:
-          _log.severe("[_onNotifAction] Unknown event: $event");
-          break;
-      }
+      _stopSelf();
     } catch (e, stackTrace) {
-      _log.shout("[_onNotifAction] Uncaught exception", e, stackTrace);
+      _log.shout("[_onRecvStop] Uncaught exception", e, stackTrace);
+    }
+  }
+
+  void _onRecvCancel(Map<String, dynamic>? arg) {
+    try {
+      _log.info("[call] User canceled");
+      _stopSelf();
+    } catch (e, stackTrace) {
+      _log.shout("[_onRecvCancel] Uncaught exception", e, stackTrace);
     }
   }
 
   void _stopSelf() {
     _log.info("[_stopSelf] Stopping service");
-    FlutterBackgroundService().setNotificationInfo(
+    service.setForegroundNotificationInfo(
       title: _L10n.global().backgroundServiceStopping,
     );
     _shouldRun.add(null);
   }
+
+  final AndroidServiceInstance service;
 
   final _shouldRun = StreamController<void>.broadcast();
 }
@@ -194,6 +190,3 @@ class _Service {
 @npLog
 // ignore: camel_case_types
 class __ {}
-
-const _dataKeyEvent = "event";
-const _eventStop = "stop";

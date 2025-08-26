@@ -1,9 +1,7 @@
 part of '../collection_browser.dart';
 
 class _LabelView extends StatelessWidget {
-  const _LabelView({
-    required this.text,
-  });
+  const _LabelView({required this.text});
 
   @override
   Widget build(BuildContext context) {
@@ -14,17 +12,11 @@ class _LabelView extends StatelessWidget {
 }
 
 class _EditLabelView extends StatelessWidget {
-  const _EditLabelView({
-    required this.text,
-    required this.onEditPressed,
-  });
+  const _EditLabelView({required this.text, required this.onEditPressed});
 
   @override
   Widget build(BuildContext context) {
-    return PhotoListLabelEdit(
-      text: text,
-      onEditPressed: onEditPressed,
-    );
+    return PhotoListLabelEdit(text: text, onEditPressed: onEditPressed);
   }
 
   final String text;
@@ -32,10 +24,7 @@ class _EditLabelView extends StatelessWidget {
 }
 
 class _MapView extends StatelessWidget {
-  const _MapView({
-    required this.location,
-    this.onTap,
-  });
+  const _MapView({required this.location, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -57,19 +46,13 @@ class _MapView extends StatelessWidget {
 }
 
 class _EditMapView extends StatelessWidget {
-  const _EditMapView({
-    required this.location,
-    required this.onEditPressed,
-  });
+  const _EditMapView({required this.location, required this.onEditPressed});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        AbsorbPointer(
-          absorbing: true,
-          child: _MapView(location: location),
-        ),
+        AbsorbPointer(absorbing: true, child: _MapView(location: location)),
         Positioned(
           top: 8,
           right: 8,

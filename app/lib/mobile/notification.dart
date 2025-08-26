@@ -13,10 +13,17 @@ class NotificationManager implements itf.NotificationManager {
       return plugin.Notification.notifyLogSaveSuccessful(n.result);
     } else if (n is AndroidDownloadSuccessfulNotification) {
       return plugin.Notification.notifyDownloadSuccessful(
-          n.fileUris, n.mimeTypes, n.notificationId);
+        n.fileUris,
+        n.mimeTypes,
+        n.notificationId,
+      );
     } else if (n is AndroidDownloadProgressNotification) {
       return plugin.Notification.notifyDownloadProgress(
-          n.progress, n.max, n.currentItemTitle, n.notificationId);
+        n.progress,
+        n.max,
+        n.currentItemTitle,
+        n.notificationId,
+      );
     } else {
       _log.shout("[notify] Unknown type: ${n.runtimeType}");
       throw UnsupportedError("Unsupported notification");
@@ -57,13 +64,12 @@ class AndroidDownloadProgressNotification implements itf.Notification {
     int? progress,
     String? currentItemTitle,
     dynamic notificationId,
-  }) =>
-      AndroidDownloadProgressNotification(
-        progress ?? this.progress,
-        max,
-        currentItemTitle: currentItemTitle ?? this.currentItemTitle,
-        notificationId: notificationId ?? this.notificationId,
-      );
+  }) => AndroidDownloadProgressNotification(
+    progress ?? this.progress,
+    max,
+    currentItemTitle: currentItemTitle ?? this.currentItemTitle,
+    notificationId: notificationId ?? this.notificationId,
+  );
 
   final int progress;
   final int max;

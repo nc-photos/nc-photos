@@ -11,9 +11,7 @@ class TrustedCertControllerRemoveError extends Error {
 }
 
 class TrustedCertController {
-  TrustedCertController({
-    required this.manager,
-  }) {
+  TrustedCertController({required this.manager}) {
     _streamController.add(manager.whitelist);
   }
 
@@ -30,8 +28,9 @@ class TrustedCertController {
     if (result) {
       _streamController.addWithValue((value) => value.removed(cert));
     } else {
-      _errorStreamController
-          .add(ExceptionEvent(TrustedCertControllerRemoveError()));
+      _errorStreamController.add(
+        ExceptionEvent(TrustedCertControllerRemoveError()),
+      );
     }
   }
 

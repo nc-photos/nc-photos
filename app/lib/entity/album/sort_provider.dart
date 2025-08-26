@@ -24,7 +24,8 @@ abstract class AlbumSortProvider with EquatableMixin {
         return AlbumTimeSortProvider.fromJson(content.cast<String, dynamic>());
       case AlbumFilenameSortProvider._type:
         return AlbumFilenameSortProvider.fromJson(
-            content.cast<String, dynamic>());
+          content.cast<String, dynamic>(),
+        );
       default:
         _log.shout("[fromJson] Unknown type: $type");
         throw ArgumentError.value(type, "type");
@@ -32,7 +33,8 @@ abstract class AlbumSortProvider with EquatableMixin {
   }
 
   factory AlbumSortProvider.fromCollectionItemSort(
-      CollectionItemSort itemSort) {
+    CollectionItemSort itemSort,
+  ) {
     switch (itemSort) {
       case CollectionItemSort.manual:
         return const AlbumNullSortProvider();
@@ -60,20 +62,16 @@ abstract class AlbumSortProvider with EquatableMixin {
       }
     }
 
-    return {
-      "type": getType(),
-      "content": _toContentJson(),
-    };
+    return {"type": getType(), "content": _toContentJson()};
   }
 
   /// Return a sorted copy of [items]
   List<AlbumItem> sort(List<AlbumItem> items) {
     final type = toCollectionItemSort();
     final sorter = CollectionSorter.fromSortType(type);
-    return sorter(items.map(AlbumAdaptedCollectionItem.fromItem).toList())
-        .whereType<AlbumAdaptedCollectionItem>()
-        .map((e) => e.albumItem)
-        .toList();
+    return sorter(
+      items.map(AlbumAdaptedCollectionItem.fromItem).toList(),
+    ).whereType<AlbumAdaptedCollectionItem>().map((e) => e.albumItem).toList();
   }
 
   CollectionItemSort toCollectionItemSort() {
@@ -122,20 +120,14 @@ class AlbumNullSortProvider extends AlbumSortProvider {
 }
 
 abstract class AlbumReversibleSortProvider extends AlbumSortProvider {
-  const AlbumReversibleSortProvider({
-    required this.isAscending,
-  });
+  const AlbumReversibleSortProvider({required this.isAscending});
 
   @override
-  get props => [
-        isAscending,
-      ];
+  get props => [isAscending];
 
   @override
   _toContentJson() {
-    return {
-      "isAscending": isAscending,
-    };
+    return {"isAscending": isAscending};
   }
 
   final bool isAscending;
@@ -144,14 +136,10 @@ abstract class AlbumReversibleSortProvider extends AlbumSortProvider {
 /// Sort based on the time of the files
 @toString
 class AlbumTimeSortProvider extends AlbumReversibleSortProvider {
-  const AlbumTimeSortProvider({
-    required super.isAscending,
-  });
+  const AlbumTimeSortProvider({required super.isAscending});
 
   factory AlbumTimeSortProvider.fromJson(JsonObj json) {
-    return AlbumTimeSortProvider(
-      isAscending: json["isAscending"] ?? true,
-    );
+    return AlbumTimeSortProvider(isAscending: json["isAscending"] ?? true);
   }
 
   @override
@@ -163,14 +151,10 @@ class AlbumTimeSortProvider extends AlbumReversibleSortProvider {
 /// Sort based on the name of the files
 @toString
 class AlbumFilenameSortProvider extends AlbumReversibleSortProvider {
-  const AlbumFilenameSortProvider({
-    required super.isAscending,
-  });
+  const AlbumFilenameSortProvider({required super.isAscending});
 
   factory AlbumFilenameSortProvider.fromJson(JsonObj json) {
-    return AlbumFilenameSortProvider(
-      isAscending: json["isAscending"] ?? true,
-    );
+    return AlbumFilenameSortProvider(isAscending: json["isAscending"] ?? true);
   }
 
   @override

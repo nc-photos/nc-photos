@@ -9,34 +9,33 @@ import 'dart:ffi' as ffi;
 class NpExiv2C {
   /// Holds the symbol lookup function.
   final ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-      _lookup;
+  _lookup;
 
   /// The symbols are looked up in [dynamicLibrary].
   NpExiv2C(ffi.DynamicLibrary dynamicLibrary) : _lookup = dynamicLibrary.lookup;
 
   /// The symbols are looked up with [lookup].
   NpExiv2C.fromLookup(
-      ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName)
-          lookup)
-      : _lookup = lookup;
+    ffi.Pointer<T> Function<T extends ffi.NativeType>(String symbolName) lookup,
+  ) : _lookup = lookup;
 
   /// Extract metadata from a file pointed to by @a path
   ///
   /// @return A handle to retrieve actual results, 0 if failed
-  ffi.Pointer<Exiv2ReadResult> exiv2_read_file(
-    ffi.Pointer<ffi.Char> path,
-  ) {
-    return _exiv2_read_file(
-      path,
-    );
+  ffi.Pointer<Exiv2ReadResult> exiv2_read_file(ffi.Pointer<ffi.Char> path) {
+    return _exiv2_read_file(path);
   }
 
   late final _exiv2_read_filePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<Exiv2ReadResult> Function(
-              ffi.Pointer<ffi.Char>)>>('exiv2_read_file');
-  late final _exiv2_read_file = _exiv2_read_filePtr.asFunction<
-      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Char>)>();
+    ffi.NativeFunction<
+      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Char>)
+    >
+  >('exiv2_read_file');
+  late final _exiv2_read_file =
+      _exiv2_read_filePtr
+          .asFunction<
+            ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Char>)
+          >();
 
   /// Extract metadata from a buffer
   ///
@@ -45,34 +44,32 @@ class NpExiv2C {
     ffi.Pointer<ffi.Uint8> buffer,
     int size,
   ) {
-    return _exiv2_read_buffer(
-      buffer,
-      size,
-    );
+    return _exiv2_read_buffer(buffer, size);
   }
 
   late final _exiv2_read_bufferPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<Exiv2ReadResult> Function(
-              ffi.Pointer<ffi.Uint8>, ffi.Size)>>('exiv2_read_buffer');
-  late final _exiv2_read_buffer = _exiv2_read_bufferPtr.asFunction<
-      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Uint8>, int)>();
+    ffi.NativeFunction<
+      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Uint8>, ffi.Size)
+    >
+  >('exiv2_read_buffer');
+  late final _exiv2_read_buffer =
+      _exiv2_read_bufferPtr
+          .asFunction<
+            ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Uint8>, int)
+          >();
 
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file
-  void exiv2_result_free(
-    ffi.Pointer<Exiv2ReadResult> that,
-  ) {
-    return _exiv2_result_free(
-      that,
-    );
+  void exiv2_result_free(ffi.Pointer<Exiv2ReadResult> that) {
+    return _exiv2_result_free(that);
   }
 
   late final _exiv2_result_freePtr = _lookup<
-          ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Exiv2ReadResult>)>>(
-      'exiv2_result_free');
-  late final _exiv2_result_free = _exiv2_result_freePtr
-      .asFunction<void Function(ffi.Pointer<Exiv2ReadResult>)>();
+    ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Exiv2ReadResult>)>
+  >('exiv2_result_free');
+  late final _exiv2_result_free =
+      _exiv2_result_freePtr
+          .asFunction<void Function(ffi.Pointer<Exiv2ReadResult>)>();
 }
 
 final class __mbstate_t extends ffi.Union {
@@ -116,35 +113,35 @@ enum Exiv2TypeId {
   const Exiv2TypeId(this.value);
 
   static Exiv2TypeId fromValue(int value) => switch (value) {
-        0 => exiv2_type_id_unsigned_byte,
-        1 => exiv2_type_id_ascii_string,
-        2 => exiv2_type_id_unsigned_short,
-        3 => exiv2_type_id_unsigned_long,
-        4 => exiv2_type_id_unsigned_rational,
-        5 => exiv2_type_id_signed_byte,
-        6 => exiv2_type_id_undefined,
-        7 => exiv2_type_id_signed_short,
-        8 => exiv2_type_id_signed_long,
-        9 => exiv2_type_id_signed_rational,
-        10 => exiv2_type_id_tiff_float,
-        11 => exiv2_type_id_tiff_double,
-        12 => exiv2_type_id_tiff_ifd,
-        13 => exiv2_type_id_unsigned_long_long,
-        14 => exiv2_type_id_signed_long_long,
-        15 => exiv2_type_id_tiff_ifd8,
-        16 => exiv2_type_id_string,
-        17 => exiv2_type_id_date,
-        18 => exiv2_type_id_time,
-        19 => exiv2_type_id_comment,
-        20 => exiv2_type_id_directory,
-        21 => exiv2_type_id_xmp_text,
-        22 => exiv2_type_id_xmp_alt,
-        23 => exiv2_type_id_xmp_bag,
-        24 => exiv2_type_id_xmp_seq,
-        25 => exiv2_type_id_lang_alt,
-        26 => exiv2_type_id_invalid_type_id,
-        _ => throw ArgumentError("Unknown value for Exiv2TypeId: $value"),
-      };
+    0 => exiv2_type_id_unsigned_byte,
+    1 => exiv2_type_id_ascii_string,
+    2 => exiv2_type_id_unsigned_short,
+    3 => exiv2_type_id_unsigned_long,
+    4 => exiv2_type_id_unsigned_rational,
+    5 => exiv2_type_id_signed_byte,
+    6 => exiv2_type_id_undefined,
+    7 => exiv2_type_id_signed_short,
+    8 => exiv2_type_id_signed_long,
+    9 => exiv2_type_id_signed_rational,
+    10 => exiv2_type_id_tiff_float,
+    11 => exiv2_type_id_tiff_double,
+    12 => exiv2_type_id_tiff_ifd,
+    13 => exiv2_type_id_unsigned_long_long,
+    14 => exiv2_type_id_signed_long_long,
+    15 => exiv2_type_id_tiff_ifd8,
+    16 => exiv2_type_id_string,
+    17 => exiv2_type_id_date,
+    18 => exiv2_type_id_time,
+    19 => exiv2_type_id_comment,
+    20 => exiv2_type_id_directory,
+    21 => exiv2_type_id_xmp_text,
+    22 => exiv2_type_id_xmp_alt,
+    23 => exiv2_type_id_xmp_bag,
+    24 => exiv2_type_id_xmp_seq,
+    25 => exiv2_type_id_lang_alt,
+    26 => exiv2_type_id_invalid_type_id,
+    _ => throw ArgumentError("Unknown value for Exiv2TypeId: $value"),
+  };
 }
 
 /// A key value pair

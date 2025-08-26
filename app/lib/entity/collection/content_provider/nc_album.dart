@@ -17,10 +17,7 @@ part 'nc_album.g.dart';
 class CollectionNcAlbumProvider
     with EquatableMixin
     implements CollectionContentProvider {
-  const CollectionNcAlbumProvider({
-    required this.account,
-    required this.album,
-  });
+  const CollectionNcAlbumProvider({required this.account, required this.album});
 
   @override
   String toString() => _$toString();
@@ -39,26 +36,24 @@ class CollectionNcAlbumProvider
 
   @override
   List<CollectionCapability> get capabilities => [
-        CollectionCapability.manualItem,
-        CollectionCapability.rename,
-        // CollectionCapability.share,
-      ];
+    CollectionCapability.manualItem,
+    CollectionCapability.rename,
+    // CollectionCapability.share,
+  ];
 
   /// Capabilities when this album is shared to this user by someone else
   List<CollectionCapability> get guestCapabilities => [
-        CollectionCapability.manualItem,
-      ];
+    CollectionCapability.manualItem,
+  ];
 
   @override
   CollectionItemSort get itemSort => CollectionItemSort.dateDescending;
 
   @override
-  List<CollectionShare> get shares => album.collaborators
-      .map((c) => CollectionShare(
-            userId: c.id,
-            username: c.label,
-          ))
-      .toList();
+  List<CollectionShare> get shares =>
+      album.collaborators
+          .map((c) => CollectionShare(userId: c.id, username: c.label))
+          .toList();
 
   @override
   CollectionCoverResult? getCoverUrl(

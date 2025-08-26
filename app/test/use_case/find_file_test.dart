@@ -18,13 +18,12 @@ void main() {
 /// Expect: return the file found
 Future<void> _findFile() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -40,9 +39,7 @@ Future<void> _findFile() async {
 Future<void> _findMissingFile() async {
   final account = util.buildAccount();
   final files = (util.FilesBuilder()..addJpeg("admin/test1.jpg")).build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);

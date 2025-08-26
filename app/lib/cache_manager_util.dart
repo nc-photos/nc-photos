@@ -18,8 +18,10 @@ part 'cache_manager_util.g.dart';
 class CancelableGetFile {
   CancelableGetFile(this.store);
 
-  Future<FileInfo> getFileUntil(String key,
-      {bool ignoreMemCache = false}) async {
+  Future<FileInfo> getFileUntil(
+    String key, {
+    bool ignoreMemCache = false,
+  }) async {
     FileInfo? product;
     while (product == null && _shouldRun) {
       product = await store.getFile(key, ignoreMemCache: ignoreMemCache);
@@ -108,11 +110,7 @@ class ExtraFormatCacheManager {
   );
 }
 
-enum CachedNetworkImageType {
-  thumbnail,
-  largeImage,
-  cover,
-}
+enum CachedNetworkImageType { thumbnail, largeImage, cover }
 
 @npLog
 class CachedNetworkImageBuilder {
@@ -153,10 +151,10 @@ class CachedNetworkImageBuilder {
   }
 
   SizeInt get _boundingBox => switch (type) {
-        CachedNetworkImageType.thumbnail => SizeInt.square(k.photoThumbSize),
-        CachedNetworkImageType.largeImage => SizeInt.square(k.photoLargeSize),
-        CachedNetworkImageType.cover => SizeInt.square(k.coverSize),
-      };
+    CachedNetworkImageType.thumbnail => SizeInt.square(k.photoThumbSize),
+    CachedNetworkImageType.largeImage => SizeInt.square(k.photoLargeSize),
+    CachedNetworkImageType.cover => SizeInt.square(k.coverSize),
+  };
 
   final CachedNetworkImageType type;
   final String imageUrl;
@@ -180,7 +178,10 @@ CacheManager getCacheManager(CachedNetworkImageType type, String? mime) {
 }
 
 Future<FileInfo?> getFileFromCache(
-    CachedNetworkImageType type, String imageUrl, String? mime) async {
+  CachedNetworkImageType type,
+  String imageUrl,
+  String? mime,
+) async {
   final cacheManager = getCacheManager(CachedNetworkImageType.largeImage, mime);
   return await cacheManager.getFileFromCache(imageUrl);
 }

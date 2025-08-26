@@ -17,16 +17,21 @@ class CollectionLocationGroupAdapter
         CollectionAdapterUnshareableTag
     implements CollectionAdapter {
   CollectionLocationGroupAdapter(this._c, this.account, this.collection)
-      : _provider =
-            collection.contentProvider as CollectionLocationGroupProvider;
+    : _provider = collection.contentProvider as CollectionLocationGroupProvider;
 
   @override
   Stream<List<CollectionItem>> listItem() async* {
     final files = <File>[];
     for (final r in account.roots) {
       final dir = File(path: file_util.unstripPath(account, r));
-      files.addAll(await ListLocationFile(_c)(account, dir,
-          _provider.location.place, _provider.location.countryCode));
+      files.addAll(
+        await ListLocationFile(_c)(
+          account,
+          dir,
+          _provider.location.place,
+          _provider.location.countryCode,
+        ),
+      );
     }
     yield files
         .where((f) => file_util.isSupportedFormat(f))

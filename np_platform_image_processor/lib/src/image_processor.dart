@@ -51,12 +51,12 @@ class TransformCropFilter implements ImageFilter {
 
   @override
   Map<String, dynamic> toJson() => {
-        "type": "crop",
-        "top": top,
-        "left": left,
-        "bottom": bottom,
-        "right": right,
-      };
+    "type": "crop",
+    "top": top,
+    "left": left,
+    "bottom": bottom,
+    "right": right,
+  };
 
   final double top;
   final double left;
@@ -68,10 +68,7 @@ class TransformOrientationFilter implements ImageFilter {
   const TransformOrientationFilter(this.degree);
 
   @override
-  Map<String, dynamic> toJson() => {
-        "type": "orientation",
-        "degree": degree,
-      };
+  Map<String, dynamic> toJson() => {"type": "orientation", "degree": degree};
 
   final int degree;
 }
@@ -80,62 +77,59 @@ class ImageProcessor {
   static Stream<ImageProcessorEvent> get stream => EventHandler.stream;
 
   static Future<void> zeroDce(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
     int iteration, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("zeroDce", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "iteration": iteration,
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("zeroDce", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "iteration": iteration,
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<void> deepLab3Portrait(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
     int radius, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("deepLab3Portrait", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "radius": radius,
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("deepLab3Portrait", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "radius": radius,
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<void> esrgan(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("esrgan", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("esrgan", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<void> arbitraryStyleTransfer(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
@@ -143,97 +137,93 @@ class ImageProcessor {
     double weight, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("arbitraryStyleTransfer", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "styleUri": styleUri,
-        "weight": weight,
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("arbitraryStyleTransfer", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "styleUri": styleUri,
+    "weight": weight,
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<void> deepLab3ColorPop(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
     double weight, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("deepLab3ColorPop", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "weight": weight,
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("deepLab3ColorPop", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "weight": weight,
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<void> neurOp(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("neurOp", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("neurOp", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<void> filter(
-    String fileUrl,
+    Uri fileUri,
     String filename,
     int maxWidth,
     int maxHeight,
     List<ImageFilter> filters, {
     Map<String, String>? headers,
     required bool isSaveToServer,
-  }) =>
-      _methodChannel.invokeMethod("filter", <String, dynamic>{
-        "fileUrl": fileUrl,
-        "headers": headers,
-        "filename": filename,
-        "maxWidth": maxWidth,
-        "maxHeight": maxHeight,
-        "filters": filters.map((f) => f.toJson()).toList(),
-        "isSaveToServer": isSaveToServer,
-      });
+  }) => _methodChannel.invokeMethod("filter", <String, dynamic>{
+    "fileUri": fileUri.toString(),
+    "headers": headers,
+    "filename": filename,
+    "maxWidth": maxWidth,
+    "maxHeight": maxHeight,
+    "filters": filters.map((f) => f.toJson()).toList(),
+    "isSaveToServer": isSaveToServer,
+  });
 
   static Future<Rgba8Image> filterPreview(
     Rgba8Image img,
     List<ImageFilter> filters,
   ) async {
-    final result = await _methodChannel
-        .invokeMethod<Map>("filterPreview", <String, dynamic>{
-      "rgba8": img.toJson(),
-      "filters": filters.map((f) => f.toJson()).toList(),
-    });
+    final result = await _methodChannel.invokeMethod<Map>(
+      "filterPreview",
+      <String, dynamic>{
+        "rgba8": img.toJson(),
+        "filters": filters.map((f) => f.toJson()).toList(),
+      },
+    );
     return Rgba8Image.fromJson(result!.cast<String, dynamic>());
   }
 
-  static const _methodChannel =
-      MethodChannel("${k.libId}/image_processor_method");
+  static const _methodChannel = MethodChannel(
+    "${k.libId}/image_processor_method",
+  );
 }
 
 class _SingleWeightFilter implements ImageFilter {
   const _SingleWeightFilter(this.type, this.weight);
 
   @override
-  Map<String, dynamic> toJson() => {
-        "type": type,
-        "weight": weight,
-      };
+  Map<String, dynamic> toJson() => {"type": type, "weight": weight};
 
   final String type;
   final double weight;

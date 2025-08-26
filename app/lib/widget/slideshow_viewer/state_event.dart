@@ -8,7 +8,8 @@ class _State {
     required this.page,
     required this.nextPage,
     required this.shouldAnimateNextPage,
-    required this.rawFiles,
+    required this.remoteFiles,
+    required this.localFiles,
     this.collectionItems,
     required this.files,
     this.currentFile,
@@ -23,21 +24,22 @@ class _State {
   });
 
   factory _State.init() => const _State(
-        hasInit: false,
-        page: 0,
-        nextPage: 0,
-        shouldAnimateNextPage: true,
-        rawFiles: {},
-        files: [],
-        isShowUi: false,
-        isPlay: true,
-        isVideoCompleted: false,
-        hasPrev: false,
-        hasNext: false,
-        isShowTimeline: false,
-        hasShownTimeline: false,
-        hasRequestExit: false,
-      );
+    hasInit: false,
+    page: 0,
+    nextPage: 0,
+    shouldAnimateNextPage: true,
+    remoteFiles: [],
+    localFiles: [],
+    files: [],
+    isShowUi: false,
+    isPlay: true,
+    isVideoCompleted: false,
+    hasPrev: false,
+    hasNext: false,
+    isShowTimeline: false,
+    hasShownTimeline: false,
+    hasRequestExit: false,
+  );
 
   @override
   String toString() => _$toString();
@@ -46,10 +48,11 @@ class _State {
   final int page;
   final int nextPage;
   final bool shouldAnimateNextPage;
-  final Map<int, FileDescriptor> rawFiles;
+  final List<FileDescriptor> remoteFiles;
+  final List<LocalFile> localFiles;
   final Map<int, CollectionFileItem>? collectionItems;
-  final List<FileDescriptor?> files;
-  final FileDescriptor? currentFile;
+  final List<AnyFile?> files;
+  final AnyFile? currentFile;
 
   final bool isShowUi;
   final bool isPlay;

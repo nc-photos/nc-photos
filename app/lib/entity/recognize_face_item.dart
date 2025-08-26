@@ -28,19 +28,19 @@ class RecognizeFaceItem with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        path,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        hasPreview,
-        realPath,
-        isFavorite,
-        fileMetadataWidth,
-        fileMetadataHeight,
-        faceDetections,
-      ];
+    path,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    realPath,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+    faceDetections,
+  ];
 
   final String path;
   final int fileId;

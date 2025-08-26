@@ -13,11 +13,12 @@ part of 'item.dart';
 // **************************************************************************
 
 abstract class $AlbumFileItemCopyWithWorker {
-  AlbumFileItem call(
-      {CiString? addedBy,
-      DateTime? addedAt,
-      FileDescriptor? file,
-      CiString? ownerId});
+  AlbumFileItem call({
+    CiString? addedBy,
+    DateTime? addedAt,
+    FileDescriptor? file,
+    CiString? ownerId,
+  });
 }
 
 class _$AlbumFileItemCopyWithWorkerImpl
@@ -25,13 +26,18 @@ class _$AlbumFileItemCopyWithWorkerImpl
   _$AlbumFileItemCopyWithWorkerImpl(this.that);
 
   @override
-  AlbumFileItem call(
-      {dynamic addedBy, dynamic addedAt, dynamic file, dynamic ownerId}) {
+  AlbumFileItem call({
+    dynamic addedBy,
+    dynamic addedAt,
+    dynamic file,
+    dynamic ownerId,
+  }) {
     return AlbumFileItem(
-        addedBy: addedBy as CiString? ?? that.addedBy,
-        addedAt: addedAt as DateTime? ?? that.addedAt,
-        file: file as FileDescriptor? ?? that.file,
-        ownerId: ownerId as CiString? ?? that.ownerId);
+      addedBy: addedBy as CiString? ?? that.addedBy,
+      addedAt: addedAt as DateTime? ?? that.addedAt,
+      file: file as FileDescriptor? ?? that.file,
+      ownerId: ownerId as CiString? ?? that.ownerId,
+    );
   }
 
   final AlbumFileItem that;

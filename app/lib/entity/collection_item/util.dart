@@ -3,5 +3,5 @@ enum CollectionItemSort {
   dateAscending,
   nameAscending,
   nameDescending,
-  manual;
+  manual,
 }

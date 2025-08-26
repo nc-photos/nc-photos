@@ -22,8 +22,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic isBrowserShowDate, dynamic error = copyWithNull}) {
     return _State(
-        isBrowserShowDate: isBrowserShowDate as bool? ?? that.isBrowserShowDate,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      isBrowserShowDate: isBrowserShowDate as bool? ?? that.isBrowserShowDate,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -42,8 +43,9 @@ extension _$_WrappedAlbumSettingsStateNpLog on _WrappedAlbumSettingsState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.collection_settings._WrappedAlbumSettingsState");
+  static final log = Logger(
+    "widget.settings.collection_settings._WrappedAlbumSettingsState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

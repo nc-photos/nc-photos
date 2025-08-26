@@ -21,7 +21,8 @@ class MetadataController {
     required this.serverController,
   }) {
     _subscriptions.add(
-        prefController.isEnableClientExifChange.listen(_onSetEnableClientExif));
+      prefController.isEnableClientExifChange.listen(_onSetEnableClientExif),
+    );
   }
 
   void dispose() {
@@ -83,7 +84,10 @@ class MetadataController {
       }
     } catch (e, stackTrace) {
       _log.shout(
-          "[_startMetadataTask] Failed starting metadata task", e, stackTrace);
+        "[_startMetadataTask] Failed starting metadata task",
+        e,
+        stackTrace,
+      );
     }
   }
 

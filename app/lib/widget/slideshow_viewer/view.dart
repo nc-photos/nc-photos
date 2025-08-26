@@ -67,41 +67,53 @@ class _ControlBar extends StatelessWidget {
               children: [
                 _BlocSelector<bool>(
                   selector: (state) => state.hasPrev,
-                  builder: (context, hasPrev) => IconButton(
-                    onPressed: hasPrev
-                        ? () {
-                            context.addEvent(const _RequestPrevPage());
-                          }
-                        : null,
-                    icon: const Icon(Icons.skip_previous_outlined),
-                  ),
+                  builder:
+                      (context, hasPrev) => IconButton(
+                        onPressed:
+                            hasPrev
+                                ? () {
+                                  context.addEvent(const _RequestPrevPage());
+                                }
+                                : null,
+                        icon: const Icon(Icons.skip_previous_outlined),
+                      ),
                 ),
                 _BlocSelector<bool>(
                   selector: (state) => state.isPlay,
-                  builder: (context, isPlay) => isPlay
-                      ? IconButton(
-                          onPressed: () {
-                            context.addEvent(const _SetPause());
-                          },
-                          icon: const Icon(Icons.pause_outlined, size: 36),
-                        )
-                      : IconButton(
-                          onPressed: () {
-                            context.addEvent(const _SetPlay());
-                          },
-                          icon: const Icon(Icons.play_arrow_outlined, size: 36),
-                        ),
+                  builder:
+                      (context, isPlay) =>
+                          isPlay
+                              ? IconButton(
+                                onPressed: () {
+                                  context.addEvent(const _SetPause());
+                                },
+                                icon: const Icon(
+                                  Icons.pause_outlined,
+                                  size: 36,
+                                ),
+                              )
+                              : IconButton(
+                                onPressed: () {
+                                  context.addEvent(const _SetPlay());
+                                },
+                                icon: const Icon(
+                                  Icons.play_arrow_outlined,
+                                  size: 36,
+                                ),
+                              ),
                 ),
                 _BlocSelector<bool>(
                   selector: (state) => state.hasNext,
-                  builder: (context, hasNext) => IconButton(
-                    onPressed: hasNext
-                        ? () {
-                            context.addEvent(const _RequestNextPage());
-                          }
-                        : null,
-                    icon: const Icon(Icons.skip_next_outlined),
-                  ),
+                  builder:
+                      (context, hasNext) => IconButton(
+                        onPressed:
+                            hasNext
+                                ? () {
+                                  context.addEvent(const _RequestNextPage());
+                                }
+                                : null,
+                        icon: const Icon(Icons.skip_next_outlined),
+                      ),
                 ),
               ],
             ),
@@ -116,9 +128,11 @@ class _ControlBar extends StatelessWidget {
                 },
                 icon: _BlocSelector<bool>(
                   selector: (state) => state.isShowTimeline,
-                  builder: (context, isShowTimeline) => isShowTimeline
-                      ? const Icon(Icons.view_timeline)
-                      : const Icon(Icons.view_timeline_outlined),
+                  builder:
+                      (context, isShowTimeline) =>
+                          isShowTimeline
+                              ? const Icon(Icons.view_timeline)
+                              : const Icon(Icons.view_timeline_outlined),
                 ),
               ),
             ),
@@ -174,47 +188,52 @@ class _Body extends StatelessWidget {
           const ColoredBox(color: Colors.black),
           _BlocSelector<bool>(
             selector: (state) => state.hasInit,
-            builder: (context, hasInit) =>
-                hasInit ? const _PageViewer() : const SizedBox.shrink(),
+            builder:
+                (context, hasInit) =>
+                    hasInit ? const _PageViewer() : const SizedBox.shrink(),
           ),
           _BlocSelector<bool>(
             selector: (state) => state.isShowUi,
-            builder: (context, isShowUi) => AnimatedVisibility(
-              opacity: isShowUi ? 1 : 0,
-              duration: k.animationDurationNormal,
-              child: const Align(
-                alignment: Alignment.topCenter,
-                child: _AppBar(),
-              ),
-            ),
+            builder:
+                (context, isShowUi) => AnimatedVisibility(
+                  opacity: isShowUi ? 1 : 0,
+                  duration: k.animationDurationNormal,
+                  child: const Align(
+                    alignment: Alignment.topCenter,
+                    child: _AppBar(),
+                  ),
+                ),
           ),
           _BlocSelector<bool>(
             selector: (state) => state.isShowUi,
-            builder: (context, isShowUi) => AnimatedVisibility(
-              opacity: isShowUi ? 1 : 0,
-              duration: k.animationDurationNormal,
-              child: const Align(
-                alignment: Alignment.bottomCenter,
-                child: _ControlBar(),
-              ),
-            ),
+            builder:
+                (context, isShowUi) => AnimatedVisibility(
+                  opacity: isShowUi ? 1 : 0,
+                  duration: k.animationDurationNormal,
+                  child: const Align(
+                    alignment: Alignment.bottomCenter,
+                    child: _ControlBar(),
+                  ),
+                ),
           ),
           _BlocSelector<bool>(
             selector: (state) => state.isShowTimeline,
-            builder: (context, isShowTimeline) => AnimatedPositionedDirectional(
-              top: 0,
-              bottom: 0,
-              end: isShowTimeline ? 0 : -_Timeline.width,
-              duration: k.animationDurationNormal,
-              // needed because Timeline rely on some late var
-              child: _BlocSelector<bool>(
-                selector: (state) => state.hasShownTimeline,
-                builder: (context, hasShownTimeline) => Visibility(
-                  visible: hasShownTimeline,
-                  child: const _Timeline(),
+            builder:
+                (context, isShowTimeline) => AnimatedPositionedDirectional(
+                  top: 0,
+                  bottom: 0,
+                  end: isShowTimeline ? 0 : -_Timeline.width,
+                  duration: k.animationDurationNormal,
+                  // needed because Timeline rely on some late var
+                  child: _BlocSelector<bool>(
+                    selector: (state) => state.hasShownTimeline,
+                    builder:
+                        (context, hasShownTimeline) => Visibility(
+                          visible: hasShownTimeline,
+                          child: const _Timeline(),
+                        ),
+                  ),
                 ),
-              ),
-            ),
           ),
         ],
       ),
@@ -235,8 +254,8 @@ class _PageViewerState extends State<_PageViewer> {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.nextPage != current.nextPage,
+          listenWhen:
+              (previous, current) => previous.nextPage != current.nextPage,
           listener: (context, state) {
             if (state.shouldAnimateNextPage) {
               _controller.animateToPage(
@@ -252,10 +271,11 @@ class _PageViewerState extends State<_PageViewer> {
       ],
       child: HorizontalPageViewer(
         pageCount: context.bloc.pageCount,
-        pageBuilder: (context, index) => FractionallySizedBox(
-          widthFactor: 1 / _viewportFraction,
-          child: _PageView.ofPage(context, index),
-        ),
+        pageBuilder:
+            (context, index) => FractionallySizedBox(
+              widthFactor: 1 / _viewportFraction,
+              child: _PageView.ofPage(context, index),
+            ),
         initialPage: context.bloc.initialPage,
         controller: _controller,
         viewportFraction: _viewportFraction,
@@ -272,19 +292,16 @@ class _PageViewerState extends State<_PageViewer> {
 
 @npLog
 class _PageView extends StatelessWidget {
-  const _PageView._({
-    required this.page,
-    required this.itemIndex,
-  });
+  const _PageView._({required this.page, required this.itemIndex});
 
   factory _PageView.ofPage(BuildContext context, int page) => _PageView._(
-        page: page,
-        itemIndex: context.bloc.convertPageToFileIndex(page),
-      );
+    page: page,
+    itemIndex: context.bloc.convertPageToFileIndex(page),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector<FileDescriptor?>(
+    return _BlocSelector(
       selector: (state) => state.files[itemIndex],
       builder: (context, file) {
         if (file == null) {
@@ -295,14 +312,14 @@ class _PageView extends StatelessWidget {
             ),
           );
         }
-        if (file_util.isSupportedImageFormat(file)) {
+        if (file_util.isSupportedImageMime(file.mime ?? "")) {
           return _ImagePageView(
             file: file,
             onLoaded: () {
               context.addEvent(_PreloadSidePages(page));
             },
           );
-        } else if (file_util.isSupportedVideoFormat(file)) {
+        } else if (file_util.isSupportedVideoMime(file.mime ?? "")) {
           return _VideoPageView(
             file: file,
             onCompleted: () {
@@ -310,7 +327,7 @@ class _PageView extends StatelessWidget {
             },
           );
         } else {
-          _log.shout("[build] Unknown file format: ${file.fdMime}");
+          _log.shout("[build] Unknown file format: ${file.mime}");
           return const SizedBox.shrink();
         }
       },
@@ -322,30 +339,26 @@ class _PageView extends StatelessWidget {
 }
 
 class _ImagePageView extends StatelessWidget {
-  const _ImagePageView({
-    required this.file,
-    this.onLoaded,
-  });
+  const _ImagePageView({required this.file, this.onLoaded});
 
   @override
   Widget build(BuildContext context) {
-    return RemoteImageViewer(
-      account: context.bloc.account,
+    return FileContentView(
       file: file,
+      shouldPlayLivePhoto: false,
       canZoom: false,
+      canLoop: false,
+      isPlayControlVisible: false,
       onLoaded: onLoaded,
     );
   }
 
-  final FileDescriptor file;
+  final AnyFile file;
   final VoidCallback? onLoaded;
 }
 
 class _VideoPageView extends StatelessWidget {
-  const _VideoPageView({
-    required this.file,
-    this.onCompleted,
-  });
+  const _VideoPageView({required this.file, this.onCompleted});
 
   @override
   Widget build(BuildContext context) {
@@ -368,7 +381,7 @@ class _VideoPageView extends StatelessWidget {
     );
   }
 
-  final FileDescriptor file;
+  final AnyFile file;
   final VoidCallback? onCompleted;
 }
 

@@ -3,10 +3,8 @@ part of '../people_browser.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.account,
-    required this.personsController,
-  }) : super(_State.init()) {
+  _Bloc({required this.account, required this.personsController})
+    : super(_State.init()) {
     on<_LoadPersons>(_onLoad);
     on<_Reload>(_onReload);
     on<_TransformItems>(_onTransformItems);
@@ -21,18 +19,14 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         personsController.stream,
-        onData: (data) => state.copyWith(
-          persons: data.data,
-          isLoading: data.hasNext,
-        ),
+        onData:
+            (data) =>
+                state.copyWith(persons: data.data, isLoading: data.hasNext),
       ),
       forEach(
         emit,
         personsController.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isLoading: false, error: data),
       ),
     ]);
   }
@@ -43,7 +37,9 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _onTransformItems(
-      _TransformItems ev, Emitter<_State> emit) async {
+    _TransformItems ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info("[_onTransformItems] $ev");
     final transformed =
         ev.persons.sorted(_sorter).map(_Item.fromPerson).toList();

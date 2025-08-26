@@ -10,6 +10,7 @@ extension _$SyncRecognizeFaceNpLog on SyncRecognizeFace {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("use_case.recognize_face.sync_recognize_face.SyncRecognizeFace");
+  static final log = Logger(
+    "use_case.recognize_face.sync_recognize_face.SyncRecognizeFace",
+  );
 }

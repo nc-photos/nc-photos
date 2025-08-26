@@ -19,7 +19,9 @@ abstract class FaceRecognitionPersonRepo {
 
   /// Query all [FaceRecognitionFace]s belonging to [person]
   Stream<List<FaceRecognitionFace>> getFaces(
-      Account account, FaceRecognitionPerson person);
+    Account account,
+    FaceRecognitionPerson person,
+  );
 }
 
 /// A repo that simply relay the call to the backed
@@ -35,7 +37,9 @@ class BasicFaceRecognitionPersonRepo implements FaceRecognitionPersonRepo {
 
   @override
   Stream<List<FaceRecognitionFace>> getFaces(
-      Account account, FaceRecognitionPerson person) async* {
+    Account account,
+    FaceRecognitionPerson person,
+  ) async* {
     yield await dataSrc.getFaces(account, person);
   }
 
@@ -48,5 +52,7 @@ abstract class FaceRecognitionPersonDataSource {
 
   /// Query all faces belonging to [person]
   Future<List<FaceRecognitionFace>> getFaces(
-      Account account, FaceRecognitionPerson person);
+    Account account,
+    FaceRecognitionPerson person,
+  );
 }

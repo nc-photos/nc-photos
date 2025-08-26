@@ -13,10 +13,7 @@ part 'places_controller.g.dart';
 
 @genCopyWith
 class PlaceStreamEvent {
-  const PlaceStreamEvent({
-    required this.data,
-    required this.hasNext,
-  });
+  const PlaceStreamEvent({required this.data, required this.hasNext});
 
   final LocationGroupResult data;
 
@@ -27,10 +24,7 @@ class PlaceStreamEvent {
 
 @npLog
 class PlacesController {
-  PlacesController(
-    this._c, {
-    required this.account,
-  });
+  PlacesController(this._c, {required this.account});
 
   void dispose() {
     _placeStreamContorller.close();
@@ -64,10 +58,7 @@ class PlacesController {
     final completer = Completer();
     ListLocationGroup(_c.withLocalRepo())(account).asStream().listen(
       (results) {
-        lastData = PlaceStreamEvent(
-          data: results,
-          hasNext: true,
-        );
+        lastData = PlaceStreamEvent(data: results, hasNext: true);
         _placeStreamContorller.add(lastData);
       },
       onError: _placeErrorStreamController.add,

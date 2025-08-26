@@ -21,8 +21,8 @@ class _UpgradeProgressView extends StatelessWidget {
             children: [
               _BlocSelector<String?>(
                 selector: (state) => state.upgradeText,
-                builder: (context, upgradeText) =>
-                    Text(upgradeText ?? "Updating"),
+                builder:
+                    (context, upgradeText) => Text(upgradeText ?? "Updating"),
               ),
               const SizedBox(height: 8),
               LinearProgressIndicator(value: upgradeProgress),

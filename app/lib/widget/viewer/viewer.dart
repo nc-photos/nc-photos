@@ -17,28 +17,30 @@ import 'package:nc_photos/asset.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collection_items_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/download_handler.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/live_photo_util.dart';
 import 'package:nc_photos/platform/features.dart' as features;
-import 'package:nc_photos/set_as_handler.dart';
-import 'package:nc_photos/share_handler.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
+import 'package:nc_photos/widget/delete_result_snack_bar.dart';
 import 'package:nc_photos/widget/disposable.dart';
 import 'package:nc_photos/widget/file_content_view.dart';
-import 'package:nc_photos/widget/handler/remove_selection_handler.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:nc_photos/widget/image_editor.dart';
 import 'package:nc_photos/widget/image_enhancer.dart';
@@ -47,11 +49,11 @@ import 'package:nc_photos/widget/png_icon.dart';
 import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/slideshow_dialog.dart';
 import 'package:nc_photos/widget/slideshow_viewer.dart';
-import 'package:nc_photos/widget/viewer_detail_pane.dart';
+import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
+import 'package:nc_photos/widget/viewer_detail_pane/viewer_detail_pane.dart';
 import 'package:nc_photos/widget/viewer_mixin.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
-import 'package:np_common/or_null.dart';
 import 'package:np_common/unique.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
@@ -75,20 +77,18 @@ class ViewerPositionInfo {
   });
 
   final int pageIndex;
-  final FileDescriptor originalFile;
+  final AnyFile originalFile;
 }
 
 @toString
 class ViewerContentProviderResult {
-  const ViewerContentProviderResult({
-    required this.files,
-  });
+  const ViewerContentProviderResult({required this.files});
 
   @override
   String toString() => _$toString();
 
-  @Format(r"${$?.map((e) => e.fdId).toReadableString()}")
-  final List<FileDescriptor> files;
+  @Format(r"${$?.map((e) => e.id).toReadableString()}")
+  final List<AnyFile> files;
 }
 
 abstract interface class ViewerContentProvider {
@@ -108,16 +108,18 @@ abstract interface class ViewerContentProvider {
   /// It is allowed for implementations to return fewer number of results than
   /// requested, even with an empty list.
   Future<ViewerContentProviderResult> getFiles(
-      ViewerPositionInfo at, int count);
+    ViewerPositionInfo at,
+    int count,
+  );
 
   /// Return a single file at the specified page
-  Future<FileDescriptor> getFile(int page, int fileId);
+  Future<AnyFile> getFile(int page, String afId);
 
   /// Called when user removed a file returned from [getFiles]
-  void notifyFileRemoved(int page, FileDescriptor file);
+  void notifyFileRemoved(int page, AnyFile file);
 
   /// Return all file ids, typically for slideshow
-  Future<List<int>> listFileIds();
+  Future<List<String>> listAfIds();
 }
 
 class ViewerArguments {
@@ -150,27 +152,30 @@ class Viewer extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create: (_) => _Bloc(
-        KiwiContainer().resolve(),
-        account: accountController.account,
-        filesController: accountController.filesController,
-        collectionsController: accountController.collectionsController,
-        prefController: context.read(),
-        accountPrefController: accountController.accountPrefController,
-        contentProvider: contentProvider,
-        allFilesCount: allFilesCount,
-        initialFile: initialFile,
-        initialIndex: initialIndex,
-        brightness: Theme.of(context).brightness,
-        collectionId: collectionId,
-      )..add(const _Init()),
+      create:
+          (_) => _Bloc(
+            KiwiContainer().resolve(),
+            account: accountController.account,
+            anyFilesController: accountController.anyFilesController,
+            filesController: accountController.filesController,
+            localFilesController: context.read(),
+            collectionsController: accountController.collectionsController,
+            prefController: context.read(),
+            accountPrefController: accountController.accountPrefController,
+            contentProvider: contentProvider,
+            allFilesCount: allFilesCount,
+            initialFile: initialFile,
+            initialIndex: initialIndex,
+            brightness: Theme.of(context).brightness,
+            collectionId: collectionId,
+          )..add(const _Init()),
       child: const _WrappedViewer(),
     );
   }
 
   final ViewerContentProvider contentProvider;
   final int allFilesCount;
-  final FileDescriptor initialFile;
+  final AnyFile initialFile;
   final int initialIndex;
 
   /// ID of the collection these files belongs to, or null
@@ -206,8 +211,10 @@ class _WrappedViewerState extends State<_WrappedViewer>
               selector: (state) => state.imageEditorRequest,
               listener: (context, imageEditorRequest) {
                 if (imageEditorRequest.value != null) {
-                  Navigator.of(context).pushNamed(ImageEditor.routeName,
-                      arguments: imageEditorRequest.value);
+                  Navigator.of(context).pushNamed(
+                    ImageEditor.routeName,
+                    arguments: imageEditorRequest.value,
+                  );
                 }
               },
             ),
@@ -215,29 +222,25 @@ class _WrappedViewerState extends State<_WrappedViewer>
               selector: (state) => state.imageEnhancerRequest,
               listener: (context, imageEnhancerRequest) {
                 if (imageEnhancerRequest.value != null) {
-                  Navigator.of(context).pushNamed(ImageEnhancer.routeName,
-                      arguments: imageEnhancerRequest.value);
+                  Navigator.of(context).pushNamed(
+                    ImageEnhancer.routeName,
+                    arguments: imageEnhancerRequest.value,
+                  );
                 }
               },
             ),
             _BlocListenerT(
               selector: (state) => state.shareRequest,
-              listener: (context, shareRequest) {
-                if (shareRequest.value != null) {
-                  ShareHandler(
-                    KiwiContainer().resolve<DiContainer>(),
-                    context: context,
-                  ).shareFiles(
-                      context.bloc.account, [shareRequest.value!.file]);
-                }
-              },
+              listener: _onShareRequest,
             ),
             _BlocListenerT(
               selector: (state) => state.startSlideshowRequest,
               listener: (context, startSlideshowRequest) {
                 if (startSlideshowRequest.value != null) {
                   _onStartSlideshowRequest(
-                      context, startSlideshowRequest.value!);
+                    context,
+                    startSlideshowRequest.value!,
+                  );
                 }
               },
             ),
@@ -254,6 +257,10 @@ class _WrappedViewerState extends State<_WrappedViewer>
               listener: _onSetAsRequest,
             ),
             _BlocListenerT(
+              selector: (state) => state.uploadRequest,
+              listener: _onUploadRequest,
+            ),
+            _BlocListenerT(
               selector: (state) => state.error,
               listener: (context, error) {
                 if (error != null && isPageVisible()) {
@@ -264,44 +271,54 @@ class _WrappedViewerState extends State<_WrappedViewer>
           ],
           child: _BlocSelector(
             selector: (state) => state.isBusy,
-            builder: (context, isBusy) => PopScope(
-              canPop: !isBusy,
-              child: _BlocBuilder(
-                buildWhen: (previous, current) =>
-                    previous.isShowAppBar != current.isShowAppBar ||
-                    previous.isDetailPaneActive != current.isDetailPaneActive,
-                builder: (context, state) => Scaffold(
-                  extendBodyBehindAppBar: true,
-                  extendBody: true,
-                  appBar: state.isShowAppBar
-                      ? const PreferredSize(
-                          preferredSize: Size.fromHeight(kToolbarHeight),
-                          child: _AppBar(),
-                        )
-                      : null,
-                  bottomNavigationBar:
-                      state.isShowAppBar && !state.isDetailPaneActive
-                          ? const _BottomAppBar()
-                          : null,
-                  body: Stack(
-                    children: [
-                      const _ContentBody(),
-                      _BlocSelector(
-                        selector: (state) => state.isBusy,
-                        builder: (context, isBusy) => isBusy
-                            ? AbsorbPointer(
-                                child: ProcessingOverlay(
-                                  text: L10n.global()
-                                      .genericProcessingDialogContent,
-                                ),
-                              )
-                            : const SizedBox.shrink(),
-                      ),
-                    ],
+            builder:
+                (context, isBusy) => PopScope(
+                  canPop: !isBusy,
+                  child: _BlocBuilder(
+                    buildWhen:
+                        (previous, current) =>
+                            previous.isShowAppBar != current.isShowAppBar ||
+                            previous.isDetailPaneActive !=
+                                current.isDetailPaneActive,
+                    builder:
+                        (context, state) => Scaffold(
+                          extendBodyBehindAppBar: true,
+                          extendBody: true,
+                          appBar:
+                              state.isShowAppBar
+                                  ? const PreferredSize(
+                                    preferredSize: Size.fromHeight(
+                                      kToolbarHeight,
+                                    ),
+                                    child: _AppBar(),
+                                  )
+                                  : null,
+                          bottomNavigationBar:
+                              state.isShowAppBar && !state.isDetailPaneActive
+                                  ? const _BottomAppBar()
+                                  : null,
+                          body: Stack(
+                            children: [
+                              const _ContentBody(),
+                              _BlocSelector(
+                                selector: (state) => state.isBusy,
+                                builder:
+                                    (context, isBusy) =>
+                                        isBusy
+                                            ? AbsorbPointer(
+                                              child: ProcessingOverlay(
+                                                text:
+                                                    L10n.global()
+                                                        .genericProcessingDialogContent,
+                                              ),
+                                            )
+                                            : const SizedBox.shrink(),
+                              ),
+                            ],
+                          ),
+                        ),
                   ),
                 ),
-              ),
-            ),
           ),
         ),
       ),
@@ -314,12 +331,13 @@ class _WrappedViewerState extends State<_WrappedViewer>
   ) async {
     final result = await showDialog<SlideshowConfig>(
       context: context,
-      builder: (_) => SlideshowDialog(
-        duration: context.bloc.prefController.slideshowDurationValue,
-        isShuffle: context.bloc.prefController.isSlideshowShuffleValue,
-        isRepeat: context.bloc.prefController.isSlideshowRepeatValue,
-        isReverse: context.bloc.prefController.isSlideshowReverseValue,
-      ),
+      builder:
+          (_) => SlideshowDialog(
+            duration: context.bloc.prefController.slideshowDurationValue,
+            isShuffle: context.bloc.prefController.isSlideshowShuffleValue,
+            isRepeat: context.bloc.prefController.isSlideshowRepeatValue,
+            isReverse: context.bloc.prefController.isSlideshowReverseValue,
+          ),
     );
     if (!context.mounted || result == null) {
       return;
@@ -334,7 +352,7 @@ class _WrappedViewerState extends State<_WrappedViewer>
     final newIndex = await Navigator.of(context).pushNamed<int>(
       SlideshowViewer.routeName,
       arguments: SlideshowViewerArguments(
-        slideshowRequest.fileIds,
+        slideshowRequest.afIds,
         slideshowRequest.startIndex,
         slideshowRequest.collectionId,
         slideshowRequest.config,
@@ -342,11 +360,28 @@ class _WrappedViewerState extends State<_WrappedViewer>
     );
     _log.info("[_onSlideshowRequest] Slideshow ended, jump to: $newIndex");
     if (newIndex != null && context.mounted) {
-      context.addEvent(_JumpToLastSlideshow(
-        index: newIndex,
-        fileId: slideshowRequest.fileIds[newIndex],
-      ));
+      context.addEvent(
+        _JumpToLastSlideshow(
+          index: newIndex,
+          afId: slideshowRequest.afIds[newIndex],
+        ),
+      );
     }
+  }
+
+  void _onShareRequest(
+    BuildContext context,
+    Unique<_ShareRequest?> shareRequest,
+  ) {
+    if (shareRequest.value == null) {
+      return;
+    }
+    final f = shareRequest.value!.file;
+    AnyFileWorkerFactory.share(
+      f,
+      account: context.bloc.account,
+      c: context.bloc._c,
+    ).share(context);
   }
 
   void _onSetAsRequest(
@@ -356,10 +391,33 @@ class _WrappedViewerState extends State<_WrappedViewer>
     if (setAsRequest.value == null) {
       return;
     }
-    SetAsHandler(
-      KiwiContainer().resolve(),
+    final f = setAsRequest.value!.file;
+    AnyFileWorkerFactory.setAs(
+      f,
+      account: context.bloc.account,
+      c: context.bloc._c,
+    ).setAs(context);
+  }
+
+  Future<void> _onUploadRequest(
+    BuildContext context,
+    Unique<_UploadRequest?> uploadRequest,
+  ) async {
+    if (uploadRequest.value == null) {
+      return;
+    }
+    final f = uploadRequest.value!.file;
+    final config = await showDialog<UploadConfig>(
       context: context,
-    ).setAsFile(setAsRequest.value!.account, setAsRequest.value!.file);
+      builder: (context) => const UploadDialog(),
+    );
+    if (config == null || !context.mounted) {
+      return;
+    }
+    AnyFileWorkerFactory.upload(
+      f,
+      account: context.bloc.account,
+    ).upload(config.relativePath);
   }
 }
 

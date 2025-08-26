@@ -1,11 +1,6 @@
 part of '../home_collections.dart';
 
-enum _ItemType {
-  ncAlbum,
-  album,
-  dirAlbum,
-  tagAlbum,
-}
+enum _ItemType { ncAlbum, album, dirAlbum, tagAlbum }
 
 @npLog
 class _Item implements SelectableItemMetadata {
@@ -26,13 +21,12 @@ class _Item implements SelectableItemMetadata {
         coverMime: result?.mime,
       );
     } catch (e, stackTrace) {
-      _$_ItemNpLog.log
-          .warning("[fromCollection] Failed while getCoverUrl", e, stackTrace);
-      return _Item._(
-        collection: collection,
-        coverUrl: null,
-        coverMime: null,
+      _$_ItemNpLog.log.warning(
+        "[fromCollection] Failed while getCoverUrl",
+        e,
+        stackTrace,
       );
+      return _Item._(collection: collection, coverUrl: null, coverMime: null);
     }
   }
 
@@ -49,9 +43,7 @@ class _Item implements SelectableItemMetadata {
 
   String get name => collection.name;
 
-  String? getSubtitle({
-    int? itemCountOverride,
-  }) {
+  String? getSubtitle({int? itemCountOverride}) {
     if (collection.count != null) {
       return L10n.global().albumSize(itemCountOverride ?? collection.count!);
     } else {

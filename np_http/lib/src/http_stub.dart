@@ -1,7 +1,5 @@
 import 'package:http/http.dart';
 
-Client makeHttpClientImpl({
-  required String userAgent,
-}) {
+Client makeHttpClientImpl({required String userAgent}) {
   throw UnsupportedError("Unsupported");
 }

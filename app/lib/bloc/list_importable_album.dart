@@ -30,10 +30,7 @@ abstract class ListImportableAlbumBlocEvent {
 
 @toString
 class ListImportableAlbumBlocQuery extends ListImportableAlbumBlocEvent {
-  const ListImportableAlbumBlocQuery(
-    this.account,
-    this.roots,
-  );
+  const ListImportableAlbumBlocQuery(this.account, this.roots);
 
   @override
   String toString() => _$toString();
@@ -80,38 +77,47 @@ class ListImportableAlbumBlocFailure extends ListImportableAlbumBlocState {
 class ListImportableAlbumBloc
     extends Bloc<ListImportableAlbumBlocEvent, ListImportableAlbumBlocState> {
   ListImportableAlbumBloc(this._c)
-      : assert(require(_c)),
-        assert(ListAlbum.require(_c)),
-        super(ListImportableAlbumBlocInit()) {
+    : assert(require(_c)),
+      assert(ListAlbum.require(_c)),
+      super(ListImportableAlbumBlocInit()) {
     on<ListImportableAlbumBlocEvent>(_onEvent);
   }
 
   static bool require(DiContainer c) => DiContainer.has(c, DiType.fileRepo);
 
-  Future<void> _onEvent(ListImportableAlbumBlocEvent event,
-      Emitter<ListImportableAlbumBlocState> emit) async {
+  Future<void> _onEvent(
+    ListImportableAlbumBlocEvent event,
+    Emitter<ListImportableAlbumBlocState> emit,
+  ) async {
     _log.info("[_onEvent] $event");
     if (event is ListImportableAlbumBlocQuery) {
       await _onEventQuery(event, emit);
     }
   }
 
-  Future<void> _onEventQuery(ListImportableAlbumBlocQuery ev,
-      Emitter<ListImportableAlbumBlocState> emit) async {
+  Future<void> _onEventQuery(
+    ListImportableAlbumBlocQuery ev,
+    Emitter<ListImportableAlbumBlocState> emit,
+  ) async {
     emit(const ListImportableAlbumBlocLoading([]));
     try {
-      final albums = (await ListAlbum(_c)(ev.account)
-              .where((event) => event is Album)
-              .toList())
-          .cast<Album>();
-      final importedDirs = albums.map((a) {
-        if (a.provider is! AlbumDirProvider) {
-          return <File>[];
-        } else {
-          return (a.provider as AlbumDirProvider).dirs;
-        }
-      }).fold<List<File>>(
-          [], (previousValue, element) => previousValue + element);
+      final albums =
+          (await ListAlbum(_c)(
+                ev.account,
+              ).where((event) => event is Album).toList())
+              .cast<Album>();
+      final importedDirs = albums
+          .map((a) {
+            if (a.provider is! AlbumDirProvider) {
+              return <File>[];
+            } else {
+              return (a.provider as AlbumDirProvider).dirs;
+            }
+          })
+          .fold<List<File>>(
+            [],
+            (previousValue, element) => previousValue + element,
+          );
 
       final products = <ListImportableAlbumBlocItem>[];
       int count = 0;
@@ -139,7 +145,10 @@ class ListImportableAlbumBloc
   ///
   /// Emit ListImportableAlbumBlocItem or Exception
   Stream<dynamic> _queryDir(
-      Account account, List<File> importedDirs, File dir) async* {
+    Account account,
+    List<File> importedDirs,
+    File dir,
+  ) async* {
     try {
       if (importedDirs.containsIf(dir, (a, b) => a.path == b.path)) {
         return;
@@ -151,16 +160,19 @@ class ListImportableAlbumBloc
       if (count >= 5) {
         yield ListImportableAlbumBlocItem(dir, count);
       }
-      for (final d in files.where((f) =>
-          f.isCollection == true &&
-          !f.path.endsWith(remote_storage_util.getRemoteStorageDir(account)))) {
+      for (final d in files.where(
+        (f) =>
+            f.isCollection == true &&
+            !f.path.endsWith(remote_storage_util.getRemoteStorageDir(account)),
+      )) {
         yield* _queryDir(account, importedDirs, d);
       }
     } catch (e, stacktrace) {
       _log.shout(
-          "[_queryDir] Failed while listing dir: ${logFilename(dir.path)}",
-          e,
-          stacktrace);
+        "[_queryDir] Failed while listing dir: ${logFilename(dir.path)}",
+        e,
+        stacktrace,
+      );
       yield e;
     }
   }

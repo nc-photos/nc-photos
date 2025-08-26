@@ -5,8 +5,8 @@ homepage:
 publish_to: none
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.29.0"
 
 dependencies:
   equatable: ^2.0.5
@@ -25,13 +25,14 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-1.1.0
+      ref: to_string-2.0.0
       path: to_string
   xml: ^6.5.0
 
 dev_dependencies:
   build_runner: ^2.4.9
   build_runner_core: ">=7.2.9"
+  dart_style: 3.0.1
   np_lints:
     path: ../np_lints
   np_log_build:
@@ -40,5 +41,5 @@ dev_dependencies:
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-1.1.1
+      ref: to_string_build-2.0.0
       path: to_string_build

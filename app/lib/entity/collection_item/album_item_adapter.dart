@@ -28,12 +28,8 @@ class CollectionFileItemAlbumAdapter extends CollectionFileItem
   const CollectionFileItemAlbumAdapter(this.item);
 
   @override
-  CollectionFileItemAlbumAdapter copyWith({
-    FileDescriptor? file,
-  }) {
-    return CollectionFileItemAlbumAdapter(item.copyWith(
-      file: file,
-    ));
+  CollectionFileItemAlbumAdapter copyWith({FileDescriptor? file}) {
+    return CollectionFileItemAlbumAdapter(item.copyWith(file: file));
   }
 
   @override

@@ -39,9 +39,6 @@ Future<void> _favorites() async {
       href: "/remote.php/dav/files/admin/Nextcloud intro.mp4",
       fileId: 12345,
     ),
-    Favorite(
-      href: "/remote.php/dav/files/admin/Nextcloud.png",
-      fileId: 23456,
-    ),
+    Favorite(href: "/remote.php/dav/files/admin/Nextcloud.png", fileId: 23456),
   ]);
 }

@@ -5,12 +5,13 @@ version: 1.0.0
 publish_to: none
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
+  sdk: ">=3.7.0 <4.0.0"
 
 dependencies:
   clock: ^1.1.1
 
 dev_dependencies:
+  dart_style: 3.0.1
   np_lints:
     path: ../np_lints
   test: ^1.22.1

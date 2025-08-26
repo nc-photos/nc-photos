@@ -15,9 +15,9 @@ class Message {
   }
 
   Map<String, dynamic> toJson() => {
-        "event": event,
-        if (data != null) "data": data,
-      };
+    "event": event,
+    if (data != null) "data": data,
+  };
 
   final String event;
   final String? data;
@@ -48,8 +48,9 @@ class MessageRelay {
   }
 
   static const _eventChannel = EventChannel("${k.libId}/message_relay_event");
-  static const _methodChannel =
-      MethodChannel("${k.libId}/message_relay_method");
+  static const _methodChannel = MethodChannel(
+    "${k.libId}/message_relay_method",
+  );
 
   static final _log = _$MessageRelayNpLog.log;
 }

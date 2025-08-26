@@ -11,10 +11,8 @@ class _State {
     this.error,
   });
 
-  factory _State.init() => _State(
-        askWebDavUrlRequest: Unique(null),
-        cancelRequest: false,
-      );
+  factory _State.init() =>
+      _State(askWebDavUrlRequest: Unique(null), cancelRequest: false);
 
   @override
   String toString() => _$toString();

@@ -43,9 +43,7 @@ class CollectionNullSorter implements CollectionSorter {
 
 /// Sort based on the time of the files
 class CollectionTimeSorter implements CollectionSorter {
-  const CollectionTimeSorter({
-    required this.isAscending,
-  });
+  const CollectionTimeSorter({required this.isAscending});
 
   @override
   List<CollectionItem> call(List<CollectionItem> items) {
@@ -83,9 +81,7 @@ class CollectionTimeSorter implements CollectionSorter {
 
 /// Sort based on the name of the files
 class CollectionFilenameSorter implements CollectionSorter {
-  const CollectionFilenameSorter({
-    required this.isAscending,
-  });
+  const CollectionFilenameSorter({required this.isAscending});
 
   @override
   List<CollectionItem> call(List<CollectionItem> items) {
@@ -132,10 +128,12 @@ class CollectionAlbumSortAdapter implements CollectionSorter {
       sorter = const CollectionNullSorter();
     } else if (sort is AlbumTimeSortProvider) {
       sorter = CollectionTimeSorter(
-          isAscending: (sort as AlbumTimeSortProvider).isAscending);
+        isAscending: (sort as AlbumTimeSortProvider).isAscending,
+      );
     } else if (sort is AlbumFilenameSortProvider) {
       sorter = CollectionFilenameSorter(
-          isAscending: (sort as AlbumFilenameSortProvider).isAscending);
+        isAscending: (sort as AlbumFilenameSortProvider).isAscending,
+      );
     } else {
       _log.shout("[call] Unknown type: ${sort.runtimeType}");
       throw UnsupportedError("Unknown type: ${sort.runtimeType}");

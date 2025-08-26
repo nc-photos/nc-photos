@@ -3,10 +3,8 @@ part of '../places_browser.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.account,
-    required this.placesController,
-  }) : super(_State.init()) {
+  _Bloc({required this.account, required this.placesController})
+    : super(_State.init()) {
     on<_LoadPlaces>(_onLoad);
     on<_Reload>(_onReload);
     on<_TransformItems>(_onTransformItems);
@@ -21,18 +19,14 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         placesController.stream,
-        onData: (data) => state.copyWith(
-          places: data.data,
-          isLoading: data.hasNext,
-        ),
+        onData:
+            (data) =>
+                state.copyWith(places: data.data, isLoading: data.hasNext),
       ),
       forEach(
         emit,
         placesController.errorStream,
-        onData: (data) => state.copyWith(
-          isLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isLoading: false, error: data),
       ),
     ]);
   }
@@ -43,20 +37,26 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   Future<void> _onTransformItems(
-      _TransformItems ev, Emitter<_State> emit) async {
+    _TransformItems ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
-    final transformedPlaces = ev.places.name
-        .sorted(_sorter)
-        .map((e) => _Item(account: account, place: e))
-        .toList();
-    final transformedCountries = ev.places.countryCode
-        .sorted(_sorter)
-        .map((e) => _Item(account: account, place: e))
-        .toList();
-    emit(state.copyWith(
-      transformedPlaceItems: transformedPlaces,
-      transformedCountryItems: transformedCountries,
-    ));
+    final transformedPlaces =
+        ev.places.name
+            .sorted(_sorter)
+            .map((e) => _Item(account: account, place: e))
+            .toList();
+    final transformedCountries =
+        ev.places.countryCode
+            .sorted(_sorter)
+            .map((e) => _Item(account: account, place: e))
+            .toList();
+    emit(
+      state.copyWith(
+        transformedPlaceItems: transformedPlaces,
+        transformedCountryItems: transformedCountries,
+      ),
+    );
   }
 
   final Account account;

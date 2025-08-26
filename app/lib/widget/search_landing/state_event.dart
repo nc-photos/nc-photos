@@ -14,13 +14,13 @@ class _State {
   });
 
   factory _State.init() => const _State(
-        persons: [],
-        isPersonsLoading: false,
-        transformedPersonItems: [],
-        places: LocationGroupResult([], [], [], []),
-        isPlacesLoading: false,
-        transformedPlaceItems: [],
-      );
+    persons: [],
+    isPersonsLoading: false,
+    transformedPersonItems: [],
+    places: LocationGroupResult([], [], [], []),
+    isPlacesLoading: false,
+    transformedPlaceItems: [],
+  );
 
   @override
   String toString() => _$toString();

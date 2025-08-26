@@ -43,10 +43,7 @@ class _AnimatedVisibilityState extends State<AnimatedVisibility> {
       duration: widget.duration,
       onEnd: _onEnd,
       alwaysIncludeSemantics: widget.alwaysIncludeSemantics,
-      child: Visibility(
-        visible: _isActive,
-        child: widget.child,
-      ),
+      child: Visibility(visible: _isActive, child: widget.child),
     );
   }
 

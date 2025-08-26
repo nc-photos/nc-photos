@@ -118,9 +118,7 @@ class _LoadItems implements _Event {
 /// Transform the collection list (e.g., filtering, sorting, etc)
 @toString
 class _TransformItems implements _Event {
-  const _TransformItems({
-    required this.items,
-  });
+  const _TransformItems({required this.items});
 
   @override
   String toString() => _$toString();
@@ -220,9 +218,7 @@ class _EditManualSort implements _Event {
 
 @toString
 class _TransformEditItems implements _Event {
-  const _TransformEditItems({
-    required this.items,
-  });
+  const _TransformEditItems({required this.items});
 
   @override
   String toString() => _$toString();
@@ -257,9 +253,7 @@ class _UnsetCover implements _Event {
 /// Set the currently selected items
 @toString
 class _SetSelectedItems implements _Event {
-  const _SetSelectedItems({
-    required this.items,
-  });
+  const _SetSelectedItems({required this.items});
 
   @override
   String toString() => _$toString();

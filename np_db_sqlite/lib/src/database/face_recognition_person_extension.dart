@@ -11,16 +11,25 @@ extension SqliteDbFaceRecognitionPersonExtension on SqliteDb {
         ..where((t) => t.account.equals(account.sqlAccount!.rowId));
       return query.get();
     } else {
-      final query = select(faceRecognitionPersons).join([
-        innerJoin(
-            accounts, accounts.rowId.equalsExp(faceRecognitionPersons.account),
-            useColumns: false),
-        innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-            useColumns: false),
-      ])
-        ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(accounts.userId
-            .equals(account.dbAccount!.userId.toCaseInsensitiveString()));
+      final query =
+          select(faceRecognitionPersons).join([
+              innerJoin(
+                accounts,
+                accounts.rowId.equalsExp(faceRecognitionPersons.account),
+                useColumns: false,
+              ),
+              innerJoin(
+                servers,
+                servers.rowId.equalsExp(accounts.server),
+                useColumns: false,
+              ),
+            ])
+            ..where(servers.address.equals(account.dbAccount!.serverAddress))
+            ..where(
+              accounts.userId.equals(
+                account.dbAccount!.userId.toCaseInsensitiveString(),
+              ),
+            );
       return query.map((r) => r.readTable(faceRecognitionPersons)).get();
     }
   }
@@ -31,27 +40,41 @@ extension SqliteDbFaceRecognitionPersonExtension on SqliteDb {
   }) async {
     _log.info("[searchFaceRecognitionPersonByName] name: $name");
     if (account.sqlAccount != null) {
-      final query = select(faceRecognitionPersons)
-        ..where((t) => t.account.equals(account.sqlAccount!.rowId))
-        ..where((t) =>
-            t.name.like(name) |
-            t.name.like("% $name") |
-            t.name.like("$name %"));
+      final query =
+          select(faceRecognitionPersons)
+            ..where((t) => t.account.equals(account.sqlAccount!.rowId))
+            ..where(
+              (t) =>
+                  t.name.like(name) |
+                  t.name.like("% $name") |
+                  t.name.like("$name %"),
+            );
       return query.get();
     } else {
-      final query = select(faceRecognitionPersons).join([
-        innerJoin(
-            accounts, accounts.rowId.equalsExp(faceRecognitionPersons.account),
-            useColumns: false),
-        innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-            useColumns: false),
-      ])
-        ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(
-            accounts.userId.equals(account.dbAccount!.userId.toCaseInsensitiveString()))
-        ..where(faceRecognitionPersons.name.like(name) |
-            faceRecognitionPersons.name.like("% $name") |
-            faceRecognitionPersons.name.like("$name %"));
+      final query =
+          select(faceRecognitionPersons).join([
+              innerJoin(
+                accounts,
+                accounts.rowId.equalsExp(faceRecognitionPersons.account),
+                useColumns: false,
+              ),
+              innerJoin(
+                servers,
+                servers.rowId.equalsExp(accounts.server),
+                useColumns: false,
+              ),
+            ])
+            ..where(servers.address.equals(account.dbAccount!.serverAddress))
+            ..where(
+              accounts.userId.equals(
+                account.dbAccount!.userId.toCaseInsensitiveString(),
+              ),
+            )
+            ..where(
+              faceRecognitionPersons.name.like(name) |
+                  faceRecognitionPersons.name.like("% $name") |
+                  faceRecognitionPersons.name.like("$name %"),
+            );
       return query.map((r) => r.readTable(faceRecognitionPersons)).get();
     }
   }
@@ -75,12 +98,13 @@ extension SqliteDbFaceRecognitionPersonExtension on SqliteDb {
       for (final u in updates) {
         batch.update(
           faceRecognitionPersons,
-          FaceRecognitionPersonConverter.toSql(sqlAccount, u).copyWith(
-            account: const Value.absent(),
-            name: const Value.absent(),
-          ),
-          where: ($FaceRecognitionPersonsTable t) =>
-              t.account.equals(sqlAccount.rowId) & t.name.equals(u.name),
+          FaceRecognitionPersonConverter.toSql(
+            sqlAccount,
+            u,
+          ).copyWith(account: const Value.absent(), name: const Value.absent()),
+          where:
+              ($FaceRecognitionPersonsTable t) =>
+                  t.account.equals(sqlAccount.rowId) & t.name.equals(u.name),
         );
       }
       for (final i in inserts) {

@@ -10,9 +10,7 @@ class BasicCollectionFileItem implements CollectionFileItem {
   const BasicCollectionFileItem(this.file);
 
   @override
-  BasicCollectionFileItem copyWith({
-    FileDescriptor? file,
-  }) {
+  BasicCollectionFileItem copyWith({FileDescriptor? file}) {
     return BasicCollectionFileItem(file ?? this.file);
   }
 

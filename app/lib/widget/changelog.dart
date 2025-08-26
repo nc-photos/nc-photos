@@ -30,6 +30,7 @@ part 'changelog/changelog_730.dart';
 part 'changelog/changelog_740.dart';
 part 'changelog/changelog_750.dart';
 part 'changelog/changelog_760.dart';
+part 'changelog/changelog_770.dart';
 
 class ChangelogArguments {
   const ChangelogArguments(this.fromVersion);
@@ -50,27 +51,19 @@ class Changelog extends StatelessWidget {
   static bool hasContent(int fromVersion) =>
       _changelogs.keys.first > fromVersion;
 
-  const Changelog({
-    super.key,
-    this.fromVersion,
-  });
+  const Changelog({super.key, this.fromVersion});
 
   Changelog.fromArgs(ChangelogArguments args, {Key? key})
-      : this(
-          key: key,
-          fromVersion: args.fromVersion,
-        );
+    : this(key: key, fromVersion: args.fromVersion);
 
   @override
   build(BuildContext context) => Scaffold(
-        appBar: _buildAppBar(),
-        body: Builder(builder: (context) => _buildContent(context)),
-      );
+    appBar: _buildAppBar(),
+    body: Builder(builder: (context) => _buildContent(context)),
+  );
 
-  AppBar _buildAppBar() => AppBar(
-        title: Text(L10n.global().changelogTitle),
-        elevation: 0,
-      );
+  AppBar _buildAppBar() =>
+      AppBar(title: Text(L10n.global().changelogTitle), elevation: 0);
 
   Widget _buildContent(BuildContext context) {
     return Column(
@@ -90,7 +83,7 @@ class Changelog extends StatelessWidget {
       final version = _changelogs.keys.elementAt(i);
       return ExpansionTile(
         key: PageStorageKey(i),
-        title: Text((version / 10).toStringAsFixed(1)),
+        title: Text((version / (version > 1000 ? 100 : 10)).toStringAsFixed(1)),
         initiallyExpanded:
             fromVersion == null ? (i == 0) : (version > fromVersion!),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -110,32 +103,34 @@ class Changelog extends StatelessWidget {
 List<Widget> _buildChangelog460(BuildContext context) {
   return [
     _subSectionHighlight("IMPORTANT"),
-    _bulletGroup(const Text(
-        "Completely reworked the cache database, the app will perform a full resync with server from scratch")),
-    _bulletGroup(const Text(
-        "(LDAP user only) Previously the username is used in place of user ID incorrectly, this is now fixed but albums created before may become broken. Please recreate them if that's the case. Sorry for your inconvenience")),
+    _bulletGroup(
+      const Text(
+        "Completely reworked the cache database, the app will perform a full resync with server from scratch",
+      ),
+    ),
+    _bulletGroup(
+      const Text(
+        "(LDAP user only) Previously the username is used in place of user ID incorrectly, this is now fixed but albums created before may become broken. Please recreate them if that's the case. Sorry for your inconvenience",
+      ),
+    ),
     _sectionPadding(),
     _subSection("Improvements"),
-    _bulletGroup(const Text(
-        "Improved performance working with a large collection of photos")),
     _bulletGroup(
-      const Text("New image editor"),
-      [
-        const Text(
-            "Adjust image brightness, contrast, white point, black point, saturation, warmth and tint")
-      ],
+      const Text(
+        "Improved performance working with a large collection of photos",
+      ),
     ),
-    _bulletGroup(
-      const Text("Double tap to exit"),
-      [
-        const Text("Settings > Miscellaneous > Double tap to exit"),
-      ],
-    ),
+    _bulletGroup(const Text("New image editor"), [
+      const Text(
+        "Adjust image brightness, contrast, white point, black point, saturation, warmth and tint",
+      ),
+    ]),
+    _bulletGroup(const Text("Double tap to exit"), [
+      const Text("Settings > Miscellaneous > Double tap to exit"),
+    ]),
     _bulletGroup(
       const Text("Replace account info in the app bar with customized label"),
-      [
-        const Text("Settings > Account > Label"),
-      ],
+      [const Text("Settings > Account > Label")],
     ),
     _sectionPadding(),
     _subSection("Localization"),
@@ -143,8 +138,11 @@ List<Widget> _buildChangelog460(BuildContext context) {
     _bulletGroup(const Text("Updated Spanish (by luckkmaxx)")),
     _sectionPadding(),
     _subSection("Known issues"),
-    _bulletGroup(const Text(
-        "Google Maps is temporarily disabled due to a bug in the Maps SDK. The app will use OSM as the only map provider until the bug is fixed")),
+    _bulletGroup(
+      const Text(
+        "Google Maps is temporarily disabled due to a bug in the Maps SDK. The app will use OSM as the only map provider until the bug is fixed",
+      ),
+    ),
   ];
 }
 
@@ -154,8 +152,11 @@ List<Widget> _buildChangelog470(BuildContext context) {
     _bulletGroup(const Text("Updated Spanish (by luckkmaxx)")),
     _sectionPadding(),
     _subSection("Known issues"),
-    _bulletGroup(const Text(
-        "Google Maps is temporarily disabled due to a bug in the Maps SDK. The app will use OSM as the only map provider until the bug is fixed")),
+    _bulletGroup(
+      const Text(
+        "Google Maps is temporarily disabled due to a bug in the Maps SDK. The app will use OSM as the only map provider until the bug is fixed",
+      ),
+    ),
   ];
 }
 
@@ -163,7 +164,8 @@ List<Widget> _buildChangelog480(BuildContext context) {
   return [
     _subSectionHighlight("IMPORTANT"),
     _bulletGroup(
-        const Text("Favorites and People are relocated to the Search tab")),
+      const Text("Favorites and People are relocated to the Search tab"),
+    ),
     _sectionPadding(),
     _subSection("Improvements"),
     _bulletGroup(const Text("Search")),
@@ -173,8 +175,11 @@ List<Widget> _buildChangelog480(BuildContext context) {
     _bulletGroup(const Text("Updated Spanish (by luckkmaxx)")),
     _sectionPadding(),
     _subSection("Known issues"),
-    _bulletGroup(const Text(
-        "Google Maps is temporarily disabled due to a bug in the Maps SDK. The app will use OSM as the only map provider until the bug is fixed")),
+    _bulletGroup(
+      const Text(
+        "Google Maps is temporarily disabled due to a bug in the Maps SDK. The app will use OSM as the only map provider until the bug is fixed",
+      ),
+    ),
   ];
 }
 
@@ -183,10 +188,9 @@ List<Widget> _buildChangelog500(BuildContext context) {
     _subSection("Changes"),
     _bulletGroup(
       const Text(
-          "Search and show places converted from GPS coordinates embedded in EXIF"),
-      [
-        const Text("The app will process your photos in the background"),
-      ],
+        "Search and show places converted from GPS coordinates embedded in EXIF",
+      ),
+      [const Text("The app will process your photos in the background")],
     ),
     _bulletGroup(const Text("Google Maps is now re-enabled on some devices")),
     _sectionPadding(),
@@ -194,27 +198,25 @@ List<Widget> _buildChangelog500(BuildContext context) {
     _bulletGroup(const Text("Updated Finnish (by pHamala)")),
     _sectionPadding(),
     _subSection("Known issues"),
-    _bulletGroup(const Text(
-        "Google Maps is temporarily disabled on some devices due to a bug in the Maps SDK")),
+    _bulletGroup(
+      const Text(
+        "Google Maps is temporarily disabled on some devices due to a bug in the Maps SDK",
+      ),
+    ),
   ];
 }
 
 List<Widget> _buildChangelog510(BuildContext context) {
   return [
     _subSection("Changes"),
-    _bulletGroup(
-      const Text("New image editing tools"),
-      [
-        const Text("Crop"),
-        const Text("Change the orientation (90°, 180°, 270°) of an image"),
-      ],
-    ),
+    _bulletGroup(const Text("New image editing tools"), [
+      const Text("Crop"),
+      const Text("Change the orientation (90°, 180°, 270°) of an image"),
+    ]),
     _bulletGroup(const Text("Search now returns more relavant results")),
     _bulletGroup(
       const Text("Tweak how many days should be included in Memories"),
-      [
-        const Text("Settings > Photos > Memories range"),
-      ],
+      [const Text("Settings > Photos > Memories range")],
     ),
   ];
 }
@@ -222,38 +224,39 @@ List<Widget> _buildChangelog510(BuildContext context) {
 List<Widget> _buildChangelog520(BuildContext context) {
   return [
     _subSection("Changes"),
-    _bulletGroup(const Text(
-        "New option to share a reduced quality preview instead of the original file")),
-    _bulletGroup(const Text(
-        "Support saving enhanced/edited photos directly on the server")),
     _bulletGroup(
-      const Text("Image enhancements"),
-      [
-        const Text("Added color pop"),
-        const Text("Improved portrait blur in scenes with multiple objects"),
-      ],
+      const Text(
+        "New option to share a reduced quality preview instead of the original file",
+      ),
     ),
     _bulletGroup(
-      const Text("Image editor"),
-      [
-        const Text("Fixed changing image orientation may flip the image"),
-      ],
+      const Text(
+        "Support saving enhanced/edited photos directly on the server",
+      ),
     ),
+    _bulletGroup(const Text("Image enhancements"), [
+      const Text("Added color pop"),
+      const Text("Improved portrait blur in scenes with multiple objects"),
+    ]),
+    _bulletGroup(const Text("Image editor"), [
+      const Text("Fixed changing image orientation may flip the image"),
+    ]),
   ];
 }
 
 List<Widget> _buildChangelog530(BuildContext context) {
   return [
     _subSection("Changes"),
+    _bulletGroup(const Text("New enhancement: auto retouch"), [
+      const Text(
+        "Automatically retouch your photos, improve color and vibrance",
+      ),
+    ]),
     _bulletGroup(
-      const Text("New enhancement: auto retouch"),
-      [
-        const Text(
-            "Automatically retouch your photos, improve color and vibrance"),
-      ],
+      const Text(
+        "A redesigned enhancement page that is more informative and beautiful",
+      ),
     ),
-    _bulletGroup(const Text(
-        "A redesigned enhancement page that is more informative and beautiful")),
     _sectionPadding(),
     _subSection("Localization"),
     _bulletGroup(const Text("Updated Spanish (by luckkmaxx)")),
@@ -274,7 +277,7 @@ List<Widget> _buildChangelog540(BuildContext context) {
 class _ChangelogBanner extends StatelessWidget {
   const _ChangelogBanner({
     required this.title,
-    // ignore: unused_element
+    // ignore: unused_element_parameter
     this.action,
   });
 
@@ -282,26 +285,23 @@ class _ChangelogBanner extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
-      color:
-          Theme.of(context).elevate(Theme.of(context).colorScheme.surface, 2),
+      color: Theme.of(
+        context,
+      ).elevate(Theme.of(context).colorScheme.surface, 2),
       child: DefaultTextStyle(
         style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
         child: TextButtonTheme(
           data: TextButtonThemeData(
             style: ButtonStyle(
               foregroundColor: WidgetStateProperty.all(
-                  Theme.of(context).colorScheme.primary),
+                Theme.of(context).colorScheme.primary,
+              ),
             ),
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: title,
-              ),
-              if (action != null) action!,
-            ],
+            children: [Expanded(child: title), if (action != null) action!],
           ),
         ),
       ),
@@ -327,47 +327,41 @@ List<Widget> _buildChangelogCompat(BuildContext context, int majorVersion) {
 
 Widget _sectionPadding() => const SizedBox(height: 16);
 
-Widget _subSection(String label) => Text(
-      label,
-      style: const TextStyle(fontSize: 16),
-    );
+Widget _subSection(String label) =>
+    Text(label, style: const TextStyle(fontSize: 16));
 
-Widget _subSectionHighlight(String label) => Text(
-      label,
-      style: const TextStyle(fontSize: 16, color: Colors.red),
-    );
+Widget _subSectionHighlight(String label) =>
+    Text(label, style: const TextStyle(fontSize: 16, color: Colors.red));
 
 Widget _bulletGroup(Widget main, [List<Widget> children = const []]) => Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2),
-      child: Column(
-        children: [
-          _bulletPoint(main),
-          ...children.map((s) => _subBulletPoint(s)),
-        ],
-      ),
-    );
+  padding: const EdgeInsets.symmetric(vertical: 2),
+  child: Column(
+    children: [_bulletPoint(main), ...children.map((s) => _subBulletPoint(s))],
+  ),
+);
 
 Widget _bulletPoint(Widget child) => Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(width: 4),
-        const Text(_bullet),
-        const SizedBox(width: 4),
-        Expanded(child: child),
-      ],
-    );
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    const SizedBox(width: 4),
+    const Text(_bullet),
+    const SizedBox(width: 4),
+    Expanded(child: child),
+  ],
+);
 
 Widget _subBulletPoint(Widget child) => Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(width: 24),
-        const Text(_bullet),
-        const SizedBox(width: 4),
-        Expanded(child: child),
-      ],
-    );
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    const SizedBox(width: 24),
+    const Text(_bullet),
+    const SizedBox(width: 4),
+    Expanded(child: child),
+  ],
+);
 
 final _changelogs = <int, List<Widget> Function(BuildContext)>{
+  7700: (_) => const [_Changelog770()],
   760: (_) => const [_Changelog760()],
   750: (_) => const [_Changelog750()],
   740: (_) => const [_Changelog740()],

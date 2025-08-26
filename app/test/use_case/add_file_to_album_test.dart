@@ -42,9 +42,9 @@ void main() {
 Future<void> _addFile() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final file = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg"))
-        .build()[0];
+    final file =
+        (util.FilesBuilder(initialFileId: 1)
+          ..addJpeg("admin/test1.jpg")).build()[0];
     final album = util.AlbumBuilder().build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -65,29 +65,26 @@ Future<void> _addFile() async {
       c.albumMemoryRepo.findAlbumByPath(albumFile.path),
       [file],
     );
-    expect(
-      c.albumMemoryRepo.albums,
-      [
-        Album(
-          lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
-          name: "test",
-          provider: AlbumStaticProvider(
-            items: [
-              AlbumFileItem(
-                addedBy: "admin".toCi(),
-                addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5),
-                file: file.toDescriptor(),
-                ownerId: "admin".toCi(),
-              ),
-            ],
-            latestItemTime: DateTime.utc(2020, 1, 2, 3, 4, 5),
-          ),
-          coverProvider: AlbumAutoCoverProvider(coverFile: file.toDescriptor()),
-          sortProvider: const AlbumNullSortProvider(),
-          albumFile: albumFile,
+    expect(c.albumMemoryRepo.albums, [
+      Album(
+        lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
+        name: "test",
+        provider: AlbumStaticProvider(
+          items: [
+            AlbumFileItem(
+              addedBy: "admin".toCi(),
+              addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5),
+              file: file.toDescriptor(),
+              ownerId: "admin".toCi(),
+            ),
+          ],
+          latestItemTime: DateTime.utc(2020, 1, 2, 3, 4, 5),
         ),
-      ],
-    );
+        coverProvider: AlbumAutoCoverProvider(coverFile: file.toDescriptor()),
+        sortProvider: const AlbumNullSortProvider(),
+        albumFile: albumFile,
+      ),
+    ]);
   });
 }
 
@@ -97,19 +94,16 @@ Future<void> _addFile() async {
 Future<void> _addExistingFile() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final files = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg(
-            "admin/test1.jpg",
-            lastModified: DateTime.utc(2019, 1, 2, 3, 4, 5),
-          ))
-        .build();
+    final files =
+        (util.FilesBuilder(initialFileId: 1)..addJpeg(
+          "admin/test1.jpg",
+          lastModified: DateTime.utc(2019, 1, 2, 3, 4, 5),
+        )).build();
     final oldFile = files[0].toDescriptor();
-    final album = (util.AlbumBuilder()
-          ..addFileItem(
-            oldFile,
-            addedAt: clock.now().toUtc(),
-          ))
-        .build();
+    final album =
+        (util.AlbumBuilder()
+              ..addFileItem(oldFile, addedAt: clock.now().toUtc()))
+            .build();
     final newFile = files[0].copyWith();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -130,51 +124,44 @@ Future<void> _addExistingFile() async {
       c.albumMemoryRepo.findAlbumByPath(albumFile.path),
       [newFile],
     );
-    expect(
-      c.albumMemoryRepo.albums,
-      [
-        Album(
-          lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
-          name: "test",
-          provider: AlbumStaticProvider(
-            items: [
-              AlbumFileItem(
-                addedBy: "admin".toCi(),
-                addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5),
-                file: files[0].toDescriptor(),
-                ownerId: "admin".toCi(),
-              ),
-            ],
-            latestItemTime: DateTime.utc(2019, 1, 2, 3, 4, 5),
-          ),
-          coverProvider: AlbumAutoCoverProvider(
-            coverFile: files[0].toDescriptor(),
-          ),
-          sortProvider: const AlbumNullSortProvider(),
-          albumFile: albumFile,
+    expect(c.albumMemoryRepo.albums, [
+      Album(
+        lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
+        name: "test",
+        provider: AlbumStaticProvider(
+          items: [
+            AlbumFileItem(
+              addedBy: "admin".toCi(),
+              addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5),
+              file: files[0].toDescriptor(),
+              ownerId: "admin".toCi(),
+            ),
+          ],
+          latestItemTime: DateTime.utc(2019, 1, 2, 3, 4, 5),
         ),
-      ],
-    );
+        coverProvider: AlbumAutoCoverProvider(
+          coverFile: files[0].toDescriptor(),
+        ),
+        sortProvider: const AlbumNullSortProvider(),
+        albumFile: albumFile,
+      ),
+    ]);
     // when there's a conflict, it's guaranteed that the original file in the
     // album is kept and the incoming file dropped
     expect(
       identical(
-        AlbumStaticProvider.of(c.albumMemoryRepo.albums[0])
-            .items
-            .whereType<AlbumFileItem>()
-            .first
-            .file,
+        AlbumStaticProvider.of(
+          c.albumMemoryRepo.albums[0],
+        ).items.whereType<AlbumFileItem>().first.file,
         oldFile,
       ),
       true,
     );
     expect(
       identical(
-        AlbumStaticProvider.of(c.albumMemoryRepo.albums[0])
-            .items
-            .whereType<AlbumFileItem>()
-            .first
-            .file,
+        AlbumStaticProvider.of(
+          c.albumMemoryRepo.albums[0],
+        ).items.whereType<AlbumFileItem>().first.file,
         newFile,
       ),
       false,
@@ -189,11 +176,11 @@ Future<void> _addExistingSharedFile() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
     final user1Account = util.buildAccount(userId: "user1");
-    final files = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg"))
-        .build();
+    final files =
+        (util.FilesBuilder(initialFileId: 1)
+          ..addJpeg("admin/test1.jpg")).build();
     final user1Files = [
-      files[0].copyWith(path: "remote.php/dav/files/user1/test1.jpg")
+      files[0].copyWith(path: "remote.php/dav/files/user1/test1.jpg"),
     ];
     final album =
         (util.AlbumBuilder()..addFileItem(files[0].toDescriptor())).build();
@@ -218,31 +205,28 @@ Future<void> _addExistingSharedFile() async {
       c.albumMemoryRepo.findAlbumByPath(albumFile.path),
       [user1Files[0]],
     );
-    expect(
-      c.albumMemoryRepo.albums,
-      [
-        Album(
-          lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
-          name: "test",
-          provider: AlbumStaticProvider(
-            items: [
-              AlbumFileItem(
-                addedBy: "admin".toCi(),
-                addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5),
-                file: files[0].toDescriptor(),
-                ownerId: "admin".toCi(),
-              ),
-            ],
-            latestItemTime: DateTime.utc(2020, 1, 2, 3, 4, 5),
-          ),
-          coverProvider: AlbumAutoCoverProvider(
-            coverFile: files[0].toDescriptor(),
-          ),
-          sortProvider: const AlbumNullSortProvider(),
-          albumFile: albumFile,
+    expect(c.albumMemoryRepo.albums, [
+      Album(
+        lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
+        name: "test",
+        provider: AlbumStaticProvider(
+          items: [
+            AlbumFileItem(
+              addedBy: "admin".toCi(),
+              addedAt: DateTime.utc(2020, 1, 2, 3, 4, 5),
+              file: files[0].toDescriptor(),
+              ownerId: "admin".toCi(),
+            ),
+          ],
+          latestItemTime: DateTime.utc(2020, 1, 2, 3, 4, 5),
         ),
-      ],
-    );
+        coverProvider: AlbumAutoCoverProvider(
+          coverFile: files[0].toDescriptor(),
+        ),
+        sortProvider: const AlbumNullSortProvider(),
+        albumFile: albumFile,
+      ),
+    ]);
   });
 }
 
@@ -252,9 +236,9 @@ Future<void> _addExistingSharedFile() async {
 Future<void> _addFileToSharedAlbumOwned() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final file = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg"))
-        .build()[0];
+    final file =
+        (util.FilesBuilder(initialFileId: 1)
+          ..addJpeg("admin/test1.jpg")).build()[0];
     final album = (util.AlbumBuilder()..addShare("user1")).build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -264,9 +248,7 @@ Future<void> _addFileToSharedAlbumOwned() async {
         util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
       ]),
       npDb: util.buildTestDb(),
-      pref: Pref.scoped(PrefMemoryProvider({
-        "isLabEnableSharedAlbum": true,
-      })),
+      pref: Pref.scoped(PrefMemoryProvider({"isLabEnableSharedAlbum": true})),
     );
     addTearDown(() => c.sqliteDb.close());
     await c.sqliteDb.transaction(() async {
@@ -279,13 +261,10 @@ Future<void> _addFileToSharedAlbumOwned() async {
       c.albumMemoryRepo.findAlbumByPath(albumFile.path),
       [file],
     );
-    expect(
-      c.shareMemoryRepo.shares,
-      [
-        util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-        util.buildShare(id: "1", file: file, shareWith: "user1"),
-      ],
-    );
+    expect(c.shareMemoryRepo.shares, [
+      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+      util.buildShare(id: "1", file: file, shareWith: "user1"),
+    ]);
   });
 }
 
@@ -295,9 +274,9 @@ Future<void> _addFileToSharedAlbumOwned() async {
 Future<void> _addFileOwnedByUserToSharedAlbumOwned() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final file = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg", ownerId: "user1"))
-        .build()[0];
+    final file =
+        (util.FilesBuilder(initialFileId: 1)
+          ..addJpeg("admin/test1.jpg", ownerId: "user1")).build()[0];
     final album = (util.AlbumBuilder()..addShare("user1")).build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -307,9 +286,7 @@ Future<void> _addFileOwnedByUserToSharedAlbumOwned() async {
         util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
       ]),
       npDb: util.buildTestDb(),
-      pref: Pref.scoped(PrefMemoryProvider({
-        "isLabEnableSharedAlbum": true,
-      })),
+      pref: Pref.scoped(PrefMemoryProvider({"isLabEnableSharedAlbum": true})),
     );
     addTearDown(() => c.sqliteDb.close());
     await c.sqliteDb.transaction(() async {
@@ -322,12 +299,9 @@ Future<void> _addFileOwnedByUserToSharedAlbumOwned() async {
       c.albumMemoryRepo.findAlbumByPath(albumFile.path),
       [file],
     );
-    expect(
-      c.shareMemoryRepo.shares,
-      [
-        util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-      ],
-    );
+    expect(c.shareMemoryRepo.shares, [
+      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    ]);
   });
 }
 
@@ -338,27 +312,34 @@ Future<void> _addFileToMultiuserSharedAlbumNotOwned() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     // doesn't work right now, skipped
     final account = util.buildAccount();
-    final file = (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg"))
-        .build()[0];
-    final album = (util.AlbumBuilder(ownerId: "user1")
-          ..addShare("admin")
-          ..addShare("user2"))
-        .build();
+    final file =
+        (util.FilesBuilder(initialFileId: 1)
+          ..addJpeg("admin/test1.jpg")).build()[0];
+    final album =
+        (util.AlbumBuilder(ownerId: "user1")
+              ..addShare("admin")
+              ..addShare("user2"))
+            .build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
       fileRepo: MockFileMemoryRepo(),
       albumRepo: MockAlbumMemoryRepo([album]),
       shareRepo: MockShareMemoryRepo([
         util.buildShare(
-            id: "0", file: albumFile, uidOwner: "user1", shareWith: "admin"),
+          id: "0",
+          file: albumFile,
+          uidOwner: "user1",
+          shareWith: "admin",
+        ),
         util.buildShare(
-            id: "1", file: albumFile, uidOwner: "user1", shareWith: "user2"),
+          id: "1",
+          file: albumFile,
+          uidOwner: "user1",
+          shareWith: "user2",
+        ),
       ]),
       npDb: util.buildTestDb(),
-      pref: Pref.scoped(PrefMemoryProvider({
-        "isLabEnableSharedAlbum": true,
-      })),
+      pref: Pref.scoped(PrefMemoryProvider({"isLabEnableSharedAlbum": true})),
     );
     addTearDown(() => c.sqliteDb.close());
     await c.sqliteDb.transaction(() async {
@@ -371,17 +352,22 @@ Future<void> _addFileToMultiuserSharedAlbumNotOwned() async {
       c.albumMemoryRepo.findAlbumByPath(albumFile.path),
       [file],
     );
-    expect(
-      c.shareMemoryRepo.shares,
-      [
-        util.buildShare(
-            id: "0", uidOwner: "user1", file: albumFile, shareWith: "admin"),
-        util.buildShare(
-            id: "1", uidOwner: "user1", file: albumFile, shareWith: "user2"),
-        // the order for these two shares are actually NOT guaranteed
-        util.buildShare(id: "2", file: file, shareWith: "user2"),
-        util.buildShare(id: "3", file: file, shareWith: "user1"),
-      ],
-    );
+    expect(c.shareMemoryRepo.shares, [
+      util.buildShare(
+        id: "0",
+        uidOwner: "user1",
+        file: albumFile,
+        shareWith: "admin",
+      ),
+      util.buildShare(
+        id: "1",
+        uidOwner: "user1",
+        file: albumFile,
+        shareWith: "user2",
+      ),
+      // the order for these two shares are actually NOT guaranteed
+      util.buildShare(id: "2", file: file, shareWith: "user2"),
+      util.buildShare(id: "3", file: file, shareWith: "user1"),
+    ]);
   });
 }

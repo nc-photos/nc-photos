@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
-import 'package:collection/collection.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
@@ -36,15 +35,17 @@ class AlbumRemoteDataSource2 implements AlbumDataSource2 {
     List<File> albumFiles, {
     ErrorWithValueHandler<File>? onError,
   }) async {
-    final results = await Future.wait(albumFiles.map((f) async {
-      try {
-        return await _getSingle(account, f);
-      } catch (e, stackTrace) {
-        onError?.call(f, e, stackTrace);
-        return null;
-      }
-    }));
-    return results.whereNotNull().toList();
+    final results = await Future.wait(
+      albumFiles.map((f) async {
+        try {
+          return await _getSingle(account, f);
+        } catch (e, stackTrace) {
+          onError?.call(f, e, stackTrace);
+          return null;
+        }
+      }),
+    );
+    return results.nonNulls.toList();
   }
 
   @override
@@ -69,7 +70,7 @@ class AlbumRemoteDataSource2 implements AlbumDataSource2 {
   Future<void> update(Account account, Album album) async {
     _log.info("[update] ${album.albumFile!.path}");
     const fileRepo = FileRepo(FileWebdavDataSource());
-    await PutFileBinary(fileRepo)(
+    await const PutFileBinary(fileRepo)(
       account,
       album.albumFile!.path,
       const Utf8Encoder().convert(jsonEncode(album.toRemoteJson())),
@@ -138,29 +139,39 @@ class AlbumSqliteDbDataSource2 implements AlbumDataSource2 {
           if (dbAlbum == null || dbFile == null) {
             // cache not found
             onError?.call(
-                f, const CacheNotFoundException(), StackTrace.current);
+              f,
+              const CacheNotFoundException(),
+              StackTrace.current,
+            );
             return null;
           }
           try {
-            final file =
-                DbFileConverter.fromDb(account.userId.toString(), dbFile);
+            final file = DbFileConverter.fromDb(
+              account.userId.toString(),
+              dbFile,
+            );
             if (dbAlbum.version < 9) {
               dbAlbum = AlbumUpgraderV8(logFilePath: file.path).doDb(dbAlbum)!;
             }
             if (dbAlbum.version < 10) {
               dbAlbum =
-                  AlbumUpgraderV9(account: account, logFilePath: file.path)
-                      .doDb(dbAlbum)!;
+                  AlbumUpgraderV9(
+                    account: account,
+                    logFilePath: file.path,
+                  ).doDb(dbAlbum)!;
             }
             return DbAlbumConverter.fromDb(file, dbAlbum);
           } catch (e, stackTrace) {
             _log.severe(
-                "[getAlbums] Failed while converting DB entry", e, stackTrace);
+              "[getAlbums] Failed while converting DB entry",
+              e,
+              stackTrace,
+            );
             onError?.call(f, e, stackTrace);
             return null;
           }
         })
-        .whereNotNull()
+        .nonNulls
         .toList();
   }
 

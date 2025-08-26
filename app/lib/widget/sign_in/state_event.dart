@@ -18,15 +18,15 @@ class _State {
   });
 
   factory _State.init() => const _State(
-        scheme: _Scheme.https,
-        serverUrl: "",
-        username: "",
-        password: "",
-        shouldObscurePassword: true,
-        isConnecting: false,
-        isCompleted: false,
-        method: _SignInMethod.serverFlowV2,
-      );
+    scheme: _Scheme.https,
+    serverUrl: "",
+    username: "",
+    password: "",
+    shouldObscurePassword: true,
+    isConnecting: false,
+    isCompleted: false,
+    method: _SignInMethod.serverFlowV2,
+  );
 
   @override
   String toString() => _$toString();

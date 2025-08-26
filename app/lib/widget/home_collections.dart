@@ -57,18 +57,17 @@ part 'home_collections/view.dart';
 
 /// Show and manage a list of [Collection]s
 class HomeCollections extends StatelessWidget {
-  const HomeCollections({
-    super.key,
-  });
+  const HomeCollections({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        account: context.read<AccountController>().account,
-        controller: context.read<AccountController>().collectionsController,
-        prefController: context.read(),
-      ),
+      create:
+          (context) => _Bloc(
+            account: context.read<AccountController>().account,
+            controller: context.read<AccountController>().collectionsController,
+            prefController: context.read(),
+          ),
       child: const _WrappedHomeCollections(),
     );
   }
@@ -95,8 +94,9 @@ class _WrappedHomeCollectionsState extends State<_WrappedHomeCollections>
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.collections != current.collections,
+          listenWhen:
+              (previous, current) =>
+                  previous.collections != current.collections,
           listener: (context, state) {
             _bloc.add(_TransformItems(state.collections));
           },
@@ -110,34 +110,36 @@ class _WrappedHomeCollectionsState extends State<_WrappedHomeCollections>
           },
         ),
         _BlocListener(
-          listenWhen: (previous, current) =>
-              previous.removeError != current.removeError,
+          listenWhen:
+              (previous, current) =>
+                  previous.removeError != current.removeError,
           listener: (context, state) {
             if (state.removeError != null && isPageVisible()) {
-              SnackBarManager().showSnackBar(SnackBar(
-                content:
-                    Text(L10n.global().removeCollectionsFailedNotification),
-                duration: k.snackBarDurationNormal,
-              ));
+              SnackBarManager().showSnackBar(
+                SnackBar(
+                  content: Text(
+                    L10n.global().removeCollectionsFailedNotification,
+                  ),
+                  duration: k.snackBarDurationNormal,
+                ),
+              );
             }
           },
         ),
       ],
       child: _BlocSelector(
         selector: (state) => state.selectedItems.isEmpty,
-        builder: (context, isSelectedEmpty) => isSelectedEmpty
-            ? DoubleTapExitContainer(
-                child: _BodyView(
-                  key: _bodyKey,
-                ),
-              )
-            : PopScope(
-                canPop: false,
-                onPopInvokedWithResult: (didPop, result) {
-                  context.addEvent(const _SetSelectedItems(items: {}));
-                },
-                child: _BodyView(key: _bodyKey),
-              ),
+        builder:
+            (context, isSelectedEmpty) =>
+                isSelectedEmpty
+                    ? DoubleTapExitContainer(child: _BodyView(key: _bodyKey))
+                    : PopScope(
+                      canPop: false,
+                      onPopInvokedWithResult: (didPop, result) {
+                        context.addEvent(const _SetSelectedItems(items: {}));
+                      },
+                      child: _BodyView(key: _bodyKey),
+                    ),
       ),
     );
   }
@@ -161,53 +163,60 @@ class _BodyView extends StatelessWidget {
           child: CustomScrollView(
             slivers: [
               _BlocBuilder(
-                buildWhen: (previous, current) =>
-                    previous.selectedItems.isEmpty !=
-                    current.selectedItems.isEmpty,
-                builder: (context, state) => state.selectedItems.isEmpty
-                    ? const _AppBar()
-                    : const _SelectionAppBar(),
+                buildWhen:
+                    (previous, current) =>
+                        previous.selectedItems.isEmpty !=
+                        current.selectedItems.isEmpty,
+                builder:
+                    (context, state) =>
+                        state.selectedItems.isEmpty
+                            ? const _AppBar()
+                            : const _SelectionAppBar(),
               ),
-              const SliverToBoxAdapter(
-                child: SizedBox(height: 8),
-              ),
+              const SliverToBoxAdapter(child: SizedBox(height: 8)),
               _BlocBuilder(
-                buildWhen: (previous, current) =>
-                    previous.transformedItems != current.transformedItems ||
-                    previous.selectedItems != current.selectedItems,
-                builder: (context, state) => SliverPadding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  sliver: SelectableItemList(
-                    maxCrossAxisExtent: 256,
-                    childBorderRadius: BorderRadius.zero,
-                    indicatorAlignment: const Alignment(-.92, -.92),
-                    items: state.transformedItems,
-                    itemBuilder: (_, __, item) {
-                      return _BlocSelector<int?>(
-                        selector: (state) =>
-                            state.itemCounts[item.collection.id],
-                        builder: (context, itemCount) => _ItemView(
-                          account: context.bloc.account,
-                          item: item,
-                          collectionItemCountOverride: itemCount,
-                        ),
-                      );
-                    },
-                    staggeredTileBuilder: (_, __) =>
-                        const StaggeredTile.count(1, 1),
-                    selectedItems: state.selectedItems,
-                    onSelectionChange: (_, selected) {
-                      context
-                          .addEvent(_SetSelectedItems(items: selected.cast()));
-                    },
-                    onItemTap: (context, _, item) {
-                      Navigator.of(context).pushNamed(
-                        CollectionBrowser.routeName,
-                        arguments: CollectionBrowserArguments(item.collection),
-                      );
-                    },
-                  ),
-                ),
+                buildWhen:
+                    (previous, current) =>
+                        previous.transformedItems != current.transformedItems ||
+                        previous.selectedItems != current.selectedItems,
+                builder:
+                    (context, state) => SliverPadding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      sliver: SelectableItemList(
+                        maxCrossAxisExtent: 256,
+                        childBorderRadius: BorderRadius.zero,
+                        indicatorAlignment: const Alignment(-.92, -.92),
+                        items: state.transformedItems,
+                        itemBuilder: (_, __, item) {
+                          return _BlocSelector<int?>(
+                            selector:
+                                (state) => state.itemCounts[item.collection.id],
+                            builder:
+                                (context, itemCount) => _ItemView(
+                                  account: context.bloc.account,
+                                  item: item,
+                                  collectionItemCountOverride: itemCount,
+                                ),
+                          );
+                        },
+                        staggeredTileBuilder:
+                            (_, __) => const StaggeredTile.count(1, 1),
+                        selectedItems: state.selectedItems,
+                        onSelectionChange: (_, selected) {
+                          context.addEvent(
+                            _SetSelectedItems(items: selected.cast()),
+                          );
+                        },
+                        onItemTap: (context, _, item) {
+                          Navigator.of(context).pushNamed(
+                            CollectionBrowser.routeName,
+                            arguments: CollectionBrowserArguments(
+                              item.collection,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
               ),
               SliverToBoxAdapter(
                 child: SizedBox(

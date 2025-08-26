@@ -32,10 +32,7 @@ class _PersonItemView extends StatelessWidget {
       ),
     );
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        child: content,
-      );
+      return InkWell(onTap: onTap, child: content);
     } else {
       return content;
     }
@@ -47,11 +44,7 @@ class _PersonItemView extends StatelessWidget {
 }
 
 class _PlaceItemView extends StatelessWidget {
-  const _PlaceItemView({
-    required this.account,
-    required this.item,
-    this.onTap,
-  });
+  const _PlaceItemView({required this.account, required this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -74,10 +67,7 @@ class _PlaceItemView extends StatelessWidget {
       ),
     );
     if (onTap != null) {
-      return InkWell(
-        onTap: onTap,
-        child: content,
-      );
+      return InkWell(onTap: onTap, child: content);
     } else {
       return content;
     }
@@ -89,9 +79,7 @@ class _PlaceItemView extends StatelessWidget {
 }
 
 class _LabelView extends StatelessWidget {
-  const _LabelView({
-    required this.label,
-  });
+  const _LabelView({required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -144,9 +132,7 @@ class _LocationCoverImage extends StatelessWidget {
         errorBuilder: (_) => const _LocationCoverPlaceholder(),
       );
     } catch (_) {
-      cover = const FittedBox(
-        child: _LocationCoverPlaceholder(),
-      );
+      cover = const FittedBox(child: _LocationCoverPlaceholder());
     }
 
     return SizedBox.square(

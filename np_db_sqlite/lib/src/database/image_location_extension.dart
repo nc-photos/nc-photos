@@ -89,17 +89,21 @@ extension SqliteDbImageLocationExtension on SqliteDb {
           ?.let((e) => query.where(e));
     }
     query
-      ..where(imageLocations.latitude.isNotNull() &
-          imageLocations.longitude.isNotNull())
+      ..where(
+        imageLocations.latitude.isNotNull() &
+            imageLocations.longitude.isNotNull(),
+      )
       ..orderBy([OrderingTerm.desc(accountFiles.bestDateTime)]);
     return query
-        .map((r) => ImageLatLng(
-              lat: r.read(imageLocations.latitude)!,
-              lng: r.read(imageLocations.longitude)!,
-              fileId: r.read(files.fileId)!,
-              fileRelativePath: r.read(accountFiles.relativePath)!,
-              mime: r.read(files.contentType),
-            ))
+        .map(
+          (r) => ImageLatLng(
+            lat: r.read(imageLocations.latitude)!,
+            lng: r.read(imageLocations.longitude)!,
+            fileId: r.read(files.fileId)!,
+            fileRelativePath: r.read(accountFiles.relativePath)!,
+            mime: r.read(files.contentType),
+          ),
+        )
         .get();
   }
 
@@ -152,24 +156,38 @@ extension SqliteDbImageLocationExtension on SqliteDb {
   }) {
     _log.info("[groupImageLocationsByCountryCode]");
     final query = selectOnly(imageLocations).join([
-      innerJoin(accountFiles,
-          accountFiles.rowId.equalsExp(imageLocations.accountFile),
-          useColumns: false),
-      innerJoin(files, files.rowId.equalsExp(accountFiles.file),
-          useColumns: false),
+      innerJoin(
+        accountFiles,
+        accountFiles.rowId.equalsExp(imageLocations.accountFile),
+        useColumns: false,
+      ),
+      innerJoin(
+        files,
+        files.rowId.equalsExp(accountFiles.file),
+        useColumns: false,
+      ),
     ]);
     if (account.sqlAccount != null) {
       query.where(accountFiles.account.equals(account.sqlAccount!.rowId));
     } else {
       query.join([
-        innerJoin(accounts, accounts.rowId.equalsExp(accountFiles.account),
-            useColumns: false),
-        innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-            useColumns: false),
-      ])
+          innerJoin(
+            accounts,
+            accounts.rowId.equalsExp(accountFiles.account),
+            useColumns: false,
+          ),
+          innerJoin(
+            servers,
+            servers.rowId.equalsExp(accounts.server),
+            useColumns: false,
+          ),
+        ])
         ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(accounts.userId
-            .equals(account.dbAccount!.userId.toCaseInsensitiveString()));
+        ..where(
+          accounts.userId.equals(
+            account.dbAccount!.userId.toCaseInsensitiveString(),
+          ),
+        );
     }
 
     final count = imageLocations.rowId.count();
@@ -183,10 +201,9 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         accountFiles.relativePath,
         latest,
       ])
-      ..groupBy(
-        [imageLocations.countryCode],
-        having: accountFiles.bestDateTime.equalsExp(latest),
-      )
+      ..groupBy([
+        imageLocations.countryCode,
+      ], having: accountFiles.bestDateTime.equalsExp(latest))
       ..where(imageLocations.countryCode.isNotNull());
     if (includeRelativeRoots != null &&
         includeRelativeRoots.isNotEmpty &&
@@ -221,45 +238,60 @@ extension SqliteDbImageLocationExtension on SqliteDb {
   }) async {
     final candidates = await fileIds.withPartition((sublist) async {
       final query = selectOnly(files).join([
-        innerJoin(accountFiles, accountFiles.file.equalsExp(files.rowId),
-            useColumns: false),
+        innerJoin(
+          accountFiles,
+          accountFiles.file.equalsExp(files.rowId),
+          useColumns: false,
+        ),
         if (account.dbAccount != null) ...[
-          innerJoin(accounts, accounts.rowId.equalsExp(accountFiles.account),
-              useColumns: false),
-          innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-              useColumns: false),
+          innerJoin(
+            accounts,
+            accounts.rowId.equalsExp(accountFiles.account),
+            useColumns: false,
+          ),
+          innerJoin(
+            servers,
+            servers.rowId.equalsExp(accounts.server),
+            useColumns: false,
+          ),
         ],
-        innerJoin(imageLocations,
-            imageLocations.accountFile.equalsExp(accountFiles.rowId),
-            useColumns: false),
+        innerJoin(
+          imageLocations,
+          imageLocations.accountFile.equalsExp(accountFiles.rowId),
+          useColumns: false,
+        ),
       ]);
-      query.addColumns([
-        accountFiles.rowId,
-        accountFiles.bestDateTime,
-      ]);
+      query.addColumns([accountFiles.rowId, accountFiles.bestDateTime]);
 
       if (account.sqlAccount != null) {
         query.where(accountFiles.account.equals(account.sqlAccount!.rowId));
       } else if (account.dbAccount != null) {
         query
           ..where(servers.address.equals(account.dbAccount!.serverAddress))
-          ..where(accounts.userId
-              .equals(account.dbAccount!.userId.toCaseInsensitiveString()));
+          ..where(
+            accounts.userId.equals(
+              account.dbAccount!.userId.toCaseInsensitiveString(),
+            ),
+          );
       }
 
       query
         ..where(files.fileId.isIn(sublist))
-        ..where(imageLocations.latitude.isNotNull() &
-            imageLocations.longitude.isNotNull())
+        ..where(
+          imageLocations.latitude.isNotNull() &
+              imageLocations.longitude.isNotNull(),
+        )
         ..orderBy([OrderingTerm.desc(accountFiles.bestDateTime)])
         ..limit(1);
       return [
         await query
-            .map((r) => (
-                  rowId: r.read(accountFiles.rowId)!,
-                  dateTime: r.read(accountFiles.bestDateTime)!,
-                ))
-            .getSingleOrNull()
+            .map(
+              (r) => (
+                rowId: r.read(accountFiles.rowId)!,
+                dateTime: r.read(accountFiles.bestDateTime)!,
+              ),
+            )
+            .getSingleOrNull(),
       ];
     }, _maxByFileIdsSize);
     final winner =
@@ -280,24 +312,38 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     List<String>? excludeRelativeRoots,
   }) {
     final query = selectOnly(imageLocations).join([
-      innerJoin(accountFiles,
-          accountFiles.rowId.equalsExp(imageLocations.accountFile),
-          useColumns: false),
-      innerJoin(files, files.rowId.equalsExp(accountFiles.file),
-          useColumns: false),
+      innerJoin(
+        accountFiles,
+        accountFiles.rowId.equalsExp(imageLocations.accountFile),
+        useColumns: false,
+      ),
+      innerJoin(
+        files,
+        files.rowId.equalsExp(accountFiles.file),
+        useColumns: false,
+      ),
     ]);
     if (account.sqlAccount != null) {
       query.where(accountFiles.account.equals(account.sqlAccount!.rowId));
     } else {
       query.join([
-        innerJoin(accounts, accounts.rowId.equalsExp(accountFiles.account),
-            useColumns: false),
-        innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-            useColumns: false),
-      ])
+          innerJoin(
+            accounts,
+            accounts.rowId.equalsExp(accountFiles.account),
+            useColumns: false,
+          ),
+          innerJoin(
+            servers,
+            servers.rowId.equalsExp(accounts.server),
+            useColumns: false,
+          ),
+        ])
         ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(accounts.userId
-            .equals(account.dbAccount!.userId.toCaseInsensitiveString()));
+        ..where(
+          accounts.userId.equals(
+            account.dbAccount!.userId.toCaseInsensitiveString(),
+          ),
+        );
     }
 
     final count = imageLocations.rowId.count();
@@ -312,10 +358,10 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         accountFiles.relativePath,
         latest,
       ])
-      ..groupBy(
-        [by, imageLocations.countryCode],
-        having: accountFiles.bestDateTime.equalsExp(latest),
-      )
+      ..groupBy([
+        by,
+        imageLocations.countryCode,
+      ], having: accountFiles.bestDateTime.equalsExp(latest))
       ..where(by.isNotNull());
     if (includeRelativeRoots != null &&
         includeRelativeRoots.isNotEmpty &&
@@ -331,15 +377,17 @@ extension SqliteDbImageLocationExtension on SqliteDb {
       }
     }
     return query
-        .map((r) => ImageLocationGroup(
-              place: r.read(by)!,
-              countryCode: r.read(imageLocations.countryCode)!,
-              count: r.read(count)!,
-              latestFileId: r.read(files.fileId)!,
-              latestDateTime: r.read(latest)!.toUtc(),
-              latestFileMime: r.read(files.contentType),
-              latestFileRelativePath: r.read(accountFiles.relativePath)!,
-            ))
+        .map(
+          (r) => ImageLocationGroup(
+            place: r.read(by)!,
+            countryCode: r.read(imageLocations.countryCode)!,
+            count: r.read(count)!,
+            latestFileId: r.read(files.fileId)!,
+            latestDateTime: r.read(latest)!.toUtc(),
+            latestFileMime: r.read(files.contentType),
+            latestFileRelativePath: r.read(accountFiles.relativePath)!,
+          ),
+        )
         .get();
   }
 }

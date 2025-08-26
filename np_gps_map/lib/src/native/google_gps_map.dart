@@ -3,11 +3,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:np_gps_map/src/type.dart' as type;
 
 class GoogleGpsMap extends StatelessWidget {
-  const GoogleGpsMap({
-    super.key,
-    required this.location,
-    this.onTap,
-  });
+  const GoogleGpsMap({super.key, required this.location, this.onTap});
 
   @override
   Widget build(BuildContext context) {

@@ -11,20 +11,23 @@ class _ViewerContentController {
     _pageContentMap[initialIndex] = initialFile;
   }
 
-  Future<Map<int, FileDescriptor>> getForwardContent() async {
+  Future<Map<int, AnyFile>> getForwardContent() async {
     try {
       _isQueryingForward = true;
       final from = _pageContentMap.entries.last.let(
-          (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value));
+        (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value),
+      );
       if (from.pageIndex >= allFilesCount - 1) {
         _log.severe(
-            "[_getForwardContent] Trying to query beyond max count, contentEnd: ${from.pageIndex}, max: $allFilesCount");
+          "[_getForwardContent] Trying to query beyond max count, contentEnd: ${from.pageIndex}, max: $allFilesCount",
+        );
         return const {};
       }
       final results = await contentProvider.getFiles(from, _fileCountPerQuery);
-      final resultMap = results.files
-          .mapIndexed((i, e) => MapEntry(from.pageIndex + 1 + i, e))
-          .toMap();
+      final resultMap =
+          results.files
+              .mapIndexed((i, e) => MapEntry(from.pageIndex + 1 + i, e))
+              .toMap();
       _log.info("[_getForwardContent] Result: $results");
       _pageContentMap.addAll(resultMap);
       return resultMap;
@@ -36,20 +39,23 @@ class _ViewerContentController {
     }
   }
 
-  Future<Map<int, FileDescriptor>> getBackwardContent() async {
+  Future<Map<int, AnyFile>> getBackwardContent() async {
     try {
       _isQueryingBackward = true;
       final from = _pageContentMap.entries.first.let(
-          (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value));
+        (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value),
+      );
       if (from.pageIndex == 0) {
         _log.severe(
-            "[_getBackwardContent] Trying to query beyond max count, contentBegin: ${from.pageIndex}");
+          "[_getBackwardContent] Trying to query beyond max count, contentBegin: ${from.pageIndex}",
+        );
         return const {};
       }
       final results = await contentProvider.getFiles(from, -_fileCountPerQuery);
-      final resultMap = results.files
-          .mapIndexed((i, e) => MapEntry(from.pageIndex - 1 - i, e))
-          .toMap();
+      final resultMap =
+          results.files
+              .mapIndexed((i, e) => MapEntry(from.pageIndex - 1 - i, e))
+              .toMap();
       _log.info("[_getBackwardContent] Result: $results");
       _pageContentMap.addAll(resultMap);
       return resultMap;
@@ -79,20 +85,21 @@ class _ViewerContentController {
     return false;
   }
 
-  void notifyFileRemoved(int page, int fileId) {
-    _log.info("[notifyFileRemoved] page: $page, fileId: $fileId");
+  void notifyFileRemoved(int page, String afId) {
+    _log.info("[notifyFileRemoved] page: $page, afId: $afId");
     if (!_pageContentMap.containsKey(page)) {
       _log.severe("[notifyFileRemoved] Page not found: $page");
       return;
     }
     final current = _pageContentMap[page]!;
-    if (current.fdId != fileId) {
+    if (current.id != afId) {
       _log.warning(
-          "[notifyFileRemoved] Removed file does not match record, page: $page, expected: ${current.fdId}, actual: $fileId");
+        "[notifyFileRemoved] Removed file does not match record, page: $page, expected: ${current.id}, actual: $afId",
+      );
     }
     contentProvider.notifyFileRemoved(page, current);
 
-    final nextMap = SplayTreeMap<int, FileDescriptor>();
+    final nextMap = SplayTreeMap<int, AnyFile>();
     for (final e in _pageContentMap.entries) {
       if (e.key < page) {
         nextMap[e.key] = e.value;
@@ -103,27 +110,23 @@ class _ViewerContentController {
     _pageContentMap = nextMap;
   }
 
-  Future<void> fastJump({
-    required int page,
-    required int fileId,
-  }) async {
+  Future<void> fastJump({required int page, required String afId}) async {
     // make this class smarter to handle this without clearing cache
     if (page > _pageContentMap.keys.last || page < _pageContentMap.keys.first) {
       _log.fine(
-          "[fastJump] Out of range, resetting map: $page, [${_pageContentMap.keys.first}, ${_pageContentMap.keys.last}]");
+        "[fastJump] Out of range, resetting map: $page, [${_pageContentMap.keys.first}, ${_pageContentMap.keys.last}]",
+      );
       _pageContentMap.clear();
-      _pageContentMap.addAll({
-        page: await contentProvider.getFile(page, fileId),
-      });
+      _pageContentMap.addAll({page: await contentProvider.getFile(page, afId)});
     }
   }
 
   final ViewerContentProvider contentProvider;
   final int allFilesCount;
-  final FileDescriptor initialFile;
+  final AnyFile initialFile;
   final int initialIndex;
 
-  var _pageContentMap = SplayTreeMap<int, FileDescriptor>();
+  var _pageContentMap = SplayTreeMap<int, AnyFile>();
   var _isQueryingForward = false;
   var _isQueryingBackward = false;
 }

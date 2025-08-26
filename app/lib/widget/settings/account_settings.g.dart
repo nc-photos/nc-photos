@@ -13,37 +13,39 @@ part of 'account_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {bool? shouldReload,
-      Account? account,
-      String? label,
-      String? shareFolder,
-      PersonProvider? personProvider,
-      bool? shouldResync,
-      ExceptionEvent? error});
+  _State call({
+    bool? shouldReload,
+    Account? account,
+    String? label,
+    String? shareFolder,
+    PersonProvider? personProvider,
+    bool? shouldResync,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic shouldReload,
-      dynamic account,
-      dynamic label = copyWithNull,
-      dynamic shareFolder,
-      dynamic personProvider,
-      dynamic shouldResync,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic shouldReload,
+    dynamic account,
+    dynamic label = copyWithNull,
+    dynamic shareFolder,
+    dynamic personProvider,
+    dynamic shouldResync,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        shouldReload: shouldReload as bool? ?? that.shouldReload,
-        account: account as Account? ?? that.account,
-        label: label == copyWithNull ? that.label : label as String?,
-        shareFolder: shareFolder as String? ?? that.shareFolder,
-        personProvider:
-            personProvider as PersonProvider? ?? that.personProvider,
-        shouldResync: shouldResync as bool? ?? that.shouldResync,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      shouldReload: shouldReload as bool? ?? that.shouldReload,
+      account: account as Account? ?? that.account,
+      label: label == copyWithNull ? that.label : label as String?,
+      shareFolder: shareFolder as String? ?? that.shareFolder,
+      personProvider: personProvider as PersonProvider? ?? that.personProvider,
+      shouldResync: shouldResync as bool? ?? that.shouldResync,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -62,16 +64,18 @@ extension _$_WrappedAccountSettingsStateNpLog on _WrappedAccountSettingsState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.account_settings._WrappedAccountSettingsState");
+  static final log = Logger(
+    "widget.settings.account_settings._WrappedAccountSettingsState",
+  );
 }
 
 extension _$_PersonProviderDialogNpLog on _PersonProviderDialog {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.settings.account_settings._PersonProviderDialog");
+  static final log = Logger(
+    "widget.settings.account_settings._PersonProviderDialog",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

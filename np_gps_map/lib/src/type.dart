@@ -3,27 +3,20 @@ import 'package:google_maps_flutter/google_maps_flutter.dart' as gmap;
 import 'package:latlong2/latlong.dart';
 import 'package:np_common/type.dart';
 
-enum GpsMapProvider {
-  google,
-  osm,
-  ;
-}
+enum GpsMapProvider { google, osm }
 
 /// A pair of latitude and longitude coordinates, stored as degrees
 class MapCoord {
   const MapCoord(this.latitude, this.longitude);
 
   MapCoord.fromJson(JsonObj json)
-      : latitude = json["lat"],
-        longitude = json["lng"];
+    : latitude = json["lat"],
+      longitude = json["lng"];
 
   @override
   String toString() => "MapCoord {latitude: $latitude, longitude: $longitude}";
 
-  JsonObj toJson() => {
-        "lat": latitude,
-        "lng": longitude,
-      };
+  JsonObj toJson() => {"lat": latitude, "lng": longitude};
 
   final double latitude;
   final double longitude;
@@ -53,18 +46,15 @@ class CameraPosition with EquatableMixin {
   }
 
   @override
-  String toString() => "CameraPosition {"
+  String toString() =>
+      "CameraPosition {"
       "center: $center, "
       "zoom: $zoom, "
       "rotation: $rotation, "
       "}";
 
   JsonObj toJson() {
-    return {
-      "center": center.toJson(),
-      "zoom": zoom,
-      "rotation": rotation,
-    };
+    return {"center": center.toJson(), "zoom": zoom, "rotation": rotation};
   }
 
   @override

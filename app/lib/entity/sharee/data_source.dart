@@ -18,17 +18,15 @@ class ShareeRemoteDataSource implements ShareeDataSource {
   @override
   list(Account account) async {
     _log.info("[list]");
-    final response =
-        await ApiUtil.fromAccount(account).ocs().filesSharing().sharees().get(
-              itemType: "file",
-              lookup: false,
-            );
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).ocs().filesSharing().sharees().get(itemType: "file", lookup: false);
     if (!response.isGood) {
       _log.severe("[list] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiShares = await api.ShareeParser().parse(response.body);
@@ -44,13 +42,15 @@ class _ShareeParser {
     for (final kt in _keyTypes.entries) {
       for (final u in dataJson[kt.key] ?? []) {
         try {
-          product.add(Sharee(
-            type: kt.value,
-            label: u["label"],
-            shareType: u["value"]["shareType"],
-            shareWith: CiString(u["value"]["shareWith"]),
-            shareWithDisplayNameUnique: u["shareWithDisplayNameUnique"],
-          ));
+          product.add(
+            Sharee(
+              type: kt.value,
+              label: u["label"],
+              shareType: u["value"]["shareType"],
+              shareWith: CiString(u["value"]["shareWith"]),
+              shareWithDisplayNameUnique: u["shareWithDisplayNameUnique"],
+            ),
+          );
         } catch (e) {
           _log.severe("[list] Failed parsing json: ${jsonEncode(u)}", e);
         }

@@ -16,7 +16,7 @@ class CollectionAdHocAdapter
         CollectionAdapterUnshareableTag
     implements CollectionAdapter {
   CollectionAdHocAdapter(this._c, this.account, this.collection)
-      : _provider = collection.contentProvider as CollectionAdHocProvider;
+    : _provider = collection.contentProvider as CollectionAdHocProvider;
 
   @override
   Stream<List<CollectionItem>> listItem() async* {

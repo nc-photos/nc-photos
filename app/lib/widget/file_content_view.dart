@@ -5,25 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
-import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/live_photo_util.dart';
-import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:nc_photos/use_case/request_public_link.dart';
 import 'package:nc_photos/widget/disposable.dart';
-import 'package:nc_photos/widget/image_viewer.dart';
 import 'package:nc_photos/widget/live_photo_viewer.dart';
 import 'package:nc_photos/widget/wakelock_util.dart';
 import 'package:nc_photos/widget/zoomable_viewer.dart';
 import 'package:np_log/np_log.dart';
-import 'package:np_platform_util/np_platform_util.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 import 'package:video_player/video_player.dart';
@@ -55,7 +51,7 @@ class FileContentView extends StatefulWidget {
   @override
   State<StatefulWidget> createState() => _FileContentViewState();
 
-  final FileDescriptor file;
+  final AnyFile file;
   final bool shouldPlayLivePhoto;
   final bool canZoom;
   final bool canPlay;
@@ -177,16 +173,14 @@ class _WrappedFileContentView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final file = context.bloc.file;
-    if (file_util.isSupportedImageFormat(file)) {
+    if (file_util.isSupportedImageMime(file.mime ?? "")) {
       return _BlocSelector(
         selector: (state) => state.shouldPlayLivePhoto,
         builder: (context, shouldPlayLivePhoto) {
           if (shouldPlayLivePhoto) {
             final livePhotoType = getLivePhotoTypeFromFile(file);
             if (livePhotoType != null) {
-              return _LivePhotoPageContentView(
-                livePhotoType: livePhotoType,
-              );
+              return _LivePhotoPageContentView(livePhotoType: livePhotoType);
             } else {
               _log.warning("[build] Not a live photo");
               return const _PhotoPageContentView();
@@ -196,10 +190,10 @@ class _WrappedFileContentView extends StatelessWidget {
           }
         },
       );
-    } else if (file_util.isSupportedVideoFormat(file)) {
+    } else if (file_util.isSupportedVideoMime(file.mime ?? "")) {
       return const _VideoContentView();
     } else {
-      _log.shout("[build] Unknown file format: ${file.fdMime}");
+      _log.shout("[build] Unknown file format: ${file.mime}");
       // _pageStates[index]!.itemHeight = 0;
       return Container();
     }

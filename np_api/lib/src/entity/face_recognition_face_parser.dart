@@ -28,10 +28,7 @@ class FaceRecognitionFaceParser {
   }
 
   FaceRecognitionFace _parseSingle(JsonObj json) {
-    return FaceRecognitionFace(
-      id: json["id"],
-      fileId: json["fileId"],
-    );
+    return FaceRecognitionFace(id: json["id"], fileId: json["fileId"]);
   }
 }
 

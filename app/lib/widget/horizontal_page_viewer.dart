@@ -40,10 +40,12 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
       keepPage: false,
     );
     if (widget.onPageChanged != null) {
-      widget.controller._pageController.addListener(PageChangedListener(
-        widget.controller._pageController,
-        onPageChanged: widget.onPageChanged,
-      ).call);
+      widget.controller._pageController.addListener(
+        PageChangedListener(
+          widget.controller._pageController,
+          onPageChanged: widget.onPageChanged,
+        ).call,
+      );
     }
   }
 
@@ -92,9 +94,10 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
           controller: widget.controller._pageController,
           itemCount: widget.pageCount,
           itemBuilder: widget.pageBuilder,
-          physics: getRawPlatform() != NpPlatform.web && widget.canSwitchPage
-              ? null
-              : const NeverScrollableScrollPhysics(),
+          physics:
+              getRawPlatform() != NpPlatform.web && widget.canSwitchPage
+                  ? null
+                  : const NeverScrollableScrollPhysics(),
         ),
         if (getRawPlatform() == NpPlatform.web)
           ..._buildNavigationButtons(context),
@@ -128,7 +131,9 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 36),
+                      horizontal: 24,
+                      vertical: 36,
+                    ),
                     child: IconButton(
                       icon: const Icon(
                         Icons.arrow_forward_ios_outlined,
@@ -166,7 +171,9 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
                   },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 24, vertical: 36),
+                      horizontal: 24,
+                      vertical: 36,
+                    ),
                     child: IconButton(
                       icon: const Icon(
                         Icons.arrow_back_ios_outlined,
@@ -187,17 +194,25 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
   void _switchToPrev() {
     widget.controller._pageController
         .previousPage(
-            duration: k.animationDurationNormal, curve: Curves.easeInOut)
-        .whenComplete(() => _updateNavigationState(
-            widget.controller._pageController.page!.round()));
+          duration: k.animationDurationNormal,
+          curve: Curves.easeInOut,
+        )
+        .whenComplete(
+          () => _updateNavigationState(
+            widget.controller._pageController.page!.round(),
+          ),
+        );
   }
 
   /// Switch to the next image in the stream
   void _switchToNext() {
     widget.controller._pageController
         .nextPage(duration: k.animationDurationNormal, curve: Curves.easeInOut)
-        .whenComplete(() => _updateNavigationState(
-            widget.controller._pageController.page!.round()));
+        .whenComplete(
+          () => _updateNavigationState(
+            widget.controller._pageController.page!.round(),
+          ),
+        );
   }
 
   /// Switch to the image on the "left", what that means depend on the current
@@ -265,39 +280,25 @@ class HorizontalPageViewerController {
   Future<void> previousPage({
     required Duration duration,
     required Curve curve,
-  }) =>
-      _pageController.previousPage(
-        duration: duration,
-        curve: curve,
-      );
+  }) => _pageController.previousPage(duration: duration, curve: curve);
 
-  Future<void> nextPage({
-    required Duration duration,
-    required Curve curve,
-  }) =>
-      _pageController.nextPage(
-        duration: duration,
-        curve: curve,
-      );
+  Future<void> nextPage({required Duration duration, required Curve curve}) =>
+      _pageController.nextPage(duration: duration, curve: curve);
 
   void animateToPage(
     int page, {
     required Duration duration,
     required Curve curve,
-  }) =>
-      _pageController.animateToPage(
-        page,
-        duration: duration,
-        curve: curve,
-      );
+  }) => _pageController.animateToPage(page, duration: duration, curve: curve);
 
   void jumpToPage(int page) {
     _pageController.jumpToPage(page);
   }
 
-  int get currentPage => _pageController.hasClients
-      ? _pageController.page!.round()
-      : _pageController.initialPage;
+  int get currentPage =>
+      _pageController.hasClients
+          ? _pageController.page!.round()
+          : _pageController.initialPage;
 
   late PageController _pageController;
 }

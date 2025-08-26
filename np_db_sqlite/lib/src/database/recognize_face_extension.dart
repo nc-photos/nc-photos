@@ -15,15 +15,25 @@ extension SqliteDbRecognizeFaceExtension on SqliteDb {
       }
       return query.get();
     } else {
-      final query = select(recognizeFaces).join([
-        innerJoin(accounts, accounts.rowId.equalsExp(recognizeFaces.account),
-            useColumns: false),
-        innerJoin(servers, servers.rowId.equalsExp(accounts.server),
-            useColumns: false),
-      ])
-        ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(accounts.userId
-            .equals(account.dbAccount!.userId.toCaseInsensitiveString()));
+      final query =
+          select(recognizeFaces).join([
+              innerJoin(
+                accounts,
+                accounts.rowId.equalsExp(recognizeFaces.account),
+                useColumns: false,
+              ),
+              innerJoin(
+                servers,
+                servers.rowId.equalsExp(accounts.server),
+                useColumns: false,
+              ),
+            ])
+            ..where(servers.address.equals(account.dbAccount!.serverAddress))
+            ..where(
+              accounts.userId.equals(
+                account.dbAccount!.userId.toCaseInsensitiveString(),
+              ),
+            );
       if (labels != null) {
         query.where(recognizeFaces.label.isIn(labels));
       }
@@ -50,11 +60,10 @@ extension SqliteDbRecognizeFaceExtension on SqliteDb {
       for (final u in updates) {
         batch.update(
           recognizeFaces,
-          RecognizeFacesCompanion(
-            label: Value(u.label),
-          ),
-          where: ($RecognizeFacesTable t) =>
-              t.account.equals(sqlAccount.rowId) & t.label.equals(u.label),
+          RecognizeFacesCompanion(label: Value(u.label)),
+          where:
+              ($RecognizeFacesTable t) =>
+                  t.account.equals(sqlAccount.rowId) & t.label.equals(u.label),
         );
       }
       for (final i in inserts) {
@@ -89,8 +98,9 @@ extension SqliteDbRecognizeFaceExtension on SqliteDb {
             parent: const Value.absent(),
             fileId: const Value.absent(),
           ),
-          where: ($RecognizeFaceItemsTable t) =>
-              t.parent.equals(face.rowId) & t.fileId.equals(u.fileId),
+          where:
+              ($RecognizeFaceItemsTable t) =>
+                  t.parent.equals(face.rowId) & t.fileId.equals(u.fileId),
         );
       }
       for (final i in inserts) {

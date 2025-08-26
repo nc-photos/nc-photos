@@ -9,9 +9,7 @@ abstract class _Item implements SelectableItemMetadata {
 }
 
 abstract class _FileItem extends _Item {
-  const _FileItem({
-    required this.file,
-  });
+  const _FileItem({required this.file});
 
   @override
   bool get isSelectable => true;
@@ -28,10 +26,8 @@ abstract class _FileItem extends _Item {
 }
 
 class _PhotoItem extends _FileItem {
-  _PhotoItem({
-    required super.file,
-    required this.account,
-  }) : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
+  _PhotoItem({required super.file, required this.account})
+    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
@@ -43,7 +39,7 @@ class _PhotoItem extends _FileItem {
       previewUrl: _previewUrl,
       mime: file.fdMime,
       isFavorite: file.fdIsFavorite,
-      heroKey: flutter_util.getImageHeroTag(file),
+      heroKey: flutter_util.HeroTag.fromFile(file),
     );
   }
 
@@ -52,10 +48,8 @@ class _PhotoItem extends _FileItem {
 }
 
 class _VideoItem extends _FileItem {
-  _VideoItem({
-    required super.file,
-    required this.account,
-  }) : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
+  _VideoItem({required super.file, required this.account})
+    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, file);
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
@@ -92,19 +86,14 @@ class _VisibleItem implements Comparable<_VisibleItem> {
 }
 
 class _ItemTransformerArgument {
-  const _ItemTransformerArgument({
-    required this.account,
-    required this.files,
-  });
+  const _ItemTransformerArgument({required this.account, required this.files});
 
   final Account account;
   final List<FileDescriptor> files;
 }
 
 class _ItemTransformerResult {
-  const _ItemTransformerResult({
-    required this.items,
-  });
+  const _ItemTransformerResult({required this.items});
 
   final List<_Item> items;
 }

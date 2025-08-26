@@ -21,8 +21,13 @@ class ListTaggedFile {
   Future<List<File>> call(Account account, List<Tag> tags) async {
     final taggedFiles = <TaggedFile>[];
     for (final r in account.roots) {
-      taggedFiles.addAll(await _c.taggedFileRepo
-          .list(account, File(path: file_util.unstripPath(account, r)), tags));
+      taggedFiles.addAll(
+        await _c.taggedFileRepo.list(
+          account,
+          File(path: file_util.unstripPath(account, r)),
+          tags,
+        ),
+      );
     }
     // server bug workaround, filter out repeated files
     final files = await FindFile(_c)(

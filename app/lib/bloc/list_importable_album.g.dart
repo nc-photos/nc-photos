@@ -10,8 +10,9 @@ extension _$ListImportableAlbumBlocNpLog on ListImportableAlbumBloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("bloc.list_importable_album.ListImportableAlbumBloc");
+  static final log = Logger(
+    "bloc.list_importable_album.ListImportableAlbumBloc",
+  );
 }
 
 // **************************************************************************

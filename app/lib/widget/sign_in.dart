@@ -17,7 +17,7 @@ import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/connect2/connect.dart';
 import 'package:nc_photos/widget/expandable_container.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/root_picker.dart';
 import 'package:np_collection/np_collection.dart';
@@ -38,19 +38,18 @@ class SignIn extends StatelessWidget {
   static const routeName = "/sign-in";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (context) => const SignIn(),
-        settings: settings,
-      );
+    builder: (context) => const SignIn(),
+    settings: settings,
+  );
 
   const SignIn({super.key});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        npDb: context.read(),
-        prefController: context.read(),
-      ),
+      create:
+          (context) =>
+              _Bloc(npDb: context.read(), prefController: context.read()),
       child: const _WrappedSignIn(),
     );
   }
@@ -94,7 +93,8 @@ class _WrappedSignInState extends State<_WrappedSignIn>
                       return;
                     }
                     final uri = Uri.parse(
-                        "${connectArg.scheme}://${connectArg.address}");
+                      "${connectArg.scheme}://${connectArg.address}",
+                    );
                     if (connectArg.username != null &&
                         connectArg.password != null) {
                       _connectWithFlow(
@@ -118,8 +118,9 @@ class _WrappedSignInState extends State<_WrappedSignIn>
                         context,
                         Home.routeName,
                         (route) => false,
-                        arguments:
-                            HomeArguments(context.state.connectedAccount!),
+                        arguments: HomeArguments(
+                          context.state.connectedAccount!,
+                        ),
                       );
                     }
                   },
@@ -135,8 +136,9 @@ class _WrappedSignInState extends State<_WrappedSignIn>
               ],
               child: _BlocSelector(
                 selector: (state) => state.isConnecting,
-                builder: (context, isConnecting) =>
-                    isConnecting ? const _ConnectingBody() : const _Body(),
+                builder:
+                    (context, isConnecting) =>
+                        isConnecting ? const _ConnectingBody() : const _Body(),
               ),
             ),
           ),
@@ -146,7 +148,10 @@ class _WrappedSignInState extends State<_WrappedSignIn>
   }
 
   Future<void> _connectWithFlow(
-      BuildContext context, Uri connectUri, LoginFlow login) async {
+    BuildContext context,
+    Uri connectUri,
+    LoginFlow login,
+  ) async {
     var account = await Navigator.pushNamed<Account>(
       context,
       Connect.routeName,

@@ -40,10 +40,11 @@ void main() {
 /// Expect: file deleted
 Future<void> _removeFile() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg"))
-      .build();
+  final files =
+      (util.FilesBuilder()
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg"))
+          .build();
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo(),
     fileRepo: MockFileMemoryRepo(files),
@@ -67,10 +68,11 @@ Future<void> _removeFile() async {
 /// Expect: file deleted
 Future<void> _removeFileNoCleanUp() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addJpeg("admin/test1.jpg")
-        ..addJpeg("admin/test2.jpg"))
-      .build();
+  final files =
+      (util.FilesBuilder()
+            ..addJpeg("admin/test1.jpg")
+            ..addJpeg("admin/test2.jpg"))
+          .build();
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo(),
     fileRepo: MockFileMemoryRepo(files),
@@ -114,10 +116,12 @@ Future<void> _removeAlbumFile() async {
   await Remove(c)(account, [files[0]]);
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -158,10 +162,12 @@ Future<void> _removeAlbumFileNoCleanUp() async {
   await Remove(c)(account, [files[0]], shouldCleanUp: false);
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -187,10 +193,11 @@ Future<void> _removeSharedAlbumFile() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0])
-        ..addShare("user1"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0])
+            ..addShare("user1"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -211,10 +218,12 @@ Future<void> _removeSharedAlbumFile() async {
   await Remove(c)(account, [files[0]]);
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -224,16 +233,13 @@ Future<void> _removeSharedAlbumFile() async {
         coverProvider: const AlbumAutoCoverProvider(),
         sortProvider: const AlbumNullSortProvider(),
         albumFile: albumFile,
-        shares: [
-          util.buildAlbumShare(userId: "user1"),
-        ],
+        shares: [util.buildAlbumShare(userId: "user1")],
       ),
     ],
   );
-  expect(
-    c.shareMemoryRepo.shares,
-    [util.buildShare(id: "0", file: albumFile, shareWith: "user1")],
-  );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+  ]);
 }
 
 /// Remove a file shared with you (user1 -> admin), added by you to a shared
@@ -244,17 +250,18 @@ Future<void> _removeSharedAlbumFile() async {
 Future<void> _removeSharedAlbumSharedFile() async {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files = (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg", ownerId: "user1"))
-      .build();
+  final files =
+      (util.FilesBuilder(initialFileId: 1)
+        ..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
   final user1Files = [
-    files[0].copyWith(path: "remote.php/dav/files/user1/test1.jpg")
+    files[0].copyWith(path: "remote.php/dav/files/user1/test1.jpg"),
   ];
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0])
-        ..addShare("user1")
-        ..addShare("user2"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(files[0])
+            ..addShare("user1")
+            ..addShare("user2"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -263,7 +270,11 @@ Future<void> _removeSharedAlbumSharedFile() async {
       util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
       util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
       util.buildShare(
-          id: "2", file: user1Files[0], uidOwner: "user1", shareWith: "admin"),
+        id: "2",
+        file: user1Files[0],
+        uidOwner: "user1",
+        shareWith: "admin",
+      ),
       util.buildShare(id: "3", file: files[0], shareWith: "user2"),
     ]),
     npDb: util.buildTestDb(),
@@ -281,10 +292,12 @@ Future<void> _removeSharedAlbumSharedFile() async {
   await Remove(c)(account, [files[0]]);
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -301,15 +314,16 @@ Future<void> _removeSharedAlbumSharedFile() async {
       ),
     ],
   );
-  expect(
-    c.shareMemoryRepo.shares,
-    [
-      util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-      util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
-      util.buildShare(
-          id: "2", file: user1Files[0], uidOwner: "user1", shareWith: "admin"),
-    ],
-  );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+    util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+    util.buildShare(
+      id: "2",
+      file: user1Files[0],
+      uidOwner: "user1",
+      shareWith: "admin",
+    ),
+  ]);
 }
 
 /// Remove a file included in a shared album (admin -> user1), with the album
@@ -321,11 +335,15 @@ Future<void> _removeSharedAlbumResyncedFile() async {
   final account = util.buildAccount();
   final files =
       (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album = (util.AlbumBuilder()
-        ..addFileItem(files[0]
-            .copyWith(path: "remote.php/dav/files/user1/share/test1.jpg"))
-        ..addShare("user1"))
-      .build();
+  final album =
+      (util.AlbumBuilder()
+            ..addFileItem(
+              files[0].copyWith(
+                path: "remote.php/dav/files/user1/share/test1.jpg",
+              ),
+            )
+            ..addShare("user1"))
+          .build();
   final albumFile = album.albumFile!;
   final c = DiContainer(
     albumRepo: MockAlbumMemoryRepo([album]),
@@ -346,10 +364,12 @@ Future<void> _removeSharedAlbumResyncedFile() async {
   await Remove(c)(account, [files[0]]);
   expect(
     c.albumMemoryRepo.albums
-        .map((e) => e.copyWith(
-              // we need to set a known value to lastUpdated
-              lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
-            ))
+        .map(
+          (e) => e.copyWith(
+            // we need to set a known value to lastUpdated
+            lastUpdated: OrNull(DateTime.utc(2020, 1, 2, 3, 4, 5)),
+          ),
+        )
         .toList(),
     [
       Album(
@@ -359,14 +379,11 @@ Future<void> _removeSharedAlbumResyncedFile() async {
         coverProvider: const AlbumAutoCoverProvider(),
         sortProvider: const AlbumNullSortProvider(),
         albumFile: albumFile,
-        shares: [
-          util.buildAlbumShare(userId: "user1"),
-        ],
+        shares: [util.buildAlbumShare(userId: "user1")],
       ),
     ],
   );
-  expect(
-    c.shareMemoryRepo.shares,
-    [util.buildShare(id: "0", file: albumFile, shareWith: "user1")],
-  );
+  expect(c.shareMemoryRepo.shares, [
+    util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+  ]);
 }

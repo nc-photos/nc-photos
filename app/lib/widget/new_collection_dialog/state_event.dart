@@ -29,8 +29,9 @@ class _State {
     required Account account,
     required Set<_ProviderOption> supportedProviders,
   }) {
-    final prevType =
-        AccountPref.of(account).getLastNewCollectionType()?.run((t) {
+    final prevType = AccountPref.of(account).getLastNewCollectionType()?.run((
+      t,
+    ) {
       try {
         return _ProviderOption.values[t];
       } catch (_) {
@@ -43,9 +44,7 @@ class _State {
     }
     return _State(
       supportedProviders: supportedProviders,
-      formValue: _FormValue(
-        provider: provider,
-      ),
+      formValue: _FormValue(provider: provider),
       showDialog: true,
     );
   }

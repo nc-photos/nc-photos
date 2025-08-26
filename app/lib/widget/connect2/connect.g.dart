@@ -13,34 +13,38 @@ part of 'connect.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {Account? result,
-      Unique<_AskWebDavUrlRequest?>? askWebDavUrlRequest,
-      String? userId,
-      bool? cancelRequest,
-      ({Object error, StackTrace? stackTrace})? error});
+  _State call({
+    Account? result,
+    Unique<_AskWebDavUrlRequest?>? askWebDavUrlRequest,
+    String? userId,
+    bool? cancelRequest,
+    ({Object error, StackTrace? stackTrace})? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic result = copyWithNull,
-      dynamic askWebDavUrlRequest,
-      dynamic userId = copyWithNull,
-      dynamic cancelRequest,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic result = copyWithNull,
+    dynamic askWebDavUrlRequest,
+    dynamic userId = copyWithNull,
+    dynamic cancelRequest,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        result: result == copyWithNull ? that.result : result as Account?,
-        askWebDavUrlRequest:
-            askWebDavUrlRequest as Unique<_AskWebDavUrlRequest?>? ??
-                that.askWebDavUrlRequest,
-        userId: userId == copyWithNull ? that.userId : userId as String?,
-        cancelRequest: cancelRequest as bool? ?? that.cancelRequest,
-        error: error == copyWithNull
-            ? that.error
-            : error as ({Object error, StackTrace? stackTrace})?);
+      result: result == copyWithNull ? that.result : result as Account?,
+      askWebDavUrlRequest:
+          askWebDavUrlRequest as Unique<_AskWebDavUrlRequest?>? ??
+          that.askWebDavUrlRequest,
+      userId: userId == copyWithNull ? that.userId : userId as String?,
+      cancelRequest: cancelRequest as bool? ?? that.cancelRequest,
+      error:
+          error == copyWithNull
+              ? that.error
+              : error as ({Object error, StackTrace? stackTrace})?,
+    );
   }
 
   final _State that;

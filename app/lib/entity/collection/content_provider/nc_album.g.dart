@@ -23,8 +23,9 @@ class _$CollectionNcAlbumProviderCopyWithWorkerImpl
   @override
   CollectionNcAlbumProvider call({dynamic account, dynamic album}) {
     return CollectionNcAlbumProvider(
-        account: account as Account? ?? that.account,
-        album: album as NcAlbum? ?? that.album);
+      account: account as Account? ?? that.account,
+      album: album as NcAlbum? ?? that.album,
+    );
   }
 
   final CollectionNcAlbumProvider that;

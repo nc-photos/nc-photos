@@ -5,8 +5,8 @@ homepage:
 publish_to: none
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.29.0"
 
 dependencies:
   flutter:
@@ -16,6 +16,7 @@ dependencies:
   synchronized: ^3.1.0+1
 
 dev_dependencies:
+  dart_style: 3.0.1
   np_lints:
     path: ../np_lints
 

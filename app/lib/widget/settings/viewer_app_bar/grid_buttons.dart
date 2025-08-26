@@ -1,10 +1,7 @@
 part of '../viewer_app_bar_settings.dart';
 
 class _GridButton extends StatelessWidget {
-  const _GridButton({
-    required this.tooltip,
-    required this.icon,
-  });
+  const _GridButton({required this.tooltip, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -151,6 +148,18 @@ class _GridSetAsButton extends StatelessWidget {
     return _GridButton(
       tooltip: L10n.global().setAsTooltip,
       icon: const Icon(Icons.launch),
+    );
+  }
+}
+
+class _GridUploadButton extends StatelessWidget {
+  const _GridUploadButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return _GridButton(
+      tooltip: L10n.global().uploadTooltip,
+      icon: const Icon(Icons.cloud_upload_outlined),
     );
   }
 }

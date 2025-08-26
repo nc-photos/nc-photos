@@ -14,10 +14,7 @@ enum PersonProvider {
 }
 
 class PersonCoverResult {
-  const PersonCoverResult({
-    required this.url,
-    required this.mime,
-  });
+  const PersonCoverResult({required this.url, required this.mime});
 
   final String url;
   final String? mime;
@@ -26,10 +23,7 @@ class PersonCoverResult {
 @genCopyWith
 @toString
 class Person with EquatableMixin {
-  const Person({
-    required this.name,
-    required this.contentProvider,
-  });
+  const Person({required this.name, required this.contentProvider});
 
   @override
   String toString() => _$toString();
@@ -52,22 +46,18 @@ class Person with EquatableMixin {
     int width,
     int height, {
     bool? isKeepAspectRatio,
-  }) =>
-      contentProvider.getCoverUrl(
-        width,
-        height,
-        isKeepAspectRatio: isKeepAspectRatio,
-      );
+  }) => contentProvider.getCoverUrl(
+    width,
+    height,
+    isKeepAspectRatio: isKeepAspectRatio,
+  );
 
   /// See [PersonContentProvider.getCoverTransform]
   Matrix4? getCoverTransform(int viewportSize, int width, int height) =>
       contentProvider.getCoverTransform(viewportSize, width, height);
 
   @override
-  List<Object?> get props => [
-        name,
-        contentProvider,
-      ];
+  List<Object?> get props => [name, contentProvider];
 
   final String name;
   final PersonContentProvider contentProvider;

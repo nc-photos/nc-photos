@@ -11,5 +11,6 @@ extension _$ImportPotentialSharedAlbumNpLog on ImportPotentialSharedAlbum {
   Logger get _log => log;
 
   static final log = Logger(
-      "use_case.import_potential_shared_album.ImportPotentialSharedAlbum");
+    "use_case.import_potential_shared_album.ImportPotentialSharedAlbum",
+  );
 }

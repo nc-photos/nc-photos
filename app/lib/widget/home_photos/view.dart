@@ -6,9 +6,10 @@ class _ContentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.zoom != current.zoom ||
-          previous.viewWidth != current.viewWidth,
+      buildWhen:
+          (previous, current) =>
+              previous.zoom != current.zoom ||
+              previous.viewWidth != current.viewWidth,
       builder: (context, state) {
         if (state.viewWidth == null) {
           return const SliverFillRemaining();
@@ -33,9 +34,10 @@ class _ScalingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.scale != current.scale ||
-          previous.viewWidth != current.viewWidth,
+      buildWhen:
+          (previous, current) =>
+              previous.scale != current.scale ||
+              previous.viewWidth != current.viewWidth,
       builder: (context, state) {
         if (state.viewWidth == null || state.scale == null) {
           return const SliverFillRemaining();
@@ -72,77 +74,86 @@ class _ContentListBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.transformedItems != current.transformedItems ||
-          previous.selectedItems != current.selectedItems ||
-          (previous.itemPerRow == null) != (current.itemPerRow == null) ||
-          (previous.itemSize == null) != (current.itemSize == null),
-      builder: (context, state) =>
-          state.itemPerRow == null || state.itemSize == null
-              ? const SliverToBoxAdapter(
-                  child: SizedBox.shrink(),
-                )
-              : SelectableSectionList<_Item>(
-                  sections: state.transformedItems
-                      .map((e) => SelectableSection(
-                            header: e.first,
-                            items: e.sublist(1),
-                          ))
-                      .toList(),
-                  selectedItems: state.selectedItems,
-                  sectionHeaderBuilder: (context, section, item) =>
-                      item.buildWidget(context),
-                  itemBuilder: (context, section, index, item) {
-                    final w = item.buildWidget(context);
-                    if (isNeedVisibilityInfo) {
-                      return _ContentListItemView(
-                        key: Key("${_log.fullName}.${item.id}"),
-                        item: item,
-                        child: w,
-                      );
-                    } else {
-                      return w;
-                    }
-                  },
-                  extentOptimizer: SelectableSectionListExtentOptimizer(
-                    itemPerRow: itemPerRow,
-                    titleExtentBuilder: (_) =>
-                        AppDimension.of(context).timelineDateItemHeight,
-                    itemExtentBuilder: (_) => itemSize,
-                  ),
-                  onSelectionChange: (_, selected) {
-                    context.addEvent(_SetSelectedItems(items: selected.cast()));
-                  },
-                  onItemTap: (context, section, index, item) {
-                    if (item is! _FileItem) {
-                      // ?
-                      return;
-                    }
-                    final fileDate = item.file.fdDateTime.toLocal().toDate();
-                    final summary = context.state.filesSummary.items;
-                    var count = 0;
-                    for (final e
-                        in summary.entries.sortedBy((e) => e.key).reversed) {
-                      if (e.key.isAfter(fileDate)) {
-                        count += e.value.count;
+      buildWhen:
+          (previous, current) =>
+              previous.transformedItems != current.transformedItems ||
+              previous.selectedItems != current.selectedItems ||
+              (previous.itemPerRow == null) != (current.itemPerRow == null) ||
+              (previous.itemSize == null) != (current.itemSize == null),
+      builder:
+          (context, state) =>
+              state.itemPerRow == null || state.itemSize == null
+                  ? const SliverToBoxAdapter(child: SizedBox.shrink())
+                  : SelectableSectionList<_Item>(
+                    sections:
+                        state.transformedItems
+                            .map(
+                              (e) => SelectableSection(
+                                header: e.first,
+                                items: e.sublist(1),
+                              ),
+                            )
+                            .toList(),
+                    selectedItems: state.selectedItems,
+                    sectionHeaderBuilder:
+                        (context, section, item) => item.buildWidget(context),
+                    itemBuilder: (context, section, index, item) {
+                      final w = item.buildWidget(context);
+                      if (isNeedVisibilityInfo) {
+                        return _ContentListItemView(
+                          key: Key("${_log.fullName}.${item.id}"),
+                          item: item,
+                          child: w,
+                        );
                       } else {
-                        break;
+                        return w;
                       }
-                    }
-                    count += index;
+                    },
+                    extentOptimizer: SelectableSectionListExtentOptimizer(
+                      itemPerRow: itemPerRow,
+                      titleExtentBuilder:
+                          (_) =>
+                              AppDimension.of(context).timelineDateItemHeight,
+                      itemExtentBuilder: (_) => itemSize,
+                    ),
+                    onSelectionChange: (_, selected) {
+                      context.addEvent(
+                        _SetSelectedItems(items: selected.cast()),
+                      );
+                    },
+                    onItemTap: (context, section, index, item) {
+                      if (item is _FileItem) {
+                        final fileDate = item.file.dateTime.toLocal().toDate();
+                        final summary = [
+                          ...context.state.filesSummary.items.entries.map(
+                            (e) => (e.key, e.value.count),
+                          ),
+                          ...context.state.localFilesSummary.items.entries.map(
+                            (e) => (e.key, e.value),
+                          ),
+                        ];
+                        var count = 0;
+                        for (final e
+                            in summary.sortedBy((e) => e.$1).reversed) {
+                          if (e.$1.isAfter(fileDate)) {
+                            count += e.$2;
+                          } else {
+                            break;
+                          }
+                        }
+                        count += index;
 
-                    Navigator.of(context).pushNamed(
-                      TimelineViewer.routeName,
-                      arguments: TimelineViewerArguments(
-                        initialFile: item.file,
-                        initialIndex: count,
-                        allFilesCount: context.state.filesSummary.items.values
-                            .map((e) => e.count)
-                            .sum,
-                      ),
-                    );
-                  },
-                ),
+                        Navigator.of(context).pushNamed(
+                          TimelineViewer.routeName,
+                          arguments: TimelineViewerArguments(
+                            initialFile: item.file,
+                            initialIndex: count,
+                            allFilesCount: summary.map((e) => e.$2).sum,
+                          ),
+                        );
+                      }
+                    },
+                  ),
     );
   }
 
@@ -191,10 +202,12 @@ class _ContentListItemViewState extends State<_ContentListItemView> {
           if (date != null) {
             if (info.visibleFraction >= 0.2) {
               context.addEvent(
-                  _AddVisibleDate(_VisibleDate(widget.item.id, date)));
+                _AddVisibleDate(_VisibleDate(widget.item.id, date)),
+              );
             } else {
               context.addEvent(
-                  _RemoveVisibleDate(_VisibleDate(widget.item.id, date)));
+                _RemoveVisibleDate(_VisibleDate(widget.item.id, date)),
+              );
             }
           }
         }
@@ -207,7 +220,7 @@ class _ContentListItemViewState extends State<_ContentListItemView> {
     final item = widget.item;
     Date? date;
     if (item is _FileItem) {
-      date = item.file.fdDateTime.toLocal().toDate();
+      date = item.file.dateTime.toLocal().toDate();
     } else if (item is _SummaryFileItem) {
       date = item.date;
     }
@@ -227,31 +240,32 @@ class _MemoryCollectionList extends StatelessWidget {
         height: _MemoryCollectionItemView.height,
         child: _BlocSelector<List<Collection>>(
           selector: (state) => state.memoryCollections,
-          builder: (context, memoryCollections) => ListView.separated(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            itemCount: memoryCollections.length,
-            itemBuilder: (context, index) {
-              final c = memoryCollections[index];
-              final result = c.getCoverUrl(
-                k.photoThumbSize,
-                k.photoThumbSize,
-                isKeepAspectRatio: true,
-              );
-              return _MemoryCollectionItemView(
-                coverUrl: result?.url,
-                coverMime: result?.mime,
-                label: c.name,
-                onTap: () {
-                  Navigator.of(context).pushNamed(
-                    CollectionBrowser.routeName,
-                    arguments: CollectionBrowserArguments(c),
+          builder:
+              (context, memoryCollections) => ListView.separated(
+                scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                itemCount: memoryCollections.length,
+                itemBuilder: (context, index) {
+                  final c = memoryCollections[index];
+                  final result = c.getCoverUrl(
+                    k.photoThumbSize,
+                    k.photoThumbSize,
+                    isKeepAspectRatio: true,
+                  );
+                  return _MemoryCollectionItemView(
+                    coverUrl: result?.url,
+                    coverMime: result?.mime,
+                    label: c.name,
+                    onTap: () {
+                      Navigator.of(context).pushNamed(
+                        CollectionBrowser.routeName,
+                        arguments: CollectionBrowserArguments(c),
+                      );
+                    },
                   );
                 },
-              );
-            },
-            separatorBuilder: (context, index) => const SizedBox(width: 8),
-          ),
+                separatorBuilder: (context, index) => const SizedBox(width: 8),
+              ),
         ),
       ),
     );
@@ -313,8 +327,8 @@ class _MemoryCollectionItemView extends StatelessWidget {
                     child: Text(
                       label,
                       style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                            color: Theme.of(context).onDarkSurface,
-                          ),
+                        color: Theme.of(context).onDarkSurface,
+                      ),
                     ),
                   ),
                 ),
@@ -323,9 +337,7 @@ class _MemoryCollectionItemView extends StatelessWidget {
                 Positioned.fill(
                   child: Material(
                     type: MaterialType.transparency,
-                    child: InkWell(
-                      onTap: onTap,
-                    ),
+                    child: InkWell(onTap: onTap),
                   ),
                 ),
             ],
@@ -352,16 +364,18 @@ class _ScrollLabel extends StatelessWidget {
         if (scrollDate == null) {
           return const SizedBox.shrink();
         }
-        final text = DateFormat(DateFormat.YEAR_ABBR_MONTH,
-                Localizations.localeOf(context).languageCode)
-            .format(scrollDate.toUtcDateTime());
+        final text = DateFormat(
+          DateFormat.YEAR_ABBR_MONTH,
+          Localizations.localeOf(context).languageCode,
+        ).format(scrollDate.toUtcDateTime());
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           child: DefaultTextStyle(
-            style: Theme.of(context).textStyleColored(
-              (textTheme) => textTheme.titleMedium,
-              (colorScheme) => colorScheme.onSecondaryContainer,
-            )!,
+            style:
+                Theme.of(context).textStyleColored(
+                  (textTheme) => textTheme.titleMedium,
+                  (colorScheme) => colorScheme.onSecondaryContainer,
+                )!,
             child: Text(text),
           ),
         );

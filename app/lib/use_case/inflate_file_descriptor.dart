@@ -15,7 +15,9 @@ class InflateFileDescriptor {
   /// will be done for File objects in [fds]
   Future<List<File>> call(Account account, List<FileDescriptor> fds) async {
     final found = await FindFile(_c)(
-        account, fds.where((e) => e is! File).map((e) => e.fdId).toList());
+      account,
+      fds.where((e) => e is! File).map((e) => e.fdId).toList(),
+    );
     final foundMap = Map.fromEntries(found.map((e) => MapEntry(e.fileId!, e)));
     return fds.map((e) {
       if (e is File) {

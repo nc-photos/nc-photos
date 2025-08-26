@@ -27,16 +27,21 @@ class _AnimatedSmoothClipRRectState
     extends AnimatedWidgetBaseState<AnimatedSmoothClipRRect> {
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _borderRadius = visitor(
-      _borderRadius,
-      widget.borderRadius,
-      (dynamic value) => Tween<BorderRadius>(begin: value as BorderRadius),
-    ) as Tween<BorderRadius>?;
-    _side = visitor(
-      _side,
-      widget.side,
-      (dynamic value) => BorderSideTween(begin: value as BorderSide),
-    ) as BorderSideTween?;
+    _borderRadius =
+        visitor(
+              _borderRadius,
+              widget.borderRadius,
+              (dynamic value) =>
+                  Tween<BorderRadius>(begin: value as BorderRadius),
+            )
+            as Tween<BorderRadius>?;
+    _side =
+        visitor(
+              _side,
+              widget.side,
+              (dynamic value) => BorderSideTween(begin: value as BorderSide),
+            )
+            as BorderSideTween?;
   }
 
   @override

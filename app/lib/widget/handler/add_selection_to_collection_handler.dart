@@ -26,8 +26,9 @@ class AddSelectionToCollectionHandler {
     VoidCallback? clearSelection,
   }) async {
     try {
-      final collection = await Navigator.of(context)
-          .pushNamed<Collection>(CollectionPicker.routeName);
+      final collection = await Navigator.of(
+        context,
+      ).pushNamed<Collection>(CollectionPicker.routeName);
       if (collection == null) {
         return;
       }
@@ -43,10 +44,12 @@ class AddSelectionToCollectionHandler {
       await controller.addFiles(selection);
     } catch (e, stackTrace) {
       _log.shout("[call] Exception", e, stackTrace);
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().addItemToCollectionFailureNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().addItemToCollectionFailureNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
   }
 }

@@ -9,19 +9,13 @@ part 'entity.g.dart';
 @genCopyWith
 @toString
 class DbAccount with EquatableMixin {
-  const DbAccount({
-    required this.serverAddress,
-    required this.userId,
-  });
+  const DbAccount({required this.serverAddress, required this.userId});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        serverAddress,
-        userId,
-      ];
+  List<Object?> get props => [serverAddress, userId];
 
   final String serverAddress;
   final CiString userId;
@@ -50,19 +44,19 @@ class DbAlbum with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        fileId,
-        fileEtag,
-        version,
-        lastUpdated,
-        name,
-        providerType,
-        providerContent,
-        coverProviderType,
-        coverProviderContent,
-        sortProviderType,
-        sortProviderContent,
-        shares,
-      ];
+    fileId,
+    fileEtag,
+    version,
+    lastUpdated,
+    name,
+    providerType,
+    providerContent,
+    coverProviderType,
+    coverProviderContent,
+    sortProviderType,
+    sortProviderContent,
+    shares,
+  ];
 
   final int fileId;
   final String? fileEtag;
@@ -92,11 +86,7 @@ class DbAlbumShare with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        userId,
-        displayName,
-        sharedAt,
-      ];
+  List<Object?> get props => [userId, displayName, sharedAt];
 
   final String userId;
   final String? displayName;
@@ -116,11 +106,7 @@ class DbFaceRecognitionPerson with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        name,
-        thumbFaceId,
-        count,
-      ];
+  List<Object?> get props => [name, thumbFaceId, count];
 
   final String name;
   final int thumbFaceId;
@@ -156,25 +142,25 @@ class DbFile with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        isCollection,
-        usedBytes,
-        hasPreview,
-        ownerId,
-        ownerDisplayName,
-        relativePath,
-        isFavorite,
-        isArchived,
-        overrideDateTime,
-        bestDateTime,
-        imageData,
-        location,
-        trashData,
-      ];
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    isCollection,
+    usedBytes,
+    hasPreview,
+    ownerId,
+    ownerDisplayName,
+    relativePath,
+    isFavorite,
+    isArchived,
+    overrideDateTime,
+    bestDateTime,
+    imageData,
+    location,
+    trashData,
+  ];
 
   final int fileId;
   final int? contentLength;
@@ -213,13 +199,13 @@ class DbFileDescriptor with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        relativePath,
-        fileId,
-        contentType,
-        isArchived,
-        isFavorite,
-        bestDateTime,
-      ];
+    relativePath,
+    fileId,
+    contentType,
+    isArchived,
+    isFavorite,
+    bestDateTime,
+  ];
 
   final String relativePath;
   final int fileId;
@@ -247,14 +233,14 @@ class DbImageData with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        lastUpdated,
-        fileEtag,
-        width,
-        height,
-        exif,
-        exifDateTimeOriginal,
-        src,
-      ];
+    lastUpdated,
+    fileEtag,
+    width,
+    height,
+    exif,
+    exifDateTimeOriginal,
+    src,
+  ];
 
   final DateTime lastUpdated;
   final String? fileEtag;
@@ -283,14 +269,14 @@ class DbLocation with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        version,
-        name,
-        latitude,
-        longitude,
-        countryCode,
-        admin1,
-        admin2,
-      ];
+    version,
+    name,
+    latitude,
+    longitude,
+    countryCode,
+    admin1,
+    admin2,
+  ];
 
   final int version;
   final String? name;
@@ -320,15 +306,15 @@ class DbNcAlbum with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        relativePath,
-        lastPhoto,
-        nbItems,
-        location,
-        dateStart,
-        dateEnd,
-        collaborators,
-        isOwned,
-      ];
+    relativePath,
+    lastPhoto,
+    nbItems,
+    location,
+    dateStart,
+    dateEnd,
+    collaborators,
+    isOwned,
+  ];
 
   final String relativePath;
   final int? lastPhoto;
@@ -361,17 +347,17 @@ class DbNcAlbumItem with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        relativePath,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        hasPreview,
-        isFavorite,
-        fileMetadataWidth,
-        fileMetadataHeight,
-      ];
+    relativePath,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+  ];
 
   final String relativePath;
   final int fileId;
@@ -388,17 +374,13 @@ class DbNcAlbumItem with EquatableMixin {
 @genCopyWith
 @toString
 class DbRecognizeFace with EquatableMixin {
-  const DbRecognizeFace({
-    required this.label,
-  });
+  const DbRecognizeFace({required this.label});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        label,
-      ];
+  List<Object?> get props => [label];
 
   final String label;
 }
@@ -426,19 +408,19 @@ class DbRecognizeFaceItem with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        relativePath,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        hasPreview,
-        realPath,
-        isFavorite,
-        fileMetadataWidth,
-        fileMetadataHeight,
-        faceDetections,
-      ];
+    relativePath,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    realPath,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+    faceDetections,
+  ];
 
   final String relativePath;
   final int fileId;
@@ -468,12 +450,7 @@ class DbTag with EquatableMixin {
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [
-        id,
-        displayName,
-        userVisible,
-        userAssignable,
-      ];
+  List<Object?> get props => [id, displayName, userVisible, userAssignable];
 
   final int id;
   final String displayName;

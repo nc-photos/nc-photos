@@ -13,29 +13,33 @@ part of 'account_picker_dialog.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<Account>? accounts,
-      bool? isOpenDropdown,
-      Account? newSelectAccount,
-      ExceptionEvent? error});
+  _State call({
+    List<Account>? accounts,
+    bool? isOpenDropdown,
+    Account? newSelectAccount,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic accounts,
-      dynamic isOpenDropdown,
-      dynamic newSelectAccount = copyWithNull,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic accounts,
+    dynamic isOpenDropdown,
+    dynamic newSelectAccount = copyWithNull,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        accounts: accounts as List<Account>? ?? that.accounts,
-        isOpenDropdown: isOpenDropdown as bool? ?? that.isOpenDropdown,
-        newSelectAccount: newSelectAccount == copyWithNull
-            ? that.newSelectAccount
-            : newSelectAccount as Account?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      accounts: accounts as List<Account>? ?? that.accounts,
+      isOpenDropdown: isOpenDropdown as bool? ?? that.isOpenDropdown,
+      newSelectAccount:
+          newSelectAccount == copyWithNull
+              ? that.newSelectAccount
+              : newSelectAccount as Account?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

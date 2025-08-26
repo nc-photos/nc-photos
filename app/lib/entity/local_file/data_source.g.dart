@@ -11,6 +11,7 @@ extension _$LocalFileMediaStoreDataSourceNpLog
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.local_file.data_source.LocalFileMediaStoreDataSource");
+  static final log = Logger(
+    "entity.local_file.data_source.LocalFileMediaStoreDataSource",
+  );
 }

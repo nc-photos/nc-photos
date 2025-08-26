@@ -12,5 +12,6 @@ extension _$_PhotoDateTimeEditDialogStateNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.photo_date_time_edit_dialog._PhotoDateTimeEditDialogState");
+    "widget.photo_date_time_edit_dialog._PhotoDateTimeEditDialogState",
+  );
 }

@@ -2,10 +2,8 @@ part of '../splash.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
-  _Bloc({
-    required this.prefController,
-    required this.npDb,
-  }) : super(_State.init()) {
+  _Bloc({required this.prefController, required this.npDb})
+    : super(_State.init()) {
     on<_Init>(_onInit);
     on<_ChangelogDismissed>(_onChangelogDismissed);
   }
@@ -80,7 +78,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _showChangelogIfAvailable(
-      int lastVersion, Emitter<_State> emit) async {
+    int lastVersion,
+    Emitter<_State> emit,
+  ) async {
     if (Changelog.hasContent(lastVersion)) {
       emit(state.copyWith(changelogFromVersion: lastVersion));
     } else {
@@ -100,6 +100,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     }
     if (lastVersion < 750) {
       await _upgrade75(lastVersion, emit);
+    }
+    if (lastVersion < 7700) {
+      _upgrade77(lastVersion);
     }
   }
 
@@ -131,10 +134,13 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         npDb,
         onProgress: (current, count) {
           if (!isClosed) {
-            emit(state.copyWith(
-              upgradeProgress: current / count,
-              upgradeText: L10n.global().migrateDatabaseProcessingNotification,
-            ));
+            emit(
+              state.copyWith(
+                upgradeProgress: current / count,
+                upgradeText:
+                    L10n.global().migrateDatabaseProcessingNotification,
+              ),
+            );
           }
         },
       );
@@ -144,18 +150,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       await npDb.clearAndInitWithAccounts(accounts.toDb());
     }
     if (!isClosed) {
-      emit(state.copyWith(
-        upgradeProgress: null,
-        upgradeText: null,
-      ));
+      emit(state.copyWith(upgradeProgress: null, upgradeText: null));
     }
   }
 
   Future<void> _upgrade75(int lastVersion, Emitter<_State> emit) async {
     _log.info("[_upgrade75] migrate DB");
-    emit(state.copyWith(
-      upgradeText: L10n.global().migrateDatabaseProcessingNotification,
-    ));
+    emit(
+      state.copyWith(
+        upgradeText: L10n.global().migrateDatabaseProcessingNotification,
+      ),
+    );
     try {
       await CompatV75.migrateDb(npDb);
     } catch (e, stackTrace) {
@@ -164,9 +169,16 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       await npDb.clearAndInitWithAccounts(accounts.toDb());
     }
     if (!isClosed) {
-      emit(state.copyWith(
-        upgradeText: null,
-      ));
+      emit(state.copyWith(upgradeText: null));
+    }
+  }
+
+  void _upgrade77(int lastVersion) {
+    _log.info("[_upgrade77] migrate pref");
+    try {
+      CompatV77.migratePref(prefController);
+    } catch (e, stackTrace) {
+      _log.shout("[_upgrade77] Failed while migratePref", e, stackTrace);
     }
   }
 

@@ -3,4 +3,3 @@ class DriftTableSort {
 
   final String dbClass;
 }
-

@@ -17,12 +17,12 @@ class ImageLatLng with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        latitude,
-        longitude,
-        fileId,
-        fileRelativePath,
-        mime,
-      ];
+    latitude,
+    longitude,
+    fileId,
+    fileRelativePath,
+    mime,
+  ];
 
   final double latitude;
   final double longitude;
@@ -44,8 +44,9 @@ class BasicImageLocationRepo implements ImageLocationRepo {
 
   @override
   Future<List<ImageLatLng>> getLocations(
-          Account account, TimeRange timeRange) =>
-      dataSrc.getLocations(account, timeRange);
+    Account account,
+    TimeRange timeRange,
+  ) => dataSrc.getLocations(account, timeRange);
 
   final ImageLocationDataSource dataSrc;
 }

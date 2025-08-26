@@ -37,12 +37,9 @@ part 'share_handler.g.dart';
 /// Handle sharing to other apps
 @npLog
 class ShareHandler {
-  ShareHandler(
-    this._c, {
-    required this.context,
-    this.clearSelection,
-  })  : assert(require(_c)),
-        assert(InflateFileDescriptor.require(_c));
+  ShareHandler(this._c, {required this.context, this.clearSelection})
+    : assert(require(_c)),
+      assert(InflateFileDescriptor.require(_c));
 
   static bool require(DiContainer c) => true;
 
@@ -57,9 +54,10 @@ class ShareHandler {
       onFailure: (f, e, stackTrace) {
         if (e != null) {
           _log.shout(
-              "[shareLocalFiles] Failed while sharing file: ${logFilename(f.logTag)}",
-              e,
-              stackTrace);
+            "[shareLocalFiles] Failed while sharing file: ${logFilename(f.logTag)}",
+            e,
+            stackTrace,
+          );
           if (!hasShownError) {
             SnackBarManager().showSnackBarForException(e);
             hasShownError = true;
@@ -98,37 +96,54 @@ class ShareHandler {
   Future<ShareMethod?> _askShareMethod(List<File> files) {
     return showDialog<ShareMethod>(
       context: context,
-      builder: (context) => ShareMethodDialog(
-        isSupportPerview: files.any((f) => file_util.isSupportedImageFormat(f)),
-      ),
+      builder:
+          (context) => ShareMethodDialog(
+            isSupportPerview: files.any(
+              (f) => file_util.isSupportedImageFormat(f),
+            ),
+            isSupportRemoteLink: true,
+          ),
     );
   }
 
   Future<void> _shareAsPreview(Account account, List<File> files) async {
     assert(getRawPlatform() == NpPlatform.android);
-    final results =
-        await InternalDownloadHandler(account).downloadPreviews(context, files);
-    final share = AndroidFileShare(results.entries
-        .map((e) => AndroidFileShareFile(e.value as String, e.key.contentType))
-        .toList());
+    final results = await InternalDownloadHandler(
+      account,
+    ).downloadPreviews(context, files);
+    final share = AndroidFileShare(
+      results.entries
+          .map(
+            (e) => AndroidFileShareFile(e.value as String, e.key.contentType),
+          )
+          .toList(),
+    );
     return share.share();
   }
 
   Future<void> _shareAsFile(Account account, List<File> files) async {
     assert(getRawPlatform() == NpPlatform.android);
-    final results =
-        await InternalDownloadHandler(account).downloadFiles(context, files);
+    final results = await InternalDownloadHandler(
+      account,
+    ).downloadFiles(context, files);
     if (results.isEmpty) {
       return;
     }
-    final share = AndroidFileShare(results.entries
-        .map((e) => AndroidFileShareFile(e.value as String, e.key.contentType))
-        .toList());
+    final share = AndroidFileShare(
+      results.entries
+          .map(
+            (e) => AndroidFileShareFile(e.value as String, e.key.contentType),
+          )
+          .toList(),
+    );
     return share.share();
   }
 
   Future<void> _shareAsLink(
-      Account account, List<File> files, bool isPasswordProtected) async {
+    Account account,
+    List<File> files,
+    bool isPasswordProtected,
+  ) async {
     if (files.length == 1) {
       String? password;
       if (isPasswordProtected) {
@@ -161,17 +176,17 @@ class ShareHandler {
       await _copyFilesToDir(c.fileRepo, account, files, path);
       return _shareFileAsLink(
         account,
-        File(
-          path: path,
-          isCollection: true,
-        ),
+        File(path: path, isCollection: true),
         result.password,
       );
     }
   }
 
   Future<void> _shareFileAsLink(
-      Account account, File file, String? password) async {
+    Account account,
+    File file,
+    String? password,
+  ) async {
     final shareRepo = ShareRepo(ShareRemoteDataSource());
     try {
       final share = await CreateLinkShare(shareRepo)(
@@ -180,10 +195,12 @@ class ShareHandler {
         password: password,
       );
       await Clipboard.setData(ClipboardData(text: share.url!));
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().linkCopiedNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().linkCopiedNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
 
       if (getRawPlatform() == NpPlatform.android) {
         final textShare = AndroidTextShare(share.url!);
@@ -191,7 +208,10 @@ class ShareHandler {
       }
     } catch (e, stackTrace) {
       _log.shout(
-          "[_shareFileAsLink] Failed while CreateLinkShare", e, stackTrace);
+        "[_shareFileAsLink] Failed while CreateLinkShare",
+        e,
+        stackTrace,
+      );
       SnackBarManager().showSnackBarForException(e);
     }
   }
@@ -199,32 +219,39 @@ class ShareHandler {
   Future<String?> _askPassword() {
     return showDialog<String>(
       context: context,
-      builder: (context) => SimpleInputDialog(
-        hintText: L10n.global().passwordInputHint,
-        buttonText: MaterialLocalizations.of(context).okButtonLabel,
-        validator: (value) {
-          if (value?.isNotEmpty != true) {
-            return L10n.global().passwordInputInvalidEmpty;
-          }
-          return null;
-        },
-        obscureText: true,
-      ),
+      builder:
+          (context) => SimpleInputDialog(
+            hintText: L10n.global().passwordInputHint,
+            buttonText: MaterialLocalizations.of(context).okButtonLabel,
+            validator: (value) {
+              if (value?.isNotEmpty != true) {
+                return L10n.global().passwordInputInvalidEmpty;
+              }
+              return null;
+            },
+            obscureText: true,
+          ),
     );
   }
 
   Future<ShareLinkMultipleFilesDialogResult?> _askDirDetail(
-      BuildContext context, bool isPasswordProtected) {
+    BuildContext context,
+    bool isPasswordProtected,
+  ) {
     return showDialog<ShareLinkMultipleFilesDialogResult>(
       context: context,
-      builder: (_) => ShareLinkMultipleFilesDialog(
-        shouldAskPassword: isPasswordProtected,
-      ),
+      builder:
+          (_) => ShareLinkMultipleFilesDialog(
+            shouldAskPassword: isPasswordProtected,
+          ),
     );
   }
 
   Future<String> _createDir(
-      FileRepo fileRepo, Account account, String name) async {
+    FileRepo fileRepo,
+    Account account,
+    String name,
+  ) async {
     // add a intermediate dir to allow shared dirs having the same name. Since
     // the dir names are public, we can't add random pre/suffix
     final timestamp = clock.now().millisecondsSinceEpoch;
@@ -237,23 +264,34 @@ class ShareHandler {
     return path;
   }
 
-  Future<void> _copyFilesToDir(FileRepo fileRepo, Account account,
-      List<File> files, String dirPath) async {
+  Future<void> _copyFilesToDir(
+    FileRepo fileRepo,
+    Account account,
+    List<File> files,
+    String dirPath,
+  ) async {
     var failureCount = 0;
     for (final f in files) {
       try {
         await Copy(fileRepo)(account, f, "$dirPath/${f.filename}");
       } catch (e, stackTrace) {
         _log.severe(
-            "[_copyFilesToDir] Failed while copying file: $f", e, stackTrace);
+          "[_copyFilesToDir] Failed while copying file: $f",
+          e,
+          stackTrace,
+        );
         ++failureCount;
       }
     }
     if (failureCount != 0) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().copyItemsFailureNotification(failureCount)),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(
+            L10n.global().copyItemsFailureNotification(failureCount),
+          ),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
   }
 

@@ -10,6 +10,7 @@ extension _$MetadataControllerNpLog on MetadataController {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("controller.metadata_controller.MetadataController");
+  static final log = Logger(
+    "controller.metadata_controller.MetadataController",
+  );
 }

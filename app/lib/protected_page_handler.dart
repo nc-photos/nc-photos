@@ -11,12 +11,7 @@ import 'package:np_string/np_string.dart';
 
 part 'protected_page_handler.g.dart';
 
-enum ProtectedPageAuthType {
-  biometric,
-  pin,
-  password,
-  ;
-}
+enum ProtectedPageAuthType { biometric, pin, password }
 
 class ProtectedPageAuthException implements Exception {
   const ProtectedPageAuthException([this.message]);
@@ -28,15 +23,16 @@ class ProtectedPageAuthException implements Exception {
 }
 
 extension ProtectedPageBuildContextExtension on NavigatorState {
-  Future<T?>
-      pushReplacementNamedProtected<T extends Object?, U extends Object?>(
-    String routeName, {
-    U? result,
-    Object? arguments,
-  }) async {
+  Future<T?> pushReplacementNamedProtected<
+    T extends Object?,
+    U extends Object?
+  >(String routeName, {U? result, Object? arguments}) async {
     if (await authProtectedPage()) {
-      return pushReplacementNamed(routeName,
-          arguments: arguments, result: result);
+      return pushReplacementNamed(
+        routeName,
+        arguments: arguments,
+        result: result,
+      );
     } else {
       throw const ProtectedPageAuthException();
     }
@@ -89,13 +85,16 @@ extension ProtectedPageBuildContextExtension on NavigatorState {
   }
 
   Future<bool> _authPin(SecurePrefController securePrefController) =>
-      _PinAuthHandler(context, securePrefController.protectedPageAuthPinValue!)
-          .auth();
+      _PinAuthHandler(
+        context,
+        securePrefController.protectedPageAuthPinValue!,
+      ).auth();
 
   Future<bool> _authPassword(SecurePrefController securePrefController) =>
       _PasswordAuthHandler(
-              context, securePrefController.protectedPageAuthPasswordValue!)
-          .auth();
+        context,
+        securePrefController.protectedPageAuthPasswordValue!,
+      ).auth();
 }
 
 abstract class _AuthHandler {
@@ -114,9 +113,7 @@ class _BiometricAuthHandler implements _AuthHandler {
       }
       return await localAuth.authenticate(
         localizedReason: L10n.global().appLockUnlockHint,
-        options: const AuthenticationOptions(
-          biometricOnly: true,
-        ),
+        options: const AuthenticationOptions(biometricOnly: true),
       );
     } catch (e, stackTrace) {
       _log.severe("[auth] Exception", e, stackTrace);

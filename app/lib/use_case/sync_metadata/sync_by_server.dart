@@ -49,11 +49,13 @@ class _SyncByServer {
           // unsupported image format
           if (isEnableClientExif) {
             _log.info(
-                "[_syncDir] File ${f.path} (mime: ${f.fdMime}) not supported by server, fallback to client");
+              "[_syncDir] File ${f.path} (mime: ${f.fdMime}) not supported by server, fallback to client",
+            );
             result = await fallback.syncOne(f);
           } else {
             _log.info(
-                "[_syncDir] File ${f.path} (mime: ${f.fdMime}) not supported by server");
+              "[_syncDir] File ${f.path} (mime: ${f.fdMime}) not supported by server",
+            );
           }
         } else {
           // supported image format
@@ -61,7 +63,8 @@ class _SyncByServer {
             // no metadata from server
             if (isFallbackClientExif) {
               _log.info(
-                  "[_syncDir] File ${f.path} metadata not found on server, fallback to client");
+                "[_syncDir] File ${f.path} metadata not found on server, fallback to client",
+              );
               result = await fallback.syncOne(f);
             }
           } else {
@@ -99,8 +102,11 @@ class _SyncByServer {
         }
         locationUpdate = OrNull(location ?? ImageLocation.empty());
       } catch (e, stackTrace) {
-        _log.severe("[_syncOne] Failed while reverse geocoding: ${file.path}",
-            e, stackTrace);
+        _log.severe(
+          "[_syncOne] Failed while reverse geocoding: ${file.path}",
+          e,
+          stackTrace,
+        );
         // if failed, we skip updating the location
       }
 
@@ -112,8 +118,11 @@ class _SyncByServer {
       );
       return file;
     } catch (e, stackTrace) {
-      _log.severe("[_syncOne] Failed while updating metadata: ${file.path}", e,
-          stackTrace);
+      _log.severe(
+        "[_syncOne] Failed while updating metadata: ${file.path}",
+        e,
+        stackTrace,
+      );
       return null;
     }
   }
@@ -128,8 +137,5 @@ class _SyncByServer {
   final _geocoder = ReverseGeocoder();
   var _shouldRun = true;
 
-  static const _supportedMimes = [
-    "image/jpeg",
-    "image/webp",
-  ];
+  static const _supportedMimes = ["image/jpeg", "image/webp"];
 }

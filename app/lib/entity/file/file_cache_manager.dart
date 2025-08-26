@@ -38,7 +38,8 @@ class FileCacheLoader {
       if (remoteEtag == null) {
         // if no etag supplied, we need to query it form remote
         _log.info(
-            "[call] etag missing from input, querying remote: ${logFilename(dir.path)}");
+          "[call] etag missing from input, querying remote: ${logFilename(dir.path)}",
+        );
         remoteEtag = (await remoteSrc.list(account, dir, depth: 0)).first.etag;
       }
       if (cacheEtag == remoteEtag) {
@@ -62,7 +63,10 @@ class FileCacheLoader {
   String? get remoteTouchEtag => _remoteEtag;
 
   Future<void> _checkTouchEtag(
-      Account account, File f, List<File> cache) async {
+    Account account,
+    File f,
+    List<File> cache,
+  ) async {
     final result = await _c.touchManager.checkTouchEtag(account, f);
     if (result == null) {
       _isGood = true;
@@ -102,10 +106,7 @@ class FileSqliteCacheUpdater {
   }
 
   Future<void> updateSingle(Account account, File remoteFile) async {
-    await db.syncFile(
-      account: account.toDb(),
-      file: remoteFile.toDb(),
-    );
+    await db.syncFile(account: account.toDb(), file: remoteFile.toDb());
   }
 
   final NpDb db;
@@ -116,10 +117,7 @@ class FileSqliteCacheEmptier {
 
   /// Empty a dir from cache
   Future<void> call(Account account, File dir) async {
-    await _c.npDb.truncateDir(
-      account: account.toDb(),
-      dir: dir.toDbKey(),
-    );
+    await _c.npDb.truncateDir(account: account.toDb(), dir: dir.toDbKey());
   }
 
   final DiContainer _c;

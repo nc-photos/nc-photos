@@ -10,8 +10,9 @@ extension _$HomeSearchSuggestionBlocNpLog on HomeSearchSuggestionBloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("bloc.home_search_suggestion.HomeSearchSuggestionBloc");
+  static final log = Logger(
+    "bloc.home_search_suggestion.HomeSearchSuggestionBloc",
+  );
 }
 
 // **************************************************************************

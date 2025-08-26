@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/pref/provider/memory.dart';
@@ -25,9 +24,11 @@ class Pref {
     _inst = pref;
   }
 
-  Future<bool> _set<T>(PrefKey key, T value,
-          Future<bool> Function(PrefKey key, T value) setFn) =>
-      setFn(key, value);
+  Future<bool> _set<T>(
+    PrefKey key,
+    T value,
+    Future<bool> Function(PrefKey key, T value) setFn,
+  ) => setFn(key, value);
 
   final PrefProvider provider;
 
@@ -39,7 +40,9 @@ class AccountPref {
 
   static AccountPref of(Account account) {
     _insts.putIfAbsent(
-        account.id, () => AccountPref.scoped(PrefMemoryProvider()));
+      account.id,
+      () => AccountPref.scoped(PrefMemoryProvider()),
+    );
     return _insts[account.id]!;
   }
 
@@ -54,9 +57,11 @@ class AccountPref {
     }
   }
 
-  Future<bool> _set<T>(AccountPrefKey key, T value,
-          Future<bool> Function(AccountPrefKey key, T value) setFn) =>
-      setFn(key, value);
+  Future<bool> _set<T>(
+    AccountPrefKey key,
+    T value,
+    Future<bool> Function(AccountPrefKey key, T value) setFn,
+  ) => setFn(key, value);
 
   Future<bool> _remove(AccountPrefKey key) => provider.remove(key);
 
@@ -119,109 +124,62 @@ enum PrefKey implements PrefKeyInterface {
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
   isFallbackClientExif,
-  ;
+  localDirs;
 
   @override
   String toStringKey() {
-    switch (this) {
-      case PrefKey.accounts3:
-        return "accounts3";
-      case PrefKey.currentAccountIndex:
-        return "currentAccountIndex";
-      case PrefKey.homePhotosZoomLevel:
-        return "homePhotosZoomLevel";
-      case PrefKey.albumBrowserZoomLevel:
-        return "albumViewerZoomLevel";
-      case PrefKey.homeAlbumsSort:
-        return "homeAlbumsSort";
-      case PrefKey.enableExif:
-        return "isEnableExif";
-      case PrefKey.viewerScreenBrightness:
-        return "viewerScreenBrightness";
-      case PrefKey.viewerForceRotation:
-        return "viewerForceRotation";
-      case PrefKey.setupProgress:
-        return "setupProgress";
-      case PrefKey.lastVersion:
-        return "lastVersion";
-      case PrefKey.darkTheme:
-        return "isDarkTheme";
-      case PrefKey.followSystemTheme:
-        return "isFollowSystemTheme";
-      case PrefKey.useBlackInDarkTheme:
-        return "isUseBlackInDarkTheme";
-      case PrefKey.language:
-        return "language";
-      case PrefKey.labEnableSharedAlbum:
-        return "isLabEnableSharedAlbum";
-      case PrefKey.slideshowDuration:
-        return "slideshowDuration";
-      case PrefKey.isSlideshowShuffle:
-        return "isSlideshowShuffle";
-      case PrefKey.isSlideshowRepeat:
-        return "isSlideshowRepeat";
-      case PrefKey.isAlbumBrowserShowDate:
-        return "isAlbumBrowserShowDate";
-      case PrefKey.gpsMapProvider:
-        return "gpsMapProvider";
-      case PrefKey.hasShownSharedAlbumInfo:
-        return "hasShownSharedAlbumInfo";
-      case PrefKey.enhanceMaxWidth:
-        return "enhanceMaxWidth";
-      case PrefKey.enhanceMaxHeight:
-        return "enhanceMaxHeight";
-      case PrefKey.hasShownEnhanceInfo:
-        return "hasShownEnhanceInfo";
-      case PrefKey.firstRunTime:
-        return "firstRunTime";
+    return switch (this) {
+      PrefKey.accounts3 => "accounts3",
+      PrefKey.currentAccountIndex => "currentAccountIndex",
+      PrefKey.homePhotosZoomLevel => "homePhotosZoomLevel",
+      PrefKey.albumBrowserZoomLevel => "albumViewerZoomLevel",
+      PrefKey.homeAlbumsSort => "homeAlbumsSort",
+      PrefKey.enableExif => "isEnableExif",
+      PrefKey.viewerScreenBrightness => "viewerScreenBrightness",
+      PrefKey.viewerForceRotation => "viewerForceRotation",
+      PrefKey.setupProgress => "setupProgress",
+      PrefKey.lastVersion => "lastVersion",
+      PrefKey.darkTheme => "isDarkTheme",
+      PrefKey.followSystemTheme => "isFollowSystemTheme",
+      PrefKey.useBlackInDarkTheme => "isUseBlackInDarkTheme",
+      PrefKey.language => "language",
+      PrefKey.labEnableSharedAlbum => "isLabEnableSharedAlbum",
+      PrefKey.slideshowDuration => "slideshowDuration",
+      PrefKey.isSlideshowShuffle => "isSlideshowShuffle",
+      PrefKey.isSlideshowRepeat => "isSlideshowRepeat",
+      PrefKey.isAlbumBrowserShowDate => "isAlbumBrowserShowDate",
+      PrefKey.gpsMapProvider => "gpsMapProvider",
+      PrefKey.hasShownSharedAlbumInfo => "hasShownSharedAlbumInfo",
+      PrefKey.enhanceMaxWidth => "enhanceMaxWidth",
+      PrefKey.enhanceMaxHeight => "enhanceMaxHeight",
+      PrefKey.hasShownEnhanceInfo => "hasShownEnhanceInfo",
+      PrefKey.firstRunTime => "firstRunTime",
       // ignore: deprecated_member_use_from_same_package
-      case PrefKey.isPhotosTabSortByName:
-        return "isPhotosTabSortByName";
-      case PrefKey.shouldProcessExifWifiOnly:
-        return "shouldProcessExifWifiOnly";
-      case PrefKey.doubleTapExit:
-        return "doubleTapExit";
-      case PrefKey.memoriesRange:
-        return "memoriesRange";
-      case PrefKey.saveEditResultToServer:
-        return "saveEditResultToServer";
-      case PrefKey.hasShownSaveEditResultDialog:
-        return "hasShownSaveEditResultDialog";
-      case PrefKey.isSlideshowReverse:
-        return "isSlideshowReverse";
-      case PrefKey.seedColor:
-        return "seedColor";
-      case PrefKey.isVideoPlayerMute:
-        return "isVideoPlayerMute";
-      case PrefKey.isVideoPlayerLoop:
-        return "isVideoPlayerLoop";
-      case PrefKey.secondarySeedColor:
-        return "secondarySeedColor";
-      case PrefKey.protectedPageAuthType:
-        return "protectedPageAuthType";
-      case PrefKey.protectedPageAuthPin:
-        return "protectedPageAuthPin";
-      case PrefKey.protectedPageAuthPassword:
-        return "protectedPageAuthPassword";
-      case PrefKey.dontShowVideoPreviewHint:
-        return "dontShowVideoPreviewHint";
-      case PrefKey.mapBrowserPrevPosition:
-        return "mapBrowserPrevPosition";
-      case PrefKey.isNewHttpEngine:
-        return "isNewHttpEngine";
-      case PrefKey.mapDefaultRangeType:
-        return "mapDefaultRangeType";
-      case PrefKey.mapDefaultCustomRange:
-        return "mapDefaultCustomRange";
-      case PrefKey.viewerAppBarButtons:
-        return "viewerAppBarButtons";
-      case PrefKey.viewerBottomAppBarButtons:
-        return "viewerBottomAppBarButtons";
-      case PrefKey.homeCollectionsNavBarButtons:
-        return "homeCollectionsNavBarButtons";
-      case PrefKey.isFallbackClientExif:
-        return "isFallbackClientExif";
-    }
+      PrefKey.isPhotosTabSortByName => "isPhotosTabSortByName",
+      PrefKey.shouldProcessExifWifiOnly => "shouldProcessExifWifiOnly",
+      PrefKey.doubleTapExit => "doubleTapExit",
+      PrefKey.memoriesRange => "memoriesRange",
+      PrefKey.saveEditResultToServer => "saveEditResultToServer",
+      PrefKey.hasShownSaveEditResultDialog => "hasShownSaveEditResultDialog",
+      PrefKey.isSlideshowReverse => "isSlideshowReverse",
+      PrefKey.seedColor => "seedColor",
+      PrefKey.isVideoPlayerMute => "isVideoPlayerMute",
+      PrefKey.isVideoPlayerLoop => "isVideoPlayerLoop",
+      PrefKey.secondarySeedColor => "secondarySeedColor",
+      PrefKey.protectedPageAuthType => "protectedPageAuthType",
+      PrefKey.protectedPageAuthPin => "protectedPageAuthPin",
+      PrefKey.protectedPageAuthPassword => "protectedPageAuthPassword",
+      PrefKey.dontShowVideoPreviewHint => "dontShowVideoPreviewHint",
+      PrefKey.mapBrowserPrevPosition => "mapBrowserPrevPosition",
+      PrefKey.isNewHttpEngine => "isNewHttpEngine",
+      PrefKey.mapDefaultRangeType => "mapDefaultRangeType",
+      PrefKey.mapDefaultCustomRange => "mapDefaultCustomRange",
+      PrefKey.viewerAppBarButtons => "viewerAppBarButtons",
+      PrefKey.viewerBottomAppBarButtons => "viewerBottomAppBarButtons",
+      PrefKey.homeCollectionsNavBarButtons => "homeCollectionsNavBarButtons",
+      PrefKey.isFallbackClientExif => "isFallbackClientExif",
+      PrefKey.localDirs => "localDirs",
+    };
   }
 }
 
@@ -234,28 +192,21 @@ enum AccountPrefKey implements PrefKeyInterface {
   lastNewCollectionType,
   personProvider,
   serverStatus,
-  ;
+  uploadRelativePath;
 
   @override
   String toStringKey() {
-    switch (this) {
-      case AccountPrefKey.shareFolder:
-        return "shareFolder";
-      case AccountPrefKey.hasNewSharedAlbum:
-        return "hasNewSharedAlbum";
-      case AccountPrefKey.isEnableMemoryAlbum:
-        return "isEnableMemoryAlbum";
-      case AccountPrefKey.touchRootEtag:
-        return "touchRootEtag";
-      case AccountPrefKey.accountLabel:
-        return "accountLabel";
-      case AccountPrefKey.lastNewCollectionType:
-        return "lastNewCollectionType";
-      case AccountPrefKey.personProvider:
-        return "personProvider";
-      case AccountPrefKey.serverStatus:
-        return "serverStatus";
-    }
+    return switch (this) {
+      AccountPrefKey.shareFolder => "shareFolder",
+      AccountPrefKey.hasNewSharedAlbum => "hasNewSharedAlbum",
+      AccountPrefKey.isEnableMemoryAlbum => "isEnableMemoryAlbum",
+      AccountPrefKey.touchRootEtag => "touchRootEtag",
+      AccountPrefKey.accountLabel => "accountLabel",
+      AccountPrefKey.lastNewCollectionType => "lastNewCollectionType",
+      AccountPrefKey.personProvider => "personProvider",
+      AccountPrefKey.serverStatus => "serverStatus",
+      AccountPrefKey.uploadRelativePath => "uploadRelativePath",
+    };
   }
 }
 

@@ -16,8 +16,8 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   @override
   bool Function(dynamic, dynamic)? get shouldLog => (currentState, nextState) {
-        return currentState.position == nextState.position;
-      };
+    return currentState.position == nextState.position;
+  };
 
   void _onSetPosition(_SetPosition ev, _Emitter emit) {
     // _log.info(ev);

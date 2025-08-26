@@ -23,37 +23,38 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         personsController.stream,
-        onData: (data) => state.copyWith(
-          persons: data.data,
-          isPersonsLoading: data.hasNext,
-        ),
+        onData:
+            (data) => state.copyWith(
+              persons: data.data,
+              isPersonsLoading: data.hasNext,
+            ),
       ),
       forEach(
         emit,
         personsController.errorStream,
-        onData: (data) => state.copyWith(
-          isPersonsLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isPersonsLoading: false, error: data),
       ),
     ]);
   }
 
   Future<void> _onTransformPersonItems(
-      _TransformPersonItems ev, Emitter<_State> emit) async {
+    _TransformPersonItems ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
-    final transformed = ev.persons
-        .sorted((a, b) {
-          final countCompare = (b.count ?? 0).compareTo(a.count ?? 0);
-          if (countCompare == 0) {
-            return a.name.compareTo(b.name);
-          } else {
-            return countCompare;
-          }
-        })
-        .take(10)
-        .map(_PersonItem.fromPerson)
-        .toList();
+    final transformed =
+        ev.persons
+            .sorted((a, b) {
+              final countCompare = (b.count ?? 0).compareTo(a.count ?? 0);
+              if (countCompare == 0) {
+                return a.name.compareTo(b.name);
+              } else {
+                return countCompare;
+              }
+            })
+            .take(10)
+            .map(_PersonItem.fromPerson)
+            .toList();
     emit(state.copyWith(transformedPersonItems: transformed));
   }
 
@@ -63,37 +64,38 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         placesController.stream,
-        onData: (data) => state.copyWith(
-          places: data.data,
-          isPlacesLoading: data.hasNext,
-        ),
+        onData:
+            (data) => state.copyWith(
+              places: data.data,
+              isPlacesLoading: data.hasNext,
+            ),
       ),
       forEach(
         emit,
         placesController.errorStream,
-        onData: (data) => state.copyWith(
-          isPlacesLoading: false,
-          error: data,
-        ),
+        onData: (data) => state.copyWith(isPlacesLoading: false, error: data),
       ),
     ]);
   }
 
   Future<void> _onTransformPlaceItems(
-      _TransformPlaceItems ev, Emitter<_State> emit) async {
+    _TransformPlaceItems ev,
+    Emitter<_State> emit,
+  ) async {
     _log.info(ev);
-    final transformed = ev.places.name
-        .sorted((a, b) {
-          final compare = b.count.compareTo(a.count);
-          if (compare == 0) {
-            return a.place.compareTo(b.place);
-          } else {
-            return compare;
-          }
-        })
-        .take(10)
-        .map((e) => _PlaceItem(account: account, place: e))
-        .toList();
+    final transformed =
+        ev.places.name
+            .sorted((a, b) {
+              final compare = b.count.compareTo(a.count);
+              if (compare == 0) {
+                return a.place.compareTo(b.place);
+              } else {
+                return compare;
+              }
+            })
+            .take(10)
+            .map((e) => _PlaceItem(account: account, place: e))
+            .toList();
     emit(state.copyWith(transformedPlaceItems: transformed));
   }
 

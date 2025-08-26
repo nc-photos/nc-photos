@@ -10,9 +10,7 @@ part 'update_property.g.dart';
 
 @npLog
 class UpdateProperty {
-  const UpdateProperty({
-    required this.fileRepo,
-  });
+  const UpdateProperty({required this.fileRepo});
 
   final FileRepo2 fileRepo;
 
@@ -64,6 +62,8 @@ extension UpdatePropertyExtension on UpdateProperty {
   ///
   /// See [UpdateProperty.call]
   Future<void> updateOverrideDateTime(
-          Account account, File file, DateTime overrideDateTime) =>
-      call(account, file, overrideDateTime: OrNull(overrideDateTime));
+    Account account,
+    File file,
+    DateTime overrideDateTime,
+  ) => call(account, file, overrideDateTime: OrNull(overrideDateTime));
 }

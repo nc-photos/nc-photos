@@ -7,8 +7,8 @@ import 'package:np_db_sqlite/src/database.dart';
 import 'package:np_db_sqlite/src/util.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
-typedef ComputeWithDbCallback<T, U> = Future<U> Function(
-    SqliteDb db, T message);
+typedef ComputeWithDbCallback<T, U> =
+    Future<U> Function(SqliteDb db, T message);
 
 /// Create a drift db running in an isolate
 ///
@@ -21,7 +21,10 @@ Future<SqliteDb> createDb() async {
 }
 
 Future<U> computeWithDb<T, U>(
-    ComputeWithDbCallback<T, U> callback, T args, SqliteDb fallbackDb) async {
+  ComputeWithDbCallback<T, U> callback,
+  T args,
+  SqliteDb fallbackDb,
+) async {
   if (getRawPlatform() == NpPlatform.web) {
     return await callback(fallbackDb, args);
   } else {
@@ -41,7 +44,10 @@ class _IsolateStartRequest {
 
 class _ComputeWithDbMessage<T, U> {
   const _ComputeWithDbMessage(
-      this.sqliteConnectionArgs, this.callback, this.args);
+    this.sqliteConnectionArgs,
+    this.callback,
+    this.args,
+  );
 
   final Map<String, dynamic> sqliteConnectionArgs;
   final ComputeWithDbCallback<T, U> callback;

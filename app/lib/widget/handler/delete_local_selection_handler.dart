@@ -28,24 +28,30 @@ class DeleteLocalSelectionHandler {
       onFailure: (file, e, stackTrace) {
         if (e != null) {
           _log.shout(
-              "[call] Failed while deleting file: ${logFilename(file.logTag)}",
-              e,
-              stackTrace);
+            "[call] Failed while deleting file: ${logFilename(file.logTag)}",
+            e,
+            stackTrace,
+          );
         }
         ++failureCount;
       },
     );
     if (failureCount == 0) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().deleteSelectedSuccessNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().deleteSelectedSuccessNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     } else {
-      SnackBarManager().showSnackBar(SnackBar(
-        content:
-            Text(L10n.global().deleteSelectedFailureNotification(failureCount)),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(
+            L10n.global().deleteSelectedFailureNotification(failureCount),
+          ),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
     return selectedFiles.length - failureCount;
   }

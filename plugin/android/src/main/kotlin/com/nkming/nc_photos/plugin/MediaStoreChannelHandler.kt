@@ -1,12 +1,21 @@
 package com.nkming.nc_photos.plugin
 
 import android.app.Activity
+import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.content.Intent
+import android.database.ContentObserver
 import android.net.Uri
 import android.os.Build
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.provider.MediaStore
+import androidx.annotation.RequiresApi
+import androidx.core.database.getLongOrNull
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.lifecycleScope
 import com.nkming.nc_photos.np_android_core.MediaStoreUtil
 import com.nkming.nc_photos.np_android_core.PermissionException
 import com.nkming.nc_photos.np_android_core.PermissionUtil
@@ -18,7 +27,13 @@ import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.PluginRegistry
+import kotlinx.coroutines.launch
 import java.io.File
+import java.time.Instant
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.temporal.ChronoUnit
+import java.util.Date
 
 /*
  * Save downloaded item on device
@@ -41,8 +56,38 @@ internal class MediaStoreChannelHandler(context: Context) :
 		private const val TAG = "MediaStoreChannelHandler"
 	}
 
+	private inner class MyContentObserver : ContentObserver(handler) {
+		override fun onChange(selfChange: Boolean, uri: Uri?, flags: Int) {
+			if ((flags and ContentResolver.NOTIFY_INSERT) != 0) {
+				eventSink?.success(buildMap {
+					put("event", "NotifyInsert")
+				})
+			} else if ((flags and ContentResolver.NOTIFY_DELETE) != 0) {
+				eventSink?.success(buildMap {
+					put("event", "NotifyDelete")
+				})
+			} else if ((flags and ContentResolver.NOTIFY_UPDATE) != 0) {
+				eventSink?.success(buildMap {
+					put("event", "NotifyUpdate")
+				})
+			}
+		}
+	}
+
 	override fun onAttachedToActivity(binding: ActivityPluginBinding) {
 		activity = binding.activity
+
+		val cr = binding.activity.applicationContext.contentResolver
+		cr.registerContentObserver(
+			MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+			true,
+			imageObserver
+		)
+		cr.registerContentObserver(
+			MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+			true,
+			videoObserver
+		)
 	}
 
 	override fun onReattachedToActivityForConfigChanges(
@@ -52,6 +97,12 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	override fun onDetachedFromActivity() {
+		activity?.applicationContext?.contentResolver?.unregisterContentObserver(
+			imageObserver
+		)
+		activity?.applicationContext?.contentResolver?.unregisterContentObserver(
+			videoObserver
+		)
 		activity = null
 	}
 
@@ -65,6 +116,12 @@ internal class MediaStoreChannelHandler(context: Context) :
 		if (requestCode == K.MEDIA_STORE_DELETE_REQUEST_CODE) {
 			eventSink?.success(buildMap {
 				put("event", "DeleteRequestResult")
+				put("resultCode", resultCode)
+			})
+			return true
+		} else if (requestCode == K.MEDIA_STORE_TRASH_REQUEST_CODE) {
+			eventSink?.success(buildMap {
+				put("event", "TrashRequestResult")
 				put("resultCode", resultCode)
 			})
 			return true
@@ -112,9 +169,103 @@ internal class MediaStoreChannelHandler(context: Context) :
 				}
 			}
 
+			"queryFiles2" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						val timeRangeBeg =
+							call.argument<Number>("timeRangeBeg")?.toLong()
+								?.let { Date(it) }
+						val isTimeRangeBegInclusive =
+							call.argument<Boolean>("isTimeRangeBegInclusive")
+						val timeRangeEnd =
+							call.argument<Number>("timeRangeEnd")?.toLong()
+								?.let { Date(it) }
+						val isTimeRangeEndInclusive =
+							call.argument<Boolean>("isTimeRangeEndInclusive")
+						queryFiles2(
+							fileIds = call.argument<List<Number>>("fileIds")
+								?.map { it.toLong() },
+							timeRangeBeg = timeRangeBeg,
+							isTimeRangeBegInclusive = isTimeRangeBegInclusive,
+							timeRangeEnd = timeRangeEnd,
+							isTimeRangeEndInclusive = isTimeRangeEndInclusive,
+							isAscending = call.argument("isAscending") ?: false,
+							offset = call.argument<Number>("offset")?.toInt(),
+							limit = call.argument<Number>("limit")?.toInt(),
+							dirWhitelist = call.argument("dirWhitelist"),
+							result = result
+						)
+					} else {
+						result.success(listOf<Map<String, Any>>())
+					}
+				} catch (e: Throwable) {
+					result.error(
+						"systemException", e.message, e.stackTraceToString()
+					)
+				}
+			}
+
 			"deleteFiles" -> {
 				try {
 					deleteFiles(call.argument("uris")!!, result)
+				} catch (e: Throwable) {
+					result.error("systemException", e.message, null)
+				}
+			}
+
+			"trashFiles" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						trashFiles(call.argument("uris")!!, result)
+					} else {
+						result.error(
+							"systemException", "Require Android 11+", null
+						)
+					}
+				} catch (e: Throwable) {
+					result.error(
+						"systemException", e.message, e.stackTraceToString()
+					)
+				}
+			}
+
+			"getFilesSummary" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						getFilesSummary(
+							dirWhitelist = call.argument("dirWhitelist"),
+							result = result
+						)
+					} else {
+						result.success(listOf<Map<Long, Int>>())
+					}
+				} catch (e: Throwable) {
+					result.error("systemException", e.message, null)
+				}
+			}
+
+			"getFileIdWithTimestamps" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						getFileIdWithTimestamps(
+							dirWhitelist = call.argument("dirWhitelist"),
+							result = result
+						)
+					} else {
+						result.success(listOf<Map<String, Any>>())
+					}
+				} catch (e: Throwable) {
+					result.error("systemException", e.message, null)
+				}
+			}
+
+			"getDirList" -> {
+				try {
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+						getDirList(result)
+					} else {
+						result.success(listOf<Map<String, Any>>())
+					}
 				} catch (e: Throwable) {
 					result.error("systemException", e.message, null)
 				}
@@ -125,7 +276,9 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	private fun saveFileToDownload(
-		content: ByteArray, filename: String, subDir: String?,
+		content: ByteArray,
+		filename: String,
+		subDir: String?,
 		result: MethodChannel.Result
 	) {
 		try {
@@ -140,7 +293,9 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	private fun copyFileToDownload(
-		fromFile: String, filename: String?, subDir: String?,
+		fromFile: String,
+		filename: String?,
+		subDir: String?,
 		result: MethodChannel.Result
 	) {
 		try {
@@ -168,15 +323,16 @@ internal class MediaStoreChannelHandler(context: Context) :
 			pathColumnName = MediaStore.Images.Media.RELATIVE_PATH
 			pathArg = "${relativePath}/%"
 		} else {
-			@Suppress("Deprecation") pathColumnName =
-				MediaStore.Images.Media.DATA
+			pathColumnName = MediaStore.Images.Media.DATA
 			pathArg = "%/${relativePath}/%"
 		}
 		val projection = arrayOf(
 			MediaStore.Images.Media._ID, MediaStore.Images.Media.DATE_MODIFIED,
 			MediaStore.Images.Media.MIME_TYPE,
 			MediaStore.Images.Media.DATE_TAKEN,
-			MediaStore.Images.Media.DISPLAY_NAME, pathColumnName
+			MediaStore.Images.Media.DISPLAY_NAME,
+			MediaStore.Images.Media.SIZE,
+			pathColumnName
 		)
 		val selection = StringBuilder().apply {
 			append("${MediaStore.Images.Media.MIME_TYPE} LIKE ?")
@@ -196,14 +352,17 @@ internal class MediaStoreChannelHandler(context: Context) :
 				it.getColumnIndexOrThrow(MediaStore.Images.Media.DATE_TAKEN)
 			val displayNameColumn =
 				it.getColumnIndexOrThrow(MediaStore.Images.Media.DISPLAY_NAME)
+			val sizeColumn =
+				it.getColumnIndexOrThrow(MediaStore.Images.Media.SIZE)
 			val pathColumn = it.getColumnIndexOrThrow(pathColumnName)
 			val products = mutableListOf<Map<String, Any>>()
 			while (it.moveToNext()) {
 				val id = it.getLong(idColumn)
 				val dateModified = it.getLong(dateModifiedColumn)
 				val mimeType = it.getString(mimeTypeColumn)
-				val dateTaken = it.getLong(dateTakenColumn)
+				val dateTaken = it.getLongOrNull(dateTakenColumn)
 				val displayName = it.getString(displayNameColumn)
+				val size = it.getLong(sizeColumn)
 				val path = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 					// RELATIVE_PATH
 					"${it.getString(pathColumn).trimEnd('/')}/$displayName"
@@ -215,12 +374,14 @@ internal class MediaStoreChannelHandler(context: Context) :
 					MediaStore.Images.Media.EXTERNAL_CONTENT_URI, id
 				)
 				products.add(buildMap {
+					put("id", id)
 					put("uri", contentUri.toString())
 					put("displayName", displayName)
 					put("path", path)
 					put("dateModified", dateModified * 1000)
 					put("mimeType", mimeType)
-					if (dateTaken != 0L) put("dateTaken", dateTaken)
+					if (dateTaken != null) put("dateTaken", dateTaken)
+					put("size", size)
 				})
 				// logD(
 				// 	TAG,
@@ -231,6 +392,180 @@ internal class MediaStoreChannelHandler(context: Context) :
 		}
 		logI(TAG, "[queryEnhancedPhotos] Found ${files.size} files")
 		result.success(files)
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun queryFiles2(
+		fileIds: List<Long>? = null,
+		timeRangeBeg: Date? = null,
+		isTimeRangeBegInclusive: Boolean? = null,
+		timeRangeEnd: Date? = null,
+		isTimeRangeEndInclusive: Boolean? = null,
+		isAscending: Boolean,
+		offset: Int?,
+		limit: Int?,
+		dirWhitelist: List<String>?,
+		result: MethodChannel.Result
+	) {
+		if (!PermissionUtil.hasReadMedia(context)) {
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
+			result.error("permissionError", "Permission not granted", null)
+			return
+		}
+
+		val wheres = mutableListOf<String>()
+		val whereArgs = mutableListOf<String>()
+		wheres.add(
+			"(" +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+					" OR " +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+					")"
+		)
+		if (fileIds != null) {
+			val args = fileIds.joinToString(",", transform = { it.toString() })
+			wheres.add("${MediaStore.MediaColumns._ID} IN (${args})")
+		}
+		if (timeRangeBeg != null) {
+			if (isTimeRangeBegInclusive == false) {
+				wheres.add(
+					"${MediaStore.MediaColumns.DATE_TAKEN} > ${timeRangeBeg.time}"
+				)
+			} else {
+				wheres.add(
+					"${MediaStore.MediaColumns.DATE_TAKEN} >= ${timeRangeBeg.time}"
+				)
+			}
+		}
+		if (timeRangeEnd != null) {
+			if (isTimeRangeEndInclusive == true) {
+				wheres.add(
+					"${MediaStore.MediaColumns.DATE_TAKEN} <= ${timeRangeEnd.time}"
+				)
+			} else {
+				wheres.add(
+					"${MediaStore.MediaColumns.DATE_TAKEN} < ${timeRangeEnd.time}"
+				)
+			}
+		}
+		if (!dirWhitelist.isNullOrEmpty()) {
+			val (w, wa) = dirWhitelistToSql(dirWhitelist)
+			wheres.add(w)
+			whereArgs.addAll(wa)
+		}
+
+		doWork {
+			context.contentResolver.query(
+				MediaStore.Files.getContentUri("external"),
+				arrayOf(
+					MediaStore.MediaColumns._ID,
+					MediaStore.MediaColumns.DATE_MODIFIED,
+					MediaStore.MediaColumns.MIME_TYPE,
+					MediaStore.MediaColumns.DATE_TAKEN,
+					MediaStore.MediaColumns.DISPLAY_NAME,
+					MediaStore.MediaColumns.RELATIVE_PATH,
+					MediaStore.MediaColumns.WIDTH,
+					MediaStore.MediaColumns.HEIGHT,
+					MediaStore.MediaColumns.SIZE,
+				),
+				Bundle().apply {
+					if (wheres.isNotEmpty()) {
+						putString(
+							ContentResolver.QUERY_ARG_SQL_SELECTION,
+							wheres.joinToString(" AND "),
+						)
+					}
+					if (whereArgs.isNotEmpty()) {
+						putStringArray(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs.toTypedArray(),
+						)
+					}
+					val order = if (isAscending) "ASC" else "DESC"
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+						"${MediaStore.MediaColumns.DATE_TAKEN} $order, ${MediaStore.MediaColumns._ID} $order"
+					)
+					if (offset != null) {
+						putInt(ContentResolver.QUERY_ARG_OFFSET, offset)
+					}
+					if (limit != null) {
+						putInt(ContentResolver.QUERY_ARG_LIMIT, limit)
+					}
+				},
+				null,
+			)?.use {
+				val products = mutableListOf<Map<String, Any>>()
+				if (it.moveToFirst()) {
+					val idColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns._ID
+					)
+					val dateModifiedColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.DATE_MODIFIED
+					)
+					val mimeTypeColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.MIME_TYPE
+					)
+					val dateTakenColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.DATE_TAKEN
+					)
+					val displayNameColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.DISPLAY_NAME
+					)
+					val relativePathColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.RELATIVE_PATH
+					)
+					val widthColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.WIDTH
+					)
+					val heightColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.HEIGHT
+					)
+					val sizeColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.SIZE
+					)
+					do {
+						try {
+							val id = it.getLong(idColumn)
+							val contentUri = ContentUris.withAppendedId(
+								MediaStore.Files.getContentUri("external"), id
+							)
+							val displayName = it.getString(displayNameColumn)
+							val relativePath = "${
+								it.getString(relativePathColumn).trimEnd('/')
+							}/$displayName"
+							products.add(buildMap {
+								put("id", id)
+								put("uri", contentUri.toString())
+								put(
+									"displayName",
+									it.getString(displayNameColumn)
+								)
+								put("path", relativePath)
+								put(
+									"dateModified",
+									it.getLong(dateModifiedColumn) * 1000
+								)
+								put("mimeType", it.getString(mimeTypeColumn))
+								it.getLongOrNull(dateTakenColumn)?.let { v ->
+									put("dateTaken", v)
+								}
+								if (!it.isNull(widthColumn) &&
+									!it.isNull(heightColumn)
+								) {
+									put("width", it.getInt(widthColumn))
+									put("height", it.getInt(heightColumn))
+								}
+								put("size", it.getLong(sizeColumn))
+							})
+						} catch (e: Throwable) {
+							logE(TAG, "Failed to read row", e)
+						}
+					} while (it.moveToNext())
+				}
+				result.success(products)
+			}
+		}
 	}
 
 	private fun deleteFiles(uris: List<String>, result: MethodChannel.Result) {
@@ -264,6 +599,221 @@ internal class MediaStoreChannelHandler(context: Context) :
 		}
 	}
 
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun trashFiles(uris: List<String>, result: MethodChannel.Result) {
+		val urisTyped = uris.map(Uri::parse)
+		// MediaStore does not support deleting files via their file uris
+		// (seriously why?!), we need to first convert them to image/video uris
+		val convertedUris =
+			MediaStoreUtil.convertFileUrisToConcreteUris(context, urisTyped)
+		val pi = MediaStore.createTrashRequest(
+			context.contentResolver, convertedUris.values, true
+		)
+		activity!!.startIntentSenderForResult(
+			pi.intentSender, K.MEDIA_STORE_TRASH_REQUEST_CODE, null, 0, 0,
+			0
+		)
+		result.success(convertedUris.keys.map { it.toString() })
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun getFilesSummary(
+		dirWhitelist: List<String>?,
+		result: MethodChannel.Result
+	) {
+		if (!PermissionUtil.hasReadMedia(context)) {
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
+			result.error("permissionError", "Permission not granted", null)
+			return
+		}
+
+		doWork {
+			val dateCount = mutableMapOf<Long, Int>()
+			var thisDateBeg = 0L
+			var thisDateEnd = 0L
+			var thisDateCount = 0
+
+			val whereArgs = mutableListOf<String>()
+			var where = "(" +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+					" OR " +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+					")"
+			where += " AND ${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
+			if (!dirWhitelist.isNullOrEmpty()) {
+				val (w, wa) = dirWhitelistToSql(dirWhitelist)
+				where += " AND $w"
+				whereArgs.addAll(wa)
+			}
+			context.contentResolver.query(
+				MediaStore.Files.getContentUri("external"),
+				arrayOf(
+					MediaStore.MediaColumns.DATE_TAKEN,
+				),
+				Bundle().apply {
+					putString(ContentResolver.QUERY_ARG_SQL_SELECTION, where)
+					if (whereArgs.isNotEmpty()) {
+						putStringArray(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs.toTypedArray(),
+						)
+					}
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+						"${MediaStore.MediaColumns.DATE_TAKEN} DESC"
+					)
+				},
+				null,
+			)?.use {
+				if (it.moveToFirst()) {
+					val dateColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.DATE_TAKEN
+					)
+					do {
+						val time = it.getLong(dateColumn)
+						if (time in thisDateBeg until thisDateEnd) {
+							// same date
+							++thisDateCount
+						} else {
+							// new date
+							if (thisDateCount > 0) {
+								dateCount[thisDateBeg] = thisDateCount
+							}
+							val thisDate = ZonedDateTime.ofInstant(
+								Instant.ofEpochMilli(time),
+								ZoneId.systemDefault()
+							)
+							thisDateBeg = thisDate.truncatedTo(ChronoUnit.DAYS)
+								.toInstant().toEpochMilli()
+							thisDateEnd = thisDate.truncatedTo(ChronoUnit.DAYS)
+								.plusDays(1).toInstant().toEpochMilli()
+							thisDateCount = 1
+						}
+					} while (it.moveToNext())
+					if (thisDateCount > 0) {
+						dateCount[thisDateBeg] = thisDateCount
+					}
+				}
+			}
+			result.success(dateCount)
+		}
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun getFileIdWithTimestamps(
+		dirWhitelist: List<String>?,
+		result: MethodChannel.Result
+	) {
+		if (!PermissionUtil.hasReadMedia(context)) {
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
+			result.error("permissionError", "Permission not granted", null)
+			return
+		}
+
+		val results = mutableListOf<Map<String, Any>>()
+		doWork {
+			val whereArgs = mutableListOf<String>()
+			var where = "(" +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+					" OR " +
+					"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+					")"
+			where += " AND ${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL"
+			if (!dirWhitelist.isNullOrEmpty()) {
+				val (w, wa) = dirWhitelistToSql(dirWhitelist)
+				where += " AND $w"
+				whereArgs.addAll(wa)
+			}
+			context.contentResolver.query(
+				MediaStore.Files.getContentUri("external"),
+				arrayOf(
+					MediaStore.MediaColumns._ID,
+					MediaStore.MediaColumns.DATE_TAKEN,
+				),
+				Bundle().apply {
+					putString(ContentResolver.QUERY_ARG_SQL_SELECTION, where)
+					if (whereArgs.isNotEmpty()) {
+						putStringArray(
+							ContentResolver.QUERY_ARG_SQL_SELECTION_ARGS,
+							whereArgs.toTypedArray(),
+						)
+					}
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SORT_ORDER,
+						"${MediaStore.MediaColumns.DATE_TAKEN} DESC, ${MediaStore.MediaColumns._ID} DESC"
+					)
+				},
+				null,
+			)?.use {
+				if (it.moveToFirst()) {
+					val idColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns._ID
+					)
+					val dateColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.DATE_TAKEN
+					)
+					do {
+						val id = it.getLong(idColumn)
+						val timestamp = it.getLong(dateColumn)
+						results.add(
+							mapOf(
+								"fileId" to id,
+								"timestamp" to timestamp,
+							)
+						)
+					} while (it.moveToNext())
+				}
+			}
+			result.success(results)
+		}
+	}
+
+	@RequiresApi(Build.VERSION_CODES.R)
+	private fun getDirList(result: MethodChannel.Result) {
+		if (!PermissionUtil.hasReadMedia(context)) {
+			// activity?.let { PermissionUtil.requestReadMedia(it) }
+			result.error("permissionError", "Permission not granted", null)
+			return
+		}
+
+		val results = mutableListOf<String>()
+		doWork {
+			context.contentResolver.query(
+				MediaStore.Files.getContentUri("external"),
+				arrayOf(
+					MediaStore.MediaColumns.RELATIVE_PATH,
+				),
+				Bundle().apply {
+					putString(
+						ContentResolver.QUERY_ARG_SQL_SELECTION,
+						"(" +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_IMAGE}" +
+								" OR " +
+								"${MediaStore.Files.FileColumns.MEDIA_TYPE}=${MediaStore.Files.FileColumns.MEDIA_TYPE_VIDEO}" +
+								") AND " +
+								"${MediaStore.MediaColumns.DATE_TAKEN} IS NOT NULL",
+					)
+					putString(
+						ContentResolver.QUERY_ARG_SQL_GROUP_BY,
+						MediaStore.MediaColumns.RELATIVE_PATH,
+					)
+				},
+				null,
+			)?.use {
+				if (it.moveToFirst()) {
+					val relPathColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.RELATIVE_PATH
+					)
+					do {
+						val relPath = it.getString(relPathColumn)
+						results.add(relPath)
+					} while (it.moveToNext())
+				}
+			}
+			result.success(results)
+		}
+	}
+
 	private fun inputToUri(fromFile: String): Uri {
 		val testUri = Uri.parse(fromFile)
 		return if (testUri.scheme == null) {
@@ -275,7 +825,32 @@ internal class MediaStoreChannelHandler(context: Context) :
 		}
 	}
 
+	private fun doWork(block: () -> Unit) {
+		if (activity is LifecycleOwner) {
+			(activity as LifecycleOwner).lifecycleScope.launch {
+				block()
+			}
+		} else {
+			block()
+		}
+	}
+
+	private fun dirWhitelistToSql(dirWhitelist: List<String>)
+			: Pair<String, List<String>> {
+		val wheres = mutableListOf<String>()
+		val whereArgs = mutableListOf<String>()
+		for (w in dirWhitelist) {
+			wheres.add("${MediaStore.MediaColumns.RELATIVE_PATH} LIKE ?")
+			whereArgs.add("%$w%")
+		}
+		return Pair("(" + wheres.joinToString(" OR ") + ")", whereArgs)
+	}
+
 	private val context = context
 	private var activity: Activity? = null
 	private var eventSink: EventChannel.EventSink? = null
+
+	private val handler = Handler(Looper.getMainLooper())
+	private val imageObserver = MyContentObserver()
+	private val videoObserver = MyContentObserver()
 }

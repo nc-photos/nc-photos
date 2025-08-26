@@ -12,6 +12,7 @@ import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/selectable_item_stream_list_mixin.dart';
+import 'package:np_common/size.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:to_string/to_string.dart';
 
@@ -57,12 +58,12 @@ class PhotoListImageItem extends PhotoListFileItem {
 
   @override
   Widget buildWidget(BuildContext context) => PhotoListImage(
-        account: account,
-        previewUrl: previewUrl,
-        mime: file.fdMime,
-        isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
-        heroKey: flutter_util.getImageHeroTag(file),
-      );
+    account: account,
+    previewUrl: previewUrl,
+    mime: file.fdMime,
+    isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
+    heroKey: flutter_util.HeroTag.fromFile(file),
+  );
 
   final Account account;
   final String previewUrl;
@@ -79,21 +80,18 @@ class PhotoListVideoItem extends PhotoListFileItem {
 
   @override
   Widget buildWidget(BuildContext context) => PhotoListVideo(
-        account: account,
-        previewUrl: previewUrl,
-        mime: file.fdMime,
-        isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
-      );
+    account: account,
+    previewUrl: previewUrl,
+    mime: file.fdMime,
+    isFavorite: shouldShowFavoriteBadge && file.fdIsFavorite == true,
+  );
 
   final Account account;
   final String previewUrl;
 }
 
 class PhotoListDateItem extends SelectableItem {
-  const PhotoListDateItem({
-    required this.date,
-    this.isMonthOnly = false,
-  });
+  const PhotoListDateItem({required this.date, this.isMonthOnly = false});
 
   @override
   get isTappable => false;
@@ -105,20 +103,15 @@ class PhotoListDateItem extends SelectableItem {
   get staggeredTile => const StaggeredTile.extent(99, 32);
 
   @override
-  buildWidget(BuildContext context) => PhotoListDate(
-        date: date,
-        isMonthOnly: isMonthOnly,
-      );
+  buildWidget(BuildContext context) =>
+      PhotoListDate(date: date, isMonthOnly: isMonthOnly);
 
   final Date date;
   final bool isMonthOnly;
 }
 
 abstract class PhotoListLocalFileItem extends SelectableItem {
-  const PhotoListLocalFileItem({
-    required this.fileIndex,
-    required this.file,
-  });
+  const PhotoListLocalFileItem({required this.fileIndex, required this.file});
 
   @override
   get isTappable => true;
@@ -144,57 +137,7 @@ class PhotoListLocalImageItem extends PhotoListLocalFileItem {
   });
 
   @override
-  buildWidget(BuildContext context) {
-    final ImageProvider provider;
-    if (file is LocalUriFile) {
-      provider = ContentUriImage((file as LocalUriFile).uri);
-    } else {
-      throw ArgumentError("Invalid file");
-    }
-
-    return Padding(
-      padding: const EdgeInsets.all(2),
-      child: FittedBox(
-        clipBehavior: Clip.hardEdge,
-        fit: BoxFit.cover,
-        child: Stack(
-          children: [
-            Container(
-              // arbitrary size here
-              constraints: BoxConstraints.tight(const Size(128, 128)),
-              color: Theme.of(context).listPlaceholderBackgroundColor,
-              child: Image(
-                image: ResizeImage.resizeIfNeeded(
-                    k.photoThumbSize, null, provider),
-                filterQuality: FilterQuality.high,
-                fit: BoxFit.cover,
-                errorBuilder: (context, e, stackTrace) {
-                  return Center(
-                    child: Icon(
-                      Icons.image_not_supported,
-                      size: 64,
-                      color: Theme.of(context).listPlaceholderForegroundColor,
-                    ),
-                  );
-                },
-              ),
-            ),
-            Container(
-              // arbitrary size here
-              constraints: BoxConstraints.tight(const Size(128, 128)),
-              alignment: AlignmentDirectional.bottomEnd,
-              padding: const EdgeInsets.all(8),
-              child: const Icon(
-                Icons.cloud_off,
-                size: 20,
-                color: Colors.white,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  Widget buildWidget(BuildContext context) => PhotoListLocalImage(file: file);
 }
 
 class PhotoListImage extends StatelessWidget {
@@ -211,17 +154,15 @@ class PhotoListImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget buildPlaceholder() => Padding(
-          padding: const EdgeInsets.all(12),
-          child: Icon(
-            Icons.image_not_supported,
-            color: Theme.of(context).listPlaceholderForegroundColor,
-          ),
-        );
+      padding: const EdgeInsets.all(12),
+      child: Icon(
+        Icons.image_not_supported,
+        color: Theme.of(context).listPlaceholderForegroundColor,
+      ),
+    );
     Widget child;
     if (previewUrl == null) {
-      child = FittedBox(
-        child: buildPlaceholder(),
-      );
+      child = FittedBox(child: buildPlaceholder());
     } else {
       child = NetworkRectThumbnail(
         account: account,
@@ -230,10 +171,7 @@ class PhotoListImage extends StatelessWidget {
         errorBuilder: (_) => buildPlaceholder(),
       );
       if (heroKey != null) {
-        child = Hero(
-          tag: heroKey!,
-          child: child,
-        );
+        child = Hero(tag: heroKey!, child: child);
       }
     }
 
@@ -271,7 +209,7 @@ class PhotoListImage extends StatelessWidget {
   final EdgeInsetsGeometry padding;
   final bool isFavorite;
   // if not null, the image will be contained by a Hero widget
-  final String? heroKey;
+  final Object? heroKey;
 }
 
 class PhotoListVideo extends StatelessWidget {
@@ -337,10 +275,7 @@ class PhotoListVideo extends StatelessWidget {
 }
 
 class PhotoListLabel extends StatelessWidget {
-  const PhotoListLabel({
-    super.key,
-    required this.text,
-  });
+  const PhotoListLabel({super.key, required this.text});
 
   @override
   build(BuildContext context) {
@@ -371,9 +306,7 @@ class PhotoListLabelEdit extends PhotoListLabel {
     return Stack(
       children: [
         // needed to expand the touch sensitive area to the whole row
-        Container(
-          color: Colors.transparent,
-        ),
+        Container(color: Colors.transparent),
         super.build(context),
         PositionedDirectional(
           top: 0,
@@ -403,21 +336,154 @@ class PhotoListDate extends StatelessWidget {
   Widget build(BuildContext context) {
     final pattern =
         isMonthOnly ? DateFormat.YEAR_MONTH : DateFormat.YEAR_MONTH_DAY;
-    final subtitle =
-        DateFormat(pattern, Localizations.localeOf(context).languageCode)
-            .format(date.toUtcDateTime());
+    final subtitle = DateFormat(
+      pattern,
+      Localizations.localeOf(context).languageCode,
+    ).format(date.toUtcDateTime());
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Text(
-          subtitle,
-          style: Theme.of(context).textTheme.labelMedium,
-        ),
+        child: Text(subtitle, style: Theme.of(context).textTheme.labelMedium),
       ),
     );
   }
 
   final Date date;
   final bool isMonthOnly;
+}
+
+class PhotoListLocalImage extends StatelessWidget {
+  const PhotoListLocalImage({super.key, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    final ImageProvider provider;
+    if (file is LocalUriFile) {
+      provider = ContentUriImage(
+        (file as LocalUriFile).uri,
+        thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
+      );
+    } else {
+      throw ArgumentError("Invalid file");
+    }
+
+    return Padding(
+      padding: const EdgeInsets.all(2),
+      child: FittedBox(
+        clipBehavior: Clip.hardEdge,
+        fit: BoxFit.cover,
+        child: Stack(
+          children: [
+            Container(
+              // arbitrary size here
+              constraints: BoxConstraints.tight(const Size(128, 128)),
+              color: Theme.of(context).listPlaceholderBackgroundColor,
+              child: Hero(
+                tag: flutter_util.HeroTag.fromLocalFile(file),
+                child: Image(
+                  image: provider,
+                  filterQuality: FilterQuality.high,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, e, stackTrace) {
+                    return Center(
+                      child: Icon(
+                        Icons.image_not_supported,
+                        size: 64,
+                        color: Theme.of(context).listPlaceholderForegroundColor,
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+            Container(
+              // arbitrary size here
+              constraints: BoxConstraints.tight(const Size(128, 128)),
+              alignment: AlignmentDirectional.bottomEnd,
+              padding: const EdgeInsets.all(8),
+              child: const Icon(Icons.cloud_off, size: 20, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  final LocalFile file;
+}
+
+class PhotoListLocalVideo extends StatelessWidget {
+  const PhotoListLocalVideo({super.key, required this.file});
+
+  @override
+  Widget build(BuildContext context) {
+    final ImageProvider provider;
+    if (file is LocalUriFile) {
+      provider = ContentUriImage(
+        (file as LocalUriFile).uri,
+        thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
+      );
+    } else {
+      throw ArgumentError("Invalid file");
+    }
+
+    return IconTheme(
+      data: const IconThemeData(color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: FittedBox(
+          clipBehavior: Clip.hardEdge,
+          fit: BoxFit.cover,
+          child: Stack(
+            children: [
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                color: Theme.of(context).listPlaceholderBackgroundColor,
+                child: Hero(
+                  tag: flutter_util.HeroTag.fromLocalFile(file),
+                  child: Image(
+                    image: ResizeImage.resizeIfNeeded(
+                      k.photoThumbSize,
+                      null,
+                      provider,
+                    ),
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, e, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 64,
+                          color:
+                              Theme.of(context).listPlaceholderForegroundColor,
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                alignment: AlignmentDirectional.bottomEnd,
+                padding: const EdgeInsets.all(8),
+                child: const Icon(Icons.cloud_off, size: 20),
+              ),
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                alignment: AlignmentDirectional.topEnd,
+                padding: const EdgeInsets.all(8),
+                child: const Icon(Icons.play_circle_outlined, size: 22),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  final LocalFile file;
 }

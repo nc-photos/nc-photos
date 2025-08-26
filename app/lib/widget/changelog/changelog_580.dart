@@ -10,8 +10,11 @@ class _Changelog580 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _subSection("Changes"),
-        _bulletGroup(const Text(
-            "Themed icon on Android 13+ (contributed by fischer-felix)")),
+        _bulletGroup(
+          const Text(
+            "Themed icon on Android 13+ (contributed by fischer-felix)",
+          ),
+        ),
         _bulletGroup(const Text("Various bugfixes and UI improvements")),
         _sectionPadding(),
         _subSection("Localization"),

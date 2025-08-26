@@ -13,28 +13,31 @@ part of 'people_browser.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<Person>? persons,
-      bool? isLoading,
-      List<_Item>? transformedItems,
-      ExceptionEvent? error});
+  _State call({
+    List<Person>? persons,
+    bool? isLoading,
+    List<_Item>? transformedItems,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic persons,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic persons,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        persons: persons as List<Person>? ?? that.persons,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      persons: persons as List<Person>? ?? that.persons,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<_Item>? ?? that.transformedItems,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

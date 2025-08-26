@@ -1,4 +1,6 @@
 import 'package:equatable/equatable.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:np_common/size.dart';
 import 'package:to_string/to_string.dart';
 
 part 'local_file.g.dart';
@@ -17,30 +19,41 @@ abstract class LocalFile with EquatableMixin {
 
   String get logTag;
 
+  String get id;
   String get filename;
   DateTime get lastModified;
   String? get mime;
   DateTime? get dateTaken;
+  SizeInt? get size;
+  String? get path;
+  int get byteSize;
 }
 
 extension LocalFileExtension on LocalFile {
   DateTime get bestDateTime => dateTaken ?? lastModified;
+
+  AnyFile toAnyFile() {
+    return AnyFile(provider: AnyFileLocalProvider(file: this));
+  }
 }
 
 /// A local file represented by its content uri on Android
 @ToString(ignoreNull: true)
 class LocalUriFile with EquatableMixin implements LocalFile {
   const LocalUriFile({
+    required this.id,
     required this.uri,
     required this.displayName,
     required this.path,
     required this.lastModified,
     this.mime,
     this.dateTaken,
+    this.size,
+    required this.byteSize,
   });
 
   @override
-  compareIdentity(LocalFile other) {
+  bool compareIdentity(LocalFile other) {
     if (other is! LocalUriFile) {
       return false;
     } else {
@@ -49,31 +62,36 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   }
 
   @override
-  get identityHashCode => uri.hashCode;
+  int get identityHashCode => uri.hashCode;
 
   @override
   String toString() => _$toString();
 
   @override
-  get logTag => path;
+  String get logTag => path;
 
   @override
-  get filename => displayName;
+  String get filename => displayName;
 
   @override
-  get props => [
-        uri,
-        displayName,
-        path,
-        lastModified,
-        mime,
-        dateTaken,
-      ];
+  List<Object?> get props => [
+    id,
+    uri,
+    displayName,
+    path,
+    lastModified,
+    mime,
+    dateTaken,
+    size,
+  ];
 
+  @override
+  final String id;
   final String uri;
   final String displayName;
 
   /// [path] could be a relative path or an absolute path
+  @override
   final String path;
   @override
   final DateTime lastModified;
@@ -81,47 +99,21 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   final String? mime;
   @override
   final DateTime? dateTaken;
+  @override
+  final SizeInt? size;
+  @override
+  final int byteSize;
 }
 
-typedef LocalFileOnFailureListener = void Function(
-    LocalFile file, Object? error, StackTrace? stackTrace);
+typedef LocalFileOnFailureListener =
+    void Function(LocalFile file, Object? error, StackTrace? stackTrace);
 
-class LocalFileRepo {
-  const LocalFileRepo(this.dataSrc);
-
-  /// See [LocalFileDataSource.listDir]
-  Future<List<LocalFile>> listDir(String path) => dataSrc.listDir(path);
-
-  /// See [LocalFileDataSource.deleteFiles]
-  Future<void> deleteFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  }) =>
-      dataSrc.deleteFiles(files, onFailure: onFailure);
-
-  /// See [LocalFileDataSource.shareFiles]
-  Future<void> shareFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  }) =>
-      dataSrc.shareFiles(files, onFailure: onFailure);
-
-  final LocalFileDataSource dataSrc;
-}
-
-abstract class LocalFileDataSource {
-  /// List all files under [path]
-  Future<List<LocalFile>> listDir(String path);
-
-  /// Delete files
-  Future<void> deleteFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  });
-
-  /// Share files
-  Future<void> shareFiles(
-    List<LocalFile> files, {
-    LocalFileOnFailureListener? onFailure,
-  });
+int compareLocalFileDateTimeDescending(LocalFile x, LocalFile y) {
+  final tmp = y.bestDateTime.compareTo(x.bestDateTime);
+  if (tmp != 0) {
+    return tmp;
+  } else {
+    // compare file name if files are modified at the same time
+    return y.filename.compareTo(x.filename);
+  }
 }

@@ -13,11 +13,7 @@ class DbFilesSummaryDiff with EquatableMixin {
   });
 
   @override
-  List<Object?> get props => [
-        onlyInThis,
-        onlyInOther,
-        updated,
-      ];
+  List<Object?> get props => [onlyInThis, onlyInOther, updated];
 
   final Map<Date, DbFilesSummaryItem> onlyInThis;
   final Map<Date, DbFilesSummaryItem> onlyInOther;
@@ -38,10 +34,12 @@ extension DbFilesSummaryExtension on DbFilesSummary {
           thisMissing[obj.key] = obj.value;
         });
         return DbFilesSummaryDiff(
-          onlyInOther:
-              LinkedHashMap.fromEntries(thisMissing.entries.toList().reversed),
-          onlyInThis:
-              LinkedHashMap.fromEntries(otherMissing.entries.toList().reversed),
+          onlyInOther: LinkedHashMap.fromEntries(
+            thisMissing.entries.toList().reversed,
+          ),
+          onlyInThis: LinkedHashMap.fromEntries(
+            otherMissing.entries.toList().reversed,
+          ),
           updated: LinkedHashMap.fromEntries(updated.entries.toList().reversed),
         );
       }
@@ -53,10 +51,12 @@ extension DbFilesSummaryExtension on DbFilesSummary {
           otherMissing[obj.key] = obj.value;
         });
         return DbFilesSummaryDiff(
-          onlyInOther:
-              LinkedHashMap.fromEntries(thisMissing.entries.toList().reversed),
-          onlyInThis:
-              LinkedHashMap.fromEntries(otherMissing.entries.toList().reversed),
+          onlyInOther: LinkedHashMap.fromEntries(
+            thisMissing.entries.toList().reversed,
+          ),
+          onlyInThis: LinkedHashMap.fromEntries(
+            otherMissing.entries.toList().reversed,
+          ),
           updated: LinkedHashMap.fromEntries(updated.entries.toList().reversed),
         );
       }
@@ -110,9 +110,10 @@ extension DbFilesSummaryExtension on DbFilesSummary {
       return DbFilesSummaryDiff(
         onlyInOther: const {},
         onlyInThis: const {},
-        updated: thisObj.value == otherObj.value
-            ? const {}
-            : Map.fromEntries([otherObj]),
+        updated:
+            thisObj.value == otherObj.value
+                ? const {}
+                : Map.fromEntries([otherObj]),
       );
     }
   }

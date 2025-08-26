@@ -4,14 +4,13 @@ import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/share_handler.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
+import 'package:nc_photos/widget/file_content_view.dart';
 import 'package:nc_photos/widget/handler/delete_local_selection_handler.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
-import 'package:nc_photos/widget/image_viewer.dart';
 import 'package:np_log/np_log.dart';
 
 part 'local_file_viewer.g.dart';
@@ -27,11 +26,12 @@ class LocalFileViewer extends StatefulWidget {
   static const routeName = "/local-file-viewer";
 
   static Route buildRoute(
-          LocalFileViewerArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => LocalFileViewer.fromArgs(args),
-        settings: settings,
-      );
+    LocalFileViewerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => LocalFileViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const LocalFileViewer({
     super.key,
@@ -40,11 +40,11 @@ class LocalFileViewer extends StatefulWidget {
   });
 
   LocalFileViewer.fromArgs(LocalFileViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          streamFiles: args.streamFiles,
-          startIndex: args.startIndex,
-        );
+    : this(
+        key: key,
+        streamFiles: args.streamFiles,
+        startIndex: args.startIndex,
+      );
 
   @override
   createState() => _LocalFileViewerState();
@@ -64,11 +64,7 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
           systemNavigationBarColor: Colors.black,
           systemNavigationBarIconBrightness: Brightness.dark,
         ),
-        child: Scaffold(
-          body: Builder(
-            builder: _buildContent,
-          ),
-        ),
+        child: Scaffold(body: Builder(builder: _buildContent)),
       ),
     );
   }
@@ -135,12 +131,13 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
                 ),
                 PopupMenuButton<_AppBarMenuOption>(
                   tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: _AppBarMenuOption.delete,
-                      child: Text(L10n.global().deletePermanentlyTooltip),
-                    ),
-                  ],
+                  itemBuilder:
+                      (context) => [
+                        PopupMenuItem(
+                          value: _AppBarMenuOption.delete,
+                          child: Text(L10n.global().deletePermanentlyTooltip),
+                        ),
+                      ],
                   onSelected: (option) => _onMenuSelected(context, option),
                 ),
               ],
@@ -163,9 +160,6 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
       case _AppBarMenuOption.delete:
         _onDeletePressed(context);
         break;
-      default:
-        _log.shout("[_onMenuSelected] Unknown option: $option");
-        break;
     }
   }
 
@@ -187,35 +181,19 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
     }
     return FractionallySizedBox(
       widthFactor: 1 / _viewportFraction,
-      child: _buildItemView(context, index),
+      child: FileContentView(
+        file: widget.streamFiles[index].toAnyFile(),
+        shouldPlayLivePhoto: false,
+        isPlayControlVisible: false,
+        onZoomChanged: (isZoomed) {
+          setState(() {
+            _isZoomed = isZoomed;
+          });
+        },
+        onLoaded: () => _onImageLoaded(index),
+      ),
     );
   }
-
-  Widget _buildItemView(BuildContext context, int index) {
-    final file = widget.streamFiles[index];
-    if (file_util.isSupportedImageMime(file.mime ?? "")) {
-      return _buildImageView(context, index);
-    } else {
-      _log.shout("[_buildItemView] Unknown file format: ${file.mime}");
-      return Container();
-    }
-  }
-
-  Widget _buildImageView(BuildContext context, int index) => LocalImageViewer(
-        file: widget.streamFiles[index],
-        canZoom: true,
-        onLoaded: () => _onImageLoaded(index),
-        onZoomStarted: () {
-          setState(() {
-            _isZoomed = true;
-          });
-        },
-        onZoomEnded: () {
-          setState(() {
-            _isZoomed = false;
-          });
-        },
-      );
 
   void _onImageLoaded(int index) {
     if (_viewerController.currentPage == index &&
@@ -243,6 +221,4 @@ class _PageState {
   bool hasLoaded = false;
 }
 
-enum _AppBarMenuOption {
-  delete,
-}
+enum _AppBarMenuOption { delete }

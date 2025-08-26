@@ -1,10 +1,7 @@
 part of '../viewer_app_bar_settings.dart';
 
 class _DemoButton extends StatelessWidget {
-  const _DemoButton({
-    required this.tooltip,
-    required this.icon,
-  });
+  const _DemoButton({required this.tooltip, required this.icon});
 
   @override
   Widget build(BuildContext context) {
@@ -22,23 +19,24 @@ class _DemoMoreButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(L10n.global().customizeButtonsUnsupportedWarning),
-          duration: k.snackBarDurationNormal,
-        ));
+        SnackBarManager().showSnackBar(
+          SnackBar(
+            content: Text(L10n.global().customizeButtonsUnsupportedWarning),
+            duration: k.snackBarDurationNormal,
+          ),
+        );
       },
       onLongPress: () {
-        SnackBarManager().showSnackBar(SnackBar(
-          content: Text(L10n.global().customizeButtonsUnsupportedWarning),
-          duration: k.snackBarDurationNormal,
-        ));
+        SnackBarManager().showSnackBar(
+          SnackBar(
+            content: Text(L10n.global().customizeButtonsUnsupportedWarning),
+            duration: k.snackBarDurationNormal,
+          ),
+        );
       },
       child: AbsorbPointer(
         absorbing: true,
-        child: IconButton(
-          onPressed: () {},
-          icon: Icon(Icons.adaptive.more),
-        ),
+        child: IconButton(onPressed: () {}, icon: Icon(Icons.adaptive.more)),
       ),
     );
   }
@@ -160,6 +158,18 @@ class _DemoSetAsButton extends StatelessWidget {
     return _DemoButton(
       tooltip: L10n.global().setAsTooltip,
       icon: const Icon(Icons.launch),
+    );
+  }
+}
+
+class _DemoUploadButton extends StatelessWidget {
+  const _DemoUploadButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return _DemoButton(
+      tooltip: L10n.global().uploadTooltip,
+      icon: const Icon(Icons.cloud_upload_outlined),
     );
   }
 }

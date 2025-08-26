@@ -32,15 +32,16 @@ class CollectionNcAlbumAdapter
     with CollectionAdapterUnshareableTag
     implements CollectionAdapter {
   CollectionNcAlbumAdapter(this._c, this.account, this.collection)
-      : assert(require(_c)),
-        _provider = collection.contentProvider as CollectionNcAlbumProvider;
+    : assert(require(_c)),
+      _provider = collection.contentProvider as CollectionNcAlbumProvider;
 
   static bool require(DiContainer c) => ListNcAlbumItem.require(c);
 
   @override
   Stream<List<CollectionItem>> listItem() {
-    return ListNcAlbumItem(_c)(account, _provider.album)
-        .asyncMap((items) async {
+    return ListNcAlbumItem(_c)(account, _provider.album).asyncMap((
+      items,
+    ) async {
       final found = await FindFileDescriptor(_c)(
         account,
         items.map((e) => e.fileId).toList(),
@@ -67,16 +68,20 @@ class CollectionNcAlbumAdapter
     ErrorWithValueHandler<FileDescriptor>? onError,
     required ValueChanged<Collection> onCollectionUpdated,
   }) async {
-    final count = await AddFileToNcAlbum(_c)(account, _provider.album, files,
-        onError: onError);
+    final count = await AddFileToNcAlbum(_c)(
+      account,
+      _provider.album,
+      files,
+      onError: onError,
+    );
     if (count > 0) {
       try {
         final newAlbum = await _syncRemote();
-        onCollectionUpdated(collection.copyWith(
-          contentProvider: _provider.copyWith(
-            album: newAlbum,
+        onCollectionUpdated(
+          collection.copyWith(
+            contentProvider: _provider.copyWith(album: newAlbum),
           ),
-        ));
+        );
       } catch (e, stackTrace) {
         _log.severe("[addFiles] Failed while _syncRemote", e, stackTrace);
       }
@@ -95,7 +100,8 @@ class CollectionNcAlbumAdapter
     assert(name != null);
     if (items != null || itemSort != null || cover != null) {
       _log.warning(
-          "[edit] Nextcloud album does not support editing item or sort");
+        "[edit] Nextcloud album does not support editing item or sort",
+      );
     }
     // final newItems = items?.run((items) => items
     //     .map((e) => e is CollectionFileItem ? e.file : null)
@@ -120,16 +126,20 @@ class CollectionNcAlbumAdapter
     ErrorWithValueIndexedHandler<CollectionItem>? onError,
     required ValueChanged<Collection> onCollectionUpdated,
   }) async {
-    final count = await RemoveFromNcAlbum(_c)(account, _provider.album, items,
-        onError: onError);
+    final count = await RemoveFromNcAlbum(_c)(
+      account,
+      _provider.album,
+      items,
+      onError: onError,
+    );
     if (count > 0) {
       try {
         final newAlbum = await _syncRemote();
-        onCollectionUpdated(collection.copyWith(
-          contentProvider: _provider.copyWith(
-            album: newAlbum,
+        onCollectionUpdated(
+          collection.copyWith(
+            contentProvider: _provider.copyWith(album: newAlbum),
           ),
-        ));
+        );
       } catch (e, stackTrace) {
         _log.severe("[removeItems] Failed while _syncRemote", e, stackTrace);
       }

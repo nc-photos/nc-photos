@@ -357,6 +357,14 @@
 			}
 		}
 	},
+	"settingsDeviceMediaTitle": "Show device media",
+	"@settingsDeviceMediaTitle": {
+		"description": "Control which device folders to be included in the timeline"
+	},
+	"settingsDeviceMediaDescription": "Selected folders will be displayed",
+	"@settingsDeviceMediaDescription": {
+		"description": "Control which device folders to be included in the timeline"
+	},
 	"settingsViewerTitle": "Viewer",
 	"settingsViewerDescription": "Customize the image/video viewer",
 	"settingsScreenBrightnessTitle": "Screen brightness",
@@ -1537,6 +1545,30 @@
 	"fileNotFound": "File not found",
 	"signInViaNextcloudLoginFlowV2": "via Nextcloud Login Flow v2",
 	"signInViaUsernamePassword": "via username and password",
+	"fileOnDevice": "On device",
+	"@fileOnDevice": {
+		"description": "Local files on your device"
+	},
+	"fileOnCloud": "On cloud",
+	"@fileOnCloud": {
+		"description": "Filed uploaded to your Nextcloud server"
+	},
+	"uploadTooltip": "Upload",
+	"@uploadTooltip": {
+		"description": "Upload files to your Nextcloud server"
+	},
+	"uploadFolderPickerTitle": "Upload to",
+	"@uploadFolderPickerTitle": {
+		"description": "Pick a folder on your server where the files will be uploaded to"
+	},
+	"opOnlySupportRemoteFiles": "This feature only supports remote files on your Nextcloud server. Any selected local files are ignored",
+	"@opOnlySupportRemoteFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a remote only action"
+	},
+	"opOnlySupportLocalFiles": "This feature only supports local files on your device. Any selected remote files are ignored",
+	"@opOnlySupportLocalFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a local only action"
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

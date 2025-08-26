@@ -3,11 +3,7 @@ part of '../developer_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    this.lastSuccessful,
-    this.error,
-    this.message,
-  });
+  const _State({this.lastSuccessful, this.error, this.message});
 
   @override
   String toString() => _$toString();

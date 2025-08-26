@@ -2,10 +2,7 @@ import 'dart:async';
 
 import 'package:logging/logging.dart';
 
-void initLog({
-  required bool isDebugMode,
-  void Function(String) print = print,
-}) {
+void initLog({required bool isDebugMode, void Function(String) print = print}) {
   Logger.root.level = !isDebugMode ? Level.WARNING : Level.ALL;
   Logger.root.onRecord.listen((record) {
     String msg =

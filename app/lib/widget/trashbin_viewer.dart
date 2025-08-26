@@ -10,6 +10,7 @@ import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception_util.dart' as exception_util;
 import 'package:nc_photos/k.dart' as k;
@@ -37,11 +38,12 @@ class TrashbinViewer extends StatefulWidget {
   static const routeName = "/trashbin-viewer";
 
   static Route buildRoute(
-          TrashbinViewerArguments args, RouteSettings settings) =>
-      MaterialPageRoute(
-        builder: (context) => TrashbinViewer.fromArgs(args),
-        settings: settings,
-      );
+    TrashbinViewerArguments args,
+    RouteSettings settings,
+  ) => MaterialPageRoute(
+    builder: (context) => TrashbinViewer.fromArgs(args),
+    settings: settings,
+  );
 
   const TrashbinViewer({
     super.key,
@@ -51,12 +53,12 @@ class TrashbinViewer extends StatefulWidget {
   });
 
   TrashbinViewer.fromArgs(TrashbinViewerArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-          streamFiles: args.streamFiles,
-          startIndex: args.startIndex,
-        );
+    : this(
+        key: key,
+        account: args.account,
+        streamFiles: args.streamFiles,
+        startIndex: args.startIndex,
+      );
 
   @override
   createState() => _TrashbinViewerState();
@@ -72,11 +74,7 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
   build(BuildContext context) {
     return Theme(
       data: buildDarkTheme(context),
-      child: Scaffold(
-        body: Builder(
-          builder: _buildContent,
-        ),
-      ),
+      child: Scaffold(body: Builder(builder: _buildContent)),
     );
   }
 
@@ -140,20 +138,17 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
                 ),
                 PopupMenuButton<_AppBarMenuOption>(
                   tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-                  itemBuilder: (context) => [
-                    PopupMenuItem(
-                      value: _AppBarMenuOption.delete,
-                      child: Text(L10n.global().deletePermanentlyTooltip),
-                    ),
-                  ],
+                  itemBuilder:
+                      (context) => [
+                        PopupMenuItem(
+                          value: _AppBarMenuOption.delete,
+                          child: Text(L10n.global().deletePermanentlyTooltip),
+                        ),
+                      ],
                   onSelected: (option) {
                     switch (option) {
                       case _AppBarMenuOption.delete:
                         _onDeletePressed(context);
-                        break;
-
-                      default:
-                        _log.shout("[_buildAppBar] Unknown option: $option");
                         break;
                     }
                   },
@@ -178,22 +173,33 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
     );
     try {
       await RestoreTrashbin(KiwiContainer().resolve<DiContainer>())(
-          widget.account, file);
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().restoreSuccessNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+        widget.account,
+        file,
+      );
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().restoreSuccessNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       if (mounted) {
         Navigator.of(context).pop();
       }
     } catch (e, stacktrace) {
-      _log.shout("Failed while restore trashbin: ${logFilename(file.path)}", e,
-          stacktrace);
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text("${L10n.global().restoreFailureNotification}: "
-            "${exception_util.toUserString(e)}"),
-        duration: k.snackBarDurationNormal,
-      ));
+      _log.shout(
+        "Failed while restore trashbin: ${logFilename(file.path)}",
+        e,
+        stacktrace,
+      );
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(
+            "${L10n.global().restoreFailureNotification}: "
+            "${exception_util.toUserString(e)}",
+          ),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
     }
   }
 
@@ -203,20 +209,24 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
     unawaited(
       showDialog(
         context: context,
-        builder: (_) => AlertDialog(
-          title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
-          content:
-              Text(L10n.global().deletePermanentlyConfirmationDialogContent),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                _delete(context);
-              },
-              child: Text(L10n.global().confirmButtonLabel),
+        builder:
+            (_) => AlertDialog(
+              title: Text(
+                L10n.global().deletePermanentlyConfirmationDialogTitle,
+              ),
+              content: Text(
+                L10n.global().deletePermanentlyConfirmationDialogContent,
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    _delete(context);
+                  },
+                  child: Text(L10n.global().confirmButtonLabel),
+                ),
+              ],
             ),
-          ],
-        ),
       ),
     );
   }
@@ -264,7 +274,7 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
 
   Widget _buildVideoView(BuildContext context, int index) {
     return FileContentView(
-      file: widget.streamFiles[index],
+      file: widget.streamFiles[index].toAnyFile(),
       shouldPlayLivePhoto: false,
       isPlayControlVisible: _isShowVideoControl,
       onZoomChanged: (isZoomed) {
@@ -362,6 +372,4 @@ class _PageState {
   bool hasLoaded = false;
 }
 
-enum _AppBarMenuOption {
-  delete,
-}
+enum _AppBarMenuOption { delete }

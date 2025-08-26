@@ -27,8 +27,9 @@ class SyncFavorite {
 
   Future<List<int>> _getRemoteFavoriteFileIds(Account account) async {
     final settings = AccountPref.of(account);
-    final shareDir =
-        File(path: file_util.unstripPath(account, settings.getShareFolderOr()));
+    final shareDir = File(
+      path: file_util.unstripPath(account, settings.getShareFolderOr()),
+    );
     bool isShareDirIncluded = false;
 
     final fileIds = <int>[];

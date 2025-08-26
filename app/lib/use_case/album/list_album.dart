@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/album.dart';
@@ -38,10 +37,9 @@ class ListAlbum {
     List<File> ls;
     try {
       ls = await Ls(_c.fileRepo)(
-          account,
-          File(
-            path: remote_storage_util.getRemoteAlbumsDir(account),
-          ));
+        account,
+        File(path: remote_storage_util.getRemoteAlbumsDir(account)),
+      );
     } catch (e, stackTrace) {
       if (e is ApiException && e.response.statusCode == 404) {
         // no albums
@@ -64,7 +62,7 @@ class ListAlbum {
         albumFiles[i] = null;
       }
     }
-    yield* _c.albumRepo.getAll(account, albumFiles.whereNotNull().toList());
+    yield* _c.albumRepo.getAll(account, albumFiles.nonNulls.toList());
   }
 
   final DiContainer _c;

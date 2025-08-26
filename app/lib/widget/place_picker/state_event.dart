@@ -3,14 +3,9 @@ part of 'place_picker.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    this.position,
-    required this.isDone,
-  });
+  const _State({this.position, required this.isDone});
 
-  factory _State.init() => const _State(
-    isDone: false,
-  );
+  factory _State.init() => const _State(isDone: false);
 
   @override
   String toString() => _$toString();

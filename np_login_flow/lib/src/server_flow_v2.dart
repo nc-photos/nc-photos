@@ -35,13 +35,15 @@ class ServerFlowV2 implements LoginFlow {
   }
 
   @override
-  Future<LoginResult> login({
-    required Uri uri,
-  }) async {
+  Future<LoginResult> login({required Uri uri}) async {
     _log.info("[login] $uri");
     final initiateLoginResponse = await _initiateLogin(uri);
-    unawaited(launchUrl(Uri.parse(initiateLoginResponse.login),
-        mode: LaunchMode.externalApplication));
+    unawaited(
+      launchUrl(
+        Uri.parse(initiateLoginResponse.login),
+        mode: LaunchMode.externalApplication,
+      ),
+    );
     final loginResponse = await _pollLoginResult(initiateLoginResponse.poll);
     return LoginResult(
       server: loginResponse.server,
@@ -57,15 +59,15 @@ class ServerFlowV2 implements LoginFlow {
 
   /// Initiate a login with Nextcloud login flow v2: https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
   Future<_InitiateLoginResponse> _initiateLogin(Uri uri) async {
-    final response = await Api.fromBaseUrl(uri).request(
-      "POST",
-      "index.php/login/v2",
-    );
+    final response = await Api.fromBaseUrl(
+      uri,
+    ).request("POST", "index.php/login/v2");
     if (response.isGood) {
       return _InitiateLoginResponse.fromJson(jsonDecode(response.body));
     } else {
       _log.severe(
-          "[_initiateLogin] Failed while requesting app password: $response");
+        "[_initiateLogin] Failed while requesting app password: $response",
+      );
       throw LoginException(
         response: response,
         message: "Server responded with an error: HTTP ${response.statusCode}",
@@ -78,7 +80,8 @@ class ServerFlowV2 implements LoginFlow {
   ///
   /// See https://docs.nextcloud.com/server/latest/developer_manual/client_apis/LoginFlow/index.html#login-flow-v2
   Future<_PollLoginResponse> _pollLoginResult(
-      _InitiateLoginPollOptions options) async {
+    _InitiateLoginPollOptions options,
+  ) async {
     while (true) {
       if (!_shouldRun) {
         _log.fine("[_pollLoginResult] Login interrupted");
@@ -109,7 +112,8 @@ class ServerFlowV2 implements LoginFlow {
   }
 
   Future<_PollLoginResponse?> _pollLoginResultOnce(
-      _InitiateLoginPollOptions options) async {
+    _InitiateLoginPollOptions options,
+  ) async {
     final Uri uri;
     if (options.endpoint.scheme == "http") {
       uri = Uri.http(options.endpoint.authority);
@@ -119,9 +123,7 @@ class ServerFlowV2 implements LoginFlow {
     final response = await Api.fromBaseUrl(uri).request(
       "POST",
       options.endpoint.pathSegments.join("/"),
-      header: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
+      header: {"Content-Type": "application/x-www-form-urlencoded"},
       body: "token=${options.token}",
     );
     if (response.statusCode == 200) {
@@ -131,7 +133,8 @@ class ServerFlowV2 implements LoginFlow {
       return null;
     } else {
       _log.severe(
-          "[_pollLoginResult] Failed while requesting app password: $response");
+        "[_pollLoginResult] Failed while requesting app password: $response",
+      );
       throw LoginException(
         response: response,
         message: "Server responded with an error: HTTP ${response.statusCode}",
@@ -146,15 +149,14 @@ class ServerFlowV2 implements LoginFlow {
 
 @toString
 class _InitiateLoginResponse {
-  const _InitiateLoginResponse({
-    required this.poll,
-    required this.login,
-  });
+  const _InitiateLoginResponse({required this.poll, required this.login});
 
   factory _InitiateLoginResponse.fromJson(JsonObj json) {
     return _InitiateLoginResponse(
       poll: _InitiateLoginPollOptions(
-          json["poll"]["token"], json["poll"]["endpoint"]),
+        json["poll"]["token"],
+        json["poll"]["endpoint"],
+      ),
       login: json["login"],
     );
   }
@@ -169,8 +171,8 @@ class _InitiateLoginResponse {
 @toString
 class _InitiateLoginPollOptions {
   _InitiateLoginPollOptions(this.token, String endpoint)
-      : endpoint = Uri.parse(endpoint),
-        _validUntil = clock.now().add(const Duration(minutes: 20));
+    : endpoint = Uri.parse(endpoint),
+      _validUntil = clock.now().add(const Duration(minutes: 20));
 
   @override
   String toString() => _$toString();

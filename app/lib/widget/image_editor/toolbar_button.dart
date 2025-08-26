@@ -55,13 +55,7 @@ class ToolbarButton extends StatelessWidget {
                       ),
                     ),
                   ),
-                  Center(
-                    child: Icon(
-                      icon,
-                      size: 32,
-                      color: foregroundColor,
-                    ),
-                  ),
+                  Center(child: Icon(icon, size: 32, color: foregroundColor)),
                   if (isActivated && activationOrder! >= 0)
                     Padding(
                       padding: const EdgeInsets.only(top: 2),
@@ -85,9 +79,10 @@ class ToolbarButton extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,
-                color: isSelected
-                    ? Theme.of(context).colorScheme.onSurface
-                    : Theme.of(context).colorScheme.onSurfaceVariant,
+                color:
+                    isSelected
+                        ? Theme.of(context).colorScheme.onSurface
+                        : Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
           ],

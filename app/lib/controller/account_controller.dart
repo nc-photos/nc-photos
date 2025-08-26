@@ -1,8 +1,10 @@
 import 'package:kiwi/kiwi.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/metadata_controller.dart';
 import 'package:nc_photos/controller/persons_controller.dart';
 import 'package:nc_photos/controller/places_controller.dart';
@@ -17,6 +19,7 @@ import 'package:nc_photos/event/native_event_relay.dart';
 class AccountController {
   AccountController({
     required this.prefController,
+    required this.localFilesController,
   });
 
   void setCurrentAccount(Account account) {
@@ -40,6 +43,8 @@ class AccountController {
     _placesController = null;
     _filesController?.dispose();
     _filesController = null;
+    _anyFilesController?.dispose();
+    _anyFilesController = null;
 
     _metadataController?.dispose();
     _metadataController = null;
@@ -67,9 +72,7 @@ class AccountController {
       );
 
   AccountPrefController get accountPrefController =>
-      _accountPrefController ??= AccountPrefController(
-        account: _account!,
-      );
+      _accountPrefController ??= AccountPrefController(account: _account!);
 
   PersonsController get personsController =>
       _personsController ??= PersonsController(
@@ -78,9 +81,8 @@ class AccountController {
         accountPrefController: accountPrefController,
       );
 
-  SyncController get syncController => _syncController ??= SyncController(
-        account: _account!,
-      );
+  SyncController get syncController =>
+      _syncController ??= SyncController(account: _account!);
 
   SessionController get sessionController =>
       _sessionController ??= SessionController();
@@ -97,10 +99,17 @@ class AccountController {
         account: _account!,
       );
 
-  FilesController get filesController => _filesController ??= FilesController(
+  FilesController get filesController =>
+      _filesController ??= FilesController(
         KiwiContainer().resolve<DiContainer>(),
         account: _account!,
         accountPrefController: accountPrefController,
+      );
+
+  AnyFilesController get anyFilesController =>
+      _anyFilesController ??= AnyFilesController(
+        filesController: filesController,
+        localFilesController: localFilesController,
       );
 
   MetadataController get metadataController =>
@@ -111,7 +120,8 @@ class AccountController {
         serverController: serverController,
       );
 
-  PrefController prefController;
+  final PrefController prefController;
+  final LocalFilesController localFilesController;
 
   Account? _account;
 
@@ -124,6 +134,7 @@ class AccountController {
   SharingsController? _sharingsController;
   PlacesController? _placesController;
   FilesController? _filesController;
+  AnyFilesController? _anyFilesController;
 
   MetadataController? _metadataController;
   NativeEventRelay? _nativeEventRelay;

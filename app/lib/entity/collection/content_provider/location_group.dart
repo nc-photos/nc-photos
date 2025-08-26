@@ -31,8 +31,8 @@ class CollectionLocationGroupProvider
 
   @override
   List<CollectionCapability> get capabilities => [
-        CollectionCapability.deleteItem,
-      ];
+    CollectionCapability.deleteItem,
+  ];
 
   @override
   CollectionItemSort get itemSort => CollectionItemSort.dateDescending;
@@ -50,8 +50,10 @@ class CollectionLocationGroupProvider
       url: getStaticViewUrlForImageFile(
         account,
         FileDescriptor(
-          fdPath:
-              file_util.unstripPath(account, location.latestFileRelativePath),
+          fdPath: file_util.unstripPath(
+            account,
+            location.latestFileRelativePath,
+          ),
           fdId: location.latestFileId,
           fdMime: location.latestFileMime,
           fdIsArchived: false,

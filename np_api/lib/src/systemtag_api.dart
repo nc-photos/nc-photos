@@ -30,28 +30,33 @@ class ApiSystemtags {
       final builder = XmlBuilder();
       builder
         ..processing("xml", "version=\"1.0\"")
-        ..element("d:propfind", namespaces: namespaces, nest: () {
-          builder.element("d:prop", nest: () {
-            if (id != null) {
-              builder.element("oc:id");
-            }
-            if (displayName != null) {
-              builder.element("oc:display-name");
-            }
-            if (userVisible != null) {
-              builder.element("oc:user-visible");
-            }
-            if (userAssignable != null) {
-              builder.element("oc:user-assignable");
-            }
-          });
-        });
+        ..element(
+          "d:propfind",
+          namespaces: namespaces,
+          nest: () {
+            builder.element(
+              "d:prop",
+              nest: () {
+                if (id != null) {
+                  builder.element("oc:id");
+                }
+                if (displayName != null) {
+                  builder.element("oc:display-name");
+                }
+                if (userVisible != null) {
+                  builder.element("oc:user-visible");
+                }
+                if (userAssignable != null) {
+                  builder.element("oc:user-assignable");
+                }
+              },
+            );
+          },
+        );
       return await api.request(
         "PROPFIND",
         endpoint,
-        header: {
-          "Content-Type": "application/xml",
-        },
+        header: {"Content-Type": "application/xml"},
         body: builder.buildDocument().toXmlString(),
       );
     } catch (e) {
@@ -104,31 +109,36 @@ class ApiSystemtagsRelationsFiles {
       final builder = XmlBuilder();
       builder
         ..processing("xml", "version=\"1.0\"")
-        ..element("d:propfind", namespaces: namespaces, nest: () {
-          builder.element("d:prop", nest: () {
-            if (id != null) {
-              builder.element("oc:id");
-            }
-            if (displayName != null) {
-              builder.element("oc:display-name");
-            }
-            if (userVisible != null) {
-              builder.element("oc:user-visible");
-            }
-            if (userAssignable != null) {
-              builder.element("oc:user-assignable");
-            }
-            if (canAssign != null) {
-              builder.element("oc:can-assign");
-            }
-          });
-        });
+        ..element(
+          "d:propfind",
+          namespaces: namespaces,
+          nest: () {
+            builder.element(
+              "d:prop",
+              nest: () {
+                if (id != null) {
+                  builder.element("oc:id");
+                }
+                if (displayName != null) {
+                  builder.element("oc:display-name");
+                }
+                if (userVisible != null) {
+                  builder.element("oc:user-visible");
+                }
+                if (userAssignable != null) {
+                  builder.element("oc:user-assignable");
+                }
+                if (canAssign != null) {
+                  builder.element("oc:can-assign");
+                }
+              },
+            );
+          },
+        );
       return await systemtagsRelations.api.request(
         "PROPFIND",
         endpoint,
-        header: {
-          "Content-Type": "application/xml",
-        },
+        header: {"Content-Type": "application/xml"},
         body: builder.buildDocument().toXmlString(),
       );
     } catch (e) {

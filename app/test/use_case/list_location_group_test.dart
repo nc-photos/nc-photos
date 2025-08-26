@@ -23,9 +23,7 @@ void main() {
 /// Expect: []
 Future<void> _empty() async {
   final account = util.buildAccount();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -44,13 +42,12 @@ Future<void> _empty() async {
 /// Expect: []
 Future<void> _noLocation() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg"))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg("admin/test1.jpg"))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -73,26 +70,29 @@ Future<void> _noLocation() async {
 /// Expect: ["Some place"]
 Future<void> _nFile1Location() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg(
+              "admin/test1.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test2.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
             ))
-        ..addJpeg("admin/test2.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
-            )))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -101,14 +101,28 @@ Future<void> _nFile1Location() async {
 
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
-    LocationGroup("Some place", "AD", 2, 2,
-        DateTime.utc(2020, 1, 2, 3, 4, 5 + 2), "image/jpeg", "test2.jpg"),
+    LocationGroup(
+      "Some place",
+      "AD",
+      2,
+      2,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+      "image/jpeg",
+      "test2.jpg",
+    ),
   });
   expect(result.admin1.toSet(), <LocationGroup>{});
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
-    LocationGroup("Andorra", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
-        "image/jpeg", "test2.jpg"),
+    LocationGroup(
+      "Andorra",
+      "AD",
+      2,
+      2,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+      "image/jpeg",
+      "test2.jpg",
+    ),
   });
 }
 
@@ -123,40 +137,47 @@ Future<void> _nFile1Location() async {
 /// Expect: ["Some place", "Another place"]
 Future<void> _nFileNLocation() async {
   final account = util.buildAccount();
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addJpeg("admin/test1.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg(
+              "admin/test1.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test2.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test3.jpg",
+              location: const ImageLocation(
+                name: "Another place",
+                latitude: 4.3,
+                longitude: 2.1,
+                countryCode: "ZW",
+              ),
+            )
+            ..addJpeg(
+              "admin/test4.jpg",
+              location: const ImageLocation(
+                name: "Another place",
+                latitude: 4.3,
+                longitude: 2.1,
+                countryCode: "ZW",
+              ),
             ))
-        ..addJpeg("admin/test2.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
-            ))
-        ..addJpeg("admin/test3.jpg",
-            location: const ImageLocation(
-              name: "Another place",
-              latitude: 4.3,
-              longitude: 2.1,
-              countryCode: "ZW",
-            ))
-        ..addJpeg("admin/test4.jpg",
-            location: const ImageLocation(
-              name: "Another place",
-              latitude: 4.3,
-              longitude: 2.1,
-              countryCode: "ZW",
-            )))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -165,18 +186,46 @@ Future<void> _nFileNLocation() async {
 
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
-    LocationGroup("Some place", "AD", 2, 2,
-        DateTime.utc(2020, 1, 2, 3, 4, 5 + 2), "image/jpeg", "test2.jpg"),
-    LocationGroup("Another place", "ZW", 2, 4,
-        DateTime.utc(2020, 1, 2, 3, 4, 5 + 4), "image/jpeg", "test4.jpg"),
+    LocationGroup(
+      "Some place",
+      "AD",
+      2,
+      2,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+      "image/jpeg",
+      "test2.jpg",
+    ),
+    LocationGroup(
+      "Another place",
+      "ZW",
+      2,
+      4,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 4),
+      "image/jpeg",
+      "test4.jpg",
+    ),
   });
   expect(result.admin1.toSet(), <LocationGroup>{});
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
-    LocationGroup("Andorra", "AD", 2, 2, DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
-        "image/jpeg", "test2.jpg"),
-    LocationGroup("Zimbabwe", "ZW", 2, 4, DateTime.utc(2020, 1, 2, 3, 4, 5 + 4),
-        "image/jpeg", "test4.jpg"),
+    LocationGroup(
+      "Andorra",
+      "AD",
+      2,
+      2,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+      "image/jpeg",
+      "test2.jpg",
+    ),
+    LocationGroup(
+      "Zimbabwe",
+      "ZW",
+      2,
+      4,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 4),
+      "image/jpeg",
+      "test4.jpg",
+    ),
   });
 }
 
@@ -190,53 +239,60 @@ Future<void> _nFileNLocation() async {
 /// ]
 /// Expect: ["Some place"]
 Future<void> _multipleRoots() async {
-  final account = util.buildAccount(
-    roots: ["test1", "test2"],
-  );
-  final files = (util.FilesBuilder()
-        ..addDir("admin")
-        ..addDir("admin/test1")
-        ..addDir("admin/test2")
-        ..addDir("admin/test3")
-        ..addJpeg("admin/test1/test1.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
+  final account = util.buildAccount(roots: ["test1", "test2"]);
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addDir("admin/test1")
+            ..addDir("admin/test2")
+            ..addDir("admin/test3")
+            ..addJpeg(
+              "admin/test1/test1.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test1/test2.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test2/test3.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test2/test4.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test3/test5.jpg",
+              location: const ImageLocation(
+                name: "Some place",
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
             ))
-        ..addJpeg("admin/test1/test2.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
-            ))
-        ..addJpeg("admin/test2/test3.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
-            ))
-        ..addJpeg("admin/test2/test4.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
-            ))
-        ..addJpeg("admin/test3/test5.jpg",
-            location: const ImageLocation(
-              name: "Some place",
-              latitude: 1.2,
-              longitude: 3.4,
-              countryCode: "AD",
-            )))
-      .build();
-  final c = DiContainer(
-    npDb: util.buildTestDb(),
-  );
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
     await c.sqliteDb.insertAccounts([account.toDb()]);
@@ -245,13 +301,27 @@ Future<void> _multipleRoots() async {
 
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
-    LocationGroup("Some place", "AD", 4, 7,
-        DateTime.utc(2020, 1, 2, 3, 4, 5 + 7), "image/jpeg", "test2/test4.jpg"),
+    LocationGroup(
+      "Some place",
+      "AD",
+      4,
+      7,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 7),
+      "image/jpeg",
+      "test2/test4.jpg",
+    ),
   });
   expect(result.admin1.toSet(), <LocationGroup>{});
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
-    LocationGroup("Andorra", "AD", 4, 7, DateTime.utc(2020, 1, 2, 3, 4, 5 + 7),
-        "image/jpeg", "test2/test4.jpg"),
+    LocationGroup(
+      "Andorra",
+      "AD",
+      4,
+      7,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 7),
+      "image/jpeg",
+      "test2/test4.jpg",
+    ),
   });
 }

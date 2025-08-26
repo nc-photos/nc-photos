@@ -45,7 +45,8 @@ class _$DbFilesSummaryCopyWithWorkerImpl
   @override
   DbFilesSummary call({dynamic items}) {
     return DbFilesSummary(
-        items: items as Map<Date, DbFilesSummaryItem>? ?? that.items);
+      items: items as Map<Date, DbFilesSummaryItem>? ?? that.items,
+    );
   }
 
   final DbFilesSummary that;
@@ -68,8 +69,8 @@ class _$DbFilesMemoryCopyWithWorkerImpl
   @override
   DbFilesMemory call({dynamic memories}) {
     return DbFilesMemory(
-        memories:
-            memories as Map<int, List<DbFileDescriptor>>? ?? that.memories);
+      memories: memories as Map<int, List<DbFileDescriptor>>? ?? that.memories,
+    );
   }
 
   final DbFilesMemory that;
@@ -82,8 +83,9 @@ extension $DbFilesMemoryCopyWith on DbFilesMemory {
 }
 
 abstract class $DbFileMissingMetadataResultCopyWithWorker {
-  DbFileMissingMetadataResult call(
-      {List<({int fileId, String relativePath})>? items});
+  DbFileMissingMetadataResult call({
+    List<({int fileId, String relativePath})>? items,
+  });
 }
 
 class _$DbFileMissingMetadataResultCopyWithWorkerImpl
@@ -93,8 +95,8 @@ class _$DbFileMissingMetadataResultCopyWithWorkerImpl
   @override
   DbFileMissingMetadataResult call({dynamic items}) {
     return DbFileMissingMetadataResult(
-        items:
-            items as List<({int fileId, String relativePath})>? ?? that.items);
+      items: items as List<({int fileId, String relativePath})>? ?? that.items,
+    );
   }
 
   final DbFileMissingMetadataResult that;
@@ -138,7 +140,7 @@ extension _$DbSyncIdResultToString on DbSyncIdResult {
 extension _$DbLocationGroupToString on DbLocationGroup {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbLocationGroup {place: $place, countryCode: $countryCode, count: $count, latestFileId: $latestFileId, latestDateTime: $latestDateTime}";
+    return "DbLocationGroup {place: $place, countryCode: $countryCode, count: $count, latestFileId: $latestFileId, latestDateTime: $latestDateTime, latestFileMime: $latestFileMime, latestFileRelativePath: $latestFileRelativePath}";
   }
 }
 
@@ -152,7 +154,7 @@ extension _$DbLocationGroupResultToString on DbLocationGroupResult {
 extension _$DbImageLatLngToString on DbImageLatLng {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbImageLatLng {lat: ${lat.toStringAsFixed(3)}, lng: ${lng.toStringAsFixed(3)}, fileId: $fileId}";
+    return "DbImageLatLng {lat: ${lat.toStringAsFixed(3)}, lng: ${lng.toStringAsFixed(3)}, fileId: $fileId, fileRelativePath: $fileRelativePath, mime: $mime}";
   }
 }
 

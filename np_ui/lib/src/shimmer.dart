@@ -2,11 +2,7 @@
 import 'package:flutter/material.dart';
 
 class Shimmer extends StatefulWidget {
-  const Shimmer({
-    super.key,
-    required this.linearGradient,
-    this.child,
-  });
+  const Shimmer({super.key, required this.linearGradient, this.child});
 
   static _ShimmerState? _of(BuildContext context) {
     return context.findAncestorStateOfType<_ShimmerState>();
@@ -36,13 +32,14 @@ class _ShimmerState extends State<Shimmer> with SingleTickerProviderStateMixin {
   }
 
   LinearGradient get gradient => LinearGradient(
-        colors: widget.linearGradient.colors,
-        stops: widget.linearGradient.stops,
-        begin: widget.linearGradient.begin,
-        end: widget.linearGradient.end,
-        transform:
-            _SlidingGradientTransform(slidePercent: _shimmerController.value),
-      );
+    colors: widget.linearGradient.colors,
+    stops: widget.linearGradient.stops,
+    begin: widget.linearGradient.begin,
+    end: widget.linearGradient.end,
+    transform: _SlidingGradientTransform(
+      slidePercent: _shimmerController.value,
+    ),
+  );
 
   bool get isSized =>
       (context.findRenderObject() as RenderBox?)?.hasSize ?? false;
@@ -127,9 +124,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
     Offset offsetWithinShimmer = Offset.zero;
     if (context.findRenderObject() != null) {
       final box = context.findRenderObject() as RenderBox;
-      offsetWithinShimmer = shimmer.getDescendantOffset(
-        descendant: box,
-      );
+      offsetWithinShimmer = shimmer.getDescendantOffset(descendant: box);
     }
 
     return ShaderMask(
@@ -150,9 +145,7 @@ class _ShimmerLoadingState extends State<ShimmerLoading> {
 }
 
 class _SlidingGradientTransform extends GradientTransform {
-  const _SlidingGradientTransform({
-    required this.slidePercent,
-  });
+  const _SlidingGradientTransform({required this.slidePercent});
 
   final double slidePercent;
 

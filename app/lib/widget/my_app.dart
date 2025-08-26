@@ -12,10 +12,12 @@ import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/controller/trusted_cert_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/language_util.dart' as language_util;
+import 'package:nc_photos/mobile/android/android_info.dart';
 import 'package:nc_photos/mobile/self_signed_cert_manager.dart';
 import 'package:nc_photos/navigation_manager.dart';
 import 'package:nc_photos/protected_page_handler.dart';
@@ -32,7 +34,7 @@ import 'package:nc_photos/widget/collection_picker.dart';
 import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/connect2/connect.dart';
 import 'package:nc_photos/widget/enhanced_photo_browser.dart';
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/image_editor.dart';
 import 'package:nc_photos/widget/image_enhancer.dart';
 import 'package:nc_photos/widget/local_file_viewer.dart';
@@ -57,8 +59,11 @@ import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/trashbin_browser.dart';
 import 'package:nc_photos/widget/trashbin_viewer.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/upload_folder_picker.dart';
+import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 
 part 'my_app.g.dart';
@@ -79,30 +84,36 @@ class MyApp extends StatelessWidget {
     final DiContainer _c = KiwiContainer().resolve<DiContainer>();
     return MultiRepositoryProvider(
       providers: [
-        RepositoryProvider(
-          create: (_) => PrefController(_c.pref),
+        RepositoryProvider(create: (_) => PrefController(_c.pref)),
+        RepositoryProvider(create: (_) => SecurePrefController(_c.securePref)),
+        RepositoryProvider<LocalFilesController>(
+          create: (context) {
+            if (getRawPlatform() == NpPlatform.android) {
+              if (AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU) {
+                return LocalFilesControllerImpl(
+                  _c,
+                  prefController: context.read(),
+                );
+              }
+            }
+            return DummyLocalFilesController();
+          },
         ),
         RepositoryProvider(
-          create: (_) => SecurePrefController(_c.securePref),
+          create:
+              (context) => AccountController(
+                prefController: context.read(),
+                localFilesController: context.read(),
+              ),
         ),
-        RepositoryProvider(
-          create: (context) => AccountController(
-            prefController: context.read(),
-          ),
-        ),
-        RepositoryProvider<NpDb>(
-          create: (_) => _c.npDb,
-        ),
+        RepositoryProvider<NpDb>(create: (_) => _c.npDb),
         RepositoryProvider<TrustedCertController>(
-          create: (_) => TrustedCertController(
-            manager: SelfSignedCertManager(),
-          ),
+          create:
+              (_) => TrustedCertController(manager: SelfSignedCertManager()),
         ),
       ],
       child: BlocProvider(
-        create: (context) => _Bloc(
-          prefController: context.read(),
-        ),
+        create: (context) => _Bloc(prefController: context.read()),
         child: const _WrappedApp(),
       ),
     );
@@ -138,51 +149,51 @@ class _WrappedAppState extends State<_WrappedApp>
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen: (previous, current) =>
-          previous.language != current.language ||
-          previous.isDarkTheme != current.isDarkTheme ||
-          previous.isFollowSystemTheme != current.isFollowSystemTheme ||
-          previous.isUseBlackInDarkTheme != current.isUseBlackInDarkTheme ||
-          previous.seedColor != current.seedColor ||
-          previous.secondarySeedColor != current.secondarySeedColor,
-      builder: (context, state) => DynamicColorBuilder(
-        builder: (lightDynamic, darkDynamic) {
-          SessionStorage()
-            ..lightDynamicColorScheme = lightDynamic
-            ..darkDynamicColorScheme = darkDynamic
-            ..isSupportDynamicColor = lightDynamic != null;
-          final ThemeMode themeMode;
-          if (state.isFollowSystemTheme) {
-            themeMode = ThemeMode.system;
-          } else {
-            themeMode = state.isDarkTheme ? ThemeMode.dark : ThemeMode.light;
-          }
-          return MaterialApp(
-            onGenerateTitle: (context) =>
-                AppLocalizations.of(context)!.appTitle,
-            theme: buildLightTheme(context, lightDynamic),
-            darkTheme: buildDarkTheme(context, darkDynamic),
-            themeMode: themeMode,
-            initialRoute: Splash.routeName,
-            onGenerateRoute: _onGenerateRoute,
-            navigatorObservers: [
-              MyApp.routeObserver,
-              _NavigatorLogger(),
-            ],
-            navigatorKey: _navigatorKey,
-            scaffoldMessengerKey: _scaffoldMessengerKey,
-            locale: state.language.locale,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            builder: (context, child) {
-              MyApp._globalContext = context;
-              return _ThemedMyApp(child: child!);
+      buildWhen:
+          (previous, current) =>
+              previous.language != current.language ||
+              previous.isDarkTheme != current.isDarkTheme ||
+              previous.isFollowSystemTheme != current.isFollowSystemTheme ||
+              previous.isUseBlackInDarkTheme != current.isUseBlackInDarkTheme ||
+              previous.seedColor != current.seedColor ||
+              previous.secondarySeedColor != current.secondarySeedColor,
+      builder:
+          (context, state) => DynamicColorBuilder(
+            builder: (lightDynamic, darkDynamic) {
+              SessionStorage()
+                ..lightDynamicColorScheme = lightDynamic
+                ..darkDynamicColorScheme = darkDynamic
+                ..isSupportDynamicColor = lightDynamic != null;
+              final ThemeMode themeMode;
+              if (state.isFollowSystemTheme) {
+                themeMode = ThemeMode.system;
+              } else {
+                themeMode =
+                    state.isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+              }
+              return MaterialApp(
+                onGenerateTitle:
+                    (context) => AppLocalizations.of(context)!.appTitle,
+                theme: buildLightTheme(context, lightDynamic),
+                darkTheme: buildDarkTheme(context, darkDynamic),
+                themeMode: themeMode,
+                initialRoute: Splash.routeName,
+                onGenerateRoute: _onGenerateRoute,
+                navigatorObservers: [MyApp.routeObserver, _NavigatorLogger()],
+                navigatorKey: _navigatorKey,
+                scaffoldMessengerKey: _scaffoldMessengerKey,
+                locale: state.language.locale,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                builder: (context, child) {
+                  MyApp._globalContext = context;
+                  return _ThemedMyApp(child: child!);
+                },
+                debugShowCheckedModeBanner: false,
+                scrollBehavior: const _MyScrollBehavior(),
+              );
             },
-            debugShowCheckedModeBanner: false,
-            scrollBehavior: const _MyScrollBehavior(),
-          );
-        },
-      ),
+          ),
     );
   }
 
@@ -201,20 +212,20 @@ class _WrappedAppState extends State<_WrappedApp>
   getNavigator() => _navigatorKey.currentState;
 
   Map<String, Route Function(RouteSettings)> _getRouter() => {
-        Setup.routeName: Setup.buildRoute,
-        SignIn.routeName: SignIn.buildRoute,
-        Splash.routeName: Splash.buildRoute,
-        CollectionPicker.routeName: CollectionPicker.buildRoute,
-        LanguageSettings.routeName: LanguageSettings.buildRoute,
-        PeopleBrowser.routeName: PeopleBrowser.buildRoute,
-        EnhancementSettings.routeName: EnhancementSettings.buildRoute,
-        Settings.routeName: Settings.buildRoute,
-        SharingBrowser.routeName: SharingBrowser.buildRoute,
-        PlacesBrowser.routeName: PlacesBrowser.buildRoute,
-        ArchiveBrowser.routeName: ArchiveBrowser.buildRoute,
-        TrustedCertManager.routeName: TrustedCertManager.buildRoute,
-        MapBrowser.routeName: MapBrowser.buildRoute,
-      };
+    Setup.routeName: Setup.buildRoute,
+    SignIn.routeName: SignIn.buildRoute,
+    Splash.routeName: Splash.buildRoute,
+    CollectionPicker.routeName: CollectionPicker.buildRoute,
+    LanguageSettings.routeName: LanguageSettings.buildRoute,
+    PeopleBrowser.routeName: PeopleBrowser.buildRoute,
+    EnhancementSettings.routeName: EnhancementSettings.buildRoute,
+    Settings.routeName: Settings.buildRoute,
+    SharingBrowser.routeName: SharingBrowser.buildRoute,
+    PlacesBrowser.routeName: PlacesBrowser.buildRoute,
+    ArchiveBrowser.routeName: ArchiveBrowser.buildRoute,
+    TrustedCertManager.routeName: TrustedCertManager.buildRoute,
+    MapBrowser.routeName: MapBrowser.buildRoute,
+  };
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {
     _log.info("[_onGenerateRoute] Route: ${settings.name}");
@@ -242,6 +253,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handlePlacePickerRoute(settings);
     route ??= _handleTimelineViewerRoute(settings);
     route ??= _handleCollectionViewerRoute(settings);
+    route ??= _handleUploadFolderPickerRoute(settings);
     return route;
   }
 
@@ -301,7 +313,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleAlbumDirPickerRoute] Failed while handling route", e);
+        "[_handleAlbumDirPickerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -328,7 +342,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleTrashbinBrowserRoute] Failed while handling route", e);
+        "[_handleTrashbinBrowserRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -342,7 +358,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleTrashbinViewerRoute] Failed while handling route", e);
+        "[_handleTrashbinViewerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -356,7 +374,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleSlideshowViewerRoute] Failed while handling route", e);
+        "[_handleSlideshowViewerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -370,7 +390,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleSharedFileViewerRoute] Failed while handling route", e);
+        "[_handleSharedFileViewerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -384,8 +406,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleAlbumShareOutlierBrowserRoute] Failed while handling route",
-          e);
+        "[_handleAlbumShareOutlierBrowserRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -399,7 +422,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleShareFolderPickerRoute] Failed while handling route", e);
+        "[_handleShareFolderPickerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -410,8 +435,9 @@ class _WrappedAppState extends State<_WrappedApp>
           settings.arguments != null) {
         final args = settings.arguments as EnhancedPhotoBrowserArguments;
         return EnhancedPhotoBrowser.buildRoute(args, settings);
-      } else if (settings.name
-              ?.startsWith("${EnhancedPhotoBrowser.routeName}?") ==
+      } else if (settings.name?.startsWith(
+            "${EnhancedPhotoBrowser.routeName}?",
+          ) ==
           true) {
         final queries = Uri.parse(settings.name!).queryParameters;
         final args = EnhancedPhotoBrowserArguments(queries["filename"]);
@@ -419,7 +445,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleEnhancedPhotoBrowserRoute] Failed while handling route", e);
+        "[_handleEnhancedPhotoBrowserRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -433,7 +461,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleLocalFileViewerRoute] Failed while handling route", e);
+        "[_handleLocalFileViewerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -480,8 +510,11 @@ class _WrappedAppState extends State<_WrappedApp>
         return ResultViewer.buildRoute(args, settings);
       }
     } catch (e, stackTrace) {
-      _log.severe("[_handleResultViewerRoute] Failed while handling route", e,
-          stackTrace);
+      _log.severe(
+        "[_handleResultViewerRoute] Failed while handling route",
+        e,
+        stackTrace,
+      );
     }
     return null;
   }
@@ -508,7 +541,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleCollectionBrowserRoute] Failed while handling route", e);
+        "[_handleCollectionBrowserRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -521,7 +556,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleAccountSettingsRoute] Failed while handling route", e);
+        "[_handleAccountSettingsRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -547,7 +584,9 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleTimelineViewerRoute] Failed while handling route", e);
+        "[_handleTimelineViewerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -561,7 +600,25 @@ class _WrappedAppState extends State<_WrappedApp>
       }
     } catch (e) {
       _log.severe(
-          "[_handleCollectionViewerRoute] Failed while handling route", e);
+        "[_handleCollectionViewerRoute] Failed while handling route",
+        e,
+      );
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleUploadFolderPickerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == UploadFolderPicker.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as UploadFolderPickerArguments;
+        return UploadFolderPicker.buildRoute(args, settings);
+      }
+    } catch (e) {
+      _log.severe(
+        "[_handleUploadFolderPickerRoute] Failed while handling route",
+        e,
+      );
     }
     return null;
   }
@@ -572,9 +629,7 @@ class _WrappedAppState extends State<_WrappedApp>
 }
 
 class _ThemedMyApp extends StatelessWidget {
-  const _ThemedMyApp({
-    required this.child,
-  });
+  const _ThemedMyApp({required this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -598,9 +653,9 @@ class _MyScrollBehavior extends MaterialScrollBehavior {
 
   @override
   get dragDevices => {
-        PointerDeviceKind.touch,
-        PointerDeviceKind.stylus,
-        PointerDeviceKind.invertedStylus,
-        PointerDeviceKind.mouse,
-      };
+    PointerDeviceKind.touch,
+    PointerDeviceKind.stylus,
+    PointerDeviceKind.invertedStylus,
+    PointerDeviceKind.mouse,
+  };
 }

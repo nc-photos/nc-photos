@@ -22,8 +22,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic selected, dynamic error = copyWithNull}) {
     return _State(
-        selected: selected as language_util.AppLanguage? ?? that.selected,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      selected: selected as language_util.AppLanguage? ?? that.selected,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;

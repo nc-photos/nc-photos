@@ -13,24 +13,30 @@ part of 'new_collection_dialog.dart';
 // **************************************************************************
 
 abstract class $_FormValueCopyWithWorker {
-  _FormValue call(
-      {String? name,
-      _ProviderOption? provider,
-      List<File>? dirs,
-      List<Tag>? tags});
+  _FormValue call({
+    String? name,
+    _ProviderOption? provider,
+    List<File>? dirs,
+    List<Tag>? tags,
+  });
 }
 
 class _$_FormValueCopyWithWorkerImpl implements $_FormValueCopyWithWorker {
   _$_FormValueCopyWithWorkerImpl(this.that);
 
   @override
-  _FormValue call(
-      {dynamic name, dynamic provider, dynamic dirs, dynamic tags}) {
+  _FormValue call({
+    dynamic name,
+    dynamic provider,
+    dynamic dirs,
+    dynamic tags,
+  }) {
     return _FormValue(
-        name: name as String? ?? that.name,
-        provider: provider as _ProviderOption? ?? that.provider,
-        dirs: dirs as List<File>? ?? that.dirs,
-        tags: tags as List<Tag>? ?? that.tags);
+      name: name as String? ?? that.name,
+      provider: provider as _ProviderOption? ?? that.provider,
+      dirs: dirs as List<File>? ?? that.dirs,
+      tags: tags as List<Tag>? ?? that.tags,
+    );
   }
 
   final _FormValue that;
@@ -43,28 +49,31 @@ extension $_FormValueCopyWith on _FormValue {
 }
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {_FormValue? formValue,
-      Collection? result,
-      bool? showDialog,
-      ExceptionEvent? error});
+  _State call({
+    _FormValue? formValue,
+    Collection? result,
+    bool? showDialog,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic formValue,
-      dynamic result = copyWithNull,
-      dynamic showDialog,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic formValue,
+    dynamic result = copyWithNull,
+    dynamic showDialog,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        supportedProviders: that.supportedProviders,
-        formValue: formValue as _FormValue? ?? that.formValue,
-        result: result == copyWithNull ? that.result : result as Collection?,
-        showDialog: showDialog as bool? ?? that.showDialog,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      supportedProviders: that.supportedProviders,
+      formValue: formValue as _FormValue? ?? that.formValue,
+      result: result == copyWithNull ? that.result : result as Collection?,
+      showDialog: showDialog as bool? ?? that.showDialog,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -84,8 +93,9 @@ extension _$_WrappedNewCollectionDialogStateNpLog
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.new_collection_dialog._WrappedNewCollectionDialogState");
+  static final log = Logger(
+    "widget.new_collection_dialog._WrappedNewCollectionDialogState",
+  );
 }
 
 extension _$_BlocNpLog on _Bloc {

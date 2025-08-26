@@ -11,20 +11,28 @@ class $ServersTable extends Servers with TableInfo<$ServersTable, Server> {
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _addressMeta =
-      const VerificationMeta('address');
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _addressMeta = const VerificationMeta(
+    'address',
+  );
   @override
   late final GeneratedColumn<String> address = GeneratedColumn<String>(
-      'address', aliasedName, false,
-      type: DriftSqlType.string,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'));
+    'address',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways('UNIQUE'),
+  );
   @override
   List<GeneratedColumn> get $columns => [rowId, address];
   @override
@@ -33,17 +41,23 @@ class $ServersTable extends Servers with TableInfo<$ServersTable, Server> {
   String get actualTableName => $name;
   static const String $name = 'servers';
   @override
-  VerificationContext validateIntegrity(Insertable<Server> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Server> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('address')) {
-      context.handle(_addressMeta,
-          address.isAcceptableOrUnknown(data['address']!, _addressMeta));
+      context.handle(
+        _addressMeta,
+        address.isAcceptableOrUnknown(data['address']!, _addressMeta),
+      );
     } else if (isInserting) {
       context.missing(_addressMeta);
     }
@@ -56,10 +70,16 @@ class $ServersTable extends Servers with TableInfo<$ServersTable, Server> {
   Server map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Server(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      address: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}address'])!,
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      address:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}address'],
+          )!,
     );
   }
 
@@ -82,14 +102,13 @@ class Server extends DataClass implements Insertable<Server> {
   }
 
   ServersCompanion toCompanion(bool nullToAbsent) {
-    return ServersCompanion(
-      rowId: Value(rowId),
-      address: Value(address),
-    );
+    return ServersCompanion(rowId: Value(rowId), address: Value(address));
   }
 
-  factory Server.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Server.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Server(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -105,10 +124,15 @@ class Server extends DataClass implements Insertable<Server> {
     };
   }
 
-  Server copyWith({int? rowId, String? address}) => Server(
-        rowId: rowId ?? this.rowId,
-        address: address ?? this.address,
-      );
+  Server copyWith({int? rowId, String? address}) =>
+      Server(rowId: rowId ?? this.rowId, address: address ?? this.address);
+  Server copyWithCompanion(ServersCompanion data) {
+    return Server(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      address: data.address.present ? data.address.value : this.address,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Server(')
@@ -186,25 +210,37 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _serverMeta = const VerificationMeta('server');
   @override
   late final GeneratedColumn<int> server = GeneratedColumn<int>(
-      'server', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES servers (row_id) ON DELETE CASCADE'));
+    'server',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES servers (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<String> userId = GeneratedColumn<String>(
-      'user_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [rowId, server, userId];
   @override
@@ -213,23 +249,31 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   String get actualTableName => $name;
   static const String $name = 'accounts';
   @override
-  VerificationContext validateIntegrity(Insertable<Account> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Account> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('server')) {
-      context.handle(_serverMeta,
-          server.isAcceptableOrUnknown(data['server']!, _serverMeta));
+      context.handle(
+        _serverMeta,
+        server.isAcceptableOrUnknown(data['server']!, _serverMeta),
+      );
     } else if (isInserting) {
       context.missing(_serverMeta);
     }
     if (data.containsKey('user_id')) {
-      context.handle(_userIdMeta,
-          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
@@ -240,18 +284,27 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {server, userId},
-      ];
+    {server, userId},
+  ];
   @override
   Account map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Account(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      server: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}server'])!,
-      userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      server:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}server'],
+          )!,
+      userId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}user_id'],
+          )!,
     );
   }
 
@@ -265,8 +318,11 @@ class Account extends DataClass implements Insertable<Account> {
   final int rowId;
   final int server;
   final String userId;
-  const Account(
-      {required this.rowId, required this.server, required this.userId});
+  const Account({
+    required this.rowId,
+    required this.server,
+    required this.userId,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -284,8 +340,10 @@ class Account extends DataClass implements Insertable<Account> {
     );
   }
 
-  factory Account.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Account.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Account(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -304,10 +362,18 @@ class Account extends DataClass implements Insertable<Account> {
   }
 
   Account copyWith({int? rowId, int? server, String? userId}) => Account(
-        rowId: rowId ?? this.rowId,
-        server: server ?? this.server,
-        userId: userId ?? this.userId,
-      );
+    rowId: rowId ?? this.rowId,
+    server: server ?? this.server,
+    userId: userId ?? this.userId,
+  );
+  Account copyWithCompanion(AccountsCompanion data) {
+    return Account(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      server: data.server.present ? data.server.value : this.server,
+      userId: data.userId.present ? data.userId.value : this.userId,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Account(')
@@ -342,8 +408,8 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     this.rowId = const Value.absent(),
     required int server,
     required String userId,
-  })  : server = Value(server),
-        userId = Value(userId);
+  }) : server = Value(server),
+       userId = Value(userId);
   static Insertable<Account> custom({
     Expression<int>? rowId,
     Expression<int>? server,
@@ -356,8 +422,11 @@ class AccountsCompanion extends UpdateCompanion<Account> {
     });
   }
 
-  AccountsCompanion copyWith(
-      {Value<int>? rowId, Value<int>? server, Value<String>? userId}) {
+  AccountsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? server,
+    Value<String>? userId,
+  }) {
     return AccountsCompanion(
       rowId: rowId ?? this.rowId,
       server: server ?? this.server,
@@ -399,169 +468,250 @@ class $FilesTable extends Files with TableInfo<$FilesTable, File> {
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _serverMeta = const VerificationMeta('server');
   @override
   late final GeneratedColumn<int> server = GeneratedColumn<int>(
-      'server', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES servers (row_id) ON DELETE CASCADE'));
+    'server',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES servers (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _fileIdMeta = const VerificationMeta('fileId');
   @override
   late final GeneratedColumn<int> fileId = GeneratedColumn<int>(
-      'file_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _contentLengthMeta =
-      const VerificationMeta('contentLength');
+    'file_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentLengthMeta = const VerificationMeta(
+    'contentLength',
+  );
   @override
   late final GeneratedColumn<int> contentLength = GeneratedColumn<int>(
-      'content_length', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _contentTypeMeta =
-      const VerificationMeta('contentType');
+    'content_length',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentTypeMeta = const VerificationMeta(
+    'contentType',
+  );
   @override
   late final GeneratedColumn<String> contentType = GeneratedColumn<String>(
-      'content_type', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'content_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _etagMeta = const VerificationMeta('etag');
   @override
   late final GeneratedColumn<String> etag = GeneratedColumn<String>(
-      'etag', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _lastModifiedMeta =
-      const VerificationMeta('lastModified');
+    'etag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
+    'lastModified',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
-      lastModified = GeneratedColumn<DateTime>(
-              'last_modified', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>($FilesTable.$converterlastModifiedn);
-  static const VerificationMeta _isCollectionMeta =
-      const VerificationMeta('isCollection');
+  lastModified = GeneratedColumn<DateTime>(
+    'last_modified',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  ).withConverter<DateTime?>($FilesTable.$converterlastModifiedn);
+  static const VerificationMeta _isCollectionMeta = const VerificationMeta(
+    'isCollection',
+  );
   @override
   late final GeneratedColumn<bool> isCollection = GeneratedColumn<bool>(
-      'is_collection', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("is_collection" IN (0, 1))'));
-  static const VerificationMeta _usedBytesMeta =
-      const VerificationMeta('usedBytes');
+    'is_collection',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_collection" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _usedBytesMeta = const VerificationMeta(
+    'usedBytes',
+  );
   @override
   late final GeneratedColumn<int> usedBytes = GeneratedColumn<int>(
-      'used_bytes', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _hasPreviewMeta =
-      const VerificationMeta('hasPreview');
+    'used_bytes',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _hasPreviewMeta = const VerificationMeta(
+    'hasPreview',
+  );
   @override
   late final GeneratedColumn<bool> hasPreview = GeneratedColumn<bool>(
-      'has_preview', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("has_preview" IN (0, 1))'));
-  static const VerificationMeta _ownerIdMeta =
-      const VerificationMeta('ownerId');
+    'has_preview',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("has_preview" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _ownerIdMeta = const VerificationMeta(
+    'ownerId',
+  );
   @override
   late final GeneratedColumn<String> ownerId = GeneratedColumn<String>(
-      'owner_id', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _ownerDisplayNameMeta =
-      const VerificationMeta('ownerDisplayName');
+    'owner_id',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _ownerDisplayNameMeta = const VerificationMeta(
+    'ownerDisplayName',
+  );
   @override
   late final GeneratedColumn<String> ownerDisplayName = GeneratedColumn<String>(
-      'owner_display_name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'owner_display_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        rowId,
-        server,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        isCollection,
-        usedBytes,
-        hasPreview,
-        ownerId,
-        ownerDisplayName
-      ];
+    rowId,
+    server,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    isCollection,
+    usedBytes,
+    hasPreview,
+    ownerId,
+    ownerDisplayName,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'files';
   @override
-  VerificationContext validateIntegrity(Insertable<File> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<File> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('server')) {
-      context.handle(_serverMeta,
-          server.isAcceptableOrUnknown(data['server']!, _serverMeta));
+      context.handle(
+        _serverMeta,
+        server.isAcceptableOrUnknown(data['server']!, _serverMeta),
+      );
     } else if (isInserting) {
       context.missing(_serverMeta);
     }
     if (data.containsKey('file_id')) {
-      context.handle(_fileIdMeta,
-          fileId.isAcceptableOrUnknown(data['file_id']!, _fileIdMeta));
+      context.handle(
+        _fileIdMeta,
+        fileId.isAcceptableOrUnknown(data['file_id']!, _fileIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_fileIdMeta);
     }
     if (data.containsKey('content_length')) {
       context.handle(
+        _contentLengthMeta,
+        contentLength.isAcceptableOrUnknown(
+          data['content_length']!,
           _contentLengthMeta,
-          contentLength.isAcceptableOrUnknown(
-              data['content_length']!, _contentLengthMeta));
+        ),
+      );
     }
     if (data.containsKey('content_type')) {
       context.handle(
+        _contentTypeMeta,
+        contentType.isAcceptableOrUnknown(
+          data['content_type']!,
           _contentTypeMeta,
-          contentType.isAcceptableOrUnknown(
-              data['content_type']!, _contentTypeMeta));
+        ),
+      );
     }
     if (data.containsKey('etag')) {
       context.handle(
-          _etagMeta, etag.isAcceptableOrUnknown(data['etag']!, _etagMeta));
+        _etagMeta,
+        etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
+      );
     }
     context.handle(_lastModifiedMeta, const VerificationResult.success());
     if (data.containsKey('is_collection')) {
       context.handle(
+        _isCollectionMeta,
+        isCollection.isAcceptableOrUnknown(
+          data['is_collection']!,
           _isCollectionMeta,
-          isCollection.isAcceptableOrUnknown(
-              data['is_collection']!, _isCollectionMeta));
+        ),
+      );
     }
     if (data.containsKey('used_bytes')) {
-      context.handle(_usedBytesMeta,
-          usedBytes.isAcceptableOrUnknown(data['used_bytes']!, _usedBytesMeta));
+      context.handle(
+        _usedBytesMeta,
+        usedBytes.isAcceptableOrUnknown(data['used_bytes']!, _usedBytesMeta),
+      );
     }
     if (data.containsKey('has_preview')) {
       context.handle(
-          _hasPreviewMeta,
-          hasPreview.isAcceptableOrUnknown(
-              data['has_preview']!, _hasPreviewMeta));
+        _hasPreviewMeta,
+        hasPreview.isAcceptableOrUnknown(data['has_preview']!, _hasPreviewMeta),
+      );
     }
     if (data.containsKey('owner_id')) {
-      context.handle(_ownerIdMeta,
-          ownerId.isAcceptableOrUnknown(data['owner_id']!, _ownerIdMeta));
+      context.handle(
+        _ownerIdMeta,
+        ownerId.isAcceptableOrUnknown(data['owner_id']!, _ownerIdMeta),
+      );
     }
     if (data.containsKey('owner_display_name')) {
       context.handle(
+        _ownerDisplayNameMeta,
+        ownerDisplayName.isAcceptableOrUnknown(
+          data['owner_display_name']!,
           _ownerDisplayNameMeta,
-          ownerDisplayName.isAcceptableOrUnknown(
-              data['owner_display_name']!, _ownerDisplayNameMeta));
+        ),
+      );
     }
     return context;
   }
@@ -570,37 +720,65 @@ class $FilesTable extends Files with TableInfo<$FilesTable, File> {
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {server, fileId},
-      ];
+    {server, fileId},
+  ];
   @override
   File map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return File(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      server: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}server'])!,
-      fileId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file_id'])!,
-      contentLength: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}content_length']),
-      contentType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}content_type']),
-      etag: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}etag']),
-      lastModified: $FilesTable.$converterlastModifiedn.fromSql(
+      rowId:
           attachedDatabase.typeMapping.read(
-              DriftSqlType.dateTime, data['${effectivePrefix}last_modified'])),
-      isCollection: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_collection']),
-      usedBytes: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}used_bytes']),
-      hasPreview: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}has_preview']),
-      ownerId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}owner_id']),
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      server:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}server'],
+          )!,
+      fileId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}file_id'],
+          )!,
+      contentLength: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}content_length'],
+      ),
+      contentType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_type'],
+      ),
+      etag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}etag'],
+      ),
+      lastModified: $FilesTable.$converterlastModifiedn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modified'],
+        ),
+      ),
+      isCollection: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_collection'],
+      ),
+      usedBytes: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}used_bytes'],
+      ),
+      hasPreview: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}has_preview'],
+      ),
+      ownerId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}owner_id'],
+      ),
       ownerDisplayName: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}owner_display_name']),
+        DriftSqlType.string,
+        data['${effectivePrefix}owner_display_name'],
+      ),
     );
   }
 
@@ -628,19 +806,20 @@ class File extends DataClass implements Insertable<File> {
   final bool? hasPreview;
   final String? ownerId;
   final String? ownerDisplayName;
-  const File(
-      {required this.rowId,
-      required this.server,
-      required this.fileId,
-      this.contentLength,
-      this.contentType,
-      this.etag,
-      this.lastModified,
-      this.isCollection,
-      this.usedBytes,
-      this.hasPreview,
-      this.ownerId,
-      this.ownerDisplayName});
+  const File({
+    required this.rowId,
+    required this.server,
+    required this.fileId,
+    this.contentLength,
+    this.contentType,
+    this.etag,
+    this.lastModified,
+    this.isCollection,
+    this.usedBytes,
+    this.hasPreview,
+    this.ownerId,
+    this.ownerDisplayName,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -658,7 +837,8 @@ class File extends DataClass implements Insertable<File> {
     }
     if (!nullToAbsent || lastModified != null) {
       map['last_modified'] = Variable<DateTime>(
-          $FilesTable.$converterlastModifiedn.toSql(lastModified));
+        $FilesTable.$converterlastModifiedn.toSql(lastModified),
+      );
     }
     if (!nullToAbsent || isCollection != null) {
       map['is_collection'] = Variable<bool>(isCollection);
@@ -683,36 +863,46 @@ class File extends DataClass implements Insertable<File> {
       rowId: Value(rowId),
       server: Value(server),
       fileId: Value(fileId),
-      contentLength: contentLength == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contentLength),
-      contentType: contentType == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contentType),
+      contentLength:
+          contentLength == null && nullToAbsent
+              ? const Value.absent()
+              : Value(contentLength),
+      contentType:
+          contentType == null && nullToAbsent
+              ? const Value.absent()
+              : Value(contentType),
       etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
-      lastModified: lastModified == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastModified),
-      isCollection: isCollection == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isCollection),
-      usedBytes: usedBytes == null && nullToAbsent
-          ? const Value.absent()
-          : Value(usedBytes),
-      hasPreview: hasPreview == null && nullToAbsent
-          ? const Value.absent()
-          : Value(hasPreview),
-      ownerId: ownerId == null && nullToAbsent
-          ? const Value.absent()
-          : Value(ownerId),
-      ownerDisplayName: ownerDisplayName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(ownerDisplayName),
+      lastModified:
+          lastModified == null && nullToAbsent
+              ? const Value.absent()
+              : Value(lastModified),
+      isCollection:
+          isCollection == null && nullToAbsent
+              ? const Value.absent()
+              : Value(isCollection),
+      usedBytes:
+          usedBytes == null && nullToAbsent
+              ? const Value.absent()
+              : Value(usedBytes),
+      hasPreview:
+          hasPreview == null && nullToAbsent
+              ? const Value.absent()
+              : Value(hasPreview),
+      ownerId:
+          ownerId == null && nullToAbsent
+              ? const Value.absent()
+              : Value(ownerId),
+      ownerDisplayName:
+          ownerDisplayName == null && nullToAbsent
+              ? const Value.absent()
+              : Value(ownerDisplayName),
     );
   }
 
-  factory File.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory File.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return File(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -748,38 +938,68 @@ class File extends DataClass implements Insertable<File> {
     };
   }
 
-  File copyWith(
-          {int? rowId,
-          int? server,
-          int? fileId,
-          Value<int?> contentLength = const Value.absent(),
-          Value<String?> contentType = const Value.absent(),
-          Value<String?> etag = const Value.absent(),
-          Value<DateTime?> lastModified = const Value.absent(),
-          Value<bool?> isCollection = const Value.absent(),
-          Value<int?> usedBytes = const Value.absent(),
-          Value<bool?> hasPreview = const Value.absent(),
-          Value<String?> ownerId = const Value.absent(),
-          Value<String?> ownerDisplayName = const Value.absent()}) =>
-      File(
-        rowId: rowId ?? this.rowId,
-        server: server ?? this.server,
-        fileId: fileId ?? this.fileId,
-        contentLength:
-            contentLength.present ? contentLength.value : this.contentLength,
-        contentType: contentType.present ? contentType.value : this.contentType,
-        etag: etag.present ? etag.value : this.etag,
-        lastModified:
-            lastModified.present ? lastModified.value : this.lastModified,
-        isCollection:
-            isCollection.present ? isCollection.value : this.isCollection,
-        usedBytes: usedBytes.present ? usedBytes.value : this.usedBytes,
-        hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
-        ownerId: ownerId.present ? ownerId.value : this.ownerId,
-        ownerDisplayName: ownerDisplayName.present
+  File copyWith({
+    int? rowId,
+    int? server,
+    int? fileId,
+    Value<int?> contentLength = const Value.absent(),
+    Value<String?> contentType = const Value.absent(),
+    Value<String?> etag = const Value.absent(),
+    Value<DateTime?> lastModified = const Value.absent(),
+    Value<bool?> isCollection = const Value.absent(),
+    Value<int?> usedBytes = const Value.absent(),
+    Value<bool?> hasPreview = const Value.absent(),
+    Value<String?> ownerId = const Value.absent(),
+    Value<String?> ownerDisplayName = const Value.absent(),
+  }) => File(
+    rowId: rowId ?? this.rowId,
+    server: server ?? this.server,
+    fileId: fileId ?? this.fileId,
+    contentLength:
+        contentLength.present ? contentLength.value : this.contentLength,
+    contentType: contentType.present ? contentType.value : this.contentType,
+    etag: etag.present ? etag.value : this.etag,
+    lastModified: lastModified.present ? lastModified.value : this.lastModified,
+    isCollection: isCollection.present ? isCollection.value : this.isCollection,
+    usedBytes: usedBytes.present ? usedBytes.value : this.usedBytes,
+    hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
+    ownerId: ownerId.present ? ownerId.value : this.ownerId,
+    ownerDisplayName:
+        ownerDisplayName.present
             ? ownerDisplayName.value
             : this.ownerDisplayName,
-      );
+  );
+  File copyWithCompanion(FilesCompanion data) {
+    return File(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      server: data.server.present ? data.server.value : this.server,
+      fileId: data.fileId.present ? data.fileId.value : this.fileId,
+      contentLength:
+          data.contentLength.present
+              ? data.contentLength.value
+              : this.contentLength,
+      contentType:
+          data.contentType.present ? data.contentType.value : this.contentType,
+      etag: data.etag.present ? data.etag.value : this.etag,
+      lastModified:
+          data.lastModified.present
+              ? data.lastModified.value
+              : this.lastModified,
+      isCollection:
+          data.isCollection.present
+              ? data.isCollection.value
+              : this.isCollection,
+      usedBytes: data.usedBytes.present ? data.usedBytes.value : this.usedBytes,
+      hasPreview:
+          data.hasPreview.present ? data.hasPreview.value : this.hasPreview,
+      ownerId: data.ownerId.present ? data.ownerId.value : this.ownerId,
+      ownerDisplayName:
+          data.ownerDisplayName.present
+              ? data.ownerDisplayName.value
+              : this.ownerDisplayName,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('File(')
@@ -801,18 +1021,19 @@ class File extends DataClass implements Insertable<File> {
 
   @override
   int get hashCode => Object.hash(
-      rowId,
-      server,
-      fileId,
-      contentLength,
-      contentType,
-      etag,
-      lastModified,
-      isCollection,
-      usedBytes,
-      hasPreview,
-      ownerId,
-      ownerDisplayName);
+    rowId,
+    server,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    isCollection,
+    usedBytes,
+    hasPreview,
+    ownerId,
+    ownerDisplayName,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -871,8 +1092,8 @@ class FilesCompanion extends UpdateCompanion<File> {
     this.hasPreview = const Value.absent(),
     this.ownerId = const Value.absent(),
     this.ownerDisplayName = const Value.absent(),
-  })  : server = Value(server),
-        fileId = Value(fileId);
+  }) : server = Value(server),
+       fileId = Value(fileId);
   static Insertable<File> custom({
     Expression<int>? rowId,
     Expression<int>? server,
@@ -903,19 +1124,20 @@ class FilesCompanion extends UpdateCompanion<File> {
     });
   }
 
-  FilesCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? server,
-      Value<int>? fileId,
-      Value<int?>? contentLength,
-      Value<String?>? contentType,
-      Value<String?>? etag,
-      Value<DateTime?>? lastModified,
-      Value<bool?>? isCollection,
-      Value<int?>? usedBytes,
-      Value<bool?>? hasPreview,
-      Value<String?>? ownerId,
-      Value<String?>? ownerDisplayName}) {
+  FilesCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? server,
+    Value<int>? fileId,
+    Value<int?>? contentLength,
+    Value<String?>? contentType,
+    Value<String?>? etag,
+    Value<DateTime?>? lastModified,
+    Value<bool?>? isCollection,
+    Value<int?>? usedBytes,
+    Value<bool?>? hasPreview,
+    Value<String?>? ownerId,
+    Value<String?>? ownerDisplayName,
+  }) {
     return FilesCompanion(
       rowId: rowId ?? this.rowId,
       server: server ?? this.server,
@@ -955,7 +1177,8 @@ class FilesCompanion extends UpdateCompanion<File> {
     }
     if (lastModified.present) {
       map['last_modified'] = Variable<DateTime>(
-          $FilesTable.$converterlastModifiedn.toSql(lastModified.value));
+        $FilesTable.$converterlastModifiedn.toSql(lastModified.value),
+      );
     }
     if (isCollection.present) {
       map['is_collection'] = Variable<bool>(isCollection.value);
@@ -1004,125 +1227,172 @@ class $AccountFilesTable extends AccountFiles
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _accountMeta =
-      const VerificationMeta('account');
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _accountMeta = const VerificationMeta(
+    'account',
+  );
   @override
   late final GeneratedColumn<int> account = GeneratedColumn<int>(
-      'account', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES accounts (row_id) ON DELETE CASCADE'));
+    'account',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES accounts (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _fileMeta = const VerificationMeta('file');
   @override
   late final GeneratedColumn<int> file = GeneratedColumn<int>(
-      'file', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES files (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _relativePathMeta =
-      const VerificationMeta('relativePath');
+    'file',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES files (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _relativePathMeta = const VerificationMeta(
+    'relativePath',
+  );
   @override
   late final GeneratedColumn<String> relativePath = GeneratedColumn<String>(
-      'relative_path', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _isFavoriteMeta =
-      const VerificationMeta('isFavorite');
+    'relative_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isFavoriteMeta = const VerificationMeta(
+    'isFavorite',
+  );
   @override
   late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
-      'is_favorite', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("is_favorite" IN (0, 1))'));
-  static const VerificationMeta _isArchivedMeta =
-      const VerificationMeta('isArchived');
+    'is_favorite',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_favorite" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _isArchivedMeta = const VerificationMeta(
+    'isArchived',
+  );
   @override
   late final GeneratedColumn<bool> isArchived = GeneratedColumn<bool>(
-      'is_archived', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("is_archived" IN (0, 1))'));
-  static const VerificationMeta _overrideDateTimeMeta =
-      const VerificationMeta('overrideDateTime');
+    'is_archived',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_archived" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _overrideDateTimeMeta = const VerificationMeta(
+    'overrideDateTime',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
-      overrideDateTime = GeneratedColumn<DateTime>(
-              'override_date_time', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>(
-              $AccountFilesTable.$converteroverrideDateTimen);
-  static const VerificationMeta _bestDateTimeMeta =
-      const VerificationMeta('bestDateTime');
+  overrideDateTime = GeneratedColumn<DateTime>(
+    'override_date_time',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  ).withConverter<DateTime?>($AccountFilesTable.$converteroverrideDateTimen);
+  static const VerificationMeta _bestDateTimeMeta = const VerificationMeta(
+    'bestDateTime',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> bestDateTime =
-      GeneratedColumn<DateTime>('best_date_time', aliasedName, false,
-              type: DriftSqlType.dateTime, requiredDuringInsert: true)
-          .withConverter<DateTime>($AccountFilesTable.$converterbestDateTime);
+      GeneratedColumn<DateTime>(
+        'best_date_time',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($AccountFilesTable.$converterbestDateTime);
   @override
   List<GeneratedColumn> get $columns => [
-        rowId,
-        account,
-        file,
-        relativePath,
-        isFavorite,
-        isArchived,
-        overrideDateTime,
-        bestDateTime
-      ];
+    rowId,
+    account,
+    file,
+    relativePath,
+    isFavorite,
+    isArchived,
+    overrideDateTime,
+    bestDateTime,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'account_files';
   @override
-  VerificationContext validateIntegrity(Insertable<AccountFile> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<AccountFile> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('account')) {
-      context.handle(_accountMeta,
-          account.isAcceptableOrUnknown(data['account']!, _accountMeta));
+      context.handle(
+        _accountMeta,
+        account.isAcceptableOrUnknown(data['account']!, _accountMeta),
+      );
     } else if (isInserting) {
       context.missing(_accountMeta);
     }
     if (data.containsKey('file')) {
       context.handle(
-          _fileMeta, file.isAcceptableOrUnknown(data['file']!, _fileMeta));
+        _fileMeta,
+        file.isAcceptableOrUnknown(data['file']!, _fileMeta),
+      );
     } else if (isInserting) {
       context.missing(_fileMeta);
     }
     if (data.containsKey('relative_path')) {
       context.handle(
+        _relativePathMeta,
+        relativePath.isAcceptableOrUnknown(
+          data['relative_path']!,
           _relativePathMeta,
-          relativePath.isAcceptableOrUnknown(
-              data['relative_path']!, _relativePathMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_relativePathMeta);
     }
     if (data.containsKey('is_favorite')) {
       context.handle(
-          _isFavoriteMeta,
-          isFavorite.isAcceptableOrUnknown(
-              data['is_favorite']!, _isFavoriteMeta));
+        _isFavoriteMeta,
+        isFavorite.isAcceptableOrUnknown(data['is_favorite']!, _isFavoriteMeta),
+      );
     }
     if (data.containsKey('is_archived')) {
       context.handle(
-          _isArchivedMeta,
-          isArchived.isAcceptableOrUnknown(
-              data['is_archived']!, _isArchivedMeta));
+        _isArchivedMeta,
+        isArchived.isAcceptableOrUnknown(data['is_archived']!, _isArchivedMeta),
+      );
     }
     context.handle(_overrideDateTimeMeta, const VerificationResult.success());
     context.handle(_bestDateTimeMeta, const VerificationResult.success());
@@ -1133,30 +1403,52 @@ class $AccountFilesTable extends AccountFiles
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {account, file},
-      ];
+    {account, file},
+  ];
   @override
   AccountFile map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AccountFile(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      account: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}account'])!,
-      file: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file'])!,
-      relativePath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}relative_path'])!,
-      isFavorite: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite']),
-      isArchived: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_archived']),
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      account:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}account'],
+          )!,
+      file:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}file'],
+          )!,
+      relativePath:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}relative_path'],
+          )!,
+      isFavorite: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_favorite'],
+      ),
+      isArchived: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_archived'],
+      ),
       overrideDateTime: $AccountFilesTable.$converteroverrideDateTimen.fromSql(
-          attachedDatabase.typeMapping.read(DriftSqlType.dateTime,
-              data['${effectivePrefix}override_date_time'])),
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}override_date_time'],
+        ),
+      ),
       bestDateTime: $AccountFilesTable.$converterbestDateTime.fromSql(
-          attachedDatabase.typeMapping.read(DriftSqlType.dateTime,
-              data['${effectivePrefix}best_date_time'])!),
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}best_date_time'],
+        )!,
+      ),
     );
   }
 
@@ -1182,15 +1474,16 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
   final bool? isArchived;
   final DateTime? overrideDateTime;
   final DateTime bestDateTime;
-  const AccountFile(
-      {required this.rowId,
-      required this.account,
-      required this.file,
-      required this.relativePath,
-      this.isFavorite,
-      this.isArchived,
-      this.overrideDateTime,
-      required this.bestDateTime});
+  const AccountFile({
+    required this.rowId,
+    required this.account,
+    required this.file,
+    required this.relativePath,
+    this.isFavorite,
+    this.isArchived,
+    this.overrideDateTime,
+    required this.bestDateTime,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -1205,13 +1498,14 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
       map['is_archived'] = Variable<bool>(isArchived);
     }
     if (!nullToAbsent || overrideDateTime != null) {
-      map['override_date_time'] = Variable<DateTime>($AccountFilesTable
-          .$converteroverrideDateTimen
-          .toSql(overrideDateTime));
+      map['override_date_time'] = Variable<DateTime>(
+        $AccountFilesTable.$converteroverrideDateTimen.toSql(overrideDateTime),
+      );
     }
     {
       map['best_date_time'] = Variable<DateTime>(
-          $AccountFilesTable.$converterbestDateTime.toSql(bestDateTime));
+        $AccountFilesTable.$converterbestDateTime.toSql(bestDateTime),
+      );
     }
     return map;
   }
@@ -1222,21 +1516,26 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
       account: Value(account),
       file: Value(file),
       relativePath: Value(relativePath),
-      isFavorite: isFavorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isFavorite),
-      isArchived: isArchived == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isArchived),
-      overrideDateTime: overrideDateTime == null && nullToAbsent
-          ? const Value.absent()
-          : Value(overrideDateTime),
+      isFavorite:
+          isFavorite == null && nullToAbsent
+              ? const Value.absent()
+              : Value(isFavorite),
+      isArchived:
+          isArchived == null && nullToAbsent
+              ? const Value.absent()
+              : Value(isArchived),
+      overrideDateTime:
+          overrideDateTime == null && nullToAbsent
+              ? const Value.absent()
+              : Value(overrideDateTime),
       bestDateTime: Value(bestDateTime),
     );
   }
 
-  factory AccountFile.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory AccountFile.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AccountFile(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -1245,8 +1544,9 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
       relativePath: serializer.fromJson<String>(json['relativePath']),
       isFavorite: serializer.fromJson<bool?>(json['isFavorite']),
       isArchived: serializer.fromJson<bool?>(json['isArchived']),
-      overrideDateTime:
-          serializer.fromJson<DateTime?>(json['overrideDateTime']),
+      overrideDateTime: serializer.fromJson<DateTime?>(
+        json['overrideDateTime'],
+      ),
       bestDateTime: serializer.fromJson<DateTime>(json['bestDateTime']),
     );
   }
@@ -1265,27 +1565,52 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
     };
   }
 
-  AccountFile copyWith(
-          {int? rowId,
-          int? account,
-          int? file,
-          String? relativePath,
-          Value<bool?> isFavorite = const Value.absent(),
-          Value<bool?> isArchived = const Value.absent(),
-          Value<DateTime?> overrideDateTime = const Value.absent(),
-          DateTime? bestDateTime}) =>
-      AccountFile(
-        rowId: rowId ?? this.rowId,
-        account: account ?? this.account,
-        file: file ?? this.file,
-        relativePath: relativePath ?? this.relativePath,
-        isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
-        isArchived: isArchived.present ? isArchived.value : this.isArchived,
-        overrideDateTime: overrideDateTime.present
+  AccountFile copyWith({
+    int? rowId,
+    int? account,
+    int? file,
+    String? relativePath,
+    Value<bool?> isFavorite = const Value.absent(),
+    Value<bool?> isArchived = const Value.absent(),
+    Value<DateTime?> overrideDateTime = const Value.absent(),
+    DateTime? bestDateTime,
+  }) => AccountFile(
+    rowId: rowId ?? this.rowId,
+    account: account ?? this.account,
+    file: file ?? this.file,
+    relativePath: relativePath ?? this.relativePath,
+    isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
+    isArchived: isArchived.present ? isArchived.value : this.isArchived,
+    overrideDateTime:
+        overrideDateTime.present
             ? overrideDateTime.value
             : this.overrideDateTime,
-        bestDateTime: bestDateTime ?? this.bestDateTime,
-      );
+    bestDateTime: bestDateTime ?? this.bestDateTime,
+  );
+  AccountFile copyWithCompanion(AccountFilesCompanion data) {
+    return AccountFile(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      account: data.account.present ? data.account.value : this.account,
+      file: data.file.present ? data.file.value : this.file,
+      relativePath:
+          data.relativePath.present
+              ? data.relativePath.value
+              : this.relativePath,
+      isFavorite:
+          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
+      isArchived:
+          data.isArchived.present ? data.isArchived.value : this.isArchived,
+      overrideDateTime:
+          data.overrideDateTime.present
+              ? data.overrideDateTime.value
+              : this.overrideDateTime,
+      bestDateTime:
+          data.bestDateTime.present
+              ? data.bestDateTime.value
+              : this.bestDateTime,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AccountFile(')
@@ -1302,8 +1627,16 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
   }
 
   @override
-  int get hashCode => Object.hash(rowId, account, file, relativePath,
-      isFavorite, isArchived, overrideDateTime, bestDateTime);
+  int get hashCode => Object.hash(
+    rowId,
+    account,
+    file,
+    relativePath,
+    isFavorite,
+    isArchived,
+    overrideDateTime,
+    bestDateTime,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1346,10 +1679,10 @@ class AccountFilesCompanion extends UpdateCompanion<AccountFile> {
     this.isArchived = const Value.absent(),
     this.overrideDateTime = const Value.absent(),
     required DateTime bestDateTime,
-  })  : account = Value(account),
-        file = Value(file),
-        relativePath = Value(relativePath),
-        bestDateTime = Value(bestDateTime);
+  }) : account = Value(account),
+       file = Value(file),
+       relativePath = Value(relativePath),
+       bestDateTime = Value(bestDateTime);
   static Insertable<AccountFile> custom({
     Expression<int>? rowId,
     Expression<int>? account,
@@ -1372,15 +1705,16 @@ class AccountFilesCompanion extends UpdateCompanion<AccountFile> {
     });
   }
 
-  AccountFilesCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? account,
-      Value<int>? file,
-      Value<String>? relativePath,
-      Value<bool?>? isFavorite,
-      Value<bool?>? isArchived,
-      Value<DateTime?>? overrideDateTime,
-      Value<DateTime>? bestDateTime}) {
+  AccountFilesCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? account,
+    Value<int>? file,
+    Value<String>? relativePath,
+    Value<bool?>? isFavorite,
+    Value<bool?>? isArchived,
+    Value<DateTime?>? overrideDateTime,
+    Value<DateTime>? bestDateTime,
+  }) {
     return AccountFilesCompanion(
       rowId: rowId ?? this.rowId,
       account: account ?? this.account,
@@ -1415,13 +1749,16 @@ class AccountFilesCompanion extends UpdateCompanion<AccountFile> {
       map['is_archived'] = Variable<bool>(isArchived.value);
     }
     if (overrideDateTime.present) {
-      map['override_date_time'] = Variable<DateTime>($AccountFilesTable
-          .$converteroverrideDateTimen
-          .toSql(overrideDateTime.value));
+      map['override_date_time'] = Variable<DateTime>(
+        $AccountFilesTable.$converteroverrideDateTimen.toSql(
+          overrideDateTime.value,
+        ),
+      );
     }
     if (bestDateTime.present) {
       map['best_date_time'] = Variable<DateTime>(
-          $AccountFilesTable.$converterbestDateTime.toSql(bestDateTime.value));
+        $AccountFilesTable.$converterbestDateTime.toSql(bestDateTime.value),
+      );
     }
     return map;
   }
@@ -1447,104 +1784,155 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ImagesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _accountFileMeta =
-      const VerificationMeta('accountFile');
+  static const VerificationMeta _accountFileMeta = const VerificationMeta(
+    'accountFile',
+  );
   @override
   late final GeneratedColumn<int> accountFile = GeneratedColumn<int>(
-      'account_file', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES account_files (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _lastUpdatedMeta =
-      const VerificationMeta('lastUpdated');
+    'account_file',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES account_files (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _lastUpdatedMeta = const VerificationMeta(
+    'lastUpdated',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> lastUpdated =
-      GeneratedColumn<DateTime>('last_updated', aliasedName, false,
-              type: DriftSqlType.dateTime, requiredDuringInsert: true)
-          .withConverter<DateTime>($ImagesTable.$converterlastUpdated);
-  static const VerificationMeta _fileEtagMeta =
-      const VerificationMeta('fileEtag');
+      GeneratedColumn<DateTime>(
+        'last_updated',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($ImagesTable.$converterlastUpdated);
+  static const VerificationMeta _fileEtagMeta = const VerificationMeta(
+    'fileEtag',
+  );
   @override
   late final GeneratedColumn<String> fileEtag = GeneratedColumn<String>(
-      'file_etag', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'file_etag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _widthMeta = const VerificationMeta('width');
   @override
   late final GeneratedColumn<int> width = GeneratedColumn<int>(
-      'width', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'width',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _heightMeta = const VerificationMeta('height');
   @override
   late final GeneratedColumn<int> height = GeneratedColumn<int>(
-      'height', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _exifRawMeta =
-      const VerificationMeta('exifRaw');
+    'height',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _exifRawMeta = const VerificationMeta(
+    'exifRaw',
+  );
   @override
   late final GeneratedColumn<String> exifRaw = GeneratedColumn<String>(
-      'exif_raw', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'exif_raw',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _srcMeta = const VerificationMeta('src');
   @override
   late final GeneratedColumn<int> src = GeneratedColumn<int>(
-      'src', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _dateTimeOriginalMeta =
-      const VerificationMeta('dateTimeOriginal');
+    'src',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dateTimeOriginalMeta = const VerificationMeta(
+    'dateTimeOriginal',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
-      dateTimeOriginal = GeneratedColumn<DateTime>(
-              'date_time_original', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>($ImagesTable.$converterdateTimeOriginaln);
+  dateTimeOriginal = GeneratedColumn<DateTime>(
+    'date_time_original',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  ).withConverter<DateTime?>($ImagesTable.$converterdateTimeOriginaln);
   @override
   List<GeneratedColumn> get $columns => [
-        accountFile,
-        lastUpdated,
-        fileEtag,
-        width,
-        height,
-        exifRaw,
-        src,
-        dateTimeOriginal
-      ];
+    accountFile,
+    lastUpdated,
+    fileEtag,
+    width,
+    height,
+    exifRaw,
+    src,
+    dateTimeOriginal,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'images';
   @override
-  VerificationContext validateIntegrity(Insertable<Image> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Image> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('account_file')) {
       context.handle(
+        _accountFileMeta,
+        accountFile.isAcceptableOrUnknown(
+          data['account_file']!,
           _accountFileMeta,
-          accountFile.isAcceptableOrUnknown(
-              data['account_file']!, _accountFileMeta));
+        ),
+      );
     }
     context.handle(_lastUpdatedMeta, const VerificationResult.success());
     if (data.containsKey('file_etag')) {
-      context.handle(_fileEtagMeta,
-          fileEtag.isAcceptableOrUnknown(data['file_etag']!, _fileEtagMeta));
+      context.handle(
+        _fileEtagMeta,
+        fileEtag.isAcceptableOrUnknown(data['file_etag']!, _fileEtagMeta),
+      );
     }
     if (data.containsKey('width')) {
       context.handle(
-          _widthMeta, width.isAcceptableOrUnknown(data['width']!, _widthMeta));
+        _widthMeta,
+        width.isAcceptableOrUnknown(data['width']!, _widthMeta),
+      );
     }
     if (data.containsKey('height')) {
-      context.handle(_heightMeta,
-          height.isAcceptableOrUnknown(data['height']!, _heightMeta));
+      context.handle(
+        _heightMeta,
+        height.isAcceptableOrUnknown(data['height']!, _heightMeta),
+      );
     }
     if (data.containsKey('exif_raw')) {
-      context.handle(_exifRawMeta,
-          exifRaw.isAcceptableOrUnknown(data['exif_raw']!, _exifRawMeta));
+      context.handle(
+        _exifRawMeta,
+        exifRaw.isAcceptableOrUnknown(data['exif_raw']!, _exifRawMeta),
+      );
     }
     if (data.containsKey('src')) {
       context.handle(
-          _srcMeta, src.isAcceptableOrUnknown(data['src']!, _srcMeta));
+        _srcMeta,
+        src.isAcceptableOrUnknown(data['src']!, _srcMeta),
+      );
     }
     context.handle(_dateTimeOriginalMeta, const VerificationResult.success());
     return context;
@@ -1556,24 +1944,43 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
   Image map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Image(
-      accountFile: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}account_file'])!,
-      lastUpdated: $ImagesTable.$converterlastUpdated.fromSql(
+      accountFile:
           attachedDatabase.typeMapping.read(
-              DriftSqlType.dateTime, data['${effectivePrefix}last_updated'])!),
-      fileEtag: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}file_etag']),
-      width: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}width']),
-      height: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}height']),
-      exifRaw: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}exif_raw']),
-      src: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}src']),
+            DriftSqlType.int,
+            data['${effectivePrefix}account_file'],
+          )!,
+      lastUpdated: $ImagesTable.$converterlastUpdated.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_updated'],
+        )!,
+      ),
+      fileEtag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_etag'],
+      ),
+      width: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}width'],
+      ),
+      height: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}height'],
+      ),
+      exifRaw: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}exif_raw'],
+      ),
+      src: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}src'],
+      ),
       dateTimeOriginal: $ImagesTable.$converterdateTimeOriginaln.fromSql(
-          attachedDatabase.typeMapping.read(DriftSqlType.dateTime,
-              data['${effectivePrefix}date_time_original'])),
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}date_time_original'],
+        ),
+      ),
     );
   }
 
@@ -1599,22 +2006,24 @@ class Image extends DataClass implements Insertable<Image> {
   final String? exifRaw;
   final int? src;
   final DateTime? dateTimeOriginal;
-  const Image(
-      {required this.accountFile,
-      required this.lastUpdated,
-      this.fileEtag,
-      this.width,
-      this.height,
-      this.exifRaw,
-      this.src,
-      this.dateTimeOriginal});
+  const Image({
+    required this.accountFile,
+    required this.lastUpdated,
+    this.fileEtag,
+    this.width,
+    this.height,
+    this.exifRaw,
+    this.src,
+    this.dateTimeOriginal,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['account_file'] = Variable<int>(accountFile);
     {
       map['last_updated'] = Variable<DateTime>(
-          $ImagesTable.$converterlastUpdated.toSql(lastUpdated));
+        $ImagesTable.$converterlastUpdated.toSql(lastUpdated),
+      );
     }
     if (!nullToAbsent || fileEtag != null) {
       map['file_etag'] = Variable<String>(fileEtag);
@@ -1633,7 +2042,8 @@ class Image extends DataClass implements Insertable<Image> {
     }
     if (!nullToAbsent || dateTimeOriginal != null) {
       map['date_time_original'] = Variable<DateTime>(
-          $ImagesTable.$converterdateTimeOriginaln.toSql(dateTimeOriginal));
+        $ImagesTable.$converterdateTimeOriginaln.toSql(dateTimeOriginal),
+      );
     }
     return map;
   }
@@ -1642,25 +2052,30 @@ class Image extends DataClass implements Insertable<Image> {
     return ImagesCompanion(
       accountFile: Value(accountFile),
       lastUpdated: Value(lastUpdated),
-      fileEtag: fileEtag == null && nullToAbsent
-          ? const Value.absent()
-          : Value(fileEtag),
+      fileEtag:
+          fileEtag == null && nullToAbsent
+              ? const Value.absent()
+              : Value(fileEtag),
       width:
           width == null && nullToAbsent ? const Value.absent() : Value(width),
       height:
           height == null && nullToAbsent ? const Value.absent() : Value(height),
-      exifRaw: exifRaw == null && nullToAbsent
-          ? const Value.absent()
-          : Value(exifRaw),
+      exifRaw:
+          exifRaw == null && nullToAbsent
+              ? const Value.absent()
+              : Value(exifRaw),
       src: src == null && nullToAbsent ? const Value.absent() : Value(src),
-      dateTimeOriginal: dateTimeOriginal == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dateTimeOriginal),
+      dateTimeOriginal:
+          dateTimeOriginal == null && nullToAbsent
+              ? const Value.absent()
+              : Value(dateTimeOriginal),
     );
   }
 
-  factory Image.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Image.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Image(
       accountFile: serializer.fromJson<int>(json['accountFile']),
@@ -1670,8 +2085,9 @@ class Image extends DataClass implements Insertable<Image> {
       height: serializer.fromJson<int?>(json['height']),
       exifRaw: serializer.fromJson<String?>(json['exifRaw']),
       src: serializer.fromJson<int?>(json['src']),
-      dateTimeOriginal:
-          serializer.fromJson<DateTime?>(json['dateTimeOriginal']),
+      dateTimeOriginal: serializer.fromJson<DateTime?>(
+        json['dateTimeOriginal'],
+      ),
     );
   }
   @override
@@ -1689,27 +2105,46 @@ class Image extends DataClass implements Insertable<Image> {
     };
   }
 
-  Image copyWith(
-          {int? accountFile,
-          DateTime? lastUpdated,
-          Value<String?> fileEtag = const Value.absent(),
-          Value<int?> width = const Value.absent(),
-          Value<int?> height = const Value.absent(),
-          Value<String?> exifRaw = const Value.absent(),
-          Value<int?> src = const Value.absent(),
-          Value<DateTime?> dateTimeOriginal = const Value.absent()}) =>
-      Image(
-        accountFile: accountFile ?? this.accountFile,
-        lastUpdated: lastUpdated ?? this.lastUpdated,
-        fileEtag: fileEtag.present ? fileEtag.value : this.fileEtag,
-        width: width.present ? width.value : this.width,
-        height: height.present ? height.value : this.height,
-        exifRaw: exifRaw.present ? exifRaw.value : this.exifRaw,
-        src: src.present ? src.value : this.src,
-        dateTimeOriginal: dateTimeOriginal.present
+  Image copyWith({
+    int? accountFile,
+    DateTime? lastUpdated,
+    Value<String?> fileEtag = const Value.absent(),
+    Value<int?> width = const Value.absent(),
+    Value<int?> height = const Value.absent(),
+    Value<String?> exifRaw = const Value.absent(),
+    Value<int?> src = const Value.absent(),
+    Value<DateTime?> dateTimeOriginal = const Value.absent(),
+  }) => Image(
+    accountFile: accountFile ?? this.accountFile,
+    lastUpdated: lastUpdated ?? this.lastUpdated,
+    fileEtag: fileEtag.present ? fileEtag.value : this.fileEtag,
+    width: width.present ? width.value : this.width,
+    height: height.present ? height.value : this.height,
+    exifRaw: exifRaw.present ? exifRaw.value : this.exifRaw,
+    src: src.present ? src.value : this.src,
+    dateTimeOriginal:
+        dateTimeOriginal.present
             ? dateTimeOriginal.value
             : this.dateTimeOriginal,
-      );
+  );
+  Image copyWithCompanion(ImagesCompanion data) {
+    return Image(
+      accountFile:
+          data.accountFile.present ? data.accountFile.value : this.accountFile,
+      lastUpdated:
+          data.lastUpdated.present ? data.lastUpdated.value : this.lastUpdated,
+      fileEtag: data.fileEtag.present ? data.fileEtag.value : this.fileEtag,
+      width: data.width.present ? data.width.value : this.width,
+      height: data.height.present ? data.height.value : this.height,
+      exifRaw: data.exifRaw.present ? data.exifRaw.value : this.exifRaw,
+      src: data.src.present ? data.src.value : this.src,
+      dateTimeOriginal:
+          data.dateTimeOriginal.present
+              ? data.dateTimeOriginal.value
+              : this.dateTimeOriginal,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Image(')
@@ -1726,8 +2161,16 @@ class Image extends DataClass implements Insertable<Image> {
   }
 
   @override
-  int get hashCode => Object.hash(accountFile, lastUpdated, fileEtag, width,
-      height, exifRaw, src, dateTimeOriginal);
+  int get hashCode => Object.hash(
+    accountFile,
+    lastUpdated,
+    fileEtag,
+    width,
+    height,
+    exifRaw,
+    src,
+    dateTimeOriginal,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -1793,15 +2236,16 @@ class ImagesCompanion extends UpdateCompanion<Image> {
     });
   }
 
-  ImagesCompanion copyWith(
-      {Value<int>? accountFile,
-      Value<DateTime>? lastUpdated,
-      Value<String?>? fileEtag,
-      Value<int?>? width,
-      Value<int?>? height,
-      Value<String?>? exifRaw,
-      Value<int?>? src,
-      Value<DateTime?>? dateTimeOriginal}) {
+  ImagesCompanion copyWith({
+    Value<int>? accountFile,
+    Value<DateTime>? lastUpdated,
+    Value<String?>? fileEtag,
+    Value<int?>? width,
+    Value<int?>? height,
+    Value<String?>? exifRaw,
+    Value<int?>? src,
+    Value<DateTime?>? dateTimeOriginal,
+  }) {
     return ImagesCompanion(
       accountFile: accountFile ?? this.accountFile,
       lastUpdated: lastUpdated ?? this.lastUpdated,
@@ -1822,7 +2266,8 @@ class ImagesCompanion extends UpdateCompanion<Image> {
     }
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(
-          $ImagesTable.$converterlastUpdated.toSql(lastUpdated.value));
+        $ImagesTable.$converterlastUpdated.toSql(lastUpdated.value),
+      );
     }
     if (fileEtag.present) {
       map['file_etag'] = Variable<String>(fileEtag.value);
@@ -1840,9 +2285,9 @@ class ImagesCompanion extends UpdateCompanion<Image> {
       map['src'] = Variable<int>(src.value);
     }
     if (dateTimeOriginal.present) {
-      map['date_time_original'] = Variable<DateTime>($ImagesTable
-          .$converterdateTimeOriginaln
-          .toSql(dateTimeOriginal.value));
+      map['date_time_original'] = Variable<DateTime>(
+        $ImagesTable.$converterdateTimeOriginaln.toSql(dateTimeOriginal.value),
+      );
     }
     return map;
   }
@@ -1869,112 +2314,169 @@ class $ImageLocationsTable extends ImageLocations
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ImageLocationsTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _accountFileMeta =
-      const VerificationMeta('accountFile');
+  static const VerificationMeta _accountFileMeta = const VerificationMeta(
+    'accountFile',
+  );
   @override
   late final GeneratedColumn<int> accountFile = GeneratedColumn<int>(
-      'account_file', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES account_files (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _versionMeta =
-      const VerificationMeta('version');
+    'account_file',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES account_files (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
   @override
   late final GeneratedColumn<int> version = GeneratedColumn<int>(
-      'version', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _latitudeMeta =
-      const VerificationMeta('latitude');
+    'name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _latitudeMeta = const VerificationMeta(
+    'latitude',
+  );
   @override
   late final GeneratedColumn<double> latitude = GeneratedColumn<double>(
-      'latitude', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _longitudeMeta =
-      const VerificationMeta('longitude');
+    'latitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _longitudeMeta = const VerificationMeta(
+    'longitude',
+  );
   @override
   late final GeneratedColumn<double> longitude = GeneratedColumn<double>(
-      'longitude', aliasedName, true,
-      type: DriftSqlType.double, requiredDuringInsert: false);
-  static const VerificationMeta _countryCodeMeta =
-      const VerificationMeta('countryCode');
+    'longitude',
+    aliasedName,
+    true,
+    type: DriftSqlType.double,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _countryCodeMeta = const VerificationMeta(
+    'countryCode',
+  );
   @override
   late final GeneratedColumn<String> countryCode = GeneratedColumn<String>(
-      'country_code', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'country_code',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _admin1Meta = const VerificationMeta('admin1');
   @override
   late final GeneratedColumn<String> admin1 = GeneratedColumn<String>(
-      'admin1', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'admin1',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _admin2Meta = const VerificationMeta('admin2');
   @override
   late final GeneratedColumn<String> admin2 = GeneratedColumn<String>(
-      'admin2', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'admin2',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        accountFile,
-        version,
-        name,
-        latitude,
-        longitude,
-        countryCode,
-        admin1,
-        admin2
-      ];
+    accountFile,
+    version,
+    name,
+    latitude,
+    longitude,
+    countryCode,
+    admin1,
+    admin2,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'image_locations';
   @override
-  VerificationContext validateIntegrity(Insertable<ImageLocation> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<ImageLocation> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('account_file')) {
       context.handle(
+        _accountFileMeta,
+        accountFile.isAcceptableOrUnknown(
+          data['account_file']!,
           _accountFileMeta,
-          accountFile.isAcceptableOrUnknown(
-              data['account_file']!, _accountFileMeta));
+        ),
+      );
     }
     if (data.containsKey('version')) {
-      context.handle(_versionMeta,
-          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
     } else if (isInserting) {
       context.missing(_versionMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     }
     if (data.containsKey('latitude')) {
-      context.handle(_latitudeMeta,
-          latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta));
+      context.handle(
+        _latitudeMeta,
+        latitude.isAcceptableOrUnknown(data['latitude']!, _latitudeMeta),
+      );
     }
     if (data.containsKey('longitude')) {
-      context.handle(_longitudeMeta,
-          longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta));
+      context.handle(
+        _longitudeMeta,
+        longitude.isAcceptableOrUnknown(data['longitude']!, _longitudeMeta),
+      );
     }
     if (data.containsKey('country_code')) {
       context.handle(
+        _countryCodeMeta,
+        countryCode.isAcceptableOrUnknown(
+          data['country_code']!,
           _countryCodeMeta,
-          countryCode.isAcceptableOrUnknown(
-              data['country_code']!, _countryCodeMeta));
+        ),
+      );
     }
     if (data.containsKey('admin1')) {
-      context.handle(_admin1Meta,
-          admin1.isAcceptableOrUnknown(data['admin1']!, _admin1Meta));
+      context.handle(
+        _admin1Meta,
+        admin1.isAcceptableOrUnknown(data['admin1']!, _admin1Meta),
+      );
     }
     if (data.containsKey('admin2')) {
-      context.handle(_admin2Meta,
-          admin2.isAcceptableOrUnknown(data['admin2']!, _admin2Meta));
+      context.handle(
+        _admin2Meta,
+        admin2.isAcceptableOrUnknown(data['admin2']!, _admin2Meta),
+      );
     }
     return context;
   }
@@ -1985,22 +2487,40 @@ class $ImageLocationsTable extends ImageLocations
   ImageLocation map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ImageLocation(
-      accountFile: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}account_file'])!,
-      version: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name']),
-      latitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}latitude']),
-      longitude: attachedDatabase.typeMapping
-          .read(DriftSqlType.double, data['${effectivePrefix}longitude']),
-      countryCode: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}country_code']),
-      admin1: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}admin1']),
-      admin2: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}admin2']),
+      accountFile:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}account_file'],
+          )!,
+      version:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}version'],
+          )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      ),
+      latitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}latitude'],
+      ),
+      longitude: attachedDatabase.typeMapping.read(
+        DriftSqlType.double,
+        data['${effectivePrefix}longitude'],
+      ),
+      countryCode: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}country_code'],
+      ),
+      admin1: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}admin1'],
+      ),
+      admin2: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}admin2'],
+      ),
     );
   }
 
@@ -2019,15 +2539,16 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
   final String? countryCode;
   final String? admin1;
   final String? admin2;
-  const ImageLocation(
-      {required this.accountFile,
-      required this.version,
-      this.name,
-      this.latitude,
-      this.longitude,
-      this.countryCode,
-      this.admin1,
-      this.admin2});
+  const ImageLocation({
+    required this.accountFile,
+    required this.version,
+    this.name,
+    this.latitude,
+    this.longitude,
+    this.countryCode,
+    this.admin1,
+    this.admin2,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2059,15 +2580,18 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
       accountFile: Value(accountFile),
       version: Value(version),
       name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      latitude: latitude == null && nullToAbsent
-          ? const Value.absent()
-          : Value(latitude),
-      longitude: longitude == null && nullToAbsent
-          ? const Value.absent()
-          : Value(longitude),
-      countryCode: countryCode == null && nullToAbsent
-          ? const Value.absent()
-          : Value(countryCode),
+      latitude:
+          latitude == null && nullToAbsent
+              ? const Value.absent()
+              : Value(latitude),
+      longitude:
+          longitude == null && nullToAbsent
+              ? const Value.absent()
+              : Value(longitude),
+      countryCode:
+          countryCode == null && nullToAbsent
+              ? const Value.absent()
+              : Value(countryCode),
       admin1:
           admin1 == null && nullToAbsent ? const Value.absent() : Value(admin1),
       admin2:
@@ -2075,8 +2599,10 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
     );
   }
 
-  factory ImageLocation.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory ImageLocation.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return ImageLocation(
       accountFile: serializer.fromJson<int>(json['accountFile']),
@@ -2104,25 +2630,40 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
     };
   }
 
-  ImageLocation copyWith(
-          {int? accountFile,
-          int? version,
-          Value<String?> name = const Value.absent(),
-          Value<double?> latitude = const Value.absent(),
-          Value<double?> longitude = const Value.absent(),
-          Value<String?> countryCode = const Value.absent(),
-          Value<String?> admin1 = const Value.absent(),
-          Value<String?> admin2 = const Value.absent()}) =>
-      ImageLocation(
-        accountFile: accountFile ?? this.accountFile,
-        version: version ?? this.version,
-        name: name.present ? name.value : this.name,
-        latitude: latitude.present ? latitude.value : this.latitude,
-        longitude: longitude.present ? longitude.value : this.longitude,
-        countryCode: countryCode.present ? countryCode.value : this.countryCode,
-        admin1: admin1.present ? admin1.value : this.admin1,
-        admin2: admin2.present ? admin2.value : this.admin2,
-      );
+  ImageLocation copyWith({
+    int? accountFile,
+    int? version,
+    Value<String?> name = const Value.absent(),
+    Value<double?> latitude = const Value.absent(),
+    Value<double?> longitude = const Value.absent(),
+    Value<String?> countryCode = const Value.absent(),
+    Value<String?> admin1 = const Value.absent(),
+    Value<String?> admin2 = const Value.absent(),
+  }) => ImageLocation(
+    accountFile: accountFile ?? this.accountFile,
+    version: version ?? this.version,
+    name: name.present ? name.value : this.name,
+    latitude: latitude.present ? latitude.value : this.latitude,
+    longitude: longitude.present ? longitude.value : this.longitude,
+    countryCode: countryCode.present ? countryCode.value : this.countryCode,
+    admin1: admin1.present ? admin1.value : this.admin1,
+    admin2: admin2.present ? admin2.value : this.admin2,
+  );
+  ImageLocation copyWithCompanion(ImageLocationsCompanion data) {
+    return ImageLocation(
+      accountFile:
+          data.accountFile.present ? data.accountFile.value : this.accountFile,
+      version: data.version.present ? data.version.value : this.version,
+      name: data.name.present ? data.name.value : this.name,
+      latitude: data.latitude.present ? data.latitude.value : this.latitude,
+      longitude: data.longitude.present ? data.longitude.value : this.longitude,
+      countryCode:
+          data.countryCode.present ? data.countryCode.value : this.countryCode,
+      admin1: data.admin1.present ? data.admin1.value : this.admin1,
+      admin2: data.admin2.present ? data.admin2.value : this.admin2,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('ImageLocation(')
@@ -2139,8 +2680,16 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
   }
 
   @override
-  int get hashCode => Object.hash(accountFile, version, name, latitude,
-      longitude, countryCode, admin1, admin2);
+  int get hashCode => Object.hash(
+    accountFile,
+    version,
+    name,
+    latitude,
+    longitude,
+    countryCode,
+    admin1,
+    admin2,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -2206,15 +2755,16 @@ class ImageLocationsCompanion extends UpdateCompanion<ImageLocation> {
     });
   }
 
-  ImageLocationsCompanion copyWith(
-      {Value<int>? accountFile,
-      Value<int>? version,
-      Value<String?>? name,
-      Value<double?>? latitude,
-      Value<double?>? longitude,
-      Value<String?>? countryCode,
-      Value<String?>? admin1,
-      Value<String?>? admin2}) {
+  ImageLocationsCompanion copyWith({
+    Value<int>? accountFile,
+    Value<int>? version,
+    Value<String?>? name,
+    Value<double?>? latitude,
+    Value<double?>? longitude,
+    Value<String?>? countryCode,
+    Value<String?>? admin1,
+    Value<String?>? admin2,
+  }) {
     return ImageLocationsCompanion(
       accountFile: accountFile ?? this.accountFile,
       version: version ?? this.version,
@@ -2281,58 +2831,90 @@ class $TrashesTable extends Trashes with TableInfo<$TrashesTable, Trash> {
   static const VerificationMeta _fileMeta = const VerificationMeta('file');
   @override
   late final GeneratedColumn<int> file = GeneratedColumn<int>(
-      'file', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES files (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _filenameMeta =
-      const VerificationMeta('filename');
+    'file',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES files (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _filenameMeta = const VerificationMeta(
+    'filename',
+  );
   @override
   late final GeneratedColumn<String> filename = GeneratedColumn<String>(
-      'filename', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _originalLocationMeta =
-      const VerificationMeta('originalLocation');
+    'filename',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _originalLocationMeta = const VerificationMeta(
+    'originalLocation',
+  );
   @override
   late final GeneratedColumn<String> originalLocation = GeneratedColumn<String>(
-      'original_location', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _deletionTimeMeta =
-      const VerificationMeta('deletionTime');
+    'original_location',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _deletionTimeMeta = const VerificationMeta(
+    'deletionTime',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> deletionTime =
-      GeneratedColumn<DateTime>('deletion_time', aliasedName, false,
-              type: DriftSqlType.dateTime, requiredDuringInsert: true)
-          .withConverter<DateTime>($TrashesTable.$converterdeletionTime);
+      GeneratedColumn<DateTime>(
+        'deletion_time',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($TrashesTable.$converterdeletionTime);
   @override
-  List<GeneratedColumn> get $columns =>
-      [file, filename, originalLocation, deletionTime];
+  List<GeneratedColumn> get $columns => [
+    file,
+    filename,
+    originalLocation,
+    deletionTime,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'trashes';
   @override
-  VerificationContext validateIntegrity(Insertable<Trash> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Trash> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('file')) {
       context.handle(
-          _fileMeta, file.isAcceptableOrUnknown(data['file']!, _fileMeta));
+        _fileMeta,
+        file.isAcceptableOrUnknown(data['file']!, _fileMeta),
+      );
     }
     if (data.containsKey('filename')) {
-      context.handle(_filenameMeta,
-          filename.isAcceptableOrUnknown(data['filename']!, _filenameMeta));
+      context.handle(
+        _filenameMeta,
+        filename.isAcceptableOrUnknown(data['filename']!, _filenameMeta),
+      );
     } else if (isInserting) {
       context.missing(_filenameMeta);
     }
     if (data.containsKey('original_location')) {
       context.handle(
+        _originalLocationMeta,
+        originalLocation.isAcceptableOrUnknown(
+          data['original_location']!,
           _originalLocationMeta,
-          originalLocation.isAcceptableOrUnknown(
-              data['original_location']!, _originalLocationMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_originalLocationMeta);
     }
@@ -2346,15 +2928,27 @@ class $TrashesTable extends Trashes with TableInfo<$TrashesTable, Trash> {
   Trash map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Trash(
-      file: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file'])!,
-      filename: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}filename'])!,
-      originalLocation: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}original_location'])!,
-      deletionTime: $TrashesTable.$converterdeletionTime.fromSql(
+      file:
           attachedDatabase.typeMapping.read(
-              DriftSqlType.dateTime, data['${effectivePrefix}deletion_time'])!),
+            DriftSqlType.int,
+            data['${effectivePrefix}file'],
+          )!,
+      filename:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}filename'],
+          )!,
+      originalLocation:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}original_location'],
+          )!,
+      deletionTime: $TrashesTable.$converterdeletionTime.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}deletion_time'],
+        )!,
+      ),
     );
   }
 
@@ -2372,11 +2966,12 @@ class Trash extends DataClass implements Insertable<Trash> {
   final String filename;
   final String originalLocation;
   final DateTime deletionTime;
-  const Trash(
-      {required this.file,
-      required this.filename,
-      required this.originalLocation,
-      required this.deletionTime});
+  const Trash({
+    required this.file,
+    required this.filename,
+    required this.originalLocation,
+    required this.deletionTime,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2385,7 +2980,8 @@ class Trash extends DataClass implements Insertable<Trash> {
     map['original_location'] = Variable<String>(originalLocation);
     {
       map['deletion_time'] = Variable<DateTime>(
-          $TrashesTable.$converterdeletionTime.toSql(deletionTime));
+        $TrashesTable.$converterdeletionTime.toSql(deletionTime),
+      );
     }
     return map;
   }
@@ -2399,8 +2995,10 @@ class Trash extends DataClass implements Insertable<Trash> {
     );
   }
 
-  factory Trash.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Trash.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Trash(
       file: serializer.fromJson<int>(json['file']),
@@ -2420,17 +3018,32 @@ class Trash extends DataClass implements Insertable<Trash> {
     };
   }
 
-  Trash copyWith(
-          {int? file,
-          String? filename,
-          String? originalLocation,
-          DateTime? deletionTime}) =>
-      Trash(
-        file: file ?? this.file,
-        filename: filename ?? this.filename,
-        originalLocation: originalLocation ?? this.originalLocation,
-        deletionTime: deletionTime ?? this.deletionTime,
-      );
+  Trash copyWith({
+    int? file,
+    String? filename,
+    String? originalLocation,
+    DateTime? deletionTime,
+  }) => Trash(
+    file: file ?? this.file,
+    filename: filename ?? this.filename,
+    originalLocation: originalLocation ?? this.originalLocation,
+    deletionTime: deletionTime ?? this.deletionTime,
+  );
+  Trash copyWithCompanion(TrashesCompanion data) {
+    return Trash(
+      file: data.file.present ? data.file.value : this.file,
+      filename: data.filename.present ? data.filename.value : this.filename,
+      originalLocation:
+          data.originalLocation.present
+              ? data.originalLocation.value
+              : this.originalLocation,
+      deletionTime:
+          data.deletionTime.present
+              ? data.deletionTime.value
+              : this.deletionTime,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Trash(')
@@ -2471,9 +3084,9 @@ class TrashesCompanion extends UpdateCompanion<Trash> {
     required String filename,
     required String originalLocation,
     required DateTime deletionTime,
-  })  : filename = Value(filename),
-        originalLocation = Value(originalLocation),
-        deletionTime = Value(deletionTime);
+  }) : filename = Value(filename),
+       originalLocation = Value(originalLocation),
+       deletionTime = Value(deletionTime);
   static Insertable<Trash> custom({
     Expression<int>? file,
     Expression<String>? filename,
@@ -2488,11 +3101,12 @@ class TrashesCompanion extends UpdateCompanion<Trash> {
     });
   }
 
-  TrashesCompanion copyWith(
-      {Value<int>? file,
-      Value<String>? filename,
-      Value<String>? originalLocation,
-      Value<DateTime>? deletionTime}) {
+  TrashesCompanion copyWith({
+    Value<int>? file,
+    Value<String>? filename,
+    Value<String>? originalLocation,
+    Value<DateTime>? deletionTime,
+  }) {
     return TrashesCompanion(
       file: file ?? this.file,
       filename: filename ?? this.filename,
@@ -2515,7 +3129,8 @@ class TrashesCompanion extends UpdateCompanion<Trash> {
     }
     if (deletionTime.present) {
       map['deletion_time'] = Variable<DateTime>(
-          $TrashesTable.$converterdeletionTime.toSql(deletionTime.value));
+        $TrashesTable.$converterdeletionTime.toSql(deletionTime.value),
+      );
     }
     return map;
   }
@@ -2540,19 +3155,27 @@ class $DirFilesTable extends DirFiles with TableInfo<$DirFilesTable, DirFile> {
   static const VerificationMeta _dirMeta = const VerificationMeta('dir');
   @override
   late final GeneratedColumn<int> dir = GeneratedColumn<int>(
-      'dir', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES files (row_id) ON DELETE CASCADE'));
+    'dir',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES files (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _childMeta = const VerificationMeta('child');
   @override
   late final GeneratedColumn<int> child = GeneratedColumn<int>(
-      'child', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES files (row_id) ON DELETE CASCADE'));
+    'child',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES files (row_id) ON DELETE CASCADE',
+    ),
+  );
   @override
   List<GeneratedColumn> get $columns => [dir, child];
   @override
@@ -2561,19 +3184,25 @@ class $DirFilesTable extends DirFiles with TableInfo<$DirFilesTable, DirFile> {
   String get actualTableName => $name;
   static const String $name = 'dir_files';
   @override
-  VerificationContext validateIntegrity(Insertable<DirFile> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<DirFile> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('dir')) {
       context.handle(
-          _dirMeta, dir.isAcceptableOrUnknown(data['dir']!, _dirMeta));
+        _dirMeta,
+        dir.isAcceptableOrUnknown(data['dir']!, _dirMeta),
+      );
     } else if (isInserting) {
       context.missing(_dirMeta);
     }
     if (data.containsKey('child')) {
       context.handle(
-          _childMeta, child.isAcceptableOrUnknown(data['child']!, _childMeta));
+        _childMeta,
+        child.isAcceptableOrUnknown(data['child']!, _childMeta),
+      );
     } else if (isInserting) {
       context.missing(_childMeta);
     }
@@ -2586,10 +3215,16 @@ class $DirFilesTable extends DirFiles with TableInfo<$DirFilesTable, DirFile> {
   DirFile map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DirFile(
-      dir: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}dir'])!,
-      child: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}child'])!,
+      dir:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}dir'],
+          )!,
+      child:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}child'],
+          )!,
     );
   }
 
@@ -2612,14 +3247,13 @@ class DirFile extends DataClass implements Insertable<DirFile> {
   }
 
   DirFilesCompanion toCompanion(bool nullToAbsent) {
-    return DirFilesCompanion(
-      dir: Value(dir),
-      child: Value(child),
-    );
+    return DirFilesCompanion(dir: Value(dir), child: Value(child));
   }
 
-  factory DirFile.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory DirFile.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return DirFile(
       dir: serializer.fromJson<int>(json['dir']),
@@ -2635,10 +3269,15 @@ class DirFile extends DataClass implements Insertable<DirFile> {
     };
   }
 
-  DirFile copyWith({int? dir, int? child}) => DirFile(
-        dir: dir ?? this.dir,
-        child: child ?? this.child,
-      );
+  DirFile copyWith({int? dir, int? child}) =>
+      DirFile(dir: dir ?? this.dir, child: child ?? this.child);
+  DirFile copyWithCompanion(DirFilesCompanion data) {
+    return DirFile(
+      dir: data.dir.present ? data.dir.value : this.dir,
+      child: data.child.present ? data.child.value : this.child,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('DirFile(')
@@ -2669,8 +3308,8 @@ class DirFilesCompanion extends UpdateCompanion<DirFile> {
     required int dir,
     required int child,
     this.rowid = const Value.absent(),
-  })  : dir = Value(dir),
-        child = Value(child);
+  }) : dir = Value(dir),
+       child = Value(child);
   static Insertable<DirFile> custom({
     Expression<int>? dir,
     Expression<int>? child,
@@ -2683,8 +3322,11 @@ class DirFilesCompanion extends UpdateCompanion<DirFile> {
     });
   }
 
-  DirFilesCompanion copyWith(
-      {Value<int>? dir, Value<int>? child, Value<int>? rowid}) {
+  DirFilesCompanion copyWith({
+    Value<int>? dir,
+    Value<int>? child,
+    Value<int>? rowid,
+  }) {
     return DirFilesCompanion(
       dir: dir ?? this.dir,
       child: child ?? this.child,
@@ -2726,177 +3368,265 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, Album> {
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _fileMeta = const VerificationMeta('file');
   @override
   late final GeneratedColumn<int> file = GeneratedColumn<int>(
-      'file', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'UNIQUE REFERENCES files (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _fileEtagMeta =
-      const VerificationMeta('fileEtag');
+    'file',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'UNIQUE REFERENCES files (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _fileEtagMeta = const VerificationMeta(
+    'fileEtag',
+  );
   @override
   late final GeneratedColumn<String> fileEtag = GeneratedColumn<String>(
-      'file_etag', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _versionMeta =
-      const VerificationMeta('version');
+    'file_etag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _versionMeta = const VerificationMeta(
+    'version',
+  );
   @override
   late final GeneratedColumn<int> version = GeneratedColumn<int>(
-      'version', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _lastUpdatedMeta =
-      const VerificationMeta('lastUpdated');
+    'version',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastUpdatedMeta = const VerificationMeta(
+    'lastUpdated',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> lastUpdated =
-      GeneratedColumn<DateTime>('last_updated', aliasedName, false,
-              type: DriftSqlType.dateTime, requiredDuringInsert: true)
-          .withConverter<DateTime>($AlbumsTable.$converterlastUpdated);
+      GeneratedColumn<DateTime>(
+        'last_updated',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($AlbumsTable.$converterlastUpdated);
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _providerTypeMeta =
-      const VerificationMeta('providerType');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _providerTypeMeta = const VerificationMeta(
+    'providerType',
+  );
   @override
   late final GeneratedColumn<String> providerType = GeneratedColumn<String>(
-      'provider_type', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _providerContentMeta =
-      const VerificationMeta('providerContent');
+    'provider_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _providerContentMeta = const VerificationMeta(
+    'providerContent',
+  );
   @override
   late final GeneratedColumn<String> providerContent = GeneratedColumn<String>(
-      'provider_content', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _coverProviderTypeMeta =
-      const VerificationMeta('coverProviderType');
+    'provider_content',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _coverProviderTypeMeta = const VerificationMeta(
+    'coverProviderType',
+  );
   @override
   late final GeneratedColumn<String> coverProviderType =
-      GeneratedColumn<String>('cover_provider_type', aliasedName, false,
-          type: DriftSqlType.string, requiredDuringInsert: true);
+      GeneratedColumn<String>(
+        'cover_provider_type',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
   static const VerificationMeta _coverProviderContentMeta =
       const VerificationMeta('coverProviderContent');
   @override
   late final GeneratedColumn<String> coverProviderContent =
-      GeneratedColumn<String>('cover_provider_content', aliasedName, false,
-          type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _sortProviderTypeMeta =
-      const VerificationMeta('sortProviderType');
+      GeneratedColumn<String>(
+        'cover_provider_content',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
+  static const VerificationMeta _sortProviderTypeMeta = const VerificationMeta(
+    'sortProviderType',
+  );
   @override
   late final GeneratedColumn<String> sortProviderType = GeneratedColumn<String>(
-      'sort_provider_type', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'sort_provider_type',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _sortProviderContentMeta =
       const VerificationMeta('sortProviderContent');
   @override
   late final GeneratedColumn<String> sortProviderContent =
-      GeneratedColumn<String>('sort_provider_content', aliasedName, false,
-          type: DriftSqlType.string, requiredDuringInsert: true);
+      GeneratedColumn<String>(
+        'sort_provider_content',
+        aliasedName,
+        false,
+        type: DriftSqlType.string,
+        requiredDuringInsert: true,
+      );
   @override
   List<GeneratedColumn> get $columns => [
-        rowId,
-        file,
-        fileEtag,
-        version,
-        lastUpdated,
-        name,
-        providerType,
-        providerContent,
-        coverProviderType,
-        coverProviderContent,
-        sortProviderType,
-        sortProviderContent
-      ];
+    rowId,
+    file,
+    fileEtag,
+    version,
+    lastUpdated,
+    name,
+    providerType,
+    providerContent,
+    coverProviderType,
+    coverProviderContent,
+    sortProviderType,
+    sortProviderContent,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'albums';
   @override
-  VerificationContext validateIntegrity(Insertable<Album> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Album> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('file')) {
       context.handle(
-          _fileMeta, file.isAcceptableOrUnknown(data['file']!, _fileMeta));
+        _fileMeta,
+        file.isAcceptableOrUnknown(data['file']!, _fileMeta),
+      );
     } else if (isInserting) {
       context.missing(_fileMeta);
     }
     if (data.containsKey('file_etag')) {
-      context.handle(_fileEtagMeta,
-          fileEtag.isAcceptableOrUnknown(data['file_etag']!, _fileEtagMeta));
+      context.handle(
+        _fileEtagMeta,
+        fileEtag.isAcceptableOrUnknown(data['file_etag']!, _fileEtagMeta),
+      );
     }
     if (data.containsKey('version')) {
-      context.handle(_versionMeta,
-          version.isAcceptableOrUnknown(data['version']!, _versionMeta));
+      context.handle(
+        _versionMeta,
+        version.isAcceptableOrUnknown(data['version']!, _versionMeta),
+      );
     } else if (isInserting) {
       context.missing(_versionMeta);
     }
     context.handle(_lastUpdatedMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('provider_type')) {
       context.handle(
+        _providerTypeMeta,
+        providerType.isAcceptableOrUnknown(
+          data['provider_type']!,
           _providerTypeMeta,
-          providerType.isAcceptableOrUnknown(
-              data['provider_type']!, _providerTypeMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_providerTypeMeta);
     }
     if (data.containsKey('provider_content')) {
       context.handle(
+        _providerContentMeta,
+        providerContent.isAcceptableOrUnknown(
+          data['provider_content']!,
           _providerContentMeta,
-          providerContent.isAcceptableOrUnknown(
-              data['provider_content']!, _providerContentMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_providerContentMeta);
     }
     if (data.containsKey('cover_provider_type')) {
       context.handle(
+        _coverProviderTypeMeta,
+        coverProviderType.isAcceptableOrUnknown(
+          data['cover_provider_type']!,
           _coverProviderTypeMeta,
-          coverProviderType.isAcceptableOrUnknown(
-              data['cover_provider_type']!, _coverProviderTypeMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_coverProviderTypeMeta);
     }
     if (data.containsKey('cover_provider_content')) {
       context.handle(
+        _coverProviderContentMeta,
+        coverProviderContent.isAcceptableOrUnknown(
+          data['cover_provider_content']!,
           _coverProviderContentMeta,
-          coverProviderContent.isAcceptableOrUnknown(
-              data['cover_provider_content']!, _coverProviderContentMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_coverProviderContentMeta);
     }
     if (data.containsKey('sort_provider_type')) {
       context.handle(
+        _sortProviderTypeMeta,
+        sortProviderType.isAcceptableOrUnknown(
+          data['sort_provider_type']!,
           _sortProviderTypeMeta,
-          sortProviderType.isAcceptableOrUnknown(
-              data['sort_provider_type']!, _sortProviderTypeMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_sortProviderTypeMeta);
     }
     if (data.containsKey('sort_provider_content')) {
       context.handle(
+        _sortProviderContentMeta,
+        sortProviderContent.isAcceptableOrUnknown(
+          data['sort_provider_content']!,
           _sortProviderContentMeta,
-          sortProviderContent.isAcceptableOrUnknown(
-              data['sort_provider_content']!, _sortProviderContentMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_sortProviderContentMeta);
     }
@@ -2909,33 +3639,66 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, Album> {
   Album map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Album(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      file: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file'])!,
-      fileEtag: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}file_etag']),
-      version: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}version'])!,
-      lastUpdated: $AlbumsTable.$converterlastUpdated.fromSql(
+      rowId:
           attachedDatabase.typeMapping.read(
-              DriftSqlType.dateTime, data['${effectivePrefix}last_updated'])!),
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      providerType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}provider_type'])!,
-      providerContent: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}provider_content'])!,
-      coverProviderType: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}cover_provider_type'])!,
-      coverProviderContent: attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}cover_provider_content'])!,
-      sortProviderType: attachedDatabase.typeMapping.read(
-          DriftSqlType.string, data['${effectivePrefix}sort_provider_type'])!,
-      sortProviderContent: attachedDatabase.typeMapping.read(
-          DriftSqlType.string,
-          data['${effectivePrefix}sort_provider_content'])!,
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      file:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}file'],
+          )!,
+      fileEtag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}file_etag'],
+      ),
+      version:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}version'],
+          )!,
+      lastUpdated: $AlbumsTable.$converterlastUpdated.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_updated'],
+        )!,
+      ),
+      name:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}name'],
+          )!,
+      providerType:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}provider_type'],
+          )!,
+      providerContent:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}provider_content'],
+          )!,
+      coverProviderType:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}cover_provider_type'],
+          )!,
+      coverProviderContent:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}cover_provider_content'],
+          )!,
+      sortProviderType:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}sort_provider_type'],
+          )!,
+      sortProviderContent:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}sort_provider_content'],
+          )!,
     );
   }
 
@@ -2961,19 +3724,20 @@ class Album extends DataClass implements Insertable<Album> {
   final String coverProviderContent;
   final String sortProviderType;
   final String sortProviderContent;
-  const Album(
-      {required this.rowId,
-      required this.file,
-      this.fileEtag,
-      required this.version,
-      required this.lastUpdated,
-      required this.name,
-      required this.providerType,
-      required this.providerContent,
-      required this.coverProviderType,
-      required this.coverProviderContent,
-      required this.sortProviderType,
-      required this.sortProviderContent});
+  const Album({
+    required this.rowId,
+    required this.file,
+    this.fileEtag,
+    required this.version,
+    required this.lastUpdated,
+    required this.name,
+    required this.providerType,
+    required this.providerContent,
+    required this.coverProviderType,
+    required this.coverProviderContent,
+    required this.sortProviderType,
+    required this.sortProviderContent,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -2985,7 +3749,8 @@ class Album extends DataClass implements Insertable<Album> {
     map['version'] = Variable<int>(version);
     {
       map['last_updated'] = Variable<DateTime>(
-          $AlbumsTable.$converterlastUpdated.toSql(lastUpdated));
+        $AlbumsTable.$converterlastUpdated.toSql(lastUpdated),
+      );
     }
     map['name'] = Variable<String>(name);
     map['provider_type'] = Variable<String>(providerType);
@@ -3001,9 +3766,10 @@ class Album extends DataClass implements Insertable<Album> {
     return AlbumsCompanion(
       rowId: Value(rowId),
       file: Value(file),
-      fileEtag: fileEtag == null && nullToAbsent
-          ? const Value.absent()
-          : Value(fileEtag),
+      fileEtag:
+          fileEtag == null && nullToAbsent
+              ? const Value.absent()
+              : Value(fileEtag),
       version: Value(version),
       lastUpdated: Value(lastUpdated),
       name: Value(name),
@@ -3016,8 +3782,10 @@ class Album extends DataClass implements Insertable<Album> {
     );
   }
 
-  factory Album.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Album.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Album(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -3029,11 +3797,13 @@ class Album extends DataClass implements Insertable<Album> {
       providerType: serializer.fromJson<String>(json['providerType']),
       providerContent: serializer.fromJson<String>(json['providerContent']),
       coverProviderType: serializer.fromJson<String>(json['coverProviderType']),
-      coverProviderContent:
-          serializer.fromJson<String>(json['coverProviderContent']),
+      coverProviderContent: serializer.fromJson<String>(
+        json['coverProviderContent'],
+      ),
       sortProviderType: serializer.fromJson<String>(json['sortProviderType']),
-      sortProviderContent:
-          serializer.fromJson<String>(json['sortProviderContent']),
+      sortProviderContent: serializer.fromJson<String>(
+        json['sortProviderContent'],
+      ),
     );
   }
   @override
@@ -3055,33 +3825,69 @@ class Album extends DataClass implements Insertable<Album> {
     };
   }
 
-  Album copyWith(
-          {int? rowId,
-          int? file,
-          Value<String?> fileEtag = const Value.absent(),
-          int? version,
-          DateTime? lastUpdated,
-          String? name,
-          String? providerType,
-          String? providerContent,
-          String? coverProviderType,
-          String? coverProviderContent,
-          String? sortProviderType,
-          String? sortProviderContent}) =>
-      Album(
-        rowId: rowId ?? this.rowId,
-        file: file ?? this.file,
-        fileEtag: fileEtag.present ? fileEtag.value : this.fileEtag,
-        version: version ?? this.version,
-        lastUpdated: lastUpdated ?? this.lastUpdated,
-        name: name ?? this.name,
-        providerType: providerType ?? this.providerType,
-        providerContent: providerContent ?? this.providerContent,
-        coverProviderType: coverProviderType ?? this.coverProviderType,
-        coverProviderContent: coverProviderContent ?? this.coverProviderContent,
-        sortProviderType: sortProviderType ?? this.sortProviderType,
-        sortProviderContent: sortProviderContent ?? this.sortProviderContent,
-      );
+  Album copyWith({
+    int? rowId,
+    int? file,
+    Value<String?> fileEtag = const Value.absent(),
+    int? version,
+    DateTime? lastUpdated,
+    String? name,
+    String? providerType,
+    String? providerContent,
+    String? coverProviderType,
+    String? coverProviderContent,
+    String? sortProviderType,
+    String? sortProviderContent,
+  }) => Album(
+    rowId: rowId ?? this.rowId,
+    file: file ?? this.file,
+    fileEtag: fileEtag.present ? fileEtag.value : this.fileEtag,
+    version: version ?? this.version,
+    lastUpdated: lastUpdated ?? this.lastUpdated,
+    name: name ?? this.name,
+    providerType: providerType ?? this.providerType,
+    providerContent: providerContent ?? this.providerContent,
+    coverProviderType: coverProviderType ?? this.coverProviderType,
+    coverProviderContent: coverProviderContent ?? this.coverProviderContent,
+    sortProviderType: sortProviderType ?? this.sortProviderType,
+    sortProviderContent: sortProviderContent ?? this.sortProviderContent,
+  );
+  Album copyWithCompanion(AlbumsCompanion data) {
+    return Album(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      file: data.file.present ? data.file.value : this.file,
+      fileEtag: data.fileEtag.present ? data.fileEtag.value : this.fileEtag,
+      version: data.version.present ? data.version.value : this.version,
+      lastUpdated:
+          data.lastUpdated.present ? data.lastUpdated.value : this.lastUpdated,
+      name: data.name.present ? data.name.value : this.name,
+      providerType:
+          data.providerType.present
+              ? data.providerType.value
+              : this.providerType,
+      providerContent:
+          data.providerContent.present
+              ? data.providerContent.value
+              : this.providerContent,
+      coverProviderType:
+          data.coverProviderType.present
+              ? data.coverProviderType.value
+              : this.coverProviderType,
+      coverProviderContent:
+          data.coverProviderContent.present
+              ? data.coverProviderContent.value
+              : this.coverProviderContent,
+      sortProviderType:
+          data.sortProviderType.present
+              ? data.sortProviderType.value
+              : this.sortProviderType,
+      sortProviderContent:
+          data.sortProviderContent.present
+              ? data.sortProviderContent.value
+              : this.sortProviderContent,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Album(')
@@ -3103,18 +3909,19 @@ class Album extends DataClass implements Insertable<Album> {
 
   @override
   int get hashCode => Object.hash(
-      rowId,
-      file,
-      fileEtag,
-      version,
-      lastUpdated,
-      name,
-      providerType,
-      providerContent,
-      coverProviderType,
-      coverProviderContent,
-      sortProviderType,
-      sortProviderContent);
+    rowId,
+    file,
+    fileEtag,
+    version,
+    lastUpdated,
+    name,
+    providerType,
+    providerContent,
+    coverProviderType,
+    coverProviderContent,
+    sortProviderType,
+    sortProviderContent,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3173,16 +3980,16 @@ class AlbumsCompanion extends UpdateCompanion<Album> {
     required String coverProviderContent,
     required String sortProviderType,
     required String sortProviderContent,
-  })  : file = Value(file),
-        version = Value(version),
-        lastUpdated = Value(lastUpdated),
-        name = Value(name),
-        providerType = Value(providerType),
-        providerContent = Value(providerContent),
-        coverProviderType = Value(coverProviderType),
-        coverProviderContent = Value(coverProviderContent),
-        sortProviderType = Value(sortProviderType),
-        sortProviderContent = Value(sortProviderContent);
+  }) : file = Value(file),
+       version = Value(version),
+       lastUpdated = Value(lastUpdated),
+       name = Value(name),
+       providerType = Value(providerType),
+       providerContent = Value(providerContent),
+       coverProviderType = Value(coverProviderType),
+       coverProviderContent = Value(coverProviderContent),
+       sortProviderType = Value(sortProviderType),
+       sortProviderContent = Value(sortProviderContent);
   static Insertable<Album> custom({
     Expression<int>? rowId,
     Expression<int>? file,
@@ -3215,19 +4022,20 @@ class AlbumsCompanion extends UpdateCompanion<Album> {
     });
   }
 
-  AlbumsCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? file,
-      Value<String?>? fileEtag,
-      Value<int>? version,
-      Value<DateTime>? lastUpdated,
-      Value<String>? name,
-      Value<String>? providerType,
-      Value<String>? providerContent,
-      Value<String>? coverProviderType,
-      Value<String>? coverProviderContent,
-      Value<String>? sortProviderType,
-      Value<String>? sortProviderContent}) {
+  AlbumsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? file,
+    Value<String?>? fileEtag,
+    Value<int>? version,
+    Value<DateTime>? lastUpdated,
+    Value<String>? name,
+    Value<String>? providerType,
+    Value<String>? providerContent,
+    Value<String>? coverProviderType,
+    Value<String>? coverProviderContent,
+    Value<String>? sortProviderType,
+    Value<String>? sortProviderContent,
+  }) {
     return AlbumsCompanion(
       rowId: rowId ?? this.rowId,
       file: file ?? this.file,
@@ -3261,7 +4069,8 @@ class AlbumsCompanion extends UpdateCompanion<Album> {
     }
     if (lastUpdated.present) {
       map['last_updated'] = Variable<DateTime>(
-          $AlbumsTable.$converterlastUpdated.toSql(lastUpdated.value));
+        $AlbumsTable.$converterlastUpdated.toSql(lastUpdated.value),
+      );
     }
     if (name.present) {
       map['name'] = Variable<String>(name.value);
@@ -3276,15 +4085,17 @@ class AlbumsCompanion extends UpdateCompanion<Album> {
       map['cover_provider_type'] = Variable<String>(coverProviderType.value);
     }
     if (coverProviderContent.present) {
-      map['cover_provider_content'] =
-          Variable<String>(coverProviderContent.value);
+      map['cover_provider_content'] = Variable<String>(
+        coverProviderContent.value,
+      );
     }
     if (sortProviderType.present) {
       map['sort_provider_type'] = Variable<String>(sortProviderType.value);
     }
     if (sortProviderContent.present) {
-      map['sort_provider_content'] =
-          Variable<String>(sortProviderContent.value);
+      map['sort_provider_content'] = Variable<String>(
+        sortProviderContent.value,
+      );
     }
     return map;
   }
@@ -3318,29 +4129,47 @@ class $AlbumSharesTable extends AlbumShares
   static const VerificationMeta _albumMeta = const VerificationMeta('album');
   @override
   late final GeneratedColumn<int> album = GeneratedColumn<int>(
-      'album', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES albums (row_id) ON DELETE CASCADE'));
+    'album',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES albums (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _userIdMeta = const VerificationMeta('userId');
   @override
   late final GeneratedColumn<String> userId = GeneratedColumn<String>(
-      'user_id', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _displayNameMeta =
-      const VerificationMeta('displayName');
+    'user_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _displayNameMeta = const VerificationMeta(
+    'displayName',
+  );
   @override
   late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
-      'display_name', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _sharedAtMeta =
-      const VerificationMeta('sharedAt');
+    'display_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _sharedAtMeta = const VerificationMeta(
+    'sharedAt',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> sharedAt =
-      GeneratedColumn<DateTime>('shared_at', aliasedName, false,
-              type: DriftSqlType.dateTime, requiredDuringInsert: true)
-          .withConverter<DateTime>($AlbumSharesTable.$convertersharedAt);
+      GeneratedColumn<DateTime>(
+        'shared_at',
+        aliasedName,
+        false,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: true,
+      ).withConverter<DateTime>($AlbumSharesTable.$convertersharedAt);
   @override
   List<GeneratedColumn> get $columns => [album, userId, displayName, sharedAt];
   @override
@@ -3349,27 +4178,36 @@ class $AlbumSharesTable extends AlbumShares
   String get actualTableName => $name;
   static const String $name = 'album_shares';
   @override
-  VerificationContext validateIntegrity(Insertable<AlbumShare> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<AlbumShare> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('album')) {
       context.handle(
-          _albumMeta, album.isAcceptableOrUnknown(data['album']!, _albumMeta));
+        _albumMeta,
+        album.isAcceptableOrUnknown(data['album']!, _albumMeta),
+      );
     } else if (isInserting) {
       context.missing(_albumMeta);
     }
     if (data.containsKey('user_id')) {
-      context.handle(_userIdMeta,
-          userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta));
+      context.handle(
+        _userIdMeta,
+        userId.isAcceptableOrUnknown(data['user_id']!, _userIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_userIdMeta);
     }
     if (data.containsKey('display_name')) {
       context.handle(
+        _displayNameMeta,
+        displayName.isAcceptableOrUnknown(
+          data['display_name']!,
           _displayNameMeta,
-          displayName.isAcceptableOrUnknown(
-              data['display_name']!, _displayNameMeta));
+        ),
+      );
     }
     context.handle(_sharedAtMeta, const VerificationResult.success());
     return context;
@@ -3381,15 +4219,26 @@ class $AlbumSharesTable extends AlbumShares
   AlbumShare map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AlbumShare(
-      album: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}album'])!,
-      userId: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}user_id'])!,
-      displayName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}display_name']),
-      sharedAt: $AlbumSharesTable.$convertersharedAt.fromSql(attachedDatabase
-          .typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}shared_at'])!),
+      album:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}album'],
+          )!,
+      userId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}user_id'],
+          )!,
+      displayName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}display_name'],
+      ),
+      sharedAt: $AlbumSharesTable.$convertersharedAt.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}shared_at'],
+        )!,
+      ),
     );
   }
 
@@ -3407,11 +4256,12 @@ class AlbumShare extends DataClass implements Insertable<AlbumShare> {
   final String userId;
   final String? displayName;
   final DateTime sharedAt;
-  const AlbumShare(
-      {required this.album,
-      required this.userId,
-      this.displayName,
-      required this.sharedAt});
+  const AlbumShare({
+    required this.album,
+    required this.userId,
+    this.displayName,
+    required this.sharedAt,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3422,7 +4272,8 @@ class AlbumShare extends DataClass implements Insertable<AlbumShare> {
     }
     {
       map['shared_at'] = Variable<DateTime>(
-          $AlbumSharesTable.$convertersharedAt.toSql(sharedAt));
+        $AlbumSharesTable.$convertersharedAt.toSql(sharedAt),
+      );
     }
     return map;
   }
@@ -3431,15 +4282,18 @@ class AlbumShare extends DataClass implements Insertable<AlbumShare> {
     return AlbumSharesCompanion(
       album: Value(album),
       userId: Value(userId),
-      displayName: displayName == null && nullToAbsent
-          ? const Value.absent()
-          : Value(displayName),
+      displayName:
+          displayName == null && nullToAbsent
+              ? const Value.absent()
+              : Value(displayName),
       sharedAt: Value(sharedAt),
     );
   }
 
-  factory AlbumShare.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory AlbumShare.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return AlbumShare(
       album: serializer.fromJson<int>(json['album']),
@@ -3459,17 +4313,27 @@ class AlbumShare extends DataClass implements Insertable<AlbumShare> {
     };
   }
 
-  AlbumShare copyWith(
-          {int? album,
-          String? userId,
-          Value<String?> displayName = const Value.absent(),
-          DateTime? sharedAt}) =>
-      AlbumShare(
-        album: album ?? this.album,
-        userId: userId ?? this.userId,
-        displayName: displayName.present ? displayName.value : this.displayName,
-        sharedAt: sharedAt ?? this.sharedAt,
-      );
+  AlbumShare copyWith({
+    int? album,
+    String? userId,
+    Value<String?> displayName = const Value.absent(),
+    DateTime? sharedAt,
+  }) => AlbumShare(
+    album: album ?? this.album,
+    userId: userId ?? this.userId,
+    displayName: displayName.present ? displayName.value : this.displayName,
+    sharedAt: sharedAt ?? this.sharedAt,
+  );
+  AlbumShare copyWithCompanion(AlbumSharesCompanion data) {
+    return AlbumShare(
+      album: data.album.present ? data.album.value : this.album,
+      userId: data.userId.present ? data.userId.value : this.userId,
+      displayName:
+          data.displayName.present ? data.displayName.value : this.displayName,
+      sharedAt: data.sharedAt.present ? data.sharedAt.value : this.sharedAt,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('AlbumShare(')
@@ -3512,9 +4376,9 @@ class AlbumSharesCompanion extends UpdateCompanion<AlbumShare> {
     this.displayName = const Value.absent(),
     required DateTime sharedAt,
     this.rowid = const Value.absent(),
-  })  : album = Value(album),
-        userId = Value(userId),
-        sharedAt = Value(sharedAt);
+  }) : album = Value(album),
+       userId = Value(userId),
+       sharedAt = Value(sharedAt);
   static Insertable<AlbumShare> custom({
     Expression<int>? album,
     Expression<String>? userId,
@@ -3531,12 +4395,13 @@ class AlbumSharesCompanion extends UpdateCompanion<AlbumShare> {
     });
   }
 
-  AlbumSharesCompanion copyWith(
-      {Value<int>? album,
-      Value<String>? userId,
-      Value<String?>? displayName,
-      Value<DateTime>? sharedAt,
-      Value<int>? rowid}) {
+  AlbumSharesCompanion copyWith({
+    Value<int>? album,
+    Value<String>? userId,
+    Value<String?>? displayName,
+    Value<DateTime>? sharedAt,
+    Value<int>? rowid,
+  }) {
     return AlbumSharesCompanion(
       album: album ?? this.album,
       userId: userId ?? this.userId,
@@ -3560,7 +4425,8 @@ class AlbumSharesCompanion extends UpdateCompanion<AlbumShare> {
     }
     if (sharedAt.present) {
       map['shared_at'] = Variable<DateTime>(
-          $AlbumSharesTable.$convertersharedAt.toSql(sharedAt.value));
+        $AlbumSharesTable.$convertersharedAt.toSql(sharedAt.value),
+      );
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -3589,97 +4455,147 @@ class $TagsTable extends Tags with TableInfo<$TagsTable, Tag> {
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _serverMeta = const VerificationMeta('server');
   @override
   late final GeneratedColumn<int> server = GeneratedColumn<int>(
-      'server', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES servers (row_id) ON DELETE CASCADE'));
+    'server',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES servers (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _tagIdMeta = const VerificationMeta('tagId');
   @override
   late final GeneratedColumn<int> tagId = GeneratedColumn<int>(
-      'tag_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _displayNameMeta =
-      const VerificationMeta('displayName');
+    'tag_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _displayNameMeta = const VerificationMeta(
+    'displayName',
+  );
   @override
   late final GeneratedColumn<String> displayName = GeneratedColumn<String>(
-      'display_name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _userVisibleMeta =
-      const VerificationMeta('userVisible');
+    'display_name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _userVisibleMeta = const VerificationMeta(
+    'userVisible',
+  );
   @override
   late final GeneratedColumn<bool> userVisible = GeneratedColumn<bool>(
-      'user_visible', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("user_visible" IN (0, 1))'));
-  static const VerificationMeta _userAssignableMeta =
-      const VerificationMeta('userAssignable');
+    'user_visible',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("user_visible" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _userAssignableMeta = const VerificationMeta(
+    'userAssignable',
+  );
   @override
   late final GeneratedColumn<bool> userAssignable = GeneratedColumn<bool>(
-      'user_assignable', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("user_assignable" IN (0, 1))'));
+    'user_assignable',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("user_assignable" IN (0, 1))',
+    ),
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [rowId, server, tagId, displayName, userVisible, userAssignable];
+  List<GeneratedColumn> get $columns => [
+    rowId,
+    server,
+    tagId,
+    displayName,
+    userVisible,
+    userAssignable,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'tags';
   @override
-  VerificationContext validateIntegrity(Insertable<Tag> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<Tag> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('server')) {
-      context.handle(_serverMeta,
-          server.isAcceptableOrUnknown(data['server']!, _serverMeta));
+      context.handle(
+        _serverMeta,
+        server.isAcceptableOrUnknown(data['server']!, _serverMeta),
+      );
     } else if (isInserting) {
       context.missing(_serverMeta);
     }
     if (data.containsKey('tag_id')) {
       context.handle(
-          _tagIdMeta, tagId.isAcceptableOrUnknown(data['tag_id']!, _tagIdMeta));
+        _tagIdMeta,
+        tagId.isAcceptableOrUnknown(data['tag_id']!, _tagIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_tagIdMeta);
     }
     if (data.containsKey('display_name')) {
       context.handle(
+        _displayNameMeta,
+        displayName.isAcceptableOrUnknown(
+          data['display_name']!,
           _displayNameMeta,
-          displayName.isAcceptableOrUnknown(
-              data['display_name']!, _displayNameMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_displayNameMeta);
     }
     if (data.containsKey('user_visible')) {
       context.handle(
+        _userVisibleMeta,
+        userVisible.isAcceptableOrUnknown(
+          data['user_visible']!,
           _userVisibleMeta,
-          userVisible.isAcceptableOrUnknown(
-              data['user_visible']!, _userVisibleMeta));
+        ),
+      );
     }
     if (data.containsKey('user_assignable')) {
       context.handle(
+        _userAssignableMeta,
+        userAssignable.isAcceptableOrUnknown(
+          data['user_assignable']!,
           _userAssignableMeta,
-          userAssignable.isAcceptableOrUnknown(
-              data['user_assignable']!, _userAssignableMeta));
+        ),
+      );
     }
     return context;
   }
@@ -3688,24 +4604,40 @@ class $TagsTable extends Tags with TableInfo<$TagsTable, Tag> {
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {server, tagId},
-      ];
+    {server, tagId},
+  ];
   @override
   Tag map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Tag(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      server: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}server'])!,
-      tagId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}tag_id'])!,
-      displayName: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}display_name'])!,
-      userVisible: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}user_visible']),
-      userAssignable: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}user_assignable']),
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      server:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}server'],
+          )!,
+      tagId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}tag_id'],
+          )!,
+      displayName:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}display_name'],
+          )!,
+      userVisible: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}user_visible'],
+      ),
+      userAssignable: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}user_assignable'],
+      ),
     );
   }
 
@@ -3722,13 +4654,14 @@ class Tag extends DataClass implements Insertable<Tag> {
   final String displayName;
   final bool? userVisible;
   final bool? userAssignable;
-  const Tag(
-      {required this.rowId,
-      required this.server,
-      required this.tagId,
-      required this.displayName,
-      this.userVisible,
-      this.userAssignable});
+  const Tag({
+    required this.rowId,
+    required this.server,
+    required this.tagId,
+    required this.displayName,
+    this.userVisible,
+    this.userAssignable,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -3751,17 +4684,21 @@ class Tag extends DataClass implements Insertable<Tag> {
       server: Value(server),
       tagId: Value(tagId),
       displayName: Value(displayName),
-      userVisible: userVisible == null && nullToAbsent
-          ? const Value.absent()
-          : Value(userVisible),
-      userAssignable: userAssignable == null && nullToAbsent
-          ? const Value.absent()
-          : Value(userAssignable),
+      userVisible:
+          userVisible == null && nullToAbsent
+              ? const Value.absent()
+              : Value(userVisible),
+      userAssignable:
+          userAssignable == null && nullToAbsent
+              ? const Value.absent()
+              : Value(userAssignable),
     );
   }
 
-  factory Tag.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory Tag.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return Tag(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -3785,22 +4722,38 @@ class Tag extends DataClass implements Insertable<Tag> {
     };
   }
 
-  Tag copyWith(
-          {int? rowId,
-          int? server,
-          int? tagId,
-          String? displayName,
-          Value<bool?> userVisible = const Value.absent(),
-          Value<bool?> userAssignable = const Value.absent()}) =>
-      Tag(
-        rowId: rowId ?? this.rowId,
-        server: server ?? this.server,
-        tagId: tagId ?? this.tagId,
-        displayName: displayName ?? this.displayName,
-        userVisible: userVisible.present ? userVisible.value : this.userVisible,
-        userAssignable:
-            userAssignable.present ? userAssignable.value : this.userAssignable,
-      );
+  Tag copyWith({
+    int? rowId,
+    int? server,
+    int? tagId,
+    String? displayName,
+    Value<bool?> userVisible = const Value.absent(),
+    Value<bool?> userAssignable = const Value.absent(),
+  }) => Tag(
+    rowId: rowId ?? this.rowId,
+    server: server ?? this.server,
+    tagId: tagId ?? this.tagId,
+    displayName: displayName ?? this.displayName,
+    userVisible: userVisible.present ? userVisible.value : this.userVisible,
+    userAssignable:
+        userAssignable.present ? userAssignable.value : this.userAssignable,
+  );
+  Tag copyWithCompanion(TagsCompanion data) {
+    return Tag(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      server: data.server.present ? data.server.value : this.server,
+      tagId: data.tagId.present ? data.tagId.value : this.tagId,
+      displayName:
+          data.displayName.present ? data.displayName.value : this.displayName,
+      userVisible:
+          data.userVisible.present ? data.userVisible.value : this.userVisible,
+      userAssignable:
+          data.userAssignable.present
+              ? data.userAssignable.value
+              : this.userAssignable,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('Tag(')
@@ -3816,7 +4769,13 @@ class Tag extends DataClass implements Insertable<Tag> {
 
   @override
   int get hashCode => Object.hash(
-      rowId, server, tagId, displayName, userVisible, userAssignable);
+    rowId,
+    server,
+    tagId,
+    displayName,
+    userVisible,
+    userAssignable,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -3851,9 +4810,9 @@ class TagsCompanion extends UpdateCompanion<Tag> {
     required String displayName,
     this.userVisible = const Value.absent(),
     this.userAssignable = const Value.absent(),
-  })  : server = Value(server),
-        tagId = Value(tagId),
-        displayName = Value(displayName);
+  }) : server = Value(server),
+       tagId = Value(tagId),
+       displayName = Value(displayName);
   static Insertable<Tag> custom({
     Expression<int>? rowId,
     Expression<int>? server,
@@ -3872,13 +4831,14 @@ class TagsCompanion extends UpdateCompanion<Tag> {
     });
   }
 
-  TagsCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? server,
-      Value<int>? tagId,
-      Value<String>? displayName,
-      Value<bool?>? userVisible,
-      Value<bool?>? userAssignable}) {
+  TagsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? server,
+    Value<int>? tagId,
+    Value<String>? displayName,
+    Value<bool?>? userVisible,
+    Value<bool?>? userAssignable,
+  }) {
     return TagsCompanion(
       rowId: rowId ?? this.rowId,
       server: server ?? this.server,
@@ -3936,40 +4896,67 @@ class $FaceRecognitionPersonsTable extends FaceRecognitionPersons
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _accountMeta =
-      const VerificationMeta('account');
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _accountMeta = const VerificationMeta(
+    'account',
+  );
   @override
   late final GeneratedColumn<int> account = GeneratedColumn<int>(
-      'account', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES accounts (row_id) ON DELETE CASCADE'));
+    'account',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES accounts (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _nameMeta = const VerificationMeta('name');
   @override
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
-      'name', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _thumbFaceIdMeta =
-      const VerificationMeta('thumbFaceId');
+    'name',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _thumbFaceIdMeta = const VerificationMeta(
+    'thumbFaceId',
+  );
   @override
   late final GeneratedColumn<int> thumbFaceId = GeneratedColumn<int>(
-      'thumb_face_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'thumb_face_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _countMeta = const VerificationMeta('count');
   @override
   late final GeneratedColumn<int> count = GeneratedColumn<int>(
-      'count', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
+    'count',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
   @override
-  List<GeneratedColumn> get $columns =>
-      [rowId, account, name, thumbFaceId, count];
+  List<GeneratedColumn> get $columns => [
+    rowId,
+    account,
+    name,
+    thumbFaceId,
+    count,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -3977,37 +4964,49 @@ class $FaceRecognitionPersonsTable extends FaceRecognitionPersons
   static const String $name = 'face_recognition_persons';
   @override
   VerificationContext validateIntegrity(
-      Insertable<FaceRecognitionPerson> instance,
-      {bool isInserting = false}) {
+    Insertable<FaceRecognitionPerson> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('account')) {
-      context.handle(_accountMeta,
-          account.isAcceptableOrUnknown(data['account']!, _accountMeta));
+      context.handle(
+        _accountMeta,
+        account.isAcceptableOrUnknown(data['account']!, _accountMeta),
+      );
     } else if (isInserting) {
       context.missing(_accountMeta);
     }
     if (data.containsKey('name')) {
       context.handle(
-          _nameMeta, name.isAcceptableOrUnknown(data['name']!, _nameMeta));
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
     } else if (isInserting) {
       context.missing(_nameMeta);
     }
     if (data.containsKey('thumb_face_id')) {
       context.handle(
+        _thumbFaceIdMeta,
+        thumbFaceId.isAcceptableOrUnknown(
+          data['thumb_face_id']!,
           _thumbFaceIdMeta,
-          thumbFaceId.isAcceptableOrUnknown(
-              data['thumb_face_id']!, _thumbFaceIdMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_thumbFaceIdMeta);
     }
     if (data.containsKey('count')) {
       context.handle(
-          _countMeta, count.isAcceptableOrUnknown(data['count']!, _countMeta));
+        _countMeta,
+        count.isAcceptableOrUnknown(data['count']!, _countMeta),
+      );
     } else if (isInserting) {
       context.missing(_countMeta);
     }
@@ -4018,22 +5017,37 @@ class $FaceRecognitionPersonsTable extends FaceRecognitionPersons
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {account, name},
-      ];
+    {account, name},
+  ];
   @override
   FaceRecognitionPerson map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FaceRecognitionPerson(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      account: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}account'])!,
-      name: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}name'])!,
-      thumbFaceId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}thumb_face_id'])!,
-      count: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}count'])!,
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      account:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}account'],
+          )!,
+      name:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}name'],
+          )!,
+      thumbFaceId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}thumb_face_id'],
+          )!,
+      count:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}count'],
+          )!,
     );
   }
 
@@ -4050,12 +5064,13 @@ class FaceRecognitionPerson extends DataClass
   final String name;
   final int thumbFaceId;
   final int count;
-  const FaceRecognitionPerson(
-      {required this.rowId,
-      required this.account,
-      required this.name,
-      required this.thumbFaceId,
-      required this.count});
+  const FaceRecognitionPerson({
+    required this.rowId,
+    required this.account,
+    required this.name,
+    required this.thumbFaceId,
+    required this.count,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4077,8 +5092,10 @@ class FaceRecognitionPerson extends DataClass
     );
   }
 
-  factory FaceRecognitionPerson.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory FaceRecognitionPerson.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return FaceRecognitionPerson(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -4100,19 +5117,32 @@ class FaceRecognitionPerson extends DataClass
     };
   }
 
-  FaceRecognitionPerson copyWith(
-          {int? rowId,
-          int? account,
-          String? name,
-          int? thumbFaceId,
-          int? count}) =>
-      FaceRecognitionPerson(
-        rowId: rowId ?? this.rowId,
-        account: account ?? this.account,
-        name: name ?? this.name,
-        thumbFaceId: thumbFaceId ?? this.thumbFaceId,
-        count: count ?? this.count,
-      );
+  FaceRecognitionPerson copyWith({
+    int? rowId,
+    int? account,
+    String? name,
+    int? thumbFaceId,
+    int? count,
+  }) => FaceRecognitionPerson(
+    rowId: rowId ?? this.rowId,
+    account: account ?? this.account,
+    name: name ?? this.name,
+    thumbFaceId: thumbFaceId ?? this.thumbFaceId,
+    count: count ?? this.count,
+  );
+  FaceRecognitionPerson copyWithCompanion(
+    FaceRecognitionPersonsCompanion data,
+  ) {
+    return FaceRecognitionPerson(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      account: data.account.present ? data.account.value : this.account,
+      name: data.name.present ? data.name.value : this.name,
+      thumbFaceId:
+          data.thumbFaceId.present ? data.thumbFaceId.value : this.thumbFaceId,
+      count: data.count.present ? data.count.value : this.count,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('FaceRecognitionPerson(')
@@ -4158,10 +5188,10 @@ class FaceRecognitionPersonsCompanion
     required String name,
     required int thumbFaceId,
     required int count,
-  })  : account = Value(account),
-        name = Value(name),
-        thumbFaceId = Value(thumbFaceId),
-        count = Value(count);
+  }) : account = Value(account),
+       name = Value(name),
+       thumbFaceId = Value(thumbFaceId),
+       count = Value(count);
   static Insertable<FaceRecognitionPerson> custom({
     Expression<int>? rowId,
     Expression<int>? account,
@@ -4178,12 +5208,13 @@ class FaceRecognitionPersonsCompanion
     });
   }
 
-  FaceRecognitionPersonsCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? account,
-      Value<String>? name,
-      Value<int>? thumbFaceId,
-      Value<int>? count}) {
+  FaceRecognitionPersonsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? account,
+    Value<String>? name,
+    Value<int>? thumbFaceId,
+    Value<int>? count,
+  }) {
     return FaceRecognitionPersonsCompanion(
       rowId: rowId ?? this.rowId,
       account: account ?? this.account,
@@ -4235,142 +5266,211 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _accountMeta =
-      const VerificationMeta('account');
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _accountMeta = const VerificationMeta(
+    'account',
+  );
   @override
   late final GeneratedColumn<int> account = GeneratedColumn<int>(
-      'account', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES accounts (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _relativePathMeta =
-      const VerificationMeta('relativePath');
+    'account',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES accounts (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _relativePathMeta = const VerificationMeta(
+    'relativePath',
+  );
   @override
   late final GeneratedColumn<String> relativePath = GeneratedColumn<String>(
-      'relative_path', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _lastPhotoMeta =
-      const VerificationMeta('lastPhoto');
+    'relative_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _lastPhotoMeta = const VerificationMeta(
+    'lastPhoto',
+  );
   @override
   late final GeneratedColumn<int> lastPhoto = GeneratedColumn<int>(
-      'last_photo', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _nbItemsMeta =
-      const VerificationMeta('nbItems');
+    'last_photo',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _nbItemsMeta = const VerificationMeta(
+    'nbItems',
+  );
   @override
   late final GeneratedColumn<int> nbItems = GeneratedColumn<int>(
-      'nb_items', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _locationMeta =
-      const VerificationMeta('location');
+    'nb_items',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _locationMeta = const VerificationMeta(
+    'location',
+  );
   @override
   late final GeneratedColumn<String> location = GeneratedColumn<String>(
-      'location', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _dateStartMeta =
-      const VerificationMeta('dateStart');
+    'location',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _dateStartMeta = const VerificationMeta(
+    'dateStart',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime> dateStart =
-      GeneratedColumn<DateTime>('date_start', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>($NcAlbumsTable.$converterdateStartn);
-  static const VerificationMeta _dateEndMeta =
-      const VerificationMeta('dateEnd');
+      GeneratedColumn<DateTime>(
+        'date_start',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      ).withConverter<DateTime?>($NcAlbumsTable.$converterdateStartn);
+  static const VerificationMeta _dateEndMeta = const VerificationMeta(
+    'dateEnd',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime> dateEnd =
-      GeneratedColumn<DateTime>('date_end', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>($NcAlbumsTable.$converterdateEndn);
-  static const VerificationMeta _collaboratorsMeta =
-      const VerificationMeta('collaborators');
+      GeneratedColumn<DateTime>(
+        'date_end',
+        aliasedName,
+        true,
+        type: DriftSqlType.dateTime,
+        requiredDuringInsert: false,
+      ).withConverter<DateTime?>($NcAlbumsTable.$converterdateEndn);
+  static const VerificationMeta _collaboratorsMeta = const VerificationMeta(
+    'collaborators',
+  );
   @override
   late final GeneratedColumn<String> collaborators = GeneratedColumn<String>(
-      'collaborators', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
-  static const VerificationMeta _isOwnedMeta =
-      const VerificationMeta('isOwned');
+    'collaborators',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _isOwnedMeta = const VerificationMeta(
+    'isOwned',
+  );
   @override
   late final GeneratedColumn<bool> isOwned = GeneratedColumn<bool>(
-      'is_owned', aliasedName, false,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: true,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('CHECK ("is_owned" IN (0, 1))'));
+    'is_owned',
+    aliasedName,
+    false,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_owned" IN (0, 1))',
+    ),
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        rowId,
-        account,
-        relativePath,
-        lastPhoto,
-        nbItems,
-        location,
-        dateStart,
-        dateEnd,
-        collaborators,
-        isOwned
-      ];
+    rowId,
+    account,
+    relativePath,
+    lastPhoto,
+    nbItems,
+    location,
+    dateStart,
+    dateEnd,
+    collaborators,
+    isOwned,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'nc_albums';
   @override
-  VerificationContext validateIntegrity(Insertable<NcAlbum> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<NcAlbum> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('account')) {
-      context.handle(_accountMeta,
-          account.isAcceptableOrUnknown(data['account']!, _accountMeta));
+      context.handle(
+        _accountMeta,
+        account.isAcceptableOrUnknown(data['account']!, _accountMeta),
+      );
     } else if (isInserting) {
       context.missing(_accountMeta);
     }
     if (data.containsKey('relative_path')) {
       context.handle(
+        _relativePathMeta,
+        relativePath.isAcceptableOrUnknown(
+          data['relative_path']!,
           _relativePathMeta,
-          relativePath.isAcceptableOrUnknown(
-              data['relative_path']!, _relativePathMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_relativePathMeta);
     }
     if (data.containsKey('last_photo')) {
-      context.handle(_lastPhotoMeta,
-          lastPhoto.isAcceptableOrUnknown(data['last_photo']!, _lastPhotoMeta));
+      context.handle(
+        _lastPhotoMeta,
+        lastPhoto.isAcceptableOrUnknown(data['last_photo']!, _lastPhotoMeta),
+      );
     }
     if (data.containsKey('nb_items')) {
-      context.handle(_nbItemsMeta,
-          nbItems.isAcceptableOrUnknown(data['nb_items']!, _nbItemsMeta));
+      context.handle(
+        _nbItemsMeta,
+        nbItems.isAcceptableOrUnknown(data['nb_items']!, _nbItemsMeta),
+      );
     } else if (isInserting) {
       context.missing(_nbItemsMeta);
     }
     if (data.containsKey('location')) {
-      context.handle(_locationMeta,
-          location.isAcceptableOrUnknown(data['location']!, _locationMeta));
+      context.handle(
+        _locationMeta,
+        location.isAcceptableOrUnknown(data['location']!, _locationMeta),
+      );
     }
     context.handle(_dateStartMeta, const VerificationResult.success());
     context.handle(_dateEndMeta, const VerificationResult.success());
     if (data.containsKey('collaborators')) {
       context.handle(
+        _collaboratorsMeta,
+        collaborators.isAcceptableOrUnknown(
+          data['collaborators']!,
           _collaboratorsMeta,
-          collaborators.isAcceptableOrUnknown(
-              data['collaborators']!, _collaboratorsMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_collaboratorsMeta);
     }
     if (data.containsKey('is_owned')) {
-      context.handle(_isOwnedMeta,
-          isOwned.isAcceptableOrUnknown(data['is_owned']!, _isOwnedMeta));
+      context.handle(
+        _isOwnedMeta,
+        isOwned.isAcceptableOrUnknown(data['is_owned']!, _isOwnedMeta),
+      );
     } else if (isInserting) {
       context.missing(_isOwnedMeta);
     }
@@ -4381,34 +5481,62 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {account, relativePath},
-      ];
+    {account, relativePath},
+  ];
   @override
   NcAlbum map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NcAlbum(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      account: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}account'])!,
-      relativePath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}relative_path'])!,
-      lastPhoto: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}last_photo']),
-      nbItems: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}nb_items'])!,
-      location: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}location']),
-      dateStart: $NcAlbumsTable.$converterdateStartn.fromSql(attachedDatabase
-          .typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_start'])),
-      dateEnd: $NcAlbumsTable.$converterdateEndn.fromSql(attachedDatabase
-          .typeMapping
-          .read(DriftSqlType.dateTime, data['${effectivePrefix}date_end'])),
-      collaborators: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}collaborators'])!,
-      isOwned: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_owned'])!,
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      account:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}account'],
+          )!,
+      relativePath:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}relative_path'],
+          )!,
+      lastPhoto: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}last_photo'],
+      ),
+      nbItems:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}nb_items'],
+          )!,
+      location: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}location'],
+      ),
+      dateStart: $NcAlbumsTable.$converterdateStartn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}date_start'],
+        ),
+      ),
+      dateEnd: $NcAlbumsTable.$converterdateEndn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}date_end'],
+        ),
+      ),
+      collaborators:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}collaborators'],
+          )!,
+      isOwned:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.bool,
+            data['${effectivePrefix}is_owned'],
+          )!,
     );
   }
 
@@ -4438,17 +5566,18 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
   final DateTime? dateEnd;
   final String collaborators;
   final bool isOwned;
-  const NcAlbum(
-      {required this.rowId,
-      required this.account,
-      required this.relativePath,
-      this.lastPhoto,
-      required this.nbItems,
-      this.location,
-      this.dateStart,
-      this.dateEnd,
-      required this.collaborators,
-      required this.isOwned});
+  const NcAlbum({
+    required this.rowId,
+    required this.account,
+    required this.relativePath,
+    this.lastPhoto,
+    required this.nbItems,
+    this.location,
+    this.dateStart,
+    this.dateEnd,
+    required this.collaborators,
+    required this.isOwned,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -4464,11 +5593,13 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
     }
     if (!nullToAbsent || dateStart != null) {
       map['date_start'] = Variable<DateTime>(
-          $NcAlbumsTable.$converterdateStartn.toSql(dateStart));
+        $NcAlbumsTable.$converterdateStartn.toSql(dateStart),
+      );
     }
     if (!nullToAbsent || dateEnd != null) {
-      map['date_end'] =
-          Variable<DateTime>($NcAlbumsTable.$converterdateEndn.toSql(dateEnd));
+      map['date_end'] = Variable<DateTime>(
+        $NcAlbumsTable.$converterdateEndn.toSql(dateEnd),
+      );
     }
     map['collaborators'] = Variable<String>(collaborators);
     map['is_owned'] = Variable<bool>(isOwned);
@@ -4480,26 +5611,32 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
       rowId: Value(rowId),
       account: Value(account),
       relativePath: Value(relativePath),
-      lastPhoto: lastPhoto == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastPhoto),
+      lastPhoto:
+          lastPhoto == null && nullToAbsent
+              ? const Value.absent()
+              : Value(lastPhoto),
       nbItems: Value(nbItems),
-      location: location == null && nullToAbsent
-          ? const Value.absent()
-          : Value(location),
-      dateStart: dateStart == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dateStart),
-      dateEnd: dateEnd == null && nullToAbsent
-          ? const Value.absent()
-          : Value(dateEnd),
+      location:
+          location == null && nullToAbsent
+              ? const Value.absent()
+              : Value(location),
+      dateStart:
+          dateStart == null && nullToAbsent
+              ? const Value.absent()
+              : Value(dateStart),
+      dateEnd:
+          dateEnd == null && nullToAbsent
+              ? const Value.absent()
+              : Value(dateEnd),
       collaborators: Value(collaborators),
       isOwned: Value(isOwned),
     );
   }
 
-  factory NcAlbum.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory NcAlbum.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return NcAlbum(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -4531,29 +5668,50 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
     };
   }
 
-  NcAlbum copyWith(
-          {int? rowId,
-          int? account,
-          String? relativePath,
-          Value<int?> lastPhoto = const Value.absent(),
-          int? nbItems,
-          Value<String?> location = const Value.absent(),
-          Value<DateTime?> dateStart = const Value.absent(),
-          Value<DateTime?> dateEnd = const Value.absent(),
-          String? collaborators,
-          bool? isOwned}) =>
-      NcAlbum(
-        rowId: rowId ?? this.rowId,
-        account: account ?? this.account,
-        relativePath: relativePath ?? this.relativePath,
-        lastPhoto: lastPhoto.present ? lastPhoto.value : this.lastPhoto,
-        nbItems: nbItems ?? this.nbItems,
-        location: location.present ? location.value : this.location,
-        dateStart: dateStart.present ? dateStart.value : this.dateStart,
-        dateEnd: dateEnd.present ? dateEnd.value : this.dateEnd,
-        collaborators: collaborators ?? this.collaborators,
-        isOwned: isOwned ?? this.isOwned,
-      );
+  NcAlbum copyWith({
+    int? rowId,
+    int? account,
+    String? relativePath,
+    Value<int?> lastPhoto = const Value.absent(),
+    int? nbItems,
+    Value<String?> location = const Value.absent(),
+    Value<DateTime?> dateStart = const Value.absent(),
+    Value<DateTime?> dateEnd = const Value.absent(),
+    String? collaborators,
+    bool? isOwned,
+  }) => NcAlbum(
+    rowId: rowId ?? this.rowId,
+    account: account ?? this.account,
+    relativePath: relativePath ?? this.relativePath,
+    lastPhoto: lastPhoto.present ? lastPhoto.value : this.lastPhoto,
+    nbItems: nbItems ?? this.nbItems,
+    location: location.present ? location.value : this.location,
+    dateStart: dateStart.present ? dateStart.value : this.dateStart,
+    dateEnd: dateEnd.present ? dateEnd.value : this.dateEnd,
+    collaborators: collaborators ?? this.collaborators,
+    isOwned: isOwned ?? this.isOwned,
+  );
+  NcAlbum copyWithCompanion(NcAlbumsCompanion data) {
+    return NcAlbum(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      account: data.account.present ? data.account.value : this.account,
+      relativePath:
+          data.relativePath.present
+              ? data.relativePath.value
+              : this.relativePath,
+      lastPhoto: data.lastPhoto.present ? data.lastPhoto.value : this.lastPhoto,
+      nbItems: data.nbItems.present ? data.nbItems.value : this.nbItems,
+      location: data.location.present ? data.location.value : this.location,
+      dateStart: data.dateStart.present ? data.dateStart.value : this.dateStart,
+      dateEnd: data.dateEnd.present ? data.dateEnd.value : this.dateEnd,
+      collaborators:
+          data.collaborators.present
+              ? data.collaborators.value
+              : this.collaborators,
+      isOwned: data.isOwned.present ? data.isOwned.value : this.isOwned,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('NcAlbum(')
@@ -4572,8 +5730,18 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
   }
 
   @override
-  int get hashCode => Object.hash(rowId, account, relativePath, lastPhoto,
-      nbItems, location, dateStart, dateEnd, collaborators, isOwned);
+  int get hashCode => Object.hash(
+    rowId,
+    account,
+    relativePath,
+    lastPhoto,
+    nbItems,
+    location,
+    dateStart,
+    dateEnd,
+    collaborators,
+    isOwned,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -4624,11 +5792,11 @@ class NcAlbumsCompanion extends UpdateCompanion<NcAlbum> {
     this.dateEnd = const Value.absent(),
     required String collaborators,
     required bool isOwned,
-  })  : account = Value(account),
-        relativePath = Value(relativePath),
-        nbItems = Value(nbItems),
-        collaborators = Value(collaborators),
-        isOwned = Value(isOwned);
+  }) : account = Value(account),
+       relativePath = Value(relativePath),
+       nbItems = Value(nbItems),
+       collaborators = Value(collaborators),
+       isOwned = Value(isOwned);
   static Insertable<NcAlbum> custom({
     Expression<int>? rowId,
     Expression<int>? account,
@@ -4655,17 +5823,18 @@ class NcAlbumsCompanion extends UpdateCompanion<NcAlbum> {
     });
   }
 
-  NcAlbumsCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? account,
-      Value<String>? relativePath,
-      Value<int?>? lastPhoto,
-      Value<int>? nbItems,
-      Value<String?>? location,
-      Value<DateTime?>? dateStart,
-      Value<DateTime?>? dateEnd,
-      Value<String>? collaborators,
-      Value<bool>? isOwned}) {
+  NcAlbumsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? account,
+    Value<String>? relativePath,
+    Value<int?>? lastPhoto,
+    Value<int>? nbItems,
+    Value<String?>? location,
+    Value<DateTime?>? dateStart,
+    Value<DateTime?>? dateEnd,
+    Value<String>? collaborators,
+    Value<bool>? isOwned,
+  }) {
     return NcAlbumsCompanion(
       rowId: rowId ?? this.rowId,
       account: account ?? this.account,
@@ -4703,11 +5872,13 @@ class NcAlbumsCompanion extends UpdateCompanion<NcAlbum> {
     }
     if (dateStart.present) {
       map['date_start'] = Variable<DateTime>(
-          $NcAlbumsTable.$converterdateStartn.toSql(dateStart.value));
+        $NcAlbumsTable.$converterdateStartn.toSql(dateStart.value),
+      );
     }
     if (dateEnd.present) {
       map['date_end'] = Variable<DateTime>(
-          $NcAlbumsTable.$converterdateEndn.toSql(dateEnd.value));
+        $NcAlbumsTable.$converterdateEndn.toSql(dateEnd.value),
+      );
     }
     if (collaborators.present) {
       map['collaborators'] = Variable<String>(collaborators.value);
@@ -4745,175 +5916,254 @@ class $NcAlbumItemsTable extends NcAlbumItems
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _parentMeta = const VerificationMeta('parent');
   @override
   late final GeneratedColumn<int> parent = GeneratedColumn<int>(
-      'parent', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES nc_albums (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _relativePathMeta =
-      const VerificationMeta('relativePath');
+    'parent',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES nc_albums (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _relativePathMeta = const VerificationMeta(
+    'relativePath',
+  );
   @override
   late final GeneratedColumn<String> relativePath = GeneratedColumn<String>(
-      'relative_path', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'relative_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _fileIdMeta = const VerificationMeta('fileId');
   @override
   late final GeneratedColumn<int> fileId = GeneratedColumn<int>(
-      'file_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _contentLengthMeta =
-      const VerificationMeta('contentLength');
+    'file_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentLengthMeta = const VerificationMeta(
+    'contentLength',
+  );
   @override
   late final GeneratedColumn<int> contentLength = GeneratedColumn<int>(
-      'content_length', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _contentTypeMeta =
-      const VerificationMeta('contentType');
+    'content_length',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentTypeMeta = const VerificationMeta(
+    'contentType',
+  );
   @override
   late final GeneratedColumn<String> contentType = GeneratedColumn<String>(
-      'content_type', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'content_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _etagMeta = const VerificationMeta('etag');
   @override
   late final GeneratedColumn<String> etag = GeneratedColumn<String>(
-      'etag', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _lastModifiedMeta =
-      const VerificationMeta('lastModified');
+    'etag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
+    'lastModified',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
-      lastModified = GeneratedColumn<DateTime>(
-              'last_modified', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>($NcAlbumItemsTable.$converterlastModifiedn);
-  static const VerificationMeta _hasPreviewMeta =
-      const VerificationMeta('hasPreview');
+  lastModified = GeneratedColumn<DateTime>(
+    'last_modified',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  ).withConverter<DateTime?>($NcAlbumItemsTable.$converterlastModifiedn);
+  static const VerificationMeta _hasPreviewMeta = const VerificationMeta(
+    'hasPreview',
+  );
   @override
   late final GeneratedColumn<bool> hasPreview = GeneratedColumn<bool>(
-      'has_preview', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("has_preview" IN (0, 1))'));
-  static const VerificationMeta _isFavoriteMeta =
-      const VerificationMeta('isFavorite');
+    'has_preview',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("has_preview" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _isFavoriteMeta = const VerificationMeta(
+    'isFavorite',
+  );
   @override
   late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
-      'is_favorite', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("is_favorite" IN (0, 1))'));
-  static const VerificationMeta _fileMetadataWidthMeta =
-      const VerificationMeta('fileMetadataWidth');
+    'is_favorite',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_favorite" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _fileMetadataWidthMeta = const VerificationMeta(
+    'fileMetadataWidth',
+  );
   @override
   late final GeneratedColumn<int> fileMetadataWidth = GeneratedColumn<int>(
-      'file_metadata_width', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'file_metadata_width',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _fileMetadataHeightMeta =
       const VerificationMeta('fileMetadataHeight');
   @override
   late final GeneratedColumn<int> fileMetadataHeight = GeneratedColumn<int>(
-      'file_metadata_height', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'file_metadata_height',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        rowId,
-        parent,
-        relativePath,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        hasPreview,
-        isFavorite,
-        fileMetadataWidth,
-        fileMetadataHeight
-      ];
+    rowId,
+    parent,
+    relativePath,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'nc_album_items';
   @override
-  VerificationContext validateIntegrity(Insertable<NcAlbumItem> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<NcAlbumItem> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('parent')) {
-      context.handle(_parentMeta,
-          parent.isAcceptableOrUnknown(data['parent']!, _parentMeta));
+      context.handle(
+        _parentMeta,
+        parent.isAcceptableOrUnknown(data['parent']!, _parentMeta),
+      );
     } else if (isInserting) {
       context.missing(_parentMeta);
     }
     if (data.containsKey('relative_path')) {
       context.handle(
+        _relativePathMeta,
+        relativePath.isAcceptableOrUnknown(
+          data['relative_path']!,
           _relativePathMeta,
-          relativePath.isAcceptableOrUnknown(
-              data['relative_path']!, _relativePathMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_relativePathMeta);
     }
     if (data.containsKey('file_id')) {
-      context.handle(_fileIdMeta,
-          fileId.isAcceptableOrUnknown(data['file_id']!, _fileIdMeta));
+      context.handle(
+        _fileIdMeta,
+        fileId.isAcceptableOrUnknown(data['file_id']!, _fileIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_fileIdMeta);
     }
     if (data.containsKey('content_length')) {
       context.handle(
+        _contentLengthMeta,
+        contentLength.isAcceptableOrUnknown(
+          data['content_length']!,
           _contentLengthMeta,
-          contentLength.isAcceptableOrUnknown(
-              data['content_length']!, _contentLengthMeta));
+        ),
+      );
     }
     if (data.containsKey('content_type')) {
       context.handle(
+        _contentTypeMeta,
+        contentType.isAcceptableOrUnknown(
+          data['content_type']!,
           _contentTypeMeta,
-          contentType.isAcceptableOrUnknown(
-              data['content_type']!, _contentTypeMeta));
+        ),
+      );
     }
     if (data.containsKey('etag')) {
       context.handle(
-          _etagMeta, etag.isAcceptableOrUnknown(data['etag']!, _etagMeta));
+        _etagMeta,
+        etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
+      );
     }
     context.handle(_lastModifiedMeta, const VerificationResult.success());
     if (data.containsKey('has_preview')) {
       context.handle(
-          _hasPreviewMeta,
-          hasPreview.isAcceptableOrUnknown(
-              data['has_preview']!, _hasPreviewMeta));
+        _hasPreviewMeta,
+        hasPreview.isAcceptableOrUnknown(data['has_preview']!, _hasPreviewMeta),
+      );
     }
     if (data.containsKey('is_favorite')) {
       context.handle(
-          _isFavoriteMeta,
-          isFavorite.isAcceptableOrUnknown(
-              data['is_favorite']!, _isFavoriteMeta));
+        _isFavoriteMeta,
+        isFavorite.isAcceptableOrUnknown(data['is_favorite']!, _isFavoriteMeta),
+      );
     }
     if (data.containsKey('file_metadata_width')) {
       context.handle(
+        _fileMetadataWidthMeta,
+        fileMetadataWidth.isAcceptableOrUnknown(
+          data['file_metadata_width']!,
           _fileMetadataWidthMeta,
-          fileMetadataWidth.isAcceptableOrUnknown(
-              data['file_metadata_width']!, _fileMetadataWidthMeta));
+        ),
+      );
     }
     if (data.containsKey('file_metadata_height')) {
       context.handle(
+        _fileMetadataHeightMeta,
+        fileMetadataHeight.isAcceptableOrUnknown(
+          data['file_metadata_height']!,
           _fileMetadataHeightMeta,
-          fileMetadataHeight.isAcceptableOrUnknown(
-              data['file_metadata_height']!, _fileMetadataHeightMeta));
+        ),
+      );
     }
     return context;
   }
@@ -4922,37 +6172,66 @@ class $NcAlbumItemsTable extends NcAlbumItems
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {parent, fileId},
-      ];
+    {parent, fileId},
+  ];
   @override
   NcAlbumItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NcAlbumItem(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      parent: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}parent'])!,
-      relativePath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}relative_path'])!,
-      fileId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file_id'])!,
-      contentLength: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}content_length']),
-      contentType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}content_type']),
-      etag: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}etag']),
-      lastModified: $NcAlbumItemsTable.$converterlastModifiedn.fromSql(
+      rowId:
           attachedDatabase.typeMapping.read(
-              DriftSqlType.dateTime, data['${effectivePrefix}last_modified'])),
-      hasPreview: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}has_preview']),
-      isFavorite: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite']),
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      parent:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}parent'],
+          )!,
+      relativePath:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}relative_path'],
+          )!,
+      fileId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}file_id'],
+          )!,
+      contentLength: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}content_length'],
+      ),
+      contentType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_type'],
+      ),
+      etag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}etag'],
+      ),
+      lastModified: $NcAlbumItemsTable.$converterlastModifiedn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modified'],
+        ),
+      ),
+      hasPreview: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}has_preview'],
+      ),
+      isFavorite: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_favorite'],
+      ),
       fileMetadataWidth: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}file_metadata_width']),
+        DriftSqlType.int,
+        data['${effectivePrefix}file_metadata_width'],
+      ),
       fileMetadataHeight: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}file_metadata_height']),
+        DriftSqlType.int,
+        data['${effectivePrefix}file_metadata_height'],
+      ),
     );
   }
 
@@ -4980,19 +6259,20 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
   final bool? isFavorite;
   final int? fileMetadataWidth;
   final int? fileMetadataHeight;
-  const NcAlbumItem(
-      {required this.rowId,
-      required this.parent,
-      required this.relativePath,
-      required this.fileId,
-      this.contentLength,
-      this.contentType,
-      this.etag,
-      this.lastModified,
-      this.hasPreview,
-      this.isFavorite,
-      this.fileMetadataWidth,
-      this.fileMetadataHeight});
+  const NcAlbumItem({
+    required this.rowId,
+    required this.parent,
+    required this.relativePath,
+    required this.fileId,
+    this.contentLength,
+    this.contentType,
+    this.etag,
+    this.lastModified,
+    this.hasPreview,
+    this.isFavorite,
+    this.fileMetadataWidth,
+    this.fileMetadataHeight,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5011,7 +6291,8 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
     }
     if (!nullToAbsent || lastModified != null) {
       map['last_modified'] = Variable<DateTime>(
-          $NcAlbumItemsTable.$converterlastModifiedn.toSql(lastModified));
+        $NcAlbumItemsTable.$converterlastModifiedn.toSql(lastModified),
+      );
     }
     if (!nullToAbsent || hasPreview != null) {
       map['has_preview'] = Variable<bool>(hasPreview);
@@ -5034,33 +6315,42 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
       parent: Value(parent),
       relativePath: Value(relativePath),
       fileId: Value(fileId),
-      contentLength: contentLength == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contentLength),
-      contentType: contentType == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contentType),
+      contentLength:
+          contentLength == null && nullToAbsent
+              ? const Value.absent()
+              : Value(contentLength),
+      contentType:
+          contentType == null && nullToAbsent
+              ? const Value.absent()
+              : Value(contentType),
       etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
-      lastModified: lastModified == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastModified),
-      hasPreview: hasPreview == null && nullToAbsent
-          ? const Value.absent()
-          : Value(hasPreview),
-      isFavorite: isFavorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isFavorite),
-      fileMetadataWidth: fileMetadataWidth == null && nullToAbsent
-          ? const Value.absent()
-          : Value(fileMetadataWidth),
-      fileMetadataHeight: fileMetadataHeight == null && nullToAbsent
-          ? const Value.absent()
-          : Value(fileMetadataHeight),
+      lastModified:
+          lastModified == null && nullToAbsent
+              ? const Value.absent()
+              : Value(lastModified),
+      hasPreview:
+          hasPreview == null && nullToAbsent
+              ? const Value.absent()
+              : Value(hasPreview),
+      isFavorite:
+          isFavorite == null && nullToAbsent
+              ? const Value.absent()
+              : Value(isFavorite),
+      fileMetadataWidth:
+          fileMetadataWidth == null && nullToAbsent
+              ? const Value.absent()
+              : Value(fileMetadataWidth),
+      fileMetadataHeight:
+          fileMetadataHeight == null && nullToAbsent
+              ? const Value.absent()
+              : Value(fileMetadataHeight),
     );
   }
 
-  factory NcAlbumItem.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory NcAlbumItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return NcAlbumItem(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -5096,39 +6386,75 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
     };
   }
 
-  NcAlbumItem copyWith(
-          {int? rowId,
-          int? parent,
-          String? relativePath,
-          int? fileId,
-          Value<int?> contentLength = const Value.absent(),
-          Value<String?> contentType = const Value.absent(),
-          Value<String?> etag = const Value.absent(),
-          Value<DateTime?> lastModified = const Value.absent(),
-          Value<bool?> hasPreview = const Value.absent(),
-          Value<bool?> isFavorite = const Value.absent(),
-          Value<int?> fileMetadataWidth = const Value.absent(),
-          Value<int?> fileMetadataHeight = const Value.absent()}) =>
-      NcAlbumItem(
-        rowId: rowId ?? this.rowId,
-        parent: parent ?? this.parent,
-        relativePath: relativePath ?? this.relativePath,
-        fileId: fileId ?? this.fileId,
-        contentLength:
-            contentLength.present ? contentLength.value : this.contentLength,
-        contentType: contentType.present ? contentType.value : this.contentType,
-        etag: etag.present ? etag.value : this.etag,
-        lastModified:
-            lastModified.present ? lastModified.value : this.lastModified,
-        hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
-        isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
-        fileMetadataWidth: fileMetadataWidth.present
+  NcAlbumItem copyWith({
+    int? rowId,
+    int? parent,
+    String? relativePath,
+    int? fileId,
+    Value<int?> contentLength = const Value.absent(),
+    Value<String?> contentType = const Value.absent(),
+    Value<String?> etag = const Value.absent(),
+    Value<DateTime?> lastModified = const Value.absent(),
+    Value<bool?> hasPreview = const Value.absent(),
+    Value<bool?> isFavorite = const Value.absent(),
+    Value<int?> fileMetadataWidth = const Value.absent(),
+    Value<int?> fileMetadataHeight = const Value.absent(),
+  }) => NcAlbumItem(
+    rowId: rowId ?? this.rowId,
+    parent: parent ?? this.parent,
+    relativePath: relativePath ?? this.relativePath,
+    fileId: fileId ?? this.fileId,
+    contentLength:
+        contentLength.present ? contentLength.value : this.contentLength,
+    contentType: contentType.present ? contentType.value : this.contentType,
+    etag: etag.present ? etag.value : this.etag,
+    lastModified: lastModified.present ? lastModified.value : this.lastModified,
+    hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
+    isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
+    fileMetadataWidth:
+        fileMetadataWidth.present
             ? fileMetadataWidth.value
             : this.fileMetadataWidth,
-        fileMetadataHeight: fileMetadataHeight.present
+    fileMetadataHeight:
+        fileMetadataHeight.present
             ? fileMetadataHeight.value
             : this.fileMetadataHeight,
-      );
+  );
+  NcAlbumItem copyWithCompanion(NcAlbumItemsCompanion data) {
+    return NcAlbumItem(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      parent: data.parent.present ? data.parent.value : this.parent,
+      relativePath:
+          data.relativePath.present
+              ? data.relativePath.value
+              : this.relativePath,
+      fileId: data.fileId.present ? data.fileId.value : this.fileId,
+      contentLength:
+          data.contentLength.present
+              ? data.contentLength.value
+              : this.contentLength,
+      contentType:
+          data.contentType.present ? data.contentType.value : this.contentType,
+      etag: data.etag.present ? data.etag.value : this.etag,
+      lastModified:
+          data.lastModified.present
+              ? data.lastModified.value
+              : this.lastModified,
+      hasPreview:
+          data.hasPreview.present ? data.hasPreview.value : this.hasPreview,
+      isFavorite:
+          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
+      fileMetadataWidth:
+          data.fileMetadataWidth.present
+              ? data.fileMetadataWidth.value
+              : this.fileMetadataWidth,
+      fileMetadataHeight:
+          data.fileMetadataHeight.present
+              ? data.fileMetadataHeight.value
+              : this.fileMetadataHeight,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('NcAlbumItem(')
@@ -5150,18 +6476,19 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
 
   @override
   int get hashCode => Object.hash(
-      rowId,
-      parent,
-      relativePath,
-      fileId,
-      contentLength,
-      contentType,
-      etag,
-      lastModified,
-      hasPreview,
-      isFavorite,
-      fileMetadataWidth,
-      fileMetadataHeight);
+    rowId,
+    parent,
+    relativePath,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -5220,9 +6547,9 @@ class NcAlbumItemsCompanion extends UpdateCompanion<NcAlbumItem> {
     this.isFavorite = const Value.absent(),
     this.fileMetadataWidth = const Value.absent(),
     this.fileMetadataHeight = const Value.absent(),
-  })  : parent = Value(parent),
-        relativePath = Value(relativePath),
-        fileId = Value(fileId);
+  }) : parent = Value(parent),
+       relativePath = Value(relativePath),
+       fileId = Value(fileId);
   static Insertable<NcAlbumItem> custom({
     Expression<int>? rowId,
     Expression<int>? parent,
@@ -5254,19 +6581,20 @@ class NcAlbumItemsCompanion extends UpdateCompanion<NcAlbumItem> {
     });
   }
 
-  NcAlbumItemsCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? parent,
-      Value<String>? relativePath,
-      Value<int>? fileId,
-      Value<int?>? contentLength,
-      Value<String?>? contentType,
-      Value<String?>? etag,
-      Value<DateTime?>? lastModified,
-      Value<bool?>? hasPreview,
-      Value<bool?>? isFavorite,
-      Value<int?>? fileMetadataWidth,
-      Value<int?>? fileMetadataHeight}) {
+  NcAlbumItemsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? parent,
+    Value<String>? relativePath,
+    Value<int>? fileId,
+    Value<int?>? contentLength,
+    Value<String?>? contentType,
+    Value<String?>? etag,
+    Value<DateTime?>? lastModified,
+    Value<bool?>? hasPreview,
+    Value<bool?>? isFavorite,
+    Value<int?>? fileMetadataWidth,
+    Value<int?>? fileMetadataHeight,
+  }) {
     return NcAlbumItemsCompanion(
       rowId: rowId ?? this.rowId,
       parent: parent ?? this.parent,
@@ -5309,7 +6637,8 @@ class NcAlbumItemsCompanion extends UpdateCompanion<NcAlbumItem> {
     }
     if (lastModified.present) {
       map['last_modified'] = Variable<DateTime>(
-          $NcAlbumItemsTable.$converterlastModifiedn.toSql(lastModified.value));
+        $NcAlbumItemsTable.$converterlastModifiedn.toSql(lastModified.value),
+      );
     }
     if (hasPreview.present) {
       map['has_preview'] = Variable<bool>(hasPreview.value);
@@ -5355,26 +6684,39 @@ class $RecognizeFacesTable extends RecognizeFaces
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
-  static const VerificationMeta _accountMeta =
-      const VerificationMeta('account');
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
+  static const VerificationMeta _accountMeta = const VerificationMeta(
+    'account',
+  );
   @override
   late final GeneratedColumn<int> account = GeneratedColumn<int>(
-      'account', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES accounts (row_id) ON DELETE CASCADE'));
+    'account',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES accounts (row_id) ON DELETE CASCADE',
+    ),
+  );
   static const VerificationMeta _labelMeta = const VerificationMeta('label');
   @override
   late final GeneratedColumn<String> label = GeneratedColumn<String>(
-      'label', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'label',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   @override
   List<GeneratedColumn> get $columns => [rowId, account, label];
   @override
@@ -5383,23 +6725,31 @@ class $RecognizeFacesTable extends RecognizeFaces
   String get actualTableName => $name;
   static const String $name = 'recognize_faces';
   @override
-  VerificationContext validateIntegrity(Insertable<RecognizeFace> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<RecognizeFace> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('account')) {
-      context.handle(_accountMeta,
-          account.isAcceptableOrUnknown(data['account']!, _accountMeta));
+      context.handle(
+        _accountMeta,
+        account.isAcceptableOrUnknown(data['account']!, _accountMeta),
+      );
     } else if (isInserting) {
       context.missing(_accountMeta);
     }
     if (data.containsKey('label')) {
       context.handle(
-          _labelMeta, label.isAcceptableOrUnknown(data['label']!, _labelMeta));
+        _labelMeta,
+        label.isAcceptableOrUnknown(data['label']!, _labelMeta),
+      );
     } else if (isInserting) {
       context.missing(_labelMeta);
     }
@@ -5410,18 +6760,27 @@ class $RecognizeFacesTable extends RecognizeFaces
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {account, label},
-      ];
+    {account, label},
+  ];
   @override
   RecognizeFace map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return RecognizeFace(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      account: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}account'])!,
-      label: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}label'])!,
+      rowId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      account:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}account'],
+          )!,
+      label:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}label'],
+          )!,
     );
   }
 
@@ -5435,8 +6794,11 @@ class RecognizeFace extends DataClass implements Insertable<RecognizeFace> {
   final int rowId;
   final int account;
   final String label;
-  const RecognizeFace(
-      {required this.rowId, required this.account, required this.label});
+  const RecognizeFace({
+    required this.rowId,
+    required this.account,
+    required this.label,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5454,8 +6816,10 @@ class RecognizeFace extends DataClass implements Insertable<RecognizeFace> {
     );
   }
 
-  factory RecognizeFace.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory RecognizeFace.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return RecognizeFace(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -5479,6 +6843,14 @@ class RecognizeFace extends DataClass implements Insertable<RecognizeFace> {
         account: account ?? this.account,
         label: label ?? this.label,
       );
+  RecognizeFace copyWithCompanion(RecognizeFacesCompanion data) {
+    return RecognizeFace(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      account: data.account.present ? data.account.value : this.account,
+      label: data.label.present ? data.label.value : this.label,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('RecognizeFace(')
@@ -5513,8 +6885,8 @@ class RecognizeFacesCompanion extends UpdateCompanion<RecognizeFace> {
     this.rowId = const Value.absent(),
     required int account,
     required String label,
-  })  : account = Value(account),
-        label = Value(label);
+  }) : account = Value(account),
+       label = Value(label);
   static Insertable<RecognizeFace> custom({
     Expression<int>? rowId,
     Expression<int>? account,
@@ -5527,8 +6899,11 @@ class RecognizeFacesCompanion extends UpdateCompanion<RecognizeFace> {
     });
   }
 
-  RecognizeFacesCompanion copyWith(
-      {Value<int>? rowId, Value<int>? account, Value<String>? label}) {
+  RecognizeFacesCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? account,
+    Value<String>? label,
+  }) {
     return RecognizeFacesCompanion(
       rowId: rowId ?? this.rowId,
       account: account ?? this.account,
@@ -5571,200 +6946,293 @@ class $RecognizeFaceItemsTable extends RecognizeFaceItems
   static const VerificationMeta _rowIdMeta = const VerificationMeta('rowId');
   @override
   late final GeneratedColumn<int> rowId = GeneratedColumn<int>(
-      'row_id', aliasedName, false,
-      hasAutoIncrement: true,
-      type: DriftSqlType.int,
-      requiredDuringInsert: false,
-      defaultConstraints:
-          GeneratedColumn.constraintIsAlways('PRIMARY KEY AUTOINCREMENT'));
+    'row_id',
+    aliasedName,
+    false,
+    hasAutoIncrement: true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'PRIMARY KEY AUTOINCREMENT',
+    ),
+  );
   static const VerificationMeta _parentMeta = const VerificationMeta('parent');
   @override
   late final GeneratedColumn<int> parent = GeneratedColumn<int>(
-      'parent', aliasedName, false,
-      type: DriftSqlType.int,
-      requiredDuringInsert: true,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'REFERENCES recognize_faces (row_id) ON DELETE CASCADE'));
-  static const VerificationMeta _relativePathMeta =
-      const VerificationMeta('relativePath');
+    'parent',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES recognize_faces (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _relativePathMeta = const VerificationMeta(
+    'relativePath',
+  );
   @override
   late final GeneratedColumn<String> relativePath = GeneratedColumn<String>(
-      'relative_path', aliasedName, false,
-      type: DriftSqlType.string, requiredDuringInsert: true);
+    'relative_path',
+    aliasedName,
+    false,
+    type: DriftSqlType.string,
+    requiredDuringInsert: true,
+  );
   static const VerificationMeta _fileIdMeta = const VerificationMeta('fileId');
   @override
   late final GeneratedColumn<int> fileId = GeneratedColumn<int>(
-      'file_id', aliasedName, false,
-      type: DriftSqlType.int, requiredDuringInsert: true);
-  static const VerificationMeta _contentLengthMeta =
-      const VerificationMeta('contentLength');
+    'file_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _contentLengthMeta = const VerificationMeta(
+    'contentLength',
+  );
   @override
   late final GeneratedColumn<int> contentLength = GeneratedColumn<int>(
-      'content_length', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _contentTypeMeta =
-      const VerificationMeta('contentType');
+    'content_length',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _contentTypeMeta = const VerificationMeta(
+    'contentType',
+  );
   @override
   late final GeneratedColumn<String> contentType = GeneratedColumn<String>(
-      'content_type', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'content_type',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _etagMeta = const VerificationMeta('etag');
   @override
   late final GeneratedColumn<String> etag = GeneratedColumn<String>(
-      'etag', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _lastModifiedMeta =
-      const VerificationMeta('lastModified');
+    'etag',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
+    'lastModified',
+  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
-      lastModified = GeneratedColumn<DateTime>(
-              'last_modified', aliasedName, true,
-              type: DriftSqlType.dateTime, requiredDuringInsert: false)
-          .withConverter<DateTime?>(
-              $RecognizeFaceItemsTable.$converterlastModifiedn);
-  static const VerificationMeta _hasPreviewMeta =
-      const VerificationMeta('hasPreview');
+  lastModified = GeneratedColumn<DateTime>(
+    'last_modified',
+    aliasedName,
+    true,
+    type: DriftSqlType.dateTime,
+    requiredDuringInsert: false,
+  ).withConverter<DateTime?>($RecognizeFaceItemsTable.$converterlastModifiedn);
+  static const VerificationMeta _hasPreviewMeta = const VerificationMeta(
+    'hasPreview',
+  );
   @override
   late final GeneratedColumn<bool> hasPreview = GeneratedColumn<bool>(
-      'has_preview', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("has_preview" IN (0, 1))'));
-  static const VerificationMeta _realPathMeta =
-      const VerificationMeta('realPath');
+    'has_preview',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("has_preview" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _realPathMeta = const VerificationMeta(
+    'realPath',
+  );
   @override
   late final GeneratedColumn<String> realPath = GeneratedColumn<String>(
-      'real_path', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
-  static const VerificationMeta _isFavoriteMeta =
-      const VerificationMeta('isFavorite');
+    'real_path',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _isFavoriteMeta = const VerificationMeta(
+    'isFavorite',
+  );
   @override
   late final GeneratedColumn<bool> isFavorite = GeneratedColumn<bool>(
-      'is_favorite', aliasedName, true,
-      type: DriftSqlType.bool,
-      requiredDuringInsert: false,
-      defaultConstraints: GeneratedColumn.constraintIsAlways(
-          'CHECK ("is_favorite" IN (0, 1))'));
-  static const VerificationMeta _fileMetadataWidthMeta =
-      const VerificationMeta('fileMetadataWidth');
+    'is_favorite',
+    aliasedName,
+    true,
+    type: DriftSqlType.bool,
+    requiredDuringInsert: false,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'CHECK ("is_favorite" IN (0, 1))',
+    ),
+  );
+  static const VerificationMeta _fileMetadataWidthMeta = const VerificationMeta(
+    'fileMetadataWidth',
+  );
   @override
   late final GeneratedColumn<int> fileMetadataWidth = GeneratedColumn<int>(
-      'file_metadata_width', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
+    'file_metadata_width',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
   static const VerificationMeta _fileMetadataHeightMeta =
       const VerificationMeta('fileMetadataHeight');
   @override
   late final GeneratedColumn<int> fileMetadataHeight = GeneratedColumn<int>(
-      'file_metadata_height', aliasedName, true,
-      type: DriftSqlType.int, requiredDuringInsert: false);
-  static const VerificationMeta _faceDetectionsMeta =
-      const VerificationMeta('faceDetections');
+    'file_metadata_height',
+    aliasedName,
+    true,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+  );
+  static const VerificationMeta _faceDetectionsMeta = const VerificationMeta(
+    'faceDetections',
+  );
   @override
   late final GeneratedColumn<String> faceDetections = GeneratedColumn<String>(
-      'face_detections', aliasedName, true,
-      type: DriftSqlType.string, requiredDuringInsert: false);
+    'face_detections',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
-        rowId,
-        parent,
-        relativePath,
-        fileId,
-        contentLength,
-        contentType,
-        etag,
-        lastModified,
-        hasPreview,
-        realPath,
-        isFavorite,
-        fileMetadataWidth,
-        fileMetadataHeight,
-        faceDetections
-      ];
+    rowId,
+    parent,
+    relativePath,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    realPath,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+    faceDetections,
+  ];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
   String get actualTableName => $name;
   static const String $name = 'recognize_face_items';
   @override
-  VerificationContext validateIntegrity(Insertable<RecognizeFaceItem> instance,
-      {bool isInserting = false}) {
+  VerificationContext validateIntegrity(
+    Insertable<RecognizeFaceItem> instance, {
+    bool isInserting = false,
+  }) {
     final context = VerificationContext();
     final data = instance.toColumns(true);
     if (data.containsKey('row_id')) {
       context.handle(
-          _rowIdMeta, rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta));
+        _rowIdMeta,
+        rowId.isAcceptableOrUnknown(data['row_id']!, _rowIdMeta),
+      );
     }
     if (data.containsKey('parent')) {
-      context.handle(_parentMeta,
-          parent.isAcceptableOrUnknown(data['parent']!, _parentMeta));
+      context.handle(
+        _parentMeta,
+        parent.isAcceptableOrUnknown(data['parent']!, _parentMeta),
+      );
     } else if (isInserting) {
       context.missing(_parentMeta);
     }
     if (data.containsKey('relative_path')) {
       context.handle(
+        _relativePathMeta,
+        relativePath.isAcceptableOrUnknown(
+          data['relative_path']!,
           _relativePathMeta,
-          relativePath.isAcceptableOrUnknown(
-              data['relative_path']!, _relativePathMeta));
+        ),
+      );
     } else if (isInserting) {
       context.missing(_relativePathMeta);
     }
     if (data.containsKey('file_id')) {
-      context.handle(_fileIdMeta,
-          fileId.isAcceptableOrUnknown(data['file_id']!, _fileIdMeta));
+      context.handle(
+        _fileIdMeta,
+        fileId.isAcceptableOrUnknown(data['file_id']!, _fileIdMeta),
+      );
     } else if (isInserting) {
       context.missing(_fileIdMeta);
     }
     if (data.containsKey('content_length')) {
       context.handle(
+        _contentLengthMeta,
+        contentLength.isAcceptableOrUnknown(
+          data['content_length']!,
           _contentLengthMeta,
-          contentLength.isAcceptableOrUnknown(
-              data['content_length']!, _contentLengthMeta));
+        ),
+      );
     }
     if (data.containsKey('content_type')) {
       context.handle(
+        _contentTypeMeta,
+        contentType.isAcceptableOrUnknown(
+          data['content_type']!,
           _contentTypeMeta,
-          contentType.isAcceptableOrUnknown(
-              data['content_type']!, _contentTypeMeta));
+        ),
+      );
     }
     if (data.containsKey('etag')) {
       context.handle(
-          _etagMeta, etag.isAcceptableOrUnknown(data['etag']!, _etagMeta));
+        _etagMeta,
+        etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
+      );
     }
     context.handle(_lastModifiedMeta, const VerificationResult.success());
     if (data.containsKey('has_preview')) {
       context.handle(
-          _hasPreviewMeta,
-          hasPreview.isAcceptableOrUnknown(
-              data['has_preview']!, _hasPreviewMeta));
+        _hasPreviewMeta,
+        hasPreview.isAcceptableOrUnknown(data['has_preview']!, _hasPreviewMeta),
+      );
     }
     if (data.containsKey('real_path')) {
-      context.handle(_realPathMeta,
-          realPath.isAcceptableOrUnknown(data['real_path']!, _realPathMeta));
+      context.handle(
+        _realPathMeta,
+        realPath.isAcceptableOrUnknown(data['real_path']!, _realPathMeta),
+      );
     }
     if (data.containsKey('is_favorite')) {
       context.handle(
-          _isFavoriteMeta,
-          isFavorite.isAcceptableOrUnknown(
-              data['is_favorite']!, _isFavoriteMeta));
+        _isFavoriteMeta,
+        isFavorite.isAcceptableOrUnknown(data['is_favorite']!, _isFavoriteMeta),
+      );
     }
     if (data.containsKey('file_metadata_width')) {
       context.handle(
+        _fileMetadataWidthMeta,
+        fileMetadataWidth.isAcceptableOrUnknown(
+          data['file_metadata_width']!,
           _fileMetadataWidthMeta,
-          fileMetadataWidth.isAcceptableOrUnknown(
-              data['file_metadata_width']!, _fileMetadataWidthMeta));
+        ),
+      );
     }
     if (data.containsKey('file_metadata_height')) {
       context.handle(
+        _fileMetadataHeightMeta,
+        fileMetadataHeight.isAcceptableOrUnknown(
+          data['file_metadata_height']!,
           _fileMetadataHeightMeta,
-          fileMetadataHeight.isAcceptableOrUnknown(
-              data['file_metadata_height']!, _fileMetadataHeightMeta));
+        ),
+      );
     }
     if (data.containsKey('face_detections')) {
       context.handle(
+        _faceDetectionsMeta,
+        faceDetections.isAcceptableOrUnknown(
+          data['face_detections']!,
           _faceDetectionsMeta,
-          faceDetections.isAcceptableOrUnknown(
-              data['face_detections']!, _faceDetectionsMeta));
+        ),
+      );
     }
     return context;
   }
@@ -5773,41 +7241,74 @@ class $RecognizeFaceItemsTable extends RecognizeFaceItems
   Set<GeneratedColumn> get $primaryKey => {rowId};
   @override
   List<Set<GeneratedColumn>> get uniqueKeys => [
-        {parent, fileId},
-      ];
+    {parent, fileId},
+  ];
   @override
   RecognizeFaceItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return RecognizeFaceItem(
-      rowId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}row_id'])!,
-      parent: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}parent'])!,
-      relativePath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}relative_path'])!,
-      fileId: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}file_id'])!,
-      contentLength: attachedDatabase.typeMapping
-          .read(DriftSqlType.int, data['${effectivePrefix}content_length']),
-      contentType: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}content_type']),
-      etag: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}etag']),
-      lastModified: $RecognizeFaceItemsTable.$converterlastModifiedn.fromSql(
+      rowId:
           attachedDatabase.typeMapping.read(
-              DriftSqlType.dateTime, data['${effectivePrefix}last_modified'])),
-      hasPreview: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}has_preview']),
-      realPath: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}real_path']),
-      isFavorite: attachedDatabase.typeMapping
-          .read(DriftSqlType.bool, data['${effectivePrefix}is_favorite']),
+            DriftSqlType.int,
+            data['${effectivePrefix}row_id'],
+          )!,
+      parent:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}parent'],
+          )!,
+      relativePath:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}relative_path'],
+          )!,
+      fileId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}file_id'],
+          )!,
+      contentLength: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}content_length'],
+      ),
+      contentType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}content_type'],
+      ),
+      etag: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}etag'],
+      ),
+      lastModified: $RecognizeFaceItemsTable.$converterlastModifiedn.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.dateTime,
+          data['${effectivePrefix}last_modified'],
+        ),
+      ),
+      hasPreview: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}has_preview'],
+      ),
+      realPath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}real_path'],
+      ),
+      isFavorite: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_favorite'],
+      ),
       fileMetadataWidth: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}file_metadata_width']),
+        DriftSqlType.int,
+        data['${effectivePrefix}file_metadata_width'],
+      ),
       fileMetadataHeight: attachedDatabase.typeMapping.read(
-          DriftSqlType.int, data['${effectivePrefix}file_metadata_height']),
-      faceDetections: attachedDatabase.typeMapping
-          .read(DriftSqlType.string, data['${effectivePrefix}face_detections']),
+        DriftSqlType.int,
+        data['${effectivePrefix}file_metadata_height'],
+      ),
+      faceDetections: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}face_detections'],
+      ),
     );
   }
 
@@ -5838,21 +7339,22 @@ class RecognizeFaceItem extends DataClass
   final int? fileMetadataWidth;
   final int? fileMetadataHeight;
   final String? faceDetections;
-  const RecognizeFaceItem(
-      {required this.rowId,
-      required this.parent,
-      required this.relativePath,
-      required this.fileId,
-      this.contentLength,
-      this.contentType,
-      this.etag,
-      this.lastModified,
-      this.hasPreview,
-      this.realPath,
-      this.isFavorite,
-      this.fileMetadataWidth,
-      this.fileMetadataHeight,
-      this.faceDetections});
+  const RecognizeFaceItem({
+    required this.rowId,
+    required this.parent,
+    required this.relativePath,
+    required this.fileId,
+    this.contentLength,
+    this.contentType,
+    this.etag,
+    this.lastModified,
+    this.hasPreview,
+    this.realPath,
+    this.isFavorite,
+    this.fileMetadataWidth,
+    this.fileMetadataHeight,
+    this.faceDetections,
+  });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
@@ -5871,7 +7373,8 @@ class RecognizeFaceItem extends DataClass
     }
     if (!nullToAbsent || lastModified != null) {
       map['last_modified'] = Variable<DateTime>(
-          $RecognizeFaceItemsTable.$converterlastModifiedn.toSql(lastModified));
+        $RecognizeFaceItemsTable.$converterlastModifiedn.toSql(lastModified),
+      );
     }
     if (!nullToAbsent || hasPreview != null) {
       map['has_preview'] = Variable<bool>(hasPreview);
@@ -5900,39 +7403,50 @@ class RecognizeFaceItem extends DataClass
       parent: Value(parent),
       relativePath: Value(relativePath),
       fileId: Value(fileId),
-      contentLength: contentLength == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contentLength),
-      contentType: contentType == null && nullToAbsent
-          ? const Value.absent()
-          : Value(contentType),
+      contentLength:
+          contentLength == null && nullToAbsent
+              ? const Value.absent()
+              : Value(contentLength),
+      contentType:
+          contentType == null && nullToAbsent
+              ? const Value.absent()
+              : Value(contentType),
       etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
-      lastModified: lastModified == null && nullToAbsent
-          ? const Value.absent()
-          : Value(lastModified),
-      hasPreview: hasPreview == null && nullToAbsent
-          ? const Value.absent()
-          : Value(hasPreview),
-      realPath: realPath == null && nullToAbsent
-          ? const Value.absent()
-          : Value(realPath),
-      isFavorite: isFavorite == null && nullToAbsent
-          ? const Value.absent()
-          : Value(isFavorite),
-      fileMetadataWidth: fileMetadataWidth == null && nullToAbsent
-          ? const Value.absent()
-          : Value(fileMetadataWidth),
-      fileMetadataHeight: fileMetadataHeight == null && nullToAbsent
-          ? const Value.absent()
-          : Value(fileMetadataHeight),
-      faceDetections: faceDetections == null && nullToAbsent
-          ? const Value.absent()
-          : Value(faceDetections),
+      lastModified:
+          lastModified == null && nullToAbsent
+              ? const Value.absent()
+              : Value(lastModified),
+      hasPreview:
+          hasPreview == null && nullToAbsent
+              ? const Value.absent()
+              : Value(hasPreview),
+      realPath:
+          realPath == null && nullToAbsent
+              ? const Value.absent()
+              : Value(realPath),
+      isFavorite:
+          isFavorite == null && nullToAbsent
+              ? const Value.absent()
+              : Value(isFavorite),
+      fileMetadataWidth:
+          fileMetadataWidth == null && nullToAbsent
+              ? const Value.absent()
+              : Value(fileMetadataWidth),
+      fileMetadataHeight:
+          fileMetadataHeight == null && nullToAbsent
+              ? const Value.absent()
+              : Value(fileMetadataHeight),
+      faceDetections:
+          faceDetections == null && nullToAbsent
+              ? const Value.absent()
+              : Value(faceDetections),
     );
   }
 
-  factory RecognizeFaceItem.fromJson(Map<String, dynamic> json,
-      {ValueSerializer? serializer}) {
+  factory RecognizeFaceItem.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return RecognizeFaceItem(
       rowId: serializer.fromJson<int>(json['rowId']),
@@ -5972,44 +7486,85 @@ class RecognizeFaceItem extends DataClass
     };
   }
 
-  RecognizeFaceItem copyWith(
-          {int? rowId,
-          int? parent,
-          String? relativePath,
-          int? fileId,
-          Value<int?> contentLength = const Value.absent(),
-          Value<String?> contentType = const Value.absent(),
-          Value<String?> etag = const Value.absent(),
-          Value<DateTime?> lastModified = const Value.absent(),
-          Value<bool?> hasPreview = const Value.absent(),
-          Value<String?> realPath = const Value.absent(),
-          Value<bool?> isFavorite = const Value.absent(),
-          Value<int?> fileMetadataWidth = const Value.absent(),
-          Value<int?> fileMetadataHeight = const Value.absent(),
-          Value<String?> faceDetections = const Value.absent()}) =>
-      RecognizeFaceItem(
-        rowId: rowId ?? this.rowId,
-        parent: parent ?? this.parent,
-        relativePath: relativePath ?? this.relativePath,
-        fileId: fileId ?? this.fileId,
-        contentLength:
-            contentLength.present ? contentLength.value : this.contentLength,
-        contentType: contentType.present ? contentType.value : this.contentType,
-        etag: etag.present ? etag.value : this.etag,
-        lastModified:
-            lastModified.present ? lastModified.value : this.lastModified,
-        hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
-        realPath: realPath.present ? realPath.value : this.realPath,
-        isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
-        fileMetadataWidth: fileMetadataWidth.present
+  RecognizeFaceItem copyWith({
+    int? rowId,
+    int? parent,
+    String? relativePath,
+    int? fileId,
+    Value<int?> contentLength = const Value.absent(),
+    Value<String?> contentType = const Value.absent(),
+    Value<String?> etag = const Value.absent(),
+    Value<DateTime?> lastModified = const Value.absent(),
+    Value<bool?> hasPreview = const Value.absent(),
+    Value<String?> realPath = const Value.absent(),
+    Value<bool?> isFavorite = const Value.absent(),
+    Value<int?> fileMetadataWidth = const Value.absent(),
+    Value<int?> fileMetadataHeight = const Value.absent(),
+    Value<String?> faceDetections = const Value.absent(),
+  }) => RecognizeFaceItem(
+    rowId: rowId ?? this.rowId,
+    parent: parent ?? this.parent,
+    relativePath: relativePath ?? this.relativePath,
+    fileId: fileId ?? this.fileId,
+    contentLength:
+        contentLength.present ? contentLength.value : this.contentLength,
+    contentType: contentType.present ? contentType.value : this.contentType,
+    etag: etag.present ? etag.value : this.etag,
+    lastModified: lastModified.present ? lastModified.value : this.lastModified,
+    hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
+    realPath: realPath.present ? realPath.value : this.realPath,
+    isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
+    fileMetadataWidth:
+        fileMetadataWidth.present
             ? fileMetadataWidth.value
             : this.fileMetadataWidth,
-        fileMetadataHeight: fileMetadataHeight.present
+    fileMetadataHeight:
+        fileMetadataHeight.present
             ? fileMetadataHeight.value
             : this.fileMetadataHeight,
-        faceDetections:
-            faceDetections.present ? faceDetections.value : this.faceDetections,
-      );
+    faceDetections:
+        faceDetections.present ? faceDetections.value : this.faceDetections,
+  );
+  RecognizeFaceItem copyWithCompanion(RecognizeFaceItemsCompanion data) {
+    return RecognizeFaceItem(
+      rowId: data.rowId.present ? data.rowId.value : this.rowId,
+      parent: data.parent.present ? data.parent.value : this.parent,
+      relativePath:
+          data.relativePath.present
+              ? data.relativePath.value
+              : this.relativePath,
+      fileId: data.fileId.present ? data.fileId.value : this.fileId,
+      contentLength:
+          data.contentLength.present
+              ? data.contentLength.value
+              : this.contentLength,
+      contentType:
+          data.contentType.present ? data.contentType.value : this.contentType,
+      etag: data.etag.present ? data.etag.value : this.etag,
+      lastModified:
+          data.lastModified.present
+              ? data.lastModified.value
+              : this.lastModified,
+      hasPreview:
+          data.hasPreview.present ? data.hasPreview.value : this.hasPreview,
+      realPath: data.realPath.present ? data.realPath.value : this.realPath,
+      isFavorite:
+          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
+      fileMetadataWidth:
+          data.fileMetadataWidth.present
+              ? data.fileMetadataWidth.value
+              : this.fileMetadataWidth,
+      fileMetadataHeight:
+          data.fileMetadataHeight.present
+              ? data.fileMetadataHeight.value
+              : this.fileMetadataHeight,
+      faceDetections:
+          data.faceDetections.present
+              ? data.faceDetections.value
+              : this.faceDetections,
+    );
+  }
+
   @override
   String toString() {
     return (StringBuffer('RecognizeFaceItem(')
@@ -6033,20 +7588,21 @@ class RecognizeFaceItem extends DataClass
 
   @override
   int get hashCode => Object.hash(
-      rowId,
-      parent,
-      relativePath,
-      fileId,
-      contentLength,
-      contentType,
-      etag,
-      lastModified,
-      hasPreview,
-      realPath,
-      isFavorite,
-      fileMetadataWidth,
-      fileMetadataHeight,
-      faceDetections);
+    rowId,
+    parent,
+    relativePath,
+    fileId,
+    contentLength,
+    contentType,
+    etag,
+    lastModified,
+    hasPreview,
+    realPath,
+    isFavorite,
+    fileMetadataWidth,
+    fileMetadataHeight,
+    faceDetections,
+  );
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
@@ -6113,9 +7669,9 @@ class RecognizeFaceItemsCompanion extends UpdateCompanion<RecognizeFaceItem> {
     this.fileMetadataWidth = const Value.absent(),
     this.fileMetadataHeight = const Value.absent(),
     this.faceDetections = const Value.absent(),
-  })  : parent = Value(parent),
-        relativePath = Value(relativePath),
-        fileId = Value(fileId);
+  }) : parent = Value(parent),
+       relativePath = Value(relativePath),
+       fileId = Value(fileId);
   static Insertable<RecognizeFaceItem> custom({
     Expression<int>? rowId,
     Expression<int>? parent,
@@ -6151,21 +7707,22 @@ class RecognizeFaceItemsCompanion extends UpdateCompanion<RecognizeFaceItem> {
     });
   }
 
-  RecognizeFaceItemsCompanion copyWith(
-      {Value<int>? rowId,
-      Value<int>? parent,
-      Value<String>? relativePath,
-      Value<int>? fileId,
-      Value<int?>? contentLength,
-      Value<String?>? contentType,
-      Value<String?>? etag,
-      Value<DateTime?>? lastModified,
-      Value<bool?>? hasPreview,
-      Value<String?>? realPath,
-      Value<bool?>? isFavorite,
-      Value<int?>? fileMetadataWidth,
-      Value<int?>? fileMetadataHeight,
-      Value<String?>? faceDetections}) {
+  RecognizeFaceItemsCompanion copyWith({
+    Value<int>? rowId,
+    Value<int>? parent,
+    Value<String>? relativePath,
+    Value<int>? fileId,
+    Value<int?>? contentLength,
+    Value<String?>? contentType,
+    Value<String?>? etag,
+    Value<DateTime?>? lastModified,
+    Value<bool?>? hasPreview,
+    Value<String?>? realPath,
+    Value<bool?>? isFavorite,
+    Value<int?>? fileMetadataWidth,
+    Value<int?>? fileMetadataHeight,
+    Value<String?>? faceDetections,
+  }) {
     return RecognizeFaceItemsCompanion(
       rowId: rowId ?? this.rowId,
       parent: parent ?? this.parent,
@@ -6209,9 +7766,11 @@ class RecognizeFaceItemsCompanion extends UpdateCompanion<RecognizeFaceItem> {
       map['etag'] = Variable<String>(etag.value);
     }
     if (lastModified.present) {
-      map['last_modified'] = Variable<DateTime>($RecognizeFaceItemsTable
-          .$converterlastModifiedn
-          .toSql(lastModified.value));
+      map['last_modified'] = Variable<DateTime>(
+        $RecognizeFaceItemsTable.$converterlastModifiedn.toSql(
+          lastModified.value,
+        ),
+      );
     }
     if (hasPreview.present) {
       map['has_preview'] = Variable<bool>(hasPreview.value);
@@ -6258,6 +7817,7 @@ class RecognizeFaceItemsCompanion extends UpdateCompanion<RecognizeFaceItem> {
 
 abstract class _$SqliteDb extends GeneratedDatabase {
   _$SqliteDb(QueryExecutor e) : super(e);
+  $SqliteDbManager get managers => $SqliteDbManager(this);
   late final $ServersTable servers = $ServersTable(this);
   late final $AccountsTable accounts = $AccountsTable(this);
   late final $FilesTable files = $FilesTable(this);
@@ -6281,147 +7841,7604 @@ abstract class _$SqliteDb extends GeneratedDatabase {
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
   @override
   List<DatabaseSchemaEntity> get allSchemaEntities => [
-        servers,
-        accounts,
-        files,
-        accountFiles,
-        images,
-        imageLocations,
-        trashes,
-        dirFiles,
-        albums,
-        albumShares,
-        tags,
-        faceRecognitionPersons,
-        ncAlbums,
-        ncAlbumItems,
-        recognizeFaces,
-        recognizeFaceItems
-      ];
+    servers,
+    accounts,
+    files,
+    accountFiles,
+    images,
+    imageLocations,
+    trashes,
+    dirFiles,
+    albums,
+    albumShares,
+    tags,
+    faceRecognitionPersons,
+    ncAlbums,
+    ncAlbumItems,
+    recognizeFaces,
+    recognizeFaceItems,
+  ];
   @override
-  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules(
-        [
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('servers',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('accounts', kind: UpdateKind.delete),
-            ],
+  StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'servers',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('accounts', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'servers',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('files', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('account_files', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('account_files', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'account_files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('images', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'account_files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('image_locations', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('trashes', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('dir_files', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('dir_files', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'files',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('albums', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'albums',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('album_shares', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'servers',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('tags', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [
+        TableUpdate('face_recognition_persons', kind: UpdateKind.delete),
+      ],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('nc_albums', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'nc_albums',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('nc_album_items', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'accounts',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('recognize_faces', kind: UpdateKind.delete)],
+    ),
+    WritePropagation(
+      on: TableUpdateQuery.onTableName(
+        'recognize_faces',
+        limitUpdateKind: UpdateKind.delete,
+      ),
+      result: [TableUpdate('recognize_face_items', kind: UpdateKind.delete)],
+    ),
+  ]);
+}
+
+typedef $$ServersTableCreateCompanionBuilder =
+    ServersCompanion Function({Value<int> rowId, required String address});
+typedef $$ServersTableUpdateCompanionBuilder =
+    ServersCompanion Function({Value<int> rowId, Value<String> address});
+
+final class $$ServersTableReferences
+    extends BaseReferences<_$SqliteDb, $ServersTable, Server> {
+  $$ServersTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static MultiTypedResultKey<$AccountsTable, List<Account>> _accountsRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.accounts,
+    aliasName: $_aliasNameGenerator(db.servers.rowId, db.accounts.server),
+  );
+
+  $$AccountsTableProcessedTableManager get accountsRefs {
+    final manager = $$AccountsTableTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.server.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_accountsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$FilesTable, List<File>> _filesRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.files,
+    aliasName: $_aliasNameGenerator(db.servers.rowId, db.files.server),
+  );
+
+  $$FilesTableProcessedTableManager get filesRefs {
+    final manager = $$FilesTableTableManager(
+      $_db,
+      $_db.files,
+    ).filter((f) => f.server.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_filesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$TagsTable, List<Tag>> _tagsRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.tags,
+    aliasName: $_aliasNameGenerator(db.servers.rowId, db.tags.server),
+  );
+
+  $$TagsTableProcessedTableManager get tagsRefs {
+    final manager = $$TagsTableTableManager(
+      $_db,
+      $_db.tags,
+    ).filter((f) => f.server.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_tagsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$ServersTableFilterComposer extends Composer<_$SqliteDb, $ServersTable> {
+  $$ServersTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  Expression<bool> accountsRefs(
+    Expression<bool> Function($$AccountsTableFilterComposer f) f,
+  ) {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.server,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('servers',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('files', kind: UpdateKind.delete),
-            ],
+    );
+    return f(composer);
+  }
+
+  Expression<bool> filesRefs(
+    Expression<bool> Function($$FilesTableFilterComposer f) f,
+  ) {
+    final $$FilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.server,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableFilterComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('accounts',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('account_files', kind: UpdateKind.delete),
-            ],
+    );
+    return f(composer);
+  }
+
+  Expression<bool> tagsRefs(
+    Expression<bool> Function($$TagsTableFilterComposer f) f,
+  ) {
+    final $$TagsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.tags,
+      getReferencedColumn: (t) => t.server,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TagsTableFilterComposer(
+            $db: $db,
+            $table: $db.tags,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('account_files', kind: UpdateKind.delete),
-            ],
+    );
+    return f(composer);
+  }
+}
+
+class $$ServersTableOrderingComposer
+    extends Composer<_$SqliteDb, $ServersTable> {
+  $$ServersTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get address => $composableBuilder(
+    column: $table.address,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ServersTableAnnotationComposer
+    extends Composer<_$SqliteDb, $ServersTable> {
+  $$ServersTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get address =>
+      $composableBuilder(column: $table.address, builder: (column) => column);
+
+  Expression<T> accountsRefs<T extends Object>(
+    Expression<T> Function($$AccountsTableAnnotationComposer a) f,
+  ) {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.server,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('account_files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('images', kind: UpdateKind.delete),
-            ],
+    );
+    return f(composer);
+  }
+
+  Expression<T> filesRefs<T extends Object>(
+    Expression<T> Function($$FilesTableAnnotationComposer a) f,
+  ) {
+    final $$FilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.server,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('account_files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('image_locations', kind: UpdateKind.delete),
-            ],
+    );
+    return f(composer);
+  }
+
+  Expression<T> tagsRefs<T extends Object>(
+    Expression<T> Function($$TagsTableAnnotationComposer a) f,
+  ) {
+    final $$TagsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.tags,
+      getReferencedColumn: (t) => t.server,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TagsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.tags,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
           ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('trashes', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('dir_files', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('dir_files', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('files',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('albums', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('albums',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('album_shares', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('servers',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('tags', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('accounts',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('face_recognition_persons', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('accounts',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('nc_albums', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('nc_albums',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('nc_album_items', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('accounts',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('recognize_faces', kind: UpdateKind.delete),
-            ],
-          ),
-          WritePropagation(
-            on: TableUpdateQuery.onTableName('recognize_faces',
-                limitUpdateKind: UpdateKind.delete),
-            result: [
-              TableUpdate('recognize_face_items', kind: UpdateKind.delete),
-            ],
-          ),
-        ],
+    );
+    return f(composer);
+  }
+}
+
+class $$ServersTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $ServersTable,
+          Server,
+          $$ServersTableFilterComposer,
+          $$ServersTableOrderingComposer,
+          $$ServersTableAnnotationComposer,
+          $$ServersTableCreateCompanionBuilder,
+          $$ServersTableUpdateCompanionBuilder,
+          (Server, $$ServersTableReferences),
+          Server,
+          PrefetchHooks Function({
+            bool accountsRefs,
+            bool filesRefs,
+            bool tagsRefs,
+          })
+        > {
+  $$ServersTableTableManager(_$SqliteDb db, $ServersTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$ServersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$ServersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$ServersTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<String> address = const Value.absent(),
+              }) => ServersCompanion(rowId: rowId, address: address),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required String address,
+              }) => ServersCompanion.insert(rowId: rowId, address: address),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$ServersTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            accountsRefs = false,
+            filesRefs = false,
+            tagsRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (accountsRefs) db.accounts,
+                if (filesRefs) db.files,
+                if (tagsRefs) db.tags,
+              ],
+              addJoins: null,
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$ServersTableReferences
+                          ._accountsRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$ServersTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).accountsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.server == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (filesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$ServersTableReferences._filesRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$ServersTableReferences(db, table, p0).filesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.server == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (tagsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$ServersTableReferences._tagsRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$ServersTableReferences(db, table, p0).tagsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.server == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
       );
+}
+
+typedef $$ServersTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $ServersTable,
+      Server,
+      $$ServersTableFilterComposer,
+      $$ServersTableOrderingComposer,
+      $$ServersTableAnnotationComposer,
+      $$ServersTableCreateCompanionBuilder,
+      $$ServersTableUpdateCompanionBuilder,
+      (Server, $$ServersTableReferences),
+      Server,
+      PrefetchHooks Function({bool accountsRefs, bool filesRefs, bool tagsRefs})
+    >;
+typedef $$AccountsTableCreateCompanionBuilder =
+    AccountsCompanion Function({
+      Value<int> rowId,
+      required int server,
+      required String userId,
+    });
+typedef $$AccountsTableUpdateCompanionBuilder =
+    AccountsCompanion Function({
+      Value<int> rowId,
+      Value<int> server,
+      Value<String> userId,
+    });
+
+final class $$AccountsTableReferences
+    extends BaseReferences<_$SqliteDb, $AccountsTable, Account> {
+  $$AccountsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ServersTable _serverTable(_$SqliteDb db) => db.servers.createAlias(
+    $_aliasNameGenerator(db.accounts.server, db.servers.rowId),
+  );
+
+  $$ServersTableProcessedTableManager get server {
+    final manager = $$ServersTableTableManager(
+      $_db,
+      $_db.servers,
+    ).filter((f) => f.rowId($_item.server!));
+    final item = $_typedResult.readTableOrNull(_serverTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$AccountFilesTable, List<AccountFile>>
+  _accountFilesRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.accountFiles,
+    aliasName: $_aliasNameGenerator(db.accounts.rowId, db.accountFiles.account),
+  );
+
+  $$AccountFilesTableProcessedTableManager get accountFilesRefs {
+    final manager = $$AccountFilesTableTableManager(
+      $_db,
+      $_db.accountFiles,
+    ).filter((f) => f.account.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_accountFilesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<
+    $FaceRecognitionPersonsTable,
+    List<FaceRecognitionPerson>
+  >
+  _faceRecognitionPersonsRefsTable(_$SqliteDb db) =>
+      MultiTypedResultKey.fromTable(
+        db.faceRecognitionPersons,
+        aliasName: $_aliasNameGenerator(
+          db.accounts.rowId,
+          db.faceRecognitionPersons.account,
+        ),
+      );
+
+  $$FaceRecognitionPersonsTableProcessedTableManager
+  get faceRecognitionPersonsRefs {
+    final manager = $$FaceRecognitionPersonsTableTableManager(
+      $_db,
+      $_db.faceRecognitionPersons,
+    ).filter((f) => f.account.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(
+      _faceRecognitionPersonsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$NcAlbumsTable, List<NcAlbum>> _ncAlbumsRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.ncAlbums,
+    aliasName: $_aliasNameGenerator(db.accounts.rowId, db.ncAlbums.account),
+  );
+
+  $$NcAlbumsTableProcessedTableManager get ncAlbumsRefs {
+    final manager = $$NcAlbumsTableTableManager(
+      $_db,
+      $_db.ncAlbums,
+    ).filter((f) => f.account.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_ncAlbumsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$RecognizeFacesTable, List<RecognizeFace>>
+  _recognizeFacesRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.recognizeFaces,
+    aliasName: $_aliasNameGenerator(
+      db.accounts.rowId,
+      db.recognizeFaces.account,
+    ),
+  );
+
+  $$RecognizeFacesTableProcessedTableManager get recognizeFacesRefs {
+    final manager = $$RecognizeFacesTableTableManager(
+      $_db,
+      $_db.recognizeFaces,
+    ).filter((f) => f.account.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_recognizeFacesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$AccountsTableFilterComposer
+    extends Composer<_$SqliteDb, $AccountsTable> {
+  $$AccountsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ServersTableFilterComposer get server {
+    final $$ServersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableFilterComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> accountFilesRefs(
+    Expression<bool> Function($$AccountFilesTableFilterComposer f) f,
+  ) {
+    final $$AccountFilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.account,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableFilterComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> faceRecognitionPersonsRefs(
+    Expression<bool> Function($$FaceRecognitionPersonsTableFilterComposer f) f,
+  ) {
+    final $$FaceRecognitionPersonsTableFilterComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.rowId,
+          referencedTable: $db.faceRecognitionPersons,
+          getReferencedColumn: (t) => t.account,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$FaceRecognitionPersonsTableFilterComposer(
+                $db: $db,
+                $table: $db.faceRecognitionPersons,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<bool> ncAlbumsRefs(
+    Expression<bool> Function($$NcAlbumsTableFilterComposer f) f,
+  ) {
+    final $$NcAlbumsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.ncAlbums,
+      getReferencedColumn: (t) => t.account,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumsTableFilterComposer(
+            $db: $db,
+            $table: $db.ncAlbums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> recognizeFacesRefs(
+    Expression<bool> Function($$RecognizeFacesTableFilterComposer f) f,
+  ) {
+    final $$RecognizeFacesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.recognizeFaces,
+      getReferencedColumn: (t) => t.account,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecognizeFacesTableFilterComposer(
+            $db: $db,
+            $table: $db.recognizeFaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AccountsTableOrderingComposer
+    extends Composer<_$SqliteDb, $AccountsTable> {
+  $$AccountsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ServersTableOrderingComposer get server {
+    final $$ServersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableOrderingComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AccountsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $AccountsTable> {
+  $$AccountsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  $$ServersTableAnnotationComposer get server {
+    final $$ServersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> accountFilesRefs<T extends Object>(
+    Expression<T> Function($$AccountFilesTableAnnotationComposer a) f,
+  ) {
+    final $$AccountFilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.account,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> faceRecognitionPersonsRefs<T extends Object>(
+    Expression<T> Function($$FaceRecognitionPersonsTableAnnotationComposer a) f,
+  ) {
+    final $$FaceRecognitionPersonsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.rowId,
+          referencedTable: $db.faceRecognitionPersons,
+          getReferencedColumn: (t) => t.account,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$FaceRecognitionPersonsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.faceRecognitionPersons,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+
+  Expression<T> ncAlbumsRefs<T extends Object>(
+    Expression<T> Function($$NcAlbumsTableAnnotationComposer a) f,
+  ) {
+    final $$NcAlbumsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.ncAlbums,
+      getReferencedColumn: (t) => t.account,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.ncAlbums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> recognizeFacesRefs<T extends Object>(
+    Expression<T> Function($$RecognizeFacesTableAnnotationComposer a) f,
+  ) {
+    final $$RecognizeFacesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.recognizeFaces,
+      getReferencedColumn: (t) => t.account,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecognizeFacesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.recognizeFaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AccountsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $AccountsTable,
+          Account,
+          $$AccountsTableFilterComposer,
+          $$AccountsTableOrderingComposer,
+          $$AccountsTableAnnotationComposer,
+          $$AccountsTableCreateCompanionBuilder,
+          $$AccountsTableUpdateCompanionBuilder,
+          (Account, $$AccountsTableReferences),
+          Account,
+          PrefetchHooks Function({
+            bool server,
+            bool accountFilesRefs,
+            bool faceRecognitionPersonsRefs,
+            bool ncAlbumsRefs,
+            bool recognizeFacesRefs,
+          })
+        > {
+  $$AccountsTableTableManager(_$SqliteDb db, $AccountsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$AccountsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$AccountsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$AccountsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> server = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+              }) => AccountsCompanion(
+                rowId: rowId,
+                server: server,
+                userId: userId,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int server,
+                required String userId,
+              }) => AccountsCompanion.insert(
+                rowId: rowId,
+                server: server,
+                userId: userId,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$AccountsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            server = false,
+            accountFilesRefs = false,
+            faceRecognitionPersonsRefs = false,
+            ncAlbumsRefs = false,
+            recognizeFacesRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (accountFilesRefs) db.accountFiles,
+                if (faceRecognitionPersonsRefs) db.faceRecognitionPersons,
+                if (ncAlbumsRefs) db.ncAlbums,
+                if (recognizeFacesRefs) db.recognizeFaces,
+              ],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (server) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.server,
+                            referencedTable: $$AccountsTableReferences
+                                ._serverTable(db),
+                            referencedColumn:
+                                $$AccountsTableReferences
+                                    ._serverTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountFilesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AccountsTableReferences
+                          ._accountFilesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AccountsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).accountFilesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.account == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (faceRecognitionPersonsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AccountsTableReferences
+                          ._faceRecognitionPersonsRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AccountsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).faceRecognitionPersonsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.account == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (ncAlbumsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AccountsTableReferences
+                          ._ncAlbumsRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AccountsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).ncAlbumsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.account == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (recognizeFacesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AccountsTableReferences
+                          ._recognizeFacesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AccountsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).recognizeFacesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.account == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AccountsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $AccountsTable,
+      Account,
+      $$AccountsTableFilterComposer,
+      $$AccountsTableOrderingComposer,
+      $$AccountsTableAnnotationComposer,
+      $$AccountsTableCreateCompanionBuilder,
+      $$AccountsTableUpdateCompanionBuilder,
+      (Account, $$AccountsTableReferences),
+      Account,
+      PrefetchHooks Function({
+        bool server,
+        bool accountFilesRefs,
+        bool faceRecognitionPersonsRefs,
+        bool ncAlbumsRefs,
+        bool recognizeFacesRefs,
+      })
+    >;
+typedef $$FilesTableCreateCompanionBuilder =
+    FilesCompanion Function({
+      Value<int> rowId,
+      required int server,
+      required int fileId,
+      Value<int?> contentLength,
+      Value<String?> contentType,
+      Value<String?> etag,
+      Value<DateTime?> lastModified,
+      Value<bool?> isCollection,
+      Value<int?> usedBytes,
+      Value<bool?> hasPreview,
+      Value<String?> ownerId,
+      Value<String?> ownerDisplayName,
+    });
+typedef $$FilesTableUpdateCompanionBuilder =
+    FilesCompanion Function({
+      Value<int> rowId,
+      Value<int> server,
+      Value<int> fileId,
+      Value<int?> contentLength,
+      Value<String?> contentType,
+      Value<String?> etag,
+      Value<DateTime?> lastModified,
+      Value<bool?> isCollection,
+      Value<int?> usedBytes,
+      Value<bool?> hasPreview,
+      Value<String?> ownerId,
+      Value<String?> ownerDisplayName,
+    });
+
+final class $$FilesTableReferences
+    extends BaseReferences<_$SqliteDb, $FilesTable, File> {
+  $$FilesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ServersTable _serverTable(_$SqliteDb db) => db.servers.createAlias(
+    $_aliasNameGenerator(db.files.server, db.servers.rowId),
+  );
+
+  $$ServersTableProcessedTableManager get server {
+    final manager = $$ServersTableTableManager(
+      $_db,
+      $_db.servers,
+    ).filter((f) => f.rowId($_item.server!));
+    final item = $_typedResult.readTableOrNull(_serverTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$AccountFilesTable, List<AccountFile>>
+  _accountFilesRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.accountFiles,
+    aliasName: $_aliasNameGenerator(db.files.rowId, db.accountFiles.file),
+  );
+
+  $$AccountFilesTableProcessedTableManager get accountFilesRefs {
+    final manager = $$AccountFilesTableTableManager(
+      $_db,
+      $_db.accountFiles,
+    ).filter((f) => f.file.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_accountFilesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$TrashesTable, List<Trash>> _trashesRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.trashes,
+    aliasName: $_aliasNameGenerator(db.files.rowId, db.trashes.file),
+  );
+
+  $$TrashesTableProcessedTableManager get trashesRefs {
+    final manager = $$TrashesTableTableManager(
+      $_db,
+      $_db.trashes,
+    ).filter((f) => f.file.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_trashesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$DirFilesTable, List<DirFile>> _dirFilesRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.dirFiles,
+    aliasName: $_aliasNameGenerator(db.files.rowId, db.dirFiles.dir),
+  );
+
+  $$DirFilesTableProcessedTableManager get dirFilesRefs {
+    final manager = $$DirFilesTableTableManager(
+      $_db,
+      $_db.dirFiles,
+    ).filter((f) => f.dir.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_dirFilesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$DirFilesTable, List<DirFile>> _childTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.dirFiles,
+    aliasName: $_aliasNameGenerator(db.files.rowId, db.dirFiles.child),
+  );
+
+  $$DirFilesTableProcessedTableManager get child {
+    final manager = $$DirFilesTableTableManager(
+      $_db,
+      $_db.dirFiles,
+    ).filter((f) => f.child.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_childTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$AlbumsTable, List<Album>> _albumsRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.albums,
+    aliasName: $_aliasNameGenerator(db.files.rowId, db.albums.file),
+  );
+
+  $$AlbumsTableProcessedTableManager get albumsRefs {
+    final manager = $$AlbumsTableTableManager(
+      $_db,
+      $_db.albums,
+    ).filter((f) => f.file.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_albumsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$FilesTableFilterComposer extends Composer<_$SqliteDb, $FilesTable> {
+  $$FilesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileId => $composableBuilder(
+    column: $table.fileId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime>
+  get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<bool> get isCollection => $composableBuilder(
+    column: $table.isCollection,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get usedBytes => $composableBuilder(
+    column: $table.usedBytes,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerId => $composableBuilder(
+    column: $table.ownerId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get ownerDisplayName => $composableBuilder(
+    column: $table.ownerDisplayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ServersTableFilterComposer get server {
+    final $$ServersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableFilterComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> accountFilesRefs(
+    Expression<bool> Function($$AccountFilesTableFilterComposer f) f,
+  ) {
+    final $$AccountFilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.file,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableFilterComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> trashesRefs(
+    Expression<bool> Function($$TrashesTableFilterComposer f) f,
+  ) {
+    final $$TrashesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.trashes,
+      getReferencedColumn: (t) => t.file,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TrashesTableFilterComposer(
+            $db: $db,
+            $table: $db.trashes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> dirFilesRefs(
+    Expression<bool> Function($$DirFilesTableFilterComposer f) f,
+  ) {
+    final $$DirFilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.dirFiles,
+      getReferencedColumn: (t) => t.dir,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirFilesTableFilterComposer(
+            $db: $db,
+            $table: $db.dirFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> child(
+    Expression<bool> Function($$DirFilesTableFilterComposer f) f,
+  ) {
+    final $$DirFilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.dirFiles,
+      getReferencedColumn: (t) => t.child,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirFilesTableFilterComposer(
+            $db: $db,
+            $table: $db.dirFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> albumsRefs(
+    Expression<bool> Function($$AlbumsTableFilterComposer f) f,
+  ) {
+    final $$AlbumsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.albums,
+      getReferencedColumn: (t) => t.file,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumsTableFilterComposer(
+            $db: $db,
+            $table: $db.albums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$FilesTableOrderingComposer extends Composer<_$SqliteDb, $FilesTable> {
+  $$FilesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileId => $composableBuilder(
+    column: $table.fileId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isCollection => $composableBuilder(
+    column: $table.isCollection,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get usedBytes => $composableBuilder(
+    column: $table.usedBytes,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerId => $composableBuilder(
+    column: $table.ownerId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get ownerDisplayName => $composableBuilder(
+    column: $table.ownerDisplayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ServersTableOrderingComposer get server {
+    final $$ServersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableOrderingComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FilesTableAnnotationComposer extends Composer<_$SqliteDb, $FilesTable> {
+  $$FilesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<int> get fileId =>
+      $composableBuilder(column: $table.fileId, builder: (column) => column);
+
+  GeneratedColumn<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get etag =>
+      $composableBuilder(column: $table.etag, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get lastModified =>
+      $composableBuilder(
+        column: $table.lastModified,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<bool> get isCollection => $composableBuilder(
+    column: $table.isCollection,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get usedBytes =>
+      $composableBuilder(column: $table.usedBytes, builder: (column) => column);
+
+  GeneratedColumn<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get ownerId =>
+      $composableBuilder(column: $table.ownerId, builder: (column) => column);
+
+  GeneratedColumn<String> get ownerDisplayName => $composableBuilder(
+    column: $table.ownerDisplayName,
+    builder: (column) => column,
+  );
+
+  $$ServersTableAnnotationComposer get server {
+    final $$ServersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> accountFilesRefs<T extends Object>(
+    Expression<T> Function($$AccountFilesTableAnnotationComposer a) f,
+  ) {
+    final $$AccountFilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.file,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> trashesRefs<T extends Object>(
+    Expression<T> Function($$TrashesTableAnnotationComposer a) f,
+  ) {
+    final $$TrashesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.trashes,
+      getReferencedColumn: (t) => t.file,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$TrashesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.trashes,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> dirFilesRefs<T extends Object>(
+    Expression<T> Function($$DirFilesTableAnnotationComposer a) f,
+  ) {
+    final $$DirFilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.dirFiles,
+      getReferencedColumn: (t) => t.dir,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirFilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.dirFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> child<T extends Object>(
+    Expression<T> Function($$DirFilesTableAnnotationComposer a) f,
+  ) {
+    final $$DirFilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.dirFiles,
+      getReferencedColumn: (t) => t.child,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$DirFilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.dirFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> albumsRefs<T extends Object>(
+    Expression<T> Function($$AlbumsTableAnnotationComposer a) f,
+  ) {
+    final $$AlbumsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.albums,
+      getReferencedColumn: (t) => t.file,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.albums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$FilesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $FilesTable,
+          File,
+          $$FilesTableFilterComposer,
+          $$FilesTableOrderingComposer,
+          $$FilesTableAnnotationComposer,
+          $$FilesTableCreateCompanionBuilder,
+          $$FilesTableUpdateCompanionBuilder,
+          (File, $$FilesTableReferences),
+          File,
+          PrefetchHooks Function({
+            bool server,
+            bool accountFilesRefs,
+            bool trashesRefs,
+            bool dirFilesRefs,
+            bool child,
+            bool albumsRefs,
+          })
+        > {
+  $$FilesTableTableManager(_$SqliteDb db, $FilesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$FilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$FilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$FilesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> server = const Value.absent(),
+                Value<int> fileId = const Value.absent(),
+                Value<int?> contentLength = const Value.absent(),
+                Value<String?> contentType = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime?> lastModified = const Value.absent(),
+                Value<bool?> isCollection = const Value.absent(),
+                Value<int?> usedBytes = const Value.absent(),
+                Value<bool?> hasPreview = const Value.absent(),
+                Value<String?> ownerId = const Value.absent(),
+                Value<String?> ownerDisplayName = const Value.absent(),
+              }) => FilesCompanion(
+                rowId: rowId,
+                server: server,
+                fileId: fileId,
+                contentLength: contentLength,
+                contentType: contentType,
+                etag: etag,
+                lastModified: lastModified,
+                isCollection: isCollection,
+                usedBytes: usedBytes,
+                hasPreview: hasPreview,
+                ownerId: ownerId,
+                ownerDisplayName: ownerDisplayName,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int server,
+                required int fileId,
+                Value<int?> contentLength = const Value.absent(),
+                Value<String?> contentType = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime?> lastModified = const Value.absent(),
+                Value<bool?> isCollection = const Value.absent(),
+                Value<int?> usedBytes = const Value.absent(),
+                Value<bool?> hasPreview = const Value.absent(),
+                Value<String?> ownerId = const Value.absent(),
+                Value<String?> ownerDisplayName = const Value.absent(),
+              }) => FilesCompanion.insert(
+                rowId: rowId,
+                server: server,
+                fileId: fileId,
+                contentLength: contentLength,
+                contentType: contentType,
+                etag: etag,
+                lastModified: lastModified,
+                isCollection: isCollection,
+                usedBytes: usedBytes,
+                hasPreview: hasPreview,
+                ownerId: ownerId,
+                ownerDisplayName: ownerDisplayName,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$FilesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            server = false,
+            accountFilesRefs = false,
+            trashesRefs = false,
+            dirFilesRefs = false,
+            child = false,
+            albumsRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (accountFilesRefs) db.accountFiles,
+                if (trashesRefs) db.trashes,
+                if (dirFilesRefs) db.dirFiles,
+                if (child) db.dirFiles,
+                if (albumsRefs) db.albums,
+              ],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (server) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.server,
+                            referencedTable: $$FilesTableReferences
+                                ._serverTable(db),
+                            referencedColumn:
+                                $$FilesTableReferences._serverTable(db).rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (accountFilesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$FilesTableReferences
+                          ._accountFilesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$FilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).accountFilesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.file == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (trashesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$FilesTableReferences._trashesRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$FilesTableReferences(db, table, p0).trashesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.file == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (dirFilesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$FilesTableReferences
+                          ._dirFilesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$FilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).dirFilesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) =>
+                              referencedItems.where((e) => e.dir == item.rowId),
+                      typedResults: items,
+                    ),
+                  if (child)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$FilesTableReferences._childTable(db),
+                      managerFromTypedResult:
+                          (p0) => $$FilesTableReferences(db, table, p0).child,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.child == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (albumsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$FilesTableReferences._albumsRefsTable(
+                        db,
+                      ),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$FilesTableReferences(db, table, p0).albumsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.file == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$FilesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $FilesTable,
+      File,
+      $$FilesTableFilterComposer,
+      $$FilesTableOrderingComposer,
+      $$FilesTableAnnotationComposer,
+      $$FilesTableCreateCompanionBuilder,
+      $$FilesTableUpdateCompanionBuilder,
+      (File, $$FilesTableReferences),
+      File,
+      PrefetchHooks Function({
+        bool server,
+        bool accountFilesRefs,
+        bool trashesRefs,
+        bool dirFilesRefs,
+        bool child,
+        bool albumsRefs,
+      })
+    >;
+typedef $$AccountFilesTableCreateCompanionBuilder =
+    AccountFilesCompanion Function({
+      Value<int> rowId,
+      required int account,
+      required int file,
+      required String relativePath,
+      Value<bool?> isFavorite,
+      Value<bool?> isArchived,
+      Value<DateTime?> overrideDateTime,
+      required DateTime bestDateTime,
+    });
+typedef $$AccountFilesTableUpdateCompanionBuilder =
+    AccountFilesCompanion Function({
+      Value<int> rowId,
+      Value<int> account,
+      Value<int> file,
+      Value<String> relativePath,
+      Value<bool?> isFavorite,
+      Value<bool?> isArchived,
+      Value<DateTime?> overrideDateTime,
+      Value<DateTime> bestDateTime,
+    });
+
+final class $$AccountFilesTableReferences
+    extends BaseReferences<_$SqliteDb, $AccountFilesTable, AccountFile> {
+  $$AccountFilesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $AccountsTable _accountTable(_$SqliteDb db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.accountFiles.account, db.accounts.rowId),
+  );
+
+  $$AccountsTableProcessedTableManager get account {
+    final manager = $$AccountsTableTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.rowId($_item.account!));
+    final item = $_typedResult.readTableOrNull(_accountTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $FilesTable _fileTable(_$SqliteDb db) => db.files.createAlias(
+    $_aliasNameGenerator(db.accountFiles.file, db.files.rowId),
+  );
+
+  $$FilesTableProcessedTableManager get file {
+    final manager = $$FilesTableTableManager(
+      $_db,
+      $_db.files,
+    ).filter((f) => f.rowId($_item.file!));
+    final item = $_typedResult.readTableOrNull(_fileTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$ImagesTable, List<Image>> _imagesRefsTable(
+    _$SqliteDb db,
+  ) => MultiTypedResultKey.fromTable(
+    db.images,
+    aliasName: $_aliasNameGenerator(
+      db.accountFiles.rowId,
+      db.images.accountFile,
+    ),
+  );
+
+  $$ImagesTableProcessedTableManager get imagesRefs {
+    final manager = $$ImagesTableTableManager(
+      $_db,
+      $_db.images,
+    ).filter((f) => f.accountFile.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_imagesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+
+  static MultiTypedResultKey<$ImageLocationsTable, List<ImageLocation>>
+  _imageLocationsRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.imageLocations,
+    aliasName: $_aliasNameGenerator(
+      db.accountFiles.rowId,
+      db.imageLocations.accountFile,
+    ),
+  );
+
+  $$ImageLocationsTableProcessedTableManager get imageLocationsRefs {
+    final manager = $$ImageLocationsTableTableManager(
+      $_db,
+      $_db.imageLocations,
+    ).filter((f) => f.accountFile.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_imageLocationsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$AccountFilesTableFilterComposer
+    extends Composer<_$SqliteDb, $AccountFilesTable> {
+  $$AccountFilesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime>
+  get overrideDateTime => $composableBuilder(
+    column: $table.overrideDateTime,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, DateTime>
+  get bestDateTime => $composableBuilder(
+    column: $table.bestDateTime,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  $$AccountsTableFilterComposer get account {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FilesTableFilterComposer get file {
+    final $$FilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableFilterComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> imagesRefs(
+    Expression<bool> Function($$ImagesTableFilterComposer f) f,
+  ) {
+    final $$ImagesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.images,
+      getReferencedColumn: (t) => t.accountFile,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ImagesTableFilterComposer(
+            $db: $db,
+            $table: $db.images,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<bool> imageLocationsRefs(
+    Expression<bool> Function($$ImageLocationsTableFilterComposer f) f,
+  ) {
+    final $$ImageLocationsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.imageLocations,
+      getReferencedColumn: (t) => t.accountFile,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ImageLocationsTableFilterComposer(
+            $db: $db,
+            $table: $db.imageLocations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AccountFilesTableOrderingComposer
+    extends Composer<_$SqliteDb, $AccountFilesTable> {
+  $$AccountFilesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get overrideDateTime => $composableBuilder(
+    column: $table.overrideDateTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get bestDateTime => $composableBuilder(
+    column: $table.bestDateTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AccountsTableOrderingComposer get account {
+    final $$AccountsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FilesTableOrderingComposer get file {
+    final $$FilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AccountFilesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $AccountFilesTable> {
+  $$AccountFilesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isArchived => $composableBuilder(
+    column: $table.isArchived,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get overrideDateTime =>
+      $composableBuilder(
+        column: $table.overrideDateTime,
+        builder: (column) => column,
+      );
+
+  GeneratedColumnWithTypeConverter<DateTime, DateTime> get bestDateTime =>
+      $composableBuilder(
+        column: $table.bestDateTime,
+        builder: (column) => column,
+      );
+
+  $$AccountsTableAnnotationComposer get account {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FilesTableAnnotationComposer get file {
+    final $$FilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> imagesRefs<T extends Object>(
+    Expression<T> Function($$ImagesTableAnnotationComposer a) f,
+  ) {
+    final $$ImagesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.images,
+      getReferencedColumn: (t) => t.accountFile,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ImagesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.images,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+
+  Expression<T> imageLocationsRefs<T extends Object>(
+    Expression<T> Function($$ImageLocationsTableAnnotationComposer a) f,
+  ) {
+    final $$ImageLocationsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.imageLocations,
+      getReferencedColumn: (t) => t.accountFile,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ImageLocationsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.imageLocations,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AccountFilesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $AccountFilesTable,
+          AccountFile,
+          $$AccountFilesTableFilterComposer,
+          $$AccountFilesTableOrderingComposer,
+          $$AccountFilesTableAnnotationComposer,
+          $$AccountFilesTableCreateCompanionBuilder,
+          $$AccountFilesTableUpdateCompanionBuilder,
+          (AccountFile, $$AccountFilesTableReferences),
+          AccountFile,
+          PrefetchHooks Function({
+            bool account,
+            bool file,
+            bool imagesRefs,
+            bool imageLocationsRefs,
+          })
+        > {
+  $$AccountFilesTableTableManager(_$SqliteDb db, $AccountFilesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$AccountFilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$AccountFilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () =>
+                  $$AccountFilesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> account = const Value.absent(),
+                Value<int> file = const Value.absent(),
+                Value<String> relativePath = const Value.absent(),
+                Value<bool?> isFavorite = const Value.absent(),
+                Value<bool?> isArchived = const Value.absent(),
+                Value<DateTime?> overrideDateTime = const Value.absent(),
+                Value<DateTime> bestDateTime = const Value.absent(),
+              }) => AccountFilesCompanion(
+                rowId: rowId,
+                account: account,
+                file: file,
+                relativePath: relativePath,
+                isFavorite: isFavorite,
+                isArchived: isArchived,
+                overrideDateTime: overrideDateTime,
+                bestDateTime: bestDateTime,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int account,
+                required int file,
+                required String relativePath,
+                Value<bool?> isFavorite = const Value.absent(),
+                Value<bool?> isArchived = const Value.absent(),
+                Value<DateTime?> overrideDateTime = const Value.absent(),
+                required DateTime bestDateTime,
+              }) => AccountFilesCompanion.insert(
+                rowId: rowId,
+                account: account,
+                file: file,
+                relativePath: relativePath,
+                isFavorite: isFavorite,
+                isArchived: isArchived,
+                overrideDateTime: overrideDateTime,
+                bestDateTime: bestDateTime,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$AccountFilesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            account = false,
+            file = false,
+            imagesRefs = false,
+            imageLocationsRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (imagesRefs) db.images,
+                if (imageLocationsRefs) db.imageLocations,
+              ],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (account) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.account,
+                            referencedTable: $$AccountFilesTableReferences
+                                ._accountTable(db),
+                            referencedColumn:
+                                $$AccountFilesTableReferences
+                                    ._accountTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+                if (file) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.file,
+                            referencedTable: $$AccountFilesTableReferences
+                                ._fileTable(db),
+                            referencedColumn:
+                                $$AccountFilesTableReferences
+                                    ._fileTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (imagesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AccountFilesTableReferences
+                          ._imagesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AccountFilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).imagesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.accountFile == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                  if (imageLocationsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AccountFilesTableReferences
+                          ._imageLocationsRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AccountFilesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).imageLocationsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.accountFile == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AccountFilesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $AccountFilesTable,
+      AccountFile,
+      $$AccountFilesTableFilterComposer,
+      $$AccountFilesTableOrderingComposer,
+      $$AccountFilesTableAnnotationComposer,
+      $$AccountFilesTableCreateCompanionBuilder,
+      $$AccountFilesTableUpdateCompanionBuilder,
+      (AccountFile, $$AccountFilesTableReferences),
+      AccountFile,
+      PrefetchHooks Function({
+        bool account,
+        bool file,
+        bool imagesRefs,
+        bool imageLocationsRefs,
+      })
+    >;
+typedef $$ImagesTableCreateCompanionBuilder =
+    ImagesCompanion Function({
+      Value<int> accountFile,
+      required DateTime lastUpdated,
+      Value<String?> fileEtag,
+      Value<int?> width,
+      Value<int?> height,
+      Value<String?> exifRaw,
+      Value<int?> src,
+      Value<DateTime?> dateTimeOriginal,
+    });
+typedef $$ImagesTableUpdateCompanionBuilder =
+    ImagesCompanion Function({
+      Value<int> accountFile,
+      Value<DateTime> lastUpdated,
+      Value<String?> fileEtag,
+      Value<int?> width,
+      Value<int?> height,
+      Value<String?> exifRaw,
+      Value<int?> src,
+      Value<DateTime?> dateTimeOriginal,
+    });
+
+final class $$ImagesTableReferences
+    extends BaseReferences<_$SqliteDb, $ImagesTable, Image> {
+  $$ImagesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $AccountFilesTable _accountFileTable(_$SqliteDb db) =>
+      db.accountFiles.createAlias(
+        $_aliasNameGenerator(db.images.accountFile, db.accountFiles.rowId),
+      );
+
+  $$AccountFilesTableProcessedTableManager get accountFile {
+    final manager = $$AccountFilesTableTableManager(
+      $_db,
+      $_db.accountFiles,
+    ).filter((f) => f.rowId($_item.accountFile!));
+    final item = $_typedResult.readTableOrNull(_accountFileTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ImagesTableFilterComposer extends Composer<_$SqliteDb, $ImagesTable> {
+  $$ImagesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnWithTypeConverterFilters<DateTime, DateTime, DateTime>
+  get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get fileEtag => $composableBuilder(
+    column: $table.fileEtag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get width => $composableBuilder(
+    column: $table.width,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get height => $composableBuilder(
+    column: $table.height,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get exifRaw => $composableBuilder(
+    column: $table.exifRaw,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get src => $composableBuilder(
+    column: $table.src,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime>
+  get dateTimeOriginal => $composableBuilder(
+    column: $table.dateTimeOriginal,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  $$AccountFilesTableFilterComposer get accountFile {
+    final $$AccountFilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountFile,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableFilterComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ImagesTableOrderingComposer extends Composer<_$SqliteDb, $ImagesTable> {
+  $$ImagesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<DateTime> get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fileEtag => $composableBuilder(
+    column: $table.fileEtag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get width => $composableBuilder(
+    column: $table.width,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get height => $composableBuilder(
+    column: $table.height,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get exifRaw => $composableBuilder(
+    column: $table.exifRaw,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get src => $composableBuilder(
+    column: $table.src,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get dateTimeOriginal => $composableBuilder(
+    column: $table.dateTimeOriginal,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AccountFilesTableOrderingComposer get accountFile {
+    final $$AccountFilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountFile,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ImagesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $ImagesTable> {
+  $$ImagesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumnWithTypeConverter<DateTime, DateTime> get lastUpdated =>
+      $composableBuilder(
+        column: $table.lastUpdated,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<String> get fileEtag =>
+      $composableBuilder(column: $table.fileEtag, builder: (column) => column);
+
+  GeneratedColumn<int> get width =>
+      $composableBuilder(column: $table.width, builder: (column) => column);
+
+  GeneratedColumn<int> get height =>
+      $composableBuilder(column: $table.height, builder: (column) => column);
+
+  GeneratedColumn<String> get exifRaw =>
+      $composableBuilder(column: $table.exifRaw, builder: (column) => column);
+
+  GeneratedColumn<int> get src =>
+      $composableBuilder(column: $table.src, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get dateTimeOriginal =>
+      $composableBuilder(
+        column: $table.dateTimeOriginal,
+        builder: (column) => column,
+      );
+
+  $$AccountFilesTableAnnotationComposer get accountFile {
+    final $$AccountFilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountFile,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ImagesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $ImagesTable,
+          Image,
+          $$ImagesTableFilterComposer,
+          $$ImagesTableOrderingComposer,
+          $$ImagesTableAnnotationComposer,
+          $$ImagesTableCreateCompanionBuilder,
+          $$ImagesTableUpdateCompanionBuilder,
+          (Image, $$ImagesTableReferences),
+          Image,
+          PrefetchHooks Function({bool accountFile})
+        > {
+  $$ImagesTableTableManager(_$SqliteDb db, $ImagesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$ImagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$ImagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$ImagesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> accountFile = const Value.absent(),
+                Value<DateTime> lastUpdated = const Value.absent(),
+                Value<String?> fileEtag = const Value.absent(),
+                Value<int?> width = const Value.absent(),
+                Value<int?> height = const Value.absent(),
+                Value<String?> exifRaw = const Value.absent(),
+                Value<int?> src = const Value.absent(),
+                Value<DateTime?> dateTimeOriginal = const Value.absent(),
+              }) => ImagesCompanion(
+                accountFile: accountFile,
+                lastUpdated: lastUpdated,
+                fileEtag: fileEtag,
+                width: width,
+                height: height,
+                exifRaw: exifRaw,
+                src: src,
+                dateTimeOriginal: dateTimeOriginal,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> accountFile = const Value.absent(),
+                required DateTime lastUpdated,
+                Value<String?> fileEtag = const Value.absent(),
+                Value<int?> width = const Value.absent(),
+                Value<int?> height = const Value.absent(),
+                Value<String?> exifRaw = const Value.absent(),
+                Value<int?> src = const Value.absent(),
+                Value<DateTime?> dateTimeOriginal = const Value.absent(),
+              }) => ImagesCompanion.insert(
+                accountFile: accountFile,
+                lastUpdated: lastUpdated,
+                fileEtag: fileEtag,
+                width: width,
+                height: height,
+                exifRaw: exifRaw,
+                src: src,
+                dateTimeOriginal: dateTimeOriginal,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$ImagesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({accountFile = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (accountFile) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.accountFile,
+                            referencedTable: $$ImagesTableReferences
+                                ._accountFileTable(db),
+                            referencedColumn:
+                                $$ImagesTableReferences
+                                    ._accountFileTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ImagesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $ImagesTable,
+      Image,
+      $$ImagesTableFilterComposer,
+      $$ImagesTableOrderingComposer,
+      $$ImagesTableAnnotationComposer,
+      $$ImagesTableCreateCompanionBuilder,
+      $$ImagesTableUpdateCompanionBuilder,
+      (Image, $$ImagesTableReferences),
+      Image,
+      PrefetchHooks Function({bool accountFile})
+    >;
+typedef $$ImageLocationsTableCreateCompanionBuilder =
+    ImageLocationsCompanion Function({
+      Value<int> accountFile,
+      required int version,
+      Value<String?> name,
+      Value<double?> latitude,
+      Value<double?> longitude,
+      Value<String?> countryCode,
+      Value<String?> admin1,
+      Value<String?> admin2,
+    });
+typedef $$ImageLocationsTableUpdateCompanionBuilder =
+    ImageLocationsCompanion Function({
+      Value<int> accountFile,
+      Value<int> version,
+      Value<String?> name,
+      Value<double?> latitude,
+      Value<double?> longitude,
+      Value<String?> countryCode,
+      Value<String?> admin1,
+      Value<String?> admin2,
+    });
+
+final class $$ImageLocationsTableReferences
+    extends BaseReferences<_$SqliteDb, $ImageLocationsTable, ImageLocation> {
+  $$ImageLocationsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $AccountFilesTable _accountFileTable(_$SqliteDb db) =>
+      db.accountFiles.createAlias(
+        $_aliasNameGenerator(
+          db.imageLocations.accountFile,
+          db.accountFiles.rowId,
+        ),
+      );
+
+  $$AccountFilesTableProcessedTableManager get accountFile {
+    final manager = $$AccountFilesTableTableManager(
+      $_db,
+      $_db.accountFiles,
+    ).filter((f) => f.rowId($_item.accountFile!));
+    final item = $_typedResult.readTableOrNull(_accountFileTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$ImageLocationsTableFilterComposer
+    extends Composer<_$SqliteDb, $ImageLocationsTable> {
+  $$ImageLocationsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get countryCode => $composableBuilder(
+    column: $table.countryCode,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get admin1 => $composableBuilder(
+    column: $table.admin1,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get admin2 => $composableBuilder(
+    column: $table.admin2,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$AccountFilesTableFilterComposer get accountFile {
+    final $$AccountFilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountFile,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableFilterComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ImageLocationsTableOrderingComposer
+    extends Composer<_$SqliteDb, $ImageLocationsTable> {
+  $$ImageLocationsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get latitude => $composableBuilder(
+    column: $table.latitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<double> get longitude => $composableBuilder(
+    column: $table.longitude,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get countryCode => $composableBuilder(
+    column: $table.countryCode,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get admin1 => $composableBuilder(
+    column: $table.admin1,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get admin2 => $composableBuilder(
+    column: $table.admin2,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AccountFilesTableOrderingComposer get accountFile {
+    final $$AccountFilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountFile,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ImageLocationsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $ImageLocationsTable> {
+  $$ImageLocationsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<double> get latitude =>
+      $composableBuilder(column: $table.latitude, builder: (column) => column);
+
+  GeneratedColumn<double> get longitude =>
+      $composableBuilder(column: $table.longitude, builder: (column) => column);
+
+  GeneratedColumn<String> get countryCode => $composableBuilder(
+    column: $table.countryCode,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get admin1 =>
+      $composableBuilder(column: $table.admin1, builder: (column) => column);
+
+  GeneratedColumn<String> get admin2 =>
+      $composableBuilder(column: $table.admin2, builder: (column) => column);
+
+  $$AccountFilesTableAnnotationComposer get accountFile {
+    final $$AccountFilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.accountFile,
+      referencedTable: $db.accountFiles,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountFilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accountFiles,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$ImageLocationsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $ImageLocationsTable,
+          ImageLocation,
+          $$ImageLocationsTableFilterComposer,
+          $$ImageLocationsTableOrderingComposer,
+          $$ImageLocationsTableAnnotationComposer,
+          $$ImageLocationsTableCreateCompanionBuilder,
+          $$ImageLocationsTableUpdateCompanionBuilder,
+          (ImageLocation, $$ImageLocationsTableReferences),
+          ImageLocation,
+          PrefetchHooks Function({bool accountFile})
+        > {
+  $$ImageLocationsTableTableManager(_$SqliteDb db, $ImageLocationsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$ImageLocationsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () =>
+                  $$ImageLocationsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$ImageLocationsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> accountFile = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<String?> name = const Value.absent(),
+                Value<double?> latitude = const Value.absent(),
+                Value<double?> longitude = const Value.absent(),
+                Value<String?> countryCode = const Value.absent(),
+                Value<String?> admin1 = const Value.absent(),
+                Value<String?> admin2 = const Value.absent(),
+              }) => ImageLocationsCompanion(
+                accountFile: accountFile,
+                version: version,
+                name: name,
+                latitude: latitude,
+                longitude: longitude,
+                countryCode: countryCode,
+                admin1: admin1,
+                admin2: admin2,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> accountFile = const Value.absent(),
+                required int version,
+                Value<String?> name = const Value.absent(),
+                Value<double?> latitude = const Value.absent(),
+                Value<double?> longitude = const Value.absent(),
+                Value<String?> countryCode = const Value.absent(),
+                Value<String?> admin1 = const Value.absent(),
+                Value<String?> admin2 = const Value.absent(),
+              }) => ImageLocationsCompanion.insert(
+                accountFile: accountFile,
+                version: version,
+                name: name,
+                latitude: latitude,
+                longitude: longitude,
+                countryCode: countryCode,
+                admin1: admin1,
+                admin2: admin2,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$ImageLocationsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({accountFile = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (accountFile) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.accountFile,
+                            referencedTable: $$ImageLocationsTableReferences
+                                ._accountFileTable(db),
+                            referencedColumn:
+                                $$ImageLocationsTableReferences
+                                    ._accountFileTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$ImageLocationsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $ImageLocationsTable,
+      ImageLocation,
+      $$ImageLocationsTableFilterComposer,
+      $$ImageLocationsTableOrderingComposer,
+      $$ImageLocationsTableAnnotationComposer,
+      $$ImageLocationsTableCreateCompanionBuilder,
+      $$ImageLocationsTableUpdateCompanionBuilder,
+      (ImageLocation, $$ImageLocationsTableReferences),
+      ImageLocation,
+      PrefetchHooks Function({bool accountFile})
+    >;
+typedef $$TrashesTableCreateCompanionBuilder =
+    TrashesCompanion Function({
+      Value<int> file,
+      required String filename,
+      required String originalLocation,
+      required DateTime deletionTime,
+    });
+typedef $$TrashesTableUpdateCompanionBuilder =
+    TrashesCompanion Function({
+      Value<int> file,
+      Value<String> filename,
+      Value<String> originalLocation,
+      Value<DateTime> deletionTime,
+    });
+
+final class $$TrashesTableReferences
+    extends BaseReferences<_$SqliteDb, $TrashesTable, Trash> {
+  $$TrashesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FilesTable _fileTable(_$SqliteDb db) => db.files.createAlias(
+    $_aliasNameGenerator(db.trashes.file, db.files.rowId),
+  );
+
+  $$FilesTableProcessedTableManager get file {
+    final manager = $$FilesTableTableManager(
+      $_db,
+      $_db.files,
+    ).filter((f) => f.rowId($_item.file!));
+    final item = $_typedResult.readTableOrNull(_fileTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$TrashesTableFilterComposer extends Composer<_$SqliteDb, $TrashesTable> {
+  $$TrashesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get filename => $composableBuilder(
+    column: $table.filename,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get originalLocation => $composableBuilder(
+    column: $table.originalLocation,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, DateTime>
+  get deletionTime => $composableBuilder(
+    column: $table.deletionTime,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  $$FilesTableFilterComposer get file {
+    final $$FilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableFilterComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TrashesTableOrderingComposer
+    extends Composer<_$SqliteDb, $TrashesTable> {
+  $$TrashesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get filename => $composableBuilder(
+    column: $table.filename,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get originalLocation => $composableBuilder(
+    column: $table.originalLocation,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get deletionTime => $composableBuilder(
+    column: $table.deletionTime,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$FilesTableOrderingComposer get file {
+    final $$FilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TrashesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $TrashesTable> {
+  $$TrashesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get filename =>
+      $composableBuilder(column: $table.filename, builder: (column) => column);
+
+  GeneratedColumn<String> get originalLocation => $composableBuilder(
+    column: $table.originalLocation,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, DateTime> get deletionTime =>
+      $composableBuilder(
+        column: $table.deletionTime,
+        builder: (column) => column,
+      );
+
+  $$FilesTableAnnotationComposer get file {
+    final $$FilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TrashesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $TrashesTable,
+          Trash,
+          $$TrashesTableFilterComposer,
+          $$TrashesTableOrderingComposer,
+          $$TrashesTableAnnotationComposer,
+          $$TrashesTableCreateCompanionBuilder,
+          $$TrashesTableUpdateCompanionBuilder,
+          (Trash, $$TrashesTableReferences),
+          Trash,
+          PrefetchHooks Function({bool file})
+        > {
+  $$TrashesTableTableManager(_$SqliteDb db, $TrashesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$TrashesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$TrashesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$TrashesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> file = const Value.absent(),
+                Value<String> filename = const Value.absent(),
+                Value<String> originalLocation = const Value.absent(),
+                Value<DateTime> deletionTime = const Value.absent(),
+              }) => TrashesCompanion(
+                file: file,
+                filename: filename,
+                originalLocation: originalLocation,
+                deletionTime: deletionTime,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> file = const Value.absent(),
+                required String filename,
+                required String originalLocation,
+                required DateTime deletionTime,
+              }) => TrashesCompanion.insert(
+                file: file,
+                filename: filename,
+                originalLocation: originalLocation,
+                deletionTime: deletionTime,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$TrashesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({file = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (file) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.file,
+                            referencedTable: $$TrashesTableReferences
+                                ._fileTable(db),
+                            referencedColumn:
+                                $$TrashesTableReferences._fileTable(db).rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$TrashesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $TrashesTable,
+      Trash,
+      $$TrashesTableFilterComposer,
+      $$TrashesTableOrderingComposer,
+      $$TrashesTableAnnotationComposer,
+      $$TrashesTableCreateCompanionBuilder,
+      $$TrashesTableUpdateCompanionBuilder,
+      (Trash, $$TrashesTableReferences),
+      Trash,
+      PrefetchHooks Function({bool file})
+    >;
+typedef $$DirFilesTableCreateCompanionBuilder =
+    DirFilesCompanion Function({
+      required int dir,
+      required int child,
+      Value<int> rowid,
+    });
+typedef $$DirFilesTableUpdateCompanionBuilder =
+    DirFilesCompanion Function({
+      Value<int> dir,
+      Value<int> child,
+      Value<int> rowid,
+    });
+
+final class $$DirFilesTableReferences
+    extends BaseReferences<_$SqliteDb, $DirFilesTable, DirFile> {
+  $$DirFilesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FilesTable _dirTable(_$SqliteDb db) => db.files.createAlias(
+    $_aliasNameGenerator(db.dirFiles.dir, db.files.rowId),
+  );
+
+  $$FilesTableProcessedTableManager get dir {
+    final manager = $$FilesTableTableManager(
+      $_db,
+      $_db.files,
+    ).filter((f) => f.rowId($_item.dir!));
+    final item = $_typedResult.readTableOrNull(_dirTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static $FilesTable _childTable(_$SqliteDb db) => db.files.createAlias(
+    $_aliasNameGenerator(db.dirFiles.child, db.files.rowId),
+  );
+
+  $$FilesTableProcessedTableManager get child {
+    final manager = $$FilesTableTableManager(
+      $_db,
+      $_db.files,
+    ).filter((f) => f.rowId($_item.child!));
+    final item = $_typedResult.readTableOrNull(_childTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$DirFilesTableFilterComposer
+    extends Composer<_$SqliteDb, $DirFilesTable> {
+  $$DirFilesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$FilesTableFilterComposer get dir {
+    final $$FilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.dir,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableFilterComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FilesTableFilterComposer get child {
+    final $$FilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.child,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableFilterComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DirFilesTableOrderingComposer
+    extends Composer<_$SqliteDb, $DirFilesTable> {
+  $$DirFilesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$FilesTableOrderingComposer get dir {
+    final $$FilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.dir,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FilesTableOrderingComposer get child {
+    final $$FilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.child,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DirFilesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $DirFilesTable> {
+  $$DirFilesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  $$FilesTableAnnotationComposer get dir {
+    final $$FilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.dir,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  $$FilesTableAnnotationComposer get child {
+    final $$FilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.child,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$DirFilesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $DirFilesTable,
+          DirFile,
+          $$DirFilesTableFilterComposer,
+          $$DirFilesTableOrderingComposer,
+          $$DirFilesTableAnnotationComposer,
+          $$DirFilesTableCreateCompanionBuilder,
+          $$DirFilesTableUpdateCompanionBuilder,
+          (DirFile, $$DirFilesTableReferences),
+          DirFile,
+          PrefetchHooks Function({bool dir, bool child})
+        > {
+  $$DirFilesTableTableManager(_$SqliteDb db, $DirFilesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$DirFilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$DirFilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$DirFilesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> dir = const Value.absent(),
+                Value<int> child = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => DirFilesCompanion(dir: dir, child: child, rowid: rowid),
+          createCompanionCallback:
+              ({
+                required int dir,
+                required int child,
+                Value<int> rowid = const Value.absent(),
+              }) => DirFilesCompanion.insert(
+                dir: dir,
+                child: child,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$DirFilesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({dir = false, child = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (dir) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.dir,
+                            referencedTable: $$DirFilesTableReferences
+                                ._dirTable(db),
+                            referencedColumn:
+                                $$DirFilesTableReferences._dirTable(db).rowId,
+                          )
+                          as T;
+                }
+                if (child) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.child,
+                            referencedTable: $$DirFilesTableReferences
+                                ._childTable(db),
+                            referencedColumn:
+                                $$DirFilesTableReferences._childTable(db).rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$DirFilesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $DirFilesTable,
+      DirFile,
+      $$DirFilesTableFilterComposer,
+      $$DirFilesTableOrderingComposer,
+      $$DirFilesTableAnnotationComposer,
+      $$DirFilesTableCreateCompanionBuilder,
+      $$DirFilesTableUpdateCompanionBuilder,
+      (DirFile, $$DirFilesTableReferences),
+      DirFile,
+      PrefetchHooks Function({bool dir, bool child})
+    >;
+typedef $$AlbumsTableCreateCompanionBuilder =
+    AlbumsCompanion Function({
+      Value<int> rowId,
+      required int file,
+      Value<String?> fileEtag,
+      required int version,
+      required DateTime lastUpdated,
+      required String name,
+      required String providerType,
+      required String providerContent,
+      required String coverProviderType,
+      required String coverProviderContent,
+      required String sortProviderType,
+      required String sortProviderContent,
+    });
+typedef $$AlbumsTableUpdateCompanionBuilder =
+    AlbumsCompanion Function({
+      Value<int> rowId,
+      Value<int> file,
+      Value<String?> fileEtag,
+      Value<int> version,
+      Value<DateTime> lastUpdated,
+      Value<String> name,
+      Value<String> providerType,
+      Value<String> providerContent,
+      Value<String> coverProviderType,
+      Value<String> coverProviderContent,
+      Value<String> sortProviderType,
+      Value<String> sortProviderContent,
+    });
+
+final class $$AlbumsTableReferences
+    extends BaseReferences<_$SqliteDb, $AlbumsTable, Album> {
+  $$AlbumsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $FilesTable _fileTable(_$SqliteDb db) => db.files.createAlias(
+    $_aliasNameGenerator(db.albums.file, db.files.rowId),
+  );
+
+  $$FilesTableProcessedTableManager get file {
+    final manager = $$FilesTableTableManager(
+      $_db,
+      $_db.files,
+    ).filter((f) => f.rowId($_item.file!));
+    final item = $_typedResult.readTableOrNull(_fileTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$AlbumSharesTable, List<AlbumShare>>
+  _albumSharesRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.albumShares,
+    aliasName: $_aliasNameGenerator(db.albums.rowId, db.albumShares.album),
+  );
+
+  $$AlbumSharesTableProcessedTableManager get albumSharesRefs {
+    final manager = $$AlbumSharesTableTableManager(
+      $_db,
+      $_db.albumShares,
+    ).filter((f) => f.album.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_albumSharesRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$AlbumsTableFilterComposer extends Composer<_$SqliteDb, $AlbumsTable> {
+  $$AlbumsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get fileEtag => $composableBuilder(
+    column: $table.fileEtag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, DateTime>
+  get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get providerType => $composableBuilder(
+    column: $table.providerType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get providerContent => $composableBuilder(
+    column: $table.providerContent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get coverProviderType => $composableBuilder(
+    column: $table.coverProviderType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get coverProviderContent => $composableBuilder(
+    column: $table.coverProviderContent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sortProviderType => $composableBuilder(
+    column: $table.sortProviderType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sortProviderContent => $composableBuilder(
+    column: $table.sortProviderContent,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$FilesTableFilterComposer get file {
+    final $$FilesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableFilterComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> albumSharesRefs(
+    Expression<bool> Function($$AlbumSharesTableFilterComposer f) f,
+  ) {
+    final $$AlbumSharesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.albumShares,
+      getReferencedColumn: (t) => t.album,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumSharesTableFilterComposer(
+            $db: $db,
+            $table: $db.albumShares,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AlbumsTableOrderingComposer extends Composer<_$SqliteDb, $AlbumsTable> {
+  $$AlbumsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get fileEtag => $composableBuilder(
+    column: $table.fileEtag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get version => $composableBuilder(
+    column: $table.version,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastUpdated => $composableBuilder(
+    column: $table.lastUpdated,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get providerType => $composableBuilder(
+    column: $table.providerType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get providerContent => $composableBuilder(
+    column: $table.providerContent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get coverProviderType => $composableBuilder(
+    column: $table.coverProviderType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get coverProviderContent => $composableBuilder(
+    column: $table.coverProviderContent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sortProviderType => $composableBuilder(
+    column: $table.sortProviderType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get sortProviderContent => $composableBuilder(
+    column: $table.sortProviderContent,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$FilesTableOrderingComposer get file {
+    final $$FilesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableOrderingComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlbumsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $AlbumsTable> {
+  $$AlbumsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get fileEtag =>
+      $composableBuilder(column: $table.fileEtag, builder: (column) => column);
+
+  GeneratedColumn<int> get version =>
+      $composableBuilder(column: $table.version, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime, DateTime> get lastUpdated =>
+      $composableBuilder(
+        column: $table.lastUpdated,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<String> get providerType => $composableBuilder(
+    column: $table.providerType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get providerContent => $composableBuilder(
+    column: $table.providerContent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get coverProviderType => $composableBuilder(
+    column: $table.coverProviderType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get coverProviderContent => $composableBuilder(
+    column: $table.coverProviderContent,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sortProviderType => $composableBuilder(
+    column: $table.sortProviderType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get sortProviderContent => $composableBuilder(
+    column: $table.sortProviderContent,
+    builder: (column) => column,
+  );
+
+  $$FilesTableAnnotationComposer get file {
+    final $$FilesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.file,
+      referencedTable: $db.files,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$FilesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.files,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> albumSharesRefs<T extends Object>(
+    Expression<T> Function($$AlbumSharesTableAnnotationComposer a) f,
+  ) {
+    final $$AlbumSharesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.albumShares,
+      getReferencedColumn: (t) => t.album,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumSharesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.albumShares,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$AlbumsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $AlbumsTable,
+          Album,
+          $$AlbumsTableFilterComposer,
+          $$AlbumsTableOrderingComposer,
+          $$AlbumsTableAnnotationComposer,
+          $$AlbumsTableCreateCompanionBuilder,
+          $$AlbumsTableUpdateCompanionBuilder,
+          (Album, $$AlbumsTableReferences),
+          Album,
+          PrefetchHooks Function({bool file, bool albumSharesRefs})
+        > {
+  $$AlbumsTableTableManager(_$SqliteDb db, $AlbumsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$AlbumsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$AlbumsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$AlbumsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> file = const Value.absent(),
+                Value<String?> fileEtag = const Value.absent(),
+                Value<int> version = const Value.absent(),
+                Value<DateTime> lastUpdated = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<String> providerType = const Value.absent(),
+                Value<String> providerContent = const Value.absent(),
+                Value<String> coverProviderType = const Value.absent(),
+                Value<String> coverProviderContent = const Value.absent(),
+                Value<String> sortProviderType = const Value.absent(),
+                Value<String> sortProviderContent = const Value.absent(),
+              }) => AlbumsCompanion(
+                rowId: rowId,
+                file: file,
+                fileEtag: fileEtag,
+                version: version,
+                lastUpdated: lastUpdated,
+                name: name,
+                providerType: providerType,
+                providerContent: providerContent,
+                coverProviderType: coverProviderType,
+                coverProviderContent: coverProviderContent,
+                sortProviderType: sortProviderType,
+                sortProviderContent: sortProviderContent,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int file,
+                Value<String?> fileEtag = const Value.absent(),
+                required int version,
+                required DateTime lastUpdated,
+                required String name,
+                required String providerType,
+                required String providerContent,
+                required String coverProviderType,
+                required String coverProviderContent,
+                required String sortProviderType,
+                required String sortProviderContent,
+              }) => AlbumsCompanion.insert(
+                rowId: rowId,
+                file: file,
+                fileEtag: fileEtag,
+                version: version,
+                lastUpdated: lastUpdated,
+                name: name,
+                providerType: providerType,
+                providerContent: providerContent,
+                coverProviderType: coverProviderType,
+                coverProviderContent: coverProviderContent,
+                sortProviderType: sortProviderType,
+                sortProviderContent: sortProviderContent,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$AlbumsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({file = false, albumSharesRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (albumSharesRefs) db.albumShares],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (file) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.file,
+                            referencedTable: $$AlbumsTableReferences._fileTable(
+                              db,
+                            ),
+                            referencedColumn:
+                                $$AlbumsTableReferences._fileTable(db).rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (albumSharesRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$AlbumsTableReferences
+                          ._albumSharesRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$AlbumsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).albumSharesRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.album == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AlbumsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $AlbumsTable,
+      Album,
+      $$AlbumsTableFilterComposer,
+      $$AlbumsTableOrderingComposer,
+      $$AlbumsTableAnnotationComposer,
+      $$AlbumsTableCreateCompanionBuilder,
+      $$AlbumsTableUpdateCompanionBuilder,
+      (Album, $$AlbumsTableReferences),
+      Album,
+      PrefetchHooks Function({bool file, bool albumSharesRefs})
+    >;
+typedef $$AlbumSharesTableCreateCompanionBuilder =
+    AlbumSharesCompanion Function({
+      required int album,
+      required String userId,
+      Value<String?> displayName,
+      required DateTime sharedAt,
+      Value<int> rowid,
+    });
+typedef $$AlbumSharesTableUpdateCompanionBuilder =
+    AlbumSharesCompanion Function({
+      Value<int> album,
+      Value<String> userId,
+      Value<String?> displayName,
+      Value<DateTime> sharedAt,
+      Value<int> rowid,
+    });
+
+final class $$AlbumSharesTableReferences
+    extends BaseReferences<_$SqliteDb, $AlbumSharesTable, AlbumShare> {
+  $$AlbumSharesTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $AlbumsTable _albumTable(_$SqliteDb db) => db.albums.createAlias(
+    $_aliasNameGenerator(db.albumShares.album, db.albums.rowId),
+  );
+
+  $$AlbumsTableProcessedTableManager get album {
+    final manager = $$AlbumsTableTableManager(
+      $_db,
+      $_db.albums,
+    ).filter((f) => f.rowId($_item.album!));
+    final item = $_typedResult.readTableOrNull(_albumTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$AlbumSharesTableFilterComposer
+    extends Composer<_$SqliteDb, $AlbumSharesTable> {
+  $$AlbumSharesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime, DateTime, DateTime> get sharedAt =>
+      $composableBuilder(
+        column: $table.sharedAt,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  $$AlbumsTableFilterComposer get album {
+    final $$AlbumsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.album,
+      referencedTable: $db.albums,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumsTableFilterComposer(
+            $db: $db,
+            $table: $db.albums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlbumSharesTableOrderingComposer
+    extends Composer<_$SqliteDb, $AlbumSharesTable> {
+  $$AlbumSharesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<String> get userId => $composableBuilder(
+    column: $table.userId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get sharedAt => $composableBuilder(
+    column: $table.sharedAt,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AlbumsTableOrderingComposer get album {
+    final $$AlbumsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.album,
+      referencedTable: $db.albums,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumsTableOrderingComposer(
+            $db: $db,
+            $table: $db.albums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlbumSharesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $AlbumSharesTable> {
+  $$AlbumSharesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<String> get userId =>
+      $composableBuilder(column: $table.userId, builder: (column) => column);
+
+  GeneratedColumn<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumnWithTypeConverter<DateTime, DateTime> get sharedAt =>
+      $composableBuilder(column: $table.sharedAt, builder: (column) => column);
+
+  $$AlbumsTableAnnotationComposer get album {
+    final $$AlbumsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.album,
+      referencedTable: $db.albums,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AlbumsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.albums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$AlbumSharesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $AlbumSharesTable,
+          AlbumShare,
+          $$AlbumSharesTableFilterComposer,
+          $$AlbumSharesTableOrderingComposer,
+          $$AlbumSharesTableAnnotationComposer,
+          $$AlbumSharesTableCreateCompanionBuilder,
+          $$AlbumSharesTableUpdateCompanionBuilder,
+          (AlbumShare, $$AlbumSharesTableReferences),
+          AlbumShare,
+          PrefetchHooks Function({bool album})
+        > {
+  $$AlbumSharesTableTableManager(_$SqliteDb db, $AlbumSharesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$AlbumSharesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$AlbumSharesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () =>
+                  $$AlbumSharesTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> album = const Value.absent(),
+                Value<String> userId = const Value.absent(),
+                Value<String?> displayName = const Value.absent(),
+                Value<DateTime> sharedAt = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => AlbumSharesCompanion(
+                album: album,
+                userId: userId,
+                displayName: displayName,
+                sharedAt: sharedAt,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int album,
+                required String userId,
+                Value<String?> displayName = const Value.absent(),
+                required DateTime sharedAt,
+                Value<int> rowid = const Value.absent(),
+              }) => AlbumSharesCompanion.insert(
+                album: album,
+                userId: userId,
+                displayName: displayName,
+                sharedAt: sharedAt,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$AlbumSharesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({album = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (album) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.album,
+                            referencedTable: $$AlbumSharesTableReferences
+                                ._albumTable(db),
+                            referencedColumn:
+                                $$AlbumSharesTableReferences
+                                    ._albumTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$AlbumSharesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $AlbumSharesTable,
+      AlbumShare,
+      $$AlbumSharesTableFilterComposer,
+      $$AlbumSharesTableOrderingComposer,
+      $$AlbumSharesTableAnnotationComposer,
+      $$AlbumSharesTableCreateCompanionBuilder,
+      $$AlbumSharesTableUpdateCompanionBuilder,
+      (AlbumShare, $$AlbumSharesTableReferences),
+      AlbumShare,
+      PrefetchHooks Function({bool album})
+    >;
+typedef $$TagsTableCreateCompanionBuilder =
+    TagsCompanion Function({
+      Value<int> rowId,
+      required int server,
+      required int tagId,
+      required String displayName,
+      Value<bool?> userVisible,
+      Value<bool?> userAssignable,
+    });
+typedef $$TagsTableUpdateCompanionBuilder =
+    TagsCompanion Function({
+      Value<int> rowId,
+      Value<int> server,
+      Value<int> tagId,
+      Value<String> displayName,
+      Value<bool?> userVisible,
+      Value<bool?> userAssignable,
+    });
+
+final class $$TagsTableReferences
+    extends BaseReferences<_$SqliteDb, $TagsTable, Tag> {
+  $$TagsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $ServersTable _serverTable(_$SqliteDb db) => db.servers.createAlias(
+    $_aliasNameGenerator(db.tags.server, db.servers.rowId),
+  );
+
+  $$ServersTableProcessedTableManager get server {
+    final manager = $$ServersTableTableManager(
+      $_db,
+      $_db.servers,
+    ).filter((f) => f.rowId($_item.server!));
+    final item = $_typedResult.readTableOrNull(_serverTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$TagsTableFilterComposer extends Composer<_$SqliteDb, $TagsTable> {
+  $$TagsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get tagId => $composableBuilder(
+    column: $table.tagId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get userVisible => $composableBuilder(
+    column: $table.userVisible,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get userAssignable => $composableBuilder(
+    column: $table.userAssignable,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$ServersTableFilterComposer get server {
+    final $$ServersTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableFilterComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TagsTableOrderingComposer extends Composer<_$SqliteDb, $TagsTable> {
+  $$TagsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get tagId => $composableBuilder(
+    column: $table.tagId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get userVisible => $composableBuilder(
+    column: $table.userVisible,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get userAssignable => $composableBuilder(
+    column: $table.userAssignable,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$ServersTableOrderingComposer get server {
+    final $$ServersTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableOrderingComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TagsTableAnnotationComposer extends Composer<_$SqliteDb, $TagsTable> {
+  $$TagsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<int> get tagId =>
+      $composableBuilder(column: $table.tagId, builder: (column) => column);
+
+  GeneratedColumn<String> get displayName => $composableBuilder(
+    column: $table.displayName,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get userVisible => $composableBuilder(
+    column: $table.userVisible,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get userAssignable => $composableBuilder(
+    column: $table.userAssignable,
+    builder: (column) => column,
+  );
+
+  $$ServersTableAnnotationComposer get server {
+    final $$ServersTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.server,
+      referencedTable: $db.servers,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ServersTableAnnotationComposer(
+            $db: $db,
+            $table: $db.servers,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$TagsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $TagsTable,
+          Tag,
+          $$TagsTableFilterComposer,
+          $$TagsTableOrderingComposer,
+          $$TagsTableAnnotationComposer,
+          $$TagsTableCreateCompanionBuilder,
+          $$TagsTableUpdateCompanionBuilder,
+          (Tag, $$TagsTableReferences),
+          Tag,
+          PrefetchHooks Function({bool server})
+        > {
+  $$TagsTableTableManager(_$SqliteDb db, $TagsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$TagsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$TagsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$TagsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> server = const Value.absent(),
+                Value<int> tagId = const Value.absent(),
+                Value<String> displayName = const Value.absent(),
+                Value<bool?> userVisible = const Value.absent(),
+                Value<bool?> userAssignable = const Value.absent(),
+              }) => TagsCompanion(
+                rowId: rowId,
+                server: server,
+                tagId: tagId,
+                displayName: displayName,
+                userVisible: userVisible,
+                userAssignable: userAssignable,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int server,
+                required int tagId,
+                required String displayName,
+                Value<bool?> userVisible = const Value.absent(),
+                Value<bool?> userAssignable = const Value.absent(),
+              }) => TagsCompanion.insert(
+                rowId: rowId,
+                server: server,
+                tagId: tagId,
+                displayName: displayName,
+                userVisible: userVisible,
+                userAssignable: userAssignable,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$TagsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({server = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (server) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.server,
+                            referencedTable: $$TagsTableReferences._serverTable(
+                              db,
+                            ),
+                            referencedColumn:
+                                $$TagsTableReferences._serverTable(db).rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$TagsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $TagsTable,
+      Tag,
+      $$TagsTableFilterComposer,
+      $$TagsTableOrderingComposer,
+      $$TagsTableAnnotationComposer,
+      $$TagsTableCreateCompanionBuilder,
+      $$TagsTableUpdateCompanionBuilder,
+      (Tag, $$TagsTableReferences),
+      Tag,
+      PrefetchHooks Function({bool server})
+    >;
+typedef $$FaceRecognitionPersonsTableCreateCompanionBuilder =
+    FaceRecognitionPersonsCompanion Function({
+      Value<int> rowId,
+      required int account,
+      required String name,
+      required int thumbFaceId,
+      required int count,
+    });
+typedef $$FaceRecognitionPersonsTableUpdateCompanionBuilder =
+    FaceRecognitionPersonsCompanion Function({
+      Value<int> rowId,
+      Value<int> account,
+      Value<String> name,
+      Value<int> thumbFaceId,
+      Value<int> count,
+    });
+
+final class $$FaceRecognitionPersonsTableReferences
+    extends
+        BaseReferences<
+          _$SqliteDb,
+          $FaceRecognitionPersonsTable,
+          FaceRecognitionPerson
+        > {
+  $$FaceRecognitionPersonsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $AccountsTable _accountTable(_$SqliteDb db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.faceRecognitionPersons.account, db.accounts.rowId),
+  );
+
+  $$AccountsTableProcessedTableManager get account {
+    final manager = $$AccountsTableTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.rowId($_item.account!));
+    final item = $_typedResult.readTableOrNull(_accountTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$FaceRecognitionPersonsTableFilterComposer
+    extends Composer<_$SqliteDb, $FaceRecognitionPersonsTable> {
+  $$FaceRecognitionPersonsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get thumbFaceId => $composableBuilder(
+    column: $table.thumbFaceId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$AccountsTableFilterComposer get account {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FaceRecognitionPersonsTableOrderingComposer
+    extends Composer<_$SqliteDb, $FaceRecognitionPersonsTable> {
+  $$FaceRecognitionPersonsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get thumbFaceId => $composableBuilder(
+    column: $table.thumbFaceId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get count => $composableBuilder(
+    column: $table.count,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AccountsTableOrderingComposer get account {
+    final $$AccountsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FaceRecognitionPersonsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $FaceRecognitionPersonsTable> {
+  $$FaceRecognitionPersonsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+
+  GeneratedColumn<int> get thumbFaceId => $composableBuilder(
+    column: $table.thumbFaceId,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get count =>
+      $composableBuilder(column: $table.count, builder: (column) => column);
+
+  $$AccountsTableAnnotationComposer get account {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$FaceRecognitionPersonsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $FaceRecognitionPersonsTable,
+          FaceRecognitionPerson,
+          $$FaceRecognitionPersonsTableFilterComposer,
+          $$FaceRecognitionPersonsTableOrderingComposer,
+          $$FaceRecognitionPersonsTableAnnotationComposer,
+          $$FaceRecognitionPersonsTableCreateCompanionBuilder,
+          $$FaceRecognitionPersonsTableUpdateCompanionBuilder,
+          (FaceRecognitionPerson, $$FaceRecognitionPersonsTableReferences),
+          FaceRecognitionPerson,
+          PrefetchHooks Function({bool account})
+        > {
+  $$FaceRecognitionPersonsTableTableManager(
+    _$SqliteDb db,
+    $FaceRecognitionPersonsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$FaceRecognitionPersonsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer:
+              () => $$FaceRecognitionPersonsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$FaceRecognitionPersonsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> account = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<int> thumbFaceId = const Value.absent(),
+                Value<int> count = const Value.absent(),
+              }) => FaceRecognitionPersonsCompanion(
+                rowId: rowId,
+                account: account,
+                name: name,
+                thumbFaceId: thumbFaceId,
+                count: count,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int account,
+                required String name,
+                required int thumbFaceId,
+                required int count,
+              }) => FaceRecognitionPersonsCompanion.insert(
+                rowId: rowId,
+                account: account,
+                name: name,
+                thumbFaceId: thumbFaceId,
+                count: count,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$FaceRecognitionPersonsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({account = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (account) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.account,
+                            referencedTable:
+                                $$FaceRecognitionPersonsTableReferences
+                                    ._accountTable(db),
+                            referencedColumn:
+                                $$FaceRecognitionPersonsTableReferences
+                                    ._accountTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$FaceRecognitionPersonsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $FaceRecognitionPersonsTable,
+      FaceRecognitionPerson,
+      $$FaceRecognitionPersonsTableFilterComposer,
+      $$FaceRecognitionPersonsTableOrderingComposer,
+      $$FaceRecognitionPersonsTableAnnotationComposer,
+      $$FaceRecognitionPersonsTableCreateCompanionBuilder,
+      $$FaceRecognitionPersonsTableUpdateCompanionBuilder,
+      (FaceRecognitionPerson, $$FaceRecognitionPersonsTableReferences),
+      FaceRecognitionPerson,
+      PrefetchHooks Function({bool account})
+    >;
+typedef $$NcAlbumsTableCreateCompanionBuilder =
+    NcAlbumsCompanion Function({
+      Value<int> rowId,
+      required int account,
+      required String relativePath,
+      Value<int?> lastPhoto,
+      required int nbItems,
+      Value<String?> location,
+      Value<DateTime?> dateStart,
+      Value<DateTime?> dateEnd,
+      required String collaborators,
+      required bool isOwned,
+    });
+typedef $$NcAlbumsTableUpdateCompanionBuilder =
+    NcAlbumsCompanion Function({
+      Value<int> rowId,
+      Value<int> account,
+      Value<String> relativePath,
+      Value<int?> lastPhoto,
+      Value<int> nbItems,
+      Value<String?> location,
+      Value<DateTime?> dateStart,
+      Value<DateTime?> dateEnd,
+      Value<String> collaborators,
+      Value<bool> isOwned,
+    });
+
+final class $$NcAlbumsTableReferences
+    extends BaseReferences<_$SqliteDb, $NcAlbumsTable, NcAlbum> {
+  $$NcAlbumsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $AccountsTable _accountTable(_$SqliteDb db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.ncAlbums.account, db.accounts.rowId),
+  );
+
+  $$AccountsTableProcessedTableManager get account {
+    final manager = $$AccountsTableTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.rowId($_item.account!));
+    final item = $_typedResult.readTableOrNull(_accountTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$NcAlbumItemsTable, List<NcAlbumItem>>
+  _ncAlbumItemsRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.ncAlbumItems,
+    aliasName: $_aliasNameGenerator(db.ncAlbums.rowId, db.ncAlbumItems.parent),
+  );
+
+  $$NcAlbumItemsTableProcessedTableManager get ncAlbumItemsRefs {
+    final manager = $$NcAlbumItemsTableTableManager(
+      $_db,
+      $_db.ncAlbumItems,
+    ).filter((f) => f.parent.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(_ncAlbumItemsRefsTable($_db));
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$NcAlbumsTableFilterComposer
+    extends Composer<_$SqliteDb, $NcAlbumsTable> {
+  $$NcAlbumsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get lastPhoto => $composableBuilder(
+    column: $table.lastPhoto,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get nbItems => $composableBuilder(
+    column: $table.nbItems,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime> get dateStart =>
+      $composableBuilder(
+        column: $table.dateStart,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime> get dateEnd =>
+      $composableBuilder(
+        column: $table.dateEnd,
+        builder: (column) => ColumnWithTypeConverterFilters(column),
+      );
+
+  ColumnFilters<String> get collaborators => $composableBuilder(
+    column: $table.collaborators,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isOwned => $composableBuilder(
+    column: $table.isOwned,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$AccountsTableFilterComposer get account {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> ncAlbumItemsRefs(
+    Expression<bool> Function($$NcAlbumItemsTableFilterComposer f) f,
+  ) {
+    final $$NcAlbumItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.ncAlbumItems,
+      getReferencedColumn: (t) => t.parent,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.ncAlbumItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$NcAlbumsTableOrderingComposer
+    extends Composer<_$SqliteDb, $NcAlbumsTable> {
+  $$NcAlbumsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get lastPhoto => $composableBuilder(
+    column: $table.lastPhoto,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get nbItems => $composableBuilder(
+    column: $table.nbItems,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get location => $composableBuilder(
+    column: $table.location,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get dateStart => $composableBuilder(
+    column: $table.dateStart,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get dateEnd => $composableBuilder(
+    column: $table.dateEnd,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get collaborators => $composableBuilder(
+    column: $table.collaborators,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isOwned => $composableBuilder(
+    column: $table.isOwned,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AccountsTableOrderingComposer get account {
+    final $$AccountsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NcAlbumsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $NcAlbumsTable> {
+  $$NcAlbumsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get lastPhoto =>
+      $composableBuilder(column: $table.lastPhoto, builder: (column) => column);
+
+  GeneratedColumn<int> get nbItems =>
+      $composableBuilder(column: $table.nbItems, builder: (column) => column);
+
+  GeneratedColumn<String> get location =>
+      $composableBuilder(column: $table.location, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get dateStart =>
+      $composableBuilder(column: $table.dateStart, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get dateEnd =>
+      $composableBuilder(column: $table.dateEnd, builder: (column) => column);
+
+  GeneratedColumn<String> get collaborators => $composableBuilder(
+    column: $table.collaborators,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isOwned =>
+      $composableBuilder(column: $table.isOwned, builder: (column) => column);
+
+  $$AccountsTableAnnotationComposer get account {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> ncAlbumItemsRefs<T extends Object>(
+    Expression<T> Function($$NcAlbumItemsTableAnnotationComposer a) f,
+  ) {
+    final $$NcAlbumItemsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.ncAlbumItems,
+      getReferencedColumn: (t) => t.parent,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumItemsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.ncAlbumItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$NcAlbumsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $NcAlbumsTable,
+          NcAlbum,
+          $$NcAlbumsTableFilterComposer,
+          $$NcAlbumsTableOrderingComposer,
+          $$NcAlbumsTableAnnotationComposer,
+          $$NcAlbumsTableCreateCompanionBuilder,
+          $$NcAlbumsTableUpdateCompanionBuilder,
+          (NcAlbum, $$NcAlbumsTableReferences),
+          NcAlbum,
+          PrefetchHooks Function({bool account, bool ncAlbumItemsRefs})
+        > {
+  $$NcAlbumsTableTableManager(_$SqliteDb db, $NcAlbumsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$NcAlbumsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$NcAlbumsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$NcAlbumsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> account = const Value.absent(),
+                Value<String> relativePath = const Value.absent(),
+                Value<int?> lastPhoto = const Value.absent(),
+                Value<int> nbItems = const Value.absent(),
+                Value<String?> location = const Value.absent(),
+                Value<DateTime?> dateStart = const Value.absent(),
+                Value<DateTime?> dateEnd = const Value.absent(),
+                Value<String> collaborators = const Value.absent(),
+                Value<bool> isOwned = const Value.absent(),
+              }) => NcAlbumsCompanion(
+                rowId: rowId,
+                account: account,
+                relativePath: relativePath,
+                lastPhoto: lastPhoto,
+                nbItems: nbItems,
+                location: location,
+                dateStart: dateStart,
+                dateEnd: dateEnd,
+                collaborators: collaborators,
+                isOwned: isOwned,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int account,
+                required String relativePath,
+                Value<int?> lastPhoto = const Value.absent(),
+                required int nbItems,
+                Value<String?> location = const Value.absent(),
+                Value<DateTime?> dateStart = const Value.absent(),
+                Value<DateTime?> dateEnd = const Value.absent(),
+                required String collaborators,
+                required bool isOwned,
+              }) => NcAlbumsCompanion.insert(
+                rowId: rowId,
+                account: account,
+                relativePath: relativePath,
+                lastPhoto: lastPhoto,
+                nbItems: nbItems,
+                location: location,
+                dateStart: dateStart,
+                dateEnd: dateEnd,
+                collaborators: collaborators,
+                isOwned: isOwned,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$NcAlbumsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({account = false, ncAlbumItemsRefs = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [if (ncAlbumItemsRefs) db.ncAlbumItems],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (account) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.account,
+                            referencedTable: $$NcAlbumsTableReferences
+                                ._accountTable(db),
+                            referencedColumn:
+                                $$NcAlbumsTableReferences
+                                    ._accountTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (ncAlbumItemsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$NcAlbumsTableReferences
+                          ._ncAlbumItemsRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$NcAlbumsTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).ncAlbumItemsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.parent == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$NcAlbumsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $NcAlbumsTable,
+      NcAlbum,
+      $$NcAlbumsTableFilterComposer,
+      $$NcAlbumsTableOrderingComposer,
+      $$NcAlbumsTableAnnotationComposer,
+      $$NcAlbumsTableCreateCompanionBuilder,
+      $$NcAlbumsTableUpdateCompanionBuilder,
+      (NcAlbum, $$NcAlbumsTableReferences),
+      NcAlbum,
+      PrefetchHooks Function({bool account, bool ncAlbumItemsRefs})
+    >;
+typedef $$NcAlbumItemsTableCreateCompanionBuilder =
+    NcAlbumItemsCompanion Function({
+      Value<int> rowId,
+      required int parent,
+      required String relativePath,
+      required int fileId,
+      Value<int?> contentLength,
+      Value<String?> contentType,
+      Value<String?> etag,
+      Value<DateTime?> lastModified,
+      Value<bool?> hasPreview,
+      Value<bool?> isFavorite,
+      Value<int?> fileMetadataWidth,
+      Value<int?> fileMetadataHeight,
+    });
+typedef $$NcAlbumItemsTableUpdateCompanionBuilder =
+    NcAlbumItemsCompanion Function({
+      Value<int> rowId,
+      Value<int> parent,
+      Value<String> relativePath,
+      Value<int> fileId,
+      Value<int?> contentLength,
+      Value<String?> contentType,
+      Value<String?> etag,
+      Value<DateTime?> lastModified,
+      Value<bool?> hasPreview,
+      Value<bool?> isFavorite,
+      Value<int?> fileMetadataWidth,
+      Value<int?> fileMetadataHeight,
+    });
+
+final class $$NcAlbumItemsTableReferences
+    extends BaseReferences<_$SqliteDb, $NcAlbumItemsTable, NcAlbumItem> {
+  $$NcAlbumItemsTableReferences(super.$_db, super.$_table, super.$_typedResult);
+
+  static $NcAlbumsTable _parentTable(_$SqliteDb db) => db.ncAlbums.createAlias(
+    $_aliasNameGenerator(db.ncAlbumItems.parent, db.ncAlbums.rowId),
+  );
+
+  $$NcAlbumsTableProcessedTableManager get parent {
+    final manager = $$NcAlbumsTableTableManager(
+      $_db,
+      $_db.ncAlbums,
+    ).filter((f) => f.rowId($_item.parent!));
+    final item = $_typedResult.readTableOrNull(_parentTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$NcAlbumItemsTableFilterComposer
+    extends Composer<_$SqliteDb, $NcAlbumItemsTable> {
+  $$NcAlbumItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileId => $composableBuilder(
+    column: $table.fileId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime>
+  get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileMetadataWidth => $composableBuilder(
+    column: $table.fileMetadataWidth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileMetadataHeight => $composableBuilder(
+    column: $table.fileMetadataHeight,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$NcAlbumsTableFilterComposer get parent {
+    final $$NcAlbumsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parent,
+      referencedTable: $db.ncAlbums,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumsTableFilterComposer(
+            $db: $db,
+            $table: $db.ncAlbums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NcAlbumItemsTableOrderingComposer
+    extends Composer<_$SqliteDb, $NcAlbumItemsTable> {
+  $$NcAlbumItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileId => $composableBuilder(
+    column: $table.fileId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileMetadataWidth => $composableBuilder(
+    column: $table.fileMetadataWidth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileMetadataHeight => $composableBuilder(
+    column: $table.fileMetadataHeight,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$NcAlbumsTableOrderingComposer get parent {
+    final $$NcAlbumsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parent,
+      referencedTable: $db.ncAlbums,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumsTableOrderingComposer(
+            $db: $db,
+            $table: $db.ncAlbums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NcAlbumItemsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $NcAlbumItemsTable> {
+  $$NcAlbumItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get fileId =>
+      $composableBuilder(column: $table.fileId, builder: (column) => column);
+
+  GeneratedColumn<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get etag =>
+      $composableBuilder(column: $table.etag, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get lastModified =>
+      $composableBuilder(
+        column: $table.lastModified,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get fileMetadataWidth => $composableBuilder(
+    column: $table.fileMetadataWidth,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get fileMetadataHeight => $composableBuilder(
+    column: $table.fileMetadataHeight,
+    builder: (column) => column,
+  );
+
+  $$NcAlbumsTableAnnotationComposer get parent {
+    final $$NcAlbumsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parent,
+      referencedTable: $db.ncAlbums,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$NcAlbumsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.ncAlbums,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$NcAlbumItemsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $NcAlbumItemsTable,
+          NcAlbumItem,
+          $$NcAlbumItemsTableFilterComposer,
+          $$NcAlbumItemsTableOrderingComposer,
+          $$NcAlbumItemsTableAnnotationComposer,
+          $$NcAlbumItemsTableCreateCompanionBuilder,
+          $$NcAlbumItemsTableUpdateCompanionBuilder,
+          (NcAlbumItem, $$NcAlbumItemsTableReferences),
+          NcAlbumItem,
+          PrefetchHooks Function({bool parent})
+        > {
+  $$NcAlbumItemsTableTableManager(_$SqliteDb db, $NcAlbumItemsTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$NcAlbumItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () => $$NcAlbumItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () =>
+                  $$NcAlbumItemsTableAnnotationComposer($db: db, $table: table),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> parent = const Value.absent(),
+                Value<String> relativePath = const Value.absent(),
+                Value<int> fileId = const Value.absent(),
+                Value<int?> contentLength = const Value.absent(),
+                Value<String?> contentType = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime?> lastModified = const Value.absent(),
+                Value<bool?> hasPreview = const Value.absent(),
+                Value<bool?> isFavorite = const Value.absent(),
+                Value<int?> fileMetadataWidth = const Value.absent(),
+                Value<int?> fileMetadataHeight = const Value.absent(),
+              }) => NcAlbumItemsCompanion(
+                rowId: rowId,
+                parent: parent,
+                relativePath: relativePath,
+                fileId: fileId,
+                contentLength: contentLength,
+                contentType: contentType,
+                etag: etag,
+                lastModified: lastModified,
+                hasPreview: hasPreview,
+                isFavorite: isFavorite,
+                fileMetadataWidth: fileMetadataWidth,
+                fileMetadataHeight: fileMetadataHeight,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int parent,
+                required String relativePath,
+                required int fileId,
+                Value<int?> contentLength = const Value.absent(),
+                Value<String?> contentType = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime?> lastModified = const Value.absent(),
+                Value<bool?> hasPreview = const Value.absent(),
+                Value<bool?> isFavorite = const Value.absent(),
+                Value<int?> fileMetadataWidth = const Value.absent(),
+                Value<int?> fileMetadataHeight = const Value.absent(),
+              }) => NcAlbumItemsCompanion.insert(
+                rowId: rowId,
+                parent: parent,
+                relativePath: relativePath,
+                fileId: fileId,
+                contentLength: contentLength,
+                contentType: contentType,
+                etag: etag,
+                lastModified: lastModified,
+                hasPreview: hasPreview,
+                isFavorite: isFavorite,
+                fileMetadataWidth: fileMetadataWidth,
+                fileMetadataHeight: fileMetadataHeight,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$NcAlbumItemsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({parent = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (parent) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.parent,
+                            referencedTable: $$NcAlbumItemsTableReferences
+                                ._parentTable(db),
+                            referencedColumn:
+                                $$NcAlbumItemsTableReferences
+                                    ._parentTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$NcAlbumItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $NcAlbumItemsTable,
+      NcAlbumItem,
+      $$NcAlbumItemsTableFilterComposer,
+      $$NcAlbumItemsTableOrderingComposer,
+      $$NcAlbumItemsTableAnnotationComposer,
+      $$NcAlbumItemsTableCreateCompanionBuilder,
+      $$NcAlbumItemsTableUpdateCompanionBuilder,
+      (NcAlbumItem, $$NcAlbumItemsTableReferences),
+      NcAlbumItem,
+      PrefetchHooks Function({bool parent})
+    >;
+typedef $$RecognizeFacesTableCreateCompanionBuilder =
+    RecognizeFacesCompanion Function({
+      Value<int> rowId,
+      required int account,
+      required String label,
+    });
+typedef $$RecognizeFacesTableUpdateCompanionBuilder =
+    RecognizeFacesCompanion Function({
+      Value<int> rowId,
+      Value<int> account,
+      Value<String> label,
+    });
+
+final class $$RecognizeFacesTableReferences
+    extends BaseReferences<_$SqliteDb, $RecognizeFacesTable, RecognizeFace> {
+  $$RecognizeFacesTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $AccountsTable _accountTable(_$SqliteDb db) => db.accounts.createAlias(
+    $_aliasNameGenerator(db.recognizeFaces.account, db.accounts.rowId),
+  );
+
+  $$AccountsTableProcessedTableManager get account {
+    final manager = $$AccountsTableTableManager(
+      $_db,
+      $_db.accounts,
+    ).filter((f) => f.rowId($_item.account!));
+    final item = $_typedResult.readTableOrNull(_accountTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+
+  static MultiTypedResultKey<$RecognizeFaceItemsTable, List<RecognizeFaceItem>>
+  _recognizeFaceItemsRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.recognizeFaceItems,
+    aliasName: $_aliasNameGenerator(
+      db.recognizeFaces.rowId,
+      db.recognizeFaceItems.parent,
+    ),
+  );
+
+  $$RecognizeFaceItemsTableProcessedTableManager get recognizeFaceItemsRefs {
+    final manager = $$RecognizeFaceItemsTableTableManager(
+      $_db,
+      $_db.recognizeFaceItems,
+    ).filter((f) => f.parent.rowId($_item.rowId));
+
+    final cache = $_typedResult.readTableOrNull(
+      _recognizeFaceItemsRefsTable($_db),
+    );
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: cache),
+    );
+  }
+}
+
+class $$RecognizeFacesTableFilterComposer
+    extends Composer<_$SqliteDb, $RecognizeFacesTable> {
+  $$RecognizeFacesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$AccountsTableFilterComposer get account {
+    final $$AccountsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableFilterComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<bool> recognizeFaceItemsRefs(
+    Expression<bool> Function($$RecognizeFaceItemsTableFilterComposer f) f,
+  ) {
+    final $$RecognizeFaceItemsTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.recognizeFaceItems,
+      getReferencedColumn: (t) => t.parent,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecognizeFaceItemsTableFilterComposer(
+            $db: $db,
+            $table: $db.recognizeFaceItems,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return f(composer);
+  }
+}
+
+class $$RecognizeFacesTableOrderingComposer
+    extends Composer<_$SqliteDb, $RecognizeFacesTable> {
+  $$RecognizeFacesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get label => $composableBuilder(
+    column: $table.label,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$AccountsTableOrderingComposer get account {
+    final $$AccountsTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableOrderingComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecognizeFacesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $RecognizeFacesTable> {
+  $$RecognizeFacesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get label =>
+      $composableBuilder(column: $table.label, builder: (column) => column);
+
+  $$AccountsTableAnnotationComposer get account {
+    final $$AccountsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.account,
+      referencedTable: $db.accounts,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$AccountsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.accounts,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+
+  Expression<T> recognizeFaceItemsRefs<T extends Object>(
+    Expression<T> Function($$RecognizeFaceItemsTableAnnotationComposer a) f,
+  ) {
+    final $$RecognizeFaceItemsTableAnnotationComposer composer =
+        $composerBuilder(
+          composer: this,
+          getCurrentColumn: (t) => t.rowId,
+          referencedTable: $db.recognizeFaceItems,
+          getReferencedColumn: (t) => t.parent,
+          builder:
+              (
+                joinBuilder, {
+                $addJoinBuilderToRootComposer,
+                $removeJoinBuilderFromRootComposer,
+              }) => $$RecognizeFaceItemsTableAnnotationComposer(
+                $db: $db,
+                $table: $db.recognizeFaceItems,
+                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+                joinBuilder: joinBuilder,
+                $removeJoinBuilderFromRootComposer:
+                    $removeJoinBuilderFromRootComposer,
+              ),
+        );
+    return f(composer);
+  }
+}
+
+class $$RecognizeFacesTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $RecognizeFacesTable,
+          RecognizeFace,
+          $$RecognizeFacesTableFilterComposer,
+          $$RecognizeFacesTableOrderingComposer,
+          $$RecognizeFacesTableAnnotationComposer,
+          $$RecognizeFacesTableCreateCompanionBuilder,
+          $$RecognizeFacesTableUpdateCompanionBuilder,
+          (RecognizeFace, $$RecognizeFacesTableReferences),
+          RecognizeFace,
+          PrefetchHooks Function({bool account, bool recognizeFaceItemsRefs})
+        > {
+  $$RecognizeFacesTableTableManager(_$SqliteDb db, $RecognizeFacesTable table)
+    : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$RecognizeFacesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer:
+              () =>
+                  $$RecognizeFacesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer:
+              () => $$RecognizeFacesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> account = const Value.absent(),
+                Value<String> label = const Value.absent(),
+              }) => RecognizeFacesCompanion(
+                rowId: rowId,
+                account: account,
+                label: label,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int account,
+                required String label,
+              }) => RecognizeFacesCompanion.insert(
+                rowId: rowId,
+                account: account,
+                label: label,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$RecognizeFacesTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({
+            account = false,
+            recognizeFaceItemsRefs = false,
+          }) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [
+                if (recognizeFaceItemsRefs) db.recognizeFaceItems,
+              ],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (account) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.account,
+                            referencedTable: $$RecognizeFacesTableReferences
+                                ._accountTable(db),
+                            referencedColumn:
+                                $$RecognizeFacesTableReferences
+                                    ._accountTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [
+                  if (recognizeFaceItemsRefs)
+                    await $_getPrefetchedData(
+                      currentTable: table,
+                      referencedTable: $$RecognizeFacesTableReferences
+                          ._recognizeFaceItemsRefsTable(db),
+                      managerFromTypedResult:
+                          (p0) =>
+                              $$RecognizeFacesTableReferences(
+                                db,
+                                table,
+                                p0,
+                              ).recognizeFaceItemsRefs,
+                      referencedItemsForCurrentItem:
+                          (item, referencedItems) => referencedItems.where(
+                            (e) => e.parent == item.rowId,
+                          ),
+                      typedResults: items,
+                    ),
+                ];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RecognizeFacesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $RecognizeFacesTable,
+      RecognizeFace,
+      $$RecognizeFacesTableFilterComposer,
+      $$RecognizeFacesTableOrderingComposer,
+      $$RecognizeFacesTableAnnotationComposer,
+      $$RecognizeFacesTableCreateCompanionBuilder,
+      $$RecognizeFacesTableUpdateCompanionBuilder,
+      (RecognizeFace, $$RecognizeFacesTableReferences),
+      RecognizeFace,
+      PrefetchHooks Function({bool account, bool recognizeFaceItemsRefs})
+    >;
+typedef $$RecognizeFaceItemsTableCreateCompanionBuilder =
+    RecognizeFaceItemsCompanion Function({
+      Value<int> rowId,
+      required int parent,
+      required String relativePath,
+      required int fileId,
+      Value<int?> contentLength,
+      Value<String?> contentType,
+      Value<String?> etag,
+      Value<DateTime?> lastModified,
+      Value<bool?> hasPreview,
+      Value<String?> realPath,
+      Value<bool?> isFavorite,
+      Value<int?> fileMetadataWidth,
+      Value<int?> fileMetadataHeight,
+      Value<String?> faceDetections,
+    });
+typedef $$RecognizeFaceItemsTableUpdateCompanionBuilder =
+    RecognizeFaceItemsCompanion Function({
+      Value<int> rowId,
+      Value<int> parent,
+      Value<String> relativePath,
+      Value<int> fileId,
+      Value<int?> contentLength,
+      Value<String?> contentType,
+      Value<String?> etag,
+      Value<DateTime?> lastModified,
+      Value<bool?> hasPreview,
+      Value<String?> realPath,
+      Value<bool?> isFavorite,
+      Value<int?> fileMetadataWidth,
+      Value<int?> fileMetadataHeight,
+      Value<String?> faceDetections,
+    });
+
+final class $$RecognizeFaceItemsTableReferences
+    extends
+        BaseReferences<
+          _$SqliteDb,
+          $RecognizeFaceItemsTable,
+          RecognizeFaceItem
+        > {
+  $$RecognizeFaceItemsTableReferences(
+    super.$_db,
+    super.$_table,
+    super.$_typedResult,
+  );
+
+  static $RecognizeFacesTable _parentTable(_$SqliteDb db) =>
+      db.recognizeFaces.createAlias(
+        $_aliasNameGenerator(
+          db.recognizeFaceItems.parent,
+          db.recognizeFaces.rowId,
+        ),
+      );
+
+  $$RecognizeFacesTableProcessedTableManager get parent {
+    final manager = $$RecognizeFacesTableTableManager(
+      $_db,
+      $_db.recognizeFaces,
+    ).filter((f) => f.rowId($_item.parent!));
+    final item = $_typedResult.readTableOrNull(_parentTable($_db));
+    if (item == null) return manager;
+    return ProcessedTableManager(
+      manager.$state.copyWith(prefetchedData: [item]),
+    );
+  }
+}
+
+class $$RecognizeFaceItemsTableFilterComposer
+    extends Composer<_$SqliteDb, $RecognizeFaceItemsTable> {
+  $$RecognizeFaceItemsTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileId => $composableBuilder(
+    column: $table.fileId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnWithTypeConverterFilters<DateTime?, DateTime, DateTime>
+  get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
+  );
+
+  ColumnFilters<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get realPath => $composableBuilder(
+    column: $table.realPath,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileMetadataWidth => $composableBuilder(
+    column: $table.fileMetadataWidth,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get fileMetadataHeight => $composableBuilder(
+    column: $table.fileMetadataHeight,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get faceDetections => $composableBuilder(
+    column: $table.faceDetections,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  $$RecognizeFacesTableFilterComposer get parent {
+    final $$RecognizeFacesTableFilterComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parent,
+      referencedTable: $db.recognizeFaces,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecognizeFacesTableFilterComposer(
+            $db: $db,
+            $table: $db.recognizeFaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecognizeFaceItemsTableOrderingComposer
+    extends Composer<_$SqliteDb, $RecognizeFaceItemsTable> {
+  $$RecognizeFaceItemsTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get rowId => $composableBuilder(
+    column: $table.rowId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileId => $composableBuilder(
+    column: $table.fileId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get etag => $composableBuilder(
+    column: $table.etag,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<DateTime> get lastModified => $composableBuilder(
+    column: $table.lastModified,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get realPath => $composableBuilder(
+    column: $table.realPath,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileMetadataWidth => $composableBuilder(
+    column: $table.fileMetadataWidth,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get fileMetadataHeight => $composableBuilder(
+    column: $table.fileMetadataHeight,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get faceDetections => $composableBuilder(
+    column: $table.faceDetections,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  $$RecognizeFacesTableOrderingComposer get parent {
+    final $$RecognizeFacesTableOrderingComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parent,
+      referencedTable: $db.recognizeFaces,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecognizeFacesTableOrderingComposer(
+            $db: $db,
+            $table: $db.recognizeFaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecognizeFaceItemsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $RecognizeFaceItemsTable> {
+  $$RecognizeFaceItemsTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get rowId =>
+      $composableBuilder(column: $table.rowId, builder: (column) => column);
+
+  GeneratedColumn<String> get relativePath => $composableBuilder(
+    column: $table.relativePath,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get fileId =>
+      $composableBuilder(column: $table.fileId, builder: (column) => column);
+
+  GeneratedColumn<int> get contentLength => $composableBuilder(
+    column: $table.contentLength,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get contentType => $composableBuilder(
+    column: $table.contentType,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get etag =>
+      $composableBuilder(column: $table.etag, builder: (column) => column);
+
+  GeneratedColumnWithTypeConverter<DateTime?, DateTime> get lastModified =>
+      $composableBuilder(
+        column: $table.lastModified,
+        builder: (column) => column,
+      );
+
+  GeneratedColumn<bool> get hasPreview => $composableBuilder(
+    column: $table.hasPreview,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get realPath =>
+      $composableBuilder(column: $table.realPath, builder: (column) => column);
+
+  GeneratedColumn<bool> get isFavorite => $composableBuilder(
+    column: $table.isFavorite,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get fileMetadataWidth => $composableBuilder(
+    column: $table.fileMetadataWidth,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get fileMetadataHeight => $composableBuilder(
+    column: $table.fileMetadataHeight,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<String> get faceDetections => $composableBuilder(
+    column: $table.faceDetections,
+    builder: (column) => column,
+  );
+
+  $$RecognizeFacesTableAnnotationComposer get parent {
+    final $$RecognizeFacesTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.parent,
+      referencedTable: $db.recognizeFaces,
+      getReferencedColumn: (t) => t.rowId,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$RecognizeFacesTableAnnotationComposer(
+            $db: $db,
+            $table: $db.recognizeFaces,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
+                $removeJoinBuilderFromRootComposer,
+          ),
+    );
+    return composer;
+  }
+}
+
+class $$RecognizeFaceItemsTableTableManager
+    extends
+        RootTableManager<
+          _$SqliteDb,
+          $RecognizeFaceItemsTable,
+          RecognizeFaceItem,
+          $$RecognizeFaceItemsTableFilterComposer,
+          $$RecognizeFaceItemsTableOrderingComposer,
+          $$RecognizeFaceItemsTableAnnotationComposer,
+          $$RecognizeFaceItemsTableCreateCompanionBuilder,
+          $$RecognizeFaceItemsTableUpdateCompanionBuilder,
+          (RecognizeFaceItem, $$RecognizeFaceItemsTableReferences),
+          RecognizeFaceItem,
+          PrefetchHooks Function({bool parent})
+        > {
+  $$RecognizeFaceItemsTableTableManager(
+    _$SqliteDb db,
+    $RecognizeFaceItemsTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$RecognizeFaceItemsTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer:
+              () => $$RecognizeFaceItemsTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$RecognizeFaceItemsTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                Value<int> parent = const Value.absent(),
+                Value<String> relativePath = const Value.absent(),
+                Value<int> fileId = const Value.absent(),
+                Value<int?> contentLength = const Value.absent(),
+                Value<String?> contentType = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime?> lastModified = const Value.absent(),
+                Value<bool?> hasPreview = const Value.absent(),
+                Value<String?> realPath = const Value.absent(),
+                Value<bool?> isFavorite = const Value.absent(),
+                Value<int?> fileMetadataWidth = const Value.absent(),
+                Value<int?> fileMetadataHeight = const Value.absent(),
+                Value<String?> faceDetections = const Value.absent(),
+              }) => RecognizeFaceItemsCompanion(
+                rowId: rowId,
+                parent: parent,
+                relativePath: relativePath,
+                fileId: fileId,
+                contentLength: contentLength,
+                contentType: contentType,
+                etag: etag,
+                lastModified: lastModified,
+                hasPreview: hasPreview,
+                realPath: realPath,
+                isFavorite: isFavorite,
+                fileMetadataWidth: fileMetadataWidth,
+                fileMetadataHeight: fileMetadataHeight,
+                faceDetections: faceDetections,
+              ),
+          createCompanionCallback:
+              ({
+                Value<int> rowId = const Value.absent(),
+                required int parent,
+                required String relativePath,
+                required int fileId,
+                Value<int?> contentLength = const Value.absent(),
+                Value<String?> contentType = const Value.absent(),
+                Value<String?> etag = const Value.absent(),
+                Value<DateTime?> lastModified = const Value.absent(),
+                Value<bool?> hasPreview = const Value.absent(),
+                Value<String?> realPath = const Value.absent(),
+                Value<bool?> isFavorite = const Value.absent(),
+                Value<int?> fileMetadataWidth = const Value.absent(),
+                Value<int?> fileMetadataHeight = const Value.absent(),
+                Value<String?> faceDetections = const Value.absent(),
+              }) => RecognizeFaceItemsCompanion.insert(
+                rowId: rowId,
+                parent: parent,
+                relativePath: relativePath,
+                fileId: fileId,
+                contentLength: contentLength,
+                contentType: contentType,
+                etag: etag,
+                lastModified: lastModified,
+                hasPreview: hasPreview,
+                realPath: realPath,
+                isFavorite: isFavorite,
+                fileMetadataWidth: fileMetadataWidth,
+                fileMetadataHeight: fileMetadataHeight,
+                faceDetections: faceDetections,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          $$RecognizeFaceItemsTableReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: ({parent = false}) {
+            return PrefetchHooks(
+              db: db,
+              explicitlyWatchedTables: [],
+              addJoins: <
+                T extends TableManagerState<
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic,
+                  dynamic
+                >
+              >(state) {
+                if (parent) {
+                  state =
+                      state.withJoin(
+                            currentTable: table,
+                            currentColumn: table.parent,
+                            referencedTable: $$RecognizeFaceItemsTableReferences
+                                ._parentTable(db),
+                            referencedColumn:
+                                $$RecognizeFaceItemsTableReferences
+                                    ._parentTable(db)
+                                    .rowId,
+                          )
+                          as T;
+                }
+
+                return state;
+              },
+              getPrefetchedDataCallback: (items) async {
+                return [];
+              },
+            );
+          },
+        ),
+      );
+}
+
+typedef $$RecognizeFaceItemsTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $RecognizeFaceItemsTable,
+      RecognizeFaceItem,
+      $$RecognizeFaceItemsTableFilterComposer,
+      $$RecognizeFaceItemsTableOrderingComposer,
+      $$RecognizeFaceItemsTableAnnotationComposer,
+      $$RecognizeFaceItemsTableCreateCompanionBuilder,
+      $$RecognizeFaceItemsTableUpdateCompanionBuilder,
+      (RecognizeFaceItem, $$RecognizeFaceItemsTableReferences),
+      RecognizeFaceItem,
+      PrefetchHooks Function({bool parent})
+    >;
+
+class $SqliteDbManager {
+  final _$SqliteDb _db;
+  $SqliteDbManager(this._db);
+  $$ServersTableTableManager get servers =>
+      $$ServersTableTableManager(_db, _db.servers);
+  $$AccountsTableTableManager get accounts =>
+      $$AccountsTableTableManager(_db, _db.accounts);
+  $$FilesTableTableManager get files =>
+      $$FilesTableTableManager(_db, _db.files);
+  $$AccountFilesTableTableManager get accountFiles =>
+      $$AccountFilesTableTableManager(_db, _db.accountFiles);
+  $$ImagesTableTableManager get images =>
+      $$ImagesTableTableManager(_db, _db.images);
+  $$ImageLocationsTableTableManager get imageLocations =>
+      $$ImageLocationsTableTableManager(_db, _db.imageLocations);
+  $$TrashesTableTableManager get trashes =>
+      $$TrashesTableTableManager(_db, _db.trashes);
+  $$DirFilesTableTableManager get dirFiles =>
+      $$DirFilesTableTableManager(_db, _db.dirFiles);
+  $$AlbumsTableTableManager get albums =>
+      $$AlbumsTableTableManager(_db, _db.albums);
+  $$AlbumSharesTableTableManager get albumShares =>
+      $$AlbumSharesTableTableManager(_db, _db.albumShares);
+  $$TagsTableTableManager get tags => $$TagsTableTableManager(_db, _db.tags);
+  $$FaceRecognitionPersonsTableTableManager get faceRecognitionPersons =>
+      $$FaceRecognitionPersonsTableTableManager(
+        _db,
+        _db.faceRecognitionPersons,
+      );
+  $$NcAlbumsTableTableManager get ncAlbums =>
+      $$NcAlbumsTableTableManager(_db, _db.ncAlbums);
+  $$NcAlbumItemsTableTableManager get ncAlbumItems =>
+      $$NcAlbumItemsTableTableManager(_db, _db.ncAlbumItems);
+  $$RecognizeFacesTableTableManager get recognizeFaces =>
+      $$RecognizeFacesTableTableManager(_db, _db.recognizeFaces);
+  $$RecognizeFaceItemsTableTableManager get recognizeFaceItems =>
+      $$RecognizeFaceItemsTableTableManager(_db, _db.recognizeFaceItems);
 }
 
 // **************************************************************************

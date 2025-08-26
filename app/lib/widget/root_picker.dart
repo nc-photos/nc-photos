@@ -32,16 +32,10 @@ class RootPicker extends StatefulWidget {
         settings: settings,
       );
 
-  const RootPicker({
-    super.key,
-    required this.account,
-  });
+  const RootPicker({super.key, required this.account});
 
   RootPicker.fromArgs(RootPickerArguments args, {Key? key})
-      : this(
-          key: key,
-          account: args.account,
-        );
+    : this(key: key, account: args.account);
 
   @override
   createState() => _RootPickerState();
@@ -64,8 +58,12 @@ class _RootPickerState extends State<RootPicker> {
       try {
         if (r.isNotEmpty) {
           _ensureInitDialog();
-          files.add(await LsSingleFile(c.withRemoteFileRepo())(
-              widget.account, file_util.unstripPath(widget.account, r)));
+          files.add(
+            await LsSingleFile(c.withRemoteFileRepo())(
+              widget.account,
+              file_util.unstripPath(widget.account, r),
+            ),
+          );
         }
       } catch (e, stackTrace) {
         _log.severe("[_initAccount] Failed", e, stackTrace);
@@ -79,9 +77,7 @@ class _RootPickerState extends State<RootPicker> {
 
   @override
   build(BuildContext context) {
-    return Scaffold(
-      body: _buildContent(context),
-    );
+    return Scaffold(body: _buildContent(context));
   }
 
   Widget _buildContent(BuildContext context) {
@@ -100,23 +96,23 @@ class _RootPickerState extends State<RootPicker> {
                 const SizedBox(height: 8),
                 Align(
                   alignment: AlignmentDirectional.topStart,
-                  child: Text(
-                    L10n.global().rootPickerSubHeaderText,
-                  ),
+                  child: Text(L10n.global().rootPickerSubHeaderText),
                 ),
               ],
             ),
           ),
           Expanded(
-            child: _initialPicks == null
-                ? Container()
-                : DirPicker(
-                    key: _pickerKey,
-                    account: widget.account,
-                    strippedRootDir: "",
-                    initialPicks: _initialPicks,
-                    onConfirmed: (picks) => _onPickerConfirmed(context, picks),
-                  ),
+            child:
+                _initialPicks == null
+                    ? Container()
+                    : DirPicker(
+                      key: _pickerKey,
+                      account: widget.account,
+                      strippedRootDir: "",
+                      initialPicks: _initialPicks,
+                      onConfirmed:
+                          (picks) => _onPickerConfirmed(context, picks),
+                    ),
           ),
           Padding(
             padding: const EdgeInsets.all(16),
@@ -141,26 +137,30 @@ class _RootPickerState extends State<RootPicker> {
 
   void _onSkipPressed(BuildContext context) {
     showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              content:
-                  Text(L10n.global().rootPickerSkipConfirmationDialogContent2),
-              actions: <Widget>[
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  child:
-                      Text(MaterialLocalizations.of(context).cancelButtonLabel),
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            content: Text(
+              L10n.global().rootPickerSkipConfirmationDialogContent2,
+            ),
+            actions: <Widget>[
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text(
+                  MaterialLocalizations.of(context).cancelButtonLabel,
                 ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(MaterialLocalizations.of(context).okButtonLabel),
-                ),
-              ],
-            )).then((value) {
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop(true);
+                },
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
+              ),
+            ],
+          ),
+    ).then((value) {
       if (value == true) {
         Navigator.of(context).pop(widget.account.copyWith(roots: [""]));
       }
@@ -174,10 +174,12 @@ class _RootPickerState extends State<RootPicker> {
   void _onPickerConfirmed(BuildContext context, List<File> picks) {
     final roots = picks.map((e) => e.strippedPath).toList();
     if (roots.isEmpty) {
-      SnackBarManager().showSnackBar(SnackBar(
-        content: Text(L10n.global().rootPickerListEmptyNotification),
-        duration: k.snackBarDurationNormal,
-      ));
+      SnackBarManager().showSnackBar(
+        SnackBar(
+          content: Text(L10n.global().rootPickerListEmptyNotification),
+          duration: k.snackBarDurationNormal,
+        ),
+      );
       return;
     }
     final newAccount = widget.account.copyWith(roots: roots);
@@ -195,8 +197,10 @@ class _RootPickerState extends State<RootPicker> {
         showDialog(
           barrierDismissible: false,
           context: context,
-          builder: (context) => ProcessingDialog(
-              text: L10n.global().genericProcessingDialogContent),
+          builder:
+              (context) => ProcessingDialog(
+                text: L10n.global().genericProcessingDialogContent,
+              ),
         );
       }
     });

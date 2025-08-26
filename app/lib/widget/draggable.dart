@@ -51,16 +51,10 @@ class Draggable<T extends Object> extends StatelessWidget {
             type: MaterialType.transparency,
             child: FractionalTranslation(
               translation: const Offset(-.5, -.5),
-              child: Opacity(
-                opacity: .5,
-                child: feedback ?? child,
-              ),
+              child: Opacity(opacity: .5, child: feedback ?? child),
             ),
           ),
-          childWhenDragging: Opacity(
-            opacity: .25,
-            child: child,
-          ),
+          childWhenDragging: Opacity(opacity: .25, child: child),
           child: child,
         ),
         if (onDropBefore != null || onDropAfter != null)
@@ -72,12 +66,15 @@ class Draggable<T extends Object> extends StatelessWidget {
                   Expanded(
                     child: DragTarget<T>(
                       builder: (context, candidateItems, rejectedItems) {
-                        return buildIndicator(AlignmentDirectional.centerStart,
-                            candidateItems.isNotEmpty);
+                        return buildIndicator(
+                          AlignmentDirectional.centerStart,
+                          candidateItems.isNotEmpty,
+                        );
                       },
                       onAcceptWithDetails: (details) {
                         _log.fine(
-                            "[build] Dropping ${details.data} before $data");
+                          "[build] Dropping ${details.data} before $data",
+                        );
                         onDropBefore!(details.data);
                       },
                     ),
@@ -86,12 +83,15 @@ class Draggable<T extends Object> extends StatelessWidget {
                   Expanded(
                     child: DragTarget<T>(
                       builder: (context, candidateItems, rejectedItems) {
-                        return buildIndicator(AlignmentDirectional.centerEnd,
-                            candidateItems.isNotEmpty);
+                        return buildIndicator(
+                          AlignmentDirectional.centerEnd,
+                          candidateItems.isNotEmpty,
+                        );
                       },
                       onAcceptWithDetails: (details) {
                         _log.fine(
-                            "[build] Dropping ${details.data} after $data");
+                          "[build] Dropping ${details.data} after $data",
+                        );
                         onDropAfter!(details.data);
                       },
                     ),

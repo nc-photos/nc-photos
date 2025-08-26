@@ -43,44 +43,32 @@ void main() {
         // 40.749444, -73.968056
         final lat = gpsDoubleToDms(40.749444);
         final lng = gpsDoubleToDms(-73.968056);
-        expect(
-          lat.map((e) => e.toString()),
-          [
-            const Rational(40, 1).toString(),
-            const Rational(44, 1).toString(),
-            const Rational(5799, 100).toString(),
-          ],
-        );
-        expect(
-          lng.map((e) => e.toString()),
-          [
-            const Rational(73, 1).toString(),
-            const Rational(58, 1).toString(),
-            const Rational(500, 100).toString(),
-          ],
-        );
+        expect(lat.map((e) => e.toString()), [
+          const Rational(40, 1).toString(),
+          const Rational(44, 1).toString(),
+          const Rational(5799, 100).toString(),
+        ]);
+        expect(lng.map((e) => e.toString()), [
+          const Rational(73, 1).toString(),
+          const Rational(58, 1).toString(),
+          const Rational(500, 100).toString(),
+        ]);
       });
 
       test("East Cape Lighthouse", () {
         // -37.688944, 178.548139
         final lat = gpsDoubleToDms(-37.688944);
         final lng = gpsDoubleToDms(178.548139);
-        expect(
-          lat.map((e) => e.toString()),
-          [
-            const Rational(37, 1).toString(),
-            const Rational(41, 1).toString(),
-            const Rational(2019, 100).toString(),
-          ],
-        );
-        expect(
-          lng.map((e) => e.toString()),
-          [
-            const Rational(178, 1).toString(),
-            const Rational(32, 1).toString(),
-            const Rational(5330, 100).toString(),
-          ],
-        );
+        expect(lat.map((e) => e.toString()), [
+          const Rational(37, 1).toString(),
+          const Rational(41, 1).toString(),
+          const Rational(2019, 100).toString(),
+        ]);
+        expect(lng.map((e) => e.toString()), [
+          const Rational(178, 1).toString(),
+          const Rational(32, 1).toString(),
+          const Rational(5330, 100).toString(),
+        ]);
       });
     });
 

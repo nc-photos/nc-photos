@@ -16,11 +16,7 @@ class Date implements Comparable<Date> {
 
   static Date today() => fromDateTime(clock.now());
 
-  Date copyWith({
-    int? year,
-    int? month,
-    int? day,
-  }) {
+  Date copyWith({int? year, int? month, int? day}) {
     return Date(year ?? this.year, month ?? this.month, day ?? this.day);
   }
 
@@ -49,13 +45,12 @@ extension DateExtension on Date {
   DateTime toUtcDateTime() => DateTime.utc(year, month, day);
   DateTime toLocalDateTime() => DateTime(year, month, day);
 
-  Date add({
-    int? year,
-    int? month,
-    int? day,
-  }) {
-    final d = DateTime.utc(this.year + (year ?? 0), this.month + (month ?? 0),
-        this.day + (day ?? 0));
+  Date add({int? year, int? month, int? day}) {
+    final d = DateTime.utc(
+      this.year + (year ?? 0),
+      this.month + (month ?? 0),
+      this.day + (day ?? 0),
+    );
     return Date(d.year, d.month, d.day);
   }
 

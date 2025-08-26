@@ -10,10 +10,10 @@ class DownloadPreview {
   Future<dynamic> call(Account account, FileDescriptor file) async {
     assert(getRawPlatform() == NpPlatform.android);
     final previewUrl = getViewerUrlForImageFile(account, file);
-    final fileInfo =
-        await LargeImageCacheManager.inst.getSingleFile(previewUrl, headers: {
-      "authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-    });
+    final fileInfo = await LargeImageCacheManager.inst.getSingleFile(
+      previewUrl,
+      headers: {"authorization": AuthUtil.fromAccount(account).toHeaderValue()},
+    );
     return ContentUri.getUriForFile(fileInfo.absolute.path);
   }
 }

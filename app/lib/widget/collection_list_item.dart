@@ -28,21 +28,21 @@ class CollectionListSmall extends StatelessWidget {
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
                     colors: [
-                      Colors.black.withOpacity(0),
-                      Colors.black.withOpacity(.5),
+                      Colors.black.withValues(alpha: 0),
+                      Colors.black.withValues(alpha: .5),
                     ],
                   ),
                 ),
               ),
               Container(
-                color: Colors.black.withOpacity(.5),
+                color: Colors.black.withValues(alpha: .5),
                 constraints: const BoxConstraints(minWidth: double.infinity),
                 padding: const EdgeInsets.fromLTRB(8, 0, 8, 4),
                 child: Text(
                   label,
                   style: Theme.of(context).textTheme.labelLarge!.copyWith(
-                        color: Theme.of(context).onDarkSurface,
-                      ),
+                    color: Theme.of(context).onDarkSurface,
+                  ),
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
@@ -61,9 +61,7 @@ class CollectionListSmall extends StatelessWidget {
           Positioned.fill(
             child: Material(
               type: MaterialType.transparency,
-              child: InkWell(
-                onTap: onTap,
-              ),
+              child: InkWell(onTap: onTap),
             ),
           ),
         ],

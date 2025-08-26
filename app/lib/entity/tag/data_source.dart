@@ -2,7 +2,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/entity_converter.dart';
 import 'package:nc_photos/db/entity_converter.dart';
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/tag.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
@@ -20,17 +20,17 @@ class TagRemoteDataSource implements TagDataSource {
   list(Account account) async {
     _log.info("[list] $account");
     final response = await ApiUtil.fromAccount(account).systemtags().propfind(
-          id: 1,
-          displayName: 1,
-          userVisible: 1,
-          userAssignable: 1,
-        );
+      id: 1,
+      displayName: 1,
+      userVisible: 1,
+      userAssignable: 1,
+    );
     if (!response.isGood) {
       _log.severe("[list] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiTags = await api.TagParser().parse(response.body);
@@ -38,23 +38,18 @@ class TagRemoteDataSource implements TagDataSource {
   }
 
   @override
-  listByFile(Account account, File file) async {
-    _log.info("[listByFile] ${file.path}");
+  Future<List<Tag>> listByFile(Account account, FileDescriptor file) async {
+    _log.info("[listByFile] ${file.fdPath}");
     final response = await ApiUtil.fromAccount(account)
         .systemtagsRelations()
-        .files(file.fileId!)
-        .propfind(
-          id: 1,
-          displayName: 1,
-          userVisible: 1,
-          userAssignable: 1,
-        );
+        .files(file.fdId)
+        .propfind(id: 1, displayName: 1, userVisible: 1, userAssignable: 1);
     if (!response.isGood) {
       _log.severe("[listByFile] Failed requesting server: $response");
       throw ApiException(
-          response: response,
-          message:
-              "Server responed with an error: HTTP ${response.statusCode}");
+        response: response,
+        message: "Server responed with an error: HTTP ${response.statusCode}",
+      );
     }
 
     final apiTags = await api.TagParser().parse(response.body);
@@ -74,8 +69,8 @@ class TagSqliteDbDataSource implements TagDataSource {
   }
 
   @override
-  Future<List<Tag>> listByFile(Account account, File file) async {
-    _log.info("[listByFile] ${file.path}");
+  Future<List<Tag>> listByFile(Account account, FileDescriptor file) async {
+    _log.info("[listByFile] ${file.fdPath}");
     throw UnimplementedError();
   }
 

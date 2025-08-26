@@ -5,10 +5,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   _Bloc({
     required this.account,
     required Set<_ProviderOption> supportedProviders,
-  }) : super(_State.init(
-          account: account,
-          supportedProviders: supportedProviders,
-        )) {
+  }) : super(
+         _State.init(account: account, supportedProviders: supportedProviders),
+       ) {
     on<_FormEvent>(_onFormEvent);
     on<_HideDialog>(_onHideDialog);
 
@@ -52,38 +51,37 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   void _onSubmitName(_SubmitName ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      formValue: state.formValue.copyWith(name: ev.value),
-    ));
+    emit(state.copyWith(formValue: state.formValue.copyWith(name: ev.value)));
   }
 
   void _onSubmitProvider(_SubmitProvider ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      formValue: state.formValue.copyWith(provider: ev.value),
-    ));
+    emit(
+      state.copyWith(formValue: state.formValue.copyWith(provider: ev.value)),
+    );
   }
 
   void _onSubmitDirs(_SubmitDirs ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      formValue: state.formValue.copyWith(dirs: ev.value),
-    ));
+    emit(state.copyWith(formValue: state.formValue.copyWith(dirs: ev.value)));
   }
 
   void _onSubmitTags(_SubmitTags ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      formValue: state.formValue.copyWith(tags: ev.value),
-    ));
+    emit(state.copyWith(formValue: state.formValue.copyWith(tags: ev.value)));
   }
 
   void _onSubmitForm(_SubmitForm ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      result: Collection(
-        name: state.formValue.name,
-        contentProvider: _buildProvider(),
+    emit(
+      state.copyWith(
+        result: Collection(
+          name: state.formValue.name,
+          contentProvider: _buildProvider(),
+        ),
       ),
-    ));
-    unawaited(AccountPref.of(account)
-        .setLastNewCollectionType(state.formValue.provider.index));
+    );
+    unawaited(
+      AccountPref.of(
+        account,
+      ).setLastNewCollectionType(state.formValue.provider.index),
+    );
   }
 
   void _onSetError(_SetError ev, Emitter<_State> emit) {

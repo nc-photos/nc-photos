@@ -5,8 +5,8 @@ version: 1.0.0
 publish_to: 'none'
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.24.0"
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.29.0"
 
 dependencies:
   clock: ^1.1.1
@@ -15,8 +15,8 @@ dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with
-      ref: copy_with-1.4.0
-  drift: 2.15.0
+      ref: copy_with-2.0.0
+  drift: 2.23.1
   flutter:
     sdk: flutter
   http: ^1.1.2
@@ -50,7 +50,7 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-1.1.0
+      ref: to_string-2.0.0
       path: to_string
 
 dev_dependencies:
@@ -60,8 +60,9 @@ dev_dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
-      ref: copy_with_build-1.8.1
-  drift_dev: 2.15.0
+      ref: copy_with_build-2.0.0
+  dart_style: 3.0.1
+  drift_dev: 2.23.0
   np_codegen_build:
     path: ../codegen_build
   np_lints:
@@ -72,5 +73,5 @@ dev_dependencies:
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-1.1.1
+      ref: to_string_build-2.0.0
       path: to_string_build

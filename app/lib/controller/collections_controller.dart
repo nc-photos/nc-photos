@@ -48,10 +48,7 @@ class CollectionStreamData {
 
 @genCopyWith
 class CollectionStreamEvent {
-  const CollectionStreamEvent({
-    required this.data,
-    required this.hasNext,
-  });
+  const CollectionStreamEvent({required this.data, required this.hasNext});
 
   CollectionItemsController itemsControllerByCollection(Collection collection) {
     final i = data.indexWhere((d) => collection.compareIdentity(d.collection));
@@ -116,22 +113,20 @@ class CollectionsController {
       onDone: () => completer.complete(),
     );
     await completer.future;
-    _dataStreamController.add(CollectionStreamEvent(
-      data: _prepareDataFor(results),
-      hasNext: false,
-    ));
+    _dataStreamController.add(
+      CollectionStreamEvent(data: _prepareDataFor(results), hasNext: false),
+    );
   }
 
   Future<Collection> createNew(Collection collection) async {
     // we can't simply add the collection argument to the stream because
     // the collection may not be a complete workable instance
     final created = await CreateCollection(_c)(account, collection);
-    _dataStreamController.addWithValue((v) => v.copyWith(
-          data: _prepareDataFor([
-            created,
-            ...v.data.map((e) => e.collection),
-          ]),
-        ));
+    _dataStreamController.addWithValue(
+      (v) => v.copyWith(
+        data: _prepareDataFor([created, ...v.data.map((e) => e.collection)]),
+      ),
+    );
     return created;
   }
 
@@ -154,9 +149,7 @@ class CollectionsController {
         toBeRemoved.add(newData.removeAt(i));
       }
     }
-    _dataStreamController.addWithValue((v) => v.copyWith(
-          data: newData,
-        ));
+    _dataStreamController.addWithValue((v) => v.copyWith(data: newData));
 
     final restore = <CollectionStreamData>[];
     await _mutex.protect(() async {
@@ -165,9 +158,13 @@ class CollectionsController {
         collections,
         onError: (c, e, stackTrace) {
           _log.severe(
-              "[remove] Failed while RemoveCollections: $c", e, stackTrace);
-          final i =
-              toBeRemoved.indexWhere((d) => c.compareIdentity(d.collection));
+            "[remove] Failed while RemoveCollections: $c",
+            e,
+            stackTrace,
+          );
+          final i = toBeRemoved.indexWhere(
+            (d) => c.compareIdentity(d.collection),
+          );
           if (i != -1) {
             restore.add(toBeRemoved.removeAt(i));
           }
@@ -181,12 +178,9 @@ class CollectionsController {
         .forEach(_itemControllers.remove);
     if (restore.isNotEmpty) {
       _log.severe("[remove] Restoring ${restore.length} collections");
-      _dataStreamController.addWithValue((v) => v.copyWith(
-            data: [
-              ...restore,
-              ...v.data,
-            ],
-          ));
+      _dataStreamController.addWithValue(
+        (v) => v.copyWith(data: [...restore, ...v.data]),
+      );
     }
     return collections.length - failedCount;
   }
@@ -202,7 +196,8 @@ class CollectionsController {
     try {
       final c = await _mutex.protect(() async {
         final found = _dataStreamController.value.data.firstWhereOrNull(
-            (ev) => ev.collection.compareIdentity(collection));
+          (ev) => ev.collection.compareIdentity(collection),
+        );
         final item = found?.controller.peekStream();
         return await EditCollection(_c)(
           account,
@@ -226,7 +221,7 @@ class CollectionsController {
           return Future.value(e);
         }
       });
-      _updateCollection(c, newItems?.whereNotNull().toList());
+      _updateCollection(c, newItems?.nonNulls.toList());
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
     }
@@ -249,8 +244,9 @@ class CollectionsController {
         _updateCollection(newCollection!);
       }
       if (result == CollectionShareResult.partial) {
-        _dataErrorStreamController.add(ExceptionEvent(
-            CollectionPartialShareException(sharee.shareWith.raw)));
+        _dataErrorStreamController.add(
+          ExceptionEvent(CollectionPartialShareException(sharee.shareWith.raw)),
+        );
       }
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
@@ -275,7 +271,8 @@ class CollectionsController {
       }
       if (result == CollectionShareResult.partial) {
         _dataErrorStreamController.add(
-            ExceptionEvent(CollectionPartialUnshareException(share.username)));
+          ExceptionEvent(CollectionPartialUnshareException(share.username)),
+        );
       }
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
@@ -284,16 +281,21 @@ class CollectionsController {
 
   /// See [ImportPendingSharedCollection]
   Future<Collection?> importPendingSharedCollection(
-      Collection collection) async {
+    Collection collection,
+  ) async {
     try {
-      final newCollection =
-          await ImportPendingSharedCollection(_c)(account, collection);
-      _dataStreamController.addWithValue((v) => v.copyWith(
-            data: _prepareDataFor([
-              newCollection,
-              ...v.data.map((e) => e.collection),
-            ]),
-          ));
+      final newCollection = await ImportPendingSharedCollection(_c)(
+        account,
+        collection,
+      );
+      _dataStreamController.addWithValue(
+        (v) => v.copyWith(
+          data: _prepareDataFor([
+            newCollection,
+            ...v.data.map((e) => e.collection),
+          ]),
+        ),
+      );
       return newCollection;
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
@@ -302,10 +304,7 @@ class CollectionsController {
   }
 
   Future<void> _load() async {
-    var lastData = const CollectionStreamEvent(
-      data: [],
-      hasNext: false,
-    );
+    var lastData = const CollectionStreamEvent(data: [], hasNext: false);
     final completer = Completer();
     ListCollection(_c, serverController: serverController)(account).listen(
       (c) {
@@ -334,10 +333,9 @@ class CollectionsController {
         collection: k.collection,
         onCollectionUpdated: _updateCollection,
       );
-      data.add(CollectionStreamData(
-        collection: c,
-        controller: _itemControllers[k]!,
-      ));
+      data.add(
+        CollectionStreamData(collection: c, controller: _itemControllers[k]!),
+      );
       keys.add(k);
     }
 
@@ -353,18 +351,21 @@ class CollectionsController {
 
   void _updateCollection(Collection collection, [List<CollectionItem>? items]) {
     _log.info("[_updateCollection] Updating collection: $collection");
-    _dataStreamController.addWithValue((v) => v.copyWith(
-          data: v.data.map((d) {
-            if (d.collection.compareIdentity(collection)) {
-              if (items != null) {
-                d.controller.forceReplaceItems(items);
+    _dataStreamController.addWithValue(
+      (v) => v.copyWith(
+        data:
+            v.data.map((d) {
+              if (d.collection.compareIdentity(collection)) {
+                if (items != null) {
+                  d.controller.forceReplaceItems(items);
+                }
+                return d.copyWith(collection: collection);
+              } else {
+                return d;
               }
-              return d.copyWith(collection: collection);
-            } else {
-              return d;
-            }
-          }).toList(),
-        ));
+            }).toList(),
+      ),
+    );
   }
 
   final DiContainer _c;
@@ -374,10 +375,7 @@ class CollectionsController {
 
   var _isDataStreamInited = false;
   final _dataStreamController = BehaviorSubject.seeded(
-    const CollectionStreamEvent(
-      data: [],
-      hasNext: true,
-    ),
+    const CollectionStreamEvent(data: [], hasNext: true),
   );
   final _dataErrorStreamController =
       StreamController<ExceptionEvent>.broadcast();

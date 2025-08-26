@@ -1,5 +1,6 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/type.dart';
 import 'package:np_string/np_string.dart';
@@ -9,7 +10,9 @@ import 'package:to_string/to_string.dart';
 part 'file_descriptor.g.dart';
 
 int compareFileDescriptorDateTimeDescending(
-    FileDescriptor x, FileDescriptor y) {
+  FileDescriptor x,
+  FileDescriptor y,
+) {
   final tmp = y.fdDateTime.compareTo(x.fdDateTime);
   if (tmp != 0) {
     return tmp;
@@ -32,22 +35,22 @@ class FileDescriptor with EquatableMixin {
   });
 
   static FileDescriptor fromJson(JsonObj json) => FileDescriptor(
-        fdPath: json["fdPath"],
-        fdId: json["fdId"],
-        fdMime: json["fdMime"],
-        fdIsArchived: json["fdIsArchived"],
-        fdIsFavorite: json["fdIsFavorite"],
-        fdDateTime: DateTime.parse(json["fdDateTime"]),
-      );
+    fdPath: json["fdPath"],
+    fdId: json["fdId"],
+    fdMime: json["fdMime"],
+    fdIsArchived: json["fdIsArchived"],
+    fdIsFavorite: json["fdIsFavorite"],
+    fdDateTime: DateTime.parse(json["fdDateTime"]),
+  );
 
   static JsonObj toJson(FileDescriptor that) => {
-        "fdPath": that.fdPath,
-        "fdId": that.fdId,
-        "fdMime": that.fdMime,
-        "fdIsArchived": that.fdIsArchived,
-        "fdIsFavorite": that.fdIsFavorite,
-        "fdDateTime": that.fdDateTime.toUtc().toIso8601String(),
-      };
+    "fdPath": that.fdPath,
+    "fdId": that.fdId,
+    "fdMime": that.fdMime,
+    "fdIsArchived": that.fdIsArchived,
+    "fdIsFavorite": that.fdIsFavorite,
+    "fdDateTime": that.fdDateTime.toUtc().toIso8601String(),
+  };
 
   @override
   String toString() => _$toString();
@@ -56,13 +59,13 @@ class FileDescriptor with EquatableMixin {
 
   @override
   List<Object?> get props => [
-        fdPath,
-        fdId,
-        fdMime,
-        fdIsArchived,
-        fdIsFavorite,
-        fdDateTime,
-      ];
+    fdPath,
+    fdId,
+    fdMime,
+    fdIsArchived,
+    fdIsFavorite,
+    fdDateTime,
+  ];
 
   final String fdPath;
   final int fdId;
@@ -71,6 +74,8 @@ class FileDescriptor with EquatableMixin {
   final bool fdIsFavorite;
   final DateTime fdDateTime;
 }
+
+typedef RemoteFile = FileDescriptor;
 
 extension FileDescriptorExtension on FileDescriptor {
   /// Return the path of this file with the DAV part stripped
@@ -142,6 +147,10 @@ extension FileDescriptorExtension on FileDescriptor {
     } else {
       return copyWith(fdPath: newPath);
     }
+  }
+
+  AnyFile toAnyFile() {
+    return AnyFile(provider: AnyFileNextcloudProvider(file: this));
   }
 }
 

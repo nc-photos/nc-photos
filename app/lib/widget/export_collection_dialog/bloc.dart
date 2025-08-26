@@ -42,22 +42,25 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   void _onSubmitName(_SubmitName ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      formValue: state.formValue.copyWith(name: ev.value),
-    ));
+    emit(state.copyWith(formValue: state.formValue.copyWith(name: ev.value)));
   }
 
   void _onSubmitProvider(_SubmitProvider ev, Emitter<_State> emit) {
-    emit(state.copyWith(
-      formValue: state.formValue.copyWith(provider: ev.value),
-    ));
+    emit(
+      state.copyWith(formValue: state.formValue.copyWith(provider: ev.value)),
+    );
   }
 
   Future<void> _onSubmitForm(_SubmitForm ev, Emitter<_State> emit) async {
     emit(state.copyWith(isExporting: true));
     try {
-      final exporter = CollectionExporter(account, collectionsController,
-          collection, items, state.formValue.name);
+      final exporter = CollectionExporter(
+        account,
+        collectionsController,
+        collection,
+        items,
+        state.formValue.name,
+      );
       final Collection result;
       switch (state.formValue.provider) {
         case _ProviderOption.appAlbum:

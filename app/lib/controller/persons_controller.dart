@@ -15,10 +15,7 @@ part 'persons_controller.g.dart';
 
 @genCopyWith
 class PersonStreamEvent {
-  const PersonStreamEvent({
-    required this.data,
-    required this.hasNext,
-  });
+  const PersonStreamEvent({required this.data, required this.hasNext});
 
   final List<Person> data;
 
@@ -34,10 +31,11 @@ class PersonsController {
     required this.account,
     required this.accountPrefController,
   }) {
-    _subscriptions
-        .add(accountPrefController.personProvider.distinct().listen((event) {
-      reload();
-    }));
+    _subscriptions.add(
+      accountPrefController.personProvider.distinct().listen((event) {
+        reload();
+      }),
+    );
   }
 
   void dispose() {
@@ -74,13 +72,11 @@ class PersonsController {
     _personStreamContorller.add(lastData);
     final completer = Completer();
     ListPerson(_c.withLocalRepo())(
-            account, accountPrefController.personProviderValue)
-        .listen(
+      account,
+      accountPrefController.personProviderValue,
+    ).listen(
       (results) {
-        lastData = PersonStreamEvent(
-          data: results,
-          hasNext: true,
-        );
+        lastData = PersonStreamEvent(data: results, hasNext: true);
         _personStreamContorller.add(lastData);
       },
       onError: _personErrorStreamController.add,

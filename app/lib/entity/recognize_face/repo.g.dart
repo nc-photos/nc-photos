@@ -10,6 +10,7 @@ extension _$BasicRecognizeFaceRepoNpLog on BasicRecognizeFaceRepo {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("entity.recognize_face.repo.BasicRecognizeFaceRepo");
+  static final log = Logger(
+    "entity.recognize_face.repo.BasicRecognizeFaceRepo",
+  );
 }

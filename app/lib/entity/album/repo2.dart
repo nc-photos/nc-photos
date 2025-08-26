@@ -64,18 +64,20 @@ class CachedAlbumRepo2 implements AlbumRepo2 {
     final cached = <Album>[];
     final failed = <File>[];
     try {
-      cached.addAll(await cacheDataSrc.getAlbums(
-        account,
-        albumFiles,
-        onError: (f, e, stackTrace) {
-          failed.add(f);
-          if (e is CacheNotFoundException) {
-            // not in cache, normal
-          } else {
-            _log.shout("[getAlbums] Cache failure", e, stackTrace);
-          }
-        },
-      ));
+      cached.addAll(
+        await cacheDataSrc.getAlbums(
+          account,
+          albumFiles,
+          onError: (f, e, stackTrace) {
+            failed.add(f);
+            if (e is CacheNotFoundException) {
+              // not in cache, normal
+            } else {
+              _log.shout("[getAlbums] Cache failure", e, stackTrace);
+            }
+          },
+        ),
+      );
       yield cached;
     } catch (e, stackTrace) {
       _log.shout("[getAlbums] Failed while getAlbums", e, stackTrace);
@@ -83,7 +85,9 @@ class CachedAlbumRepo2 implements AlbumRepo2 {
     final cachedGroup = cached.groupListsBy((c) {
       try {
         return _validateCache(
-            c, albumFiles.firstWhere(c.albumFile!.compareServerIdentity));
+          c,
+          albumFiles.firstWhere(c.albumFile!.compareServerIdentity),
+        );
       } catch (_) {
         return false;
       }
@@ -92,12 +96,16 @@ class CachedAlbumRepo2 implements AlbumRepo2 {
     // query remote
     final outdated = [
       ...failed,
-      ...cachedGroup[false]?.map((e) =>
-              albumFiles.firstWhere(e.albumFile!.compareServerIdentity)) ??
+      ...cachedGroup[false]?.map(
+            (e) => albumFiles.firstWhere(e.albumFile!.compareServerIdentity),
+          ) ??
           const <File>[],
     ];
-    final remote =
-        await remoteDataSrc.getAlbums(account, outdated, onError: onError);
+    final remote = await remoteDataSrc.getAlbums(
+      account,
+      outdated,
+      onError: onError,
+    );
     yield (cachedGroup[true] ?? []) + remote;
 
     // update cache
@@ -129,7 +137,8 @@ class CachedAlbumRepo2 implements AlbumRepo2 {
       return true;
     } else {
       _log.info(
-          "[_validateCache] Remote content updated for ${albumFile.path}");
+        "[_validateCache] Remote content updated for ${albumFile.path}",
+      );
       return false;
     }
   }

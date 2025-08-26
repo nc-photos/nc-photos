@@ -87,7 +87,9 @@ class ScanLocalDirBloc
   }
 
   Future<void> _onScanLocalDirBlocQuery(
-      ScanLocalDirBlocQuery event, Emitter<ScanLocalDirBlocState> emit) async {
+    ScanLocalDirBlocQuery event,
+    Emitter<ScanLocalDirBlocState> emit,
+  ) async {
     final shouldEmitIntermediate = state.files.isEmpty;
     try {
       emit(ScanLocalDirBlocLoading(state.files));
@@ -103,17 +105,22 @@ class ScanLocalDirBloc
       emit(ScanLocalDirBlocSuccess(products));
     } catch (e, stackTrace) {
       _log.severe(
-          "[_onScanLocalDirBlocQuery] Exception while request", e, stackTrace);
+        "[_onScanLocalDirBlocQuery] Exception while request",
+        e,
+        stackTrace,
+      );
       emit(ScanLocalDirBlocFailure(state.files, e));
     }
   }
 
   Future<void> _onScanLocalDirBlocFileDeleted(
-      _ScanLocalDirBlocFileDeleted event,
-      Emitter<ScanLocalDirBlocState> emit) async {
-    final newFiles = state.files
-        .where((f) => !event.files.any((d) => d.compareIdentity(f)))
-        .toList();
+    _ScanLocalDirBlocFileDeleted event,
+    Emitter<ScanLocalDirBlocState> emit,
+  ) async {
+    final newFiles =
+        state.files
+            .where((f) => !event.files.any((d) => d.compareIdentity(f)))
+            .toList();
     if (newFiles.length != state.files.length) {
       emit(ScanLocalDirBlocSuccess(newFiles));
     }

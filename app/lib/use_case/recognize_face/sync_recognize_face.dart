@@ -34,35 +34,42 @@ class SyncRecognizeFace {
     final remoteItems = await _getFaceItems(account, remote);
     return _c.npDb.syncRecognizeFacesAndItems(
       account: account.toDb(),
-      data: remoteItems.map((key, value) => MapEntry(
-            key.toDb(),
-            value.map(DbRecognizeFaceItemConverter.toDb).toList(),
-          )),
+      data: remoteItems.map(
+        (key, value) => MapEntry(
+          key.toDb(),
+          value.map(DbRecognizeFaceItemConverter.toDb).toList(),
+        ),
+      ),
     );
   }
 
   Future<Map<RecognizeFace, List<RecognizeFaceItem>>> _getFaceItems(
-      Account account, List<RecognizeFace> faces) async {
+    Account account,
+    List<RecognizeFace> faces,
+  ) async {
     Object? firstError;
     StackTrace? firstStackTrace;
-    final remote = await ListMultipleRecognizeFaceItem(_c.withRemoteRepo())(
-      account,
-      faces,
-      onError: (f, e, stackTrace) {
-        _log.severe(
-          "[_getFaceItems] Failed while listing remote face: $f",
-          e,
-          stackTrace,
-        );
-        if (firstError == null) {
-          firstError = e;
-          firstStackTrace = stackTrace;
-        }
-      },
-    ).last;
+    final remote =
+        await ListMultipleRecognizeFaceItem(_c.withRemoteRepo())(
+          account,
+          faces,
+          onError: (f, e, stackTrace) {
+            _log.severe(
+              "[_getFaceItems] Failed while listing remote face: $f",
+              e,
+              stackTrace,
+            );
+            if (firstError == null) {
+              firstError = e;
+              firstStackTrace = stackTrace;
+            }
+          },
+        ).last;
     if (firstError != null) {
       Error.throwWithStackTrace(
-          firstError!, firstStackTrace ?? StackTrace.current);
+        firstError!,
+        firstStackTrace ?? StackTrace.current,
+      );
     }
     return remote;
   }

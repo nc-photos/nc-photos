@@ -12,5 +12,6 @@ extension _$_TimelineViewerContentProviderNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.timeline_viewer.timeline_viewer._TimelineViewerContentProvider");
+    "widget.timeline_viewer.timeline_viewer._TimelineViewerContentProvider",
+  );
 }

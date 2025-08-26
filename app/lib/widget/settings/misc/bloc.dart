@@ -3,13 +3,13 @@ part of '../misc_settings.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({
-    required this.prefController,
-    required this.securePrefController,
-  }) : super(_State(
+  _Bloc({required this.prefController, required this.securePrefController})
+    : super(
+        _State(
           isDoubleTapExit: prefController.isDoubleTapExitValue,
           appLockType: securePrefController.protectedPageAuthTypeValue,
-        )) {
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_SetDoubleTapExit>(_onSetDoubleTapExit);
   }

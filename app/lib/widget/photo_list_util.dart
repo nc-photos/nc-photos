@@ -13,9 +13,7 @@ import 'package:np_log/np_log.dart';
 part 'photo_list_util.g.dart';
 
 class DateGroupHelper {
-  DateGroupHelper({
-    required this.isMonthOnly,
-  });
+  DateGroupHelper({required this.isMonthOnly});
 
   Date? onDate(Date date) {
     if (date.year != _currentDate?.year ||
@@ -37,20 +35,14 @@ class DateGroupHelper {
 /// Feb 29 is treated as Mar 1 on non leap years
 @npLog
 class MemoryCollectionHelper {
-  MemoryCollectionHelper(
-    this.account, {
-    Date? today,
-    required int dayRange,
-  })  : _tzOffset = clock.now().timeZoneOffset,
-        // today = (today?.toLocal() ?? clock.now()).toMidnight(),
-        dayRange = math.max(dayRange, 0) {
+  MemoryCollectionHelper(this.account, {Date? today, required int dayRange})
+    : _tzOffset = clock.now().timeZoneOffset,
+      // today = (today?.toLocal() ?? clock.now()).toMidnight(),
+      dayRange = math.max(dayRange, 0) {
     this.today = today ?? Date.today();
   }
 
-  void addFile(
-    FileDescriptor f, {
-    Date? localDate,
-  }) {
+  void addFile(FileDescriptor f, {Date? localDate}) {
     // too slow
     // final localDate = f.fdDateTime.toLocal().toMidnight();
     localDate ??= f.fdDateTime.add(_tzOffset).toDate();
@@ -66,7 +58,8 @@ class MemoryCollectionHelper {
               .inDays <=
           dayRange) {
         _log.fine(
-            "[addFile] Add file (${f.fdDateTime}) to ${localDate.year + dy}");
+          "[addFile] Add file (${f.fdDateTime}) to ${localDate.year + dy}",
+        );
         _addFileToYear(f, localDate.year + dy);
         break;
       }
@@ -80,16 +73,18 @@ class MemoryCollectionHelper {
   List<Collection> build(String Function(int year) nameBuilder) {
     return _data.entries
         .sorted((a, b) => b.key.compareTo(a.key))
-        .map((e) => Collection(
-              name: nameBuilder(e.key),
-              contentProvider: CollectionMemoryProvider(
-                account: account,
-                year: e.key,
-                month: today.month,
-                day: today.day,
-                cover: e.value.coverFile,
-              ),
-            ))
+        .map(
+          (e) => Collection(
+            name: nameBuilder(e.key),
+            contentProvider: CollectionMemoryProvider(
+              account: account,
+              year: e.key,
+              month: today.month,
+              day: today.day,
+              cover: e.value.coverFile,
+            ),
+          ),
+        )
         .toList();
   }
 
@@ -133,12 +128,13 @@ int getThumbSize(int zoomLevel) {
 
 class _MemoryCollectionHelperItem {
   _MemoryCollectionHelperItem(this.date, this.coverFile)
-      : coverDiff = getCoverDiff(date, coverFile);
+    : coverDiff = getCoverDiff(date, coverFile);
 
-  static Duration getCoverDiff(Date date, FileDescriptor f) => f.fdDateTime
-      .add(_tzOffset)
-      .difference(date.toLocalDateTime().copyWith(hour: 12))
-      .abs();
+  static Duration getCoverDiff(Date date, FileDescriptor f) =>
+      f.fdDateTime
+          .add(_tzOffset)
+          .difference(date.toLocalDateTime().copyWith(hour: 12))
+          .abs();
 
   final Date date;
   FileDescriptor coverFile;

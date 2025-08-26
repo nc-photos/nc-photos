@@ -13,31 +13,34 @@ part of 'collection_picker.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<Collection>? collections,
-      bool? isLoading,
-      List<_Item>? transformedItems,
-      Collection? result,
-      ExceptionEvent? error});
+  _State call({
+    List<Collection>? collections,
+    bool? isLoading,
+    List<_Item>? transformedItems,
+    Collection? result,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic collections,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic result = copyWithNull,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic collections,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic result = copyWithNull,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        collections: collections as List<Collection>? ?? that.collections,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
-        result: result == copyWithNull ? that.result : result as Collection?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      collections: collections as List<Collection>? ?? that.collections,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<_Item>? ?? that.transformedItems,
+      result: result == copyWithNull ? that.result : result as Collection?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -57,8 +60,9 @@ extension _$_WrappedCollectionPickerStateNpLog
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.collection_picker._WrappedCollectionPickerState");
+  static final log = Logger(
+    "widget.collection_picker._WrappedCollectionPickerState",
+  );
 }
 
 extension _$_NewAlbumViewNpLog on _NewAlbumView {

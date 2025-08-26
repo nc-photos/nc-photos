@@ -10,11 +10,8 @@ class _State {
     this.error,
   });
 
-  factory _State.init() => const _State(
-        items: [],
-        isLoading: true,
-        transformedItems: [],
-      );
+  factory _State.init() =>
+      const _State(items: [], isLoading: true, transformedItems: []);
 
   @override
   String toString() => _$toString();
@@ -60,7 +57,10 @@ class _ListSharingBlocShareRemoved implements _Event {
 @toString
 class _ListSharingBlocPendingSharedAlbumMoved implements _Event {
   const _ListSharingBlocPendingSharedAlbumMoved(
-      this.account, this.file, this.destination);
+    this.account,
+    this.file,
+    this.destination,
+  );
 
   @override
   String toString() => _$toString();

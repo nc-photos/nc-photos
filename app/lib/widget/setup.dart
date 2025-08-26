@@ -4,7 +4,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/widget/home.dart';
+import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/sign_in.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -14,9 +14,9 @@ class Setup extends StatefulWidget {
   static const routeName = "/setup";
 
   static Route buildRoute(RouteSettings settings) => MaterialPageRoute(
-        builder: (context) => const Setup(),
-        settings: settings,
-      );
+    builder: (context) => const Setup(),
+    settings: settings,
+  );
 
   const Setup({super.key});
 
@@ -34,10 +34,7 @@ class _SetupState extends State<Setup> {
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
-    return AppBar(
-      title: Text(L10n.global().setupWidgetTitle),
-      elevation: 0,
-    );
+    return AppBar(title: Text(L10n.global().setupWidgetTitle), elevation: 0);
   }
 
   Widget _buildContent(BuildContext context) {
@@ -69,26 +66,28 @@ class _SetupState extends State<Setup> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children: isLastPage
-                    ? [
-                        ElevatedButton(
-                          onPressed: _onDonePressed,
-                          child: Text(L10n.global().doneButtonLabel),
-                        ),
-                      ]
-                    : [
-                        ElevatedButton(
-                          onPressed: () {
-                            if (_pageController.hasClients) {
-                              _onNextPressed(
+                children:
+                    isLastPage
+                        ? [
+                          ElevatedButton(
+                            onPressed: _onDonePressed,
+                            child: Text(L10n.global().doneButtonLabel),
+                          ),
+                        ]
+                        : [
+                          ElevatedButton(
+                            onPressed: () {
+                              if (_pageController.hasClients) {
+                                _onNextPressed(
                                   (pages[_pageController.page!.round()]
                                           as _Page)
-                                      .getPageId());
-                            }
-                          },
-                          child: Text(L10n.global().nextButtonLabel),
-                        ),
-                      ],
+                                      .getPageId(),
+                                );
+                              }
+                            },
+                            child: Text(L10n.global().nextButtonLabel),
+                          ),
+                        ],
               ),
               CirclePageIndicator(
                 itemCount: pages.length,
@@ -108,15 +107,20 @@ class _SetupState extends State<Setup> {
     if (account == null) {
       Navigator.pushReplacementNamed(context, SignIn.routeName);
     } else {
-      Navigator.pushReplacementNamed(context, Home.routeName,
-          arguments: HomeArguments(account));
+      Navigator.pushReplacementNamed(
+        context,
+        Home.routeName,
+        arguments: HomeArguments(account),
+      );
     }
   }
 
   void _onNextPressed(int pageId) {
     Pref().setSetupProgress(Pref().getSetupProgressOr() | pageId);
     _pageController.nextPage(
-        duration: k.animationDurationNormal, curve: Curves.easeInOut);
+      duration: k.animationDurationNormal,
+      curve: Curves.easeInOut,
+    );
   }
 
   final _initialProgress = Pref().getSetupProgressOr();
@@ -169,10 +173,9 @@ class _ExifState extends State<_Exif> {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(
               L10n.global().setupSettingsModifyLaterHint,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyMedium
-                  ?.copyWith(fontStyle: FontStyle.italic),
+              style: Theme.of(
+                context,
+              ).textTheme.bodyMedium?.copyWith(fontStyle: FontStyle.italic),
             ),
           ),
           const SizedBox(height: 8),

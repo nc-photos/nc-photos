@@ -10,10 +10,8 @@ class _ByAccount {
 
   // const _ByAccount.app(Account account) : this._(appAccount: account);
 
-  const _ByAccount._({
-    this.sqlAccount,
-    this.appAccount,
-  }) : assert((sqlAccount != null) != (appAccount != null));
+  const _ByAccount._({this.sqlAccount, this.appAccount})
+    : assert((sqlAccount != null) != (appAccount != null));
 
   final compat.Account? sqlAccount;
   final Account? appAccount;
@@ -21,7 +19,10 @@ class _ByAccount {
 
 class _AccountFileRowIds {
   const _AccountFileRowIds(
-      this.accountFileRowId, this.accountRowId, this.fileRowId);
+    this.accountFileRowId,
+    this.accountRowId,
+    this.fileRowId,
+  );
 
   final int accountFileRowId;
   final int accountRowId;
@@ -30,7 +31,11 @@ class _AccountFileRowIds {
 
 class _AccountFileRowIdsWithFileId {
   const _AccountFileRowIdsWithFileId(
-      this.accountFileRowId, this.accountRowId, this.fileRowId, this.fileId);
+    this.accountFileRowId,
+    this.accountRowId,
+    this.fileRowId,
+    this.fileId,
+  );
 
   final int accountFileRowId;
   final int accountRowId;
@@ -49,11 +54,14 @@ extension on compat.SqliteDb {
   }) {
     assert((sqlAccount != null) != (appAccount != null));
     final query = queryFiles().let((q) {
-      q.setQueryMode(_FilesQueryMode.expression, expressions: [
-        accountFiles.rowId,
-        accountFiles.account,
-        accountFiles.file,
-      ]);
+      q.setQueryMode(
+        _FilesQueryMode.expression,
+        expressions: [
+          accountFiles.rowId,
+          accountFiles.account,
+          accountFiles.file,
+        ],
+      );
       if (sqlAccount != null) {
         q.setSqlAccount(sqlAccount);
       } else {
@@ -67,11 +75,13 @@ extension on compat.SqliteDb {
       return q.build()..limit(1);
     });
     return query
-        .map((r) => _AccountFileRowIds(
-              r.read(accountFiles.rowId)!,
-              r.read(accountFiles.account)!,
-              r.read(accountFiles.file)!,
-            ))
+        .map(
+          (r) => _AccountFileRowIds(
+            r.read(accountFiles.rowId)!,
+            r.read(accountFiles.account)!,
+            r.read(accountFiles.file)!,
+          ),
+        )
         .getSingleOrNull();
   }
 
@@ -81,22 +91,29 @@ extension on compat.SqliteDb {
     compat.Account? sqlAccount,
     Account? appAccount,
   }) =>
-      accountFileRowIdsOfOrNull(file,
-              sqlAccount: sqlAccount, appAccount: appAccount)
-          .notNull();
+      accountFileRowIdsOfOrNull(
+        file,
+        sqlAccount: sqlAccount,
+        appAccount: appAccount,
+      ).notNull();
 
   /// Query AccountFiles, Accounts and Files row ID by fileIds
   ///
   /// Returned files are NOT guaranteed to be sorted as [fileIds]
   Future<List<_AccountFileRowIdsWithFileId>> accountFileRowIdsByFileIds(
-      _ByAccount account, Iterable<int> fileIds) {
+    _ByAccount account,
+    Iterable<int> fileIds,
+  ) {
     final query = queryFiles().let((q) {
-      q.setQueryMode(_FilesQueryMode.expression, expressions: [
-        accountFiles.rowId,
-        accountFiles.account,
-        accountFiles.file,
-        files.fileId,
-      ]);
+      q.setQueryMode(
+        _FilesQueryMode.expression,
+        expressions: [
+          accountFiles.rowId,
+          accountFiles.account,
+          accountFiles.file,
+          files.fileId,
+        ],
+      );
       if (account.sqlAccount != null) {
         q.setSqlAccount(account.sqlAccount!);
       } else {
@@ -106,12 +123,14 @@ extension on compat.SqliteDb {
       return q.build();
     });
     return query
-        .map((r) => _AccountFileRowIdsWithFileId(
-              r.read(accountFiles.rowId)!,
-              r.read(accountFiles.account)!,
-              r.read(accountFiles.file)!,
-              r.read(files.fileId)!,
-            ))
+        .map(
+          (r) => _AccountFileRowIdsWithFileId(
+            r.read(accountFiles.rowId)!,
+            r.read(accountFiles.account)!,
+            r.read(accountFiles.file)!,
+            r.read(files.fileId)!,
+          ),
+        )
         .get();
   }
 
@@ -120,7 +139,10 @@ extension on compat.SqliteDb {
 
 class _SqliteAlbumConverter {
   static Album fromSql(
-      compat.Album album, File albumFile, List<compat.AlbumShare> shares) {
+    compat.Album album,
+    File albumFile,
+    List<compat.AlbumShare> shares,
+  ) {
     return Album(
       lastUpdated: album.lastUpdated,
       name: album.name,
@@ -136,15 +158,18 @@ class _SqliteAlbumConverter {
         "type": album.sortProviderType,
         "content": jsonDecode(album.sortProviderContent),
       }),
-      shares: shares.isEmpty
-          ? null
-          : shares
-              .map((e) => AlbumShare(
-                    userId: e.userId.toCi(),
-                    displayName: e.displayName,
-                    sharedAt: e.sharedAt.toUtc(),
-                  ))
-              .toList(),
+      shares:
+          shares.isEmpty
+              ? null
+              : shares
+                  .map(
+                    (e) => AlbumShare(
+                      userId: e.userId.toCi(),
+                      displayName: e.displayName,
+                      sharedAt: e.sharedAt.toUtc(),
+                    ),
+                  )
+                  .toList(),
       // replace with the original etag when this album was cached
       albumFile: albumFile.copyWith(etag: OrNull(album.fileEtag)),
       savedVersion: album.version,
@@ -152,7 +177,10 @@ class _SqliteAlbumConverter {
   }
 
   static compat.CompleteAlbumCompanion toSql(
-      Album album, int albumFileRowId, String albumFileEtag) {
+    Album album,
+    int albumFileRowId,
+    String albumFileEtag,
+  ) {
     final providerJson = album.provider.toJson();
     final coverProviderJson = album.coverProvider.toJson();
     final sortProviderJson = album.sortProvider.toJson();
@@ -169,36 +197,43 @@ class _SqliteAlbumConverter {
       sortProviderType: sortProviderJson["type"],
       sortProviderContent: jsonEncode(sortProviderJson["content"]),
     );
-    final dbAlbumShares = album.shares
-        ?.map((s) => compat.AlbumSharesCompanion(
-              userId: sql.Value(s.userId.toCaseInsensitiveString()),
-              displayName: sql.Value(s.displayName),
-              sharedAt: sql.Value(s.sharedAt),
-            ))
-        .toList();
+    final dbAlbumShares =
+        album.shares
+            ?.map(
+              (s) => compat.AlbumSharesCompanion(
+                userId: sql.Value(s.userId.toCaseInsensitiveString()),
+                displayName: sql.Value(s.displayName),
+                sharedAt: sql.Value(s.sharedAt),
+              ),
+            )
+            .toList();
     return compat.CompleteAlbumCompanion(dbAlbum, 1, dbAlbumShares ?? []);
   }
 }
 
 class _SqliteFileConverter {
   static File fromSql(String userId, compat.CompleteFile f) {
-    final metadata = f.image?.let((obj) => Metadata(
-          lastUpdated: obj.lastUpdated,
-          fileEtag: obj.fileEtag,
-          imageWidth: obj.width,
-          imageHeight: obj.height,
-          exif: obj.exifRaw?.let((e) => Exif.fromJson(jsonDecode(e))),
-          src: obj.src?.let(MetadataSrc.fromValue) ?? MetadataSrc.legacy,
-        ));
-    final location = f.imageLocation?.let((obj) => ImageLocation(
-          version: obj.version,
-          name: obj.name,
-          latitude: obj.latitude,
-          longitude: obj.longitude,
-          countryCode: obj.countryCode,
-          admin1: obj.admin1,
-          admin2: obj.admin2,
-        ));
+    final metadata = f.image?.let(
+      (obj) => Metadata(
+        lastUpdated: obj.lastUpdated,
+        fileEtag: obj.fileEtag,
+        imageWidth: obj.width,
+        imageHeight: obj.height,
+        exif: obj.exifRaw?.let((e) => Exif.fromJson(jsonDecode(e))),
+        src: obj.src?.let(MetadataSrc.fromValue) ?? MetadataSrc.legacy,
+      ),
+    );
+    final location = f.imageLocation?.let(
+      (obj) => ImageLocation(
+        version: obj.version,
+        name: obj.name,
+        latitude: obj.latitude,
+        longitude: obj.longitude,
+        countryCode: obj.countryCode,
+        admin1: obj.admin1,
+        admin2: obj.admin2,
+      ),
+    );
     return File(
       path: "remote.php/dav/files/$userId/${f.accountFile.relativePath}",
       contentLength: f.file.contentLength,
@@ -223,11 +258,14 @@ class _SqliteFileConverter {
   }
 
   static compat.CompleteFileCompanion toSql(
-      compat.Account? account, File file) {
+    compat.Account? account,
+    File file,
+  ) {
     final dbFile = compat.FilesCompanion(
-      server: account == null
-          ? const sql.Value.absent()
-          : sql.Value(account.server),
+      server:
+          account == null
+              ? const sql.Value.absent()
+              : sql.Value(account.server),
       fileId: sql.Value(file.fileId!),
       contentLength: sql.Value(file.contentLength),
       contentType: sql.Value(file.contentType),
@@ -248,45 +286,50 @@ class _SqliteFileConverter {
       overrideDateTime: sql.Value(file.overrideDateTime),
       bestDateTime: sql.Value(file.bestDateTime),
     );
-    final dbImage = file.metadata?.let((m) => compat.ImagesCompanion.insert(
-          lastUpdated: m.lastUpdated,
-          fileEtag: sql.Value(m.fileEtag),
-          width: sql.Value(m.imageWidth),
-          height: sql.Value(m.imageHeight),
-          exifRaw: sql.Value(m.exif?.toJson().let((j) => jsonEncode(j))),
-          dateTimeOriginal: sql.Value(m.exif?.dateTimeOriginal),
-          src: sql.Value(m.src.index),
-        ));
-    final dbImageLocation =
-        file.location?.let((l) => compat.ImageLocationsCompanion.insert(
-              version: l.version,
-              name: sql.Value(l.name),
-              latitude: sql.Value(l.latitude),
-              longitude: sql.Value(l.longitude),
-              countryCode: sql.Value(l.countryCode),
-              admin1: sql.Value(l.admin1),
-              admin2: sql.Value(l.admin2),
-            ));
-    final dbTrash = file.trashbinDeletionTime == null
-        ? null
-        : compat.TrashesCompanion.insert(
-            filename: file.trashbinFilename!,
-            originalLocation: file.trashbinOriginalLocation!,
-            deletionTime: file.trashbinDeletionTime!,
-          );
+    final dbImage = file.metadata?.let(
+      (m) => compat.ImagesCompanion.insert(
+        lastUpdated: m.lastUpdated,
+        fileEtag: sql.Value(m.fileEtag),
+        width: sql.Value(m.imageWidth),
+        height: sql.Value(m.imageHeight),
+        exifRaw: sql.Value(m.exif?.toJson().let((j) => jsonEncode(j))),
+        dateTimeOriginal: sql.Value(m.exif?.dateTimeOriginal),
+        src: sql.Value(m.src.index),
+      ),
+    );
+    final dbImageLocation = file.location?.let(
+      (l) => compat.ImageLocationsCompanion.insert(
+        version: l.version,
+        name: sql.Value(l.name),
+        latitude: sql.Value(l.latitude),
+        longitude: sql.Value(l.longitude),
+        countryCode: sql.Value(l.countryCode),
+        admin1: sql.Value(l.admin1),
+        admin2: sql.Value(l.admin2),
+      ),
+    );
+    final dbTrash =
+        file.trashbinDeletionTime == null
+            ? null
+            : compat.TrashesCompanion.insert(
+              filename: file.trashbinFilename!,
+              originalLocation: file.trashbinOriginalLocation!,
+              deletionTime: file.trashbinDeletionTime!,
+            );
     return compat.CompleteFileCompanion(
-        dbFile, dbAccountFile, dbImage, dbImageLocation, dbTrash);
+      dbFile,
+      dbAccountFile,
+      dbImage,
+      dbImageLocation,
+      dbTrash,
+    );
   }
 }
 
-enum _FilesQueryMode {
-  file,
-  completeFile,
-  expression,
-}
+enum _FilesQueryMode { file, completeFile, expression }
 
-typedef _FilesQueryRelativePathBuilder = sql.Expression<bool> Function(
-    sql.GeneratedColumn<String> relativePath);
+typedef _FilesQueryRelativePathBuilder =
+    sql.Expression<bool> Function(sql.GeneratedColumn<String> relativePath);
 
 /// Build a Files table query
 ///
@@ -304,8 +347,9 @@ class _FilesQueryBuilder {
     _FilesQueryMode mode, {
     Iterable<sql.Expression>? expressions,
   }) {
-    assert((mode == _FilesQueryMode.expression) !=
-        (expressions?.isEmpty != false));
+    assert(
+      (mode == _FilesQueryMode.expression) != (expressions?.isEmpty != false),
+    );
     _queryMode = mode;
     _selectExpressions = expressions;
   }
@@ -373,33 +417,53 @@ class _FilesQueryBuilder {
     if (_sqlAccount == null && _appAccount == null && !_isAccountless) {
       throw StateError("Invalid query: missing account");
     }
-    final dynamic select = _queryMode == _FilesQueryMode.expression
-        ? db.selectOnly(db.files)
-        : db.select(db.files);
-    final query = select.join([
-      sql.innerJoin(
-          db.accountFiles, db.accountFiles.file.equalsExp(db.files.rowId),
-          useColumns: _queryMode == _FilesQueryMode.completeFile),
-      if (_appAccount != null) ...[
-        sql.innerJoin(
-            db.accounts, db.accounts.rowId.equalsExp(db.accountFiles.account),
-            useColumns: false),
-        sql.innerJoin(
-            db.servers, db.servers.rowId.equalsExp(db.accounts.server),
-            useColumns: false),
-      ],
-      if (_byDirRowId != null)
-        sql.innerJoin(db.dirFiles, db.dirFiles.child.equalsExp(db.files.rowId),
-            useColumns: false),
-      if (_queryMode == _FilesQueryMode.completeFile) ...[
-        sql.leftOuterJoin(
-            db.images, db.images.accountFile.equalsExp(db.accountFiles.rowId)),
-        sql.leftOuterJoin(db.imageLocations,
-            db.imageLocations.accountFile.equalsExp(db.accountFiles.rowId)),
-        sql.leftOuterJoin(
-            db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
-      ],
-    ]) as sql.JoinedSelectStatement;
+    final dynamic select =
+        _queryMode == _FilesQueryMode.expression
+            ? db.selectOnly(db.files)
+            : db.select(db.files);
+    final query =
+        select.join([
+              sql.innerJoin(
+                db.accountFiles,
+                db.accountFiles.file.equalsExp(db.files.rowId),
+                useColumns: _queryMode == _FilesQueryMode.completeFile,
+              ),
+              if (_appAccount != null) ...[
+                sql.innerJoin(
+                  db.accounts,
+                  db.accounts.rowId.equalsExp(db.accountFiles.account),
+                  useColumns: false,
+                ),
+                sql.innerJoin(
+                  db.servers,
+                  db.servers.rowId.equalsExp(db.accounts.server),
+                  useColumns: false,
+                ),
+              ],
+              if (_byDirRowId != null)
+                sql.innerJoin(
+                  db.dirFiles,
+                  db.dirFiles.child.equalsExp(db.files.rowId),
+                  useColumns: false,
+                ),
+              if (_queryMode == _FilesQueryMode.completeFile) ...[
+                sql.leftOuterJoin(
+                  db.images,
+                  db.images.accountFile.equalsExp(db.accountFiles.rowId),
+                ),
+                sql.leftOuterJoin(
+                  db.imageLocations,
+                  db.imageLocations.accountFile.equalsExp(
+                    db.accountFiles.rowId,
+                  ),
+                ),
+                sql.leftOuterJoin(
+                  db.trashes,
+                  db.trashes.file.equalsExp(db.files.rowId),
+                ),
+              ],
+            ])
+            as sql.JoinedSelectStatement;
     if (_queryMode == _FilesQueryMode.expression) {
       query.addColumns(_selectExpressions!);
     }
@@ -409,8 +473,11 @@ class _FilesQueryBuilder {
     } else if (_appAccount != null) {
       query
         ..where(db.servers.address.equals(_appAccount!.url))
-        ..where(db.accounts.userId
-            .equals(_appAccount!.userId.toCaseInsensitiveString()));
+        ..where(
+          db.accounts.userId.equals(
+            _appAccount!.userId.toCaseInsensitiveString(),
+          ),
+        );
     }
 
     if (_byRowId != null) {
@@ -429,16 +496,20 @@ class _FilesQueryBuilder {
       final expression = _byOrRelativePathBuilders!
           .sublist(1)
           .fold<sql.Expression<bool>>(
-              _byOrRelativePathBuilders![0](db.accountFiles.relativePath),
-              (previousValue, builder) =>
-                  previousValue | builder(db.accountFiles.relativePath));
+            _byOrRelativePathBuilders![0](db.accountFiles.relativePath),
+            (previousValue, builder) =>
+                previousValue | builder(db.accountFiles.relativePath),
+          );
       query.where(expression);
     }
     if (_byMimePatterns?.isNotEmpty == true) {
-      final expression = _byMimePatterns!.sublist(1).fold<sql.Expression<bool>>(
-          db.files.contentType.like(_byMimePatterns![0]),
-          (previousValue, element) =>
-              previousValue | db.files.contentType.like(element));
+      final expression = _byMimePatterns!
+          .sublist(1)
+          .fold<sql.Expression<bool>>(
+            db.files.contentType.like(_byMimePatterns![0]),
+            (previousValue, element) =>
+                previousValue | db.files.contentType.like(element),
+          );
       query.where(expression);
     }
     if (_byFavorite != null) {
@@ -456,7 +527,8 @@ class _FilesQueryBuilder {
       query.where(db.files.server.equals(_byServerRowId!));
     }
     if (_byLocation != null) {
-      var clause = db.imageLocations.name.like(_byLocation!) |
+      var clause =
+          db.imageLocations.name.like(_byLocation!) |
           db.imageLocations.admin1.like(_byLocation!) |
           db.imageLocations.admin2.like(_byLocation!);
       final countryCode = nameToAlpha2Code(_byLocation!.toCi());
@@ -464,7 +536,8 @@ class _FilesQueryBuilder {
         clause = clause | db.imageLocations.countryCode.equals(countryCode);
       } else if (_byLocation!.length == 2 &&
           alpha2CodeToName(_byLocation!.toUpperCase()) != null) {
-        clause = clause |
+        clause =
+            clause |
             db.imageLocations.countryCode.equals(_byLocation!.toUpperCase());
       }
       query.where(clause);

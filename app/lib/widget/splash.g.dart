@@ -13,33 +13,39 @@ part of 'splash.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {int? changelogFromVersion,
-      double? upgradeProgress,
-      String? upgradeText,
-      bool? isDone});
+  _State call({
+    int? changelogFromVersion,
+    double? upgradeProgress,
+    String? upgradeText,
+    bool? isDone,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic changelogFromVersion = copyWithNull,
-      dynamic upgradeProgress = copyWithNull,
-      dynamic upgradeText = copyWithNull,
-      dynamic isDone}) {
+  _State call({
+    dynamic changelogFromVersion = copyWithNull,
+    dynamic upgradeProgress = copyWithNull,
+    dynamic upgradeText = copyWithNull,
+    dynamic isDone,
+  }) {
     return _State(
-        changelogFromVersion: changelogFromVersion == copyWithNull
-            ? that.changelogFromVersion
-            : changelogFromVersion as int?,
-        upgradeProgress: upgradeProgress == copyWithNull
-            ? that.upgradeProgress
-            : upgradeProgress as double?,
-        upgradeText: upgradeText == copyWithNull
-            ? that.upgradeText
-            : upgradeText as String?,
-        isDone: isDone as bool? ?? that.isDone);
+      changelogFromVersion:
+          changelogFromVersion == copyWithNull
+              ? that.changelogFromVersion
+              : changelogFromVersion as int?,
+      upgradeProgress:
+          upgradeProgress == copyWithNull
+              ? that.upgradeProgress
+              : upgradeProgress as double?,
+      upgradeText:
+          upgradeText == copyWithNull
+              ? that.upgradeText
+              : upgradeText as String?,
+      isDone: isDone as bool? ?? that.isDone,
+    );
   }
 
   final _State that;

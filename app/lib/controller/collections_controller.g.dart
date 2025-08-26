@@ -13,8 +13,10 @@ part of 'collections_controller.dart';
 // **************************************************************************
 
 abstract class $CollectionStreamDataCopyWithWorker {
-  CollectionStreamData call(
-      {Collection? collection, CollectionItemsController? controller});
+  CollectionStreamData call({
+    Collection? collection,
+    CollectionItemsController? controller,
+  });
 }
 
 class _$CollectionStreamDataCopyWithWorkerImpl
@@ -24,9 +26,9 @@ class _$CollectionStreamDataCopyWithWorkerImpl
   @override
   CollectionStreamData call({dynamic collection, dynamic controller}) {
     return CollectionStreamData(
-        collection: collection as Collection? ?? that.collection,
-        controller:
-            controller as CollectionItemsController? ?? that.controller);
+      collection: collection as Collection? ?? that.collection,
+      controller: controller as CollectionItemsController? ?? that.controller,
+    );
   }
 
   final CollectionStreamData that;
@@ -49,8 +51,9 @@ class _$CollectionStreamEventCopyWithWorkerImpl
   @override
   CollectionStreamEvent call({dynamic data, dynamic hasNext}) {
     return CollectionStreamEvent(
-        data: data as List<CollectionStreamData>? ?? that.data,
-        hasNext: hasNext as bool? ?? that.hasNext);
+      data: data as List<CollectionStreamData>? ?? that.data,
+      hasNext: hasNext as bool? ?? that.hasNext,
+    );
   }
 
   final CollectionStreamEvent that;
@@ -70,6 +73,7 @@ extension _$CollectionsControllerNpLog on CollectionsController {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("controller.collections_controller.CollectionsController");
+  static final log = Logger(
+    "controller.collections_controller.CollectionsController",
+  );
 }

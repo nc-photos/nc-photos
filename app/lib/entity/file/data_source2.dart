@@ -29,6 +29,7 @@ class FileRemoteDataSource implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) {
@@ -36,12 +37,12 @@ class FileRemoteDataSource implements FileDataSource2 {
   }
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) {
-    throw UnsupportedError("getFileIds not supported");
+    throw UnsupportedError("getFileIdWithTimestamps not supported");
   }
 
   @override
@@ -59,7 +60,8 @@ class FileRemoteDataSource implements FileDataSource2 {
         metadata?.obj != null &&
         metadata!.obj!.fileEtag != f.etag) {
       _log.warning(
-          "[updateProperty] Metadata etag mismatch (metadata: ${metadata.obj!.fileEtag}, file: ${f.etag})");
+        "[updateProperty] Metadata etag mismatch (metadata: ${metadata.obj!.fileEtag}, file: ${f.etag})",
+      );
     }
     final setProps = {
       if (metadata?.obj != null)
@@ -79,14 +81,14 @@ class FileRemoteDataSource implements FileDataSource2 {
       if (OrNull.isSetNull(location)) "app:location",
     ];
     final response = await ApiUtil.fromAccount(account).files().proppatch(
-          path: f.fdPath,
-          namespaces: {
-            "com.nkming.nc_photos": "app",
-            "http://owncloud.org/ns": "oc",
-          },
-          set: setProps.isNotEmpty ? setProps : null,
-          remove: removeProps.isNotEmpty ? removeProps : null,
-        );
+      path: f.fdPath,
+      namespaces: {
+        "com.nkming.nc_photos": "app",
+        "http://owncloud.org/ns": "oc",
+      },
+      set: setProps.isNotEmpty ? setProps : null,
+      remove: removeProps.isNotEmpty ? removeProps : null,
+    );
     if (!response.isGood) {
       _log.severe("[updateProperty] Failed requesting server: $response");
       throw ApiException(
@@ -99,8 +101,9 @@ class FileRemoteDataSource implements FileDataSource2 {
   @override
   Future<void> remove(Account account, FileDescriptor f) async {
     _log.info("[remove] ${f.fdPath}");
-    final response =
-        await ApiUtil.fromAccount(account).files().delete(path: f.fdPath);
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).files().delete(path: f.fdPath);
     if (!response.isGood) {
       _log.severe("[remove] Failed requesting server: $response");
       throw ApiException(
@@ -121,6 +124,7 @@ class FileNpDbDataSource implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) {
@@ -130,30 +134,41 @@ class FileNpDbDataSource implements FileDataSource2 {
       shareDirPath,
       timeRange: timeRange,
       isArchived: isArchived,
+      isAscending: isAscending,
       offset: offset,
       limit: limit,
     );
   }
 
   @override
-  Future<List<int>> getFileIds(
+  Future<List<FileIdWithTimestamp>> getFileIdWithTimestamps(
     Account account,
     String shareDirPath, {
     bool? isArchived,
   }) async {
-    _log.info("[getFileIds] $account");
-    return await db.getFileIds(
+    _log.info("[getFileIdWithTimestamps] $account");
+    final dbObj = await db.getFileIdWithTimestamps(
       account: account.toDb(),
       // need this because this arg expect empty string for root instead of "."
-      includeRelativeRoots: account.roots
-          .map((e) => File(path: file_util.unstripPath(account, e))
-              .strippedPathWithEmpty)
-          .toList(),
+      includeRelativeRoots:
+          account.roots
+              .map(
+                (e) =>
+                    File(
+                      path: file_util.unstripPath(account, e),
+                    ).strippedPathWithEmpty,
+              )
+              .toList(),
       includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
       isArchived: isArchived,
     );
+    return dbObj
+        .map(
+          (e) => FileIdWithTimestamp(fileId: e.fileId, timestamp: e.timestamp),
+        )
+        .toList();
   }
 
   @override
@@ -170,10 +185,9 @@ class FileNpDbDataSource implements FileDataSource2 {
     if (overrideDateTime != null || metadata != null) {
       f = DbFileConverter.fromDb(
         account.userId.toCaseInsensitiveString(),
-        await db.getFilesByFileIds(
-          account: account.toDb(),
-          fileIds: [f.fdId],
-        ).first,
+        await db
+            .getFilesByFileIds(account: account.toDb(), fileIds: [f.fdId])
+            .first,
       );
     }
     await db.updateFileByFileId(
@@ -182,17 +196,20 @@ class FileNpDbDataSource implements FileDataSource2 {
       isFavorite: favorite?.let(OrNull.new),
       isArchived: isArchived,
       overrideDateTime: overrideDateTime,
-      bestDateTime: overrideDateTime == null && metadata == null
-          ? null
-          : file_util.getBestDateTime(
-              overrideDateTime: overrideDateTime == null
-                  ? (f as File).overrideDateTime
-                  : overrideDateTime.obj,
-              dateTimeOriginal: metadata == null
-                  ? (f as File).metadata?.exif?.dateTimeOriginal
-                  : metadata.obj?.exif?.dateTimeOriginal,
-              lastModified: (f as File).lastModified,
-            ),
+      bestDateTime:
+          overrideDateTime == null && metadata == null
+              ? null
+              : file_util.getBestDateTime(
+                overrideDateTime:
+                    overrideDateTime == null
+                        ? (f as File).overrideDateTime
+                        : overrideDateTime.obj,
+                dateTimeOriginal:
+                    metadata == null
+                        ? (f as File).metadata?.exif?.dateTimeOriginal
+                        : metadata.obj?.exif?.dateTimeOriginal,
+                lastModified: (f as File).lastModified,
+              ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),
       location: location?.let((e) => OrNull(e.obj?.toDb())),
     );
@@ -205,10 +222,7 @@ class FileNpDbDataSource implements FileDataSource2 {
       // removing from albums, not deleting the file
       return;
     }
-    await db.deleteFile(
-      account: account.toDb(),
-      file: f.toDbKey(),
-    );
+    await db.deleteFile(account: account.toDb(), file: f.toDbKey());
   }
 
   Future<List<FileDescriptor>> _getFileDescriptors(
@@ -216,29 +230,38 @@ class FileNpDbDataSource implements FileDataSource2 {
     String shareDirPath, {
     TimeRange? timeRange,
     bool? isArchived,
+    bool? isAscending,
     int? offset,
     int? limit,
   }) async {
     _log.info(
-        "[_getFileDescriptors] $account, timeRange: $timeRange, offset: $offset, limit: $limit");
+      "[_getFileDescriptors] $account, timeRange: $timeRange, offset: $offset, limit: $limit",
+    );
     final results = await db.getFileDescriptors(
       account: account.toDb(),
       // need this because this arg expect empty string for root instead of "."
-      includeRelativeRoots: account.roots
-          .map((e) => File(path: file_util.unstripPath(account, e))
-              .strippedPathWithEmpty)
-          .toList(),
+      includeRelativeRoots:
+          account.roots
+              .map(
+                (e) =>
+                    File(
+                      path: file_util.unstripPath(account, e),
+                    ).strippedPathWithEmpty,
+              )
+              .toList(),
       includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
       timeRange: timeRange,
       isArchived: isArchived,
+      isAscending: isAscending,
       offset: offset,
       limit: limit,
     );
     return results
-        .map((e) =>
-            DbFileDescriptorConverter.fromDb(account.userId.toString(), e))
+        .map(
+          (e) => DbFileDescriptorConverter.fromDb(account.userId.toString(), e),
+        )
         .toList();
   }
 

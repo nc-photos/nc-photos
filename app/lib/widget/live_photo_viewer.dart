@@ -3,15 +3,10 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
-import 'package:nc_photos/api/api_util.dart' as api_util;
-import 'package:nc_photos/cache_manager_util.dart';
-import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:nc_photos/file_view_util.dart';
-import 'package:nc_photos/np_api_util.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:nc_photos/use_case/request_public_link.dart';
 import 'package:np_log/np_log.dart';
-import 'package:np_platform_util/np_platform_util.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
 
@@ -33,7 +28,7 @@ class LivePhotoViewer extends StatefulWidget {
   State<StatefulWidget> createState() => _LivePhotoViewerState();
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
   final VoidCallback? onLoaded;
   final void Function(Object? error, StackTrace? stackTrace)? onLoadFailure;
   final ValueChanged<double>? onHeightChanged;
@@ -46,21 +41,19 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
   @override
   void initState() {
     super.initState();
-    _getVideoUrl().then((url) {
-      if (mounted) {
-        _initController(url);
-      }
-    }).onError((e, stackTrace) {
-      _log.shout("[initState] Failed while _getVideoUrl", e, stackTrace);
+    _initController().onError((e, stackTrace) {
+      _log.shout("[initState] Failed while _initController", e, stackTrace);
       SnackBarManager().showSnackBarForException(e);
       widget.onLoadFailure?.call(e, stackTrace);
     });
 
-    _lifecycleListener = AppLifecycleListener(onShow: () {
-      if (_controller.value.isInitialized) {
-        _controller.pause();
-      }
-    });
+    _lifecycleListener = AppLifecycleListener(
+      onShow: () {
+        if (_controller.value.isInitialized) {
+          _controller.pause();
+        }
+      },
+    );
   }
 
   @override
@@ -77,10 +70,7 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     if (_isControllerInitialized && _controller.value.isInitialized) {
       content = _buildPlayer(context);
     } else {
-      content = _PlaceHolderView(
-        account: widget.account,
-        file: widget.file,
-      );
+      content = _PlaceHolderView(account: widget.account, file: widget.file);
     }
 
     return Container(
@@ -91,15 +81,9 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
     );
   }
 
-  Future<void> _initController(String url) async {
+  Future<void> _initController() async {
     try {
-      _controllerValue = VideoPlayerController.networkUrl(
-        Uri.parse(url),
-        httpHeaders: {
-          "Authorization": AuthUtil.fromAccount(widget.account).toHeaderValue(),
-        },
-        livePhotoType: widget.livePhotoType,
-      );
+      _controllerValue = await _createVideoController();
       await _controller.initialize();
       await _controller.setVolume(0);
       await _controller.setLooping(true);
@@ -119,6 +103,13 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
       SnackBarManager().showSnackBarForException(e);
       widget.onLoadFailure?.call(e, stackTrace);
     }
+  }
+
+  Future<VideoPlayerController> _createVideoController() {
+    return AnyFilePresenterFactory.videoPlayerController(
+      widget.file,
+      account: widget.account,
+    ).build(livePhotoType: widget.livePhotoType);
   }
 
   Widget _buildPlayer(BuildContext context) {
@@ -141,28 +132,15 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
             child: AspectRatio(
               key: _key,
               aspectRatio: _controller.value.aspectRatio,
-              child: IgnorePointer(
-                child: VideoPlayer(_controller),
-              ),
+              child: IgnorePointer(child: VideoPlayer(_controller)),
             ),
           ),
           if (!_isLoaded) ...[
-            _PlaceHolderView(
-              account: widget.account,
-              file: widget.file,
-            ),
+            _PlaceHolderView(account: widget.account, file: widget.file),
           ],
         ],
       ),
     );
-  }
-
-  Future<String> _getVideoUrl() async {
-    if (getRawPlatform() == NpPlatform.web) {
-      return RequestPublicLink()(widget.account, widget.file);
-    } else {
-      return api_util.getFileUrl(widget.account, widget.file);
-    }
   }
 
   void _onControllerChanged() {
@@ -188,35 +166,28 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
 }
 
 class _PlaceHolderView extends StatelessWidget {
-  const _PlaceHolderView({
-    required this.account,
-    required this.file,
-  });
+  const _PlaceHolderView({required this.account, required this.file});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
-        CachedNetworkImageBuilder(
-          type: CachedNetworkImageType.largeImage,
-          imageUrl: getViewerUrlForImageFile(account, file),
-          mime: file.fdMime,
-          account: account,
+        AnyFilePresenterFactory.largeImage(file, account: account).buildWidget(
           fit: BoxFit.contain,
-          imageBuilder: (context, child, imageProvider) {
+          imageBuilder: (context, child) {
             const SizeChangedLayoutNotification().dispatch(context);
             return child;
           },
-        ).build(),
-        ColoredBox(color: Colors.black.withOpacity(.7)),
+        ),
+        ColoredBox(color: Colors.black.withValues(alpha: .7)),
         const Center(child: _ProgressIndicator()),
       ],
     );
   }
 
   final Account account;
-  final FileDescriptor file;
+  final AnyFile file;
 }
 
 class _ProgressIndicator extends StatefulWidget {
@@ -246,8 +217,9 @@ class _ProgressIndicatorState extends State<_ProgressIndicator>
       alignment: Alignment.center,
       children: [
         RotationTransition(
-          turns: animationController
-              .drive(CurveTween(curve: Curves.easeInOutCubic)),
+          turns: animationController.drive(
+            CurveTween(curve: Curves.easeInOutCubic),
+          ),
           filterQuality: FilterQuality.high,
           child: Icon(
             Icons.motion_photos_on_outlined,

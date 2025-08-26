@@ -15,9 +15,7 @@ Future<Map<String, dynamic>> getSqliteConnectionArgs() async {
   // put the database file, called db.sqlite here, into the documents folder
   // for your app.
   final dbFolder = await getApplicationDocumentsDirectory();
-  return {
-    "path": path_lib.join(dbFolder.path, "db.sqlite"),
-  };
+  return {"path": path_lib.join(dbFolder.path, "db.sqlite")};
 }
 
 QueryExecutor openSqliteConnectionWithArgs(Map<String, dynamic> args) {

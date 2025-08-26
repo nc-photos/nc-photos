@@ -24,7 +24,8 @@ abstract class AlbumCoverProvider with EquatableMixin {
         return AlbumAutoCoverProvider.fromJson(content.cast<String, dynamic>());
       case AlbumManualCoverProvider._type:
         return AlbumManualCoverProvider.fromJson(
-            content.cast<String, dynamic>());
+          content.cast<String, dynamic>(),
+        );
       default:
         _log.shout("[fromJson] Unknown type: $type");
         throw ArgumentError.value(type, "type");
@@ -42,10 +43,7 @@ abstract class AlbumCoverProvider with EquatableMixin {
       }
     }
 
-    return {
-      "type": getType(),
-      "content": _toContentJson(),
-    };
+    return {"type": getType(), "content": _toContentJson()};
   }
 
   @override
@@ -61,15 +59,16 @@ abstract class AlbumCoverProvider with EquatableMixin {
 /// Cover selected automatically by us
 @toString
 class AlbumAutoCoverProvider extends AlbumCoverProvider {
-  const AlbumAutoCoverProvider({
-    this.coverFile,
-  });
+  const AlbumAutoCoverProvider({this.coverFile});
 
   factory AlbumAutoCoverProvider.fromJson(JsonObj json) {
     return AlbumAutoCoverProvider(
-      coverFile: json["coverFile"] == null
-          ? null
-          : FileDescriptor.fromJson(json["coverFile"].cast<String, dynamic>()),
+      coverFile:
+          json["coverFile"] == null
+              ? null
+              : FileDescriptor.fromJson(
+                json["coverFile"].cast<String, dynamic>(),
+              ),
     );
   }
 
@@ -96,15 +95,11 @@ class AlbumAutoCoverProvider extends AlbumCoverProvider {
   }
 
   @override
-  List<Object?> get props => [
-        coverFile,
-      ];
+  List<Object?> get props => [coverFile];
 
   @override
   JsonObj _toContentJson() {
-    return {
-      if (coverFile != null) "coverFile": coverFile!.toFdJson(),
-    };
+    return {if (coverFile != null) "coverFile": coverFile!.toFdJson()};
   }
 
   final FileDescriptor? coverFile;
@@ -115,14 +110,13 @@ class AlbumAutoCoverProvider extends AlbumCoverProvider {
 /// Cover picked by user
 @toString
 class AlbumManualCoverProvider extends AlbumCoverProvider {
-  const AlbumManualCoverProvider({
-    required this.coverFile,
-  });
+  const AlbumManualCoverProvider({required this.coverFile});
 
   factory AlbumManualCoverProvider.fromJson(JsonObj json) {
     return AlbumManualCoverProvider(
-      coverFile:
-          FileDescriptor.fromJson(json["coverFile"].cast<String, dynamic>()),
+      coverFile: FileDescriptor.fromJson(
+        json["coverFile"].cast<String, dynamic>(),
+      ),
     );
   }
 
@@ -133,15 +127,11 @@ class AlbumManualCoverProvider extends AlbumCoverProvider {
   FileDescriptor? getCover(Album album) => coverFile;
 
   @override
-  List<Object?> get props => [
-        coverFile,
-      ];
+  List<Object?> get props => [coverFile];
 
   @override
   JsonObj _toContentJson() {
-    return {
-      "coverFile": coverFile.toFdJson(),
-    };
+    return {"coverFile": coverFile.toFdJson()};
   }
 
   final FileDescriptor coverFile;

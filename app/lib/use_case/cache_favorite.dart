@@ -15,7 +15,9 @@ class CacheFavorite {
   ///
   /// Return the fileIds of the affected files
   Future<DbSyncIdResult> call(
-      Account account, Iterable<int> remoteFileIds) async {
+    Account account,
+    Iterable<int> remoteFileIds,
+  ) async {
     _log.info("[call] Cache favorites");
     return _c.npDb.syncFavoriteFiles(
       account: account.toDb(),

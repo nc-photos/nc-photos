@@ -1,9 +1,7 @@
 part of '../my_app.dart';
 
 class _AppLockMyApp extends StatefulWidget {
-  const _AppLockMyApp({
-    required this.child,
-  });
+  const _AppLockMyApp({required this.child});
 
   @override
   State<StatefulWidget> createState() => _AppLockMyAppState();
@@ -35,16 +33,17 @@ class _AppLockMyAppState extends State<_AppLockMyApp> {
           });
           late final OverlayEntry authOverlay;
           authOverlay = OverlayEntry(
-            builder: (_) => _AppLockOverlay(
-              onAuthSuccess: () {
-                authOverlay.remove();
-                if (mounted) {
-                  setState(() {
-                    _shouldLock = false;
-                  });
-                }
-              },
-            ),
+            builder:
+                (_) => _AppLockOverlay(
+                  onAuthSuccess: () {
+                    authOverlay.remove();
+                    if (mounted) {
+                      setState(() {
+                        _shouldLock = false;
+                      });
+                    }
+                  },
+                ),
           );
           _key.currentState?.insert(authOverlay);
         }
@@ -63,10 +62,7 @@ class _AppLockMyAppState extends State<_AppLockMyApp> {
     return Overlay(
       key: _key,
       initialEntries: [
-        OverlayEntry(
-          maintainState: true,
-          builder: (_) => widget.child,
-        ),
+        OverlayEntry(maintainState: true, builder: (_) => widget.child),
       ],
     );
   }
@@ -77,18 +73,18 @@ class _AppLockMyAppState extends State<_AppLockMyApp> {
 }
 
 class _AppLockOverlay extends StatelessWidget {
-  const _AppLockOverlay({
-    required this.onAuthSuccess,
-  });
+  const _AppLockOverlay({required this.onAuthSuccess});
 
   @override
   Widget build(BuildContext context) {
     return HeroControllerScope.none(
       child: Navigator(
-        onGenerateRoute: (_) => MaterialPageRoute(
-          builder: (context) =>
-              _AppLockOverlayPage(onAuthSuccess: onAuthSuccess),
-        ),
+        onGenerateRoute:
+            (_) => MaterialPageRoute(
+              builder:
+                  (context) =>
+                      _AppLockOverlayPage(onAuthSuccess: onAuthSuccess),
+            ),
       ),
     );
   }
@@ -97,9 +93,7 @@ class _AppLockOverlay extends StatelessWidget {
 }
 
 class _AppLockOverlayPage extends StatefulWidget {
-  const _AppLockOverlayPage({
-    required this.onAuthSuccess,
-  });
+  const _AppLockOverlayPage({required this.onAuthSuccess});
 
   @override
   State<StatefulWidget> createState() => _AppLockOverlayPageState();

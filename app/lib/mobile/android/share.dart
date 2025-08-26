@@ -2,11 +2,12 @@ import 'package:flutter/services.dart';
 
 class Share {
   static Future<void> shareItems(
-          List<String> fileUris, List<String?> mimeTypes) =>
-      _channel.invokeMethod("shareItems", <String, dynamic>{
-        "fileUris": fileUris,
-        "mimeTypes": mimeTypes,
-      });
+    List<String> fileUris,
+    List<String?> mimeTypes,
+  ) => _channel.invokeMethod("shareItems", <String, dynamic>{
+    "fileUris": fileUris,
+    "mimeTypes": mimeTypes,
+  });
 
   static Future<void> shareText(String text, String? mimeType) =>
       _channel.invokeMethod("shareText", <String, dynamic>{

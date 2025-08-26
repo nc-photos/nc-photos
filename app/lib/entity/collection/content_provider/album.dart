@@ -20,10 +20,7 @@ part 'album.g.dart';
 class CollectionAlbumProvider
     with EquatableMixin
     implements CollectionContentProvider {
-  const CollectionAlbumProvider({
-    required this.account,
-    required this.album,
-  });
+  const CollectionAlbumProvider({required this.account, required this.album});
 
   @override
   String toString() => _$toString();
@@ -49,28 +46,28 @@ class CollectionAlbumProvider
 
   @override
   List<CollectionCapability> get capabilities => [
-        CollectionCapability.sort,
-        CollectionCapability.rename,
-        CollectionCapability.manualCover,
-        CollectionCapability.deleteItem,
-        if (album.provider is AlbumStaticProvider) ...[
-          CollectionCapability.manualItem,
-          CollectionCapability.manualSort,
-          CollectionCapability.labelItem,
-          CollectionCapability.mapItem,
-          CollectionCapability.share,
-        ],
-      ];
+    CollectionCapability.sort,
+    CollectionCapability.rename,
+    CollectionCapability.manualCover,
+    CollectionCapability.deleteItem,
+    if (album.provider is AlbumStaticProvider) ...[
+      CollectionCapability.manualItem,
+      CollectionCapability.manualSort,
+      CollectionCapability.labelItem,
+      CollectionCapability.mapItem,
+      CollectionCapability.share,
+    ],
+  ];
 
   /// Capabilities when this album is shared to this user by someone else
   List<CollectionCapability> get guestCapabilities => [
-        CollectionCapability.deleteItem,
-        if (album.provider is AlbumStaticProvider) ...[
-          CollectionCapability.manualItem,
-          CollectionCapability.labelItem,
-          CollectionCapability.mapItem,
-        ],
-      ];
+    CollectionCapability.deleteItem,
+    if (album.provider is AlbumStaticProvider) ...[
+      CollectionCapability.manualItem,
+      CollectionCapability.labelItem,
+      CollectionCapability.mapItem,
+    ],
+  ];
 
   @override
   CollectionItemSort get itemSort => album.sortProvider.toCollectionItemSort();
@@ -79,10 +76,12 @@ class CollectionAlbumProvider
   List<CollectionShare> get shares =>
       album.shares
           ?.where((s) => s.userId != account.userId)
-          .map((s) => CollectionShare(
-                userId: s.userId,
-                username: s.displayName ?? s.userId.raw,
-              ))
+          .map(
+            (s) => CollectionShare(
+              userId: s.userId,
+              username: s.displayName ?? s.userId.raw,
+            ),
+          )
           .toList() ??
       const [];
 
@@ -114,7 +113,8 @@ class CollectionAlbumProvider
   @override
   bool get isPendingSharedAlbum =>
       album.albumFile?.path.startsWith(
-          remote_storage_util.getRemotePendingSharedAlbumsDir(account)) ==
+        remote_storage_util.getRemotePendingSharedAlbumsDir(account),
+      ) ==
       true;
 
   @override

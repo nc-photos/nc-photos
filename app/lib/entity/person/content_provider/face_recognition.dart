@@ -36,15 +36,14 @@ class PersonFaceRecognitionProvider
     int width,
     int height, {
     bool? isKeepAspectRatio,
-  }) =>
-      PersonCoverResult(
-        url: api_util.getFacePreviewUrl(
-          account,
-          person.thumbFaceId,
-          size: math.max(width, height),
-        ),
-        mime: null,
-      );
+  }) => PersonCoverResult(
+    url: api_util.getFacePreviewUrl(
+      account,
+      person.thumbFaceId,
+      size: math.max(width, height),
+    ),
+    mime: null,
+  );
 
   @override
   Matrix4? getCoverTransform(int viewportSize, int width, int height) => null;

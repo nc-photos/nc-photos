@@ -29,8 +29,9 @@ class NativeEventListener<T> {
     _subscription = null;
   }
 
-  static final _mappedStream =
-      MessageRelay.stream.whereType<Message>().map((ev) {
+  static final _mappedStream = MessageRelay.stream.whereType<Message>().map((
+    ev,
+  ) {
     switch (ev.event) {
       case FileExifUpdatedEvent.id:
         return FileExifUpdatedEvent.fromEvent(ev);
@@ -43,8 +44,9 @@ class NativeEventListener<T> {
   final void Function(T) listener;
   StreamSubscription<T>? _subscription;
 
-  final _log =
-      Logger("event.native_event.NativeEventListener<${T.runtimeType}>");
+  final _log = Logger(
+    "event.native_event.NativeEventListener<${T.runtimeType}>",
+  );
 }
 
 @toString
@@ -58,12 +60,7 @@ class FileExifUpdatedEvent {
     return FileExifUpdatedEvent((dataJson["fileIds"] as List).cast<int>());
   }
 
-  Message toEvent() => Message(
-        id,
-        jsonEncode({
-          "fileIds": fileIds,
-        }),
-      );
+  Message toEvent() => Message(id, jsonEncode({"fileIds": fileIds}));
 
   @override
   String toString() => _$toString();

@@ -22,8 +22,8 @@ class BlocListenerT<B extends StateStreamable<S>, S, T>
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
     return BlocListener<B, S>(
-      listenWhen: (previous, current) =>
-          selector(previous) != selector(current),
+      listenWhen:
+          (previous, current) => selector(previous) != selector(current),
       listener: (context, state) => listener(context, selector(state)),
       child: child,
     );
@@ -45,12 +45,11 @@ extension EmitterExtension<State> on Emitter<State> {
   Future<void> forEachIgnoreError<T>(
     Stream<T> stream, {
     required State Function(T data) onData,
-  }) =>
-      onEach<T>(
-        stream,
-        onData: (data) => call(onData(data)),
-        onError: (_, __) {},
-      );
+  }) => onEach<T>(
+    stream,
+    onData: (data) => call(onData(data)),
+    onError: (_, __) {},
+  );
 }
 
 extension BlocExtension<E, S> on Bloc<E, S> {
@@ -86,13 +85,16 @@ mixin BlocForEachMixin<E, S> implements Bloc<E, S> {
     S Function(Object error, StackTrace stackTrace)? onError,
   }) async {
     final completer = Completer();
-    final subscription = stream.listen((event) {
-      emit(onData(event));
-    }, onError: (e, stackTrace) {
-      if (onError != null) {
-        emit(onError(e, stackTrace));
-      }
-    });
+    final subscription = stream.listen(
+      (event) {
+        emit(onData(event));
+      },
+      onError: (e, stackTrace) {
+        if (onError != null) {
+          emit(onError(e, stackTrace));
+        }
+      },
+    );
     _forEaches.add(_BlocForEachObj(subscription, completer));
     return completer.future;
   }

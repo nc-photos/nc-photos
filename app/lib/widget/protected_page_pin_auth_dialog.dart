@@ -21,21 +21,18 @@ part 'protected_page_pin_auth_dialog/state_event.dart';
 part 'protected_page_pin_auth_dialog/view.dart';
 
 class ProtectedPagePinAuthDialog extends StatelessWidget {
-  const ProtectedPagePinAuthDialog({
-    super.key,
-    required this.pin,
-  });
+  const ProtectedPagePinAuthDialog({super.key, required this.pin});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        pin: pin,
-        removeItemBuilder: (_, animation, value) => _RemoveItem(
-          animation: animation,
-          value: value,
-        ),
-      ),
+      create:
+          (context) => _Bloc(
+            pin: pin,
+            removeItemBuilder:
+                (_, animation, value) =>
+                    _RemoveItem(animation: animation, value: value),
+          ),
       child: _WrappedProtectedPagePinAuthDialog(),
     );
   }
@@ -72,13 +69,13 @@ class ProtectedPagePinSetupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        pin: null,
-        removeItemBuilder: (_, animation, value) => _RemoveItem(
-          animation: animation,
-          value: value,
-        ),
-      ),
+      create:
+          (context) => _Bloc(
+            pin: null,
+            removeItemBuilder:
+                (_, animation, value) =>
+                    _RemoveItem(animation: animation, value: value),
+          ),
       child: _WrappedProtectedPagePinSetupDialog(),
     );
   }
@@ -108,21 +105,18 @@ class _WrappedProtectedPagePinSetupDialog extends StatelessWidget {
 }
 
 class ProtectedPagePinConfirmDialog extends StatelessWidget {
-  const ProtectedPagePinConfirmDialog({
-    super.key,
-    required this.pin,
-  });
+  const ProtectedPagePinConfirmDialog({super.key, required this.pin});
 
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        pin: pin,
-        removeItemBuilder: (_, animation, value) => _RemoveItem(
-          animation: animation,
-          value: value,
-        ),
-      ),
+      create:
+          (context) => _Bloc(
+            pin: pin,
+            removeItemBuilder:
+                (_, animation, value) =>
+                    _RemoveItem(animation: animation, value: value),
+          ),
       child: _WrappedProtectedPagePinConfirmDialog(),
     );
   }

@@ -18,7 +18,11 @@ class ServiceConfig {
   }
 
   static Future<bool> isFallbackClientExif() async {
-    return Preference.getBool(_pref, _prefIsFallbackClientExif, false).notNull();
+    return Preference.getBool(
+      _pref,
+      _prefIsFallbackClientExif,
+      false,
+    ).notNull();
   }
 
   static Future<void> setFallbackClientExif(bool flag) async {

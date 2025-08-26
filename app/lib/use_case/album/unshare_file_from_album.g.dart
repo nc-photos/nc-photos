@@ -10,6 +10,7 @@ extension _$UnshareFileFromAlbumNpLog on UnshareFileFromAlbum {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("use_case.album.unshare_file_from_album.UnshareFileFromAlbum");
+  static final log = Logger(
+    "use_case.album.unshare_file_from_album.UnshareFileFromAlbum",
+  );
 }

@@ -9,27 +9,25 @@ import 'package:np_platform_permission/src/k.dart' as k;
 class Permission {
   static const READ_EXTERNAL_STORAGE =
       "android.permission.READ_EXTERNAL_STORAGE";
-  static const READ_MEDIA_IMAGES =
-      "android.permission.READ_MEDIA_IMAGES";
+  static const READ_MEDIA_IMAGES = "android.permission.READ_MEDIA_IMAGES";
   static const WRITE_EXTERNAL_STORAGE =
       "android.permission.WRITE_EXTERNAL_STORAGE";
 
-  static Future<void> request(List<String> permissions) =>
-      _methodChannel.invokeMethod("request", <String, dynamic>{
-        "permissions": permissions,
-      });
+  static Future<void> request(List<String> permissions) => _methodChannel
+      .invokeMethod("request", <String, dynamic>{"permissions": permissions});
 
   static Future<bool> hasWriteExternalStorage() async {
-    return (await _methodChannel
-        .invokeMethod<bool>("hasWriteExternalStorage"))!;
+    return (await _methodChannel.invokeMethod<bool>(
+      "hasWriteExternalStorage",
+    ))!;
   }
 
-  static Future<bool> hasReadExternalStorage() async {
-    return (await _methodChannel.invokeMethod<bool>("hasReadExternalStorage"))!;
+  static Future<bool> hasReadMedia() async {
+    return (await _methodChannel.invokeMethod<bool>("hasReadMedia"))!;
   }
 
-  static Future<void> requestReadExternalStorage() =>
-      _methodChannel.invokeMethod("requestReadExternalStorage");
+  static Future<void> requestReadMedia() =>
+      _methodChannel.invokeMethod("requestReadMedia");
 
   static Future<bool> hasPostNotifications() async {
     return (await _methodChannel.invokeMethod<bool>("hasPostNotifications"))!;
@@ -40,13 +38,15 @@ class Permission {
 
   static Stream get stream => _eventStream;
 
-  static final _eventStream =
-      _eventChannel.receiveBroadcastStream().map((event) {
+  static final _eventStream = _eventChannel.receiveBroadcastStream().map((
+    event,
+  ) {
     if (event is Map) {
       switch (event["event"]) {
         case _eventRequestPermissionsResult:
           return PermissionRequestResult(
-              (event["grantResults"] as Map).cast<String, int>());
+            (event["grantResults"] as Map).cast<String, int>(),
+          );
 
         default:
           _log.shout("[_eventStream] Unknown event: ${event["event"]}");

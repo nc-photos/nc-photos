@@ -12,5 +12,6 @@ extension _$_CollectionViewerContentProviderNpLog
   Logger get _log => log;
 
   static final log = Logger(
-      "widget.collection_viewer.collection_viewer._CollectionViewerContentProvider");
+    "widget.collection_viewer.collection_viewer._CollectionViewerContentProvider",
+  );
 }

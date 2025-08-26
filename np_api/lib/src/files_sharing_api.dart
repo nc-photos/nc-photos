@@ -34,9 +34,7 @@ class ApiOcsFilesSharingShares {
       return await _filesSharing._ocs._api.request(
         "GET",
         "ocs/v2.php/apps/files_sharing/api/v1/shares",
-        header: {
-          "OCS-APIRequest": "true",
-        },
+        header: {"OCS-APIRequest": "true"},
         queryParameters: {
           "format": "json",
           if (path != null) "path": path,
@@ -106,9 +104,7 @@ class ApiOcsFilesSharingShare {
       return await _filesSharing._ocs._api.request(
         "DELETE",
         "ocs/v2.php/apps/files_sharing/api/v1/shares/$_shareId",
-        header: {
-          "OCS-APIRequest": "true",
-        },
+        header: {"OCS-APIRequest": "true"},
       );
     } catch (e) {
       _log.severe("[delete] Failed while delete", e);
@@ -137,9 +133,7 @@ class ApiOcsFilesSharingSharees {
       return await _filesSharing._ocs._api.request(
         "GET",
         "ocs/v1.php/apps/files_sharing/api/v1/sharees",
-        header: {
-          "OCS-APIRequest": "true",
-        },
+        header: {"OCS-APIRequest": "true"},
         queryParameters: {
           "format": "json",
           if (search != null) "search": search,

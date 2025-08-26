@@ -4,9 +4,7 @@ import 'package:nc_photos/service/service.dart';
 import 'package:rxdart/rxdart.dart';
 
 class WifiEnsurer {
-  WifiEnsurer({
-    this.interrupter,
-  }) {
+  WifiEnsurer({this.interrupter}) {
     interrupter?.listen((event) {
       _shouldRun = false;
     });

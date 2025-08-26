@@ -11,5 +11,6 @@ extension _$PersonFaceRecognitionAdapterNpLog on PersonFaceRecognitionAdapter {
   Logger get _log => log;
 
   static final log = Logger(
-      "entity.person.adapter.face_recognition.PersonFaceRecognitionAdapter");
+    "entity.person.adapter.face_recognition.PersonFaceRecognitionAdapter",
+  );
 }

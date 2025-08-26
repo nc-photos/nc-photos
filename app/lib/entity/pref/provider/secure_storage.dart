@@ -17,9 +17,7 @@ class PrefSecureStorageProvider implements PrefProvider {
         preferencesKeyPrefix: "com.nkming.nc_photos",
         sharedPreferencesName: "secure_pref",
       ),
-      iOptions: IOSOptions(
-        accountName: "com.nkming.nc_photos",
-      ),
+      iOptions: IOSOptions(accountName: "com.nkming.nc_photos"),
     );
     _rawData = await _storage.readAll();
   }

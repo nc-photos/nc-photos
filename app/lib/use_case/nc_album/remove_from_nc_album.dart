@@ -26,33 +26,35 @@ class RemoveFromNcAlbum {
     ErrorWithValueIndexedHandler<CollectionItem>? onError,
   }) async {
     _log.info(
-        "[call] Remove ${items.length} items from album '${album.strippedPath}'");
-    final fileItems = items
-        .whereIndexed((i, e) {
-          if (e is! CollectionFileItem) {
-            onError?.call(
-              i,
-              e,
-              UnsupportedError("Item type not supported: ${e.runtimeType}"),
-              StackTrace.current,
-            );
-            return false;
-          } else {
-            return true;
-          }
-        })
-        .cast<CollectionFileItem>()
-        // since nextcloud album uses the DELETE method, we must make sure we
-        // are "deleting" with an album path, not the actual file path
-        .where((e) {
-          if (file_util.isNcAlbumFile(account, e.file)) {
-            return true;
-          } else {
-            _log.warning("[call] Wrong path for files in Nextcloud album");
-            return false;
-          }
-        })
-        .toList();
+      "[call] Remove ${items.length} items from album '${album.strippedPath}'",
+    );
+    final fileItems =
+        items
+            .whereIndexed((i, e) {
+              if (e is! CollectionFileItem) {
+                onError?.call(
+                  i,
+                  e,
+                  UnsupportedError("Item type not supported: ${e.runtimeType}"),
+                  StackTrace.current,
+                );
+                return false;
+              } else {
+                return true;
+              }
+            })
+            .cast<CollectionFileItem>()
+            // since nextcloud album uses the DELETE method, we must make sure we
+            // are "deleting" with an album path, not the actual file path
+            .where((e) {
+              if (file_util.isNcAlbumFile(account, e.file)) {
+                return true;
+              } else {
+                _log.warning("[call] Wrong path for files in Nextcloud album");
+                return false;
+              }
+            })
+            .toList();
     var count = fileItems.length;
     await Remove(_c)(
       account,

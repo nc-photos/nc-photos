@@ -13,8 +13,9 @@ class UpdateAutoAlbumCover {
     if (album.coverProvider is! AlbumAutoCoverProvider) {
       return album;
     } else {
-      final sortedItems =
-          const AlbumTimeSortProvider(isAscending: false).sort(items);
+      final sortedItems = const AlbumTimeSortProvider(
+        isAscending: false,
+      ).sort(items);
       return _updateWithSortedItems(album, sortedItems);
     }
   }
@@ -42,20 +43,18 @@ class UpdateAutoAlbumCover {
     }
 
     try {
-      final coverFile = sortedItems
-          .whereType<AlbumFileItem>()
-          .map((e) => e.file)
-          .where(file_util.isSupportedFormat)
-          .first;
+      final coverFile =
+          sortedItems
+              .whereType<AlbumFileItem>()
+              .map((e) => e.file)
+              .where(file_util.isSupportedFormat)
+              .first;
       // cache the result for later use
-      if ((album.coverProvider as AlbumAutoCoverProvider)
-              .coverFile
+      if ((album.coverProvider as AlbumAutoCoverProvider).coverFile
               ?.compareServerIdentity(coverFile) !=
           true) {
         return album.copyWith(
-          coverProvider: AlbumAutoCoverProvider(
-            coverFile: coverFile,
-          ),
+          coverProvider: AlbumAutoCoverProvider(coverFile: coverFile),
         );
       }
     } on StateError catch (_) {

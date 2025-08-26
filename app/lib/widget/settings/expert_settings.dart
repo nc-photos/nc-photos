@@ -24,10 +24,10 @@ class ExpertSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => _Bloc(
-        db: context.read(),
-        prefController: context.read(),
-      )..add(const _Init()),
+      create:
+          (_) =>
+              _Bloc(db: context.read(), prefController: context.read())
+                ..add(const _Init()),
       child: const _WrappedExpertSettings(),
     );
   }
@@ -62,123 +62,154 @@ class _WrappedExpertSettingsState extends State<_WrappedExpertSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Builder(
-        builder: (context) => MultiBlocListener(
-          listeners: [
-            _BlocListener(
-              listenWhen: (previous, current) =>
-                  !identical(previous.lastSuccessful, current.lastSuccessful),
-              listener: (context, state) {
-                if (state.lastSuccessful is _ClearCacheDatabase) {
-                  showDialog(
-                    context: context,
-                    builder: (_) => AlertDialog(
-                      content: Text(L10n.global()
-                          .settingsClearCacheDatabaseSuccessNotification),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(MaterialLocalizations.of(context)
-                              .closeButtonLabel),
+        builder:
+            (context) => MultiBlocListener(
+              listeners: [
+                _BlocListener(
+                  listenWhen:
+                      (previous, current) =>
+                          !identical(
+                            previous.lastSuccessful,
+                            current.lastSuccessful,
+                          ),
+                  listener: (context, state) {
+                    if (state.lastSuccessful is _ClearCacheDatabase) {
+                      showDialog(
+                        context: context,
+                        builder:
+                            (_) => AlertDialog(
+                              content: Text(
+                                L10n.global()
+                                    .settingsClearCacheDatabaseSuccessNotification,
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                  child: Text(
+                                    MaterialLocalizations.of(
+                                      context,
+                                    ).closeButtonLabel,
+                                  ),
+                                ),
+                              ],
+                            ),
+                      );
+                    }
+                  },
+                ),
+                _BlocListenerT<bool>(
+                  selector: (state) => state.isNewHttpEngine,
+                  listener: (context, isNewHttpEngine) {
+                    showDialog(
+                      context: context,
+                      builder:
+                          (context) => AlertDialog(
+                            content: Text(
+                              L10n.global().settingsRestartNeededDialog,
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: Text(
+                                  MaterialLocalizations.of(
+                                    context,
+                                  ).closeButtonLabel,
+                                ),
+                              ),
+                            ],
+                          ),
+                    );
+                  },
+                ),
+              ],
+              child: CustomScrollView(
+                slivers: [
+                  SliverAppBar(
+                    pinned: true,
+                    title: Text(L10n.global().settingsExpertTitle),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 16,
+                    ),
+                    sliver: SliverToBoxAdapter(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.warning_amber,
+                            color: Theme.of(context).colorScheme.error,
+                          ),
+                          const SizedBox(height: 8),
+                          Text(L10n.global().settingsExpertWarningText),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SliverList(
+                    delegate: SliverChildListDelegate([
+                      ListTile(
+                        title: Text(
+                          L10n.global().settingsClearCacheDatabaseTitle,
                         ),
-                      ],
-                    ),
-                  );
-                }
-              },
-            ),
-            _BlocListenerT<bool>(
-              selector: (state) => state.isNewHttpEngine,
-              listener: (context, isNewHttpEngine) {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    content: Text(L10n.global().settingsRestartNeededDialog),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: Text(
-                            MaterialLocalizations.of(context).closeButtonLabel),
-                      ),
-                    ],
-                  ),
-                );
-              },
-            ),
-          ],
-          child: CustomScrollView(
-            slivers: [
-              SliverAppBar(
-                pinned: true,
-                title: Text(L10n.global().settingsExpertTitle),
-              ),
-              SliverPadding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-                sliver: SliverToBoxAdapter(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.warning_amber,
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(L10n.global().settingsExpertWarningText),
-                    ],
-                  ),
-                ),
-              ),
-              SliverList(
-                delegate: SliverChildListDelegate(
-                  [
-                    ListTile(
-                      title:
-                          Text(L10n.global().settingsClearCacheDatabaseTitle),
-                      subtitle: Text(
-                          L10n.global().settingsClearCacheDatabaseDescription),
-                      onTap: () {
-                        context.read<_Bloc>().add(const _ClearCacheDatabase());
-                      },
-                    ),
-                    ListTile(
-                      title: Text(
-                          L10n.global().settingsManageTrustedCertificateTitle),
-                      onTap: () {
-                        Navigator.of(context)
-                            .pushNamed(TrustedCertManager.routeName);
-                      },
-                    ),
-                    _BlocSelector<bool>(
-                      selector: (state) => state.isNewHttpEngine,
-                      builder: (context, isNewHttpEngine) => CheckboxListTile(
-                        title: Text(L10n.global().settingsUseNewHttpEngine),
-                        value: isNewHttpEngine,
-                        onChanged: (value) async {
-                          if (value == true) {
-                            final result = await showDialog<bool>(
-                              context: context,
-                              builder: (context) =>
-                                  const _NewHttpEngineDialog(),
-                            );
-                            if (context.mounted && result == true) {
-                              context.addEvent(const _SetNewHttpEngine(true));
-                            }
-                          } else {
-                            context.addEvent(const _SetNewHttpEngine(false));
-                          }
+                        subtitle: Text(
+                          L10n.global().settingsClearCacheDatabaseDescription,
+                        ),
+                        onTap: () {
+                          context.read<_Bloc>().add(
+                            const _ClearCacheDatabase(),
+                          );
                         },
                       ),
-                    ),
-                  ],
-                ),
+                      ListTile(
+                        title: Text(
+                          L10n.global().settingsManageTrustedCertificateTitle,
+                        ),
+                        onTap: () {
+                          Navigator.of(
+                            context,
+                          ).pushNamed(TrustedCertManager.routeName);
+                        },
+                      ),
+                      _BlocSelector<bool>(
+                        selector: (state) => state.isNewHttpEngine,
+                        builder:
+                            (context, isNewHttpEngine) => CheckboxListTile(
+                              title: Text(
+                                L10n.global().settingsUseNewHttpEngine,
+                              ),
+                              value: isNewHttpEngine,
+                              onChanged: (value) async {
+                                if (value == true) {
+                                  final result = await showDialog<bool>(
+                                    context: context,
+                                    builder:
+                                        (context) =>
+                                            const _NewHttpEngineDialog(),
+                                  );
+                                  if (context.mounted && result == true) {
+                                    context.addEvent(
+                                      const _SetNewHttpEngine(true),
+                                    );
+                                  }
+                                } else {
+                                  context.addEvent(
+                                    const _SetNewHttpEngine(false),
+                                  );
+                                }
+                              },
+                            ),
+                      ),
+                    ]),
+                  ),
+                ],
               ),
-            ],
-          ),
-        ),
+            ),
       ),
     );
   }

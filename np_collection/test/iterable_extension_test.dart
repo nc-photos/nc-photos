@@ -33,51 +33,53 @@ void main() {
 
       test("class", () {
         expect(
-            [
-              _DistinctTest(1, 1),
-              _DistinctTest(2, 2),
-              _DistinctTest(3, 3),
-              _DistinctTest(4, 4),
-              _DistinctTest(5, 4),
-              _DistinctTest(3, 6),
-              _DistinctTest(2, 2),
-              _DistinctTest(4, 8),
-              _DistinctTest(6, 9),
-            ].distinct(),
-            [
-              _DistinctTest(1, 1),
-              _DistinctTest(2, 2),
-              _DistinctTest(3, 3),
-              _DistinctTest(4, 4),
-              _DistinctTest(5, 4),
-              _DistinctTest(3, 6),
-              _DistinctTest(4, 8),
-              _DistinctTest(6, 9),
-            ]);
+          [
+            _DistinctTest(1, 1),
+            _DistinctTest(2, 2),
+            _DistinctTest(3, 3),
+            _DistinctTest(4, 4),
+            _DistinctTest(5, 4),
+            _DistinctTest(3, 6),
+            _DistinctTest(2, 2),
+            _DistinctTest(4, 8),
+            _DistinctTest(6, 9),
+          ].distinct(),
+          [
+            _DistinctTest(1, 1),
+            _DistinctTest(2, 2),
+            _DistinctTest(3, 3),
+            _DistinctTest(4, 4),
+            _DistinctTest(5, 4),
+            _DistinctTest(3, 6),
+            _DistinctTest(4, 8),
+            _DistinctTest(6, 9),
+          ],
+        );
       });
     });
 
     test("distinctIf", () {
       expect(
-          [
-            _DistinctTest(1, 1),
-            _DistinctTest(2, 2),
-            _DistinctTest(3, 3),
-            _DistinctTest(4, 4),
-            _DistinctTest(5, 5),
-            _DistinctTest(3, 6),
-            _DistinctTest(2, 7),
-            _DistinctTest(4, 8),
-            _DistinctTest(6, 9),
-          ].distinctIf((a, b) => a.x == b.x, (a) => a.x),
-          [
-            _DistinctTest(1, 1),
-            _DistinctTest(2, 2),
-            _DistinctTest(3, 3),
-            _DistinctTest(4, 4),
-            _DistinctTest(5, 5),
-            _DistinctTest(6, 9),
-          ]);
+        [
+          _DistinctTest(1, 1),
+          _DistinctTest(2, 2),
+          _DistinctTest(3, 3),
+          _DistinctTest(4, 4),
+          _DistinctTest(5, 5),
+          _DistinctTest(3, 6),
+          _DistinctTest(2, 7),
+          _DistinctTest(4, 8),
+          _DistinctTest(6, 9),
+        ].distinctIf((a, b) => a.x == b.x, (a) => a.x),
+        [
+          _DistinctTest(1, 1),
+          _DistinctTest(2, 2),
+          _DistinctTest(3, 3),
+          _DistinctTest(4, 4),
+          _DistinctTest(5, 5),
+          _DistinctTest(6, 9),
+        ],
+      );
     });
 
     group("indexOf", () {
@@ -92,14 +94,11 @@ void main() {
     });
 
     test("withPartition", () async {
-      expect(
-        await 0.until(10).withPartition((sublist) => [sublist], 4),
-        [
-          [0, 1, 2, 3],
-          [4, 5, 6, 7],
-          [8, 9],
-        ],
-      );
+      expect(await 0.until(10).withPartition((sublist) => [sublist], 4), [
+        [0, 1, 2, 3],
+        [4, 5, 6, 7],
+        [8, 9],
+      ]);
     });
   });
 }

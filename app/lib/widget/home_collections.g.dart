@@ -13,46 +13,51 @@ part of 'home_collections.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<Collection>? collections,
-      collection_util.CollectionSort? sort,
-      bool? isLoading,
-      List<_Item>? transformedItems,
-      Set<_Item>? selectedItems,
-      Map<String, int>? itemCounts,
-      List<PrefHomeCollectionsNavButton>? navBarButtons,
-      ExceptionEvent? error,
-      ExceptionEvent? removeError});
+  _State call({
+    List<Collection>? collections,
+    collection_util.CollectionSort? sort,
+    bool? isLoading,
+    List<_Item>? transformedItems,
+    Set<_Item>? selectedItems,
+    Map<String, int>? itemCounts,
+    List<PrefHomeCollectionsNavButton>? navBarButtons,
+    ExceptionEvent? error,
+    ExceptionEvent? removeError,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic collections,
-      dynamic sort,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic selectedItems,
-      dynamic itemCounts,
-      dynamic navBarButtons,
-      dynamic error = copyWithNull,
-      dynamic removeError = copyWithNull}) {
+  _State call({
+    dynamic collections,
+    dynamic sort,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic selectedItems,
+    dynamic itemCounts,
+    dynamic navBarButtons,
+    dynamic error = copyWithNull,
+    dynamic removeError = copyWithNull,
+  }) {
     return _State(
-        collections: collections as List<Collection>? ?? that.collections,
-        sort: sort as collection_util.CollectionSort? ?? that.sort,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
-        selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
-        itemCounts: itemCounts as Map<String, int>? ?? that.itemCounts,
-        navBarButtons: navBarButtons as List<PrefHomeCollectionsNavButton>? ??
-            that.navBarButtons,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-        removeError: removeError == copyWithNull
-            ? that.removeError
-            : removeError as ExceptionEvent?);
+      collections: collections as List<Collection>? ?? that.collections,
+      sort: sort as collection_util.CollectionSort? ?? that.sort,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<_Item>? ?? that.transformedItems,
+      selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
+      itemCounts: itemCounts as Map<String, int>? ?? that.itemCounts,
+      navBarButtons:
+          navBarButtons as List<PrefHomeCollectionsNavButton>? ??
+          that.navBarButtons,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      removeError:
+          removeError == copyWithNull
+              ? that.removeError
+              : removeError as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -71,8 +76,9 @@ extension _$_WrappedHomeCollectionsStateNpLog on _WrappedHomeCollectionsState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.home_collections._WrappedHomeCollectionsState");
+  static final log = Logger(
+    "widget.home_collections._WrappedHomeCollectionsState",
+  );
 }
 
 extension _$_SelectionAppBarNpLog on _SelectionAppBar {

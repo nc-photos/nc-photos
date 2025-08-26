@@ -31,40 +31,60 @@ class AddFileToAlbum {
 
   /// Add list of files to [album]
   Future<Album> call(
-      Account account, Album album, List<FileDescriptor> fds) async {
+    Account account,
+    Album album,
+    List<FileDescriptor> fds,
+  ) async {
     _log.info("[call] Add ${fds.length} items to album '${album.name}'");
     assert(album.provider is AlbumStaticProvider);
     final files = await InflateFileDescriptor(_c)(account, fds);
     // resync is needed to work out album cover and latest item
     final oldItems = await PreProcessAlbum(_c)(account, album);
-    final itemSet = oldItems
-        .map((e) => OverrideComparator<AlbumItem>(
-            e, _isItemFileEqual, _getItemHashCode))
-        .toSet();
+    final itemSet =
+        oldItems
+            .map(
+              (e) => OverrideComparator<AlbumItem>(
+                e,
+                _isItemFileEqual,
+                _getItemHashCode,
+              ),
+            )
+            .toSet();
     // find the items that are not having the same file as any existing ones
-    final addItems = files
-        .map((f) => AlbumFileItem(
-              addedBy: account.userId,
-              addedAt: clock.now(),
-              file: f.toDescriptor(),
-              ownerId: f.ownerId ?? account.userId,
-            ))
-        .where((i) => itemSet.add(OverrideComparator<AlbumItem>(
-            i, _isItemFileEqual, _getItemHashCode)))
-        .toList();
+    final addItems =
+        files
+            .map(
+              (f) => AlbumFileItem(
+                addedBy: account.userId,
+                addedAt: clock.now(),
+                file: f.toDescriptor(),
+                ownerId: f.ownerId ?? account.userId,
+              ),
+            )
+            .where(
+              (i) => itemSet.add(
+                OverrideComparator<AlbumItem>(
+                  i,
+                  _isItemFileEqual,
+                  _getItemHashCode,
+                ),
+              ),
+            )
+            .toList();
     if (addItems.isEmpty) {
       return album;
     }
     final newItems = <AlbumItem>[...addItems, ...oldItems];
     var newAlbum = album.copyWith(
-      provider: AlbumStaticProvider.of(album).copyWith(
-        items: newItems,
-      ),
+      provider: AlbumStaticProvider.of(album).copyWith(items: newItems),
     );
     // UpdateAlbumWithActualItems only persists when there are changes to
     // several properties, so we can't rely on it
-    newAlbum =
-        await UpdateAlbumWithActualItems(null)(account, newAlbum, newItems);
+    newAlbum = await UpdateAlbumWithActualItems(null)(
+      account,
+      newAlbum,
+      newItems,
+    );
     await UpdateAlbum(_c.albumRepo)(account, newAlbum);
 
     if (album.shares?.isNotEmpty == true) {
@@ -78,20 +98,25 @@ class AddFileToAlbum {
   }
 
   Future<void> _shareFiles(
-      Account account, Album album, List<AlbumFileItem> fileItems) async {
-    final albumShares = (album.shares!.map((e) => e.userId).toList()
-          ..add(album.albumFile!.ownerId ?? account.userId))
-        .where((element) => element != account.userId)
-        .toSet();
+    Account account,
+    Album album,
+    List<AlbumFileItem> fileItems,
+  ) async {
+    final albumShares =
+        (album.shares!.map((e) => e.userId).toList()
+              ..add(album.albumFile!.ownerId ?? account.userId))
+            .where((element) => element != account.userId)
+            .toSet();
     if (albumShares.isEmpty) {
       return;
     }
     for (final i in fileItems) {
       try {
-        final fileShares = (await ListShare(_c)(account, i.file))
-            .where((element) => element.shareType == ShareType.user)
-            .map((e) => e.shareWith!)
-            .toSet();
+        final fileShares =
+            (await ListShare(_c)(account, i.file))
+                .where((element) => element.shareType == ShareType.user)
+                .map((e) => e.shareWith!)
+                .toSet();
         final diffShares = albumShares.difference(fileShares);
         for (final s in diffShares) {
           if (s == i.ownerId) {
@@ -102,16 +127,18 @@ class AddFileToAlbum {
             await CreateUserShare(_c.shareRepo)(account, i.file, s.raw);
           } catch (e, stackTrace) {
             _log.shout(
-                "[_shareFiles] Failed while CreateUserShare: ${logFilename(i.file.fdPath)}",
-                e,
-                stackTrace);
+              "[_shareFiles] Failed while CreateUserShare: ${logFilename(i.file.fdPath)}",
+              e,
+              stackTrace,
+            );
           }
         }
       } catch (e, stackTrace) {
         _log.shout(
-            "[_shareFiles] Failed while listing shares: ${logFilename(i.file.fdPath)}",
-            e,
-            stackTrace);
+          "[_shareFiles] Failed while listing shares: ${logFilename(i.file.fdPath)}",
+          e,
+          stackTrace,
+        );
       }
     }
   }

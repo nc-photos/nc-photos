@@ -36,21 +36,22 @@ class ExportCollectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => _Bloc(
-        account: account,
-        collectionsController:
-            context.read<AccountController>().collectionsController,
-        collection: collection,
-        items: items,
-        supportedProviders: {
-          _ProviderOption.appAlbum,
-          if (context
-              .read<AccountController>()
-              .serverController
-              .isSupported(ServerFeature.ncAlbum))
-            _ProviderOption.ncAlbum,
-        },
-      ),
+      create:
+          (context) => _Bloc(
+            account: account,
+            collectionsController:
+                context.read<AccountController>().collectionsController,
+            collection: collection,
+            items: items,
+            supportedProviders: {
+              _ProviderOption.appAlbum,
+              if (context
+                  .read<AccountController>()
+                  .serverController
+                  .isSupported(ServerFeature.ncAlbum))
+                _ProviderOption.ncAlbum,
+            },
+          ),
       child: const _WrappedExportCollectionDialog(),
     );
   }
@@ -75,8 +76,9 @@ class _WrappedExportCollectionDialogState
     return MultiBlocListener(
       listeners: [
         BlocListener<_Bloc, _State>(
-          listenWhen: (previous, current) =>
-              previous.result != current.result && current.result != null,
+          listenWhen:
+              (previous, current) =>
+                  previous.result != current.result && current.result != null,
           listener: _onResult,
         ),
         BlocListener<_Bloc, _State>(
@@ -93,8 +95,8 @@ class _WrappedExportCollectionDialogState
         ),
       ],
       child: BlocBuilder<_Bloc, _State>(
-        buildWhen: (previous, current) =>
-            previous.isExporting != current.isExporting,
+        buildWhen:
+            (previous, current) => previous.isExporting != current.isExporting,
         builder: (context, state) {
           if (state.isExporting) {
             return ProcessingDialog(
@@ -153,9 +155,7 @@ class _NameTextField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      decoration: InputDecoration(
-        hintText: L10n.global().nameInputHint,
-      ),
+      decoration: InputDecoration(hintText: L10n.global().nameInputHint),
       initialValue: context.read<_Bloc>().state.formValue.name,
       validator: (value) {
         if (value!.isEmpty) {
@@ -176,24 +176,29 @@ class _ProviderDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_Bloc, _State>(
-      buildWhen: (previous, current) =>
-          previous.formValue.provider != current.formValue.provider,
-      builder: (context, state) => DropdownButtonHideUnderline(
-        child: DropdownButtonFormField<_ProviderOption>(
-          value: state.formValue.provider,
-          items: context
-              .read<_Bloc>()
-              .supportedProviders
-              .map((e) => DropdownMenuItem<_ProviderOption>(
-                    value: e,
-                    child: Text(e.toValueString(context)),
-                  ))
-              .toList(),
-          onChanged: (value) {
-            context.read<_Bloc>().add(_SubmitProvider(value!));
-          },
-        ),
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.formValue.provider != current.formValue.provider,
+      builder:
+          (context, state) => DropdownButtonHideUnderline(
+            child: DropdownButtonFormField<_ProviderOption>(
+              value: state.formValue.provider,
+              items:
+                  context
+                      .read<_Bloc>()
+                      .supportedProviders
+                      .map(
+                        (e) => DropdownMenuItem<_ProviderOption>(
+                          value: e,
+                          child: Text(e.toValueString(context)),
+                        ),
+                      )
+                      .toList(),
+              onChanged: (value) {
+                context.read<_Bloc>().add(_SubmitProvider(value!));
+              },
+            ),
+          ),
     );
   }
 }
@@ -204,12 +209,14 @@ class _ProviderDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_Bloc, _State>(
-      buildWhen: (previous, current) =>
-          previous.formValue.provider != current.formValue.provider,
-      builder: (context, state) => Text(
-        state.formValue.provider.toDescription(context),
-        style: Theme.of(context).textTheme.bodyMedium,
-      ),
+      buildWhen:
+          (previous, current) =>
+              previous.formValue.provider != current.formValue.provider,
+      builder:
+          (context, state) => Text(
+            state.formValue.provider.toDescription(context),
+            style: Theme.of(context).textTheme.bodyMedium,
+          ),
     );
   }
 }

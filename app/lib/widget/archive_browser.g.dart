@@ -13,40 +13,43 @@ part of 'archive_browser.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call(
-      {List<FileDescriptor>? files,
-      bool? isLoading,
-      List<_Item>? transformedItems,
-      Set<_Item>? selectedItems,
-      Set<_VisibleItem>? visibleItems,
-      int? zoom,
-      double? scale,
-      ExceptionEvent? error});
+  _State call({
+    List<FileDescriptor>? files,
+    bool? isLoading,
+    List<_Item>? transformedItems,
+    Set<_Item>? selectedItems,
+    Set<_VisibleItem>? visibleItems,
+    int? zoom,
+    double? scale,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _$_StateCopyWithWorkerImpl(this.that);
 
   @override
-  _State call(
-      {dynamic files,
-      dynamic isLoading,
-      dynamic transformedItems,
-      dynamic selectedItems,
-      dynamic visibleItems,
-      dynamic zoom,
-      dynamic scale = copyWithNull,
-      dynamic error = copyWithNull}) {
+  _State call({
+    dynamic files,
+    dynamic isLoading,
+    dynamic transformedItems,
+    dynamic selectedItems,
+    dynamic visibleItems,
+    dynamic zoom,
+    dynamic scale = copyWithNull,
+    dynamic error = copyWithNull,
+  }) {
     return _State(
-        files: files as List<FileDescriptor>? ?? that.files,
-        isLoading: isLoading as bool? ?? that.isLoading,
-        transformedItems:
-            transformedItems as List<_Item>? ?? that.transformedItems,
-        selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
-        visibleItems: visibleItems as Set<_VisibleItem>? ?? that.visibleItems,
-        zoom: zoom as int? ?? that.zoom,
-        scale: scale == copyWithNull ? that.scale : scale as double?,
-        error: error == copyWithNull ? that.error : error as ExceptionEvent?);
+      files: files as List<FileDescriptor>? ?? that.files,
+      isLoading: isLoading as bool? ?? that.isLoading,
+      transformedItems:
+          transformedItems as List<_Item>? ?? that.transformedItems,
+      selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
+      visibleItems: visibleItems as Set<_VisibleItem>? ?? that.visibleItems,
+      zoom: zoom as int? ?? that.zoom,
+      scale: scale == copyWithNull ? that.scale : scale as double?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+    );
   }
 
   final _State that;
@@ -65,8 +68,9 @@ extension _$_WrappedArchiveBrowserStateNpLog on _WrappedArchiveBrowserState {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log =
-      Logger("widget.archive_browser._WrappedArchiveBrowserState");
+  static final log = Logger(
+    "widget.archive_browser._WrappedArchiveBrowserState",
+  );
 }
 
 extension _$__NpLog on __ {

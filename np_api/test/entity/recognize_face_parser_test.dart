@@ -29,12 +29,9 @@ Future<void> _empty() async {
 </d:multistatus>
 """;
   final results = await RecognizeFaceParser().parse(xml);
-  expect(
-    results,
-    const [
-      RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/"),
-    ],
-  );
+  expect(results, const [
+    RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/"),
+  ]);
 }
 
 Future<void> _unnamed() async {
@@ -66,13 +63,10 @@ Future<void> _unnamed() async {
 </d:multistatus>
 """;
   final results = await RecognizeFaceParser().parse(xml);
-  expect(
-    results,
-    const [
-      RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/"),
-      RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/10/"),
-    ],
-  );
+  expect(results, const [
+    RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/"),
+    RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/10/"),
+  ]);
 }
 
 Future<void> _named() async {
@@ -104,11 +98,8 @@ Future<void> _named() async {
 </d:multistatus>
 """;
   final results = await RecognizeFaceParser().parse(xml);
-  expect(
-    results,
-    const [
-      RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/"),
-      RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/lovely face/"),
-    ],
-  );
+  expect(results, const [
+    RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/"),
+    RecognizeFace(href: "/remote.php/dav/recognize/admin/faces/lovely face/"),
+  ]);
 }

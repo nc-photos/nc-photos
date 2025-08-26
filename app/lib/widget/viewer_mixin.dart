@@ -22,9 +22,7 @@ mixin ViewerControllersMixin<T extends StatefulWidget>
       if (getRawPlatform().isMobile) _ViewerBrightnessController(),
       _ViewerSystemUiResetter(),
       if (getRawPlatform().isMobile && Pref().isViewerForceRotationOr(false))
-        _ViewerOrientationController(
-          onChanged: _onOrientationChanged,
-        ),
+        _ViewerOrientationController(onChanged: _onOrientationChanged),
     ];
   }
 
@@ -78,26 +76,26 @@ class _ViewerSystemUiResetter implements Disposable {
 
   @override
   dispose(State state) {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual,
-        overlays: SystemUiOverlay.values);
+    SystemChrome.setEnabledSystemUIMode(
+      SystemUiMode.manual,
+      overlays: SystemUiOverlay.values,
+    );
   }
 }
 
 class _ViewerOrientationController implements Disposable {
-  _ViewerOrientationController({
-    this.onChanged,
-  });
+  _ViewerOrientationController({this.onChanged});
 
   @override
   init(State state) {
     _subscription = NativeDeviceOrientationCommunicator()
         .onOrientationChanged(useSensor: true)
         .listen((orientation) {
-      _triggerThrottler.trigger(
-        data: orientation,
-        maxResponceTime: const Duration(seconds: 1),
-      );
-    });
+          _triggerThrottler.trigger(
+            data: orientation,
+            maxResponceTime: const Duration(seconds: 1),
+          );
+        });
   }
 
   @override

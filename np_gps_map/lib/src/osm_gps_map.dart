@@ -4,11 +4,7 @@ import 'package:latlong2/latlong.dart';
 import 'package:np_gps_map/src/type.dart';
 
 class OsmGpsMap extends StatelessWidget {
-  const OsmGpsMap({
-    super.key,
-    required this.location,
-    this.onTap,
-  });
+  const OsmGpsMap({super.key, required this.location, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -43,7 +39,8 @@ class OsmGpsMap extends StatelessWidget {
                   alignment: Alignment.topCenter,
                   child: const Image(
                     image: AssetImage(
-                        "packages/np_gps_map/assets/gps_map_pin.png"),
+                      "packages/np_gps_map/assets/gps_map_pin.png",
+                    ),
                   ),
                 ),
               ],
