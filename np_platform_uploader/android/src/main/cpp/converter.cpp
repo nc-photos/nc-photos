@@ -6,12 +6,16 @@
 #include <jni.h>
 #include <memory>
 #include <string>
+#include <sys/stat.h>
+#include <unistd.h>
 #include <vector>
 
 #include "converter.h"
+#include "copy_metadata.h"
 #include "log.h"
 
 using namespace std;
+using namespace np_uploader;
 
 #define REQUIRES_API(x)                                                        \
   __attribute__((__availability__(android, introduced = x)))
@@ -52,8 +56,10 @@ bool convertToJpg(const std::unique_ptr<Image> &srcBmp,
                   const std::string &dstPath, const int quality)
     REQUIRES_API(30);
 
-std::unique_ptr<Image> readFd(const int fd, const double downsizeMp)
-    REQUIRES_API(30);
+std::vector<uint8_t> readFd(const int fd);
+
+std::unique_ptr<Image> readImage(const std::vector<uint8_t> &buf,
+                                 const double downsizeMp) REQUIRES_API(30);
 
 bool compressWrite(void *userContext, const void *data, size_t size);
 
@@ -91,7 +97,12 @@ int convert(const int srcFd, const string &dstPath,
             const ConvertTargetFormat format, const int quality,
             const double downsizeMp) {
   // read file
-  auto srcBmp = readFd(srcFd, downsizeMp);
+  const auto srcBuf = readFd(srcFd);
+  if (srcBuf.empty()) {
+    LOGE(TAG, "[convert] Failed to read the source file");
+    return READ_FAILURE;
+  }
+  const auto srcBmp = readImage(srcBuf, downsizeMp);
   if (!srcBmp) {
     LOGE(TAG, "[convert] Failed to read the source file");
     return READ_FAILURE;
@@ -99,11 +110,16 @@ int convert(const int srcFd, const string &dstPath,
 
   try {
     if (format == ConvertTargetFormat::JPEG) {
-      return convertToJpg(srcBmp, dstPath, quality) ? OK : WRITE_FAILURE;
+      if (!convertToJpg(srcBmp, dstPath, quality)) {
+        return WRITE_FAILURE;
+      }
+      copyMetadata(srcBuf.data(), srcBuf.size(), dstPath);
+      return OK;
     }
     return WRITE_FAILURE;
   } catch (const exception &e) {
-    LOGE(TAG, "[convert] Failed to convert image: %s", dstPath.c_str());
+    LOGE(TAG, "[convert] Failed to convert image (%s): %s", dstPath.c_str(),
+         e.what());
     return WRITE_FAILURE;
   }
 }
@@ -130,15 +146,34 @@ bool convertToJpg(const unique_ptr<Image> &srcBmp, const string &dstPath,
   }
 }
 
-unique_ptr<Image> readFd(const int fd, const double downsizeMp) {
+vector<uint8_t> readFd(const int fd) {
   if (fd < 0) {
     LOGE(TAG, "[readFd] Invalid fd: %d", fd);
-    return nullptr;
+    return {};
   }
+
+  struct stat s;
+  auto result = fstat(fd, &s);
+  if (result < 0) {
+    LOGE(TAG, "[readFd] Failed while fstat: %d", result);
+    return {};
+  }
+  const auto fileSize = s.st_size;
+  vector<uint8_t> buf(fileSize);
+  result = read(fd, buf.data(), fileSize);
+  if (result < 0) {
+    LOGE(TAG, "[readFd] Failed while read: %d", result);
+    return {};
+  }
+  return buf;
+}
+
+unique_ptr<Image> readImage(const vector<uint8_t> &buf,
+                            const double downsizeMp) {
   AImageDecoder *decoder;
-  int result = AImageDecoder_createFromFd(fd, &decoder);
+  int result = AImageDecoder_createFromBuffer(buf.data(), buf.size(), &decoder);
   if (result != ANDROID_IMAGE_DECODER_SUCCESS) {
-    LOGE(TAG, "[readFd] Failed to create decoder: %d", result);
+    LOGE(TAG, "[readImg] Failed to create decoder: %d", result);
     return nullptr;
   }
 
@@ -159,11 +194,11 @@ unique_ptr<Image> readFd(const int fd, const double downsizeMp) {
         const auto newWidth = (int)(width * scale);
         const auto newHeight = (int)(height * scale);
         LOGI(TAG,
-             "[readFd] Resizing image to fit %.1fMP envelop: %d*%d -> %d*%d",
+             "[readImg] Resizing image to fit %.1fMP envelop: %d*%d -> %d*%d",
              downsizeMp, width, height, newWidth, newHeight);
         result = AImageDecoder_setTargetSize(decoder, newWidth, newHeight);
         if (result != ANDROID_IMAGE_DECODER_SUCCESS) {
-          LOGE(TAG, "[readFd] Failed to set target size: %d", result);
+          LOGE(TAG, "[readImg] Failed to set target size: %d", result);
         } else {
           dstHeight = newHeight;
           dstWidth = newWidth;
@@ -178,7 +213,7 @@ unique_ptr<Image> readFd(const int fd, const double downsizeMp) {
     AImageDecoder_delete(decoder);
     decoder = nullptr;
     if (result != ANDROID_IMAGE_DECODER_SUCCESS) {
-      LOGE(TAG, "[readFd] Failed to decode image: %d", result);
+      LOGE(TAG, "[readImg] Failed to decode image: %d", result);
       return nullptr;
     }
 
@@ -188,7 +223,7 @@ unique_ptr<Image> readFd(const int fd, const double downsizeMp) {
     if (decoder) {
       AImageDecoder_delete(decoder);
     }
-    LOGE(TAG, "[readFd] Exception: %s", e.what());
+    LOGE(TAG, "[readImg] Exception: %s", e.what());
     return nullptr;
   }
 }
