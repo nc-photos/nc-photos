@@ -22,6 +22,9 @@ class UploaderChannelHandler(private val context: Context) :
 						call.argument("contentUris")!!,
 						call.argument("endPoints")!!,
 						call.argument("headers")!!,
+						call.argument("convertFormat"),
+						call.argument("convertQuality"),
+						call.argument("convertDownsizeMp"),
 						result
 					)
 				} catch (e: Throwable) {
@@ -35,13 +38,17 @@ class UploaderChannelHandler(private val context: Context) :
 
 	private fun asyncUpload(
 		contentUris: List<String>, endPoints: List<String>,
-		headers: Map<String, String>, result: MethodChannel.Result
+		headers: Map<String, String>, convertFormat: Int?, convertQuality: Int?,
+		convertDownsizeMp: Double?, result: MethodChannel.Result
 	) {
 		assert(contentUris.size == endPoints.size)
 		val intent = Intent(context, UploadService::class.java).apply {
 			putExtra(UploadService.EXTRA_CONTENT_URIS, ArrayList(contentUris))
 			putExtra(UploadService.EXTRA_END_POINTS, ArrayList(endPoints))
 			putExtra(UploadService.EXTRA_HEADERS, HashMap(headers))
+			putExtra(UploadService.EXTRA_CONVERT_FORMAT, convertFormat)
+			putExtra(UploadService.EXTRA_CONVERT_QUALITY, convertQuality)
+			putExtra(UploadService.EXTRA_CONVERT_DOWNSIZE_MP, convertDownsizeMp)
 		}
 		ContextCompat.startForegroundService(context, intent)
 		result.success(null)

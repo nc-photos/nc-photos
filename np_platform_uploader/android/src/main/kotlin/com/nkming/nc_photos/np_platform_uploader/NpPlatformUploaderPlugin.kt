@@ -4,6 +4,12 @@ import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.plugin.common.MethodChannel
 
 class NpPlatformUploaderPlugin : FlutterPlugin {
+	companion object {
+		init {
+			System.loadLibrary("np_platform_uploader")
+		}
+	}
+
 	override fun onAttachedToEngine(
 		flutterPluginBinding: FlutterPlugin.FlutterPluginBinding
 	) {

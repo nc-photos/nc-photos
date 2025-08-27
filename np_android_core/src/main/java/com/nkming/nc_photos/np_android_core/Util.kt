@@ -40,5 +40,7 @@ inline fun <T> measureTime(tag: String, message: String, block: () -> T): T {
 
 fun Bundle.getIntOrNull(key: String) = get(key) as? Int
 
+fun Bundle.getDoubleOrNull(key: String) = get(key) as? Double
+
 @Suppress("Unchecked_cast")
 fun <T> Serializable.asType() = this as T
