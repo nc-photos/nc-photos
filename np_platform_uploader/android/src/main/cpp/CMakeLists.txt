@@ -32,6 +32,7 @@ add_library( # Sets the name of the library.
              # Provides a relative path to your source file(s).
              converter.cpp
              copy_metadata.cpp
+             convert_jpg.cpp
              )
 set_target_properties( np_platform_uploader PROPERTIES COMPILE_OPTIONS -fopenmp )
 

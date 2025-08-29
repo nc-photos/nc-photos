@@ -2,7 +2,6 @@
 #include <cmath>
 #include <cstring>
 #include <exception>
-#include <fstream>
 #include <jni.h>
 #include <memory>
 #include <string>
@@ -10,15 +9,15 @@
 #include <unistd.h>
 #include <vector>
 
+#include "convert_jpg.h"
 #include "converter.h"
 #include "copy_metadata.h"
+#include "image.h"
 #include "log.h"
+#include "util.h"
 
 using namespace std;
 using namespace np_uploader;
-
-#define REQUIRES_API(x)                                                        \
-  __attribute__((__availability__(android, introduced = x)))
 
 namespace {
 
@@ -33,35 +32,14 @@ enum Result {
   UNKNOWN_FAILURE,
 };
 
-struct Image {
-  Image(const int32_t width, const int32_t height, const int32_t format,
-        const size_t stride, const int32_t dataSpace,
-        std::vector<uint8_t> &&pixels)
-      : width(width), height(height), format(format), stride(stride),
-        dataSpace(dataSpace), pixels(std::move(pixels)) {}
-
-  int32_t width;
-  int32_t height;
-  int32_t format;
-  size_t stride;
-  int32_t dataSpace;
-  std::vector<uint8_t> pixels;
-};
-
 int convert(const int srcFd, const std::string &dstPath,
             const ConvertTargetFormat format, const int quality,
             const double downsizeMp) REQUIRES_API(30);
-
-bool convertToJpg(const std::unique_ptr<Image> &srcBmp,
-                  const std::string &dstPath, const int quality)
-    REQUIRES_API(30);
 
 std::vector<uint8_t> readFd(const int fd);
 
 std::unique_ptr<Image> readImage(const std::vector<uint8_t> &buf,
                                  const double downsizeMp) REQUIRES_API(30);
-
-bool compressWrite(void *userContext, const void *data, size_t size);
 
 constexpr const char *TAG = "FormatConverterNative";
 
@@ -121,28 +99,6 @@ int convert(const int srcFd, const string &dstPath,
     LOGE(TAG, "[convert] Failed to convert image (%s): %s", dstPath.c_str(),
          e.what());
     return WRITE_FAILURE;
-  }
-}
-
-bool convertToJpg(const unique_ptr<Image> &srcBmp, const string &dstPath,
-                  const int quality) {
-  LOGI(TAG, "[convertToJpg] Converting to: %s", dstPath.c_str());
-  ofstream ofs(dstPath, ios_base::binary);
-
-  AndroidBitmapInfo info;
-  memset(&info, 0, sizeof(info));
-  info.width = srcBmp->width;
-  info.height = srcBmp->height;
-  info.format = srcBmp->format;
-  info.stride = srcBmp->stride;
-  auto result = AndroidBitmap_compress(
-      &info, srcBmp->dataSpace, srcBmp->pixels.data(),
-      ANDROID_BITMAP_COMPRESS_FORMAT_JPEG, quality, &ofs, compressWrite);
-  if (result != ANDROID_BITMAP_RESULT_SUCCESS) {
-    LOGE(TAG, "[convertToJpg] Failed to compress image: %d", result);
-    return false;
-  } else {
-    return true;
   }
 }
 
@@ -230,12 +186,6 @@ unique_ptr<Image> readImage(const vector<uint8_t> &buf,
     LOGE(TAG, "[readImg] Exception: %s", e.what());
     return nullptr;
   }
-}
-
-bool compressWrite(void *userContext, const void *data, size_t size) {
-  auto ofs = (ofstream *)userContext;
-  ofs->write((const char *)data, size);
-  return ofs->good();
 }
 
 } // namespace

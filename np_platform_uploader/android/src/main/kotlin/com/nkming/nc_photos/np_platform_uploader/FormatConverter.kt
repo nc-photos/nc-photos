@@ -6,7 +6,7 @@ import com.nkming.nc_photos.np_android_core.logE
 import java.io.File
 
 class FormatConverter(
-	val contentResolver: ContentResolver
+	private val contentResolver: ContentResolver
 ) {
 	companion object {
 		private const val TAG = "FormatConverter"
