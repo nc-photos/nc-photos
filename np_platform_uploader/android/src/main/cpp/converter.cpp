@@ -181,9 +181,13 @@ unique_ptr<Image> readImage(const vector<uint8_t> &buf,
     const auto info = AImageDecoder_getHeaderInfo(decoder);
     const auto width = AImageDecoderHeaderInfo_getWidth(info);
     const auto height = AImageDecoderHeaderInfo_getHeight(info);
-    const auto format =
-        (AndroidBitmapFormat)AImageDecoderHeaderInfo_getAndroidBitmapFormat(
-            info);
+    const auto format = AndroidBitmapFormat::ANDROID_BITMAP_FORMAT_RGBA_8888;
+    result = AImageDecoder_setAndroidBitmapFormat(
+        decoder, AndroidBitmapFormat::ANDROID_BITMAP_FORMAT_RGBA_8888);
+    if (result != ANDROID_IMAGE_DECODER_SUCCESS) {
+      LOGE(TAG, "[readImg] Failed to set bitmap format: %d", result);
+      return nullptr;
+    }
     const auto dataSpace = AImageDecoderHeaderInfo_getDataSpace(info);
     auto dstWidth = width;
     auto dstHeight = height;
