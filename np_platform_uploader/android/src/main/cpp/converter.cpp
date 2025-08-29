@@ -10,6 +10,7 @@
 #include <vector>
 
 #include "convert_jpg.h"
+#include "convert_jxl.h"
 #include "converter.h"
 #include "copy_metadata.h"
 #include "image.h"
@@ -23,6 +24,7 @@ namespace {
 
 enum struct ConvertTargetFormat {
   JPEG = 0,
+  JXL,
 };
 
 enum Result {
@@ -92,6 +94,12 @@ int convert(const int srcFd, const string &dstPath,
         return WRITE_FAILURE;
       }
       copyMetadata(srcBuf.data(), srcBuf.size(), dstPath);
+      return OK;
+    } else if (format == ConvertTargetFormat::JXL) {
+      if (!convertToJxl(srcBmp, srcBuf.data(), srcBuf.size(), dstPath,
+                        quality)) {
+        return WRITE_FAILURE;
+      }
       return OK;
     }
     return WRITE_FAILURE;

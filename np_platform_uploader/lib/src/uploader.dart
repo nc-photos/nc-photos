@@ -11,7 +11,9 @@ abstract class AndroidUploadable implements Uploadable {
 }
 
 enum ConvertFormat {
-  jpeg(0);
+  jpeg(0),
+  jxl(1),
+  ;
 
   const ConvertFormat(this.value);
 

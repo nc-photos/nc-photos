@@ -14,6 +14,7 @@ class FormatConverter(
 
 	enum class Format(val value: Int) {
 		JPEG(0),
+		JXL(1),
 	}
 
 	/**

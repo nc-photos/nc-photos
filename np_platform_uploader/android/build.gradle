@@ -65,5 +65,7 @@ android {
 
     dependencies {
         implementation 'com.nkming.nc_photos.np_android_core:np_android_core'
+        // we use the libjxl binaries from this package
+        implementation 'io.github.awxkee:jxl-coder:2.3.0'
     }
 }
