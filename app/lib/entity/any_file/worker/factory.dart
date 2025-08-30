@@ -6,6 +6,7 @@ import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/local.dart';
 import 'package:nc_photos/entity/any_file/worker/nextcloud.dart';
+import 'package:np_platform_uploader/np_platform_uploader.dart';
 
 abstract interface class AnyFileWorkerFactory {
   static AnyFileCapabilityWorker capability(AnyFile file) {
@@ -147,5 +148,5 @@ abstract interface class AnyFileSetAsWorker {
 }
 
 abstract interface class AnyFileUploadWorker {
-  void upload(String relativePath);
+  void upload(String relativePath, {ConvertConfig? convertConfig});
 }

@@ -7,6 +7,7 @@ import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/mobile/share.dart';
 import 'package:nc_photos/use_case/local_file/upload_local_file.dart';
+import 'package:np_platform_uploader/np_platform_uploader.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 
 class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
@@ -109,9 +110,13 @@ class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  void upload(String relativePath) {
+  void upload(String relativePath, {ConvertConfig? convertConfig}) {
     final f = _provider.file;
-    UploadLocalFile(account: account)(f, relativePath: relativePath);
+    UploadLocalFile(account: account)(
+      f,
+      relativePath: relativePath,
+      convertConfig: convertConfig,
+    );
   }
 
   final Account account;

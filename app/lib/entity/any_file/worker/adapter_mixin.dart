@@ -1,4 +1,5 @@
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
+import 'package:np_platform_uploader/np_platform_uploader.dart';
 
 mixin AnyFileWorkerNoFavoriteTag implements AnyFileFavoriteWorker {
   @override
@@ -40,7 +41,7 @@ mixin AnyFileWorkerNoDeleteTag implements AnyFileDeleteWorker {
 
 mixin AnyFileWorkerNoUploadTag implements AnyFileUploadWorker {
   @override
-  void upload(String relativePath) {
+  void upload(String relativePath, {ConvertConfig? convertConfig}) {
     throw UnsupportedError("Operation not supported");
   }
 }
