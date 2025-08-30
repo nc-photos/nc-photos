@@ -23,7 +23,7 @@ Screenshots contain photos by:
 - and others
 
 ## Features
-- JPEG XL support
+- [JPEG XL support](https://github.com/nc-photos/nc-photos/wiki/JPEG-XL-support)
 - Client-side EXIF extraction (for formats not supported by the server)
 - [More flexible albums](https://github.com/nc-photos/nc-photos/wiki/Differences-between-collections#client-side-album)
 - Reverse geocoding
