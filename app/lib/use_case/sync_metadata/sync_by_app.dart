@@ -62,9 +62,8 @@ class _SyncByApp {
         }
         _log.fine("[syncOne] Updating metadata for ${file.path}");
         final binary = await GetFileBinary(fileRepo)(account, file);
-        final metadata = (await LoadMetadata().loadRemote(
-          account,
-          file,
+        final metadata = (await LoadMetadata().loadAnyfile(
+          file.toAnyFile(),
           binary,
         )).copyWith(fileEtag: file.etag);
         metadataUpdate = OrNull(metadata);
