@@ -221,11 +221,16 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 			}
 			var converted: File? = null
 			try {
-				converted = converter?.convert(
-					Uri.parse(uri)!!, getTempDir(this),
-					job.convertConfig.format, job.convertConfig.quality,
-					job.convertConfig.downsizeMp
-				)
+				if (converter != null) {
+					converted = converter.convert(
+						Uri.parse(uri)!!, getTempDir(this),
+						job.convertConfig.format, job.convertConfig.quality,
+						job.convertConfig.downsizeMp
+					)
+					if (converted == null) {
+						continue;
+					}
+				}
 				(URL(endPoint).openConnection() as HttpURLConnection).apply {
 					requestMethod = "PUT"
 					instanceFollowRedirects = true
