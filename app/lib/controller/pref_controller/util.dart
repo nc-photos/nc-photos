@@ -214,6 +214,26 @@ extension on Pref {
   List<String>? getLocalDirs() => provider.getStringList(PrefKey.localDirs);
   Future<bool> setLocalDirs(List<String> value) =>
       provider.setStringList(PrefKey.localDirs, value);
+
+  ConvertFormat? getUploadConvertFormat() =>
+      provider.getInt(PrefKey.uploadConvertFormat)?.let(ConvertFormat.tryParse);
+  Future<bool> setUploadConvertFormat(ConvertFormat value) =>
+      provider.setInt(PrefKey.uploadConvertFormat, value.value);
+
+  int? getUploadConvertQuality() =>
+      provider.getInt(PrefKey.uploadConvertQuality);
+  Future<bool> setUploadConvertQuality(int value) =>
+      provider.setInt(PrefKey.uploadConvertQuality, value);
+
+  double? getUploadConvertDownsizeMp() =>
+      provider.getDouble(PrefKey.uploadConvertDownsizeMp);
+  Future<bool> setUploadConvertDownsizeMp(double? value) {
+    if (value == null) {
+      return provider.remove(PrefKey.uploadConvertDownsizeMp);
+    } else {
+      return provider.setDouble(PrefKey.uploadConvertDownsizeMp, value);
+    }
+  }
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

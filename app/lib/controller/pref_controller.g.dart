@@ -291,6 +291,31 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<List<String>> get localDirsNew => localDirs.skip(1);
   Stream<List<String>> get localDirsChange => localDirs.distinct().skip(1);
   List<String> get localDirsValue => _localDirsController.value;
+  // _uploadConvertFormatController
+  ValueStream<ConvertFormat> get uploadConvertFormat =>
+      _uploadConvertFormatController.stream;
+  Stream<ConvertFormat> get uploadConvertFormatNew =>
+      uploadConvertFormat.skip(1);
+  Stream<ConvertFormat> get uploadConvertFormatChange =>
+      uploadConvertFormat.distinct().skip(1);
+  ConvertFormat get uploadConvertFormatValue =>
+      _uploadConvertFormatController.value;
+  // _uploadConvertQualityController
+  ValueStream<int> get uploadConvertQuality =>
+      _uploadConvertQualityController.stream;
+  Stream<int> get uploadConvertQualityNew => uploadConvertQuality.skip(1);
+  Stream<int> get uploadConvertQualityChange =>
+      uploadConvertQuality.distinct().skip(1);
+  int get uploadConvertQualityValue => _uploadConvertQualityController.value;
+  // _uploadConvertDownsizeMpController
+  ValueStream<double?> get uploadConvertDownsizeMp =>
+      _uploadConvertDownsizeMpController.stream;
+  Stream<double?> get uploadConvertDownsizeMpNew =>
+      uploadConvertDownsizeMp.skip(1);
+  Stream<double?> get uploadConvertDownsizeMpChange =>
+      uploadConvertDownsizeMp.distinct().skip(1);
+  double? get uploadConvertDownsizeMpValue =>
+      _uploadConvertDownsizeMpController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

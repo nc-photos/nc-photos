@@ -33,6 +33,7 @@ import 'package:nc_photos/widget/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker.dart';
 import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/connect2/connect.dart';
+import 'package:nc_photos/widget/convert_settings/convert_settings.dart';
 import 'package:nc_photos/widget/enhanced_photo_browser.dart';
 import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/image_editor.dart';
@@ -225,6 +226,7 @@ class _WrappedAppState extends State<_WrappedApp>
     ArchiveBrowser.routeName: ArchiveBrowser.buildRoute,
     TrustedCertManager.routeName: TrustedCertManager.buildRoute,
     MapBrowser.routeName: MapBrowser.buildRoute,
+    ConvertSettings.routeName: ConvertSettings.buildRoute,
   };
 
   Route<dynamic>? _onGenerateRoute(RouteSettings settings) {

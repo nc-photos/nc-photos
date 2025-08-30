@@ -25,6 +25,12 @@ class PrefUniversalStorageProvider extends PrefProvider {
   Future<bool> setInt(PrefKeyInterface key, int value) => _set(key, value);
 
   @override
+  double? getDouble(PrefKeyInterface key) => _get<double>(key);
+  @override
+  Future<bool> setDouble(PrefKeyInterface key, double value) =>
+      _set(key, value);
+
+  @override
   String? getString(PrefKeyInterface key) => _get<String>(key);
   @override
   Future<bool> setString(PrefKeyInterface key, String value) =>

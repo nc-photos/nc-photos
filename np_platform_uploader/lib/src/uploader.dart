@@ -12,10 +12,24 @@ abstract class AndroidUploadable implements Uploadable {
 
 enum ConvertFormat {
   jpeg(0),
-  jxl(1),
-  ;
+  jxl(1);
 
   const ConvertFormat(this.value);
+
+  static ConvertFormat? tryParse(int value) {
+    try {
+      return ConvertFormat.values[value];
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String toDisplayString() {
+    return switch (this) {
+      ConvertFormat.jpeg => "JPEG",
+      ConvertFormat.jxl => "JPEG-XL",
+    };
+  }
 
   final int value;
 }

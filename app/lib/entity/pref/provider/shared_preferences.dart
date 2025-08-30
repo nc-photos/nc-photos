@@ -33,6 +33,13 @@ class PrefSharedPreferencesProvider extends PrefProvider {
       _pref.setInt(key.toStringKey(), value);
 
   @override
+  double? getDouble(PrefKeyInterface key) => _pref.getDouble(key.toStringKey());
+
+  @override
+  Future<bool> setDouble(PrefKeyInterface key, double value) =>
+      _pref.setDouble(key.toStringKey(), value);
+
+  @override
   String? getString(PrefKeyInterface key) => _pref.getString(key.toStringKey());
 
   @override

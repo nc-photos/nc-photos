@@ -19,6 +19,7 @@ import 'package:np_common/size.dart';
 import 'package:np_common/type.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_platform_uploader/np_platform_uploader.dart';
 import 'package:np_string/np_string.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -302,6 +303,26 @@ class PrefController {
     value: value,
   );
 
+  Future<void> setUploadConvertFormat(ConvertFormat value) => _set(
+    controller: _uploadConvertFormatController,
+    setter: (pref, value) => pref.setUploadConvertFormat(value),
+    value: value,
+  );
+
+  Future<void> setUploadConvertQuality(int value) => _set(
+    controller: _uploadConvertQualityController,
+    setter: (pref, value) => pref.setUploadConvertQuality(value),
+    value: value,
+  );
+
+  Future<void> setUploadConvertDownsizeMp(double? value) => _setOrRemove(
+    controller: _uploadConvertDownsizeMpController,
+    setter: (pref, value) => pref.setUploadConvertDownsizeMp(value),
+    remover: (pref) => pref.setUploadConvertDownsizeMp(null),
+    value: value,
+    defaultValue: null,
+  );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -503,6 +524,18 @@ class PrefController {
   @npSubjectAccessor
   late final _localDirsController = BehaviorSubject.seeded(
     pref.getLocalDirs() ?? [],
+  );
+  @npSubjectAccessor
+  late final _uploadConvertFormatController = BehaviorSubject.seeded(
+    pref.getUploadConvertFormat() ?? ConvertFormat.jpeg,
+  );
+  @npSubjectAccessor
+  late final _uploadConvertQualityController = BehaviorSubject.seeded(
+    pref.getUploadConvertQuality() ?? 85,
+  );
+  @npSubjectAccessor
+  late final _uploadConvertDownsizeMpController = BehaviorSubject.seeded(
+    pref.getUploadConvertDownsizeMp(),
   );
 }
 

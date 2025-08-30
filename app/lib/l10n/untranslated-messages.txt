@@ -287,6 +287,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -314,6 +318,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -345,6 +353,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -524,6 +536,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -543,6 +559,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -615,6 +635,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -634,6 +658,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -711,6 +739,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -730,6 +762,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -1137,6 +1173,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1221,6 +1261,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -1311,6 +1355,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -1383,6 +1431,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -1402,7 +1454,18 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
+  ],
+
+  "tr": [
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling"
   ],
 
   "zh": [
@@ -1505,6 +1568,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ],
 
@@ -1700,6 +1767,10 @@
     "uploadFolderPickerTitle",
     "opOnlySupportRemoteFiles",
     "opOnlySupportLocalFiles",
+    "uploadBatchConvertSettings",
+    "uploadBatchConvertSettingsFormat",
+    "uploadBatchConvertSettingsQuality",
+    "uploadBatchConvertSettingsDownscaling",
     "errorServerNoCert"
   ]
 }

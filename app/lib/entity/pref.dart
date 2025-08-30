@@ -124,7 +124,10 @@ enum PrefKey implements PrefKeyInterface {
   viewerBottomAppBarButtons,
   homeCollectionsNavBarButtons,
   isFallbackClientExif,
-  localDirs;
+  localDirs,
+  uploadConvertFormat,
+  uploadConvertQuality,
+  uploadConvertDownsizeMp;
 
   @override
   String toStringKey() {
@@ -179,6 +182,9 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.homeCollectionsNavBarButtons => "homeCollectionsNavBarButtons",
       PrefKey.isFallbackClientExif => "isFallbackClientExif",
       PrefKey.localDirs => "localDirs",
+      PrefKey.uploadConvertFormat => "uploadConvertFormat",
+      PrefKey.uploadConvertQuality => "uploadConvertQuality",
+      PrefKey.uploadConvertDownsizeMp => "uploadConvertDownsizeMp",
     };
   }
 }
@@ -217,6 +223,9 @@ abstract class PrefProvider {
 
   int? getInt(PrefKeyInterface key);
   Future<bool> setInt(PrefKeyInterface key, int value);
+
+  double? getDouble(PrefKeyInterface key);
+  Future<bool> setDouble(PrefKeyInterface key, double value);
 
   String? getString(PrefKeyInterface key);
   Future<bool> setString(PrefKeyInterface key, String value);
