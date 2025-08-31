@@ -19,7 +19,6 @@ import 'package:nc_photos/language_util.dart' as language_util;
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/share_handler.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/throttler.dart';
 import 'package:nc_photos/widget/builder/photo_list_item_builder.dart';
 import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
@@ -148,12 +147,7 @@ class _HomeSearchState extends State<HomeSearch>
                           )
                         else
                           buildItemStreamList(maxCrossAxisExtent: _thumbSize),
-                        SliverToBoxAdapter(
-                          child: SizedBox(
-                            height:
-                                AppDimension.of(context).homeBottomAppBarHeight,
-                          ),
-                        ),
+                        const SliverSafeBottom(),
                       ],
                     ),
                     AnimatedVisibility(
@@ -195,7 +189,7 @@ class _HomeSearchState extends State<HomeSearch>
                         _buildItemQueue.isProcessing)
                       const LinearProgressIndicator(),
                     NavigationBarBlurFilter(
-                      height: AppDimension.of(context).homeBottomAppBarHeight,
+                      height: MediaQuery.paddingOf(context).bottom,
                     ),
                   ],
                 ),

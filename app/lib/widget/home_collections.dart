@@ -25,7 +25,6 @@ import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
-import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/widget/album_importer.dart';
 import 'package:nc_photos/widget/archive_browser.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
@@ -218,18 +217,14 @@ class _BodyView extends StatelessWidget {
                       ),
                     ),
               ),
-              SliverToBoxAdapter(
-                child: SizedBox(
-                  height: AppDimension.of(context).homeBottomAppBarHeight,
-                ),
-              ),
+              const SliverSafeBottom(),
             ],
           ),
         ),
         Align(
           alignment: Alignment.bottomCenter,
           child: NavigationBarBlurFilter(
-            height: AppDimension.of(context).homeBottomAppBarHeight,
+            height: MediaQuery.paddingOf(context).bottom,
           ),
         ),
       ],

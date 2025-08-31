@@ -133,7 +133,7 @@ class _MinimapPadding extends StatelessWidget {
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQuery.of(context).padding.top + kToolbarHeight,
-        bottom: AppDimension.of(context).homeBottomAppBarHeight,
+        bottom: MediaQuery.paddingOf(context).bottom,
       ),
       child: child,
     );
