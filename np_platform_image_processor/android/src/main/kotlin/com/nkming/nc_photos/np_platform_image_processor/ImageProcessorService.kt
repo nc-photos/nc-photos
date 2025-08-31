@@ -7,6 +7,7 @@ import android.app.Service
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.AsyncTask
@@ -17,6 +18,7 @@ import android.webkit.MimeTypeMap
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import androidx.core.net.toUri
 import androidx.exifinterface.media.ExifInterface
 import com.nkming.nc_photos.np_android_core.asType
@@ -90,7 +92,10 @@ internal class ImageProcessorService : Service() {
 	override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
 		if (!isForeground) {
 			try {
-				startForeground(NOTIFICATION_ID, buildNotification())
+				ServiceCompat.startForeground(
+					this, NOTIFICATION_ID, buildNotification(),
+					FOREGROUND_SERVICE_TYPE_DATA_SYNC
+				)
 				isForeground = true
 			} catch (e: Throwable) {
 				// ???

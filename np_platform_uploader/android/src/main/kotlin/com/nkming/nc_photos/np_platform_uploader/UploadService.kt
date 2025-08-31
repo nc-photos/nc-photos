@@ -6,12 +6,14 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.net.Uri
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.app.ServiceCompat
 import com.nkming.nc_photos.np_android_core.getPendingIntentFlagImmutable
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
@@ -75,8 +77,9 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		}
 		if (!isForeground) {
 			try {
-				startForeground(
-					K.FG_SERVICE_NOTIFICATION_ID, buildNotification()
+				ServiceCompat.startForeground(
+					this, K.FG_SERVICE_NOTIFICATION_ID, buildNotification(),
+					FOREGROUND_SERVICE_TYPE_DATA_SYNC
 				)
 				isForeground = true
 			} catch (e: Throwable) {
