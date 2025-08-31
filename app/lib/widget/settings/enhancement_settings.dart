@@ -113,6 +113,7 @@ class _WrappedEnhancementSettingsState
                 ),
               ]),
             ),
+            const SliverSafeBottom(),
           ],
         ),
       ),

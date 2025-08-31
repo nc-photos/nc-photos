@@ -30,6 +30,7 @@ import 'package:np_common/object_util.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_permission/np_platform_permission.dart';
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:np_ui/np_ui.dart';
 
 part 'enhanced_photo_browser.g.dart';
 
@@ -165,6 +166,7 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
               slivers: [
                 _buildAppBar(context),
                 buildItemStreamList(maxCrossAxisExtent: _thumbSize.toDouble()),
+                const SliverSafeBottom(),
               ],
             ),
           ),

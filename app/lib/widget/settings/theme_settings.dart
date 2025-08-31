@@ -118,6 +118,7 @@ class _WrappedThemeSettingsState extends State<_WrappedThemeSettings>
                 ),
               ]),
             ),
+            const SliverSafeBottom(),
           ],
         ),
       ),

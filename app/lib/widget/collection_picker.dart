@@ -22,6 +22,7 @@ import 'package:nc_photos/widget/app_bar_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/collection_grid_item.dart';
 import 'package:nc_photos/widget/new_collection_dialog.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
 part 'collection_picker.g.dart';
@@ -128,6 +129,7 @@ class _WrappedCollectionPickerState extends State<_WrappedCollectionPicker> {
                     ),
                   ),
             ),
+            const SliverSafeBottom(),
           ],
         ),
       ),

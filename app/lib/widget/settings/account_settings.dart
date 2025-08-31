@@ -247,6 +247,7 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
                         ),
                       ]),
                     ),
+                    const SliverSafeBottom(),
                   ],
                 ),
               ),

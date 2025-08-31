@@ -28,6 +28,7 @@ import 'package:nc_photos/widget/settings/settings_list_caption.dart';
 import 'package:nc_photos/widget/settings/theme_settings.dart';
 import 'package:nc_photos/widget/settings/viewer_settings.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 
 part 'settings.g.dart';
 
@@ -174,6 +175,7 @@ class _SettingsState extends State<Settings> {
                 ),
             ]),
           ),
+          const SliverSafeBottom(),
         ],
       ),
     );

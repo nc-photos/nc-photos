@@ -12,6 +12,7 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/widget/trusted_cert_manager.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
 part 'expert/bloc.dart';
@@ -207,6 +208,7 @@ class _WrappedExpertSettingsState extends State<_WrappedExpertSettings> {
                       ),
                     ]),
                   ),
+                  const SliverSafeBottom(),
                 ],
               ),
             ),

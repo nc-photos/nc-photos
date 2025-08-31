@@ -32,6 +32,7 @@ import 'package:nc_photos/widget/zoom_menu_button.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 
 part 'trashbin_browser.g.dart';
 
@@ -144,6 +145,7 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
               slivers: [
                 _buildAppBar(context),
                 buildItemStreamList(maxCrossAxisExtent: _thumbSize.toDouble()),
+                const SliverSafeBottom(),
               ],
             ),
           ),
