@@ -142,6 +142,7 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
                 ),
               ]),
             ),
+            const SliverSafeBottom(),
           ],
         ),
       ),

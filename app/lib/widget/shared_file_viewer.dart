@@ -19,6 +19,7 @@ import 'package:nc_photos/use_case/remove.dart';
 import 'package:nc_photos/use_case/remove_share.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:path/path.dart' as path_lib;
 
 part 'shared_file_viewer.g.dart';
@@ -134,6 +135,7 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
             ),
           ),
         ],
+        const SliverSafeBottom(),
       ],
     );
   }

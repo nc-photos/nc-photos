@@ -25,6 +25,7 @@ import 'package:nc_photos/widget/collection_list_item.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
 part 'places_browser.g.dart';
@@ -130,6 +131,7 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
                       _onTap(context, item);
                     },
                   ),
+                  const SliverSafeBottom(),
                 ],
               ),
             ),

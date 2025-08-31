@@ -8,6 +8,7 @@ export 'src/fancy_option_picker.dart';
 export 'src/material3.dart';
 export 'src/pixel_image_provider.dart';
 export 'src/shimmer.dart';
+export 'src/sliver_safe_bottom.dart';
 export 'src/stateful_slider.dart';
 export 'src/switch_form_field.dart';
 export 'src/theme_util.dart';

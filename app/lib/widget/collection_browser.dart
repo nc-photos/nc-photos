@@ -383,6 +383,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                                 }
                               },
                             ),
+                            const SliverSafeBottom(),
                           ],
                         ),
                       ),

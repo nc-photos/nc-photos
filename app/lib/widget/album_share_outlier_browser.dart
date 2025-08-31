@@ -123,6 +123,7 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
                   childCount: _items.length,
                 ),
               ),
+              const SliverSafeBottom(),
             ],
           ),
           if (state is ListAlbumShareOutlierBlocLoading)

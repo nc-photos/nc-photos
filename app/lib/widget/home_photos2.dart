@@ -117,7 +117,7 @@ class HomePhotos2 extends StatelessWidget {
             metadataController: accountController.metadataController,
             serverController: accountController.serverController,
             localFilesController: context.read(),
-            bottomAppBarHeight: AppDimension.of(context).homeBottomAppBarHeight,
+            bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
             draggableThumbSize:
                 AppDimension.of(context).timelineDraggableThumbSize,
           ),
@@ -535,7 +535,7 @@ class _BodyState extends State<_Body> {
                   constraints.maxHeight,
                   MediaQuery.of(context).padding.top +
                       kToolbarHeight +
-                      AppDimension.of(context).homeBottomAppBarHeight,
+                      MediaQuery.paddingOf(context).bottom,
                 ),
               );
             }
@@ -562,8 +562,7 @@ class _BodyState extends State<_Body> {
                       overrideMaxScrollExtent: scrollExtent,
                       // status bar + app bar
                       topOffset: _getAppBarExtent(context),
-                      bottomOffset:
-                          AppDimension.of(context).homeBottomAppBarHeight,
+                      bottomOffset: MediaQuery.paddingOf(context).bottom,
                       labelTextBuilder: (_) => const _ScrollLabel(),
                       labelPadding: const EdgeInsets.symmetric(horizontal: 40),
                       backgroundColor:
@@ -654,14 +653,7 @@ class _BodyState extends State<_Body> {
                                                         const _ScalingList(),
                                                   ),
                                         ),
-                                        SliverToBoxAdapter(
-                                          child: SizedBox(
-                                            height:
-                                                AppDimension.of(
-                                                  context,
-                                                ).homeBottomAppBarHeight,
-                                          ),
-                                        ),
+                                        const SliverSafeBottom(),
                                       ],
                                     ),
                               ),
@@ -693,7 +685,7 @@ class _BodyState extends State<_Body> {
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: NavigationBarBlurFilter(
-                        height: AppDimension.of(context).homeBottomAppBarHeight,
+                        height: MediaQuery.paddingOf(context).bottom,
                       ),
                     ),
                   ],
@@ -722,8 +714,7 @@ class _BodyState extends State<_Body> {
         (previousValue, e) => previousValue + e.logicalHeight,
       );
       final appBarExtent = _getAppBarExtent(context);
-      final bottomAppBarExtent =
-          AppDimension.of(context).homeBottomAppBarHeight;
+      final bottomAppBarExtent = MediaQuery.paddingOf(context).bottom;
       // final metadataTaskHeaderExtent = _web?.getHeaderHeight() ?? 0;
       final smartAlbumListHeight =
           hasMemoryCollection ? _MemoryCollectionItemView.height : 0;

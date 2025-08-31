@@ -122,6 +122,7 @@ class _WrappedPhotosSettingsState extends State<_WrappedPhotosSettings>
                 ),
               ]),
             ),
+            const SliverSafeBottom(),
           ],
         ),
       ),

@@ -137,6 +137,7 @@ class _WrappedSharingBrowserState extends State<_WrappedSharingBrowser>
                         ),
                       ),
                       const _ContentList(),
+                      const SliverSafeBottom(),
                     ],
                   ),
                 ],

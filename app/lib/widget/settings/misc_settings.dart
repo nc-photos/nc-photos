@@ -12,6 +12,7 @@ import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/settings/app_lock_settings.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 
 part 'misc/bloc.dart';
@@ -104,6 +105,7 @@ class _WrappedMiscSettingsState extends State<_WrappedMiscSettings>
                 ),
               ]),
             ),
+            const SliverSafeBottom(),
           ],
         ),
       ),
