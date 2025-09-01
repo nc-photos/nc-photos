@@ -349,6 +349,14 @@
 			}
 		}
 	},
+	"settingsDeviceMediaTitle": "Cihazdaki medya dosyalarını göster",
+	"@settingsDeviceMediaTitle": {
+		"description": "Control which device folders to be included in the timeline"
+	},
+	"settingsDeviceMediaDescription": "Seçilen klasörler görüntülenecektir",
+	"@settingsDeviceMediaDescription": {
+		"description": "Control which device folders to be included in the timeline"
+	},
 	"settingsViewerTitle": "Görüntüleyici",
 	"settingsViewerDescription": "Fotoğraf/Video görüntüleyicinizi Özelleştirin",
 	"settingsScreenBrightnessTitle": "Ekran Parlaklığı",
@@ -1593,6 +1601,30 @@
 	"fileNotFound": "Dosya bulunamadı",
 	"signInViaNextcloudLoginFlowV2": "Nextcloud Flow v2 aracılığıyla giriş yap",
 	"signInViaUsernamePassword": "Kullanıcı adı ve şifreyle giriş yap",
+	"fileOnDevice": "Cihazda",
+	"@fileOnDevice": {
+		"description": "Local files on your device"
+	},
+	"fileOnCloud": "Bulutta",
+	"@fileOnCloud": {
+		"description": "Filed uploaded to your Nextcloud server"
+	},
+	"uploadTooltip": "Yükle",
+	"@uploadTooltip": {
+		"description": "Upload files to your Nextcloud server"
+	},
+	"uploadFolderPickerTitle": "Yükle:",
+	"@uploadFolderPickerTitle": {
+		"description": "Pick a folder on your server where the files will be uploaded to"
+	},
+	"opOnlySupportRemoteFiles": "Bu özellik yalnızca Nextcloud sunucunuzdaki dosyaları destekler. Seçilen yerel dosyalar yok sayılır.",
+	"@opOnlySupportRemoteFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a remote only action"
+	},
+	"opOnlySupportLocalFiles": "Bu özellik sadece cihazınızdaki yerel dosyaları destekler. Seçilen buluttaki dosyalar yok sayılır.",
+	"@opOnlySupportLocalFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a local only action"
+	},
 	"dontShowAgain": "Tekrar gösterme",
 	"errorServerNoCert": "Sunucu sertifikası bulunamadı. Bunun yerine HTTP denemek ister misiniz?",
 	"@errorServerNoCert": {
