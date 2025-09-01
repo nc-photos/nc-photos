@@ -99,12 +99,13 @@ class _BottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: kToolbarHeight,
+      height: kToolbarHeight + MediaQuery.paddingOf(context).bottom,
       alignment: Alignment.center,
+      padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0, -1),
-          end: Alignment(0, 1),
+          end: Alignment(0, .8),
           colors: [Color.fromARGB(0, 0, 0, 0), Color.fromARGB(192, 0, 0, 0)],
         ),
       ),
