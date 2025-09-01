@@ -1,11 +1,16 @@
+import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:np_http/np_http.dart';
+import 'package:np_log/np_log.dart';
 import 'package:np_platform_uploader/np_platform_uploader.dart';
 import 'package:path/path.dart' as path_lib;
 
+part 'upload_local_file.g.dart';
+
+@npLog
 class UploadLocalFile {
   const UploadLocalFile({required this.account});
 
@@ -35,6 +40,9 @@ class UploadLocalFile {
     String relativePath, {
     ConvertConfig? convertConfig,
   }) async {
+    _log.info(
+      "[_uploadUriFile] Uploading ${files.length} files to $relativePath, convertConfig: $convertConfig",
+    );
     if (relativePath.startsWith("/")) {
       relativePath = relativePath.substring(1);
     }
