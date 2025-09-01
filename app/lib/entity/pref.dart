@@ -125,9 +125,11 @@ enum PrefKey implements PrefKeyInterface {
   homeCollectionsNavBarButtons,
   isFallbackClientExif,
   localDirs,
+  isEnableUploadConvert,
   uploadConvertFormat,
   uploadConvertQuality,
-  uploadConvertDownsizeMp;
+  uploadConvertDownsizeMp,
+  isShowUploadConvertWarning;
 
   @override
   String toStringKey() {
@@ -182,9 +184,11 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.homeCollectionsNavBarButtons => "homeCollectionsNavBarButtons",
       PrefKey.isFallbackClientExif => "isFallbackClientExif",
       PrefKey.localDirs => "localDirs",
+      PrefKey.isEnableUploadConvert => "isEnableUploadConvert",
       PrefKey.uploadConvertFormat => "uploadConvertFormat",
       PrefKey.uploadConvertQuality => "uploadConvertQuality",
       PrefKey.uploadConvertDownsizeMp => "uploadConvertDownsizeMp",
+      PrefKey.isShowUploadConvertWarning => "isShowUploadConvertWarning",
     };
   }
 }

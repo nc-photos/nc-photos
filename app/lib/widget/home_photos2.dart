@@ -407,6 +407,7 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     UploadAnyFile(account: context.bloc.account)(
       files,
       relativePath: config.relativePath,
+      convertConfig: config.convertConfig,
     );
   }
 

@@ -215,6 +215,11 @@ extension on Pref {
   Future<bool> setLocalDirs(List<String> value) =>
       provider.setStringList(PrefKey.localDirs, value);
 
+  bool? isEnableUploadConvert() =>
+      provider.getBool(PrefKey.isEnableUploadConvert);
+  Future<bool> setEnableUploadConvert(bool value) =>
+      provider.setBool(PrefKey.isEnableUploadConvert, value);
+
   ConvertFormat? getUploadConvertFormat() =>
       provider.getInt(PrefKey.uploadConvertFormat)?.let(ConvertFormat.tryParse);
   Future<bool> setUploadConvertFormat(ConvertFormat value) =>
@@ -234,6 +239,11 @@ extension on Pref {
       return provider.setDouble(PrefKey.uploadConvertDownsizeMp, value);
     }
   }
+
+  bool? isShowUploadConvertWarning() =>
+      provider.getBool(PrefKey.isShowUploadConvertWarning);
+  Future<bool> setShowUploadConvertWarning(bool value) =>
+      provider.setBool(PrefKey.isShowUploadConvertWarning, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

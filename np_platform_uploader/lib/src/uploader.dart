@@ -1,6 +1,10 @@
+import 'package:copy_with/copy_with.dart';
 import 'package:flutter/services.dart';
 import 'package:np_platform_uploader/src/k.dart' as k;
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:to_string/to_string.dart';
+
+part 'uploader.g.dart';
 
 abstract class Uploadable {
   String get uploadPath;
@@ -34,12 +38,17 @@ enum ConvertFormat {
   final int value;
 }
 
+@genCopyWith
+@toString
 class ConvertConfig {
   const ConvertConfig({
     required this.format,
     required this.quality,
     this.downsizeMp,
   });
+
+  @override
+  String toString() => _$toString();
 
   final ConvertFormat format;
   final int quality;

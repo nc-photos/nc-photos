@@ -9,16 +9,37 @@ environment:
   flutter: ">=3.29.0"
 
 dependencies:
+  copy_with:
+    git:
+      url: https://github.com/nkming2/dart-copy-with.git
+      path: copy_with
+      ref: copy_with-2.0.0
   flutter:
     sdk: flutter
   np_platform_util:
     path: ../np_platform_util
   plugin_platform_interface: ^2.0.2
+  to_string:
+    git:
+      url: https://github.com/nkming2/dart-to-string.git
+      ref: to_string-2.0.0
+      path: to_string
 
 dev_dependencies:
+  build_runner: ^2.4.9
+  copy_with_build:
+    git:
+      url: https://github.com/nkming2/dart-copy-with.git
+      path: copy_with_build
+      ref: copy_with_build-2.0.0
   dart_style: 3.0.1
   np_lints:
     path: ../np_lints
+  to_string_build:
+    git:
+      url: https://github.com/nkming2/dart-to-string.git
+      ref: to_string_build-2.0.0
+      path: to_string_build
 
 flutter:
   plugin:

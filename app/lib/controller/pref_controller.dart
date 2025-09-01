@@ -303,6 +303,12 @@ class PrefController {
     value: value,
   );
 
+  Future<void> setEnableUploadConvert(bool value) => _set(
+    controller: _isEnableUploadConvertController,
+    setter: (pref, value) => pref.setEnableUploadConvert(value),
+    value: value,
+  );
+
   Future<void> setUploadConvertFormat(ConvertFormat value) => _set(
     controller: _uploadConvertFormatController,
     setter: (pref, value) => pref.setUploadConvertFormat(value),
@@ -321,6 +327,12 @@ class PrefController {
     remover: (pref) => pref.setUploadConvertDownsizeMp(null),
     value: value,
     defaultValue: null,
+  );
+
+  Future<void> setShowUploadConvertWarning(bool value) => _set(
+    controller: _isShowUploadConvertWarningController,
+    setter: (pref, value) => pref.setShowUploadConvertWarning(value),
+    value: value,
   );
 
   Future<bool> _set<T>({
@@ -526,6 +538,10 @@ class PrefController {
     pref.getLocalDirs() ?? [],
   );
   @npSubjectAccessor
+  late final _isEnableUploadConvertController = BehaviorSubject.seeded(
+    pref.isEnableUploadConvert() ?? false,
+  );
+  @npSubjectAccessor
   late final _uploadConvertFormatController = BehaviorSubject.seeded(
     pref.getUploadConvertFormat() ?? ConvertFormat.jpeg,
   );
@@ -536,6 +552,10 @@ class PrefController {
   @npSubjectAccessor
   late final _uploadConvertDownsizeMpController = BehaviorSubject.seeded(
     pref.getUploadConvertDownsizeMp(),
+  );
+  @npSubjectAccessor
+  late final _isShowUploadConvertWarningController = BehaviorSubject.seeded(
+    pref.isShowUploadConvertWarning() ?? true,
   );
 }
 
