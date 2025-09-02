@@ -87,13 +87,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   void _onSetQuality(_SetQuality ev, _Emitter emit) {
-    _log.info(ev);
+    // _log.info(ev);
     emit(state.copyWith(quality: ev.value));
   }
 
   void _onSetDownsizeMp(_SetDownsizeMp ev, _Emitter emit) {
-    _log.info(ev);
-    emit(state.copyWith(downsizeMp: ev.value));
+    // _log.info(ev);
+    emit(
+      state.copyWith(
+        downsizeMp: ev.value?.let((e) => (e * 10).roundToDouble() / 10),
+      ),
+    );
   }
 
   void _onSave(_Save ev, _Emitter emit) {
