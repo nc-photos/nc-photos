@@ -29,7 +29,9 @@ class _SetupState extends State<Setup> {
   build(BuildContext context) {
     return Scaffold(
       appBar: _buildAppBar(context),
-      body: Builder(builder: (context) => _buildContent(context)),
+      body: SafeArea(
+        child: Builder(builder: (context) => _buildContent(context)),
+      ),
     );
   }
 

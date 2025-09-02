@@ -84,61 +84,65 @@ class _WrappedSignInState extends State<_WrappedSignIn>
         children: [
           const _Background(),
           Scaffold(
-            body: MultiBlocListener(
-              listeners: [
-                _BlocListenerT(
-                  selector: (state) => state.connectArg,
-                  listener: (context, connectArg) {
-                    if (connectArg == null) {
-                      return;
-                    }
-                    final uri = Uri.parse(
-                      "${connectArg.scheme}://${connectArg.address}",
-                    );
-                    if (connectArg.username != null &&
-                        connectArg.password != null) {
-                      _connectWithFlow(
-                        context,
-                        uri,
-                        UsernamePassword(
-                          username: connectArg.username!,
-                          password: connectArg.password!,
-                        ),
+            body: SafeArea(
+              child: MultiBlocListener(
+                listeners: [
+                  _BlocListenerT(
+                    selector: (state) => state.connectArg,
+                    listener: (context, connectArg) {
+                      if (connectArg == null) {
+                        return;
+                      }
+                      final uri = Uri.parse(
+                        "${connectArg.scheme}://${connectArg.address}",
                       );
-                    } else {
-                      _connectWithFlow(context, uri, ServerFlowV2());
-                    }
-                  },
+                      if (connectArg.username != null &&
+                          connectArg.password != null) {
+                        _connectWithFlow(
+                          context,
+                          uri,
+                          UsernamePassword(
+                            username: connectArg.username!,
+                            password: connectArg.password!,
+                          ),
+                        );
+                      } else {
+                        _connectWithFlow(context, uri, ServerFlowV2());
+                      }
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.isCompleted,
+                    listener: (context, isCompleted) {
+                      if (isCompleted) {
+                        Navigator.pushNamedAndRemoveUntil(
+                          context,
+                          Home.routeName,
+                          (route) => false,
+                          arguments: HomeArguments(
+                            context.state.connectedAccount!,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.error,
+                    listener: (context, error) {
+                      if (error != null && isPageVisible()) {
+                        SnackBarManager().showSnackBarForException(error.error);
+                      }
+                    },
+                  ),
+                ],
+                child: _BlocSelector(
+                  selector: (state) => state.isConnecting,
+                  builder:
+                      (context, isConnecting) =>
+                          isConnecting
+                              ? const _ConnectingBody()
+                              : const _Body(),
                 ),
-                _BlocListenerT(
-                  selector: (state) => state.isCompleted,
-                  listener: (context, isCompleted) {
-                    if (isCompleted) {
-                      Navigator.pushNamedAndRemoveUntil(
-                        context,
-                        Home.routeName,
-                        (route) => false,
-                        arguments: HomeArguments(
-                          context.state.connectedAccount!,
-                        ),
-                      );
-                    }
-                  },
-                ),
-                _BlocListenerT(
-                  selector: (state) => state.error,
-                  listener: (context, error) {
-                    if (error != null && isPageVisible()) {
-                      SnackBarManager().showSnackBarForException(error.error);
-                    }
-                  },
-                ),
-              ],
-              child: _BlocSelector(
-                selector: (state) => state.isConnecting,
-                builder:
-                    (context, isConnecting) =>
-                        isConnecting ? const _ConnectingBody() : const _Body(),
               ),
             ),
           ),
