@@ -73,7 +73,7 @@ bool setupEncoder(JxlEncoder *encoder, const unique_ptr<Image> &srcBmp,
 
   auto settings = JxlEncoderFrameSettingsCreate(encoder, nullptr);
   JxlEncoderSetFrameDistance(settings, JxlEncoderDistanceFromQuality(quality));
-  JxlEncoderFrameSettingsSetOption(settings, JXL_ENC_FRAME_SETTING_EFFORT, 8);
+  JxlEncoderFrameSettingsSetOption(settings, JXL_ENC_FRAME_SETTING_EFFORT, 7);
 
   JxlEncoderUseBoxes(encoder);
   auto srcExiv = Exiv2::ImageFactory::open(srcBuf, srcBufSize);
