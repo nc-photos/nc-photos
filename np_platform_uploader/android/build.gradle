@@ -27,9 +27,25 @@ apply plugin: "kotlin-android"
 android {
     namespace = "com.nkming.nc_photos.np_platform_uploader"
     compileSdk = 35
+    ndkVersion "27.2.12479018"
 
     defaultConfig {
         minSdk = 23
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86_64"
+        }
+        externalNativeBuild {
+            cmake {
+                arguments.add("-DANDROID_WEAK_API_DEFS=ON")
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path file('src/main/cpp/CMakeLists.txt')
+            version '3.22.1'
+        }
     }
 
     buildTypes {
@@ -49,5 +65,7 @@ android {
 
     dependencies {
         implementation 'com.nkming.nc_photos.np_android_core:np_android_core'
+        // we use the libjxl binaries from this package
+        implementation 'io.github.awxkee:jxl-coder:2.3.0'
     }
 }

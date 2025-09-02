@@ -14,6 +14,8 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.app.ServiceCompat
+import com.nkming.nc_photos.np_android_core.getDoubleOrNull
+import com.nkming.nc_photos.np_android_core.getIntOrNull
 import com.nkming.nc_photos.np_android_core.getPendingIntentFlagImmutable
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
@@ -22,6 +24,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import java.io.File
 import java.net.HttpURLConnection
 import java.net.URL
 import java.util.LinkedList
@@ -33,7 +36,16 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		private const val ACTION_CANCEL = "cancel"
 		const val EXTRA_CONTENT_URIS = "contentUris"
 		const val EXTRA_END_POINTS = "endPoints"
+		const val EXTRA_CAN_CONVERTS = "canConverts"
 		const val EXTRA_HEADERS = "headers"
+
+		/**
+		 * Setting EXTRA_CONVERT_FORMAT will make the uploader service to
+		 * compress your images before uploading
+		 */
+		const val EXTRA_CONVERT_FORMAT = "convertFormat"
+		const val EXTRA_CONVERT_QUALITY = "convertQuality"
+		const val EXTRA_CONVERT_DOWNSIZE_MP = "convertDownsizeMp"
 
 		private const val TAG = "UploadService"
 
@@ -48,6 +60,7 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		super.onCreate()
 		wakeLock.acquire()
 		createNotificationChannel()
+		cleanUp()
 	}
 
 	override fun onDestroy() {
@@ -104,12 +117,39 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 				intent.extras!!.getStringArrayList(EXTRA_CONTENT_URIS)!!
 			val endPoints =
 				intent.extras!!.getStringArrayList(EXTRA_END_POINTS)!!
+			val canConverts =
+				intent.extras!!.getBooleanArray(EXTRA_CAN_CONVERTS)!!.toList()
 			assert(contentUris.size == endPoints.size)
 			val headers = intent.extras!!.getSerializable(
 				EXTRA_HEADERS
 			) as HashMap<String, String>
+			val convertFormat = intent.extras!!.getIntOrNull(
+				EXTRA_CONVERT_FORMAT
+			)
+			val convertQuality = intent.extras!!.getIntOrNull(
+				EXTRA_CONVERT_QUALITY
+			)
+			val convertDownsizeMp = intent.extras!!.getDoubleOrNull(
+				EXTRA_CONVERT_DOWNSIZE_MP
+			)
 			synchronized(workQueue) {
-				workQueue.add(UploadJob(contentUris, endPoints, headers))
+				var convertConfig: ConvertConfig? = null
+				if (convertFormat != null) {
+					try {
+						convertConfig = ConvertConfig(
+							FormatConverter.Format.values()[convertFormat],
+							convertQuality!!, convertDownsizeMp
+						)
+					} catch (e: Throwable) {
+						logE(TAG, "[doWork] Invalid convert config", e)
+					}
+				}
+				workQueue.add(
+					UploadJob(
+						contentUris, endPoints, canConverts, headers,
+						convertConfig
+					)
+				)
 				if (workQueue.size == 1) {
 					startJobRunner()
 				}
@@ -170,11 +210,16 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 
 	private fun workOnce(job: UploadJob): Int {
 		var count = 0
-		for ((uri, endPoint) in job.contentUris.zip(job.endPoints)) {
+		val converter =
+			job.convertConfig?.let { FormatConverter(contentResolver) }
+		for (i in job.contentUris.indices) {
 			if (shouldCancel) {
 				logI(TAG, "[workOnce] Canceled")
 				return count
 			}
+			val uri = job.contentUris[i]
+			val endPoint = job.endPoints[i]
+			val canConvert = job.canConverts[i]
 			val basename = endPoint.substringAfterLast("/")
 			logI(TAG, "[workOnce] Uploading $basename")
 			if (notificationManager.areNotificationsEnabled()) {
@@ -183,7 +228,22 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 					buildNotification(content = basename)
 				)
 			}
+			var converted: File? = null
 			try {
+				if (converter != null && canConvert) {
+					logI(
+						TAG,
+						"[workOnce] Converting to $basename (${job.convertConfig.quality} | ${job.convertConfig.downsizeMp})"
+					)
+					converted = converter.convert(
+						Uri.parse(uri)!!, getTempDir(this),
+						job.convertConfig.format, job.convertConfig.quality,
+						job.convertConfig.downsizeMp
+					)
+					if (converted == null) {
+						continue;
+					}
+				}
 				(URL(endPoint).openConnection() as HttpURLConnection).apply {
 					requestMethod = "PUT"
 					instanceFollowRedirects = true
@@ -193,8 +253,10 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 					}
 					doOutput = true
 				}.use { conn ->
-					val cr = contentResolver
-					cr.openInputStream(Uri.parse(uri))!!.use { iStream ->
+					(converted?.inputStream()
+						?: contentResolver.openInputStream(
+							Uri.parse(uri)
+						)!!).use { iStream ->
 						conn.outputStream.use { oStream ->
 							iStream.copyTo(oStream)
 						}
@@ -214,6 +276,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 				}
 			} catch (e: Throwable) {
 				logE(TAG, "[workOnce] Exception", e)
+			} finally {
+				converted?.delete()
 			}
 		}
 		return count
@@ -309,6 +373,17 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		}
 	}
 
+	/**
+	 * Clean up temp files in case the service ended prematurely last time
+	 */
+	private fun cleanUp() {
+		try {
+			getTempDir(this).deleteRecursively()
+		} catch (e: Throwable) {
+			logE(TAG, "[cleanUp] Failed while cleanUp", e)
+		}
+	}
+
 	private var isForeground = false
 	private var shouldCancel = false
 
@@ -324,8 +399,27 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 	}
 }
 
+private data class ConvertConfig(
+	val format: FormatConverter.Format,
+	val quality: Int,
+	val downsizeMp: Double?,
+)
+
 private data class UploadJob(
 	val contentUris: List<String>,
 	val endPoints: List<String>,
+	val canConverts: List<Boolean>,
 	val headers: Map<String, String>,
+	val convertConfig: ConvertConfig?,
 )
+
+private fun getTempDir(context: Context): File {
+	val f = File(context.cacheDir, "uploader")
+	if (!f.exists()) {
+		f.mkdirs()
+	} else if (!f.isDirectory) {
+		f.delete()
+		f.mkdirs()
+	}
+	return f
+}

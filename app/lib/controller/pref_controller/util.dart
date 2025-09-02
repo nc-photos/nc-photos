@@ -214,6 +214,36 @@ extension on Pref {
   List<String>? getLocalDirs() => provider.getStringList(PrefKey.localDirs);
   Future<bool> setLocalDirs(List<String> value) =>
       provider.setStringList(PrefKey.localDirs, value);
+
+  bool? isEnableUploadConvert() =>
+      provider.getBool(PrefKey.isEnableUploadConvert);
+  Future<bool> setEnableUploadConvert(bool value) =>
+      provider.setBool(PrefKey.isEnableUploadConvert, value);
+
+  ConvertFormat? getUploadConvertFormat() =>
+      provider.getInt(PrefKey.uploadConvertFormat)?.let(ConvertFormat.tryParse);
+  Future<bool> setUploadConvertFormat(ConvertFormat value) =>
+      provider.setInt(PrefKey.uploadConvertFormat, value.value);
+
+  int? getUploadConvertQuality() =>
+      provider.getInt(PrefKey.uploadConvertQuality);
+  Future<bool> setUploadConvertQuality(int value) =>
+      provider.setInt(PrefKey.uploadConvertQuality, value);
+
+  double? getUploadConvertDownsizeMp() =>
+      provider.getDouble(PrefKey.uploadConvertDownsizeMp);
+  Future<bool> setUploadConvertDownsizeMp(double? value) {
+    if (value == null) {
+      return provider.remove(PrefKey.uploadConvertDownsizeMp);
+    } else {
+      return provider.setDouble(PrefKey.uploadConvertDownsizeMp, value);
+    }
+  }
+
+  bool? isShowUploadConvertWarning() =>
+      provider.getBool(PrefKey.isShowUploadConvertWarning);
+  Future<bool> setShowUploadConvertWarning(bool value) =>
+      provider.setBool(PrefKey.isShowUploadConvertWarning, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

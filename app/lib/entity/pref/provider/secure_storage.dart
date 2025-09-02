@@ -43,6 +43,16 @@ class PrefSecureStorageProvider implements PrefProvider {
       setString(key, value.toString());
 
   @override
+  double? getDouble(PrefKeyInterface key) {
+    final value = _rawData[key.toStringKey()];
+    return value?.let(double.tryParse);
+  }
+
+  @override
+  Future<bool> setDouble(PrefKeyInterface key, double value) =>
+      setString(key, value.toString());
+
+  @override
   String? getString(PrefKeyInterface key) {
     return _rawData[key.toStringKey()];
   }

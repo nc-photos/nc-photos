@@ -1569,6 +1569,25 @@
 	"@opOnlySupportLocalFiles": {
 		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a local only action"
 	},
+	"uploadDialogPath": "Path",
+	"@uploadDialogPath": {
+		"description": "Upload path"
+	},
+	"uploadDialogBatchConvert": "Batch convert",
+	"@uploadDialogBatchConvert": {
+		"description": "Batch convert files"
+	},
+	"uploadBatchConvertWarningText1": "Your photos will be compressed before uploading to your server.",
+	"uploadBatchConvertWarningText2": "Motion photos are NOT supported and they will be uploaded as a still image.",
+	"uploadBatchConvertWarningText3": "Some metadata may be altered or dropped.",
+	"uploadBatchConvertWarningText4": "Supported source formats: JPEG, PNG, WEBP, BMP, HEIC",
+	"uploadBatchConvertSettings": "Conversion settings",
+	"uploadBatchConvertSettingsFormat": "Format",
+	"@uploadBatchConvertSettingsFormat": {
+		"description": "Image format"
+	},
+	"uploadBatchConvertSettingsQuality": "Quality",
+	"uploadBatchConvertSettingsDownscaling": "Downscaling",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

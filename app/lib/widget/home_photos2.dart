@@ -404,10 +404,10 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     if (config == null || !context.mounted) {
       return;
     }
-    UploadAnyFile()(
+    UploadAnyFile(account: context.bloc.account)(
       files,
-      account: context.bloc.account,
       relativePath: config.relativePath,
+      convertConfig: config.convertConfig,
     );
   }
 

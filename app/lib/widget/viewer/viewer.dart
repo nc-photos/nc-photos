@@ -417,7 +417,7 @@ class _WrappedViewerState extends State<_WrappedViewer>
     AnyFileWorkerFactory.upload(
       f,
       account: context.bloc.account,
-    ).upload(config.relativePath);
+    ).upload(config.relativePath, convertConfig: config.convertConfig);
   }
 }
 

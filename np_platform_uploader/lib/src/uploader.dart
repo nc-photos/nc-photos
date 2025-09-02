@@ -1,22 +1,73 @@
+import 'package:copy_with/copy_with.dart';
 import 'package:flutter/services.dart';
 import 'package:np_platform_uploader/src/k.dart' as k;
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:to_string/to_string.dart';
+
+part 'uploader.g.dart';
 
 abstract class Uploadable {
   String get uploadPath;
+  bool get canConvert;
 }
 
 abstract class AndroidUploadable implements Uploadable {
   String get contentUri;
 }
 
+enum ConvertFormat {
+  jpeg(0),
+  jxl(1);
+
+  const ConvertFormat(this.value);
+
+  static ConvertFormat? tryParse(int value) {
+    try {
+      return ConvertFormat.values[value];
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String toDisplayString() {
+    return switch (this) {
+      ConvertFormat.jpeg => "JPEG",
+      ConvertFormat.jxl => "JPEG-XL",
+    };
+  }
+
+  final int value;
+}
+
+@genCopyWith
+@toString
+class ConvertConfig {
+  const ConvertConfig({
+    required this.format,
+    required this.quality,
+    this.downsizeMp,
+  });
+
+  @override
+  String toString() => _$toString();
+
+  final ConvertFormat format;
+  final int quality;
+  final double? downsizeMp;
+}
+
 class Uploader {
   static Future<void> asyncUpload({
     required List<Uploadable> uploadables,
     required Map<String, String> headers,
+    ConvertConfig? convertConfig,
   }) {
     if (getRawPlatform() == NpPlatform.android) {
-      return _asyncUploadAndroid(uploadables: uploadables, headers: headers);
+      return _asyncUploadAndroid(
+        uploadables: uploadables,
+        headers: headers,
+        convertConfig: convertConfig,
+      );
     } else {
       throw UnsupportedError("Unsupported platform");
     }
@@ -25,12 +76,17 @@ class Uploader {
   static Future<void> _asyncUploadAndroid({
     required List<Uploadable> uploadables,
     required Map<String, String> headers,
+    ConvertConfig? convertConfig,
   }) async {
     final androidUploadables = uploadables.cast<AndroidUploadable>();
     await _methodChannel.invokeMethod("asyncUpload", {
       "contentUris": androidUploadables.map((e) => e.contentUri).toList(),
       "endPoints": uploadables.map((e) => e.uploadPath).toList(),
+      "canConverts": uploadables.map((e) => e.canConvert).toList(),
       "headers": headers,
+      "convertFormat": convertConfig?.format.value,
+      "convertQuality": convertConfig?.quality,
+      "convertDownsizeMp": convertConfig?.downsizeMp,
     });
   }
 

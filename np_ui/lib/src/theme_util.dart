@@ -37,3 +37,7 @@ extension ThemeDataExtension on ThemeData {
     )?.copyWith(color: colorBuilder(colorScheme));
   }
 }
+
+extension ColorSchemeExtension on ColorScheme {
+  Color get onSurfaceLow => onSurface.withValues(alpha: .7);
+}
