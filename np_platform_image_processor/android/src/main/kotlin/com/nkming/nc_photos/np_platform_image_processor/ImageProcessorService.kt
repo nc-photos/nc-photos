@@ -366,7 +366,7 @@ internal class ImageProcessorService : Service() {
 		cmdTask = object : ImageProcessorCommandTask(applicationContext) {
 			override fun onPostExecute(result: MessageEvent) {
 				notifyResult(result, cmd.isSaveToServer)
-				cmds.removeFirst()
+				cmds.removeAt(0)
 				stopSelf(cmd.startId)
 				cmdTask = null
 				@Suppress(
@@ -405,7 +405,7 @@ internal class ImageProcessorService : Service() {
 
 				override fun onPostExecute(result: Unit?) {
 					cmdTask = null
-					cmds.removeFirst()
+					cmds.removeAt(0)
 					if (cmds.isNotEmpty() && !isCancelled) {
 						runCommand()
 					}
