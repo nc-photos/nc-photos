@@ -16,6 +16,8 @@ class UploadConvertWarningDialog extends StatelessWidget {
           const Text(" "),
           Text("\u2022 ${L10n.global().uploadBatchConvertWarningText2}"),
           Text("\u2022 ${L10n.global().uploadBatchConvertWarningText3}"),
+          const Text(" "),
+          Text(L10n.global().uploadBatchConvertWarningText4),
         ],
       ),
       actions: [
