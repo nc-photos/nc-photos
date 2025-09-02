@@ -37,9 +37,8 @@ android {
 
     buildTypes {
         profile {
-            initWith debug
             if (it.hasProperty("matchingFallbacks")) {
-                matchingFallbacks = ["debug", "release"]
+                matchingFallbacks = ["release"]
             }
         }
    		release {
