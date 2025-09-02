@@ -8,6 +8,7 @@ part 'uploader.g.dart';
 
 abstract class Uploadable {
   String get uploadPath;
+  bool get canConvert;
 }
 
 abstract class AndroidUploadable implements Uploadable {
@@ -81,6 +82,7 @@ class Uploader {
     await _methodChannel.invokeMethod("asyncUpload", {
       "contentUris": androidUploadables.map((e) => e.contentUri).toList(),
       "endPoints": uploadables.map((e) => e.uploadPath).toList(),
+      "canConverts": uploadables.map((e) => e.canConvert).toList(),
       "headers": headers,
       "convertFormat": convertConfig?.format.value,
       "convertQuality": convertConfig?.quality,

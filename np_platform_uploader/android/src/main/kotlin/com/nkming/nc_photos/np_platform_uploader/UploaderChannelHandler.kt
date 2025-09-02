@@ -21,6 +21,7 @@ class UploaderChannelHandler(private val context: Context) :
 					asyncUpload(
 						call.argument("contentUris")!!,
 						call.argument("endPoints")!!,
+						call.argument("canConverts")!!,
 						call.argument("headers")!!,
 						call.argument("convertFormat"),
 						call.argument("convertQuality"),
@@ -38,13 +39,17 @@ class UploaderChannelHandler(private val context: Context) :
 
 	private fun asyncUpload(
 		contentUris: List<String>, endPoints: List<String>,
-		headers: Map<String, String>, convertFormat: Int?, convertQuality: Int?,
-		convertDownsizeMp: Double?, result: MethodChannel.Result
+		canConverts: List<Boolean>, headers: Map<String, String>,
+		convertFormat: Int?, convertQuality: Int?, convertDownsizeMp: Double?,
+		result: MethodChannel.Result
 	) {
 		assert(contentUris.size == endPoints.size)
 		val intent = Intent(context, UploadService::class.java).apply {
 			putExtra(UploadService.EXTRA_CONTENT_URIS, ArrayList(contentUris))
 			putExtra(UploadService.EXTRA_END_POINTS, ArrayList(endPoints))
+			putExtra(
+				UploadService.EXTRA_CAN_CONVERTS, canConverts.toBooleanArray()
+			)
 			putExtra(UploadService.EXTRA_HEADERS, HashMap(headers))
 			putExtra(UploadService.EXTRA_CONVERT_FORMAT, convertFormat)
 			putExtra(UploadService.EXTRA_CONVERT_QUALITY, convertQuality)

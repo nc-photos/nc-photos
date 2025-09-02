@@ -36,6 +36,7 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		private const val ACTION_CANCEL = "cancel"
 		const val EXTRA_CONTENT_URIS = "contentUris"
 		const val EXTRA_END_POINTS = "endPoints"
+		const val EXTRA_CAN_CONVERTS = "canConverts"
 		const val EXTRA_HEADERS = "headers"
 
 		/**
@@ -116,6 +117,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 				intent.extras!!.getStringArrayList(EXTRA_CONTENT_URIS)!!
 			val endPoints =
 				intent.extras!!.getStringArrayList(EXTRA_END_POINTS)!!
+			val canConverts =
+				intent.extras!!.getBooleanArray(EXTRA_CAN_CONVERTS)!!.toList()
 			assert(contentUris.size == endPoints.size)
 			val headers = intent.extras!!.getSerializable(
 				EXTRA_HEADERS
@@ -142,7 +145,10 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 					}
 				}
 				workQueue.add(
-					UploadJob(contentUris, endPoints, headers, convertConfig)
+					UploadJob(
+						contentUris, endPoints, canConverts, headers,
+						convertConfig
+					)
 				)
 				if (workQueue.size == 1) {
 					startJobRunner()
@@ -206,11 +212,14 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 		var count = 0
 		val converter =
 			job.convertConfig?.let { FormatConverter(contentResolver) }
-		for ((uri, endPoint) in job.contentUris.zip(job.endPoints)) {
+		for (i in job.contentUris.indices) {
 			if (shouldCancel) {
 				logI(TAG, "[workOnce] Canceled")
 				return count
 			}
+			val uri = job.contentUris[i]
+			val endPoint = job.endPoints[i]
+			val canConvert = job.canConverts[i]
 			val basename = endPoint.substringAfterLast("/")
 			logI(TAG, "[workOnce] Uploading $basename")
 			if (notificationManager.areNotificationsEnabled()) {
@@ -221,7 +230,11 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 			}
 			var converted: File? = null
 			try {
-				if (converter != null) {
+				if (converter != null && canConvert) {
+					logI(
+						TAG,
+						"[workOnce] Converting to $basename (${job.convertConfig.quality} | ${job.convertConfig.downsizeMp})"
+					)
 					converted = converter.convert(
 						Uri.parse(uri)!!, getTempDir(this),
 						job.convertConfig.format, job.convertConfig.quality,
@@ -240,19 +253,13 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
 					}
 					doOutput = true
 				}.use { conn ->
-					if (converted != null) {
-						converted.inputStream().use { iStream ->
-							conn.outputStream.use { oStream ->
-								iStream.copyTo(oStream)
-							}
+					(converted?.inputStream()
+						?: contentResolver.openInputStream(
+							Uri.parse(uri)
+						)!!).use { iStream ->
+						conn.outputStream.use { oStream ->
+							iStream.copyTo(oStream)
 						}
-					} else {
-						contentResolver.openInputStream(Uri.parse(uri))!!
-							.use { iStream ->
-								conn.outputStream.use { oStream ->
-									iStream.copyTo(oStream)
-								}
-							}
 					}
 					val responseCode = conn.responseCode
 					if (responseCode / 100 != 2) {
@@ -401,6 +408,7 @@ private data class ConvertConfig(
 private data class UploadJob(
 	val contentUris: List<String>,
 	val endPoints: List<String>,
+	val canConverts: List<Boolean>,
 	val headers: Map<String, String>,
 	val convertConfig: ConvertConfig?,
 )

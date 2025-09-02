@@ -50,15 +50,20 @@ class UploadLocalFile {
     await Uploader.asyncUpload(
       uploadables:
           files.map((e) {
+            final canConvert = supportedConvertSrcMimes.contains(e.mime);
             final String filename;
-            if (convertConfig == null) {
-              filename = e.filename;
-            } else {
+            if (convertConfig != null && canConvert) {
               final basename = path_lib.basenameWithoutExtension(e.filename);
               filename = "$basename.${convertConfig.getExtension()}";
+            } else {
+              filename = e.filename;
             }
             final path = "$dir/$filename";
-            return _LocalUriUploadable(uploadPath: path, contentUri: e.uri);
+            return _LocalUriUploadable(
+              uploadPath: path,
+              contentUri: e.uri,
+              canConvert: canConvert,
+            );
           }).toList(),
       headers: {
         "Content-Type": "application/octet-stream",
@@ -76,12 +81,15 @@ class _LocalUriUploadable implements AndroidUploadable {
   const _LocalUriUploadable({
     required this.uploadPath,
     required this.contentUri,
+    required this.canConvert,
   });
 
   @override
   final String uploadPath;
   @override
   final String contentUri;
+  @override
+  final bool canConvert;
 }
 
 extension on ConvertConfig {
