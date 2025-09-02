@@ -53,110 +53,136 @@ class _WrappedConvertSettings extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  L10n.global().uploadBatchConvertSettingsFormat,
-                  style: Theme.of(context).textTheme.bodyLarge,
+                _ItemContainer(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        L10n.global().uploadBatchConvertSettingsFormat,
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      _BlocSelector(
+                        selector: (state) => state.format,
+                        builder:
+                            (context, format) =>
+                                DropdownButtonFormField<ConvertFormat>(
+                                  items:
+                                      ConvertFormat.values
+                                          .map(
+                                            (e) => DropdownMenuItem(
+                                              value: e,
+                                              child: Text(e.toDisplayString()),
+                                            ),
+                                          )
+                                          .toList(),
+                                  value: format,
+                                  isExpanded: true,
+                                  onChanged: (value) {
+                                    context.addEvent(_SetFormat(value!));
+                                  },
+                                ),
+                      ),
+                    ],
+                  ),
                 ),
-                _BlocSelector(
-                  selector: (state) => state.format,
-                  builder:
-                      (context, format) =>
-                          DropdownButtonFormField<ConvertFormat>(
-                            items:
-                                ConvertFormat.values
-                                    .map(
-                                      (e) => DropdownMenuItem(
-                                        value: e,
-                                        child: Text(e.toDisplayString()),
-                                      ),
-                                    )
-                                    .toList(),
-                            value: format,
-                            isExpanded: true,
-                            onChanged: (value) {
-                              context.addEvent(_SetFormat(value!));
-                            },
+                const SizedBox(height: 8),
+                _ItemContainer(
+                  child: Row(
+                    children: [
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            L10n.global().uploadBatchConvertSettingsQuality,
+                            style: Theme.of(context).textTheme.bodyLarge,
                           ),
-                ),
-                const SizedBox(height: 16),
-                Row(
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          L10n.global().uploadBatchConvertSettingsQuality,
-                          style: Theme.of(context).textTheme.bodyLarge,
-                        ),
-                        _BlocSelector(
+                          _BlocSelector(
+                            selector: (state) => state.quality,
+                            builder:
+                                (context, quality) => Text(
+                                  quality.toString(),
+                                  style: Theme.of(context).textStyleColored(
+                                    (textTheme) => textTheme.bodyMedium,
+                                    (colorScheme) => colorScheme.onSurfaceLow,
+                                  ),
+                                ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: _BlocSelector(
                           selector: (state) => state.quality,
                           builder:
-                              (context, quality) => Text(
-                                quality.toString(),
-                                style: Theme.of(context).textStyleColored(
-                                  (textTheme) => textTheme.bodyMedium,
-                                  (colorScheme) => colorScheme.onSurfaceLow,
-                                ),
+                              (context, quality) => Slider(
+                                min: 0,
+                                max: 100,
+                                divisions: 100,
+                                value: quality.toDouble(),
+                                padding: const EdgeInsets.all(8),
+                                onChanged: (value) {
+                                  context.addEvent(_SetQuality(value.toInt()));
+                                },
                               ),
                         ),
-                      ],
-                    ),
-                    Expanded(
-                      child: _BlocSelector(
-                        selector: (state) => state.quality,
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _ItemContainer(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _BlocSelector(
+                        selector: (state) => state.downsizeMp,
                         builder:
-                            (context, quality) => Slider(
-                              min: 0,
-                              max: 100,
-                              divisions: 100,
-                              value: quality.toDouble(),
+                            (context, downsizeMp) => CheckboxListTile(
+                              title: Text(
+                                L10n.global()
+                                    .uploadBatchConvertSettingsDownscaling,
+                              ),
+                              subtitle: downsizeMp?.let(
+                                (e) => Text(
+                                  L10n.global().megapixelCount(
+                                    e.toStringAsFixed(1),
+                                  ),
+                                  style: Theme.of(context).textStyleColored(
+                                    (textTheme) => textTheme.bodyMedium,
+                                    (colorScheme) => colorScheme.onSurfaceLow,
+                                  ),
+                                ),
+                              ),
+                              value: downsizeMp != null,
+                              contentPadding: const EdgeInsets.all(0),
                               onChanged: (value) {
-                                context.addEvent(_SetQuality(value.toInt()));
+                                context.addEvent(
+                                  _SetDownsizeMp(value! ? 16 : null),
+                                );
                               },
                             ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                _BlocSelector(
-                  selector: (state) => state.downsizeMp,
-                  builder:
-                      (context, downsizeMp) => CheckboxListTile(
-                        title: Text(
-                          L10n.global().uploadBatchConvertSettingsDownscaling,
-                        ),
-                        subtitle: downsizeMp?.let(
-                          (e) => Text(
-                            L10n.global().megapixelCount(e.toStringAsFixed(1)),
-                            style: Theme.of(context).textStyleColored(
-                              (textTheme) => textTheme.bodyMedium,
-                              (colorScheme) => colorScheme.onSurfaceLow,
-                            ),
-                          ),
-                        ),
-                        value: downsizeMp != null,
-                        contentPadding: const EdgeInsets.all(0),
-                        onChanged: (value) {
-                          context.addEvent(_SetDownsizeMp(value! ? 16 : null));
-                        },
+                      _BlocSelector(
+                        selector: (state) => state.downsizeMp,
+                        builder:
+                            (context, downsizeMp) =>
+                                downsizeMp == null
+                                    ? const SizedBox.shrink()
+                                    : Slider(
+                                      min: 0.1,
+                                      max: 50,
+                                      value: downsizeMp,
+                                      padding: const EdgeInsets.all(8),
+                                      onChanged: (value) {
+                                        context.addEvent(_SetDownsizeMp(value));
+                                      },
+                                    ),
                       ),
-                ),
-                _BlocSelector(
-                  selector: (state) => state.downsizeMp,
-                  builder:
-                      (context, downsizeMp) => Slider(
-                        min: 0.1,
-                        max: 50,
-                        value: downsizeMp ?? 16,
-                        onChanged:
-                            downsizeMp != null
-                                ? (value) {
-                                  context.addEvent(_SetDownsizeMp(value));
-                                }
-                                : null,
-                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -165,6 +191,24 @@ class _WrappedConvertSettings extends StatelessWidget {
       ),
     );
   }
+}
+
+class _ItemContainer extends StatelessWidget {
+  const _ItemContainer({required this.child});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+      child: child,
+    );
+  }
+
+  final Widget child;
 }
 
 // typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
