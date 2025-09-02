@@ -1405,17 +1405,6 @@
     "errorServerNoCert"
   ],
 
-  "tr": [
-    "settingsDeviceMediaTitle",
-    "settingsDeviceMediaDescription",
-    "fileOnDevice",
-    "fileOnCloud",
-    "uploadTooltip",
-    "uploadFolderPickerTitle",
-    "opOnlySupportRemoteFiles",
-    "opOnlySupportLocalFiles"
-  ],
-
   "zh": [
     "settingsMetadataTitle",
     "settingsExifSupportTitle2",
