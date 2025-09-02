@@ -3,6 +3,7 @@ package com.nkming.nc_photos.np_platform_uploader
 import android.content.ContentResolver
 import android.net.Uri
 import com.nkming.nc_photos.np_android_core.logE
+import com.nkming.nc_photos.np_android_core.measureTime
 import java.io.File
 
 class FormatConverter(
@@ -38,10 +39,12 @@ class FormatConverter(
 					outFile.delete()
 					return null
 				}
-				val result = convertNative(
-					it.fd, outFile.absolutePath, format.value, quality,
-					downsizeMp ?: -1.0
-				)
+				val result = measureTime(TAG, "[convert] Elapsed") {
+					convertNative(
+						it.fd, outFile.absolutePath, format.value, quality,
+						downsizeMp ?: -1.0
+					)
+				}
 				if (result != 0) {
 					logE(
 						TAG,
