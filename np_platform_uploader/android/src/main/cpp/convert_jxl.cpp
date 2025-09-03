@@ -29,6 +29,9 @@ bool addExifBox(JxlEncoder *encoder, const unique_ptr<Exiv2::Image> &srcExiv);
 
 bool addXmpBox(JxlEncoder *encoder, const unique_ptr<Exiv2::Image> &srcExiv);
 
+bool setIccProfile(JxlEncoder *encoder,
+                   const unique_ptr<Exiv2::Image> &srcExiv);
+
 bool exportJxl(JxlEncoder *encoder, const string &dstPath);
 
 } // namespace
@@ -67,10 +70,6 @@ bool setupEncoder(JxlEncoder *encoder, const unique_ptr<Image> &srcBmp,
     return false;
   }
 
-  JxlColorEncoding encoding;
-  JxlColorEncodingSetToSRGB(&encoding, JXL_FALSE);
-  JxlEncoderSetColorEncoding(encoder, &encoding);
-
   auto settings = JxlEncoderFrameSettingsCreate(encoder, nullptr);
   JxlEncoderSetFrameDistance(settings, JxlEncoderDistanceFromQuality(quality));
   JxlEncoderFrameSettingsSetOption(settings, JXL_ENC_FRAME_SETTING_EFFORT, 7);
@@ -78,7 +77,8 @@ bool setupEncoder(JxlEncoder *encoder, const unique_ptr<Image> &srcBmp,
   JxlEncoderUseBoxes(encoder);
   auto srcExiv = Exiv2::ImageFactory::open(srcBuf, srcBufSize);
   srcExiv->readMetadata();
-  if (!addExifBox(encoder, srcExiv) || !addXmpBox(encoder, srcExiv)) {
+  if (!setIccProfile(encoder, srcExiv) || !addExifBox(encoder, srcExiv) ||
+      !addXmpBox(encoder, srcExiv)) {
     return false;
   }
 
@@ -126,6 +126,22 @@ bool addXmpBox(JxlEncoder *encoder, const unique_ptr<Exiv2::Image> &srcExiv) {
       encoder, "xml ", (const uint8_t *)buffer.data(), buffer.size(), false);
   if (result != JXL_ENC_SUCCESS) {
     LOGE(TAG, "[addXmpBox] Failed while adding xml box: %d",
+         JxlEncoderGetError(encoder));
+    return false;
+  }
+  return true;
+}
+
+bool setIccProfile(JxlEncoder *encoder,
+                   const unique_ptr<Exiv2::Image> &srcExiv) {
+  if (srcExiv->iccProfile().empty()) {
+    LOGD(TAG, "[setIccProfile] No icc profile, skipping");
+    return true;
+  }
+  auto result = JxlEncoderSetICCProfile(encoder, srcExiv->iccProfile().c_data(),
+                                        srcExiv->iccProfile().size());
+  if (result != JXL_ENC_SUCCESS) {
+    LOGE(TAG, "[setIccProfile] Failed while setting icc profile: %d",
          JxlEncoderGetError(encoder));
     return false;
   }
