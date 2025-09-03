@@ -23,11 +23,15 @@ class Metadata {
 
 @HostApi()
 abstract class MyHostApi {
+  @async
   Image load(String filepath, int? w, int? h);
 
+  @async
   Image loadBytes(Uint8List bytes, int? w, int? h);
 
+  @async
   Metadata? loadMetadata(String filepath);
 
+  @async
   bool save(Image img, String filepath);
 }
