@@ -110,8 +110,8 @@ class _VideoPlayerViewState extends State<_VideoPlayerView>
             Align(
               alignment: Alignment.bottomCenter,
               child: Padding(
-                padding: const EdgeInsets.only(
-                  bottom: kToolbarHeight + 8,
+                padding: EdgeInsets.only(
+                  bottom: MediaQuery.paddingOf(context).bottom,
                   left: 8,
                   right: 8,
                 ),
