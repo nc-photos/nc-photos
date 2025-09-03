@@ -32,6 +32,7 @@ part 'changelog/changelog_750.dart';
 part 'changelog/changelog_760.dart';
 part 'changelog/changelog_770.dart';
 part 'changelog/changelog_780.dart';
+part 'changelog/changelog_782.dart';
 
 class ChangelogArguments {
   const ChangelogArguments(this.fromVersion);
@@ -82,9 +83,17 @@ class Changelog extends StatelessWidget {
   Widget _buildItem(BuildContext context, int i) {
     try {
       final version = _changelogs.keys.elementAt(i);
+      final String title;
+      if (version > 1000) {
+        final major = version ~/ 100;
+        final minor = version % 100;
+        title = "$major.$minor";
+      } else {
+        title = (version / 10).toStringAsFixed(1);
+      }
       return ExpansionTile(
         key: PageStorageKey(i),
-        title: Text((version / (version > 1000 ? 100 : 10)).toStringAsFixed(1)),
+        title: Text(title),
         initiallyExpanded:
             fromVersion == null ? (i == 0) : (version > fromVersion!),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
@@ -362,6 +371,7 @@ Widget _subBulletPoint(Widget child) => Row(
 );
 
 final _changelogs = <int, List<Widget> Function(BuildContext)>{
+  7802: (_) => const [_Changelog782()],
   7800: (_) => const [_Changelog780()],
   7700: (_) => const [_Changelog770()],
   760: (_) => const [_Changelog760()],
