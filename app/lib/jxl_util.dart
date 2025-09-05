@@ -1,6 +1,8 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:np_common/size.dart';
 import 'package:np_platform_image_format_jxl/np_platform_image_format_jxl.dart';
 
@@ -24,6 +26,16 @@ bool isJxl(Uint8List bytes) {
         0x0a,
       ]) ||
       listEquals(bytes.sublist(0, 2), const [0xff, 0x0a]);
+}
+
+Future<Codec> jxlImageCodecFromFile(File file, {SizeInt? resize}) async {
+  final img = await ImageFormatJxl().load(file, resize: resize);
+  return ImageDescriptor.raw(
+    await ImmutableBuffer.fromUint8List(img!.pixel),
+    width: img.width,
+    height: img.height,
+    pixelFormat: PixelFormat.rgba8888,
+  ).instantiateCodec();
 }
 
 Future<Codec> jxlImageCodec(Uint8List raw, {SizeInt? resize}) async {

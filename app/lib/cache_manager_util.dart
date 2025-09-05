@@ -124,7 +124,7 @@ class CachedNetworkImageBuilder {
     this.errorWidget,
   });
 
-  CachedNetworkImage build() {
+  Widget build() {
     // _log.finer("[build] $mime, $imageUrl");
     return CachedNetworkImage(
       fit: fit,
@@ -138,14 +138,18 @@ class CachedNetworkImageBuilder {
       imageRenderMethodForWeb: ImageRenderMethodForWeb.HttpGet,
       imageBuilder: imageBuilder,
       errorWidget: errorWidget,
-      customDecoder: (raw, decoder) {
-        if (isJxl(raw)) {
-          _log.fine("[build] Using experimental jxl codec: $imageUrl");
-          return jxlImageCodec(raw, resize: _boundingBox);
-        } else {
-          return decoder(raw);
-        }
-      },
+      customDecoder:
+          mime == "image/jxl"
+              ? (file, decoder) {
+                _log.fine("[build] Using experimental jxl codec: $imageUrl");
+                // return decoder(raw);
+                return jxlImageCodecFromFile(
+                  file,
+                  resize: _boundingBox,
+                  decoder: decoder,
+                );
+              }
+              : null,
       compareKey: type.name,
     );
   }

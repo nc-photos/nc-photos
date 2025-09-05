@@ -10,23 +10,38 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.io.File
 
 private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 	companion object {
 		private const val TAG = "PigeonApiImpl"
+
+		// Limit number of jobs to avoid overloading the phone
+		private val lock = Semaphore(4)
 	}
 
 	override fun load(
 		filepath: String, w: Long?, h: Long?, callback: (Result<Image>) -> Unit
 	) {
-		loadBytes(File(filepath).readBytes(), w, h, callback)
+		launch(Dispatchers.IO) {
+			doLoadBytes(File(filepath).readBytes(), w, h, callback)
+		}
 	}
 
 	override fun loadBytes(
 		bytes: ByteArray, w: Long?, h: Long?, callback: (Result<Image>) -> Unit
 	) {
 		launch(Dispatchers.IO) {
+			doLoadBytes(bytes, w, h, callback)
+		}
+	}
+
+	private suspend fun doLoadBytes(
+		bytes: ByteArray, w: Long?, h: Long?, callback: (Result<Image>) -> Unit
+	) {
+		lock.withPermit {
 			val bitmap = try {
 				if (w != null && h != null) {
 					JxlCoder.decodeSampled(
@@ -47,7 +62,7 @@ private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 						)
 					)
 				)
-				return@launch
+				return
 			}
 			try {
 				val rgba8 = bitmap.use { Rgba8Image.fromBitmap(bitmap) }
@@ -67,7 +82,7 @@ private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 						)
 					)
 				)
-				return@launch
+				return
 			}
 		}
 	}
