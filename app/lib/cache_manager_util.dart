@@ -143,11 +143,7 @@ class CachedNetworkImageBuilder {
               ? (file, decoder) {
                 _log.fine("[build] Using experimental jxl codec: $imageUrl");
                 // return decoder(raw);
-                return jxlImageCodecFromFile(
-                  file,
-                  resize: _boundingBox,
-                  decoder: decoder,
-                );
+                return jxlImageCodecFromFile(file, resize: _boundingBox);
               }
               : null,
       compareKey: type.name,
