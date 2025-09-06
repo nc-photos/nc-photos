@@ -509,8 +509,8 @@ packages:
     dependency: "direct main"
     description:
       path: flutter_cache_manager
-      ref: "flutter_cache_manager_v3.3.1-nc-photos-1"
-      resolved-ref: "2b8379744e8cf02332e4e092cd1baf78542f7de8"
+      ref: "flutter_cache_manager_v3.3.1-nc-photos-2"
+      resolved-ref: "7eb73258833d3bc704ba74495fe6154669f0bd16"
       url: "https://github.com/nc-photos/flutter_cache_manager.git"
     source: git
     version: "3.3.1"
