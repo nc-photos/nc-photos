@@ -508,10 +508,11 @@ packages:
   flutter_cache_manager:
     dependency: "direct main"
     description:
-      name: flutter_cache_manager
-      sha256: "8207f27539deb83732fdda03e259349046a39a4c767269285f449ade355d54ba"
-      url: "https://pub.dev"
-    source: hosted
+      path: flutter_cache_manager
+      ref: "flutter_cache_manager_v3.3.1-nc-photos-1"
+      resolved-ref: "2b8379744e8cf02332e4e092cd1baf78542f7de8"
+      url: "https://github.com/nc-photos/flutter_cache_manager.git"
+    source: git
     version: "3.3.1"
   flutter_colorpicker:
     dependency: "direct main"

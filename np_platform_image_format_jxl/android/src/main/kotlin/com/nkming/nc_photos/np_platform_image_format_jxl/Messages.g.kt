@@ -128,6 +128,7 @@ interface MyHostApi {
   fun loadBytes(bytes: ByteArray, w: Long?, h: Long?, callback: (Result<Image>) -> Unit)
   fun loadMetadata(filepath: String, callback: (Result<Metadata?>) -> Unit)
   fun save(img: Image, filepath: String, callback: (Result<Boolean>) -> Unit)
+  fun convertJpeg(filepath: String, w: Long?, h: Long?, callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by MyHostApi. */
@@ -216,6 +217,27 @@ interface MyHostApi {
               } else {
                 val data = result.getOrNull()
                 reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.convertJpeg$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val filepathArg = args[0] as String
+            val wArg = args[1] as Long?
+            val hArg = args[2] as Long?
+            api.convertJpeg(filepathArg, wArg, hArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                reply.reply(wrapResult(null))
               }
             }
           }

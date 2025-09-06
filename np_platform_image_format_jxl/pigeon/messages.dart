@@ -34,4 +34,7 @@ abstract class MyHostApi {
 
   @async
   bool save(Image img, String filepath);
+
+  @async
+  void convertJpeg(String filepath, int? w, int? h);
 }

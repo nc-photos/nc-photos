@@ -44,5 +44,13 @@ class ImageFormatJxl implements ImageFormatInterface {
     return _hostApi.save(img.toPigeonType(), file.absolute.path);
   }
 
+  Future<void> convertJpeg(File file, {SizeInt? resize}) {
+    return _hostApi.convertJpeg(
+      file.absolute.path,
+      resize?.width,
+      resize?.height,
+    );
+  }
+
   final _hostApi = MyHostApi();
 }

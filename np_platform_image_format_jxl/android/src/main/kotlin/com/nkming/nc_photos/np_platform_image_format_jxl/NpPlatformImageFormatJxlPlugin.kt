@@ -1,5 +1,6 @@
 package com.nkming.nc_photos.np_platform_image_format_jxl
 
+import android.graphics.Bitmap
 import com.awxkee.jxlcoder.JxlCoder
 import com.awxkee.jxlcoder.ScaleMode
 import com.nkming.nc_photos.np_android_core.Rgba8Image
@@ -26,7 +27,13 @@ private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 		filepath: String, w: Long?, h: Long?, callback: (Result<Image>) -> Unit
 	) {
 		launch(Dispatchers.IO) {
-			doLoadBytes(File(filepath).readBytes(), w, h, callback)
+			try {
+				val result =
+					decodeBytesToImage(File(filepath).readBytes(), w, h)
+				callback(Result.success(result))
+			} catch (e: Throwable) {
+				callback(Result.failure(e))
+			}
 		}
 	}
 
@@ -34,55 +41,11 @@ private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 		bytes: ByteArray, w: Long?, h: Long?, callback: (Result<Image>) -> Unit
 	) {
 		launch(Dispatchers.IO) {
-			doLoadBytes(bytes, w, h, callback)
-		}
-	}
-
-	private suspend fun doLoadBytes(
-		bytes: ByteArray, w: Long?, h: Long?, callback: (Result<Image>) -> Unit
-	) {
-		lock.withPermit {
-			val bitmap = try {
-				if (w != null && h != null) {
-					JxlCoder.decodeSampled(
-						bytes,
-						w.toInt(),
-						h.toInt(),
-						scaleMode = ScaleMode.FIT
-					)
-				} else {
-					JxlCoder.decode(bytes)
-				}
-			} catch (e: Throwable) {
-				logE(TAG, "Failed to decode bytes", e)
-				callback(
-					Result.failure(
-						FlutterError(
-							"decode-error", "Failed to decode bytes", e.message
-						)
-					)
-				)
-				return
-			}
 			try {
-				val rgba8 = bitmap.use { Rgba8Image.fromBitmap(bitmap) }
-				val result = Image(
-					pixel = rgba8.pixel,
-					width = rgba8.width.toLong(),
-					height = rgba8.height.toLong()
-				)
+				val result = decodeBytesToImage(bytes, w, h)
 				callback(Result.success(result))
 			} catch (e: Throwable) {
-				logE(TAG, "Failed to convert decoded data", e)
-				callback(
-					Result.failure(
-						FlutterError(
-							"convert-error", "Failed to convert decoded data",
-							e.message
-						)
-					)
-				)
-				return
+				callback(Result.failure(e))
 			}
 		}
 	}
@@ -121,6 +84,72 @@ private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 	) {
 		// TODO
 		callback(Result.success(false))
+	}
+
+	override fun convertJpeg(
+		filepath: String, w: Long?, h: Long?,
+		callback: (Result<Unit>) -> Unit
+	) {
+		launch(Dispatchers.IO) {
+			try {
+				val bitmap = decodeBytes(File(filepath).readBytes(), w, h)
+				bitmap.use {
+					File(filepath).outputStream().use { oStream ->
+						bitmap.compress(
+							Bitmap.CompressFormat.JPEG, 85, oStream
+						)
+					}
+				}
+				callback(Result.success(Unit))
+			} catch (e: Throwable) {
+				callback(Result.failure(e))
+			}
+		}
+	}
+
+	private suspend fun decodeBytesToImage(
+		bytes: ByteArray, w: Long?, h: Long?
+	): Image {
+		try {
+			val bitmap = decodeBytes(bytes, w, h)
+			val rgba8 = bitmap.use { Rgba8Image.fromBitmap(it) }
+			return Image(
+				pixel = rgba8.pixel,
+				width = rgba8.width.toLong(),
+				height = rgba8.height.toLong()
+			)
+		} catch (e: Throwable) {
+			logE(TAG, "Failed to convert decoded data", e)
+			throw FlutterError(
+				"convert-error", "Failed to convert decoded data",
+				e.message
+			)
+		}
+	}
+
+	private suspend fun decodeBytes(
+		bytes: ByteArray, w: Long?, h: Long?
+	): Bitmap {
+		lock.withPermit {
+			val bitmap = try {
+				if (w != null && h != null) {
+					JxlCoder.decodeSampled(
+						bytes,
+						w.toInt(),
+						h.toInt(),
+						scaleMode = ScaleMode.FIT
+					)
+				} else {
+					JxlCoder.decode(bytes)
+				}
+			} catch (e: Throwable) {
+				logE(TAG, "Failed to decode bytes", e)
+				throw FlutterError(
+					"decode-error", "Failed to decode bytes", e.message
+				)
+			}
+			return bitmap
+		}
 	}
 }
 
