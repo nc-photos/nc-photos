@@ -19,7 +19,7 @@ private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 		private const val TAG = "PigeonApiImpl"
 
 		// Limit number of jobs to avoid overloading the phone
-		private val lock = Semaphore(4)
+		private val lock = Semaphore(3)
 	}
 
 	override fun load(
