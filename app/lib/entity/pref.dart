@@ -129,7 +129,8 @@ enum PrefKey implements PrefKeyInterface {
   uploadConvertFormat,
   uploadConvertQuality,
   uploadConvertDownsizeMp,
-  isShowUploadConvertWarning;
+  isShowUploadConvertWarning,
+  isEnableLocalFile;
 
   @override
   String toStringKey() {
@@ -189,6 +190,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.uploadConvertQuality => "uploadConvertQuality",
       PrefKey.uploadConvertDownsizeMp => "uploadConvertDownsizeMp",
       PrefKey.isShowUploadConvertWarning => "isShowUploadConvertWarning",
+      PrefKey.isEnableLocalFile => "isEnableLocalFile",
     };
   }
 }

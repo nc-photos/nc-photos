@@ -13,6 +13,7 @@ import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/rx_extension.dart';
 import 'package:nc_photos/use_case/local_file/find_local_file.dart';
+import 'package:nc_photos/use_case/local_file/get_local_files_summary.dart';
 import 'package:nc_photos/use_case/local_file/list_local_file.dart';
 import 'package:nc_photos/use_case/local_file/trash_local_file.dart';
 import 'package:np_collection/np_collection.dart';
@@ -106,6 +107,11 @@ class LocalFilesControllerImpl implements LocalFilesController {
         _reload();
       }),
     );
+    _subscriptions.add(
+      prefController.isEnableLocalFileChange.listen((_) {
+        _reload();
+      }),
+    );
   }
 
   @override
@@ -154,7 +160,10 @@ class LocalFilesControllerImpl implements LocalFilesController {
       if (interests.isEmpty) {
         return;
       }
-      final files = await FindLocalFile(_c)(
+      final files = await FindLocalFile(
+        localFileRepo: _c.localFileRepo,
+        prefController: prefController,
+      )(
         interests,
         onFileNotFound: (fileId) {
           _log.warning("[queryByFileId] File missing: $fileId");
@@ -172,7 +181,10 @@ class LocalFilesControllerImpl implements LocalFilesController {
   @override
   Future<void> queryTimelineByDateRange(DateRange dateRange) async {
     try {
-      final files = await ListLocalFile(_c.localFileRepo)(
+      final files = await ListLocalFile(
+        localFileRepo: _c.localFileRepo,
+        prefController: prefController,
+      )(
         timeRange: dateRange.toLocalTimeRange(),
         dirWhitelist: ["DCIM", ...prefController.localDirsValue],
       );
@@ -264,9 +276,10 @@ class LocalFilesControllerImpl implements LocalFilesController {
     final original =
         _summaryStreamController.valueOrNull?.summary ??
         const LocalFilesSummary(items: {});
-    final results = await _c.localFileRepo.getFilesSummary(
-      dirWhitelist: ["DCIM", ...prefController.localDirsValue],
-    );
+    final results = await GetLocalFilesSummary(
+      localFileRepo: _c.localFileRepo,
+      prefController: prefController,
+    )(dirWhitelist: ["DCIM", ...prefController.localDirsValue]);
     final diff = original.diff(results);
     _summaryStreamController.add(
       LocalFilesSummaryStreamEvent(summary: results),
@@ -288,7 +301,10 @@ class LocalFilesControllerImpl implements LocalFilesController {
     _log.info("[_reload] File changed, refreshing");
     // Take the ids of loaded files
     final ids = _dataStreamController.value.data.map((e) => e.id).toList();
-    final newFiles = await FindLocalFile(_c)(
+    final newFiles = await FindLocalFile(
+      localFileRepo: _c.localFileRepo,
+      prefController: prefController,
+    )(
       ids,
       onFileNotFound: (_) {
         // file removed, can be ignored

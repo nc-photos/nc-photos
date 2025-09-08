@@ -3,15 +3,36 @@ part of 'local_root_picker.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   _Bloc(this._c, {required this.prefController})
-    : super(_State.init(selectedDirs: prefController.localDirsValue.toSet())) {
+    : super(
+        _State.init(
+          selectedDirs: prefController.localDirsValue.toSet(),
+          isEnable: prefController.isEnableLocalFileValue,
+        ),
+      ) {
     on<_ListDir>(_onListDir);
     on<_SelectDir>(_onSelectDir);
     on<_UnselectDir>(_onUnselectDir);
     on<_Save>(_onSave);
+    on<_UpdateEnableLocalFile>(_onUpdateEnableLocalFile);
+    on<_SetEnableLocalFile>(_onSetEnableLocalFile);
 
     on<_SetError>((ev, emit) {
       emit(state.copyWith(error: ExceptionEvent(ev.error, ev.stackTrace)));
     });
+
+    _subscriptions.add(
+      prefController.isEnableLocalFile.listen((ev) {
+        add(_UpdateEnableLocalFile(ev));
+      }),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    for (final s in _subscriptions) {
+      s.cancel();
+    }
+    return super.close();
   }
 
   @override
@@ -67,8 +88,20 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     }
   }
 
+  void _onUpdateEnableLocalFile(_UpdateEnableLocalFile ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(isEnable: ev.value));
+  }
+
+  void _onSetEnableLocalFile(_SetEnableLocalFile ev, _Emitter emit) {
+    _log.info(ev);
+    prefController.setEnableLocalFile(ev.value);
+  }
+
   final DiContainer _c;
   final PrefController prefController;
+
+  final _subscriptions = <StreamSubscription>[];
 
   var _isHandlingError = false;
 }

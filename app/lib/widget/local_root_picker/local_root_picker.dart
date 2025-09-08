@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -70,49 +72,80 @@ class _WrappedLocalRootPicker extends StatelessWidget {
           context.addEvent(const _Save());
         },
         child: Scaffold(
-          appBar: AppBar(title: Text(L10n.global().settingsDeviceMediaTitle)),
+          appBar: AppBar(
+            title: Text(L10n.global().settingsDeviceMediaTitle),
+            actions: [
+              _BlocSelector(
+                selector: (state) => state.isEnable,
+                builder:
+                    (context, isEnable) => Switch(
+                      value: isEnable,
+                      onChanged: (value) {
+                        context.addEvent(_SetEnableLocalFile(value));
+                      },
+                    ),
+              ),
+            ],
+          ),
           body: _BlocSelector(
-            selector: (state) => state.dirs,
+            selector: (state) => state.isEnable,
             builder:
-                (context, dirs) =>
-                    dirs == null
-                        ? const LinearProgressIndicator()
-                        : ListView.builder(
-                          itemCount: dirs.length + 1,
-                          itemBuilder: (context, index) {
-                            if (index == 0) {
-                              return CheckboxListTile(
-                                title: const Text("DCIM"),
-                                value: true,
-                                enabled: false,
-                                onChanged: (_) {},
-                              );
-                            } else {
-                              final dir = dirs[index - 1];
-                              return _BlocSelector(
-                                selector: (state) => state.selectedDirs,
-                                builder: (context, selectedDirs) {
-                                  final selectedMe = selectedDirs.contains(dir);
-                                  final selectedParent = selectedDirs.any(
-                                    (e) => file_util.isOrUnderDirPath(dir, e),
-                                  );
-                                  return CheckboxListTile(
-                                    title: Text(dir),
-                                    value: selectedMe || selectedParent,
-                                    enabled: !(!selectedMe && selectedParent),
-                                    onChanged: (value) {
-                                      context.addEvent(
-                                        value == true
-                                            ? _SelectDir(dir)
-                                            : _UnselectDir(dir),
-                                      );
+                (context, isEnable) => IgnorePointer(
+                  ignoring: !isEnable,
+                  child: Opacity(
+                    opacity: isEnable ? 1 : .4,
+                    child: _BlocSelector(
+                      selector: (state) => state.dirs,
+                      builder:
+                          (context, dirs) =>
+                              dirs == null
+                                  ? const LinearProgressIndicator()
+                                  : ListView.builder(
+                                    itemCount: dirs.length + 1,
+                                    itemBuilder: (context, index) {
+                                      if (index == 0) {
+                                        return CheckboxListTile(
+                                          title: const Text("DCIM"),
+                                          value: true,
+                                          enabled: false,
+                                          onChanged: (_) {},
+                                        );
+                                      } else {
+                                        final dir = dirs[index - 1];
+                                        return _BlocSelector(
+                                          selector:
+                                              (state) => state.selectedDirs,
+                                          builder: (context, selectedDirs) {
+                                            final selectedMe = selectedDirs
+                                                .contains(dir);
+                                            final selectedParent = selectedDirs
+                                                .any(
+                                                  (e) => file_util
+                                                      .isOrUnderDirPath(dir, e),
+                                                );
+                                            return CheckboxListTile(
+                                              title: Text(dir),
+                                              value:
+                                                  selectedMe || selectedParent,
+                                              enabled:
+                                                  !(!selectedMe &&
+                                                      selectedParent),
+                                              onChanged: (value) {
+                                                context.addEvent(
+                                                  value == true
+                                                      ? _SelectDir(dir)
+                                                      : _UnselectDir(dir),
+                                                );
+                                              },
+                                            );
+                                          },
+                                        );
+                                      }
                                     },
-                                  );
-                                },
-                              );
-                            }
-                          },
-                        ),
+                                  ),
+                    ),
+                  ),
+                ),
           ),
         ),
       ),

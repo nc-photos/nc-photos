@@ -244,6 +244,10 @@ extension on Pref {
       provider.getBool(PrefKey.isShowUploadConvertWarning);
   Future<bool> setShowUploadConvertWarning(bool value) =>
       provider.setBool(PrefKey.isShowUploadConvertWarning, value);
+
+  bool? isEnableLocalFile() => provider.getBool(PrefKey.isEnableLocalFile);
+  Future<bool> setEnableLocalFile(bool value) =>
+      provider.setBool(PrefKey.isEnableLocalFile, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

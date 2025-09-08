@@ -332,6 +332,13 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isShowUploadConvertWarning.distinct().skip(1);
   bool get isShowUploadConvertWarningValue =>
       _isShowUploadConvertWarningController.value;
+  // _isEnableLocalFileController
+  ValueStream<bool> get isEnableLocalFile =>
+      _isEnableLocalFileController.stream;
+  Stream<bool> get isEnableLocalFileNew => isEnableLocalFile.skip(1);
+  Stream<bool> get isEnableLocalFileChange =>
+      isEnableLocalFile.distinct().skip(1);
+  bool get isEnableLocalFileValue => _isEnableLocalFileController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

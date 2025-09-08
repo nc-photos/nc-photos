@@ -1,5 +1,6 @@
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file_util.dart';
@@ -13,7 +14,7 @@ part 'find_any_file.g.dart';
 
 @npLog
 class FindAnyFile {
-  const FindAnyFile(this._c);
+  const FindAnyFile(this._c, {required this.prefController});
 
   Future<List<AnyFile>> call(
     Account account,
@@ -33,7 +34,10 @@ class FindAnyFile {
             },
           ),
       localHandler:
-          (ids) => FindLocalFile(_c)(
+          (ids) => FindLocalFile(
+            localFileRepo: _c.localFileRepo,
+            prefController: prefController,
+          )(
             ids.map((e) => e.fileId).toList(),
             onFileNotFound: (fileId) {
               onFileNotFound?.call(
@@ -67,4 +71,5 @@ class FindAnyFile {
   }
 
   final DiContainer _c;
+  final PrefController prefController;
 }

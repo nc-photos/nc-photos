@@ -139,7 +139,10 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
 
   @override
   Future<AnyFile> getFile(int page, String afId) async {
-    final results = await FindAnyFile(c)(account, [afId]);
+    final results = await FindAnyFile(c, prefController: prefController)(
+      account,
+      [afId],
+    );
     return results.first;
   }
 
@@ -153,6 +156,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     final results = await ListAnyFileIdWithTimestamp(
       fileRepo: c.fileRepo2,
       localFileRepo: c.localFileRepo,
+      prefController: prefController,
     )(
       account,
       shareDirPath,
@@ -184,7 +188,10 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
   }
 
   Future<List<AnyFile>> _getLocalFiles(ViewerPositionInfo at, int count) async {
-    final raw = await ListLocalFile(c.localFileRepo)(
+    final raw = await ListLocalFile(
+      localFileRepo: c.localFileRepo,
+      prefController: prefController,
+    )(
       timeRange:
           count < 0
               ? TimeRange(from: at.originalFile.dateTime)

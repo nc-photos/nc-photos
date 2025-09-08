@@ -335,6 +335,12 @@ class PrefController {
     value: value,
   );
 
+  Future<void> setEnableLocalFile(bool value) => _set(
+    controller: _isEnableLocalFileController,
+    setter: (pref, value) => pref.setEnableLocalFile(value),
+    value: value,
+  );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -556,6 +562,10 @@ class PrefController {
   @npSubjectAccessor
   late final _isShowUploadConvertWarningController = BehaviorSubject.seeded(
     pref.isShowUploadConvertWarning() ?? true,
+  );
+  @npSubjectAccessor
+  late final _isEnableLocalFileController = BehaviorSubject.seeded(
+    pref.isEnableLocalFile() ?? true,
   );
 }
 

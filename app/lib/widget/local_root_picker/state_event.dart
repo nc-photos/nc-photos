@@ -3,14 +3,26 @@ part of 'local_root_picker.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({this.dirs, required this.selectedDirs, this.error});
+  const _State({
+    this.dirs,
+    required this.selectedDirs,
+    required this.isEnable,
+    this.error,
+  });
 
-  factory _State.init({required Set<String> selectedDirs}) {
-    return _State(selectedDirs: selectedDirs);
+  factory _State.init({
+    required Set<String> selectedDirs,
+    required bool isEnable,
+  }) {
+    return _State(selectedDirs: selectedDirs, isEnable: isEnable);
   }
+
+  @override
+  String toString() => _$toString();
 
   final List<String>? dirs;
   final Set<String> selectedDirs;
+  final bool isEnable;
 
   final ExceptionEvent? error;
 }
@@ -51,6 +63,26 @@ class _Save implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _UpdateEnableLocalFile implements _Event {
+  const _UpdateEnableLocalFile(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
+}
+
+@toString
+class _SetEnableLocalFile implements _Event {
+  const _SetEnableLocalFile(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
 }
 
 @toString

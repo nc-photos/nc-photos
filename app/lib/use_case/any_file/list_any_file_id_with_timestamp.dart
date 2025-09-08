@@ -1,5 +1,6 @@
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/file/repo.dart';
 import 'package:nc_photos/entity/local_file/repo.dart';
@@ -23,6 +24,7 @@ class ListAnyFileIdWithTimestamp {
   const ListAnyFileIdWithTimestamp({
     required this.fileRepo,
     required this.localFileRepo,
+    required this.prefController,
   });
 
   Future<List<AnyFileIdWithTimestamp>> call(
@@ -39,9 +41,10 @@ class ListAnyFileIdWithTimestamp {
               shareDirPath,
               isArchived: isArchived,
             ),
-            ListLocalFileIdWithTimestamp(localFileRepo: localFileRepo)(
-              dirWhitelist: localDirWhitelist,
-            ),
+            ListLocalFileIdWithTimestamp(
+              localFileRepo: localFileRepo,
+              prefController: prefController,
+            )(dirWhitelist: localDirWhitelist),
           ).wait;
       final remote2 =
           remote
@@ -77,4 +80,5 @@ class ListAnyFileIdWithTimestamp {
 
   final FileRepo2 fileRepo;
   final LocalFileRepo localFileRepo;
+  final PrefController prefController;
 }
