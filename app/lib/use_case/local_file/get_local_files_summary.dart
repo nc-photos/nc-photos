@@ -9,6 +9,10 @@ class GetLocalFilesSummary {
   });
 
   Future<LocalFilesSummary> call({List<String>? dirWhitelist}) {
+    if (dirWhitelist?.isEmpty == true) {
+      // no point doing anything
+      return Future.value(const LocalFilesSummary(items: {}));
+    }
     if (prefController.isEnableLocalFileValue) {
       return localFileRepo.getFilesSummary(dirWhitelist: dirWhitelist);
     } else {

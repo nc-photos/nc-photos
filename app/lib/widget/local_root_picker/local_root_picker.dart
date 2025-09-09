@@ -103,44 +103,34 @@ class _WrappedLocalRootPicker extends StatelessWidget {
                                   : ListView.builder(
                                     itemCount: dirs.length + 1,
                                     itemBuilder: (context, index) {
-                                      if (index == 0) {
-                                        return CheckboxListTile(
-                                          title: const Text("DCIM"),
-                                          value: true,
-                                          enabled: false,
-                                          onChanged: (_) {},
-                                        );
-                                      } else {
-                                        final dir = dirs[index - 1];
-                                        return _BlocSelector(
-                                          selector:
-                                              (state) => state.selectedDirs,
-                                          builder: (context, selectedDirs) {
-                                            final selectedMe = selectedDirs
-                                                .contains(dir);
-                                            final selectedParent = selectedDirs
-                                                .any(
-                                                  (e) => file_util
-                                                      .isOrUnderDirPath(dir, e),
-                                                );
-                                            return CheckboxListTile(
-                                              title: Text(dir),
-                                              value:
-                                                  selectedMe || selectedParent,
-                                              enabled:
-                                                  !(!selectedMe &&
-                                                      selectedParent),
-                                              onChanged: (value) {
-                                                context.addEvent(
-                                                  value == true
-                                                      ? _SelectDir(dir)
-                                                      : _UnselectDir(dir),
-                                                );
-                                              },
-                                            );
-                                          },
-                                        );
-                                      }
+                                      final dir =
+                                          index == 0 ? "DCIM" : dirs[index - 1];
+                                      return _BlocSelector(
+                                        selector: (state) => state.selectedDirs,
+                                        builder: (context, selectedDirs) {
+                                          final selectedMe = selectedDirs
+                                              .contains(dir);
+                                          final selectedParent = selectedDirs
+                                              .any(
+                                                (e) => file_util
+                                                    .isOrUnderDirPath(dir, e),
+                                              );
+                                          return CheckboxListTile(
+                                            title: Text(dir),
+                                            value: selectedMe || selectedParent,
+                                            enabled:
+                                                !(!selectedMe &&
+                                                    selectedParent),
+                                            onChanged: (value) {
+                                              context.addEvent(
+                                                value == true
+                                                    ? _SelectDir(dir)
+                                                    : _UnselectDir(dir),
+                                              );
+                                            },
+                                          );
+                                        },
+                                      );
                                     },
                                   ),
                     ),

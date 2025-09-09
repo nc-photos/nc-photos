@@ -16,6 +16,10 @@ class ListLocalFile {
     int? offset,
     int? limit,
   }) {
+    if (dirWhitelist?.isEmpty == true) {
+      // no point doing anything
+      return Future.value(const []);
+    }
     if (prefController.isEnableLocalFileValue) {
       return localFileRepo.getFiles(
         timeRange: timeRange,

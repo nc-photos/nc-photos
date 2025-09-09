@@ -541,7 +541,7 @@ class PrefController {
   );
   @npSubjectAccessor
   late final _localDirsController = BehaviorSubject.seeded(
-    pref.getLocalDirs() ?? [],
+    pref.getLocalDirs() ?? ["DCIM"],
   );
   @npSubjectAccessor
   late final _isEnableUploadConvertController = BehaviorSubject.seeded(

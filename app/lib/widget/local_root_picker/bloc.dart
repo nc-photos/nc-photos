@@ -55,7 +55,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     _log.info(ev);
     try {
       var dirs = await GetLocalDirList(_c.localFileRepo)();
-      // remove DCIM as its always included
+      // remove DCIM, it's handled separately
       dirs.removeWhere((e) => file_util.isOrUnderDirPath(e, "DCIM"));
       // remove trialing /
       dirs = dirs.map((e) => e.trimRightAny("/")).toList();

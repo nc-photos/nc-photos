@@ -8,6 +8,10 @@ class ListLocalFileIdWithTimestamp {
   });
 
   Future<List<LocalFileIdWithTimestamp>> call({List<String>? dirWhitelist}) {
+    if (dirWhitelist?.isEmpty == true) {
+      // no point doing anything
+      return Future.value(const []);
+    }
     if (prefController.isEnableLocalFileValue) {
       return localFileRepo.getFileIdWithTimestamps(dirWhitelist: dirWhitelist);
     } else {

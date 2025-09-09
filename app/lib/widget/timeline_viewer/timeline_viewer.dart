@@ -160,7 +160,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     )(
       account,
       shareDirPath,
-      localDirWhitelist: ["DCIM", ...prefController.localDirsValue],
+      localDirWhitelist: prefController.localDirsValue,
       isArchived: false,
     );
     return results.map((e) => e.afId).toList();
@@ -199,7 +199,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
                 to: at.originalFile.dateTime,
                 toBound: TimeRangeBound.inclusive,
               ),
-      dirWhitelist: ["DCIM", ...prefController.localDirsValue],
+      dirWhitelist: prefController.localDirsValue,
       isAscending: count < 0,
       limit: count.abs(),
     );

@@ -186,7 +186,7 @@ class LocalFilesControllerImpl implements LocalFilesController {
         prefController: prefController,
       )(
         timeRange: dateRange.toLocalTimeRange(),
-        dirWhitelist: ["DCIM", ...prefController.localDirsValue],
+        dirWhitelist: prefController.localDirsValue,
       );
       final data = _toFileMap(files);
       _timelineStreamController.addWithValue(
@@ -279,7 +279,7 @@ class LocalFilesControllerImpl implements LocalFilesController {
     final results = await GetLocalFilesSummary(
       localFileRepo: _c.localFileRepo,
       prefController: prefController,
-    )(dirWhitelist: ["DCIM", ...prefController.localDirsValue]);
+    )(dirWhitelist: prefController.localDirsValue);
     final diff = original.diff(results);
     _summaryStreamController.add(
       LocalFilesSummaryStreamEvent(summary: results),
