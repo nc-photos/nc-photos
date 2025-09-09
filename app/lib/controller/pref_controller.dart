@@ -297,6 +297,8 @@ class PrefController {
     value: value,
   );
 
+  bool hasLocalDirs() => pref.getLocalDirs() != null;
+
   Future<bool> setLocalDirs(List<String> value) => _set<List<String>>(
     controller: _localDirsController,
     setter: (pref, value) => pref.setLocalDirs(value),
