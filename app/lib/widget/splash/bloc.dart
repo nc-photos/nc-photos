@@ -104,6 +104,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     if (lastVersion < 7700) {
       _upgrade77(lastVersion);
     }
+    if (lastVersion < 7900) {
+      _upgrade79(lastVersion);
+    }
   }
 
   Future<void> _upgrade29(int lastVersion) async {
@@ -179,6 +182,15 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       CompatV77.migratePref(prefController);
     } catch (e, stackTrace) {
       _log.shout("[_upgrade77] Failed while migratePref", e, stackTrace);
+    }
+  }
+
+  void _upgrade79(int lastVersion) {
+    _log.info("[_upgrade79] migrate pref");
+    try {
+      CompatV79.migratePref(prefController);
+    } catch (e, stackTrace) {
+      _log.shout("[_upgrade79] Failed while migratePref", e, stackTrace);
     }
   }
 
