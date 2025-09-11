@@ -19,29 +19,53 @@ import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
+import 'package:path/path.dart' as path_lib;
 import 'package:to_string/to_string.dart';
 
 part 'bloc.dart';
 part 'local_root_picker.g.dart';
 part 'state_event.dart';
 
-class LocalRootPicker extends StatelessWidget {
-  const LocalRootPicker({super.key});
+class LocalRootPicker extends StatefulWidget {
+  const LocalRootPicker({super.key, required this.switchTitle});
+
+  @override
+  State<StatefulWidget> createState() => LocalRootPickerState();
+
+  final String switchTitle;
+}
+
+class LocalRootPickerState extends State<LocalRootPicker> {
+  @override
+  void initState() {
+    super.initState();
+    _bloc = _Bloc(KiwiContainer().resolve(), prefController: context.read())
+      ..add(const _ListDir());
+  }
+
+  @override
+  void dispose() {
+    _bloc.close();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create:
-          (context) =>
-              _Bloc(KiwiContainer().resolve(), prefController: context.read())
-                ..add(const _ListDir()),
-      child: const _WrappedLocalRootPicker(),
+    return BlocProvider.value(
+      value: _bloc,
+      child: _WrappedLocalRootPicker(switchTitle: widget.switchTitle),
     );
   }
+
+  void save() {
+    _bloc.add(const _Save());
+  }
+
+  late final _Bloc _bloc;
 }
 
 class _WrappedLocalRootPicker extends StatelessWidget {
-  const _WrappedLocalRootPicker();
+  const _WrappedLocalRootPicker({required this.switchTitle});
 
   @override
   Widget build(BuildContext context) {
@@ -66,79 +90,104 @@ class _WrappedLocalRootPicker extends StatelessWidget {
           },
         ),
       ],
-      child: PopScope(
-        canPop: true,
-        onPopInvokedWithResult: (didPop, result) {
-          context.addEvent(const _Save());
-        },
-        child: Scaffold(
-          appBar: AppBar(
-            title: Text(L10n.global().settingsDeviceMediaTitle),
-            actions: [
-              _BlocSelector(
+      child: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: _EnableSwitch(title: switchTitle),
+            ),
+            Expanded(
+              child: _BlocSelector(
                 selector: (state) => state.isEnable,
                 builder:
-                    (context, isEnable) => Switch(
-                      value: isEnable,
-                      onChanged: (value) {
-                        context.addEvent(_SetEnableLocalFile(value));
-                      },
+                    (context, isEnable) => IgnorePointer(
+                      ignoring: !isEnable,
+                      child: Opacity(
+                        opacity: isEnable ? 1 : .4,
+                        child: const _ContentList(),
+                      ),
                     ),
               ),
-            ],
-          ),
-          body: _BlocSelector(
-            selector: (state) => state.isEnable,
-            builder:
-                (context, isEnable) => IgnorePointer(
-                  ignoring: !isEnable,
-                  child: Opacity(
-                    opacity: isEnable ? 1 : .4,
-                    child: _BlocSelector(
-                      selector: (state) => state.dirs,
-                      builder:
-                          (context, dirs) =>
-                              dirs == null
-                                  ? const LinearProgressIndicator()
-                                  : ListView.builder(
-                                    itemCount: dirs.length + 1,
-                                    itemBuilder: (context, index) {
-                                      final dir =
-                                          index == 0 ? "DCIM" : dirs[index - 1];
-                                      return _BlocSelector(
-                                        selector: (state) => state.selectedDirs,
-                                        builder: (context, selectedDirs) {
-                                          final selectedMe = selectedDirs
-                                              .contains(dir);
-                                          final selectedParent = selectedDirs
-                                              .any(
-                                                (e) => file_util
-                                                    .isOrUnderDirPath(dir, e),
-                                              );
-                                          return CheckboxListTile(
-                                            title: Text(dir),
-                                            value: selectedMe || selectedParent,
-                                            enabled:
-                                                !(!selectedMe &&
-                                                    selectedParent),
-                                            onChanged: (value) {
-                                              context.addEvent(
-                                                value == true
-                                                    ? _SelectDir(dir)
-                                                    : _UnselectDir(dir),
-                                              );
-                                            },
-                                          );
-                                        },
-                                      );
-                                    },
-                                  ),
-                    ),
-                  ),
-                ),
-          ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+
+  final String switchTitle;
+}
+
+class _EnableSwitch extends StatelessWidget {
+  const _EnableSwitch({required this.title});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(48),
+        color: Theme.of(context).colorScheme.surfaceContainerHigh,
+      ),
+      child: _BlocSelector(
+        selector: (state) => state.isEnable,
+        builder:
+            (context, isEnable) => SwitchListTile(
+              title: Text(title),
+              value: isEnable,
+              onChanged: (value) {
+                context.addEvent(_SetEnableLocalFile(value));
+              },
+            ),
+      ),
+    );
+  }
+
+  final String title;
+}
+
+class _ContentList extends StatelessWidget {
+  const _ContentList();
+
+  @override
+  Widget build(BuildContext context) {
+    return _BlocSelector(
+      selector: (state) => state.dirs,
+      builder:
+          (context, dirs) =>
+              dirs == null
+                  ? const Align(
+                    alignment: Alignment.topCenter,
+                    child: LinearProgressIndicator(),
+                  )
+                  : ListView.builder(
+                    itemCount: dirs.length + 1,
+                    itemBuilder: (context, index) {
+                      final dir = index == 0 ? "DCIM" : dirs[index - 1];
+                      return _BlocSelector(
+                        selector: (state) => state.selectedDirs,
+                        builder: (context, selectedDirs) {
+                          final selectedMe = selectedDirs.contains(dir);
+                          final selectedParent = selectedDirs.any(
+                            (e) => file_util.isOrUnderDirPath(dir, e),
+                          );
+                          return CheckboxListTile(
+                            title: Text(path_lib.basename(dir)),
+                            subtitle: Text(dir),
+                            value: selectedMe || selectedParent,
+                            enabled: !(!selectedMe && selectedParent),
+                            onChanged: (value) {
+                              context.addEvent(
+                                value == true
+                                    ? _SelectDir(dir)
+                                    : _UnselectDir(dir),
+                              );
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
     );
   }
 }

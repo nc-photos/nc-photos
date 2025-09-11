@@ -9,8 +9,8 @@ import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
+import 'package:nc_photos/widget/settings/local_files_settings.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
@@ -82,7 +82,7 @@ class _WrappedPhotosSettingsState extends State<_WrappedPhotosSettings>
                   onTap: () {
                     Navigator.of(context).push(
                       MaterialPageRoute(
-                        builder: (_) => const LocalRootPicker(),
+                        builder: (_) => const LocalFilesSettings(),
                       ),
                     );
                   },

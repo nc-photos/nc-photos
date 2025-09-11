@@ -5,6 +5,7 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/widget/home/home.dart';
+import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
 import 'package:nc_photos/widget/sign_in.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
@@ -41,10 +42,12 @@ class _SetupState extends State<Setup> {
 
   Widget _buildContent(BuildContext context) {
     final page = _pageController.hasClients ? _pageController.page!.round() : 0;
-    final pages = <Widget>[
+    final pages = <_Page>[
       if (_initialProgress & _PageId.exif == 0) _Exif(),
       if (_initialProgress & _PageId.hiddenPrefDirNotice == 0)
         _HiddenPrefDirNotice(),
+      if (_initialProgress & _PageId.localFiles == 0)
+        _LocalFiles(key: _localFilesKey),
     ];
     final isLastPage = page >= pages.length - 1;
     return Column(
@@ -72,7 +75,9 @@ class _SetupState extends State<Setup> {
                     isLastPage
                         ? [
                           ElevatedButton(
-                            onPressed: _onDonePressed,
+                            onPressed: () {
+                              _onDonePressed(pages.last.getPageId());
+                            },
                             child: Text(L10n.global().doneButtonLabel),
                           ),
                         ]
@@ -81,8 +86,7 @@ class _SetupState extends State<Setup> {
                             onPressed: () {
                               if (_pageController.hasClients) {
                                 _onNextPressed(
-                                  (pages[_pageController.page!.round()]
-                                          as _Page)
+                                  pages[_pageController.page!.round()]
                                       .getPageId(),
                                 );
                               }
@@ -102,8 +106,12 @@ class _SetupState extends State<Setup> {
     );
   }
 
-  void _onDonePressed() {
+  void _onDonePressed(int pageId) {
     Pref().setSetupProgress(_PageId.all);
+
+    if (pageId == _PageId.localFiles) {
+      _localFilesKey.currentState?.save();
+    }
 
     final account = context.read<PrefController>().currentAccountValue;
     if (account == null) {
@@ -119,6 +127,11 @@ class _SetupState extends State<Setup> {
 
   void _onNextPressed(int pageId) {
     Pref().setSetupProgress(Pref().getSetupProgressOr() | pageId);
+
+    if (pageId == _PageId.localFiles) {
+      _localFilesKey.currentState?.save();
+    }
+
     _pageController.nextPage(
       duration: k.animationDurationNormal,
       curve: Curves.easeInOut,
@@ -128,15 +141,18 @@ class _SetupState extends State<Setup> {
   final _initialProgress = Pref().getSetupProgressOr();
   final _pageController = PageController();
   final _currentPageNotifier = ValueNotifier<int>(0);
+
+  final _localFilesKey = GlobalKey<_LocalFilesState>();
 }
 
 class _PageId {
   static const exif = 0x01;
   static const hiddenPrefDirNotice = 0x02;
-  static const all = exif | hiddenPrefDirNotice;
+  static const localFiles = 0x04;
+  static const all = exif | hiddenPrefDirNotice | localFiles;
 }
 
-abstract class _Page {
+abstract interface class _Page implements Widget {
   int getPageId();
 }
 
@@ -235,4 +251,30 @@ class _HiddenPrefDirNoticeState extends State<_HiddenPrefDirNotice> {
       ),
     );
   }
+}
+
+class _LocalFiles extends StatefulWidget implements _Page {
+  const _LocalFiles({super.key});
+
+  @override
+  State<StatefulWidget> createState() => _LocalFilesState();
+
+  @override
+  int getPageId() => _PageId.localFiles;
+}
+
+class _LocalFilesState extends State<_LocalFiles> {
+  @override
+  Widget build(BuildContext context) {
+    return LocalRootPicker(
+      key: _key,
+      switchTitle: L10n.global().settingsDeviceMediaTitle,
+    );
+  }
+
+  void save() {
+    _key.currentState?.save();
+  }
+
+  final _key = GlobalKey<LocalRootPickerState>();
 }

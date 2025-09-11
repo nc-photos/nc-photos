@@ -513,6 +513,7 @@
 	"@enableButtonLabel": {
 		"description": "Label of the enable button"
 	},
+	"enableButtonLabel2": "Enable",
 	"exifSupportDetails": "Enabling EXIF support will make various metadata available like date taken, camera model, etc. In order to read these metadata, extra network usage is required to download the original full-sized image. The app will only start downloading when connected to a Wi-Fi network",
 	"@exifSupportDetails": {
 		"description": "Detailed description of the exif support feature"
