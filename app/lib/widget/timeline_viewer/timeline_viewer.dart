@@ -20,6 +20,7 @@ import 'package:nc_photos/use_case/any_file/list_any_file_id_with_timestamp.dart
 import 'package:nc_photos/use_case/file/list_file.dart';
 import 'package:nc_photos/use_case/local_file/list_local_file.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
+import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_log/np_log.dart';
@@ -188,22 +189,27 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
   }
 
   Future<List<AnyFile>> _getLocalFiles(ViewerPositionInfo at, int count) async {
-    final raw = await ListLocalFile(
-      localFileRepo: c.localFileRepo,
-      prefController: prefController,
-    )(
-      timeRange:
-          count < 0
-              ? TimeRange(from: at.originalFile.dateTime)
-              : TimeRange(
-                to: at.originalFile.dateTime,
-                toBound: TimeRangeBound.inclusive,
-              ),
-      dirWhitelist: prefController.localDirsValue,
-      isAscending: count < 0,
-      limit: count.abs(),
-    );
-    return raw.map((e) => e.toAnyFile()).toList();
+    try {
+      final raw = await ListLocalFile(
+        localFileRepo: c.localFileRepo,
+        prefController: prefController,
+      )(
+        timeRange:
+            count < 0
+                ? TimeRange(from: at.originalFile.dateTime)
+                : TimeRange(
+                  to: at.originalFile.dateTime,
+                  toBound: TimeRangeBound.inclusive,
+                ),
+        dirWhitelist: prefController.localDirsValue,
+        isAscending: count < 0,
+        limit: count.abs(),
+      );
+      return raw.map((e) => e.toAnyFile()).toList();
+    } on PermissionException {
+      // ignore permission not granted
+      return [];
+    }
   }
 
   List<AnyFile> _mergeSortedFileList(
