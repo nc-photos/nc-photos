@@ -5,6 +5,7 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/permission_util.dart';
+import 'package:nc_photos/platform/features.dart';
 import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
 import 'package:nc_photos/widget/sign_in.dart';
@@ -47,7 +48,7 @@ class _SetupState extends State<Setup> {
       if (_initialProgress & _PageId.exif == 0) _Exif(),
       if (_initialProgress & _PageId.hiddenPrefDirNotice == 0)
         _HiddenPrefDirNotice(),
-      if (_initialProgress & _PageId.localFiles == 0)
+      if (isSupportLocalFiles && (_initialProgress & _PageId.localFiles == 0))
         _LocalFiles(key: _localFilesKey),
     ];
     final isLastPage = page >= pages.length - 1;
@@ -108,7 +109,7 @@ class _SetupState extends State<Setup> {
   }
 
   void _onDonePressed(int pageId) {
-    Pref().setSetupProgress(_PageId.all);
+    Pref().setSetupProgress(Pref().getSetupProgressOr() | pageId);
 
     if (pageId == _PageId.localFiles) {
       _localFilesKey.currentState?.save();
@@ -150,7 +151,8 @@ class _PageId {
   static const exif = 0x01;
   static const hiddenPrefDirNotice = 0x02;
   static const localFiles = 0x04;
-  static const all = exif | hiddenPrefDirNotice | localFiles;
+  static final all =
+      exif | hiddenPrefDirNotice | (isSupportLocalFiles ? localFiles : 0);
 }
 
 abstract interface class _Page implements Widget {
