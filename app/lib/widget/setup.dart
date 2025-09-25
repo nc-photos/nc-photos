@@ -4,6 +4,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
+import 'package:nc_photos/mobile/android/permission_util.dart';
 import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
 import 'package:nc_photos/widget/sign_in.dart';
@@ -265,11 +266,23 @@ class _LocalFiles extends StatefulWidget implements _Page {
 
 class _LocalFilesState extends State<_LocalFiles> {
   @override
+  void initState() {
+    super.initState();
+    requestReadMediaForResult().then((_) {
+      setState(() {
+        _isReady = true;
+      });
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return LocalRootPicker(
-      key: _key,
-      switchTitle: L10n.global().settingsDeviceMediaTitle,
-    );
+    return _isReady
+        ? LocalRootPicker(
+          key: _key,
+          switchTitle: L10n.global().settingsDeviceMediaTitle,
+        )
+        : const Center(child: CircularProgressIndicator());
   }
 
   void save() {
@@ -277,4 +290,5 @@ class _LocalFilesState extends State<_LocalFiles> {
   }
 
   final _key = GlobalKey<LocalRootPickerState>();
+  var _isReady = false;
 }
