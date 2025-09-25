@@ -17,9 +17,9 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/controller/trusted_cert_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/language_util.dart' as language_util;
-import 'package:nc_photos/mobile/android/android_info.dart';
 import 'package:nc_photos/mobile/self_signed_cert_manager.dart';
 import 'package:nc_photos/navigation_manager.dart';
+import 'package:nc_photos/platform/features.dart';
 import 'package:nc_photos/protected_page_handler.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
@@ -64,7 +64,6 @@ import 'package:nc_photos/widget/upload_folder_picker.dart';
 import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
-import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 
 part 'my_app.g.dart';
@@ -89,13 +88,11 @@ class MyApp extends StatelessWidget {
         RepositoryProvider(create: (_) => SecurePrefController(_c.securePref)),
         RepositoryProvider<LocalFilesController>(
           create: (context) {
-            if (getRawPlatform() == NpPlatform.android) {
-              if (AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU) {
-                return LocalFilesControllerImpl(
-                  _c,
-                  prefController: context.read(),
-                );
-              }
+            if (isSupportLocalFiles) {
+              return LocalFilesControllerImpl(
+                _c,
+                prefController: context.read(),
+              );
             }
             return DummyLocalFilesController();
           },

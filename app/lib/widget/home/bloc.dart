@@ -44,11 +44,9 @@ class _Bloc extends Bloc<_Event, _State>
         }),
       );
 
-      if (getRawPlatform() == NpPlatform.android) {
-        if (AndroidInfo().sdkInt >= AndroidVersion.TIRAMISU) {
-          if (!await Permission.hasReadMedia()) {
-            await requestReadMediaForResult();
-          }
+      if (isSupportLocalFiles) {
+        if (!await Permission.hasReadMedia()) {
+          await requestReadMediaForResult();
         }
       }
     } finally {

@@ -18,8 +18,8 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file/data_source.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/mobile/android/android_info.dart';
 import 'package:nc_photos/mobile/android/permission_util.dart';
+import 'package:nc_photos/platform/features.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/use_case/import_potential_shared_album.dart';
@@ -29,7 +29,6 @@ import 'package:nc_photos/widget/home_search.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_permission/np_platform_permission.dart';
-import 'package:np_platform_util/np_platform_util.dart';
 import 'package:to_string/to_string.dart';
 
 part 'bloc.dart';
