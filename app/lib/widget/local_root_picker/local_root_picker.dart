@@ -129,16 +129,21 @@ class _EnableSwitch extends StatelessWidget {
         borderRadius: BorderRadius.circular(48),
         color: Theme.of(context).colorScheme.surfaceContainerHigh,
       ),
-      child: _BlocSelector(
-        selector: (state) => state.isEnable,
-        builder:
-            (context, isEnable) => SwitchListTile(
-              title: Text(title),
-              value: isEnable,
-              onChanged: (value) {
-                context.addEvent(_SetEnableLocalFile(value));
-              },
-            ),
+      child: Material(
+        type: MaterialType.transparency,
+        borderRadius: BorderRadius.circular(48),
+        clipBehavior: Clip.antiAlias,
+        child: _BlocSelector(
+          selector: (state) => state.isEnable,
+          builder:
+              (context, isEnable) => SwitchListTile(
+                title: Text(title),
+                value: isEnable,
+                onChanged: (value) {
+                  context.addEvent(_SetEnableLocalFile(value));
+                },
+              ),
+        ),
       ),
     );
   }
