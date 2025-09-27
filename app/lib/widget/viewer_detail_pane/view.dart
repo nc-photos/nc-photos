@@ -384,11 +384,11 @@ class _DateTimeItem extends StatelessWidget {
     final dateStr = DateFormat(
       DateFormat.YEAR_ABBR_MONTH_DAY,
       Localizations.localeOf(context).languageCode,
-    ).format(context.bloc.file.dateTime);
+    ).format(context.bloc.file.dateTime.toLocal());
     final timeStr = DateFormat(
       DateFormat.HOUR_MINUTE,
       Localizations.localeOf(context).languageCode,
-    ).format(context.bloc.file.dateTime);
+    ).format(context.bloc.file.dateTime.toLocal());
     return ListTile(
       leading: const Icon(Icons.calendar_today_outlined),
       title: Text("$dateStr $timeStr"),
