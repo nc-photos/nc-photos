@@ -5,6 +5,7 @@ import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/local.dart';
+import 'package:nc_photos/entity/any_file/worker/merged.dart';
 import 'package:nc_photos/entity/any_file/worker/nextcloud.dart';
 import 'package:np_platform_uploader/np_platform_uploader.dart';
 
@@ -15,6 +16,8 @@ abstract interface class AnyFileWorkerFactory {
         return const AnyFileNextcloudCapabilityWorker();
       case AnyFileLocalProvider _:
         return const AnyFileLocalCapabilityWorker();
+      case AnyFileMergedProvider _:
+        return const AnyFileMergedCapabilityWorker();
     }
   }
 
@@ -30,6 +33,11 @@ abstract interface class AnyFileWorkerFactory {
         );
       case AnyFileLocalProvider _:
         return const AnyFileLocalFavoriteWorker();
+      case AnyFileMergedProvider _:
+        return AnyFileMergedFavoriteWorker(
+          file,
+          filesController: filesController,
+        );
     }
   }
 
@@ -45,6 +53,11 @@ abstract interface class AnyFileWorkerFactory {
         );
       case AnyFileLocalProvider _:
         return const AnyFileLocalArchiveWorker();
+      case AnyFileMergedProvider _:
+        return AnyFileMergedArchiveWorker(
+          file,
+          filesController: filesController,
+        );
     }
   }
 
@@ -58,6 +71,8 @@ abstract interface class AnyFileWorkerFactory {
         return AnyFileNextcloudDownloadWorker(file, account: account, c: c);
       case AnyFileLocalProvider _:
         return const AnyFileLocalDownloadWorker();
+      case AnyFileMergedProvider _:
+        return const AnyFileMergedDownloadWorker();
     }
   }
 
@@ -77,6 +92,12 @@ abstract interface class AnyFileWorkerFactory {
           file,
           localFilesController: localFilesController,
         );
+      case AnyFileMergedProvider _:
+        return AnyFileMergedDeleteWorker(
+          file,
+          filesController: filesController,
+          localFilesController: localFilesController,
+        );
     }
   }
 
@@ -90,6 +111,8 @@ abstract interface class AnyFileWorkerFactory {
         return AnyFileNextcloudShareWorker(file, account: account, c: c);
       case AnyFileLocalProvider _:
         return AnyFileLocalShareWorker(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedShareWorker(file, account: account, c: c);
     }
   }
 
@@ -103,6 +126,8 @@ abstract interface class AnyFileWorkerFactory {
         return AnyFileNextcloudSetAsWorker(file, account: account, c: c);
       case AnyFileLocalProvider _:
         return AnyFileLocalSetAsWorker(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedSetAsWorker(file);
     }
   }
 
@@ -112,6 +137,8 @@ abstract interface class AnyFileWorkerFactory {
         return const AnyFileNextcloudUploadWorker();
       case AnyFileLocalProvider _:
         return AnyFileLocalUploadWorker(file, account: account);
+      case AnyFileMergedProvider _:
+        return const AnyFileMergedUploadWorker();
     }
   }
 }

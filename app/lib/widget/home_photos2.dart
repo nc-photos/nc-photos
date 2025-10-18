@@ -1,10 +1,12 @@
 import 'dart:async';
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:draggable_scrollbar/draggable_scrollbar.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -19,7 +21,6 @@ import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
-import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/metadata_controller.dart';
 import 'package:nc_photos/controller/persons_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
@@ -27,20 +28,18 @@ import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/controller/sync_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/download_handler.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/content_provider/memory.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
-import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/event/event.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/exception_util.dart' as exception_util;
-import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/progress_util.dart';
@@ -52,6 +51,7 @@ import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/toast.dart';
 import 'package:nc_photos/url_launcher_util.dart';
+import 'package:nc_photos/use_case/any_file/download_any_file.dart';
 import 'package:nc_photos/use_case/any_file/share_any_file.dart';
 import 'package:nc_photos/use_case/any_file/upload_any_file.dart';
 import 'package:nc_photos/widget/collection_browser.dart';
@@ -62,7 +62,6 @@ import 'package:nc_photos/widget/file_sharer_dialog.dart' hide ShareMethod;
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/home_app_bar.dart';
 import 'package:nc_photos/widget/navigation_bar_blur_filter.dart';
-import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
 import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
 import 'package:nc_photos/widget/processing_dialog.dart';
@@ -75,10 +74,8 @@ import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
-import 'package:np_common/or_null.dart';
 import 'package:np_common/unique.dart';
 import 'package:np_datetime/np_datetime.dart';
-import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
@@ -116,7 +113,6 @@ class HomePhotos2 extends StatelessWidget {
             personsController: accountController.personsController,
             metadataController: accountController.metadataController,
             serverController: accountController.serverController,
-            localFilesController: context.read(),
             bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
             draggableThumbSize:
                 AppDimension.of(context).timelineDraggableThumbSize,
@@ -186,12 +182,12 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
             selector: (state) => state.error,
             listener: (context, error) {
               if (error != null && _isVisible == true) {
-                if (error.error is _ArchiveFailedError) {
+                if (error.error is AnyFileArchiveFailedError) {
                   SnackBarManager().showSnackBar(
                     SnackBar(
                       content: Text(
                         L10n.global().archiveSelectedFailureNotification(
-                          (error.error as _ArchiveFailedError).count,
+                          (error.error as AnyFileArchiveFailedError).count,
                         ),
                       ),
                       duration: k.snackBarDurationNormal,
@@ -404,10 +400,12 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     if (config == null || !context.mounted) {
       return;
     }
-    UploadAnyFile(account: context.bloc.account)(
-      files,
-      relativePath: config.relativePath,
-      convertConfig: config.convertConfig,
+    unawaited(
+      UploadAnyFile(account: context.bloc.account)(
+        files,
+        relativePath: config.relativePath,
+        convertConfig: config.convertConfig,
+      ),
     );
   }
 
@@ -422,7 +420,7 @@ class _BodyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocSelector<bool>(
-      selector: (state) => state.files.isEmpty && state.syncProgress != null,
+      selector: (state) => !state.hasRemoteData && state.syncProgress != null,
       builder: (context, isInitialSyncing) {
         if (isInitialSyncing) {
           return const _InitialSyncBody();

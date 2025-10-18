@@ -22,7 +22,8 @@ class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
       AnyFileCapability.favorite ||
       AnyFileCapability.archive ||
       AnyFileCapability.download ||
-      AnyFileCapability.remoteShare => false,
+      AnyFileCapability.remoteShare ||
+      AnyFileCapability.collection => false,
     };
   }
 }

@@ -8,8 +8,7 @@ class _State {
     required this.page,
     required this.nextPage,
     required this.shouldAnimateNextPage,
-    required this.remoteFiles,
-    required this.localFiles,
+    required this.anyFiles,
     this.collectionItems,
     required this.files,
     this.currentFile,
@@ -28,8 +27,7 @@ class _State {
     page: 0,
     nextPage: 0,
     shouldAnimateNextPage: true,
-    remoteFiles: [],
-    localFiles: [],
+    anyFiles: {},
     files: [],
     isShowUi: false,
     isPlay: true,
@@ -48,8 +46,7 @@ class _State {
   final int page;
   final int nextPage;
   final bool shouldAnimateNextPage;
-  final List<FileDescriptor> remoteFiles;
-  final List<LocalFile> localFiles;
+  final Map<String, AnyFile> anyFiles;
   final Map<int, CollectionFileItem>? collectionItems;
   final List<AnyFile?> files;
   final AnyFile? currentFile;

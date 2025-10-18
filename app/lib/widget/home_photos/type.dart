@@ -31,57 +31,44 @@ abstract class _FileItem extends _Item {
   final AnyFile file;
 }
 
-abstract class _NextcloudFileItem extends _FileItem {
-  _NextcloudFileItem({required this.remoteFile})
-    : super(file: remoteFile.toAnyFile());
-
-  final FileDescriptor remoteFile;
-}
-
-class _NextcloudPhotoItem extends _NextcloudFileItem {
-  _NextcloudPhotoItem({required super.remoteFile, required this.account})
-    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, remoteFile);
+class _PhotoItem extends _FileItem {
+  const _PhotoItem({required super.file, required this.account});
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
 
   @override
   Widget buildWidget(BuildContext context) {
-    return PhotoListImage(
+    return AnyFilePresenterFactory.photoListImage(
+      file,
       account: account,
-      previewUrl: _previewUrl,
-      mime: file.mime,
-      isFavorite: remoteFile.fdIsFavorite,
-      heroKey: flutter_util.HeroTag.fromAnyFile(file),
-    );
+      shouldShowFavorite: true,
+      shouldUseHero: true,
+    ).buildWidget();
   }
 
   final Account account;
-  final String _previewUrl;
 }
 
-class _NextcloudVideoItem extends _NextcloudFileItem {
-  _NextcloudVideoItem({required super.remoteFile, required this.account})
-    : _previewUrl = NetworkRectThumbnail.imageUrlForFile(account, remoteFile);
+class _VideoItem extends _FileItem {
+  const _VideoItem({required super.file, required this.account});
 
   @override
   StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
 
   @override
   Widget buildWidget(BuildContext context) {
-    return PhotoListVideo(
+    return AnyFilePresenterFactory.photoListVideo(
+      file,
       account: account,
-      previewUrl: _previewUrl,
-      mime: file.mime,
-      isFavorite: remoteFile.fdIsFavorite,
+      shouldShowFavorite: true,
       onError: () {
         context.addEvent(const _TripMissingVideoPreview());
       },
-    );
+    ).buildWidget();
   }
 
   final Account account;
-  final String _previewUrl;
 }
 
 class _DateItem extends _Item {
@@ -108,61 +95,31 @@ class _DateItem extends _Item {
   final bool isMonthOnly;
 }
 
-abstract class _LocalFileItem extends _FileItem {
-  _LocalFileItem({required this.localFile})
-    : super(file: localFile.toAnyFile());
-
-  final LocalFile localFile;
-}
-
-class _LocalPhotoItem extends _LocalFileItem {
-  _LocalPhotoItem({required super.localFile});
-
-  @override
-  StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
-
-  @override
-  Widget buildWidget(BuildContext context) {
-    return PhotoListLocalImage(file: localFile);
-  }
-}
-
-class _LocalVideoItem extends _LocalFileItem {
-  _LocalVideoItem({required super.localFile});
-
-  @override
-  StaggeredTile get staggeredTile => const StaggeredTile.count(1, 1);
-
-  @override
-  Widget buildWidget(BuildContext context) {
-    return PhotoListLocalVideo(file: localFile);
-  }
-}
-
 class _ItemTransformerArgument {
   const _ItemTransformerArgument({
     required this.account,
-    required this.files,
+    required this.anyFiles,
     required this.summary,
-    required this.localFiles,
-    required this.localSummary,
+    required this.mergedCounts,
     this.itemPerRow,
     this.itemSize,
     required this.isGroupByDay,
   });
 
   final Account account;
-  final List<FileDescriptor> files;
-  final DbFilesSummary summary;
-  final List<LocalFile> localFiles;
-  final LocalFilesSummary localSummary;
+  final List<AnyFile> anyFiles;
+  final AnyFilesSummary summary;
+  final Map<Date, int> mergedCounts;
   final int? itemPerRow;
   final double? itemSize;
   final bool isGroupByDay;
 }
 
 class _ItemTransformerResult {
-  const _ItemTransformerResult({required this.items, required this.dates});
+  const _ItemTransformerResult({
+    required this.items,
+    required this.dates,
+  });
 
   final List<List<_Item>> items;
   final Set<Date> dates;
@@ -189,16 +146,6 @@ class _VisibleDate implements Comparable<_VisibleDate> {
 }
 
 enum _SelectionMenuOption { archive, delete, download }
-
-@toString
-class _ArchiveFailedError implements Exception {
-  const _ArchiveFailedError(this.count);
-
-  @override
-  String toString() => _$toString();
-
-  final int count;
-}
 
 @toString
 class _RemoveFailedError implements Exception {

@@ -7,6 +7,7 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/file_view_util.dart';
+import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/use_case/request_public_link.dart';
 import 'package:nc_photos/widget/image_viewer.dart';
@@ -147,8 +148,12 @@ class AnyFileNextcloudImageViewerPresenter
 
 class AnyFileNextcloudPhotoListImagePresenter
     implements AnyFilePhotoListImagePresenter {
-  AnyFileNextcloudPhotoListImagePresenter(AnyFile file, {required this.account})
-    : _provider = file.provider as AnyFileNextcloudProvider;
+  AnyFileNextcloudPhotoListImagePresenter(
+    this.file, {
+    required this.account,
+    required this.shouldShowFavorite,
+    required this.shouldUseHero,
+  }) : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
   Widget buildWidget() {
@@ -156,10 +161,43 @@ class AnyFileNextcloudPhotoListImagePresenter
       account: account,
       previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),
       mime: _provider.file.fdMime,
+      isFavorite: shouldShowFavorite && _provider.file.fdIsFavorite,
+      heroKey: shouldUseHero ? flutter_util.HeroTag.fromAnyFile(file) : null,
     );
   }
 
+  final AnyFile file;
   final Account account;
+  final bool shouldShowFavorite;
+  final bool shouldUseHero;
+
+  final AnyFileNextcloudProvider _provider;
+}
+
+class AnyFileNextcloudPhotoListVideoPresenter
+    implements AnyFilePhotoListVideoPresenter {
+  AnyFileNextcloudPhotoListVideoPresenter(
+    this.file, {
+    required this.account,
+    required this.shouldShowFavorite,
+    this.onError,
+  }) : _provider = file.provider as AnyFileNextcloudProvider;
+
+  @override
+  Widget buildWidget() {
+    return PhotoListVideo(
+      account: account,
+      previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),
+      mime: _provider.file.fdMime,
+      isFavorite: shouldShowFavorite && _provider.file.fdIsFavorite,
+      onError: onError,
+    );
+  }
+
+  final AnyFile file;
+  final Account account;
+  final bool shouldShowFavorite;
+  final VoidCallback? onError;
 
   final AnyFileNextcloudProvider _provider;
 }

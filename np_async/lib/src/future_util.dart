@@ -8,6 +8,18 @@ extension FutureNotNullExtension<T> on Future<T?> {
 
 extension FutureCollectionExtension<T> on Future<Iterable<T>> {
   Future<T> get first async => (await this).first;
+
+  Future<Iterable<U>> map<U>(U Function(T e) toElement) async =>
+      (await this).map(toElement);
+}
+
+extension FutureMapEntryCollectionExtension<T, U>
+    on Future<Iterable<MapEntry<T, U>>> {
+  Future<Map<T, U>> toMap() async {
+    final result = <T, U>{};
+    (await this).iterator.iterate((obj) => result[obj.key] = obj.value);
+    return result;
+  }
 }
 
 Future<List<T>> waitOr<T>(

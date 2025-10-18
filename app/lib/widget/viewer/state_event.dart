@@ -5,8 +5,7 @@ part of 'viewer.dart';
 class _State {
   const _State({
     required this.pageAfIdMap,
-    required this.remoteFiles,
-    required this.localFiles,
+    required this.anyFiles,
     required this.mergedAfIdFileMap,
     required this.fileStates,
     required this.index,
@@ -22,6 +21,8 @@ class _State {
     required this.closeDetailPane,
     required this.isZoomed,
     required this.isInitialLoad,
+    this.forwardBound,
+    this.backwardBound,
     required this.isShowAppBar,
     required this.appBarButtons,
     required this.bottomAppBarButtons,
@@ -39,17 +40,15 @@ class _State {
   });
 
   factory _State.init({
-    required int initialIndex,
     required AnyFile initialFile,
     required List<ViewerAppBarButtonType> appBarButtons,
     required List<ViewerAppBarButtonType> bottomAppBarButtons,
   }) => _State(
-    pageAfIdMap: {initialIndex: initialFile.id},
-    remoteFiles: const [],
-    localFiles: const [],
+    pageAfIdMap: {0: initialFile.id},
+    anyFiles: const {},
     mergedAfIdFileMap: {initialFile.id: initialFile},
     fileStates: const {},
-    index: initialIndex,
+    index: 0,
     currentFile: initialFile,
     isShowDetailPane: false,
     isClosingDetailPane: false,
@@ -79,8 +78,7 @@ class _State {
   bool get canOpenDetailPane => !isZoomed;
 
   final Map<int, String> pageAfIdMap;
-  final List<FileDescriptor> remoteFiles;
-  final List<LocalFile> localFiles;
+  final Map<String, AnyFile> anyFiles;
   final Map<String, AnyFile> mergedAfIdFileMap;
   final Map<String, _PageState> fileStates;
   final int index;
@@ -96,6 +94,8 @@ class _State {
   final Unique<bool> closeDetailPane;
   final bool isZoomed;
   final bool isInitialLoad;
+  final int? forwardBound;
+  final int? backwardBound;
 
   final bool isShowAppBar;
   final List<ViewerAppBarButtonType> appBarButtons;
@@ -141,7 +141,7 @@ class _PageState {
   final bool shouldPlayLivePhoto;
 }
 
-abstract class _Event {}
+sealed class _Event {}
 
 @toString
 class _Init implements _Event {
@@ -212,6 +212,26 @@ class _NewPageContent implements _Event {
   String toString() => _$toString();
 
   final Map<int, AnyFile> value;
+}
+
+@toString
+class _SetForwardBound implements _Event {
+  const _SetForwardBound(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final int value;
+}
+
+@toString
+class _SetBackwardBound implements _Event {
+  const _SetBackwardBound(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final int value;
 }
 
 @toString

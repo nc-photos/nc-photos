@@ -89,6 +89,10 @@ dependencies:
       url: https://github.com/nc-photos/dart_image_size_getter.git
       ref: 1.0.0-nc-photos-2
       path: library
+  infinite_pageview:
+    git:
+      url: https://github.com/nc-photos/flutter_infinite_pageview.git
+      ref: 0.0.4-nc-photos-1
   intl: any
   kiwi: ^4.1.0
   local_auth: ^2.2.0

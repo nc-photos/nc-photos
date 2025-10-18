@@ -123,32 +123,10 @@ class _ContentListBody extends StatelessWidget {
                     },
                     onItemTap: (context, section, index, item) {
                       if (item is _FileItem) {
-                        final fileDate = item.file.dateTime.toLocal().toDate();
-                        final summary = [
-                          ...context.state.filesSummary.items.entries.map(
-                            (e) => (e.key, e.value.count),
-                          ),
-                          ...context.state.localFilesSummary.items.entries.map(
-                            (e) => (e.key, e.value),
-                          ),
-                        ];
-                        var count = 0;
-                        for (final e
-                            in summary.sortedBy((e) => e.$1).reversed) {
-                          if (e.$1.isAfter(fileDate)) {
-                            count += e.$2;
-                          } else {
-                            break;
-                          }
-                        }
-                        count += index;
-
                         Navigator.of(context).pushNamed(
                           TimelineViewer.routeName,
                           arguments: TimelineViewerArguments(
                             initialFile: item.file,
-                            initialIndex: count,
-                            allFilesCount: summary.map((e) => e.$2).sum,
                           ),
                         );
                       }

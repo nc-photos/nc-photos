@@ -354,7 +354,11 @@ class PhotoListDate extends StatelessWidget {
 }
 
 class PhotoListLocalImage extends StatelessWidget {
-  const PhotoListLocalImage({super.key, required this.file});
+  const PhotoListLocalImage({
+    super.key,
+    required this.file,
+    this.isMerged = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -397,13 +401,30 @@ class PhotoListLocalImage extends StatelessWidget {
                 ),
               ),
             ),
-            Container(
-              // arbitrary size here
-              constraints: BoxConstraints.tight(const Size(128, 128)),
-              alignment: AlignmentDirectional.bottomEnd,
-              padding: const EdgeInsets.all(8),
-              child: const Icon(Icons.cloud_off, size: 20, color: Colors.white),
-            ),
+            if (isMerged)
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                alignment: AlignmentDirectional.bottomEnd,
+                padding: const EdgeInsets.all(8),
+                child: const Icon(
+                  Icons.cloud_done_outlined,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              )
+            else
+              Container(
+                // arbitrary size here
+                constraints: BoxConstraints.tight(const Size(128, 128)),
+                alignment: AlignmentDirectional.bottomEnd,
+                padding: const EdgeInsets.all(8),
+                child: const Icon(
+                  Icons.cloud_off,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
           ],
         ),
       ),
@@ -411,10 +432,15 @@ class PhotoListLocalImage extends StatelessWidget {
   }
 
   final LocalFile file;
+  final bool isMerged;
 }
 
 class PhotoListLocalVideo extends StatelessWidget {
-  const PhotoListLocalVideo({super.key, required this.file});
+  const PhotoListLocalVideo({
+    super.key,
+    required this.file,
+    this.isMerged = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -464,13 +490,30 @@ class PhotoListLocalVideo extends StatelessWidget {
                   ),
                 ),
               ),
-              Container(
-                // arbitrary size here
-                constraints: BoxConstraints.tight(const Size(128, 128)),
-                alignment: AlignmentDirectional.bottomEnd,
-                padding: const EdgeInsets.all(8),
-                child: const Icon(Icons.cloud_off, size: 20),
-              ),
+              if (isMerged)
+                Container(
+                  // arbitrary size here
+                  constraints: BoxConstraints.tight(const Size(128, 128)),
+                  alignment: AlignmentDirectional.bottomEnd,
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(
+                    Icons.cloud_done_outlined,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                )
+              else
+                Container(
+                  // arbitrary size here
+                  constraints: BoxConstraints.tight(const Size(128, 128)),
+                  alignment: AlignmentDirectional.bottomEnd,
+                  padding: const EdgeInsets.all(8),
+                  child: const Icon(
+                    Icons.cloud_off,
+                    size: 20,
+                    color: Colors.white,
+                  ),
+                ),
               Container(
                 // arbitrary size here
                 constraints: BoxConstraints.tight(const Size(128, 128)),
@@ -486,4 +529,5 @@ class PhotoListLocalVideo extends StatelessWidget {
   }
 
   final LocalFile file;
+  final bool isMerged;
 }

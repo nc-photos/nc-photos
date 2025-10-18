@@ -203,13 +203,22 @@ class _ButtonBarState extends State<_ButtonBar> {
   }
 
   Future<void> _onAddToAlbumPressed(BuildContext context) {
-    if (context.bloc.file.provider is! AnyFileNextcloudProvider) {
+    final f = context.bloc.file;
+    if (!AnyFileWorkerFactory.capability(
+      f,
+    ).isPermitted(AnyFileCapability.collection)) {
       throw UnsupportedError("File not supported");
     }
-    final provider = context.bloc.file.provider as AnyFileNextcloudProvider;
+    // TODO move this away
+    final provider = f.provider;
+    final remoteFile = switch (provider) {
+      AnyFileNextcloudProvider _ => provider.file,
+      AnyFileMergedProvider _ => provider.remote.file,
+      AnyFileLocalProvider _ => throw UnsupportedError("File not supported"),
+    };
     return const AddSelectionToCollectionHandler()(
       context: context,
-      selection: [provider.file],
+      selection: [remoteFile],
       clearSelection: () {},
     );
   }
@@ -410,6 +419,7 @@ class _SizeItem extends StatelessWidget {
         String title;
         switch (context.bloc.file.provider) {
           case AnyFileNextcloudProvider _:
+          case AnyFileMergedProvider _:
             icon = Icons.cloud_outlined;
             title = L10n.global().fileOnCloud;
             break;

@@ -844,6 +844,15 @@ packages:
       url: "https://github.com/nc-photos/dart_image_size_getter.git"
     source: git
     version: "1.0.0"
+  infinite_pageview:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "0.0.4-nc-photos-1"
+      resolved-ref: "71bb11f922b59b26186a8538b91903fbd967fe2c"
+      url: "https://github.com/nc-photos/flutter_infinite_pageview.git"
+    source: git
+    version: "0.0.4"
   intl:
     dependency: "direct main"
     description:

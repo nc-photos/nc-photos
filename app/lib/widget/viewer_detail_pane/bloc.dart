@@ -111,15 +111,14 @@ class _Bloc extends Bloc<_Event, _State> {
         false;
     if (canSetCover) {
       canSetCover = switch (file.provider) {
-        AnyFileNextcloudProvider _ => true,
+        AnyFileNextcloudProvider _ || AnyFileMergedProvider _ => true,
         AnyFileLocalProvider _ => false,
       };
     }
 
-    var canAddToCollection = switch (file.provider) {
-      AnyFileNextcloudProvider _ => true,
-      AnyFileLocalProvider _ => false,
-    };
+    var canAddToCollection = capability.isPermitted(
+      AnyFileCapability.collection,
+    );
 
     var canDelete = capability.isPermitted(AnyFileCapability.delete);
     if (canDelete && collectionAdapter != null) {

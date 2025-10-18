@@ -4,12 +4,15 @@ part of '../home_photos2.dart';
 @toString
 class _State {
   const _State({
-    required this.files,
+    required this.anyFiles,
+    required this.anyFilesSummary,
     required this.isLoading,
     required this.transformedItems,
     required this.selectedItems,
     required this.visibleDates,
     required this.queriedDates,
+    required this.mergedCounts,
+    required this.hasRemoteData,
     required this.isEnableMemoryCollection,
     required this.memoryCollections,
     this.syncProgress,
@@ -22,9 +25,6 @@ class _State {
     this.itemPerRow,
     this.itemSize,
     required this.isScrolling,
-    required this.filesSummary,
-    required this.localFiles,
-    required this.localFilesSummary,
     this.minimapItems,
     required this.minimapYRatio,
     this.scrollDate,
@@ -45,20 +45,20 @@ class _State {
     required bool isEnableMemoryCollection,
     required int zoom,
   }) => _State(
-    files: const [],
+    anyFiles: const [],
+    anyFilesSummary: const AnyFilesSummary(items: {}),
     isLoading: false,
     transformedItems: const [],
     selectedItems: const {},
     visibleDates: const {},
     queriedDates: const {},
+    mergedCounts: const {},
+    hasRemoteData: false,
     isEnableMemoryCollection: isEnableMemoryCollection,
     memoryCollections: const [],
     zoom: zoom,
     finger: 0,
     isScrolling: false,
-    filesSummary: const DbFilesSummary(items: {}),
-    localFiles: const [],
-    localFilesSummary: const LocalFilesSummary(items: {}),
     minimapYRatio: 1,
     hasMissingVideoPreview: false,
     shareRequest: Unique(null),
@@ -75,15 +75,15 @@ class _State {
   @override
   String toString() => _$toString();
 
-  final List<FileDescriptor> files;
+  final List<AnyFile> anyFiles;
+  final AnyFilesSummary anyFilesSummary;
   final bool isLoading;
   final List<List<_Item>> transformedItems;
   final Set<_Item> selectedItems;
-  final DbFilesSummary filesSummary;
-  final List<LocalFile> localFiles;
-  final LocalFilesSummary localFilesSummary;
   final Set<_VisibleDate> visibleDates;
   final Set<Date> queriedDates;
+  final Map<Date, int> mergedCounts;
+  final bool hasRemoteData;
 
   final bool isEnableMemoryCollection;
   final List<Collection> memoryCollections;
@@ -144,20 +144,14 @@ class _RequestRefresh implements _Event {
 /// Transform the file list (e.g., filtering, sorting, etc)
 @toString
 class _TransformItems implements _Event {
-  const _TransformItems(
-    this.files,
-    this.summary,
-    this.localFiles,
-    this.localSummary,
-  );
+  const _TransformItems(this.anyFiles, this.mergedCounts, this.summary);
 
   @override
   String toString() => _$toString();
 
-  final List<FileDescriptor> files;
-  final DbFilesSummary summary;
-  final List<LocalFile> localFiles;
-  final LocalFilesSummary localSummary;
+  final List<AnyFile> anyFiles;
+  final AnyFilesSummary summary;
+  final Map<Date, int> mergedCounts;
 }
 
 @toString

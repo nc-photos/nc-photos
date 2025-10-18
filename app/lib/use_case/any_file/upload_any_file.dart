@@ -7,7 +7,7 @@ import 'package:np_platform_uploader/np_platform_uploader.dart';
 class UploadAnyFile {
   const UploadAnyFile({required this.account});
 
-  void call(
+  Future<void> call(
     List<AnyFile> files, {
     required String relativePath,
     ConvertConfig? convertConfig,
@@ -17,16 +17,19 @@ class UploadAnyFile {
       (e) => switch (e.provider) {
         AnyFileNextcloudProvider _ => AnyFileProviderType.nextcloud,
         AnyFileLocalProvider _ => AnyFileProviderType.local,
+        AnyFileMergedProvider _ => AnyFileProviderType.merged,
       },
     );
     if (groups[AnyFileProviderType.local]?.isNotEmpty == true) {
-      UploadLocalFile(account: account).multiple(
+      return UploadLocalFile(account: account).multiple(
         groups[AnyFileProviderType.local]!
             .map((e) => (e.provider as AnyFileLocalProvider).file)
             .toList(),
         relativePath: relativePath,
         convertConfig: convertConfig,
       );
+    } else {
+      return Future.value();
     }
   }
 

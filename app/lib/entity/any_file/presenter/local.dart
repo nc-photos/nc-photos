@@ -114,3 +114,16 @@ class AnyFileLocalPhotoListImagePresenter
 
   final AnyFileLocalProvider _provider;
 }
+
+class AnyFileLocalPhotoListVideoPresenter
+    implements AnyFilePhotoListVideoPresenter {
+  AnyFileLocalPhotoListVideoPresenter(AnyFile file)
+    : _provider = file.provider as AnyFileLocalProvider;
+
+  @override
+  Widget buildWidget() {
+    return PhotoListLocalVideo(file: _provider.file);
+  }
+
+  final AnyFileLocalProvider _provider;
+}

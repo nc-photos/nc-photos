@@ -298,6 +298,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -336,6 +337,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -378,6 +380,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -568,6 +571,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -598,6 +602,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -681,6 +686,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -711,6 +717,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -799,6 +806,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -829,6 +837,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -1247,6 +1256,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1342,6 +1352,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -1443,6 +1454,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -1526,6 +1538,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -1556,6 +1569,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -1570,7 +1584,8 @@
     "uploadBatchConvertSettings",
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
-    "uploadBatchConvertSettingsDownscaling"
+    "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText"
   ],
 
   "zh": [
@@ -1684,6 +1699,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ],
 
@@ -1890,6 +1906,7 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
+    "viewerLastPageText",
     "errorServerNoCert"
   ]
 }
