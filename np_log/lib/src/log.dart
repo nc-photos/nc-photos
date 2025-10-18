@@ -5,6 +5,9 @@ import 'package:logging/logging.dart';
 void initLog({required bool isDebugMode, void Function(String) print = print}) {
   Logger.root.level = !isDebugMode ? Level.WARNING : Level.ALL;
   Logger.root.onRecord.listen((record) {
+    if (record.loggerName == "SuperSliverList") {
+      return;
+    }
     String msg =
         "[${record.loggerName}] ${record.level.name} ${record.time}: ${record.message}";
     if (record.error != null) {
