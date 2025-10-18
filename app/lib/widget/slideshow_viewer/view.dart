@@ -212,7 +212,7 @@ class _Body extends StatelessWidget {
                   duration: k.animationDurationNormal,
                   child: const Align(
                     alignment: Alignment.bottomCenter,
-                    child: _ControlBar(),
+                    child: SafeArea(child: _ControlBar()),
                   ),
                 ),
           ),
@@ -230,7 +230,7 @@ class _Body extends StatelessWidget {
                     builder:
                         (context, hasShownTimeline) => Visibility(
                           visible: hasShownTimeline,
-                          child: const _Timeline(),
+                          child: const SafeArea(child: _Timeline()),
                         ),
                   ),
                 ),
