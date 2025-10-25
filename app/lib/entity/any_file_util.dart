@@ -99,10 +99,18 @@ Future<(T, U, V)> handleAnyFileIdByType<T, U, V>(
   }
 }
 
-int anyFileMergeSorter(AnyFile a, AnyFile b) {
+int anyFileMergeSorter(AnyFile a, AnyFile b) => deconstructedAnyFileMergeSorter(
+  (filename: a.name, dateTime: a.dateTime),
+  (filename: b.name, dateTime: b.dateTime),
+);
+
+int deconstructedAnyFileMergeSorter(
+  ({String filename, DateTime dateTime}) a,
+  ({String filename, DateTime dateTime}) b,
+) {
   var c = path_lib
-      .basenameWithoutExtension(a.name)
-      .compareTo(path_lib.basenameWithoutExtension(b.name));
+      .basenameWithoutExtension(a.filename)
+      .compareTo(path_lib.basenameWithoutExtension(b.filename));
   if (c == 0) {
     c = a.dateTime.compareTo(b.dateTime);
   }
@@ -110,10 +118,28 @@ int anyFileMergeSorter(AnyFile a, AnyFile b) {
 }
 
 bool isAnyFileMergeable(AnyFile a, AnyFile b) {
-  return path_lib.basenameWithoutExtension(a.name) ==
-          path_lib.basenameWithoutExtension(b.name) &&
+  return isDeconstructedAnyFileMergeable(
+    (
+      filename: a.name,
+      dateTime: a.dateTime,
+      isRemote: a.provider is AnyFileNextcloudProvider,
+    ),
+    (
+      filename: b.name,
+      dateTime: b.dateTime,
+      isRemote: b.provider is AnyFileNextcloudProvider,
+    ),
+  );
+}
+
+bool isDeconstructedAnyFileMergeable(
+  ({String filename, DateTime dateTime, bool isRemote}) a,
+  ({String filename, DateTime dateTime, bool isRemote}) b,
+) {
+  return path_lib.basenameWithoutExtension(a.filename) ==
+          path_lib.basenameWithoutExtension(b.filename) &&
       a.dateTime.difference(b.dateTime).abs() < const Duration(minutes: 1) &&
-      a.provider.runtimeType != b.provider.runtimeType;
+      a.isRemote != b.isRemote;
 }
 
 @npLog

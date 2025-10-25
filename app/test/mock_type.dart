@@ -418,6 +418,7 @@ class MockFileMemoryDataSource2 extends MockFileDataSource2 {
           (e) => FileIdWithTimestamp(
             fileId: e.fdId,
             timestamp: e.fdDateTime.millisecondsSinceEpoch,
+            filename: e.filename,
           ),
         )
         .toList();

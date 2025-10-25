@@ -352,12 +352,15 @@ class _WrappedViewerState extends State<_WrappedViewer>
         slideshowRequest.config,
       ),
     );
-    _log.info("[_onSlideshowRequest] Slideshow ended, jump to: $newIndex");
-    if (newIndex != null && context.mounted) {
+    final relIndex = newIndex?.let((e) => e - slideshowRequest.startIndex);
+    _log.info(
+      "[_onSlideshowRequest] Slideshow ended, jump to: $newIndex ($relIndex)",
+    );
+    if (relIndex != null && context.mounted) {
       context.addEvent(
         _JumpToLastSlideshow(
-          index: newIndex,
-          afId: slideshowRequest.afIds[newIndex],
+          index: relIndex,
+          afId: slideshowRequest.afIds[newIndex!],
         ),
       );
     }

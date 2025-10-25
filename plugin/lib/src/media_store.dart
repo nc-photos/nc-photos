@@ -232,9 +232,8 @@ class MediaStore {
     }
   }
 
-  static Future<List<({int fileId, int timestamp})>> getFileIdWithTimestamps({
-    List<String>? dirWhitelist,
-  }) async {
+  static Future<List<({int fileId, int timestamp, String filename})>>
+  getFileIdWithTimestamps({List<String>? dirWhitelist}) async {
     try {
       return (await _methodChannel.invokeMethod<List>(
             "getFileIdWithTimestamps",
@@ -247,6 +246,7 @@ class MediaStore {
             (e) => (
               fileId: e["fileId"] as int,
               timestamp: e["timestamp"] as int,
+              filename: e["displayName"] as String,
             ),
           )
           .toList();

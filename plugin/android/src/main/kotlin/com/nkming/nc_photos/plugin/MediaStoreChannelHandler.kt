@@ -729,6 +729,7 @@ internal class MediaStoreChannelHandler(context: Context) :
 				arrayOf(
 					MediaStore.MediaColumns._ID,
 					MediaStore.MediaColumns.DATE_TAKEN,
+					MediaStore.MediaColumns.DISPLAY_NAME,
 				),
 				Bundle().apply {
 					putString(ContentResolver.QUERY_ARG_SQL_SELECTION, where)
@@ -752,13 +753,18 @@ internal class MediaStoreChannelHandler(context: Context) :
 					val dateColumn = it.getColumnIndexOrThrow(
 						MediaStore.MediaColumns.DATE_TAKEN
 					)
+					val displayNameColumn = it.getColumnIndexOrThrow(
+						MediaStore.MediaColumns.DISPLAY_NAME
+					)
 					do {
 						val id = it.getLong(idColumn)
 						val timestamp = it.getLong(dateColumn)
+						val displayName = it.getString(displayNameColumn)
 						results.add(
 							mapOf(
 								"fileId" to id,
 								"timestamp" to timestamp,
+								"displayName" to displayName,
 							)
 						)
 					} while (it.moveToNext())
