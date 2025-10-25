@@ -249,13 +249,13 @@ class _Bloc extends Bloc<_Event, _State>
     await contentController.fastJump(page: ev.index, afId: ev.afId);
     emit(
       state.copyWith(
-        index: ev.index,
         pageAfIdMap:
             state.pageAfIdMap.containsKey(ev.index)
                 ? null
                 : state.pageAfIdMap.addedAll({ev.index: ev.afId}),
       ),
     );
+    add(_SetIndex(ev.index));
   }
 
   void _onSetCollection(_SetCollection ev, _Emitter emit) {
