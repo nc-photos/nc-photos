@@ -108,13 +108,17 @@ int deconstructedAnyFileMergeSorter(
   ({String filename, DateTime dateTime}) a,
   ({String filename, DateTime dateTime}) b,
 ) {
-  var c = path_lib
-      .basenameWithoutExtension(a.filename)
-      .compareTo(path_lib.basenameWithoutExtension(b.filename));
-  if (c == 0) {
-    c = a.dateTime.compareTo(b.dateTime);
+  if (a.dateTime.difference(b.dateTime).abs() < const Duration(minutes: 1)) {
+    var x = path_lib
+        .basenameWithoutExtension(a.filename)
+        .compareTo(path_lib.basenameWithoutExtension(b.filename));
+    if (x == 0) {
+      x = a.dateTime.compareTo(b.dateTime);
+    }
+    return x;
+  } else {
+    return a.dateTime.compareTo(b.dateTime);
   }
-  return c;
 }
 
 bool isAnyFileMergeable(AnyFile a, AnyFile b) {
