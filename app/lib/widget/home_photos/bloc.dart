@@ -998,8 +998,8 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
   final sortedFiles = arg.anyFiles
       .where(
         (f) =>
-            f is! ArchivableAnyFile ||
-            (f as ArchivableAnyFile).isArchived != true,
+            f.provider is! ArchivableAnyFile ||
+            (f.provider as ArchivableAnyFile).isArchived != true,
       )
       .sorted(anyFileDateTimeDescSorter);
 
