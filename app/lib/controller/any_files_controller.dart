@@ -221,10 +221,10 @@ class AnyFilesController {
           groups[AnyFileProviderType.merged]?.isNotEmpty == true)
         filesController.remove(
           [
-            ...groups[AnyFileProviderType.nextcloud]!.map(
+            ...?groups[AnyFileProviderType.nextcloud]?.map(
               (e) => (e.provider as AnyFileNextcloudProvider).file,
             ),
-            ...groups[AnyFileProviderType.merged]!.map(
+            ...?groups[AnyFileProviderType.merged]?.map(
               (e) => (e.provider as AnyFileMergedProvider).remote.file,
             ),
           ],
@@ -240,10 +240,10 @@ class AnyFilesController {
           groups[AnyFileProviderType.merged]?.isNotEmpty == true)
         localFilesController.trash(
           [
-            ...groups[AnyFileProviderType.local]!.map(
+            ...?groups[AnyFileProviderType.local]?.map(
               (e) => (e.provider as AnyFileLocalProvider).file,
             ),
-            ...groups[AnyFileProviderType.merged]!.map(
+            ...?groups[AnyFileProviderType.merged]?.map(
               (e) => (e.provider as AnyFileMergedProvider).local.file,
             ),
           ],
