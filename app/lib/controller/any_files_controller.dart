@@ -364,7 +364,7 @@ class AnyFilesController {
             ),
           ),
         );
-        final goneDate = local.dateTime.toDate();
+        final goneDate = local.dateTime.toLocal().toDate();
         mergedCounts[goneDate] = (mergedCounts[goneDate] ?? 0) + 1;
       } else {
         merged.add(e);
