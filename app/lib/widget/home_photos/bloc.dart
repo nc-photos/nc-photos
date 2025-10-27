@@ -730,6 +730,7 @@ class _Bloc extends Bloc<_Event, _State>
     AnyFilesSummary summary,
   ) {
     _log.info("[_transformItems] Queue ${anyFiles.length} items");
+    final stopwatch = Stopwatch();
     _itemTransformerQueue.addJob(
       _ItemTransformerArgument(
         account: account,
@@ -742,9 +743,15 @@ class _Bloc extends Bloc<_Event, _State>
       ),
       _buildItem,
       (result) {
+        _log.info(
+          "[_transformItems] Elapsed ${stopwatch.elapsedMilliseconds}ms for ${anyFiles.length} files",
+        );
         if (!isClosed) {
           add(_OnItemTransformed(result.items, result.dates));
         }
+      },
+      onBeforeCompute: () {
+        stopwatch.start();
       },
     );
   }
