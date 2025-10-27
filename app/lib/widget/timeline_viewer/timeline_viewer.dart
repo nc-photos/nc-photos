@@ -9,6 +9,7 @@ import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
@@ -22,21 +23,16 @@ import 'package:nc_photos/use_case/local_file/list_local_file.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/object_util.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_log/np_log.dart';
 
 part 'timeline_viewer.g.dart';
 
 class TimelineViewerArguments {
-  const TimelineViewerArguments({
-    required this.initialFile,
-    required this.initialIndex,
-    required this.allFilesCount,
-  });
+  const TimelineViewerArguments({required this.initialFile});
 
   final AnyFile initialFile;
-  final int initialIndex;
-  final int allFilesCount;
 }
 
 class TimelineViewer extends StatelessWidget {
@@ -52,20 +48,10 @@ class TimelineViewer extends StatelessWidget {
     settings: settings,
   );
 
-  const TimelineViewer({
-    super.key,
-    required this.initialFile,
-    required this.initialIndex,
-    required this.allFilesCount,
-  });
+  const TimelineViewer({super.key, required this.initialFile});
 
   TimelineViewer.fromArgs(TimelineViewerArguments args, {Key? key})
-    : this(
-        key: key,
-        initialFile: args.initialFile,
-        initialIndex: args.initialIndex,
-        allFilesCount: args.allFilesCount,
-      );
+    : this(key: key, initialFile: args.initialFile);
 
   @override
   Widget build(BuildContext context) {
@@ -81,15 +67,11 @@ class TimelineViewer extends StatelessWidget {
         ),
         prefController: context.read(),
       ),
-      allFilesCount: allFilesCount,
       initialFile: initialFile,
-      initialIndex: initialIndex,
     );
   }
 
   final AnyFile initialFile;
-  final int initialIndex;
-  final int allFilesCount;
 }
 
 @npLog
@@ -107,7 +89,7 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     ViewerPositionInfo at,
     int count,
   ) async {
-    _log.info("[getFiles] at: ${at.pageIndex}, count: $count");
+    _log.info("[getFiles] count: $count");
     // we don't know how many files will come from remote vs local, so we need
     // to query them both. Luckily, count is likely to be small here :D
     final List<AnyFile> remote;
@@ -134,7 +116,9 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
       _log.severe("[getFiles] No results");
       return const ViewerContentProviderResult(files: []);
     }
-    final results = files.pySlice(pos + 1);
+    // results after [count] could be wrong due to potential buffer underrun in
+    // one of the source
+    final results = files.pySlice(pos + 1, count.abs());
     return ViewerContentProviderResult(files: results);
   }
 
@@ -171,15 +155,20 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     ViewerPositionInfo at,
     int count,
   ) async {
+    // we need this because the remote and local file may share a different
+    // dateTime due to lower precision in Android's media store
+    final originalFile =
+        at.originalFile.provider.as<AnyFileMergedProvider>()?.asRemoteFile() ??
+        at.originalFile;
     final raw = await ListFile(c)(
       account,
       shareDirPath,
       isArchived: false,
       timeRange:
           count < 0
-              ? TimeRange(from: at.originalFile.dateTime)
+              ? TimeRange(from: originalFile.dateTime)
               : TimeRange(
-                to: at.originalFile.dateTime,
+                to: originalFile.dateTime,
                 toBound: TimeRangeBound.inclusive,
               ),
       isAscending: count < 0,
@@ -189,6 +178,11 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
   }
 
   Future<List<AnyFile>> _getLocalFiles(ViewerPositionInfo at, int count) async {
+    // we need this because the remote and local file may share a different
+    // dateTime due to lower precision in Android's media store
+    final originalFile =
+        at.originalFile.provider.as<AnyFileMergedProvider>()?.asLocalFile() ??
+        at.originalFile;
     try {
       final raw = await ListLocalFile(
         localFileRepo: c.localFileRepo,
@@ -196,9 +190,9 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
       )(
         timeRange:
             count < 0
-                ? TimeRange(from: at.originalFile.dateTime)
+                ? TimeRange(from: originalFile.dateTime)
                 : TimeRange(
-                  to: at.originalFile.dateTime,
+                  to: originalFile.dateTime,
                   toBound: TimeRangeBound.inclusive,
                 ),
         dirWhitelist: prefController.localDirsValue,
@@ -217,23 +211,38 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     List<AnyFile> b,
     bool isAscending,
   ) {
-    if (isAscending) {
-      return mergeSortedLists(a, b, (a, b) {
-        var diff = a.dateTime.compareTo(b.dateTime);
-        if (diff == 0) {
-          diff = a.id.compareTo(b.id);
-        }
-        return diff;
-      });
-    } else {
-      return mergeSortedLists(a.reversed, b.reversed, (a, b) {
-        var diff = a.dateTime.compareTo(b.dateTime);
-        if (diff == 0) {
-          diff = b.id.compareTo(a.id);
-        }
-        return diff;
-      }).reversed.toList();
+    final sorted = [...a, ...b]..sort(anyFileMergeSorter);
+    final merged = <AnyFile>[];
+    for (final e in sorted) {
+      if (merged.isEmpty) {
+        merged.add(e);
+        continue;
+      }
+      if (isAnyFileMergeable(merged.last, e)) {
+        // merge
+        final replace = merged.removeLast();
+        final remote =
+            replace.provider is AnyFileNextcloudProvider ? replace : e;
+        final local = replace.provider is AnyFileLocalProvider ? replace : e;
+        merged.add(
+          AnyFile(
+            provider: AnyFileMergedProvider(
+              remote: remote.provider.cast(),
+              local: local.provider.cast(),
+            ),
+          ),
+        );
+      } else {
+        merged.add(e);
+      }
     }
+
+    if (isAscending) {
+      merged.sort(anyFileDateTimeAscSorter);
+    } else {
+      merged.sort(anyFileDateTimeDescSorter);
+    }
+    return merged;
   }
 
   final DiContainer c;

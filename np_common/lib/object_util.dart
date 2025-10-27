@@ -23,4 +23,6 @@ extension ObjectExtension<T> on T {
 
   /// Cast this as U, or null if this is not an object of U
   U? as<U>() => this is U ? this as U : null;
+
+  U cast<U>() => this as U;
 }

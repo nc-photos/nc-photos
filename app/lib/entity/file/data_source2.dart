@@ -166,7 +166,11 @@ class FileNpDbDataSource implements FileDataSource2 {
     );
     return dbObj
         .map(
-          (e) => FileIdWithTimestamp(fileId: e.fileId, timestamp: e.timestamp),
+          (e) => FileIdWithTimestamp(
+            fileId: e.fileId,
+            timestamp: e.timestamp,
+            filename: e.filename,
+          ),
         )
         .toList();
   }

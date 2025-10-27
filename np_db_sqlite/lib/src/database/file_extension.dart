@@ -57,10 +57,11 @@ class CountFileGroupsByDateResult {
 }
 
 class QueryFileIdResult {
-  const QueryFileIdResult(this.fileId, {this.timestamp});
+  const QueryFileIdResult(this.fileId, {this.timestamp, this.filename});
 
   final int fileId;
   final int? timestamp;
+  final String? filename;
 }
 
 extension SqliteDbFileExtension on SqliteDb {
@@ -187,6 +188,7 @@ extension SqliteDbFileExtension on SqliteDb {
     List<String>? mimes,
     int? limit,
     bool? requestTimestamp,
+    bool? requestFilename,
   }) async {
     _log.info(
       "[queryFileIds] "
@@ -215,6 +217,12 @@ extension SqliteDbFileExtension on SqliteDb {
       }
     }
 
+    final pathColName =
+        "\"${accountFiles.actualTableName}\".${accountFiles.relativePath.escapedNameFor(SqlDialect.sqlite)}";
+    // https://stackoverflow.com/a/38330814
+    final colFilename = CustomExpression<String>(
+      "REPLACE($pathColName, RTRIM($pathColName, REPLACE($pathColName, '/', '')), '')",
+    );
     final query = _queryFiles().let((q) {
       q
         ..setQueryMode(
@@ -222,6 +230,7 @@ extension SqliteDbFileExtension on SqliteDb {
           expressions: [
             files.fileId,
             if (requestTimestamp == true) accountFiles.bestDateTime,
+            if (requestFilename == true) colFilename,
           ],
         )
         ..setAccount(account);
@@ -276,6 +285,7 @@ extension SqliteDbFileExtension on SqliteDb {
                 requestTimestamp == true
                     ? r.read(accountFiles.bestDateTime)!.millisecondsSinceEpoch
                     : null,
+            filename: requestFilename == true ? r.read(colFilename) : null,
           ),
         )
         .get();

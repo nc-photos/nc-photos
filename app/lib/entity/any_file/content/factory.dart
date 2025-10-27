@@ -2,6 +2,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/local.dart';
+import 'package:nc_photos/entity/any_file/content/merged.dart';
 import 'package:nc_photos/entity/any_file/content/nextcloud.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/size.dart';
@@ -15,6 +16,8 @@ abstract interface class AnyFileContentGetterFactory {
         return AnyFileNextcloudUriGetter(file, account: account);
       case AnyFileLocalProvider _:
         return AnyFileLocalUriGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedUriGetter(file);
     }
   }
 
@@ -30,6 +33,8 @@ abstract interface class AnyFileContentGetterFactory {
         return AnyFileNextcloudLargePreviewUriGetter(file, account: account);
       case AnyFileLocalProvider _:
         return AnyFileLocalLargePreviewUriGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedLargePreviewUriGetter(file);
     }
   }
 
@@ -43,6 +48,8 @@ abstract interface class AnyFileContentGetterFactory {
         return AnyFileNextcloudMetadataGetter(file, c: c, account: account);
       case AnyFileLocalProvider _:
         return AnyFileLocalMetadataGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedMetadataGetter(file, c: c, account: account);
     }
   }
 
@@ -56,6 +63,8 @@ abstract interface class AnyFileContentGetterFactory {
         return AnyFileNextcloudTagGetter(file, c: c, account: account);
       case AnyFileLocalProvider _:
         return const AnyFileLocalTagGetter();
+      case AnyFileMergedProvider _:
+        return AnyFileMergedTagGetter(file, c: c, account: account);
     }
   }
 }

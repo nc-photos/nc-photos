@@ -540,7 +540,8 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<({int fileId, int timestamp})>> getFileIdWithTimestamps({
+  Future<List<({int fileId, int timestamp, String filename})>>
+  getFileIdWithTimestamps({
     required DbAccount account,
     List<String>? includeRelativeRoots,
     List<String>? includeRelativeDirs,
@@ -559,10 +560,17 @@ class NpDbSqlite implements NpDb {
           isArchived: isArchived,
           mimes: mimes,
           requestTimestamp: true,
+          requestFilename: true,
         );
       });
       return dbObj
-          .map((e) => (fileId: e.fileId, timestamp: e.timestamp!))
+          .map(
+            (e) => (
+              fileId: e.fileId,
+              timestamp: e.timestamp!,
+              filename: e.filename!,
+            ),
+          )
           .toList();
     } finally {
       _log.fine(

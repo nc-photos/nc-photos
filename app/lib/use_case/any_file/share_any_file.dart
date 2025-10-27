@@ -49,14 +49,19 @@ class ShareAnyFile {
       (e) => switch (e.provider) {
         AnyFileNextcloudProvider _ => AnyFileProviderType.nextcloud,
         AnyFileLocalProvider _ => AnyFileProviderType.local,
+        AnyFileMergedProvider _ => AnyFileProviderType.merged,
       },
     );
     final uris = <(AnyFile, String)>[];
-    if (groups[AnyFileProviderType.nextcloud]?.isNotEmpty == true) {
+    if (groups[AnyFileProviderType.nextcloud]?.isNotEmpty == true ||
+        groups[AnyFileProviderType.merged]?.isNotEmpty == true) {
       // we need to first download the remote files
       uris.addAll(
         await _prepNextcloudFileUris(
-          groups[AnyFileProviderType.nextcloud]!,
+          [
+            ...?groups[AnyFileProviderType.nextcloud],
+            ...?groups[AnyFileProviderType.merged],
+          ],
           account: account,
           remoteMethod: remoteMethod,
           onProgress: onProgress,
@@ -64,8 +69,14 @@ class ShareAnyFile {
         ),
       );
     }
-    if (groups[AnyFileProviderType.local]?.isNotEmpty == true) {
-      uris.addAll(_prepLocalFileUris(groups[AnyFileProviderType.local]!));
+    if (groups[AnyFileProviderType.local]?.isNotEmpty == true ||
+        groups[AnyFileProviderType.merged]?.isNotEmpty == true) {
+      uris.addAll(
+        _prepLocalFileUris([
+          ...?groups[AnyFileProviderType.local],
+          ...?groups[AnyFileProviderType.merged],
+        ]),
+      );
     }
     if (isCanceled) {
       throw const InterruptedException();
@@ -96,7 +107,12 @@ class ShareAnyFile {
       if (isCanceled) {
         throw const InterruptedException();
       }
-      final f = (af.provider as AnyFileNextcloudProvider).file;
+      final provider = af.provider;
+      final f = switch (provider) {
+        AnyFileNextcloudProvider _ => provider.file,
+        AnyFileMergedProvider _ => provider.remote.file,
+        _ => throw ArgumentError("Unsupported provider type"),
+      };
       onProgress?.call(
         ShareAnyFileProgress(
           max: files.length,

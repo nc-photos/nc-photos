@@ -18,8 +18,7 @@ abstract class $_StateCopyWithWorker {
     int? page,
     int? nextPage,
     bool? shouldAnimateNextPage,
-    List<FileDescriptor>? remoteFiles,
-    List<LocalFile>? localFiles,
+    Map<String, AnyFile>? anyFiles,
     Map<int, CollectionFileItem>? collectionItems,
     List<AnyFile?>? files,
     AnyFile? currentFile,
@@ -43,8 +42,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic page,
     dynamic nextPage,
     dynamic shouldAnimateNextPage,
-    dynamic remoteFiles,
-    dynamic localFiles,
+    dynamic anyFiles,
     dynamic collectionItems = copyWithNull,
     dynamic files,
     dynamic currentFile = copyWithNull,
@@ -63,8 +61,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       nextPage: nextPage as int? ?? that.nextPage,
       shouldAnimateNextPage:
           shouldAnimateNextPage as bool? ?? that.shouldAnimateNextPage,
-      remoteFiles: remoteFiles as List<FileDescriptor>? ?? that.remoteFiles,
-      localFiles: localFiles as List<LocalFile>? ?? that.localFiles,
+      anyFiles: anyFiles as Map<String, AnyFile>? ?? that.anyFiles,
       collectionItems:
           collectionItems == copyWithNull
               ? that.collectionItems
@@ -125,7 +122,7 @@ extension _$_PageViewNpLog on _PageView {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {hasInit: $hasInit, page: $page, nextPage: $nextPage, shouldAnimateNextPage: $shouldAnimateNextPage, remoteFiles: [length: ${remoteFiles.length}], localFiles: [length: ${localFiles.length}], collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, files: [length: ${files.length}], currentFile: $currentFile, isShowUi: $isShowUi, isPlay: $isPlay, isVideoCompleted: $isVideoCompleted, hasPrev: $hasPrev, hasNext: $hasNext, isShowTimeline: $isShowTimeline, hasShownTimeline: $hasShownTimeline, hasRequestExit: $hasRequestExit}";
+    return "_State {hasInit: $hasInit, page: $page, nextPage: $nextPage, shouldAnimateNextPage: $shouldAnimateNextPage, anyFiles: {length: ${anyFiles.length}}, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, files: [length: ${files.length}], currentFile: $currentFile, isShowUi: $isShowUi, isPlay: $isPlay, isVideoCompleted: $isVideoCompleted, hasPrev: $hasPrev, hasNext: $hasNext, isShowTimeline: $isShowTimeline, hasShownTimeline: $hasShownTimeline, hasRequestExit: $hasRequestExit}";
   }
 }
 

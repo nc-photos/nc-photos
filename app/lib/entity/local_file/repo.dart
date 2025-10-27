@@ -6,10 +6,12 @@ class LocalFileIdWithTimestamp {
   const LocalFileIdWithTimestamp({
     required this.fileId,
     required this.timestamp,
+    required this.filename,
   });
 
   final String fileId;
   final int timestamp;
+  final String filename;
 }
 
 class LocalFileRepo {

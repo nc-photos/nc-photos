@@ -40,8 +40,7 @@ extension $ViewerPositionInfoCopyWith on ViewerPositionInfo {
 abstract class $_StateCopyWithWorker {
   _State call({
     Map<int, String>? pageAfIdMap,
-    List<FileDescriptor>? remoteFiles,
-    List<LocalFile>? localFiles,
+    Map<String, AnyFile>? anyFiles,
     Map<String, AnyFile>? mergedAfIdFileMap,
     Map<String, _PageState>? fileStates,
     int? index,
@@ -57,6 +56,8 @@ abstract class $_StateCopyWithWorker {
     Unique<bool>? closeDetailPane,
     bool? isZoomed,
     bool? isInitialLoad,
+    int? forwardBound,
+    int? backwardBound,
     bool? isShowAppBar,
     List<ViewerAppBarButtonType>? appBarButtons,
     List<ViewerAppBarButtonType>? bottomAppBarButtons,
@@ -80,8 +81,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({
     dynamic pageAfIdMap,
-    dynamic remoteFiles,
-    dynamic localFiles,
+    dynamic anyFiles,
     dynamic mergedAfIdFileMap,
     dynamic fileStates,
     dynamic index,
@@ -97,6 +97,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic closeDetailPane,
     dynamic isZoomed,
     dynamic isInitialLoad,
+    dynamic forwardBound = copyWithNull,
+    dynamic backwardBound = copyWithNull,
     dynamic isShowAppBar,
     dynamic appBarButtons,
     dynamic bottomAppBarButtons,
@@ -114,8 +116,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   }) {
     return _State(
       pageAfIdMap: pageAfIdMap as Map<int, String>? ?? that.pageAfIdMap,
-      remoteFiles: remoteFiles as List<FileDescriptor>? ?? that.remoteFiles,
-      localFiles: localFiles as List<LocalFile>? ?? that.localFiles,
+      anyFiles: anyFiles as Map<String, AnyFile>? ?? that.anyFiles,
       mergedAfIdFileMap:
           mergedAfIdFileMap as Map<String, AnyFile>? ?? that.mergedAfIdFileMap,
       fileStates: fileStates as Map<String, _PageState>? ?? that.fileStates,
@@ -151,6 +152,14 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       closeDetailPane: closeDetailPane as Unique<bool>? ?? that.closeDetailPane,
       isZoomed: isZoomed as bool? ?? that.isZoomed,
       isInitialLoad: isInitialLoad as bool? ?? that.isInitialLoad,
+      forwardBound:
+          forwardBound == copyWithNull
+              ? that.forwardBound
+              : forwardBound as int?,
+      backwardBound:
+          backwardBound == copyWithNull
+              ? that.backwardBound
+              : backwardBound as int?,
       isShowAppBar: isShowAppBar as bool? ?? that.isShowAppBar,
       appBarButtons:
           appBarButtons as List<ViewerAppBarButtonType>? ?? that.appBarButtons,
@@ -279,7 +288,7 @@ extension _$ViewerContentProviderResultToString on ViewerContentProviderResult {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, remoteFiles: [length: ${remoteFiles.length}], localFiles: [length: ${localFiles.length}], mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, uploadRequest: $uploadRequest, isBusy: $isBusy, error: $error}";
+    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, anyFiles: {length: ${anyFiles.length}}, mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, forwardBound: $forwardBound, backwardBound: $backwardBound, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, uploadRequest: $uploadRequest, isBusy: $isBusy, error: $error}";
   }
 }
 
@@ -336,6 +345,20 @@ extension _$_NewPageContentToString on _NewPageContent {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_NewPageContent {value: {length: ${value.length}}}";
+  }
+}
+
+extension _$_SetForwardBoundToString on _SetForwardBound {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetForwardBound {value: $value}";
+  }
+}
+
+extension _$_SetBackwardBoundToString on _SetBackwardBound {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetBackwardBound {value: $value}";
   }
 }
 

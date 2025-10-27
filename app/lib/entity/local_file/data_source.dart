@@ -151,6 +151,7 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
           (e) => LocalFileIdWithTimestamp(
             fileId: "${e.fileId}",
             timestamp: e.timestamp,
+            filename: e.filename,
           ),
         )
         .toList();

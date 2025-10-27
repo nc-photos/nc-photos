@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/presenter/local.dart';
+import 'package:nc_photos/entity/any_file/presenter/merged.dart';
 import 'package:nc_photos/entity/any_file/presenter/nextcloud.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_player_platform_interface/video_player_platform_interface.dart';
@@ -20,6 +21,8 @@ abstract interface class AnyFilePresenterFactory {
         );
       case AnyFileLocalProvider _:
         return AnyFileLocalVideoPlayerControllerPresenter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedVideoPlayerControllerPresenter(file);
     }
   }
 
@@ -32,6 +35,8 @@ abstract interface class AnyFilePresenterFactory {
         return AnyFileNextcloudLargeImagePresenter(file, account: account);
       case AnyFileLocalProvider _:
         return AnyFileLocalLargeImagePresenter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedLargeImagePresenter(file);
     }
   }
 
@@ -44,18 +49,50 @@ abstract interface class AnyFilePresenterFactory {
         return AnyFileNextcloudImageViewerPresenter(file, account: account);
       case AnyFileLocalProvider _:
         return AnyFileLocalImageViewerPresenter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedImageViewerPresenter(file);
     }
   }
 
   static AnyFilePhotoListImagePresenter photoListImage(
     AnyFile file, {
     required Account account,
+    bool shouldShowFavorite = false,
+    bool shouldUseHero = false,
   }) {
     switch (file.provider) {
       case AnyFileNextcloudProvider _:
-        return AnyFileNextcloudPhotoListImagePresenter(file, account: account);
+        return AnyFileNextcloudPhotoListImagePresenter(
+          file,
+          account: account,
+          shouldShowFavorite: shouldShowFavorite,
+          shouldUseHero: shouldUseHero,
+        );
       case AnyFileLocalProvider _:
         return AnyFileLocalPhotoListImagePresenter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedPhotoListImagePresenter(file);
+    }
+  }
+
+  static AnyFilePhotoListVideoPresenter photoListVideo(
+    AnyFile file, {
+    required Account account,
+    bool shouldShowFavorite = false,
+    VoidCallback? onError,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return AnyFileNextcloudPhotoListVideoPresenter(
+          file,
+          account: account,
+          shouldShowFavorite: shouldShowFavorite,
+          onError: onError,
+        );
+      case AnyFileLocalProvider _:
+        return AnyFileLocalPhotoListVideoPresenter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedPhotoListVideoPresenter(file);
     }
   }
 }
@@ -84,5 +121,9 @@ abstract interface class AnyFileImageViewerPresenter {
 }
 
 abstract interface class AnyFilePhotoListImagePresenter {
+  Widget buildWidget();
+}
+
+abstract interface class AnyFilePhotoListVideoPresenter {
   Widget buildWidget();
 }

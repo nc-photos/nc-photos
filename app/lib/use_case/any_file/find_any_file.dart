@@ -8,6 +8,7 @@ import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/use_case/find_file_descriptor.dart';
 import 'package:nc_photos/use_case/local_file/find_local_file.dart';
+import 'package:np_async/np_async.dart';
 import 'package:np_log/np_log.dart';
 
 part 'find_any_file.g.dart';
@@ -21,7 +22,7 @@ class FindAnyFile {
     List<String> afIds, {
     void Function(String fileId)? onFileNotFound,
   }) async {
-    final (remote, local) = await handleAnyFileIdByType(
+    final (remote, local, merged) = await handleAnyFileIdByType(
       afIds,
       nextcloudHandler:
           (ids) => FindFileDescriptor(_c)(
@@ -45,12 +46,64 @@ class FindAnyFile {
               );
             },
           ),
+      mergedHandler: (ids) async {
+        final (remoteFiles, localFiles) =
+            await (
+              FindFileDescriptor(_c)(
+                account,
+                ids.map((e) => e.remoteFileId).toList(),
+                onFileNotFound: (fileId) {
+                  onFileNotFound?.call(
+                    ids.firstWhere((e) => e.remoteFileId == fileId).afId,
+                  );
+                },
+              ).map((e) => MapEntry(e.fdId, e)).toMap(),
+              FindLocalFile(
+                localFileRepo: _c.localFileRepo,
+                prefController: prefController,
+              )(
+                ids.map((e) => e.localFileId).toList(),
+                onFileNotFound: (fileId) {
+                  onFileNotFound?.call(
+                    ids.firstWhere((e) => e.localFileId == fileId).afId,
+                  );
+                },
+              ).map((e) => MapEntry(e.id, e)).toMap(),
+            ).wait;
+        return ids
+            .map((e) {
+              try {
+                return AnyFile(
+                  provider: AnyFileMergedProvider(
+                    remote: AnyFileNextcloudProvider(
+                      file: remoteFiles[e.remoteFileId]!,
+                    ),
+                    local: AnyFileLocalProvider(
+                      file: localFiles[e.localFileId]!,
+                    ),
+                  ),
+                );
+              } catch (e, stackTrace) {
+                _log.severe(
+                  "[call] Failed to construct AnyFile",
+                  e,
+                  stackTrace,
+                );
+                return null;
+              }
+            })
+            .nonNulls
+            .toList();
+      },
     );
     final fileMap = <String, AnyFile>{};
     for (final f in remote.map((e) => e.toAnyFile())) {
       fileMap[f.id] = f;
     }
     for (final f in local.map((e) => e.toAnyFile())) {
+      fileMap[f.id] = f;
+    }
+    for (final f in merged) {
       fileMap[f.id] = f;
     }
 

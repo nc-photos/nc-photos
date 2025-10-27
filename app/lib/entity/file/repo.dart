@@ -9,10 +9,15 @@ import 'package:np_log/np_log.dart';
 part 'repo.g.dart';
 
 class FileIdWithTimestamp {
-  const FileIdWithTimestamp({required this.fileId, required this.timestamp});
+  const FileIdWithTimestamp({
+    required this.fileId,
+    required this.timestamp,
+    required this.filename,
+  });
 
   final int fileId;
   final int timestamp;
+  final String filename;
 }
 
 abstract class FileRepo2 {

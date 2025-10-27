@@ -1589,6 +1589,7 @@
 	},
 	"uploadBatchConvertSettingsQuality": "Quality",
 	"uploadBatchConvertSettingsDownscaling": "Downscaling",
+	"viewerLastPageText": "No more photos",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

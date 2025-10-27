@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:infinite_pageview/infinite_pageview.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -23,6 +24,7 @@ import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
+import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
@@ -30,7 +32,6 @@ import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/live_photo_util.dart';
@@ -41,7 +42,6 @@ import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.da
 import 'package:nc_photos/widget/delete_result_snack_bar.dart';
 import 'package:nc_photos/widget/disposable.dart';
 import 'package:nc_photos/widget/file_content_view.dart';
-import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:nc_photos/widget/image_editor.dart';
 import 'package:nc_photos/widget/image_enhancer.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
@@ -142,9 +142,7 @@ class Viewer extends StatelessWidget {
   const Viewer({
     super.key,
     required this.contentProvider,
-    required this.allFilesCount,
     required this.initialFile,
-    required this.initialIndex,
     this.collectionId,
   });
 
@@ -163,9 +161,7 @@ class Viewer extends StatelessWidget {
             prefController: context.read(),
             accountPrefController: accountController.accountPrefController,
             contentProvider: contentProvider,
-            allFilesCount: allFilesCount,
             initialFile: initialFile,
-            initialIndex: initialIndex,
             brightness: Theme.of(context).brightness,
             collectionId: collectionId,
           )..add(const _Init()),
@@ -174,9 +170,7 @@ class Viewer extends StatelessWidget {
   }
 
   final ViewerContentProvider contentProvider;
-  final int allFilesCount;
   final AnyFile initialFile;
-  final int initialIndex;
 
   /// ID of the collection these files belongs to, or null
   final String? collectionId;
@@ -358,12 +352,15 @@ class _WrappedViewerState extends State<_WrappedViewer>
         slideshowRequest.config,
       ),
     );
-    _log.info("[_onSlideshowRequest] Slideshow ended, jump to: $newIndex");
-    if (newIndex != null && context.mounted) {
+    final relIndex = newIndex?.let((e) => e - slideshowRequest.startIndex);
+    _log.info(
+      "[_onSlideshowRequest] Slideshow ended, jump to: $newIndex ($relIndex)",
+    );
+    if (relIndex != null && context.mounted) {
       context.addEvent(
         _JumpToLastSlideshow(
-          index: newIndex,
-          afId: slideshowRequest.afIds[newIndex],
+          index: relIndex,
+          afId: slideshowRequest.afIds[newIndex!],
         ),
       );
     }

@@ -55,10 +55,11 @@ class CollectionViewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Viewer(
-      contentProvider: _CollectionViewerContentProvider(files),
-      allFilesCount: files.length,
+      contentProvider: _CollectionViewerContentProvider(
+        files: files,
+        initialIndex: initialIndex,
+      ),
       initialFile: files[initialIndex].toAnyFile(),
-      initialIndex: initialIndex,
       collectionId: collectionId,
     );
   }
@@ -72,22 +73,22 @@ class CollectionViewer extends StatelessWidget {
 
 @npLog
 class _CollectionViewerContentProvider implements ViewerContentProvider {
-  _CollectionViewerContentProvider(List<FileDescriptor> files)
-    : files = files.map((e) => e.toAnyFile()).toList();
+  _CollectionViewerContentProvider({
+    required List<FileDescriptor> files,
+    required this.initialIndex,
+  }) : files = files.map((e) => e.toAnyFile()).toList();
 
   @override
   Future<ViewerContentProviderResult> getFiles(
     ViewerPositionInfo at,
     int count,
   ) async {
+    final pageIndex = _toAbsolutePageIndex(at.pageIndex);
     if (count > 0) {
-      final results = files.pySlice(at.pageIndex + 1, at.pageIndex + 1 + count);
+      final results = files.pySlice(pageIndex + 1, pageIndex + 1 + count);
       return ViewerContentProviderResult(files: results);
     } else {
-      final results = files.pySlice(
-        max(at.pageIndex - count.abs(), 0),
-        at.pageIndex,
-      );
+      final results = files.pySlice(max(pageIndex - count.abs(), 0), pageIndex);
       return ViewerContentProviderResult(files: results.reversed.toList());
     }
   }
@@ -112,5 +113,10 @@ class _CollectionViewerContentProvider implements ViewerContentProvider {
     return files.map((e) => e.id).toList();
   }
 
+  int _toAbsolutePageIndex(int relativePageIndex) {
+    return relativePageIndex + initialIndex;
+  }
+
   final List<AnyFile> files;
+  final int initialIndex;
 }
