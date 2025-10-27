@@ -288,11 +288,14 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     List<AnyFile> files,
   ) {
     final remoteFiles =
-        files
-            .where((e) => e.provider is AnyFileNextcloudProvider)
-            .map((e) => e.provider as AnyFileNextcloudProvider)
-            .map((e) => e.file)
-            .toList();
+        files.map((e) {
+          final p = e.provider;
+          return switch (p) {
+            AnyFileNextcloudProvider _ => p.file,
+            AnyFileMergedProvider _ => p.remote.file,
+            AnyFileLocalProvider _ => throw ArgumentError("File not supported"),
+          };
+        }).toList();
     return showDialog(
       context: context,
       builder:
