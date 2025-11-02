@@ -1,8 +1,10 @@
 # Photos
 The long-awaited modern gallery app for your Nextcloud server
 
-[<img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg" height="40">](https://liberapay.com/nkming2/donate)
-[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="40">](https://www.buymeacoffee.com/nkming2)
+[<img alt="Donate using Liberapay" src="https://liberapay.com/assets/widgets/donate.svg" height="30">](https://liberapay.com/nkming2/donate)  
+[<img src="https://cdn.buymeacoffee.com/buttons/v2/default-yellow.png" alt="Buy Me A Coffee" height="30">](https://www.buymeacoffee.com/nkming2)  
+BTC: bc1q294nmsh06aw7jnpl4frdeytklcg36l8g295s4p  
+<img src="https://gitlab.com/nkming2/nc-photos/-/wikis/uploads/47ae8428a073d796f733e40921d4304e/qrcode.png" width="128" />
 
 ## Get the app
 ### Android
