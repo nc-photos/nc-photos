@@ -180,11 +180,17 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         anyFilesController.summaryStream2,
-        onData:
-            (data) => state.copyWith(
-              anyFilesSummary: data.summary,
-              hasRemoteData: state.hasRemoteData || data.hasRemoteData,
-            ),
+        onData: (data) {
+          if (data.hasRemoteData == false && _isInitialLoad) {
+            // no data, first run?
+            _isInitialLoad = false;
+            _syncRemote();
+          }
+          return state.copyWith(
+            anyFilesSummary: data.summary,
+            hasRemoteData: state.hasRemoteData || (data.hasRemoteData ?? false),
+          );
+        },
         onError: (e, stackTrace) {
           _log.severe("[_onLoad] Uncaught exception", e, stackTrace);
           return state.copyWith(error: ExceptionEvent(e, stackTrace));

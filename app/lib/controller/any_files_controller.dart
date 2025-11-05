@@ -66,7 +66,7 @@ class AnyFilesSummaryStreamEvent {
   });
 
   final AnyFilesSummary summary;
-  final bool hasRemoteData;
+  final bool? hasRemoteData;
 }
 
 @npLog
@@ -324,16 +324,17 @@ class AnyFilesController {
   }
 
   void _mergeSummary() {
-    final remote = filesController.summaryStream.value;
+    final remote = filesController.summaryStream.valueOrNull;
     final local = localFilesController.summaryStream2.valueOrNull;
-    final result = remote.summary.items.map((k, v) => MapEntry(k, v.count));
+    final result =
+        remote?.summary.items.map((k, v) => MapEntry(k, v.count)) ?? const {};
     for (final e in local?.summary.items.entries ?? <MapEntry<Date, int>>[]) {
       result[e.key] = (result[e.key] ?? 0) + e.value;
     }
     _summaryStreamController.add(
       AnyFilesSummaryStreamEvent(
         summary: AnyFilesSummary(items: result),
-        hasRemoteData: remote.summary.items.isNotEmpty,
+        hasRemoteData: remote?.summary.items.isNotEmpty,
       ),
     );
   }
