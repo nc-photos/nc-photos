@@ -31,6 +31,7 @@ class _State {
     required this.hasMissingVideoPreview,
     required this.shareRequest,
     required this.uploadRequest,
+    required this.deleteRequest,
     required this.selectedCanArchive,
     required this.selectedCanDownload,
     required this.selectedCanDelete,
@@ -63,6 +64,7 @@ class _State {
     hasMissingVideoPreview: false,
     shareRequest: Unique(null),
     uploadRequest: Unique(null),
+    deleteRequest: Unique(null),
     selectedCanArchive: false,
     selectedCanDownload: false,
     selectedCanDelete: false,
@@ -108,6 +110,7 @@ class _State {
 
   final Unique<_ShareRequest?> shareRequest;
   final Unique<_UploadRequest?> uploadRequest;
+  final Unique<_DeleteRequest?> deleteRequest;
 
   final bool selectedCanArchive;
   final bool selectedCanDownload;
@@ -200,6 +203,17 @@ class _DeleteSelectedItems implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _DeleteItemsWithHint implements _Event {
+  const _DeleteItemsWithHint({required this.files, required this.hint});
+
+  @override
+  String toString() => _$toString();
+
+  final List<AnyFile> files;
+  final AnyFileRemoveHint hint;
 }
 
 @toString

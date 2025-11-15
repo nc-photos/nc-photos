@@ -58,10 +58,16 @@ class _$AnyFilesSummaryStreamEventCopyWithWorkerImpl
   _$AnyFilesSummaryStreamEventCopyWithWorkerImpl(this.that);
 
   @override
-  AnyFilesSummaryStreamEvent call({dynamic summary, dynamic hasRemoteData}) {
+  AnyFilesSummaryStreamEvent call({
+    dynamic summary,
+    dynamic hasRemoteData = copyWithNull,
+  }) {
     return AnyFilesSummaryStreamEvent(
       summary: summary as AnyFilesSummary? ?? that.summary,
-      hasRemoteData: hasRemoteData as bool? ?? that.hasRemoteData,
+      hasRemoteData:
+          hasRemoteData == copyWithNull
+              ? that.hasRemoteData
+              : hasRemoteData as bool?,
     );
   }
 

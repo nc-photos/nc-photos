@@ -41,6 +41,7 @@ abstract class $_StateCopyWithWorker {
     bool? hasMissingVideoPreview,
     Unique<_ShareRequest?>? shareRequest,
     Unique<_UploadRequest?>? uploadRequest,
+    Unique<_DeleteRequest?>? deleteRequest,
     bool? selectedCanArchive,
     bool? selectedCanDownload,
     bool? selectedCanDelete,
@@ -84,6 +85,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic hasMissingVideoPreview,
     dynamic shareRequest,
     dynamic uploadRequest,
+    dynamic deleteRequest,
     dynamic selectedCanArchive,
     dynamic selectedCanDownload,
     dynamic selectedCanDelete,
@@ -141,6 +143,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           shareRequest as Unique<_ShareRequest?>? ?? that.shareRequest,
       uploadRequest:
           uploadRequest as Unique<_UploadRequest?>? ?? that.uploadRequest,
+      deleteRequest:
+          deleteRequest as Unique<_DeleteRequest?>? ?? that.deleteRequest,
       selectedCanArchive:
           selectedCanArchive as bool? ?? that.selectedCanArchive,
       selectedCanDownload:
@@ -235,7 +239,7 @@ extension _$_ContentListBodyNpLog on _ContentListBody {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {anyFiles: [length: ${anyFiles.length}], anyFilesSummary: $anyFilesSummary, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, mergedCounts: {length: ${mergedCounts.length}}, hasRemoteData: $hasRemoteData, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, shareRequest: $shareRequest, uploadRequest: $uploadRequest, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, selectedCanUpload: $selectedCanUpload, error: $error, shouldShowRemoteOnlyWarning: $shouldShowRemoteOnlyWarning, shouldShowLocalOnlyWarning: $shouldShowLocalOnlyWarning}";
+    return "_State {anyFiles: [length: ${anyFiles.length}], anyFilesSummary: $anyFilesSummary, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, mergedCounts: {length: ${mergedCounts.length}}, hasRemoteData: $hasRemoteData, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, shareRequest: $shareRequest, uploadRequest: $uploadRequest, deleteRequest: $deleteRequest, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, selectedCanUpload: $selectedCanUpload, error: $error, shouldShowRemoteOnlyWarning: $shouldShowRemoteOnlyWarning, shouldShowLocalOnlyWarning: $shouldShowLocalOnlyWarning}";
   }
 }
 
@@ -293,6 +297,13 @@ extension _$_DeleteSelectedItemsToString on _DeleteSelectedItems {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_DeleteSelectedItems {}";
+  }
+}
+
+extension _$_DeleteItemsWithHintToString on _DeleteItemsWithHint {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_DeleteItemsWithHint {files: [length: ${files.length}], hint: ${hint.name}}";
   }
 }
 
@@ -475,5 +486,12 @@ extension _$_ShareRequestToString on _ShareRequest {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_ShareRequest {files: [length: ${files.length}], isRemoteShareOnly: $isRemoteShareOnly, isLocalShareOnly: $isLocalShareOnly}";
+  }
+}
+
+extension _$_DeleteRequestToString on _DeleteRequest {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_DeleteRequest {files: [length: ${files.length}]}";
   }
 }

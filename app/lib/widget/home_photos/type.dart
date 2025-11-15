@@ -116,10 +116,7 @@ class _ItemTransformerArgument {
 }
 
 class _ItemTransformerResult {
-  const _ItemTransformerResult({
-    required this.items,
-    required this.dates,
-  });
+  const _ItemTransformerResult({required this.items, required this.dates});
 
   final List<List<_Item>> items;
   final Set<Date> dates;
@@ -205,6 +202,16 @@ class _ShareRequest {
 
 class _UploadRequest {
   const _UploadRequest({required this.files});
+
+  final List<AnyFile> files;
+}
+
+@toString
+class _DeleteRequest {
+  const _DeleteRequest({required this.files});
+
+  @override
+  String toString() => _$toString();
 
   final List<AnyFile> files;
 }

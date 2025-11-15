@@ -33,6 +33,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_AddSelectedItemsToCollection>(_onAddSelectedItemsToCollection);
     on<_ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
+    on<_DeleteItemsWithHint>(_onDeleteItemsWithHint);
     on<_DownloadSelectedItems>(_onDownloadSelectedItems);
     on<_ShareSelectedItems>(_onShareSelectedItems);
     on<_UploadSelectedItems>(_onUploadSelectedItems);
@@ -359,11 +360,25 @@ class _Bloc extends Bloc<_Event, _State>
     final selectedFiles =
         selected.whereType<_FileItem>().map((e) => e.file).toList();
     if (selectedFiles.isNotEmpty) {
-      anyFilesController.remove(
-        selectedFiles,
-        errorBuilder: (fileIds) => _RemoveFailedError(fileIds.length),
-      );
+      if (selectedFiles.any((e) => e.provider is AnyFileMergedProvider)) {
+        final req = _DeleteRequest(files: selectedFiles);
+        emit(state.copyWith(deleteRequest: Unique(req)));
+      } else {
+        anyFilesController.remove(
+          selectedFiles,
+          errorBuilder: (fileIds) => _RemoveFailedError(fileIds.length),
+        );
+      }
     }
+  }
+
+  void _onDeleteItemsWithHint(_DeleteItemsWithHint ev, Emitter<_State> emit) {
+    _log.info(ev);
+    anyFilesController.remove(
+      ev.files,
+      hint: ev.hint,
+      errorBuilder: (fileIds) => _RemoveFailedError(fileIds.length),
+    );
   }
 
   void _onDownloadSelectedItems(

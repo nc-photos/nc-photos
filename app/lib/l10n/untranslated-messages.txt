@@ -299,6 +299,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -338,6 +342,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -381,6 +389,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -572,6 +584,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -603,6 +619,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -687,6 +707,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -718,6 +742,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -807,6 +835,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -838,6 +870,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1257,6 +1293,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1353,6 +1393,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1455,6 +1499,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1539,6 +1587,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1570,6 +1622,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1585,7 +1641,11 @@
     "uploadBatchConvertSettingsFormat",
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
-    "viewerLastPageText"
+    "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent"
   ],
 
   "zh": [
@@ -1700,6 +1760,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1907,6 +1971,10 @@
     "uploadBatchConvertSettingsQuality",
     "uploadBatchConvertSettingsDownscaling",
     "viewerLastPageText",
+    "deleteMergedFileDialogServerOnlyButton",
+    "deleteMergedFileDialogLocalOnlyButton",
+    "deleteMergedFileDialogBothButton",
+    "deleteMergedFileDialogContent",
     "errorServerNoCert"
   ]
 }

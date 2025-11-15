@@ -205,6 +205,7 @@ class AnyFilesController {
 
   Future<void> remove(
     List<AnyFile> files, {
+    AnyFileRemoveHint hint = AnyFileRemoveHint.both,
     Exception? Function(List<AnyFile> files)? errorBuilder,
   }) async {
     final groups = groupBy(
@@ -215,18 +216,24 @@ class AnyFilesController {
         AnyFileMergedProvider _ => AnyFileProviderType.merged,
       },
     );
+    final shouldRemoveRemoteMerged =
+        hint == AnyFileRemoveHint.remote || hint == AnyFileRemoveHint.both;
+    final shouldRemoveLocalMerged =
+        hint == AnyFileRemoveHint.local || hint == AnyFileRemoveHint.both;
     final failures = <AnyFile>[];
     await Future.wait([
       if (groups[AnyFileProviderType.nextcloud]?.isNotEmpty == true ||
-          groups[AnyFileProviderType.merged]?.isNotEmpty == true)
+          (shouldRemoveRemoteMerged &&
+              groups[AnyFileProviderType.merged]?.isNotEmpty == true))
         filesController.remove(
           [
             ...?groups[AnyFileProviderType.nextcloud]?.map(
               (e) => (e.provider as AnyFileNextcloudProvider).file,
             ),
-            ...?groups[AnyFileProviderType.merged]?.map(
-              (e) => (e.provider as AnyFileMergedProvider).remote.file,
-            ),
+            if (shouldRemoveRemoteMerged)
+              ...?groups[AnyFileProviderType.merged]?.map(
+                (e) => (e.provider as AnyFileMergedProvider).remote.file,
+              ),
           ],
           errorBuilder:
               errorBuilder == null
@@ -237,15 +244,17 @@ class AnyFilesController {
                   },
         ),
       if (groups[AnyFileProviderType.local]?.isNotEmpty == true ||
-          groups[AnyFileProviderType.merged]?.isNotEmpty == true)
+          (shouldRemoveLocalMerged &&
+              groups[AnyFileProviderType.merged]?.isNotEmpty == true))
         localFilesController.trash(
           [
             ...?groups[AnyFileProviderType.local]?.map(
               (e) => (e.provider as AnyFileLocalProvider).file,
             ),
-            ...?groups[AnyFileProviderType.merged]?.map(
-              (e) => (e.provider as AnyFileMergedProvider).local.file,
-            ),
+            if (shouldRemoveLocalMerged)
+              ...?groups[AnyFileProviderType.merged]?.map(
+                (e) => (e.provider as AnyFileMergedProvider).local.file,
+              ),
           ],
           errorBuilder:
               errorBuilder == null
@@ -406,6 +415,8 @@ class AnyFilesController {
 
   final _subscriptions = <StreamSubscription>[];
 }
+
+enum AnyFileRemoveHint { remote, local, both }
 
 @toString
 class AnyFileRemoveFailureError implements Exception {

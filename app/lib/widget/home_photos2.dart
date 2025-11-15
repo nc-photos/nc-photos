@@ -83,6 +83,7 @@ import 'package:visibility_detector/visibility_detector.dart';
 
 part 'home_photos/app_bar.dart';
 part 'home_photos/bloc.dart';
+part 'home_photos/delete_dialog.dart';
 part 'home_photos/minimap_view.dart';
 part 'home_photos/state_event.dart';
 part 'home_photos/type.dart';
@@ -177,6 +178,10 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
           _BlocListenerT(
             selector: (state) => state.uploadRequest,
             listener: _onUploadRequest,
+          ),
+          _BlocListenerT(
+            selector: (state) => state.deleteRequest,
+            listener: _onDeleteRequest,
           ),
           _BlocListenerT<ExceptionEvent?>(
             selector: (state) => state.error,
@@ -409,6 +414,25 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
         relativePath: config.relativePath,
         convertConfig: config.convertConfig,
       ),
+    );
+  }
+
+  Future<void> _onDeleteRequest(
+    BuildContext context,
+    Unique<_DeleteRequest?> deleteRequest,
+  ) async {
+    if (deleteRequest.value == null) {
+      return;
+    }
+    final result = await showDialog<AnyFileRemoveHint>(
+      context: context,
+      builder: (context) => const _DeleteDialog(),
+    );
+    if (result == null || !context.mounted) {
+      return;
+    }
+    context.addEvent(
+      _DeleteItemsWithHint(files: deleteRequest.value!.files, hint: result),
     );
   }
 

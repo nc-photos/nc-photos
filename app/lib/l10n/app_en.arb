@@ -1590,6 +1590,19 @@
 	"uploadBatchConvertSettingsQuality": "Quality",
 	"uploadBatchConvertSettingsDownscaling": "Downscaling",
 	"viewerLastPageText": "No more photos",
+	"deleteMergedFileDialogServerOnlyButton": "Server only",
+	"@deleteMergedFileDialogServerOnlyButton": {
+		"description": "Remove the file from server but keep the device copy"
+	},
+	"deleteMergedFileDialogLocalOnlyButton": "Device only",
+	"@deleteMergedFileDialogLocalOnlyButton": {
+		"description": "Remove the file from device but keep the server copy"
+	},
+	"deleteMergedFileDialogBothButton": "Both",
+	"@deleteMergedFileDialogBothButton": {
+		"description": "Remove the file from device and server"
+	},
+	"deleteMergedFileDialogContent": "Some of the files exist both on your server and your device. Where should we delete these files from?",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
