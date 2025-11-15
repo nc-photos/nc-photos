@@ -159,7 +159,7 @@ class _WrappedConnect extends StatelessWidget {
                 },
               ),
             ],
-            child: const _Body(),
+            child: const SafeArea(child: _Body()),
           ),
         ),
       ),
