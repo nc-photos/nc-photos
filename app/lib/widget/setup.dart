@@ -8,7 +8,7 @@ import 'package:nc_photos/mobile/android/permission_util.dart';
 import 'package:nc_photos/platform/features.dart';
 import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/local_root_picker/local_root_picker.dart';
-import 'package:nc_photos/widget/sign_in.dart';
+import 'package:nc_photos/widget/sign_in/sign_in.dart';
 import 'package:page_view_indicators/circle_page_indicator.dart';
 
 bool isNeedSetup() => Pref().getSetupProgressOr() & _PageId.all != _PageId.all;

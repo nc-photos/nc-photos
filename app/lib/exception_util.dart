@@ -6,7 +6,7 @@ import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/navigation_manager.dart';
-import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/trusted_cert_manager/trusted_cert_manager.dart';
 
 class AppMessageException implements Exception {
   const AppMessageException(this.message);

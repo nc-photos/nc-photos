@@ -1,4 +1,4 @@
-part of '../export_collection_dialog.dart';
+part of 'export_collection_dialog.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {

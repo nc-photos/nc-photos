@@ -1,4 +1,4 @@
-part of '../trusted_cert_manager.dart';
+part of 'trusted_cert_manager.dart';
 
 class _InitView extends StatelessWidget {
   const _InitView();

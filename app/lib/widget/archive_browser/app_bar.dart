@@ -1,4 +1,4 @@
-part of '../archive_browser.dart';
+part of 'archive_browser.dart';
 
 class _AppBar extends StatelessWidget {
   const _AppBar();

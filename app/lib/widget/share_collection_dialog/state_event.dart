@@ -1,4 +1,4 @@
-part of '../share_collection_dialog.dart';
+part of 'share_collection_dialog.dart';
 
 @genCopyWith
 @toString

@@ -1,4 +1,4 @@
-part of '../home_collections.dart';
+part of 'home_collections.dart';
 
 enum HomeCollectionsNavBarButtonType {
   // the order must not be changed

@@ -1,4 +1,4 @@
-part of '../map_browser.dart';
+part of 'map_browser.dart';
 
 class _MapView extends StatefulWidget {
   const _MapView();

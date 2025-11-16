@@ -1,4 +1,4 @@
-part of '../places_browser.dart';
+part of 'places_browser.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State>

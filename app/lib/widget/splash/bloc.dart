@@ -1,4 +1,4 @@
-part of '../splash.dart';
+part of 'splash.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {

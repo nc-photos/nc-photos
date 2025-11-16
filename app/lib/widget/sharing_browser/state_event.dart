@@ -1,4 +1,4 @@
-part of '../sharing_browser.dart';
+part of 'sharing_browser.dart';
 
 @genCopyWith
 @toString

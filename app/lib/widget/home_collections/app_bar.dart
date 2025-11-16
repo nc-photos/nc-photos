@@ -1,4 +1,4 @@
-part of '../home_collections.dart';
+part of 'home_collections.dart';
 
 class _AppBar extends StatelessWidget {
   const _AppBar();

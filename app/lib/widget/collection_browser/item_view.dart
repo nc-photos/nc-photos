@@ -1,4 +1,4 @@
-part of '../collection_browser.dart';
+part of 'collection_browser.dart';
 
 class _LabelView extends StatelessWidget {
   const _LabelView({required this.text});

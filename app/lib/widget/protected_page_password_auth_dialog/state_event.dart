@@ -1,4 +1,4 @@
-part of '../protected_page_password_auth_dialog.dart';
+part of 'protected_page_password_auth_dialog.dart';
 
 @genCopyWith
 @toString

@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
-import 'package:nc_photos/widget/my_app.dart';
+import 'package:nc_photos/widget/my_app/my_app.dart';
 
 mixin PageVisibilityMixin<T extends StatefulWidget> on State<T>, RouteAware {
   @override

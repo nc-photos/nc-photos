@@ -1,4 +1,4 @@
-part of '../places_browser.dart';
+part of 'places_browser.dart';
 
 @genCopyWith
 @toString

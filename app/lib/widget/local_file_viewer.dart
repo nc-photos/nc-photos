@@ -8,7 +8,7 @@ import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/share_handler.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
-import 'package:nc_photos/widget/file_content_view.dart';
+import 'package:nc_photos/widget/file_content_view/file_content_view.dart';
 import 'package:nc_photos/widget/handler/delete_local_selection_handler.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:np_log/np_log.dart';

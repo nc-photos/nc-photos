@@ -10,7 +10,7 @@ import 'package:nc_photos/json_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/language_util.dart';
 import 'package:nc_photos/protected_page_handler.dart';
-import 'package:nc_photos/widget/home_collections.dart';
+import 'package:nc_photos/widget/home_collections/home_collections.dart';
 import 'package:nc_photos/widget/viewer/viewer.dart';
 import 'package:np_codegen/np_codegen.dart';
 import 'package:np_common/color.dart';

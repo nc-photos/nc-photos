@@ -1,4 +1,4 @@
-part of '../home_photos2.dart';
+part of 'home_photos.dart';
 
 abstract class _Item implements SelectableItemMetadata {
   const _Item();

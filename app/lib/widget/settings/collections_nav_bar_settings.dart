@@ -13,7 +13,7 @@ import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/widget/draggable.dart' as my;
 import 'package:nc_photos/widget/fade_out_list.dart';
-import 'package:nc_photos/widget/home_collections.dart';
+import 'package:nc_photos/widget/home_collections/home_collections.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';

@@ -1,4 +1,4 @@
-part of '../account_picker_dialog.dart';
+part of 'account_picker_dialog.dart';
 
 @genCopyWith
 @toString

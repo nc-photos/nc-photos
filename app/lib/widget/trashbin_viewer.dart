@@ -18,7 +18,7 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/use_case/restore_trashbin.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
-import 'package:nc_photos/widget/file_content_view.dart';
+import 'package:nc_photos/widget/file_content_view/file_content_view.dart';
 import 'package:nc_photos/widget/handler/remove_selection_handler.dart';
 import 'package:nc_photos/widget/horizontal_page_viewer.dart';
 import 'package:nc_photos/widget/image_viewer.dart';

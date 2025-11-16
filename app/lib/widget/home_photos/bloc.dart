@@ -1,4 +1,4 @@
-part of '../home_photos2.dart';
+part of 'home_photos.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State>

@@ -1,4 +1,4 @@
-part of '../search_landing.dart';
+part of 'search_landing.dart';
 
 @genCopyWith
 @toString

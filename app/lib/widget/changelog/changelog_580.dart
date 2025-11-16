@@ -1,4 +1,4 @@
-part of '../changelog.dart';
+part of 'changelog.dart';
 
 class _Changelog580 extends StatelessWidget {
   const _Changelog580();

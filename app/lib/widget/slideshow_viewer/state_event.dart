@@ -1,4 +1,4 @@
-part of '../slideshow_viewer.dart';
+part of 'slideshow_viewer.dart';
 
 @genCopyWith
 @toString

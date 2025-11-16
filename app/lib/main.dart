@@ -7,7 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/app_init.dart' as app_init;
 import 'package:nc_photos/bloc_util.dart';
-import 'package:nc_photos/widget/my_app.dart';
+import 'package:nc_photos/widget/my_app/my_app.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 

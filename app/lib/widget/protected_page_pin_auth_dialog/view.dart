@@ -1,4 +1,4 @@
-part of '../protected_page_pin_auth_dialog.dart';
+part of 'protected_page_pin_auth_dialog.dart';
 
 class _DialogBody extends StatelessWidget {
   const _DialogBody();

@@ -1,4 +1,4 @@
-part of '../slideshow_viewer.dart';
+part of 'slideshow_viewer.dart';
 
 class _Timeline extends StatefulWidget {
   const _Timeline();

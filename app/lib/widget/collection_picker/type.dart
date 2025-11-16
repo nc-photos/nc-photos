@@ -1,4 +1,4 @@
-part of '../collection_picker.dart';
+part of 'collection_picker.dart';
 
 @npLog
 class _Item {

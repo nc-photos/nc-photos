@@ -1,4 +1,4 @@
-part of '../home_collections.dart';
+part of 'home_collections.dart';
 
 class HomeCollectionsNavBarButton extends StatelessWidget {
   const HomeCollectionsNavBarButton({

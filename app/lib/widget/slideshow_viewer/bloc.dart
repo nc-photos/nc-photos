@@ -1,4 +1,4 @@
-part of '../slideshow_viewer.dart';
+part of 'slideshow_viewer.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State>

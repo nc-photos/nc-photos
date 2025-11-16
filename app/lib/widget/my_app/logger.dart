@@ -1,4 +1,4 @@
-part of '../my_app.dart';
+part of 'my_app.dart';
 
 @npLog
 class _NavigatorLogger extends NavigatorObserver {

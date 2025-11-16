@@ -1,4 +1,4 @@
-part of '../splash.dart';
+part of 'splash.dart';
 
 class _UpgradeProgressView extends StatelessWidget {
   const _UpgradeProgressView();

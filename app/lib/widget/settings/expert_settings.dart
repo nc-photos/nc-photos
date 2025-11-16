@@ -9,7 +9,7 @@ import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:nc_photos/widget/trusted_cert_manager.dart';
+import 'package:nc_photos/widget/trusted_cert_manager/trusted_cert_manager.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';

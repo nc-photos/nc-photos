@@ -1,4 +1,4 @@
-part of '../sign_in.dart';
+part of 'sign_in.dart';
 
 /// A nice background that matches Nextcloud without breaking any copyright law
 class _Background extends StatelessWidget {

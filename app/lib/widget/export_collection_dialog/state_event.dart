@@ -1,4 +1,4 @@
-part of '../export_collection_dialog.dart';
+part of 'export_collection_dialog.dart';
 
 @genCopyWith
 class _FormValue {

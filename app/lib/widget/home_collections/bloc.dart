@@ -1,4 +1,4 @@
-part of '../home_collections.dart';
+part of 'home_collections.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State>

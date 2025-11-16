@@ -1,4 +1,4 @@
-part of '../my_app.dart';
+part of 'my_app.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {

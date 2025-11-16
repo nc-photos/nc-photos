@@ -1,4 +1,4 @@
-part of '../account_picker_dialog.dart';
+part of 'account_picker_dialog.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State> with BlocLogger {

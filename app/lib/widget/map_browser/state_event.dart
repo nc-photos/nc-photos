@@ -1,4 +1,4 @@
-part of '../map_browser.dart';
+part of 'map_browser.dart';
 
 @genCopyWith
 @toString

@@ -1,4 +1,4 @@
-part of '../file_content_view.dart';
+part of 'file_content_view.dart';
 
 @genCopyWith
 @toString

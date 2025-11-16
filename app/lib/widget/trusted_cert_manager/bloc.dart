@@ -1,4 +1,4 @@
-part of '../trusted_cert_manager.dart';
+part of 'trusted_cert_manager.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State>

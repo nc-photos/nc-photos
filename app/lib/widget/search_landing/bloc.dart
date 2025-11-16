@@ -1,4 +1,4 @@
-part of '../search_landing.dart';
+part of 'search_landing.dart';
 
 @npLog
 class _Bloc extends Bloc<_Event, _State>

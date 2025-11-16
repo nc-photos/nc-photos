@@ -1,4 +1,4 @@
-part of '../home_photos2.dart';
+part of 'home_photos.dart';
 
 class _ContentList extends StatelessWidget {
   const _ContentList();

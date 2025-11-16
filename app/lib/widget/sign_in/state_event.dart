@@ -1,4 +1,4 @@
-part of '../sign_in.dart';
+part of 'sign_in.dart';
 
 @genCopyWith
 @toString

@@ -1,4 +1,4 @@
-part of '../search_landing.dart';
+part of 'search_landing.dart';
 
 class _PersonItemView extends StatelessWidget {
   const _PersonItemView({

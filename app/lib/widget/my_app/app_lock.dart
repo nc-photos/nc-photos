@@ -1,4 +1,4 @@
-part of '../my_app.dart';
+part of 'my_app.dart';
 
 class _AppLockMyApp extends StatefulWidget {
   const _AppLockMyApp({required this.child});
