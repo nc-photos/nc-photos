@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/di_container.dart';
@@ -19,7 +20,7 @@ class AnyFileMergedCapabilityWorker implements AnyFileCapabilityWorker {
       AnyFileCapability.archive ||
       AnyFileCapability.edit ||
       AnyFileCapability.delete ||
-      AnyFileCapability.remoteShare||
+      AnyFileCapability.remoteShare ||
       AnyFileCapability.collection => true,
       AnyFileCapability.download || AnyFileCapability.upload => false,
     };
@@ -76,16 +77,18 @@ class AnyFileMergedDeleteWorker implements AnyFileDeleteWorker {
   });
 
   @override
-  Future<bool> delete() async {
+  Future<bool> delete({AnyFileRemoveHint hint = AnyFileRemoveHint.both}) async {
     final results = await Future.wait([
-      AnyFileNextcloudDeleteWorker(
-        file,
-        filesController: filesController,
-      ).delete(),
-      AnyFileLocalDeleteWorker(
-        file,
-        localFilesController: localFilesController,
-      ).delete(),
+      if (hint == AnyFileRemoveHint.remote || hint == AnyFileRemoveHint.both)
+        AnyFileNextcloudDeleteWorker(
+          (file.provider as AnyFileMergedProvider).asRemoteFile(),
+          filesController: filesController,
+        ).delete(),
+      if (hint == AnyFileRemoveHint.local || hint == AnyFileRemoveHint.both)
+        AnyFileLocalDeleteWorker(
+          (file.provider as AnyFileMergedProvider).asLocalFile(),
+          localFilesController: localFilesController,
+        ).delete(),
     ]);
     return results.every((e) => e);
   }

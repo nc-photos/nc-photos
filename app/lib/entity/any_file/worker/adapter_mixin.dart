@@ -1,3 +1,4 @@
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:np_platform_uploader/np_platform_uploader.dart';
 
@@ -34,7 +35,7 @@ mixin AnyFileWorkerNoDownloadTag implements AnyFileDownloadWorker {
 
 mixin AnyFileWorkerNoDeleteTag implements AnyFileDeleteWorker {
   @override
-  Future<bool> delete() {
+  Future<bool> delete({AnyFileRemoveHint hint = AnyFileRemoveHint.both}) {
     throw UnsupportedError("Operation not supported");
   }
 }

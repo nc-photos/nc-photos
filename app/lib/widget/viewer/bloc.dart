@@ -53,6 +53,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_Enhance>(_onEnhance);
     on<_Download>(_onDownload);
     on<_Delete>(_onDelete);
+    on<_DeleteWithHint>(_onDeleteWithHint);
     on<_RemoveFromCollection>(_onRemoveFromCollection);
     on<_StartSlideshow>(_onStartSlideshow);
     on<_StartSlideshowResult>(_onStartSlideshowResult);
@@ -529,11 +530,38 @@ class _Bloc extends Bloc<_Event, _State>
       _log.severe("[_onDelete] Op not supported: $f");
       return;
     }
+    if (f.provider is AnyFileMergedProvider) {
+      emit(
+        state.copyWith(
+          deleteRequest: Unique(_DeleteRequest(account: account, file: f)),
+        ),
+      );
+    } else {
+      AnyFileWorkerFactory.delete(
+        f,
+        filesController: filesController,
+        localFilesController: localFilesController,
+      ).delete().then((isSuccess) {
+        SnackBarManager().showSnackBar(
+          buildDeleteResultSnackBar(
+            account,
+            failureCount: isSuccess ? 0 : 1,
+            isMoveToTrash: true,
+            isRemoveSingle: true,
+          ),
+        );
+      });
+      _removeFileFromStream(f, emit);
+    }
+  }
+
+  void _onDeleteWithHint(_DeleteWithHint ev, _Emitter emit) {
+    _log.info(ev);
     AnyFileWorkerFactory.delete(
-      f,
+      ev.file,
       filesController: filesController,
       localFilesController: localFilesController,
-    ).delete().then((isSuccess) {
+    ).delete(hint: ev.hint).then((isSuccess) {
       SnackBarManager().showSnackBar(
         buildDeleteResultSnackBar(
           account,
@@ -543,7 +571,7 @@ class _Bloc extends Bloc<_Event, _State>
         ),
       );
     });
-    _removeFileFromStream(f, emit);
+    _removeFileFromStream(ev.file, emit);
   }
 
   void _onRemoveFromCollection(_RemoveFromCollection ev, _Emitter emit) {

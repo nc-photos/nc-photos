@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/di_container.dart';
@@ -163,7 +164,7 @@ abstract interface class AnyFileDownloadWorker {
 }
 
 abstract interface class AnyFileDeleteWorker {
-  Future<bool> delete();
+  Future<bool> delete({AnyFileRemoveHint hint = AnyFileRemoveHint.both});
 }
 
 abstract interface class AnyFileShareWorker {

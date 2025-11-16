@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
@@ -51,7 +52,7 @@ class AnyFileLocalDeleteWorker implements AnyFileDeleteWorker {
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  Future<bool> delete() async {
+  Future<bool> delete({AnyFileRemoveHint hint = AnyFileRemoveHint.both}) async {
     var isGood = true;
     await localFilesController.trash(
       [_provider.file],

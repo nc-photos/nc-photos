@@ -1603,6 +1603,7 @@
 		"description": "Remove the file from device and server"
 	},
 	"deleteMergedFileDialogContent": "Some of the files exist both on your server and your device. Where should we delete these files from?",
+	"deleteSingleMergedFileDialogContent": "File exists both on your server and your device. Where should we delete this file from?",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

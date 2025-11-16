@@ -45,3 +45,10 @@ class _UploadRequest {
   final Account account;
   final AnyFile file;
 }
+
+class _DeleteRequest {
+  const _DeleteRequest({required this.account, required this.file});
+
+  final Account account;
+  final AnyFile file;
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/download_handler.dart';
@@ -93,7 +94,7 @@ class AnyFileNextcloudDeleteWorker implements AnyFileDeleteWorker {
     : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
-  Future<bool> delete() async {
+  Future<bool> delete({AnyFileRemoveHint hint = AnyFileRemoveHint.both}) async {
     var isGood = true;
     await filesController.remove(
       [_provider.file],

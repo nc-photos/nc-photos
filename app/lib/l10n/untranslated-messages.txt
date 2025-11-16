@@ -303,6 +303,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -346,6 +347,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -393,6 +395,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -588,6 +591,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -623,6 +627,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -711,6 +716,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -746,6 +752,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -839,6 +846,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -874,6 +882,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1297,6 +1306,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1397,6 +1407,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1503,6 +1514,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1591,6 +1603,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1626,6 +1639,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1645,7 +1659,8 @@
     "deleteMergedFileDialogServerOnlyButton",
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
-    "deleteMergedFileDialogContent"
+    "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent"
   ],
 
   "zh": [
@@ -1764,6 +1779,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ],
 
@@ -1975,6 +1991,7 @@
     "deleteMergedFileDialogLocalOnlyButton",
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
+    "deleteSingleMergedFileDialogContent",
     "errorServerNoCert"
   ]
 }

@@ -62,6 +62,7 @@ import 'package:to_string/to_string.dart';
 part 'app_bar.dart';
 part 'app_bar_buttons.dart';
 part 'bloc.dart';
+part 'delete_dialog.dart';
 part 'detail_pane.dart';
 part 'state_event.dart';
 part 'type.dart';
@@ -255,6 +256,10 @@ class _WrappedViewerState extends State<_WrappedViewer>
               listener: _onUploadRequest,
             ),
             _BlocListenerT(
+              selector: (state) => state.deleteRequest,
+              listener: _onDeleteRequest,
+            ),
+            _BlocListenerT(
               selector: (state) => state.error,
               listener: (context, error) {
                 if (error != null && isPageVisible()) {
@@ -415,6 +420,25 @@ class _WrappedViewerState extends State<_WrappedViewer>
       f,
       account: context.bloc.account,
     ).upload(config.relativePath, convertConfig: config.convertConfig);
+  }
+
+  Future<void> _onDeleteRequest(
+    BuildContext context,
+    Unique<_DeleteRequest?> deleteRequest,
+  ) async {
+    if (deleteRequest.value == null) {
+      return;
+    }
+    final result = await showDialog<AnyFileRemoveHint>(
+      context: context,
+      builder: (context) => const _DeleteDialog(),
+    );
+    if (result == null || !context.mounted) {
+      return;
+    }
+    context.addEvent(
+      _DeleteWithHint(file: deleteRequest.value!.file, hint: result),
+    );
   }
 }
 

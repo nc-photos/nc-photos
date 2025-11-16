@@ -35,6 +35,7 @@ class _State {
     required this.slideshowRequest,
     required this.setAsRequest,
     required this.uploadRequest,
+    required this.deleteRequest,
     required this.isBusy,
     this.error,
   });
@@ -69,6 +70,7 @@ class _State {
     slideshowRequest: Unique(null),
     setAsRequest: Unique(null),
     uploadRequest: Unique(null),
+    deleteRequest: Unique(null),
     isBusy: false,
   );
 
@@ -111,6 +113,7 @@ class _State {
   final Unique<_SlideshowRequest?> slideshowRequest;
   final Unique<_SetAsRequest?> setAsRequest;
   final Unique<_UploadRequest?> uploadRequest;
+  final Unique<_DeleteRequest?> deleteRequest;
 
   final bool isBusy;
   final ExceptionEvent? error;
@@ -386,6 +389,17 @@ class _Delete implements _Event {
   String toString() => _$toString();
 
   final String afId;
+}
+
+@toString
+class _DeleteWithHint implements _Event {
+  const _DeleteWithHint({required this.file, required this.hint});
+
+  @override
+  String toString() => _$toString();
+
+  final AnyFile file;
+  final AnyFileRemoveHint hint;
 }
 
 @toString

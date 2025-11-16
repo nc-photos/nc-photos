@@ -70,6 +70,7 @@ abstract class $_StateCopyWithWorker {
     Unique<_SlideshowRequest?>? slideshowRequest,
     Unique<_SetAsRequest?>? setAsRequest,
     Unique<_UploadRequest?>? uploadRequest,
+    Unique<_DeleteRequest?>? deleteRequest,
     bool? isBusy,
     ExceptionEvent? error,
   });
@@ -111,6 +112,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic slideshowRequest,
     dynamic setAsRequest,
     dynamic uploadRequest,
+    dynamic deleteRequest,
     dynamic isBusy,
     dynamic error = copyWithNull,
   }) {
@@ -187,6 +189,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           setAsRequest as Unique<_SetAsRequest?>? ?? that.setAsRequest,
       uploadRequest:
           uploadRequest as Unique<_UploadRequest?>? ?? that.uploadRequest,
+      deleteRequest:
+          deleteRequest as Unique<_DeleteRequest?>? ?? that.deleteRequest,
       isBusy: isBusy as bool? ?? that.isBusy,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
@@ -288,7 +292,7 @@ extension _$ViewerContentProviderResultToString on ViewerContentProviderResult {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, anyFiles: {length: ${anyFiles.length}}, mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, forwardBound: $forwardBound, backwardBound: $backwardBound, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, uploadRequest: $uploadRequest, isBusy: $isBusy, error: $error}";
+    return "_State {pageAfIdMap: {length: ${pageAfIdMap.length}}, anyFiles: {length: ${anyFiles.length}}, mergedAfIdFileMap: {length: ${mergedAfIdFileMap.length}}, fileStates: {length: ${fileStates.length}}, index: $index, currentFile: $currentFile, currentFileState: $currentFileState, collection: $collection, collectionItemsController: $collectionItemsController, collectionItems: ${collectionItems == null ? null : "{length: ${collectionItems!.length}}"}, isShowDetailPane: $isShowDetailPane, isClosingDetailPane: $isClosingDetailPane, isDetailPaneActive: $isDetailPaneActive, openDetailPaneRequest: $openDetailPaneRequest, closeDetailPane: $closeDetailPane, isZoomed: $isZoomed, isInitialLoad: $isInitialLoad, forwardBound: $forwardBound, backwardBound: $backwardBound, isShowAppBar: $isShowAppBar, appBarButtons: [length: ${appBarButtons.length}], bottomAppBarButtons: [length: ${bottomAppBarButtons.length}], pendingRemoveFile: $pendingRemoveFile, removedAfIds: [length: ${removedAfIds.length}], imageEditorRequest: $imageEditorRequest, imageEnhancerRequest: $imageEnhancerRequest, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, setAsRequest: $setAsRequest, uploadRequest: $uploadRequest, deleteRequest: $deleteRequest, isBusy: $isBusy, error: $error}";
   }
 }
 
@@ -471,6 +475,13 @@ extension _$_DeleteToString on _Delete {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_Delete {afId: $afId}";
+  }
+}
+
+extension _$_DeleteWithHintToString on _DeleteWithHint {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_DeleteWithHint {file: $file, hint: ${hint.name}}";
   }
 }
 
