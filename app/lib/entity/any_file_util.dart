@@ -122,6 +122,10 @@ int deconstructedAnyFileMergeSorter(
 }
 
 bool isAnyFileMergeable(AnyFile a, AnyFile b) {
+  if (a.provider is AnyFileMergedProvider ||
+      b.provider is AnyFileMergedProvider) {
+    return false;
+  }
   return isDeconstructedAnyFileMergeable(
     (
       filename: a.name,
