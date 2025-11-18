@@ -224,6 +224,9 @@ class Metadata with EquatableMixin {
     final lat = gps?["latitude"]?.let(double.tryParse);
     final lng = gps?["longitude"]?.let(double.tryParse);
     final alt = gps?["altitude"]?.let(double.tryParse);
+    if (exif != null) {
+      _applyServerSideExifTimeZoneHack(exif);
+    }
     return Metadata(
       lastUpdated: clock.now().toUtc(),
       fileEtag: etag,
@@ -259,6 +262,30 @@ class Metadata with EquatableMixin {
 
   @override
   String toString() => _$toString();
+
+  static void _applyServerSideExifTimeZoneHack(Map<String, String> exif) {
+    // try the proper key
+    if (exif.containsKey("OffsetTimeOriginal")) {
+      // nextcloud fixed its bug, great
+      return;
+    }
+    // iterate the map and look for values that look like an offset
+    final r = RegExp(r"[+-]\d{2}:\d{2}");
+    final matches = exif.entries.where((e) => r.hasMatch(e.value)).toList();
+    if (matches.isEmpty) {
+      // well...
+      return;
+    }
+    if (matches.length > 1) {
+      _log.warning(
+        "[_applyServerSideExifTimeZoneHack] More than one entry looks like an offset: $matches",
+      );
+    }
+    _log.info(
+      "[_applyServerSideExifTimeZoneHack] Taking offset from key ${matches.first.key}: ${matches.first.value}",
+    );
+    exif["_OffsetTimeOriginal"] = matches.first.value;
+  }
 
   @override
   List<Object?> get props => [
@@ -628,7 +655,7 @@ class File with EquatableMixin implements FileDescriptor {
 extension FileExtension on File {
   DateTime get bestDateTime => file_util.getBestDateTime(
     overrideDateTime: overrideDateTime,
-    dateTimeOriginal: metadata?.exif?.dateTimeOriginal,
+    dateTimeOriginal: metadata?.exif?.dateTimeOriginalWithOffset,
     lastModified: lastModified,
   );
 

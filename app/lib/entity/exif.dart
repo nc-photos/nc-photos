@@ -1,9 +1,11 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:logging/logging.dart';
 import 'package:np_common/type.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_string/np_string.dart';
 
 part 'exif.g.dart';
 
@@ -111,20 +113,70 @@ class Exif with EquatableMixin {
   String? get model => data["Model"];
 
   /// 0x9003 DateTimeOriginal
+  @visibleForTesting
   DateTime? get dateTimeOriginal {
     try {
       return data.containsKey("DateTimeOriginal") &&
               (data["DateTimeOriginal"] as String).isNotEmpty
-          ? dateTimeFormat.parse(data["DateTimeOriginal"]).toUtc()
+          ? dateTimeFormat.parse(data["DateTimeOriginal"])
           : null;
     } catch (e, stackTrace) {
       _log.severe(
-        "[dateTimeOriginal] Non standard valie: ${data["DateTimeOriginal"]}",
+        "[dateTimeOriginal] Non standard value: ${data["DateTimeOriginal"]}",
         e,
         stackTrace,
       );
       return null;
     }
+  }
+
+  DateTime? get dateTimeOriginalWithOffset {
+    final d = dateTimeOriginal;
+    if (d == null) {
+      return null;
+    }
+    try {
+      final offset = offsetTimeOriginal;
+      if (offset == null) {
+        // no tz data, assume local
+        return d.toUtc();
+      }
+      final result = d.copyWith(isUtc: true);
+      // subtract the timezone offset to get the utc time manually
+      return result.subtract(offset);
+    } catch (e, stackTrace) {
+      _log.severe(
+        "[dateTimeOriginalWithTimezone] Non standard OffsetTimeOriginal value: ${data["OffsetTimeOriginal"]}",
+        e,
+        stackTrace,
+      );
+      return d.toUtc();
+    }
+  }
+
+  Duration? get offsetTimeOriginal {
+    var offsetStr =
+        data.containsKey("OffsetTimeOriginal") &&
+                (data["OffsetTimeOriginal"] as String).isNotEmpty
+            ? data["OffsetTimeOriginal"] as String
+            : null;
+    // try the server hack
+    offsetStr ??=
+        data.containsKey("_OffsetTimeOriginal") &&
+                (data["_OffsetTimeOriginal"] as String).isNotEmpty
+            ? data["_OffsetTimeOriginal"] as String
+            : null;
+    if (offsetStr == null) {
+      // no tz data
+      return null;
+    }
+    final isPositive = offsetStr.startsWith("+");
+    final hours = int.parse(offsetStr.slice(1, 3));
+    final mins = int.parse(offsetStr.slice(4));
+    return Duration(
+      hours: isPositive ? hours : -hours,
+      minutes: isPositive ? mins : -mins,
+    );
   }
 
   /// 0x829a ExposureTime

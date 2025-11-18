@@ -210,8 +210,8 @@ class FileNpDbDataSource implements FileDataSource2 {
                         : overrideDateTime.obj,
                 dateTimeOriginal:
                     metadata == null
-                        ? (f as File).metadata?.exif?.dateTimeOriginal
-                        : metadata.obj?.exif?.dateTimeOriginal,
+                        ? (f as File).metadata?.exif?.dateTimeOriginalWithOffset
+                        : metadata.obj?.exif?.dateTimeOriginalWithOffset,
                 lastModified: (f as File).lastModified,
               ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),

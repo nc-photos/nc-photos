@@ -203,6 +203,36 @@ void main() {
       });
     });
 
+    group("dateTimeOriginalWithOffset", () {
+      test("no tz", () {
+        final exif = Exif({"DateTimeOriginal": "2021:01:02 03:04:05"});
+        expect(
+          exif.dateTimeOriginalWithOffset,
+          DateTime(2021, 1, 2, 3, 4, 5).toUtc(),
+        );
+      });
+      test("with tz", () {
+        final exif = Exif({
+          "DateTimeOriginal": "2021:01:02 03:04:05",
+          "OffsetTimeOriginal": "+03:30",
+        });
+        expect(
+          exif.dateTimeOriginalWithOffset,
+          DateTime.utc(2021, 1, 1, 23, 34, 5),
+        );
+      });
+      test("broken server side parser", () {
+        final exif = Exif({
+          "DateTimeOriginal": "2021:01:02 03:04:05",
+          "_OffsetTimeOriginal": "+03:30",
+        });
+        expect(
+          exif.dateTimeOriginalWithOffset,
+          DateTime.utc(2021, 1, 1, 23, 34, 5),
+        );
+      });
+    });
+
     group("from Nextcloud", () {
       test("Rational", () {
         final exif = Exif({"ExposureTime": "123/456"});

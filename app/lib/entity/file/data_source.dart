@@ -473,8 +473,8 @@ class FileSqliteDbDataSource implements FileDataSource {
                         : overrideDateTime.obj,
                 dateTimeOriginal:
                     metadata == null
-                        ? f.metadata?.exif?.dateTimeOriginal
-                        : metadata.obj?.exif?.dateTimeOriginal,
+                        ? f.metadata?.exif?.dateTimeOriginalWithOffset
+                        : metadata.obj?.exif?.dateTimeOriginalWithOffset,
                 lastModified: f.lastModified,
               ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),
