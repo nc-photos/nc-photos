@@ -91,6 +91,10 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   @override
   Future<ImageLocation?> get location => Future.value(null);
 
+  @override
+  Future<Duration?> get offsetTime =>
+      _ensureMetadata().then((e) => e?.exif?.offsetTimeOriginal);
+
   Future<Metadata?> _ensureMetadata() {
     if (_metadataTask == null) {
       _metadataTask = Completer();

@@ -390,19 +390,39 @@ class _DateTimeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dateStr = DateFormat(
-      DateFormat.YEAR_ABBR_MONTH_DAY,
-      Localizations.localeOf(context).languageCode,
-    ).format(context.bloc.file.dateTime.toLocal());
-    final timeStr = DateFormat(
-      DateFormat.HOUR_MINUTE,
-      Localizations.localeOf(context).languageCode,
-    ).format(context.bloc.file.dateTime.toLocal());
-    return ListTile(
-      leading: const Icon(Icons.calendar_today_outlined),
-      title: Text("$dateStr $timeStr"),
-      // trailing: _file == null ? null : const Icon(Icons.edit_outlined),
-      // onTap: _file == null ? null : () => _onDateTimeTap(context),
+    return _BlocSelector(
+      selector: (state) => state.offsetTime,
+      builder: (context, offsetTime) {
+        final DateTime t;
+        if (offsetTime == null) {
+          t = context.bloc.file.dateTime.toLocal();
+        } else {
+          t = context.bloc.file.dateTime.toUtc().add(offsetTime);
+        }
+        final dateStr = DateFormat(
+          DateFormat.YEAR_ABBR_MONTH_DAY,
+          Localizations.localeOf(context).languageCode,
+        ).format(t);
+        final timeStr = DateFormat(
+          DateFormat.HOUR_MINUTE,
+          Localizations.localeOf(context).languageCode,
+        ).format(t);
+        return ListTile(
+          leading: const Icon(Icons.calendar_today_outlined),
+          title: Text("$dateStr $timeStr"),
+          subtitle: offsetTime?.let((e) {
+            if (offsetTime == DateTime.now().timeZoneOffset) {
+              // same timezone, hide it
+              return null;
+            }
+            final hrStr = e.inHours.toString().padLeft(2, "0");
+            final minStr = (e.inMinutes % 60).toString().padLeft(2, "0");
+            return Text("UTC${e.isNegative ? "-" : "+"}$hrStr:$minStr");
+          }),
+          // trailing: _file == null ? null : const Icon(Icons.edit_outlined),
+          // onTap: _file == null ? null : () => _onDateTimeTap(context),
+        );
+      },
     );
   }
 }

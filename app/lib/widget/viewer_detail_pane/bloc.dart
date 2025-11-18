@@ -39,6 +39,7 @@ class _Bloc extends Bloc<_Event, _State> {
     int? isoSpeedRatings;
     MapCoord? gps;
     ImageLocation? location;
+    Duration? offsetTime;
 
     /// Convert EXIF data to readable format
     size = await tryOrNullFN(() => metadataGetter.size);
@@ -71,6 +72,7 @@ class _Bloc extends Bloc<_Event, _State> {
     isoSpeedRatings = await tryOrNullFN(() => metadataGetter.isoSpeedRatings);
     gps = await tryOrNullFN(() => metadataGetter.gpsCoord);
     location = await tryOrNullFN(() => metadataGetter.location);
+    offsetTime = await tryOrNullFN(() => metadataGetter.offsetTime);
 
     emit(
       state.copyWith(
@@ -83,6 +85,7 @@ class _Bloc extends Bloc<_Event, _State> {
         isoSpeedRatings: isoSpeedRatings,
         gps: gps,
         location: location,
+        offsetTime: offsetTime,
       ),
     );
   }

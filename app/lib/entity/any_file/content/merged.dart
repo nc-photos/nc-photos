@@ -82,6 +82,9 @@ class AnyFileMergedMetadataGetter implements AnyFileMetadataGetter {
   @override
   Future<ImageLocation?> get location => _delegate.location;
 
+  @override
+  Future<Duration?> get offsetTime => _delegate.offsetTime;
+
   final AnyFileMetadataGetter _delegate;
 }
 

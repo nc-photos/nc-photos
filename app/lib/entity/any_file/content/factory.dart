@@ -125,6 +125,8 @@ abstract interface class AnyFileMetadataGetter {
   Future<MapCoord?> get gpsCoord;
 
   Future<ImageLocation?> get location;
+
+  Future<Duration?> get offsetTime;
 }
 
 class AnyFileTag {

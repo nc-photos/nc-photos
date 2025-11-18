@@ -143,6 +143,12 @@ class AnyFileNextcloudMetadataGetter implements AnyFileMetadataGetter {
     return file?.location;
   }
 
+  @override
+  Future<Duration?> get offsetTime async {
+    final file = await _ensureFile();
+    return file?.metadata?.exif?.offsetTimeOriginal;
+  }
+
   Future<File?> _ensureFile() async {
     if (_initCompleter == null) {
       _initCompleter = Completer();

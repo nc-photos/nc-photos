@@ -16,6 +16,7 @@ final class _State {
     this.gps,
     this.location,
     this.tags,
+    this.offsetTime,
     required this.canRemoveFromAlbum,
     required this.canSetCover,
     required this.canAddToCollection,
@@ -49,6 +50,7 @@ final class _State {
   final MapCoord? gps;
   final ImageLocation? location;
   final List<AnyFileTag>? tags;
+  final Duration? offsetTime;
 
   final bool canRemoveFromAlbum;
   final bool canSetCover;
