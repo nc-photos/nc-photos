@@ -59,10 +59,11 @@ class _Bloc extends Bloc<_Event, _State> {
     );
     exposureTime = await tryOrNullFN(
       () async => (await metadataGetter.exposureTime)?.let((e) {
-        if (e.denominator == 1) {
-          return e.numerator.toString();
+        if (e.toDouble() >= 1) {
+          return e.toDouble().toStringAsFixedTruncated(1);
         } else {
-          return e.toString();
+          final x = e.denominator / e.numerator;
+          return "1/${x.toInt()}";
         }
       }),
     );
