@@ -16,8 +16,8 @@ project("np_platform_uploader")
 # Gradle automatically packages shared libraries with your APK.
 
 # configure import libs
-set(exiv2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../np_exiv2_lib/android/src/main/jniLibs)
-set(exiv2_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../dependency/exiv2/headers)
+set(exiv2_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../np_exiv2/third_party/exiv2/lib)
+set(exiv2_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../../../np_exiv2/third_party/exiv2/include)
 set(jxl_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../dependency/libjxl/jni)
 set(jxl_INC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/../../../dependency/libjxl/headers)
 

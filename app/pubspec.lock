@@ -428,10 +428,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: "16ed7b077ef01ad6170a3d0c57caa4a112a38d7a2ed5602e0aca9ca6f3d98da6"
+      sha256: "289279317b4b16eb2bb7e271abccd4bf84ec9bdcbe999e278a94b804f5630418"
       url: "https://pub.dev"
     source: hosted
-    version: "2.1.3"
+    version: "2.1.4"
   file:
     dependency: transitive
     description:
@@ -1200,13 +1200,6 @@ packages:
     dependency: "direct main"
     description:
       path: "../np_exiv2"
-      relative: true
-    source: path
-    version: "1.0.0"
-  np_exiv2_lib:
-    dependency: "direct main"
-    description:
-      path: "../np_exiv2_lib"
       relative: true
     source: path
     version: "0.0.1"

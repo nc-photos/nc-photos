@@ -119,8 +119,6 @@ dependencies:
     path: ../np_db
   np_exiv2:
     path: ../np_exiv2
-  np_exiv2_lib:
-    path: ../np_exiv2_lib
   np_geocoder:
     path: ../np_geocoder
   np_gps_map:

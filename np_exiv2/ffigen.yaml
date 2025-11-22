@@ -1,7 +1,19 @@
-output: "lib/src/generated_bindings.g.dart"
-name: "NpExiv2C"
+# Run with `dart run ffigen --config ffigen.yaml`.
+name: NpExiv2Bindings
+description: |
+  Bindings for `src/np_exiv2.h`.
+
+  Regenerate bindings with `dart run ffigen --config ffigen.yaml`.
+output: 'lib/src/np_exiv2_bindings_generated.dart'
 headers:
   entry-points:
-    - "headers/np_exiv2_c.h"
+    - 'src/np_exiv2.h'
+  include-directives:
+    - 'src/np_exiv2.h'
 preamble: |
-  // ignore_for_file: unused_element, unused_field
+  // ignore_for_file: always_specify_types
+  // ignore_for_file: camel_case_types
+  // ignore_for_file: non_constant_identifier_names
+comments:
+  style: any
+  length: full

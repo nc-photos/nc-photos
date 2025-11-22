@@ -1,5 +1,10 @@
 #pragma once
-#pragma GCC visibility push(default)
+
+#if _WIN32
+#define FFI_PLUGIN_EXPORT __declspec(dllexport)
+#else
+#define FFI_PLUGIN_EXPORT
+#endif
 
 #include <stddef.h>
 #include <stdint.h>
@@ -69,23 +74,22 @@ typedef struct {
  *
  * @return A handle to retrieve actual results, 0 if failed
  */
-const Exiv2ReadResult *exiv2_read_file(const char *path);
+FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2_read_file(const char *path);
 
 /**
  * Extract metadata from a buffer
  *
  * @return A handle to retrieve actual results, 0 if failed
  */
-const Exiv2ReadResult *exiv2_read_buffer(const uint8_t *buffer,
-                                         const size_t size);
+FFI_PLUGIN_EXPORT const Exiv2ReadResult *
+exiv2_read_buffer(const uint8_t *buffer, const size_t size);
 
 /**
  * Release the resources of a Exiv2ReadResult object returned by
  * @a exiv2_read_file
  */
-void exiv2_result_free(const Exiv2ReadResult *that);
+FFI_PLUGIN_EXPORT void exiv2_result_free(const Exiv2ReadResult *that);
 
 #ifdef __cplusplus
 }
 #endif
-#pragma GCC visibility pop

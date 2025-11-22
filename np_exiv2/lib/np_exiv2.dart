@@ -1,3 +1,3 @@
-library np_exiv2;
+library;
 
-export 'src/api.dart';
+export 'src/np_exiv2.dart';

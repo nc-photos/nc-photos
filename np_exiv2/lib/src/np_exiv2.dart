@@ -1,13 +1,15 @@
 import 'dart:convert';
 import 'dart:ffi';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:euc/jis.dart';
 import 'package:ffi/ffi.dart' as ffi;
 import 'package:logging/logging.dart';
 import 'package:np_common/object_util.dart';
-import 'package:np_exiv2/src/generated_bindings.g.dart';
 import 'package:quiver/iterables.dart';
+
+import 'np_exiv2_bindings_generated.dart';
 
 enum TypeId {
   unsignedByte,
@@ -216,7 +218,7 @@ class Value {
   final Uint8List _data;
   final int _count;
 
-  static final _log = Logger("np_exiv2.api.Value");
+  static final _log = Logger("np_exiv2.Value");
 }
 
 class Metadatum {
@@ -260,16 +262,15 @@ class ReadResult {
   final List<Metadatum> iptcData;
   final List<Metadatum> exifData;
 
-  static final _log = Logger("np_exiv2.api.ReadResult");
+  static final _log = Logger("np_exiv2.ReadResult");
 }
 
 ReadResult readFile(String path) {
-  final lib = _ensureLib();
   final stopwatch = Stopwatch()..start();
   final pathC = path.toNativeUtf8();
   try {
     _log.fine("[readFile] Reading $path");
-    final result = lib.exiv2_read_file(pathC.cast());
+    final result = _bindings.exiv2_read_file(pathC.cast());
     if (result == nullptr) {
       _log.severe("[readFile] Result is null for file: $path");
       throw StateError("Failed to read file");
@@ -277,7 +278,7 @@ ReadResult readFile(String path) {
     try {
       return ReadResult.fromNative(result[0]);
     } finally {
-      lib.exiv2_result_free(result);
+      _bindings.exiv2_result_free(result);
     }
   } finally {
     ffi.malloc.free(pathC);
@@ -286,7 +287,6 @@ ReadResult readFile(String path) {
 }
 
 ReadResult readBuffer(Uint8List buffer) {
-  final lib = _ensureLib();
   final stopwatch = Stopwatch()..start();
   Pointer<Uint8>? cbuffer;
   try {
@@ -295,7 +295,7 @@ ReadResult readBuffer(Uint8List buffer) {
     final cbufferView = cbuffer.asTypedList(buffer.length);
     cbufferView.setAll(0, buffer);
     _log.fine("[readBuffer] Reading buffer");
-    final result = lib.exiv2_read_buffer(cbuffer, buffer.length);
+    final result = _bindings.exiv2_read_buffer(cbuffer, buffer.length);
     if (result == nullptr) {
       _log.severe("[readBuffer] Result is null for buffer");
       throw StateError("Failed to read buffer");
@@ -303,7 +303,7 @@ ReadResult readBuffer(Uint8List buffer) {
     try {
       return ReadResult.fromNative(result[0]);
     } finally {
-      lib.exiv2_result_free(result);
+      _bindings.exiv2_result_free(result);
     }
   } finally {
     if (cbuffer != null) {
@@ -313,10 +313,22 @@ ReadResult readBuffer(Uint8List buffer) {
   }
 }
 
-NpExiv2C _ensureLib() {
-  _lib ??= NpExiv2C(DynamicLibrary.open("libnp_exiv2_c.so"));
-  return _lib!;
-}
+final _log = Logger("np_exiv2");
+const String _libName = 'np_exiv2';
 
-NpExiv2C? _lib;
-final _log = Logger("np_exiv2.api");
+/// The dynamic library in which the symbols for [NpExiv2Bindings] can be found.
+final DynamicLibrary _dylib = () {
+  if (Platform.isMacOS || Platform.isIOS) {
+    return DynamicLibrary.open('$_libName.framework/$_libName');
+  }
+  if (Platform.isAndroid || Platform.isLinux) {
+    return DynamicLibrary.open('lib$_libName.so');
+  }
+  if (Platform.isWindows) {
+    return DynamicLibrary.open('$_libName.dll');
+  }
+  throw UnsupportedError('Unknown platform: ${Platform.operatingSystem}');
+}();
+
+/// The bindings to the native functions in [_dylib].
+final NpExiv2Bindings _bindings = NpExiv2Bindings(_dylib);
