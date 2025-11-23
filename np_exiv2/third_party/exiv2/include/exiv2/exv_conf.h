@@ -16,7 +16,7 @@
 /* #undef EXV_ENABLE_NLS */
 
 // Define if you want to enable the decoding of video metadata
-/* #undef EXV_ENABLE_VIDEO */
+#define EXV_ENABLE_VIDEO
 
 // Define if you want BMFF support.
 #define EXV_ENABLE_BMFF
@@ -61,14 +61,14 @@
 #define EXV_PACKAGE_NAME "exiv2"
 
 /* Define to the full name and version of this package. */
-#define EXV_PACKAGE_STRING "exiv2 0.28.3"
+#define EXV_PACKAGE_STRING "exiv2 0.28.7"
 
 /* Define to the version of this package. */
-#define EXV_PACKAGE_VERSION "0.28.3"
+#define EXV_PACKAGE_VERSION "0.28.7"
 
 #define EXIV2_MAJOR_VERSION (0U)
 #define EXIV2_MINOR_VERSION (28U)
-#define EXIV2_PATCH_VERSION (3U)
+#define EXIV2_PATCH_VERSION (7U)
 #define EXIV2_TWEAK_VERSION (U)
 
 // Definition to enable translation of Nikon lens names.
