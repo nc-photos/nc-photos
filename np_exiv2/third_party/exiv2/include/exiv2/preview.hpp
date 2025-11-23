@@ -1,16 +1,23 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef PREVIEW_HPP_
-#define PREVIEW_HPP_
+#ifndef EXIV2_PREVIEW_HPP
+#define EXIV2_PREVIEW_HPP
+
+#include "config.h"
 
 // *****************************************************************************
 #include "exiv2lib_export.h"
 
-#include "image.hpp"
+#include "types.hpp"
+
+#include <string>
+#include <vector>
 
 // *****************************************************************************
 // namespace extensions
 namespace Exiv2 {
+class Image;
+struct DataBuf;
 // *****************************************************************************
 // class definitions
 
@@ -85,12 +92,12 @@ class EXIV2API PreviewImage {
     @brief Return the MIME type of the preview image, usually either
            \c "image/tiff" or \c "image/jpeg".
    */
-  [[nodiscard]] std::string mimeType() const;
+  [[nodiscard]] const std::string& mimeType() const;
   /*!
     @brief Return the file extension for the format of the preview image
            (".tif" or ".jpg").
    */
-  [[nodiscard]] std::string extension() const;
+  [[nodiscard]] const std::string& extension() const;
   /*!
     @brief Return the width of the preview image in pixels.
   */
@@ -145,4 +152,4 @@ class EXIV2API PreviewManager {
 };  // class PreviewManager
 }  // namespace Exiv2
 
-#endif  // #ifndef PREVIEW_HPP_
+#endif  // EXIV2_PREVIEW_HPP

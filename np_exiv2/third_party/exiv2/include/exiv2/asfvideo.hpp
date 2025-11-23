@@ -1,14 +1,17 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 // Spec : Advanced Systems Format (ASF) Specification : Revision 01.20.05 :
 // https://exse.eyewated.com/fls/54b3ed95bbfb1a92.pdf
-#pragma once
+
+#ifndef EXIV2_ASFVIDEO_HPP
+#define EXIV2_ASFVIDEO_HPP
 
 // *****************************************************************************
-#include <array>
 #include "exiv2lib_export.h"
 
 // included header files
 #include "image.hpp"
+
+#include <array>
 
 // *****************************************************************************
 // namespace extensions
@@ -36,7 +39,7 @@ class EXIV2API AsfVideo : public Image {
         method to get a temporary reference.
   */
 
-  explicit AsfVideo(BasicIo::UniquePtr io);
+  explicit AsfVideo(std::unique_ptr<BasicIo> io);
   //@}
 
   //! @name Manipulators
@@ -74,12 +77,14 @@ class EXIV2API AsfVideo : public Image {
     bool operator==(const GUIDTag& other) const;
 
     // Constructor to create a GUID object by passing individual values for each attribute
-    GUIDTag(unsigned int data1, unsigned short data2, unsigned short data3, std::array<byte, 8> data4);
+    constexpr GUIDTag(unsigned int data1, unsigned short data2, unsigned short data3, std::array<byte, 8> data4) :
+        data1_(data1), data2_(data2), data3_(data3), data4_(data4) {
+    }
 
     // Constructor to create a GUID object from a byte array
     explicit GUIDTag(const uint8_t* bytes);
 
-    std::string to_string();
+    [[nodiscard]] std::string to_string() const;
 
     bool operator<(const GUIDTag& other) const;
   };
@@ -94,7 +99,7 @@ class EXIV2API AsfVideo : public Image {
     uint64_t remaining_size_{};
 
    public:
-    explicit HeaderReader(const BasicIo::UniquePtr& io);
+    explicit HeaderReader(const std::unique_ptr<BasicIo>& io);
 
     [[nodiscard]] uint64_t getSize() const {
       return size_;
@@ -173,8 +178,10 @@ class EXIV2API AsfVideo : public Image {
       Caller owns the returned object and the auto-pointer ensures that
       it will be deleted.
  */
-EXIV2API Image::UniquePtr newAsfInstance(BasicIo::UniquePtr io, bool create);
+EXIV2API Image::UniquePtr newAsfInstance(std::unique_ptr<BasicIo> io, bool create);
 
 //! Check if the file iIo is a Windows Asf Video.
 EXIV2API bool isAsfType(BasicIo& iIo, bool advance);
 }  // namespace Exiv2
+
+#endif  // EXIV2_ASFVIDEO_HPP
