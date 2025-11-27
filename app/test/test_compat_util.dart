@@ -220,6 +220,7 @@ class _SqliteFileConverter {
         imageWidth: obj.width,
         imageHeight: obj.height,
         exif: obj.exifRaw?.let((e) => Exif.fromJson(jsonDecode(e))),
+        xmp: obj.xmpRaw?.let((e) => Xmp.fromJson(jsonDecode(e))),
         src: obj.src?.let(MetadataSrc.fromValue) ?? MetadataSrc.legacy,
       ),
     );
@@ -293,6 +294,7 @@ class _SqliteFileConverter {
         width: sql.Value(m.imageWidth),
         height: sql.Value(m.imageHeight),
         exifRaw: sql.Value(m.exif?.toJson().let((j) => jsonEncode(j))),
+        xmpRaw: sql.Value(m.xmp?.toJson().let((j) => jsonEncode(j))),
         dateTimeOriginal: sql.Value(m.exif?.dateTimeOriginalWithOffset),
         src: sql.Value(m.src.index),
       ),

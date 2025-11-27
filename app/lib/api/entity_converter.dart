@@ -74,6 +74,7 @@ class ApiFileConverter {
             fileContentType: file.contentType,
             logFilePath: file.href,
           ),
+          upgraderV5: const MetadataUpgraderV5(),
         ),
       );
     }

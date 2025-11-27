@@ -32,18 +32,20 @@ class NpExiv2Bindings {
   /// @return A handle to retrieve actual results, 0 if failed
   ffi.Pointer<Exiv2ReadResult> exiv2_read_file(
     ffi.Pointer<ffi.Char> path,
+    int is_read_xmp,
   ) {
     return _exiv2_read_file(
       path,
+      is_read_xmp,
     );
   }
 
   late final _exiv2_read_filePtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<Exiv2ReadResult> Function(
-              ffi.Pointer<ffi.Char>)>>('exiv2_read_file');
+              ffi.Pointer<ffi.Char>, ffi.Int)>>('exiv2_read_file');
   late final _exiv2_read_file = _exiv2_read_filePtr.asFunction<
-      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Char>)>();
+      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Char>, int)>();
 
   /// Extract metadata from a buffer
   ///
@@ -51,19 +53,22 @@ class NpExiv2Bindings {
   ffi.Pointer<Exiv2ReadResult> exiv2_read_buffer(
     ffi.Pointer<ffi.Uint8> buffer,
     int size,
+    int is_read_xmp,
   ) {
     return _exiv2_read_buffer(
       buffer,
       size,
+      is_read_xmp,
     );
   }
 
   late final _exiv2_read_bufferPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<Exiv2ReadResult> Function(
-              ffi.Pointer<ffi.Uint8>, ffi.Size)>>('exiv2_read_buffer');
+              ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Int)>>('exiv2_read_buffer');
   late final _exiv2_read_buffer = _exiv2_read_bufferPtr.asFunction<
-      ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Uint8>, int)>();
+      ffi.Pointer<Exiv2ReadResult> Function(
+          ffi.Pointer<ffi.Uint8>, int, int)>();
 
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file

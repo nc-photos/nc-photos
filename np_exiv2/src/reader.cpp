@@ -179,6 +179,8 @@ TypeId convertTypeId(const Exiv2::TypeId value) {
 }
 } // namespace
 
+Reader::Reader(const bool is_read_xmp) : is_read_xmp_(is_read_xmp) {}
+
 unique_ptr<Result> Reader::read_file(const string &path) {
   auto image = Exiv2::ImageFactory::open(path, false);
   if (!image->good()) {
@@ -226,15 +228,16 @@ unique_ptr<Result> Reader::read_image(const Exiv2::Image::UniquePtr &image) {
 
   LOGI(TAG, "Processing XMP data");
   vector<Metadatum> xmp;
-  // xmp.reserve(image->xmpData().count());
-  // for (auto it = image->xmpData().begin(); it != image->xmpData().end();
-  // ++it) {
-  //   LOG("%s %d %lu", it->tagName().c_str(), convertTypeId(it->typeId()),
-  //   valueToCount(it->value())); xmp.push_back({it->tagName(),
-  //   convertTypeId(it->typeId()),
-  //                  valueToByteArray(it->value()),
-  //                  valueToCount(it->value())});
-  // }
+  if (is_read_xmp_) {
+    xmp.reserve(image->xmpData().count());
+    for (auto it = image->xmpData().begin(); it != image->xmpData().end();
+         ++it) {
+      // LOGD("Reader", "%s %d %lu", it->tagName().c_str(),
+      //      convertTypeId(it->typeId()), valueToCount(it->value()));
+      xmp.push_back({it->tagName(), convertTypeId(it->typeId()),
+                     valueToByteArray(it->value()), valueToCount(it->value())});
+    }
+  }
 
   LOGI(TAG, "Done");
   auto result =

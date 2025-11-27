@@ -112,6 +112,7 @@ class FilesBuilder {
               width: 640,
               height: 480,
               exif: null,
+              xmp: null,
               exifDateTimeOriginal: null,
               src: 0,
             )

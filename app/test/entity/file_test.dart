@@ -120,6 +120,7 @@ void main() {
             upgraderV2: null,
             upgraderV3: null,
             upgraderV4: null,
+            upgraderV5: null,
           ),
           Metadata(
             lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
@@ -142,6 +143,7 @@ void main() {
             upgraderV2: null,
             upgraderV3: null,
             upgraderV4: null,
+            upgraderV5: null,
           ),
           Metadata(
             lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
@@ -165,6 +167,7 @@ void main() {
             upgraderV2: null,
             upgraderV3: null,
             upgraderV4: null,
+            upgraderV5: null,
           ),
           Metadata(
             lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
@@ -188,6 +191,7 @@ void main() {
             upgraderV2: null,
             upgraderV3: null,
             upgraderV4: null,
+            upgraderV5: null,
           ),
           Metadata(
             lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),
@@ -211,6 +215,7 @@ void main() {
             upgraderV2: null,
             upgraderV3: null,
             upgraderV4: null,
+            upgraderV5: null,
           ),
           Metadata(
             lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5, 678, 901),

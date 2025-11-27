@@ -21,8 +21,9 @@ void exiv2_metadatum_free(const Exiv2Metadatum *that);
 
 } // namespace
 
-const Exiv2ReadResult *exiv2_read_file(const char *path) {
-  np_exiv2::reader::Reader reader;
+const Exiv2ReadResult *exiv2_read_file(const char *path,
+                                       const int is_read_xmp) {
+  np_exiv2::reader::Reader reader(is_read_xmp);
   try {
     auto result = reader.read_file(path);
     if (result) {
@@ -42,8 +43,9 @@ const Exiv2ReadResult *exiv2_read_file(const char *path) {
 }
 
 const Exiv2ReadResult *exiv2_read_buffer(const uint8_t *buffer,
-                                         const size_t size) {
-  np_exiv2::reader::Reader reader;
+                                         const size_t size,
+                                         const int is_read_xmp) {
+  np_exiv2::reader::Reader reader(is_read_xmp);
   try {
     auto result = reader.read_buffer(buffer, size);
     if (result) {

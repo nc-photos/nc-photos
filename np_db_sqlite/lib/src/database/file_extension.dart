@@ -342,6 +342,7 @@ extension SqliteDbFileExtension on SqliteDb {
             width: Value(imageData.obj!.width),
             height: Value(imageData.obj!.height),
             exifRaw: Value(imageData.obj!.exif?.let(jsonEncode)),
+            xmpRaw: Value(imageData.obj!.xmp?.let(jsonEncode)),
             dateTimeOriginal: Value(imageData.obj!.exifDateTimeOriginal),
             src: Value(imageData.obj!.src),
           ),
