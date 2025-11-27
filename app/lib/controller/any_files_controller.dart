@@ -336,7 +336,7 @@ class AnyFilesController {
     final remote = filesController.summaryStream.valueOrNull;
     final local = localFilesController.summaryStream2.valueOrNull;
     final result =
-        remote?.summary.items.map((k, v) => MapEntry(k, v.count)) ?? const {};
+        remote?.summary.items.map((k, v) => MapEntry(k, v.count)) ?? {};
     for (final e in local?.summary.items.entries ?? <MapEntry<Date, int>>[]) {
       result[e.key] = (result[e.key] ?? 0) + e.value;
     }
