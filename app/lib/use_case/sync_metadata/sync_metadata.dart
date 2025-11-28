@@ -5,7 +5,6 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
-import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file/file_cache_manager.dart';
 import 'package:nc_photos/entity/file/repo.dart';

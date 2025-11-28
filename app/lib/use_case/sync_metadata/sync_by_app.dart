@@ -69,13 +69,12 @@ class _SyncByApp {
         metadataUpdate = OrNull(metadata);
       }
 
-      final lat = (metadataUpdate?.obj ?? file.metadata)?.exif?.gpsLatitudeDeg;
-      final lng = (metadataUpdate?.obj ?? file.metadata)?.exif?.gpsLongitudeDeg;
+      final gps = (metadataUpdate?.obj ?? file.metadata)?.gpsCoord;
       try {
         ImageLocation? location;
-        if (lat != null && lng != null) {
+        if (gps != null) {
           _log.fine("[syncOne] Reverse geocoding for ${file.path}");
-          final l = await _geocoder(lat, lng);
+          final l = await _geocoder(gps.lat, gps.lng);
           if (l != null) {
             location = l.toImageLocation();
           }

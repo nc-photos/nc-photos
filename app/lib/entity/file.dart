@@ -307,6 +307,16 @@ class Metadata with EquatableMixin {
 
   DateTime? get dateTime => exif?.dateTimeOriginalWithOffset ?? xmp?.dateUtc;
 
+  ({double lat, double lng})? get gpsCoord {
+    final exifLat = exif?.gpsLatitudeDeg;
+    final exifLng = exif?.gpsLongitudeDeg;
+    if (exifLat != null && exifLng != null) {
+      return (lat: exifLat, lng: exifLng);
+    } else {
+      return xmp?.gpsCoordinates;
+    }
+  }
+
   @override
   List<Object?> get props => [
     lastUpdated,

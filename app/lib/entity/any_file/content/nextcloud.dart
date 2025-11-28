@@ -6,7 +6,6 @@ import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
-import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/file_view_util.dart';
@@ -128,10 +127,9 @@ class AnyFileNextcloudMetadataGetter implements AnyFileMetadataGetter {
   @override
   Future<MapCoord?> get gpsCoord async {
     final file = await _ensureFile();
-    final lat = file?.metadata?.exif?.gpsLatitudeDeg;
-    final lng = file?.metadata?.exif?.gpsLongitudeDeg;
-    if (lat != null && lng != null) {
-      return MapCoord(lat, lng);
+    final gps = file?.metadata?.gpsCoord;
+    if (gps != null) {
+      return MapCoord(gps.lat, gps.lng);
     } else {
       return null;
     }

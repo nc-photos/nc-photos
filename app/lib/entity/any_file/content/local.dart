@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
-import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
@@ -79,10 +78,9 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
 
   @override
   Future<MapCoord?> get gpsCoord => _ensureMetadata().then((e) {
-    final lat = e?.exif?.gpsLatitudeDeg;
-    final lng = e?.exif?.gpsLongitudeDeg;
-    if (lat != null && lng != null) {
-      return MapCoord(lat, lng);
+    final gps = e?.gpsCoord;
+    if (gps != null) {
+      return MapCoord(gps.lat, gps.lng);
     } else {
       return null;
     }
