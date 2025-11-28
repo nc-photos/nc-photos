@@ -82,7 +82,7 @@ class Images extends Table {
   TextColumn get xmpRaw => text().nullable()();
   IntColumn get src => integer().nullable()();
 
-  // exif columns
+  // exif/xmp columns
   DateTimeColumn get dateTimeOriginal =>
       dateTime().map(const SqliteDateTimeConverter()).nullable()();
 

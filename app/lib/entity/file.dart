@@ -305,6 +305,8 @@ class Metadata with EquatableMixin {
     exif["_OffsetTimeOriginal"] = matches.first.value;
   }
 
+  DateTime? get dateTime => exif?.dateTimeOriginalWithOffset ?? xmp?.dateUtc;
+
   @override
   List<Object?> get props => [
     lastUpdated,
@@ -687,7 +689,7 @@ class File with EquatableMixin implements FileDescriptor {
 extension FileExtension on File {
   DateTime get bestDateTime => file_util.getBestDateTime(
     overrideDateTime: overrideDateTime,
-    dateTimeOriginal: metadata?.exif?.dateTimeOriginalWithOffset,
+    metadataDateTime: metadata?.dateTime,
     lastModified: lastModified,
   );
 

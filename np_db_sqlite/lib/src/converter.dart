@@ -152,7 +152,7 @@ abstract class FileConverter {
         height: Value(m.height),
         exifRaw: Value(m.exif?.let((j) => jsonEncode(j))),
         xmpRaw: Value(m.xmp?.let((j) => jsonEncode(j))),
-        dateTimeOriginal: Value(m.exifDateTimeOriginal),
+        dateTimeOriginal: Value(m.dateTime),
         src: Value(m.src),
       ),
     );
@@ -195,7 +195,7 @@ abstract class ImageConverter {
       exif:
           src.exifRaw?.let((e) => jsonDecode(e) as Map).cast<String, dynamic>(),
       xmp: src.xmpRaw?.let((e) => jsonDecode(e) as Map).cast<String, dynamic>(),
-      exifDateTimeOriginal: src.dateTimeOriginal,
+      dateTime: src.dateTimeOriginal,
       src: src.src,
     );
   }

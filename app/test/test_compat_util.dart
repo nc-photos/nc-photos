@@ -295,7 +295,7 @@ class _SqliteFileConverter {
         height: sql.Value(m.imageHeight),
         exifRaw: sql.Value(m.exif?.toJson().let((j) => jsonEncode(j))),
         xmpRaw: sql.Value(m.xmp?.toJson().let((j) => jsonEncode(j))),
-        dateTimeOriginal: sql.Value(m.exif?.dateTimeOriginalWithOffset),
+        dateTimeOriginal: sql.Value(m.dateTime),
         src: sql.Value(m.src.index),
       ),
     );

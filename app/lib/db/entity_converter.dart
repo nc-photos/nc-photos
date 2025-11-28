@@ -175,7 +175,7 @@ abstract class DbFileConverter {
           height: s.imageHeight,
           exif: s.exif?.toJson(),
           xmp: s.xmp?.toJson(),
-          exifDateTimeOriginal: s.exif?.dateTimeOriginalWithOffset,
+          dateTime: s.dateTime,
           src: s.src.index,
         ),
       ),
@@ -240,7 +240,7 @@ abstract class DbMetadataConverter {
       height: src.imageHeight,
       exif: src.exif?.toJson(),
       xmp: src.xmp?.toJson(),
-      exifDateTimeOriginal: src.exif?.dateTimeOriginalWithOffset,
+      dateTime: src.dateTime,
       src: src.src.index,
     );
   }
