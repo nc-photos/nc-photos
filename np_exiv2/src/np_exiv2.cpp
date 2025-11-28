@@ -111,7 +111,7 @@ void convertCppType(Exiv2ReadResult *that,
       (Exiv2Metadatum *)malloc(obj.iptc_data.size() * sizeof(Exiv2Metadatum));
   auto dst_it = iptc_data;
   for (auto it = obj.iptc_data.begin(); it != obj.iptc_data.end(); ++it) {
-    LOGI(TAG, "- Convert %s", it->tag_key.c_str());
+    LOGD(TAG, "- Convert %s", it->tag_key.c_str());
     convertCppType(dst_it++, *it);
   }
   that->iptc_data = iptc_data;
@@ -122,7 +122,7 @@ void convertCppType(Exiv2ReadResult *that,
       (Exiv2Metadatum *)malloc(obj.exif_data.size() * sizeof(Exiv2Metadatum));
   dst_it = exif_data;
   for (auto it = obj.exif_data.begin(); it != obj.exif_data.end(); ++it) {
-    LOGI(TAG, "- Convert %s", it->tag_key.c_str());
+    LOGD(TAG, "- Convert %s", it->tag_key.c_str());
     convertCppType(dst_it++, *it);
   }
   that->exif_data = exif_data;
@@ -133,7 +133,7 @@ void convertCppType(Exiv2ReadResult *that,
       (Exiv2Metadatum *)malloc(obj.xmp_data.size() * sizeof(Exiv2Metadatum));
   dst_it = xmp_data;
   for (auto it = obj.xmp_data.begin(); it != obj.xmp_data.end(); ++it) {
-    LOGI(TAG, "- Convert %s", it->tag_key.c_str());
+    LOGD(TAG, "- Convert %s", it->tag_key.c_str());
     convertCppType(dst_it++, *it);
   }
   that->xmp_data = xmp_data;
