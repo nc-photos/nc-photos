@@ -55,10 +55,10 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   Future<int?> get byteSize => Future.value(_provider.file.byteSize);
 
   @override
-  Future<String?> get make => _ensureMetadata().then((e) => e?.exif?.make);
+  Future<String?> get make => _ensureMetadata().then((e) => e?.make);
 
   @override
-  Future<String?> get model => _ensureMetadata().then((e) => e?.exif?.model);
+  Future<String?> get model => _ensureMetadata().then((e) => e?.model);
 
   @override
   Future<AnyFileMetadataRational?> get fNumber =>

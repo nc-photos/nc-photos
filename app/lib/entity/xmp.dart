@@ -108,6 +108,22 @@ class Xmp with EquatableMixin {
     }
   }
 
+  String? get make =>
+      data["Make"] ??
+      // for Android
+      data["np.meta.mdta.com.android.manufacturer"] ??
+      // for Apple
+      data["np.meta.mdta.com.apple.quicktime.make"];
+
+  String? get model =>
+      data["Model"] ??
+      // for Xiaomi
+      data["np.meta.mdta.com.xiaomi.product.marketname"] ??
+      // for other Android
+      data["np.meta.mdta.com.android.model"] ??
+      // for Apple
+      data["np.meta.mdta.com.apple.quicktime.model"];
+
   @override
   List<Object?> get props => [data];
 

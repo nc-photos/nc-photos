@@ -91,13 +91,13 @@ class AnyFileNextcloudMetadataGetter implements AnyFileMetadataGetter {
   @override
   Future<String?> get make async {
     final file = await _ensureFile();
-    return file?.metadata?.exif?.make;
+    return file?.metadata?.make;
   }
 
   @override
   Future<String?> get model async {
     final file = await _ensureFile();
-    return file?.metadata?.exif?.model;
+    return file?.metadata?.model;
   }
 
   @override

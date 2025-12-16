@@ -317,6 +317,10 @@ class Metadata with EquatableMixin {
     }
   }
 
+  String? get make => exif?.make ?? xmp?.make;
+
+  String? get model => exif?.model ?? xmp?.model;
+
   @override
   List<Object?> get props => [
     lastUpdated,
