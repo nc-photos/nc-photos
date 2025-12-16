@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
+import 'package:np_common/object_util.dart';
 import 'package:np_common/type.dart';
 import 'package:np_log/np_log.dart';
 
@@ -123,6 +124,18 @@ class Xmp with EquatableMixin {
       data["np.meta.mdta.com.android.model"] ??
       // for Apple
       data["np.meta.mdta.com.apple.quicktime.model"];
+
+  // Rotation normalized to [-179, 180] deg
+  int? get rotation {
+    final val = data["Rotation"] == null ? null : int.parse(data["Rotation"]);
+    return val?.let((e) {
+      var x = e % 360;
+      if (x > 180) {
+        x -= 360;
+      }
+      return x;
+    });
+  }
 
   @override
   List<Object?> get props => [data];

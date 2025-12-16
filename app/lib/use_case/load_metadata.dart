@@ -98,16 +98,20 @@ class LoadMetadata {
       // for videos, exiv2 always returns 0 for pixel width and height
       imageWidth = xmp?.width;
       imageHeight = xmp?.height;
+      final rotation = xmp?.rotation;
+      if (rotation == 90 || rotation == -90) {
+        (imageWidth, imageHeight) = (imageHeight, imageWidth);
+      }
     } else {
       imageWidth = result.width;
       imageHeight = result.height;
-    }
-    // exiv2 doesn't handle orientation
-    if (exifData.containsKey("Orientation") &&
-        exifData["Orientation"] as int >= 5 &&
-        exifData["Orientation"] as int <= 8) {
-      // 90 deg CW/CCW
-      (imageWidth, imageHeight) = (imageHeight, imageWidth);
+      // exiv2 doesn't handle orientation
+      if (exifData.containsKey("Orientation") &&
+          exifData["Orientation"] as int >= 5 &&
+          exifData["Orientation"] as int <= 8) {
+        // 90 deg CW/CCW
+        (imageWidth, imageHeight) = (imageHeight, imageWidth);
+      }
     }
 
     return Metadata(
