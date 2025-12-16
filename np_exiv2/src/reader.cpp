@@ -183,7 +183,7 @@ Reader::Reader(const bool is_read_xmp) : is_read_xmp_(is_read_xmp) {}
 
 unique_ptr<Result> Reader::read_file(const string &path) {
   auto image = Exiv2::ImageFactory::open(path, false);
-  if (!image->good()) {
+  if (!image || !image->good()) {
     LOGE(TAG, "Failed to open image file: %s", path.c_str());
     return nullptr;
   }
@@ -193,7 +193,7 @@ unique_ptr<Result> Reader::read_file(const string &path) {
 unique_ptr<Result> Reader::read_buffer(const uint8_t *buffer,
                                        const size_t size) {
   auto image = Exiv2::ImageFactory::open(buffer, size);
-  if (!image->good()) {
+  if (!image || !image->good()) {
     LOGE(TAG, "Failed to open image buffer");
     return nullptr;
   }
