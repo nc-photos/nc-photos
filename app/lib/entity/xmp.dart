@@ -84,7 +84,11 @@ class Xmp with EquatableMixin {
   }
 
   ({double lat, double lng})? get gpsCoordinates {
-    final val = data["GPSCoordinates"];
+    final val =
+        // for Android
+        data["GPSCoordinates"] ??
+        // for Apple
+        data["np.meta.mdta.com.apple.quicktime.location.ISO6709"];
     if (val == null) {
       return null;
     }
