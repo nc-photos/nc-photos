@@ -70,6 +70,38 @@ class NpExiv2Bindings {
       ffi.Pointer<Exiv2ReadResult> Function(
           ffi.Pointer<ffi.Uint8>, int, int)>();
 
+  ffi.Pointer<Exiv2ReadResult> exiv2_read_http(
+    ffi.Pointer<ffi.Char> url,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> header_keys,
+    ffi.Pointer<ffi.Pointer<ffi.Char>> header_values,
+    int header_size,
+    int is_read_xmp,
+  ) {
+    return _exiv2_read_http(
+      url,
+      header_keys,
+      header_values,
+      header_size,
+      is_read_xmp,
+    );
+  }
+
+  late final _exiv2_read_httpPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<Exiv2ReadResult> Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Pointer<ffi.Char>>,
+              ffi.Pointer<ffi.Pointer<ffi.Char>>,
+              ffi.UnsignedInt,
+              ffi.Int)>>('exiv2_read_http');
+  late final _exiv2_read_http = _exiv2_read_httpPtr.asFunction<
+      ffi.Pointer<Exiv2ReadResult> Function(
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Pointer<ffi.Char>>,
+          ffi.Pointer<ffi.Pointer<ffi.Char>>,
+          int,
+          int)>();
+
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file
   void exiv2_result_free(

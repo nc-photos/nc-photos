@@ -1,4 +1,5 @@
 #include <exception>
+#include <exiv2/basicio.hpp>
 #include <exiv2/types.hpp>
 #include <exiv2/value.hpp>
 
@@ -193,6 +194,18 @@ unique_ptr<Result> Reader::read_file(const string &path) {
 unique_ptr<Result> Reader::read_buffer(const uint8_t *buffer,
                                        const size_t size) {
   auto image = Exiv2::ImageFactory::open(buffer, size);
+  if (!image || !image->good()) {
+    LOGE(TAG, "Failed to open image buffer");
+    return nullptr;
+  }
+  return read_image(image);
+}
+
+unique_ptr<Result> Reader::read_http(const string &url,
+                                     const map<string, string> &httpHeaders) {
+  auto io = make_unique<Exiv2::CurlIo>(url);
+  io->addHttpHeaders(httpHeaders);
+  auto image = Exiv2::ImageFactory::open(std::move(io));
   if (!image || !image->good()) {
     LOGE(TAG, "Failed to open image buffer");
     return nullptr;

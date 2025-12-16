@@ -1,12 +1,16 @@
 import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
+import 'package:nc_photos/account.dart';
+import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/xmp.dart';
+import 'package:nc_photos/np_api_util.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_exiv2/np_exiv2.dart' as exiv2;
 import 'package:np_log/np_log.dart';
@@ -25,6 +29,21 @@ class LoadMetadata {
             isReadXmp: file_util.isSupportedVideoMime(file.mime ?? ""),
           ),
       logTag: file.displayPath,
+    );
+  }
+
+  Future<Metadata> loadRemotefile(Account account, FileDescriptor file) {
+    return _loadMetadata(
+      mime: file.fdMime ?? "",
+      reader:
+          () => exiv2.readHttp(
+            api_util.getFileUrl(account, file),
+            httpHeaders: {
+              "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+            },
+            isReadXmp: file_util.isSupportedVideoMime(file.fdMime ?? ""),
+          ),
+      logTag: file.strippedPath,
     );
   }
 

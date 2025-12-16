@@ -1,6 +1,8 @@
 #include <cstdio>
 #include <cstring>
 #include <exception>
+#include <map>
+#include <string>
 
 #include "log.h"
 #include "np_exiv2.h"
@@ -63,6 +65,36 @@ const Exiv2ReadResult *exiv2_read_buffer(const uint8_t *buffer,
   }
   return nullptr;
 }
+
+const Exiv2ReadResult *exiv2_read_http(const char *url,
+                                       const char **header_keys,
+                                       const char **header_values,
+                                       const unsigned header_size,
+                                       const int is_read_xmp) {
+  np_exiv2::reader::Reader reader(is_read_xmp);
+  map<string, string> headers;
+  for (unsigned i = 0; i < header_size; ++i) {
+    headers[header_keys[i]] = header_values[i];
+  }
+  try {
+    auto result = reader.read_http(url, headers);
+    if (result) {
+      LOGI(TAG, "Converting result");
+      auto cresult = (Exiv2ReadResult *)malloc(sizeof(Exiv2ReadResult));
+      memset(cresult, 0, sizeof(Exiv2ReadResult));
+      convertCppType(cresult, *result);
+      LOGI(TAG, "Done");
+      return cresult;
+    }
+  } catch (const exception &e) {
+    LOGE(TAG, "Exception reading file: %s", e.what());
+  } catch (...) {
+    LOGE(TAG, "Exception reading file");
+  }
+  return nullptr;
+}
+
+// {{"Authorization", "YWRtaW46MTIzNDU2Nzg5"}}
 
 void exiv2_result_free(const Exiv2ReadResult *that) {
   if (that->iptc_data) {
