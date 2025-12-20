@@ -127,6 +127,17 @@ final supportedFormatMimes = [
     "video/webm",
 ];
 
+final supportedMetadataFormatMimes = [
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/gif",
+  "image/jxl",
+  "video/mp4",
+  "video/quicktime",
+];
+
 final supportedImageFormatMimes =
     supportedFormatMimes.where((f) => f.startsWith("image/")).toList();
 

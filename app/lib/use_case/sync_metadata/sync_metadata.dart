@@ -52,7 +52,7 @@ class SyncMetadata {
     }
     final files = await db.getFilesByMissingMetadata(
       account: account.toDb(),
-      mimes: file_util.supportedFormatMimes,
+      mimes: file_util.supportedMetadataFormatMimes,
       ownerId: account.userId.toCaseInsensitiveString(),
     );
     _log.info("[syncAccount] Missing count: ${files.items.length}");
