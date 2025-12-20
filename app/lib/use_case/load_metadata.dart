@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
@@ -49,12 +50,12 @@ class LoadMetadata {
 
   Future<Metadata> _loadMetadata({
     required String mime,
-    required exiv2.ReadResult Function() reader,
+    required FutureOr<exiv2.ReadResult> Function() reader,
     String? logTag,
   }) async {
     final exiv2.ReadResult result;
     try {
-      result = reader();
+      result = await reader();
     } catch (e, stacktrace) {
       _log.shout(
         "[_loadMetadata] Failed while readMetadata for $mime file: ${logFilename(logTag)}",

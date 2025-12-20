@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi';
 import 'dart:io';
+import 'dart:isolate';
 import 'dart:typed_data';
 
 import 'package:euc/jis.dart';
@@ -334,59 +335,61 @@ ReadResult readBuffer(Uint8List buffer, {required bool isReadXmp}) {
   }
 }
 
-ReadResult readHttp(
+Future<ReadResult> readHttp(
   Uri url, {
   Map<String, String>? httpHeaders,
   required bool isReadXmp,
 }) {
   final urlStr = url.toString();
-  final stopwatch = Stopwatch()..start();
-  final headerKeys = <Pointer<Char>>[];
-  final headerValues = <Pointer<Char>>[];
-  Pointer<Pointer<Char>>? headerKeysC;
-  Pointer<Pointer<Char>>? headerValuesC;
-  final urlC = urlStr.toNativeUtf8();
-  try {
-    for (final e in (httpHeaders ?? const {}).entries) {
-      headerKeys.add(e.key.toNativeUtf8().cast());
-      headerValues.add(e.value.toNativeUtf8().cast());
-    }
-    headerKeysC = headerKeys.toNativeArray();
-    headerValuesC = headerValues.toNativeArray();
-
-    _log.fine("[readHttp] Reading $url");
-    final result = _bindings.exiv2_read_http(
-      urlC.cast(),
-      headerKeysC,
-      headerValuesC,
-      httpHeaders?.length ?? 0,
-      isReadXmp ? 1 : 0,
-    );
-    if (result == nullptr) {
-      _log.severe("[readHttp] Result is null for url: $url");
-      throw StateError("Failed to read file");
-    }
+  return Isolate.run(() {
+    final stopwatch = Stopwatch()..start();
+    final headerKeys = <Pointer<Char>>[];
+    final headerValues = <Pointer<Char>>[];
+    Pointer<Pointer<Char>>? headerKeysC;
+    Pointer<Pointer<Char>>? headerValuesC;
+    final urlC = urlStr.toNativeUtf8();
     try {
-      return ReadResult.fromNative(result[0]);
+      for (final e in (httpHeaders ?? const {}).entries) {
+        headerKeys.add(e.key.toNativeUtf8().cast());
+        headerValues.add(e.value.toNativeUtf8().cast());
+      }
+      headerKeysC = headerKeys.toNativeArray();
+      headerValuesC = headerValues.toNativeArray();
+
+      _log.fine("[readHttp] Reading $url");
+      final result = _bindings.exiv2_read_http(
+        urlC.cast(),
+        headerKeysC,
+        headerValuesC,
+        httpHeaders?.length ?? 0,
+        isReadXmp ? 1 : 0,
+      );
+      if (result == nullptr) {
+        _log.severe("[readHttp] Result is null for url: $url");
+        throw StateError("Failed to read file");
+      }
+      try {
+        return ReadResult.fromNative(result[0]);
+      } finally {
+        _bindings.exiv2_result_free(result);
+      }
     } finally {
-      _bindings.exiv2_result_free(result);
+      ffi.malloc.free(urlC);
+      for (final e in headerKeys) {
+        ffi.malloc.free(e);
+      }
+      for (final e in headerValues) {
+        ffi.malloc.free(e);
+      }
+      if (headerKeysC != null) {
+        ffi.malloc.free(headerKeysC);
+      }
+      if (headerValuesC != null) {
+        ffi.malloc.free(headerValuesC);
+      }
+      _log.fine("[readHttp] Done in ${stopwatch.elapsedMilliseconds}ms");
     }
-  } finally {
-    ffi.malloc.free(urlC);
-    for (final e in headerKeys) {
-      ffi.malloc.free(e);
-    }
-    for (final e in headerValues) {
-      ffi.malloc.free(e);
-    }
-    if (headerKeysC != null) {
-      ffi.malloc.free(headerKeysC);
-    }
-    if (headerValuesC != null) {
-      ffi.malloc.free(headerValuesC);
-    }
-    _log.fine("[readHttp] Done in ${stopwatch.elapsedMilliseconds}ms");
-  }
+  });
 }
 
 extension PointerListExtension<T extends NativeType> on List<Pointer<T>> {
