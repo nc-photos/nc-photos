@@ -127,6 +127,10 @@ abstract interface class AnyFileMetadataGetter {
   Future<ImageLocation?> get location;
 
   Future<Duration?> get offsetTime;
+
+  Future<double?> get fps;
+
+  Future<Duration?> get duration;
 }
 
 class AnyFileTag {

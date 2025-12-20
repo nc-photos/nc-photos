@@ -137,6 +137,16 @@ class Xmp with EquatableMixin {
     });
   }
 
+  double? get fps {
+    return data["FrameRate"] == null ? null : double.parse(data["FrameRate"]);
+  }
+
+  Duration? get duration {
+    return data["Duration"] == null
+        ? null
+        : Duration(milliseconds: int.parse(data["Duration"]));
+  }
+
   @override
   List<Object?> get props => [data];
 

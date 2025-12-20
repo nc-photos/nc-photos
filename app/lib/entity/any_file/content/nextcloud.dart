@@ -147,6 +147,18 @@ class AnyFileNextcloudMetadataGetter implements AnyFileMetadataGetter {
     return file?.metadata?.exif?.offsetTimeOriginal;
   }
 
+  @override
+  Future<double?> get fps async {
+    final file = await _ensureFile();
+    return file?.metadata?.xmp?.fps;
+  }
+
+  @override
+  Future<Duration?> get duration async {
+    final file = await _ensureFile();
+    return file?.metadata?.xmp?.duration;
+  }
+
   Future<File?> _ensureFile() async {
     if (_initCompleter == null) {
       _initCompleter = Completer();
