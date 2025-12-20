@@ -5,16 +5,13 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
-import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file/file_cache_manager.dart';
 import 'package:nc_photos/entity/file/repo.dart';
-import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/geocoder_util.dart';
 import 'package:nc_photos/service/service.dart';
 import 'package:nc_photos/use_case/battery_ensurer.dart';
-import 'package:nc_photos/use_case/get_file_binary.dart';
 import 'package:nc_photos/use_case/load_metadata.dart';
 import 'package:nc_photos/use_case/update_property.dart';
 import 'package:nc_photos/use_case/wifi_ensurer.dart';
@@ -55,7 +52,7 @@ class SyncMetadata {
     }
     final files = await db.getFilesByMissingMetadata(
       account: account.toDb(),
-      mimes: file_util.supportedImageFormatMimes,
+      mimes: file_util.supportedFormatMimes,
       ownerId: account.userId.toCaseInsensitiveString(),
     );
     _log.info("[syncAccount] Missing count: ${files.items.length}");

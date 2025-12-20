@@ -1,11 +1,13 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#pragma once
+#ifndef EXIV2_BMFFIMAGE_HPP
+#define EXIV2_BMFFIMAGE_HPP
 
 // *****************************************************************************
 #include "exiv2lib_export.h"
 
 // included header files
+#include "config.h"
 #include "image.hpp"
 
 #include <set>
@@ -21,9 +23,6 @@ namespace Exiv2 {
 struct Iloc {
   explicit Iloc(uint32_t ID = 0, uint32_t start = 0, uint32_t length = 0) : ID_(ID), start_(start), length_(length) {
   }
-  virtual ~Iloc() = default;
-  Iloc(const Iloc&) = default;
-  Iloc& operator=(const Iloc&) = default;
 
   uint32_t ID_;
   uint32_t start_;
@@ -56,7 +55,7 @@ class EXIV2API BmffImage : public Image {
     @param create Specifies if an existing image should be read (false)
         or if a new file should be created (true).
    */
-  BmffImage(BasicIo::UniquePtr io, bool create, size_t max_box_depth = 1000);
+  BmffImage(std::unique_ptr<BasicIo> io, bool create, size_t max_box_depth = 1000);
   //@}
 
   //@{
@@ -169,9 +168,11 @@ class EXIV2API BmffImage : public Image {
          Caller owns the returned object and the auto-pointer ensures that
          it will be deleted.
  */
-EXIV2API Image::UniquePtr newBmffInstance(BasicIo::UniquePtr io, bool create);
+EXIV2API Image::UniquePtr newBmffInstance(std::unique_ptr<BasicIo> io, bool create);
 
 //! Check if the file iIo is a BMFF image.
 EXIV2API bool isBmffType(BasicIo& iIo, bool advance);
 }  // namespace Exiv2
 #endif  // EXV_ENABLE_BMFF
+
+#endif  // EXIV2_BMFFIMAGE_HPP

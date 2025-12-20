@@ -15,6 +15,7 @@ import 'package:nc_photos/entity/nc_album_item.dart';
 import 'package:nc_photos/entity/recognize_face.dart';
 import 'package:nc_photos/entity/recognize_face_item.dart';
 import 'package:nc_photos/entity/tag.dart';
+import 'package:nc_photos/entity/xmp.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:np_api/np_api.dart' as api;
 import 'package:np_common/object_util.dart';
@@ -173,7 +174,8 @@ abstract class DbFileConverter {
           width: s.imageWidth,
           height: s.imageHeight,
           exif: s.exif?.toJson(),
-          exifDateTimeOriginal: s.exif?.dateTimeOriginalWithOffset,
+          xmp: s.xmp?.toJson(),
+          dateTime: s.dateTime,
           src: s.src.index,
         ),
       ),
@@ -225,6 +227,7 @@ abstract class DbMetadataConverter {
       imageWidth: src.width,
       imageHeight: src.height,
       exif: src.exif?.let(Exif.fromJson),
+      xmp: src.xmp?.let(Xmp.fromJson),
       src: src.src?.let(MetadataSrc.fromValue) ?? MetadataSrc.legacy,
     );
   }
@@ -236,7 +239,8 @@ abstract class DbMetadataConverter {
       width: src.imageWidth,
       height: src.imageHeight,
       exif: src.exif?.toJson(),
-      exifDateTimeOriginal: src.exif?.dateTimeOriginalWithOffset,
+      xmp: src.xmp?.toJson(),
+      dateTime: src.dateTime,
       src: src.src.index,
     );
   }

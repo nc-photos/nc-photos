@@ -55,7 +55,7 @@ extension _$ImageLocationToString on ImageLocation {
 extension _$MetadataToString on Metadata {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "Metadata {lastUpdated: $lastUpdated, ${fileEtag == null ? "" : "fileEtag: $fileEtag, "}${imageWidth == null ? "" : "imageWidth: $imageWidth, "}${imageHeight == null ? "" : "imageHeight: $imageHeight, "}${exif == null ? "" : "exif: $exif, "}src: ${src.name}}";
+    return "Metadata {lastUpdated: $lastUpdated, ${fileEtag == null ? "" : "fileEtag: $fileEtag, "}${imageWidth == null ? "" : "imageWidth: $imageWidth, "}${imageHeight == null ? "" : "imageHeight: $imageHeight, "}${exif == null ? "" : "exif: $exif, "}${xmp == null ? "" : "xmp: $xmp, "}src: ${src.name}}";
   }
 }
 

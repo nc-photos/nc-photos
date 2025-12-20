@@ -224,7 +224,8 @@ class DbImageData with EquatableMixin {
     required this.width,
     required this.height,
     required this.exif,
-    required this.exifDateTimeOriginal,
+    required this.xmp,
+    required this.dateTime,
     required this.src,
   });
 
@@ -238,7 +239,8 @@ class DbImageData with EquatableMixin {
     width,
     height,
     exif,
-    exifDateTimeOriginal,
+    xmp,
+    dateTime,
     src,
   ];
 
@@ -247,7 +249,8 @@ class DbImageData with EquatableMixin {
   final int? width;
   final int? height;
   final JsonObj? exif;
-  final DateTime? exifDateTimeOriginal;
+  final JsonObj? xmp;
+  final DateTime? dateTime;
   final int? src;
 }
 

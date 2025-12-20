@@ -74,7 +74,8 @@ typedef struct {
  *
  * @return A handle to retrieve actual results, 0 if failed
  */
-FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2_read_file(const char *path);
+FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2_read_file(const char *path,
+                                                         const int is_read_xmp);
 
 /**
  * Extract metadata from a buffer
@@ -82,7 +83,13 @@ FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2_read_file(const char *path);
  * @return A handle to retrieve actual results, 0 if failed
  */
 FFI_PLUGIN_EXPORT const Exiv2ReadResult *
-exiv2_read_buffer(const uint8_t *buffer, const size_t size);
+exiv2_read_buffer(const uint8_t *buffer, const size_t size,
+                  const int is_read_xmp);
+
+FFI_PLUGIN_EXPORT const Exiv2ReadResult *
+exiv2_read_http(const char *url, const char **header_keys,
+                const char **header_values, const unsigned header_size,
+                const int is_read_xmp);
 
 /**
  * Release the resources of a Exiv2ReadResult object returned by

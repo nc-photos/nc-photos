@@ -142,11 +142,13 @@ class Value {
         case TypeId.invalidTypeId:
           return _data.buffer.asUint8List();
         case TypeId.xmpText:
+          return _removeNullTerminator(utf8.decode(_data));
+        case TypeId.xmpSeq:
+          return _removeNullTerminator(utf8.decode(_data)).split(", ");
         case TypeId.xmpAlt:
         case TypeId.xmpBag:
-        case TypeId.xmpSeq:
         case TypeId.langAlt:
-          throw UnsupportedError("XMP not supported");
+          throw UnsupportedError("XMP not fully supported");
       }
     } catch (e, stackTrace) {
       _log.severe(
@@ -240,11 +242,17 @@ class Metadatum {
 }
 
 class ReadResult {
-  const ReadResult(this.width, this.height, this.iptcData, this.exifData);
+  const ReadResult(
+    this.width,
+    this.height,
+    this.iptcData,
+    this.exifData,
+    this.xmpData,
+  );
 
   factory ReadResult.fromNative(Exiv2ReadResult src) {
     _log.fine(
-      "[fromNative] w: ${src.width}, h: ${src.height}, iptcCount: ${src.iptc_count}, exifCount: ${src.exif_count}",
+      "[fromNative] w: ${src.width}, h: ${src.height}, iptcCount: ${src.iptc_count}, exifCount: ${src.exif_count}, xmpCount: ${src.xmp_count}",
     );
     final iptcData = <Metadatum>[];
     for (var i = 0; i < src.iptc_count; ++i) {
@@ -254,23 +262,32 @@ class ReadResult {
     for (var i = 0; i < src.exif_count; ++i) {
       exifData.add(Metadatum.fromNative(src.exif_data[i]));
     }
-    return ReadResult(src.width, src.height, iptcData, exifData);
+    final xmpData = <Metadatum>[];
+    for (var i = 0; i < src.xmp_count; ++i) {
+      xmpData.add(Metadatum.fromNative(src.xmp_data[i]));
+    }
+    return ReadResult(src.width, src.height, iptcData, exifData, xmpData);
   }
 
+  // always 0 for videos, width of a video can only be retrieved from XMP (if
+  // available)
   final int width;
+  // always 0 for videos, height of a video can only be retrieved from XMP (if
+  // available)
   final int height;
   final List<Metadatum> iptcData;
   final List<Metadatum> exifData;
+  final List<Metadatum> xmpData;
 
   static final _log = Logger("np_exiv2.ReadResult");
 }
 
-ReadResult readFile(String path) {
+ReadResult readFile(String path, {required bool isReadXmp}) {
   final stopwatch = Stopwatch()..start();
   final pathC = path.toNativeUtf8();
   try {
     _log.fine("[readFile] Reading $path");
-    final result = _bindings.exiv2_read_file(pathC.cast());
+    final result = _bindings.exiv2_read_file(pathC.cast(), isReadXmp ? 1 : 0);
     if (result == nullptr) {
       _log.severe("[readFile] Result is null for file: $path");
       throw StateError("Failed to read file");
@@ -286,7 +303,7 @@ ReadResult readFile(String path) {
   }
 }
 
-ReadResult readBuffer(Uint8List buffer) {
+ReadResult readBuffer(Uint8List buffer, {required bool isReadXmp}) {
   final stopwatch = Stopwatch()..start();
   Pointer<Uint8>? cbuffer;
   try {
@@ -295,7 +312,11 @@ ReadResult readBuffer(Uint8List buffer) {
     final cbufferView = cbuffer.asTypedList(buffer.length);
     cbufferView.setAll(0, buffer);
     _log.fine("[readBuffer] Reading buffer");
-    final result = _bindings.exiv2_read_buffer(cbuffer, buffer.length);
+    final result = _bindings.exiv2_read_buffer(
+      cbuffer,
+      buffer.length,
+      isReadXmp ? 1 : 0,
+    );
     if (result == nullptr) {
       _log.severe("[readBuffer] Result is null for buffer");
       throw StateError("Failed to read buffer");
@@ -310,6 +331,70 @@ ReadResult readBuffer(Uint8List buffer) {
       ffi.malloc.free(cbuffer);
       _log.fine("[readBuffer] Done in ${stopwatch.elapsedMilliseconds}ms");
     }
+  }
+}
+
+ReadResult readHttp(
+  String url, {
+  Map<String, String>? httpHeaders,
+  required bool isReadXmp,
+}) {
+  final stopwatch = Stopwatch()..start();
+  final headerKeys = <Pointer<Char>>[];
+  final headerValues = <Pointer<Char>>[];
+  Pointer<Pointer<Char>>? headerKeysC;
+  Pointer<Pointer<Char>>? headerValuesC;
+  final urlC = url.toNativeUtf8();
+  try {
+    for (final e in (httpHeaders ?? const {}).entries) {
+      headerKeys.add(e.key.toNativeUtf8().cast());
+      headerValues.add(e.value.toNativeUtf8().cast());
+    }
+    headerKeysC = headerKeys.toNativeArray();
+    headerValuesC = headerValues.toNativeArray();
+
+    _log.fine("[readHttp] Reading $url");
+    final result = _bindings.exiv2_read_http(
+      urlC.cast(),
+      headerKeysC,
+      headerValuesC,
+      httpHeaders?.length ?? 0,
+      isReadXmp ? 1 : 0,
+    );
+    if (result == nullptr) {
+      _log.severe("[readHttp] Result is null for url: $url");
+      throw StateError("Failed to read file");
+    }
+    try {
+      return ReadResult.fromNative(result[0]);
+    } finally {
+      _bindings.exiv2_result_free(result);
+    }
+  } finally {
+    ffi.malloc.free(urlC);
+    for (final e in headerKeys) {
+      ffi.malloc.free(e);
+    }
+    for (final e in headerValues) {
+      ffi.malloc.free(e);
+    }
+    if (headerKeysC != null) {
+      ffi.malloc.free(headerKeysC);
+    }
+    if (headerValuesC != null) {
+      ffi.malloc.free(headerValuesC);
+    }
+    _log.fine("[readHttp] Done in ${stopwatch.elapsedMilliseconds}ms");
+  }
+}
+
+extension PointerListExtension<T extends NativeType> on List<Pointer<T>> {
+  Pointer<Pointer<T>> toNativeArray() {
+    final result = ffi.malloc.allocate<Pointer<T>>(length);
+    for (final (i, e) in indexed) {
+      result[i] = e;
+    }
+    return result;
   }
 }
 

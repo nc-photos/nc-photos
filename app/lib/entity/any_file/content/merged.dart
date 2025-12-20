@@ -85,6 +85,12 @@ class AnyFileMergedMetadataGetter implements AnyFileMetadataGetter {
   @override
   Future<Duration?> get offsetTime => _delegate.offsetTime;
 
+  @override
+  Future<double?> get fps => _delegate.fps;
+
+  @override
+  Future<Duration?> get duration => _delegate.duration;
+
   final AnyFileMetadataGetter _delegate;
 }
 

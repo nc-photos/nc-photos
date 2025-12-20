@@ -50,7 +50,7 @@ class FilesBuilder {
         overrideDateTime: null,
         bestDateTime: _getBestDateTime(
           overrideDateTime: null,
-          dateTimeOriginal: imageData?.exifDateTimeOriginal,
+          dateTimeOriginal: imageData?.dateTime,
           lastModified:
               lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
         ),
@@ -112,7 +112,8 @@ class FilesBuilder {
               width: 640,
               height: 480,
               exif: null,
-              exifDateTimeOriginal: null,
+              xmp: null,
+              dateTime: null,
               src: 0,
             )
             : imageData.obj,

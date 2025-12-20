@@ -36,7 +36,7 @@ class SqliteDb extends _$SqliteDb {
   static late final SqliteDb inst;
 
   @override
-  int get schemaVersion => 8;
+  int get schemaVersion => 9;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -143,6 +143,9 @@ class SqliteDb extends _$SqliteDb {
           }
           if (from < 8) {
             await m.addColumn(images, images.src);
+          }
+          if (from < 9) {
+            await m.addColumn(images, images.xmpRaw);
           }
         });
       } catch (e, stackTrace) {

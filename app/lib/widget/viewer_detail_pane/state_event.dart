@@ -17,6 +17,8 @@ final class _State {
     this.location,
     this.tags,
     this.offsetTime,
+    this.fps,
+    this.duration,
     required this.canRemoveFromAlbum,
     required this.canSetCover,
     required this.canAddToCollection,
@@ -51,6 +53,8 @@ final class _State {
   final ImageLocation? location;
   final List<AnyFileTag>? tags;
   final Duration? offsetTime;
+  final double? fps;
+  final Duration? duration;
 
   final bool canRemoveFromAlbum;
   final bool canSetCover;

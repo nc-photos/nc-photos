@@ -1,10 +1,16 @@
 import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
+import 'package:nc_photos/account.dart';
+import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/xmp.dart';
+import 'package:nc_photos/np_api_util.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_exiv2/np_exiv2.dart' as exiv2;
 import 'package:np_log/np_log.dart';
@@ -17,8 +23,27 @@ class LoadMetadata {
   Future<Metadata> loadAnyfile(AnyFile file, Uint8List binary) {
     return _loadMetadata(
       mime: file.mime ?? "",
-      reader: () => exiv2.readBuffer(binary),
+      reader:
+          () => exiv2.readBuffer(
+            binary,
+            isReadXmp: file_util.isSupportedVideoMime(file.mime ?? ""),
+          ),
       logTag: file.displayPath,
+    );
+  }
+
+  Future<Metadata> loadRemotefile(Account account, FileDescriptor file) {
+    return _loadMetadata(
+      mime: file.fdMime ?? "",
+      reader:
+          () => exiv2.readHttp(
+            api_util.getFileUrl(account, file),
+            httpHeaders: {
+              "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+            },
+            isReadXmp: file_util.isSupportedVideoMime(file.fdMime ?? ""),
+          ),
+      logTag: file.strippedPath,
     );
   }
 
@@ -38,7 +63,7 @@ class LoadMetadata {
       );
       rethrow;
     }
-    final metadata = {
+    final exifData = {
       ...result.iptcData
           .map((e) {
             try {
@@ -68,25 +93,51 @@ class LoadMetadata {
     };
     // keys starting with 0x are probably some proprietary values that we'll
     // never use
-    metadata.removeWhere((key, value) => key.startsWith("0x"));
+    exifData.removeWhere((key, value) => key.startsWith("0x"));
+    final exif = exifData.isNotEmpty ? Exif(exifData) : null;
 
-    var imageWidth = 0, imageHeight = 0;
-    // exiv2 doesn't handle exif orientation
-    if (metadata.containsKey("Orientation") &&
-        metadata["Orientation"] as int >= 5 &&
-        metadata["Orientation"] as int <= 8) {
-      // 90 deg CW/CCW
-      imageWidth = result.height;
-      imageHeight = result.width;
+    final xmpData =
+        result.xmpData
+            .map((e) {
+              try {
+                return MapEntry(e.tagKey, e.value.asTyped());
+              } catch (_) {
+                _log.shout(
+                  "[_loadMetadata] Unable to convert XMP tag: ${e.tagKey}, ${e.value.toDebugString()}",
+                );
+                return null;
+              }
+            })
+            .nonNulls
+            .toMap();
+    final xmp = xmpData.isNotEmpty ? Xmp(xmpData) : null;
+
+    int? imageWidth = 0, imageHeight = 0;
+    if (mime.startsWith("video")) {
+      // for videos, exiv2 always returns 0 for pixel width and height
+      imageWidth = xmp?.width;
+      imageHeight = xmp?.height;
+      final rotation = xmp?.rotation;
+      if (rotation == 90 || rotation == -90) {
+        (imageWidth, imageHeight) = (imageHeight, imageWidth);
+      }
     } else {
       imageWidth = result.width;
       imageHeight = result.height;
+      // exiv2 doesn't handle orientation
+      if (exifData.containsKey("Orientation") &&
+          exifData["Orientation"] as int >= 5 &&
+          exifData["Orientation"] as int <= 8) {
+        // 90 deg CW/CCW
+        (imageWidth, imageHeight) = (imageHeight, imageWidth);
+      }
     }
 
     return Metadata(
       imageWidth: imageWidth,
       imageHeight: imageHeight,
-      exif: metadata.isNotEmpty ? Exif(metadata) : null,
+      exif: exif,
+      xmp: xmp,
       src: MetadataSrc.exiv2,
     );
   }

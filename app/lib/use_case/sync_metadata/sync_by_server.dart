@@ -90,12 +90,11 @@ class _SyncByServer {
       OrNull<ImageLocation>? locationUpdate;
 
       try {
-        final lat = file.metadata!.exif?.gpsLatitudeDeg;
-        final lng = file.metadata!.exif?.gpsLongitudeDeg;
+        final gps = file.metadata!.gpsCoord;
         ImageLocation? location;
-        if (lat != null && lng != null) {
+        if (gps != null) {
           _log.fine("[_syncOne] Reverse geocoding for ${file.path}");
-          final l = await _geocoder(lat, lng);
+          final l = await _geocoder(gps.lat, gps.lng);
           if (l != null) {
             location = l.toImageLocation();
           }

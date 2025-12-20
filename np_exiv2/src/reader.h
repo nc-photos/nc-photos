@@ -2,6 +2,7 @@
 
 #include <cstdint>
 #include <exiv2/exiv2.hpp>
+#include <map>
 #include <memory>
 #include <string>
 #include <utility>
@@ -79,11 +80,18 @@ struct Result {
 
 class Reader {
 public:
+  explicit Reader(const bool is_read_xmp);
+
   std::unique_ptr<Result> read_file(const std::string &path);
   std::unique_ptr<Result> read_buffer(const uint8_t *buffer, const size_t size);
+  std::unique_ptr<Result>
+  read_http(const std::string &url,
+            const std::map<std::string, std::string> &http_headers);
 
 private:
   std::unique_ptr<Result> read_image(const Exiv2::Image::UniquePtr &image);
+
+  bool is_read_xmp_;
 };
 
 } // namespace reader

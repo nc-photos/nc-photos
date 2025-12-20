@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
-import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
@@ -56,10 +55,10 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   Future<int?> get byteSize => Future.value(_provider.file.byteSize);
 
   @override
-  Future<String?> get make => _ensureMetadata().then((e) => e?.exif?.make);
+  Future<String?> get make => _ensureMetadata().then((e) => e?.make);
 
   @override
-  Future<String?> get model => _ensureMetadata().then((e) => e?.exif?.model);
+  Future<String?> get model => _ensureMetadata().then((e) => e?.model);
 
   @override
   Future<AnyFileMetadataRational?> get fNumber =>
@@ -79,10 +78,9 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
 
   @override
   Future<MapCoord?> get gpsCoord => _ensureMetadata().then((e) {
-    final lat = e?.exif?.gpsLatitudeDeg;
-    final lng = e?.exif?.gpsLongitudeDeg;
-    if (lat != null && lng != null) {
-      return MapCoord(lat, lng);
+    final gps = e?.gpsCoord;
+    if (gps != null) {
+      return MapCoord(gps.lat, gps.lng);
     } else {
       return null;
     }
@@ -94,6 +92,12 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   @override
   Future<Duration?> get offsetTime =>
       _ensureMetadata().then((e) => e?.exif?.offsetTimeOriginal);
+
+  @override
+  Future<double?> get fps => Future.value(null);
+
+  @override
+  Future<Duration?> get duration => Future.value(null);
 
   Future<Metadata?> _ensureMetadata() {
     if (_metadataTask == null) {

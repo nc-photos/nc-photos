@@ -17,14 +17,13 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, 5th Floor, Boston, MA 02110-1301 USA.
  */
-#ifndef QUICKTIMEVIDEO_HPP_
-#define QUICKTIMEVIDEO_HPP_
+#ifndef EXIV2_QUICKTIMEVIDEO_HPP
+#define EXIV2_QUICKTIMEVIDEO_HPP
 
 // *****************************************************************************
 #include "exiv2lib_export.h"
 
 // included header files
-#include "exif.hpp"
 #include "image.hpp"
 
 // *****************************************************************************
@@ -52,7 +51,7 @@ class EXIV2API QuickTimeVideo : public Image {
         instance after it is passed to this method. Use the Image::io()
         method to get a temporary reference.
    */
-  explicit QuickTimeVideo(BasicIo::UniquePtr io, size_t max_recursion_depth = 1000);
+  explicit QuickTimeVideo(std::unique_ptr<BasicIo> io, size_t max_recursion_depth = 1000);
   //@}
 
   //! @name Manipulators
@@ -102,18 +101,6 @@ class EXIV2API QuickTimeVideo : public Image {
    */
   void videoHeaderDecoder(size_t size);
   /*!
-    @brief Interpret Movie Header Tag, and save it
-        in the respective XMP container.
-    @param size Size of the data block used to store Tag Information.
-   */
-  void movieHeaderDecoder(size_t size);
-  /*!
-    @brief Interpret Track Header Tag, and save it
-        in the respective XMP container.
-    @param size Size of the data block used to store Tag Information.
-   */
-  void trackHeaderDecoder(size_t size);
-  /*!
     @brief Interpret Handler Tag, and save it
         in the respective XMP container.
     @param size Size of the data block used to store Tag Information.
@@ -138,9 +125,9 @@ class EXIV2API QuickTimeVideo : public Image {
   /*!
     @brief Interpret User Data Tag, and save it
         in the respective XMP container.
-    @param size Size of the data block used to store Tag Information.
+    @param outer_size Size of the data block used to store Tag Information.
    */
-  void userDataDecoder(size_t size, size_t recursion_depth);
+  void userDataDecoder(size_t outer_size, size_t recursion_depth);
   /*!
     @brief Interpret Preview Tag, and save it
         in the respective XMP container.
@@ -217,11 +204,11 @@ class EXIV2API QuickTimeVideo : public Image {
       Caller owns the returned object and the auto-pointer ensures that
       it will be deleted.
  */
-EXIV2API Image::UniquePtr newQTimeInstance(BasicIo::UniquePtr io, bool create);
+EXIV2API Image::UniquePtr newQTimeInstance(std::unique_ptr<BasicIo> io, bool create);
 
 //! Check if the file iIo is a Quick Time Video.
 EXIV2API bool isQTimeType(BasicIo& iIo, bool advance);
 
 }  // namespace Exiv2
 
-#endif  // QUICKTIMEVIDEO_HPP_
+#endif  // EXIV2_QUICKTIMEVIDEO_HPP

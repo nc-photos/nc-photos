@@ -19,6 +19,7 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/entity/sharee.dart';
+import 'package:nc_photos/entity/xmp.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';

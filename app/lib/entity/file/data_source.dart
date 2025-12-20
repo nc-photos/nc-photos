@@ -471,10 +471,10 @@ class FileSqliteDbDataSource implements FileDataSource {
                     overrideDateTime == null
                         ? f.overrideDateTime
                         : overrideDateTime.obj,
-                dateTimeOriginal:
+                metadataDateTime:
                     metadata == null
-                        ? f.metadata?.exif?.dateTimeOriginalWithOffset
-                        : metadata.obj?.exif?.dateTimeOriginalWithOffset,
+                        ? f.metadata?.dateTime
+                        : metadata.obj?.dateTime,
                 lastModified: f.lastModified,
               ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),

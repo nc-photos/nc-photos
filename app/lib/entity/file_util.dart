@@ -109,10 +109,10 @@ bool isMissingMetadata(File file) =>
 
 DateTime getBestDateTime({
   DateTime? overrideDateTime,
-  DateTime? dateTimeOriginal,
+  DateTime? metadataDateTime,
   DateTime? lastModified,
 }) =>
-    overrideDateTime ?? dateTimeOriginal ?? lastModified ?? clock.now().toUtc();
+    overrideDateTime ?? metadataDateTime ?? lastModified ?? clock.now().toUtc();
 
 final supportedFormatMimes = [
   "image/jpeg",

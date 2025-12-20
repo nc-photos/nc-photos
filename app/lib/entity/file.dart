@@ -8,6 +8,7 @@ import 'package:nc_photos/entity/exif.dart';
 import 'package:nc_photos/entity/exif_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/xmp.dart';
 import 'package:nc_photos/json_util.dart' as json_util;
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
@@ -108,6 +109,7 @@ class Metadata with EquatableMixin {
     this.imageWidth,
     this.imageHeight,
     this.exif,
+    this.xmp,
     required this.src,
   }) : lastUpdated = (lastUpdated ?? clock.now()).toUtc();
 
@@ -119,7 +121,8 @@ class Metadata with EquatableMixin {
     if (other is Metadata) {
       return super == other &&
           (exif == null) == (other.exif == null) &&
-          (exif?.equals(other.exif, isDeep: isDeep) ?? true);
+          (exif?.equals(other.exif, isDeep: isDeep) ?? true) &&
+          xmp == other.xmp;
     } else {
       return false;
     }
@@ -137,6 +140,7 @@ class Metadata with EquatableMixin {
     required MetadataUpgraderV2? upgraderV2,
     required MetadataUpgraderV3? upgraderV3,
     required MetadataUpgraderV4? upgraderV4,
+    required MetadataUpgraderV5? upgraderV5,
   }) {
     final jsonVersion = json["version"];
     JsonObj? result = json;
@@ -168,6 +172,13 @@ class Metadata with EquatableMixin {
         return null;
       }
     }
+    if (jsonVersion < 6) {
+      result = upgraderV5?.call(result);
+      if (result == null) {
+        _log.info("[fromJson] Version $jsonVersion not compatible");
+        return null;
+      }
+    }
     return Metadata(
       lastUpdated:
           result["lastUpdated"] == null
@@ -180,6 +191,10 @@ class Metadata with EquatableMixin {
           result["exif"] == null
               ? null
               : Exif.fromJson(result["exif"].cast<String, dynamic>()),
+      xmp:
+          result["xmp"] == null
+              ? null
+              : Xmp.fromJson(result["xmp"].cast<String, dynamic>()),
       src: MetadataSrc.fromValue(result["src"]),
     );
   }
@@ -192,6 +207,7 @@ class Metadata with EquatableMixin {
       if (imageWidth != null) "imageWidth": imageWidth,
       if (imageHeight != null) "imageHeight": imageHeight,
       if (exif != null) "exif": exif!.toJson(),
+      if (xmp != null) "xmp": xmp!.toJson(),
       "src": src.index,
     };
   }
@@ -202,6 +218,7 @@ class Metadata with EquatableMixin {
     int? imageWidth,
     int? imageHeight,
     Exif? exif,
+    Xmp? xmp,
   }) {
     return Metadata(
       lastUpdated:
@@ -210,6 +227,7 @@ class Metadata with EquatableMixin {
       imageWidth: imageWidth ?? this.imageWidth,
       imageHeight: imageHeight ?? this.imageHeight,
       exif: exif ?? this.exif,
+      xmp: xmp ?? this.xmp,
       src: src,
     );
   }
@@ -287,6 +305,22 @@ class Metadata with EquatableMixin {
     exif["_OffsetTimeOriginal"] = matches.first.value;
   }
 
+  DateTime? get dateTime => exif?.dateTimeOriginalWithOffset ?? xmp?.dateUtc;
+
+  ({double lat, double lng})? get gpsCoord {
+    final exifLat = exif?.gpsLatitudeDeg;
+    final exifLng = exif?.gpsLongitudeDeg;
+    if (exifLat != null && exifLng != null) {
+      return (lat: exifLat, lng: exifLng);
+    } else {
+      return xmp?.gpsCoordinates;
+    }
+  }
+
+  String? get make => exif?.make ?? xmp?.make;
+
+  String? get model => exif?.model ?? xmp?.model;
+
   @override
   List<Object?> get props => [
     lastUpdated,
@@ -304,10 +338,11 @@ class Metadata with EquatableMixin {
   final int? imageWidth;
   final int? imageHeight;
   final Exif? exif;
+  final Xmp? xmp;
   final MetadataSrc src;
 
   /// versioning of this class, use to upgrade old persisted metadata
-  static const version = 5;
+  static const version = 6;
 
   static final _log = _$MetadataNpLog.log;
 }
@@ -412,6 +447,18 @@ class MetadataUpgraderV4 implements MetadataUpgrader {
   final String? logFilePath;
 }
 
+/// Upgrade v5 Metadata to v6
+///
+/// XMP data is now included for video files
+class MetadataUpgraderV5 implements MetadataUpgrader {
+  const MetadataUpgraderV5();
+
+  @override
+  JsonObj? call(JsonObj json) {
+    return json;
+  }
+}
+
 @ToString(ignoreNull: true)
 class File with EquatableMixin implements FileDescriptor {
   File({
@@ -494,6 +541,7 @@ class File with EquatableMixin implements FileDescriptor {
                   fileContentType: json["contentType"],
                   logFilePath: json["path"],
                 ),
+                upgraderV5: const MetadataUpgraderV5(),
               ),
       isArchived: json["isArchived"],
       overrideDateTime:
@@ -655,7 +703,7 @@ class File with EquatableMixin implements FileDescriptor {
 extension FileExtension on File {
   DateTime get bestDateTime => file_util.getBestDateTime(
     overrideDateTime: overrideDateTime,
-    dateTimeOriginal: metadata?.exif?.dateTimeOriginalWithOffset,
+    metadataDateTime: metadata?.dateTime,
     lastModified: lastModified,
   );
 

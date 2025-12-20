@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: GPL-2.0-or-later
 
-#ifndef IMAGE_TYPES_H
-#define IMAGE_TYPES_H
+#ifndef EXIV2_IMAGE_TYPES_HPP
+#define EXIV2_IMAGE_TYPES_HPP
 
 namespace Exiv2 {
 /// Supported Image Formats
@@ -11,14 +11,14 @@ enum class ImageType {
   asf,
   bigtiff,
   bmff,
-  bmp,  ///< Windows bitmap
+  bmp,  //!< Windows bitmap
   cr2,
   crw,
   dng,
   eps,
   exv,
-  gif,  ///< GIF
-  jp2,  ///< JPEG-2000
+  gif,  //!< GIF
+  jp2,  //!< JPEG-2000
   jpeg,
   mrw,
   nef,
@@ -26,7 +26,7 @@ enum class ImageType {
   pef,
   png,
   pgf,
-  psd,  ///< Photoshop (PSD)
+  psd,  //!< Photoshop (PSD)
   raf,
   rw2,
   sr2,
@@ -34,11 +34,11 @@ enum class ImageType {
   tga,
   tiff,
   webp,
-  xmp,  ///< XMP sidecar files
+  xmp,  //!< XMP sidecar files
   qtime,
   riff,
   mkv,
 };
 }  // namespace Exiv2
 
-#endif  // IMAGE_TYPES_H
+#endif  // EXIV2_IMAGE_TYPES_HPP

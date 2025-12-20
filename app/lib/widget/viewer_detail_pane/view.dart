@@ -291,33 +291,76 @@ class _NameItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.size,
+    return _BlocBuilder(
+      buildWhen:
+          (previous, current) =>
+              previous.size != current.size ||
+              previous.duration != current.duration,
       builder:
-          (context, size) => ListTile(
-            leading: const ListTileCenterLeading(
-              child: Icon(Icons.image_outlined),
+          (context, state) => ListTile(
+            leading: ListTileCenterLeading(
+              child:
+                  file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
+                      ? const Icon(Icons.video_file_outlined)
+                      : const Icon(Icons.image_outlined),
             ),
             title: Text(
               path_lib.basenameWithoutExtension(context.bloc.file.name),
             ),
-            subtitle: size?.let((e) => Text(_buildSizeSubtitle(e))),
+            subtitle: (file_util.isSupportedVideoMime(
+                      context.bloc.file.mime ?? "",
+                    )
+                    ? _buildVideoSubtitle(
+                      size: state.size,
+                      duration: state.duration,
+                    )
+                    : _buildSizeSubtitle(state.size))
+                ?.let(Text.new),
           ),
     );
   }
 
-  static String _buildSizeSubtitle(SizeInt size) {
+  static String? _buildSizeSubtitle(SizeInt? size) {
     var sizeSubStr = "";
     const space = "    ";
-
-    final pixelCount = size.width * size.height;
-    if (pixelCount >= 500000) {
-      final mpCount = pixelCount / 1000000.0;
-      sizeSubStr += L10n.global().megapixelCount(mpCount.toStringAsFixed(1));
-      sizeSubStr += space;
+    if (size != null) {
+      final pixelCount = size.width * size.height;
+      if (pixelCount >= 500000) {
+        final mpCount = pixelCount / 1000000.0;
+        sizeSubStr += L10n.global().megapixelCount(mpCount.toStringAsFixed(1));
+        sizeSubStr += space;
+      }
+      sizeSubStr += "${size.width} x ${size.height}";
     }
-    sizeSubStr += "${size.width} x ${size.height}";
-    return sizeSubStr;
+    sizeSubStr = sizeSubStr.trim();
+    return sizeSubStr.isEmpty ? null : sizeSubStr;
+  }
+
+  static String? _buildVideoSubtitle({
+    required SizeInt? size,
+    required Duration? duration,
+  }) {
+    var sizeSubStr = "";
+    const space = "    ";
+    if (duration != null) {
+      if (duration.inHours > 0) {
+        sizeSubStr += "${duration.inHours.toString().padLeft(2, "0")}:";
+      }
+      sizeSubStr += "${(duration.inMinutes % 60).toString().padLeft(2, "0")}:";
+      sizeSubStr +=
+          "${(duration.inSeconds % 60).toString().padLeft(2, "0")}$space";
+    }
+    if (size != null) {
+      final pixelCount = size.width * size.height;
+      if (pixelCount >= 500000) {
+        final mpCount = pixelCount / 1000000.0;
+        sizeSubStr += L10n.global().megapixelCount(mpCount.toStringAsFixed(1));
+        sizeSubStr += space;
+      }
+      sizeSubStr += "${size.width} x ${size.height}";
+    }
+    sizeSubStr = sizeSubStr.trim();
+    return sizeSubStr.isEmpty ? null : sizeSubStr;
   }
 }
 
@@ -473,7 +516,8 @@ class _ModelItem extends StatelessWidget {
               previous.fNumber != current.fNumber ||
               previous.exposureTime != current.exposureTime ||
               previous.focalLength != current.focalLength ||
-              previous.isoSpeedRatings != current.isoSpeedRatings,
+              previous.isoSpeedRatings != current.isoSpeedRatings ||
+              previous.fps != current.fps,
       builder:
           (context, state) =>
               state.model != null
@@ -482,12 +526,17 @@ class _ModelItem extends StatelessWidget {
                       child: Icon(Icons.camera_outlined),
                     ),
                     title: Text(state.model!),
-                    subtitle: _buildCameraSubtitle(
-                      fNumber: state.fNumber,
-                      exposureTime: state.exposureTime,
-                      focalLength: state.focalLength,
-                      isoSpeedRatings: state.isoSpeedRatings,
-                    )?.let(Text.new),
+                    subtitle: (file_util.isSupportedVideoMime(
+                              context.bloc.file.mime ?? "",
+                            )
+                            ? _buildVideoSubtitle(fps: state.fps)
+                            : _buildCameraSubtitle(
+                              fNumber: state.fNumber,
+                              exposureTime: state.exposureTime,
+                              focalLength: state.focalLength,
+                              isoSpeedRatings: state.isoSpeedRatings,
+                            ))
+                        ?.let(Text.new),
                   )
                   : const SizedBox.shrink(),
     );
@@ -516,6 +565,16 @@ class _ModelItem extends StatelessWidget {
     }
     if (isoSpeedRatings != null) {
       cameraSubStr += "ISO$isoSpeedRatings$space";
+    }
+    cameraSubStr = cameraSubStr.trim();
+    return cameraSubStr.isEmpty ? null : cameraSubStr;
+  }
+
+  static String? _buildVideoSubtitle({double? fps}) {
+    String cameraSubStr = "";
+    const space = "    ";
+    if (fps != null) {
+      cameraSubStr += "${fps.toStringAsFixed(1)}FPS$space";
     }
     cameraSubStr = cameraSubStr.trim();
     return cameraSubStr.isEmpty ? null : cameraSubStr;
