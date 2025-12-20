@@ -594,7 +594,9 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     emit(
       state.copyWith(
-        startSlideshowRequest: Unique(_StartSlideshowRequest(afId: ev.afId)),
+        startSlideshowRequest: Unique(
+          _StartSlideshowRequest(afId: ev.afId, fromPage: state.index),
+        ),
       ),
     );
   }
@@ -619,6 +621,7 @@ class _Bloc extends Bloc<_Event, _State>
         startIndex: afIds.indexOf(ev.request.afId),
         collectionId: collectionId,
         config: ev.config,
+        fromPage: ev.request.fromPage,
       );
       unawaited(prefController.setSlideshowDuration(ev.config.duration));
       unawaited(prefController.setSlideshowShuffle(ev.config.isShuffle));

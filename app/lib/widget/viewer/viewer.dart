@@ -363,7 +363,9 @@ class _WrappedViewerState extends State<_WrappedViewer>
         slideshowRequest.config,
       ),
     );
-    final relIndex = newIndex?.let((e) => e - slideshowRequest.startIndex);
+    final relIndex = newIndex?.let(
+      (e) => e - slideshowRequest.startIndex + slideshowRequest.fromPage,
+    );
     _log.info(
       "[_onSlideshowRequest] Slideshow ended, jump to: $newIndex ($relIndex)",
     );
