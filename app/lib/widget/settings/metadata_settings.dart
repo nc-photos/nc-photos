@@ -148,14 +148,7 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
         builder:
             (context) => AlertDialog(
               title: Text(L10n.global().exifSupportConfirmationDialogTitle2),
-              content: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(L10n.global().exifSupportDetails),
-                  const SizedBox(height: 16),
-                  Text(L10n.global().exifSupportNextcloud28Notes),
-                ],
-              ),
+              content: Text(L10n.global().exifSupportNextcloud28Notes),
               actions: [
                 TextButton(
                   onPressed: () {

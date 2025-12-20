@@ -182,11 +182,6 @@ class _ExifState extends State<_Exif> {
           const SizedBox(height: 8),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(L10n.global().exifSupportDetails),
-          ),
-          const SizedBox(height: 16),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Text(L10n.global().exifSupportNextcloud28Notes),
           ),
           const SizedBox(height: 16),
