@@ -335,16 +335,17 @@ ReadResult readBuffer(Uint8List buffer, {required bool isReadXmp}) {
 }
 
 ReadResult readHttp(
-  String url, {
+  Uri url, {
   Map<String, String>? httpHeaders,
   required bool isReadXmp,
 }) {
+  final urlStr = url.toString();
   final stopwatch = Stopwatch()..start();
   final headerKeys = <Pointer<Char>>[];
   final headerValues = <Pointer<Char>>[];
   Pointer<Pointer<Char>>? headerKeysC;
   Pointer<Pointer<Char>>? headerValuesC;
-  final urlC = url.toNativeUtf8();
+  final urlC = urlStr.toNativeUtf8();
   try {
     for (final e in (httpHeaders ?? const {}).entries) {
       headerKeys.add(e.key.toNativeUtf8().cast());

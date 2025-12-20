@@ -37,7 +37,7 @@ class LoadMetadata {
       mime: file.fdMime ?? "",
       reader:
           () => exiv2.readHttp(
-            api_util.getFileUrl(account, file),
+            api_util.getFileUri(account, file),
             httpHeaders: {
               "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
             },
