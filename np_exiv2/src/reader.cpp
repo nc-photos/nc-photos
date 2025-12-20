@@ -207,7 +207,7 @@ unique_ptr<Result> Reader::read_http(const string &url,
   io->addHttpHeaders(httpHeaders);
   auto image = Exiv2::ImageFactory::open(std::move(io));
   if (!image || !image->good()) {
-    LOGE(TAG, "Failed to open image buffer");
+    LOGE(TAG, "Failed to open image url: %s", url.c_str());
     return nullptr;
   }
   return read_image(image);
