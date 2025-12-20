@@ -1,7 +1,7 @@
 part of 'viewer.dart';
 
 class _ContentBody extends StatefulWidget {
-  const _ContentBody();
+  const _ContentBody({super.key});
 
   @override
   State<StatefulWidget> createState() => _ContentBodyState();
@@ -214,7 +214,9 @@ class _ContentBodyState extends State<_ContentBody> {
 
   // prevent view getting disposed
   final _key = GlobalKey();
-  final _pageViewController = InfiniteScrollController();
+  late final _pageViewController = InfiniteScrollController(
+    initialPage: context.state.index,
+  );
 }
 
 class _PageView extends StatefulWidget {
@@ -495,11 +497,6 @@ extension on InfiniteScrollController {
 
   // ignore: unused_element
   int? get page => pageF?.round();
-
-  void jumpToPage(int page) {
-    assert(position.hasViewportDimension);
-    jumpTo(page * position.viewportDimension);
-  }
 
   Future<void> animateToPreviousPage({
     required Duration duration,

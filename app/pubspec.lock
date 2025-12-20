@@ -848,8 +848,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: "0.0.4-nc-photos-1"
-      resolved-ref: "71bb11f922b59b26186a8538b91903fbd967fe2c"
+      ref: "0.0.4-nc-photos-2"
+      resolved-ref: e375ac01a837bf470577fa1cabc8bda6650c7d7f
       url: "https://github.com/nc-photos/flutter_infinite_pageview.git"
     source: git
     version: "0.0.4"
