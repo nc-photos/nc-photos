@@ -18,5 +18,8 @@ class BasicCollectionFileItem implements CollectionFileItem {
   String toString() => _$toString();
 
   @override
+  Object get id => file.fdId;
+
+  @override
   final FileDescriptor file;
 }

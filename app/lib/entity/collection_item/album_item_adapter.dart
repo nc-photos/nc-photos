@@ -36,6 +36,9 @@ class CollectionFileItemAlbumAdapter extends CollectionFileItem
   String toString() => _$toString();
 
   @override
+  Object get id => file.fdId;
+
+  @override
   FileDescriptor get file => item.file;
 
   @override
