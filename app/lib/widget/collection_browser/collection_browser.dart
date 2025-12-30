@@ -247,8 +247,65 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                         if (result == null) {
                           return;
                         }
-                        context.read<_Bloc>().add(_AddMapToCollection(result));
+                        context.addEvent(_AddMapToCollection(result));
                       }
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.editLabelRequest,
+                    listener: (context, editLabelRequest) async {
+                      if (editLabelRequest.value == null) {
+                        return;
+                      }
+                      final result = await showDialog<String>(
+                        context: context,
+                        builder:
+                            (context) => SimpleInputDialog(
+                              buttonText:
+                                  MaterialLocalizations.of(
+                                    context,
+                                  ).saveButtonLabel,
+                              initialText:
+                                  editLabelRequest.value!.original.text,
+                            ),
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      context.addEvent(
+                        _EditLabel(
+                          item: editLabelRequest.value!.original,
+                          newText: result,
+                        ),
+                      );
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.editMapRequest,
+                    listener: (context, editMapRequest) async {
+                      if (editMapRequest.value == null) {
+                        return;
+                      }
+                      final result = await Navigator.of(
+                        context,
+                      ).pushNamed<CameraPosition>(
+                        PlacePicker.routeName,
+                        arguments: PlacePickerArguments(
+                          initialPosition:
+                              editMapRequest.value!.original.location.center,
+                          initialZoom:
+                              editMapRequest.value!.original.location.zoom,
+                        ),
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      context.addEvent(
+                        _EditMap(
+                          item: editMapRequest.value!.original,
+                          newLocation: result,
+                        ),
+                      );
                     },
                   ),
                   _BlocListenerT<ExceptionEvent?>(

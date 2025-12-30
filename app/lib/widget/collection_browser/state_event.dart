@@ -23,6 +23,8 @@ class _State {
     this.editSort,
     required this.isAddMapBusy,
     required this.placePickerRequest,
+    required this.editLabelRequest,
+    required this.editMapRequest,
     required this.isDragging,
     required this.zoom,
     this.scale,
@@ -51,6 +53,8 @@ class _State {
       isEditBusy: false,
       isAddMapBusy: false,
       placePickerRequest: Unique(null),
+      editLabelRequest: Unique(null),
+      editMapRequest: Unique(null),
       isDragging: false,
       zoom: zoom,
     );
@@ -82,6 +86,8 @@ class _State {
   final CollectionItemSort? editSort;
   final bool isAddMapBusy;
   final Unique<_PlacePickerRequest?> placePickerRequest;
+  final Unique<_EditLabelRequest?> editLabelRequest;
+  final Unique<_EditMapRequest?> editMapRequest;
 
   final bool isDragging;
 
@@ -94,7 +100,7 @@ class _State {
   final String? message;
 }
 
-abstract class _Event {}
+sealed class _Event {}
 
 @toString
 class _UpdateCollection implements _Event {
@@ -179,6 +185,27 @@ class _AddLabelToCollection implements _Event {
 }
 
 @toString
+class _RequestEditLabel implements _Event {
+  const _RequestEditLabel(this.item);
+
+  @override
+  String toString() => _$toString();
+
+  final CollectionLabelItem item;
+}
+
+@toString
+class _EditLabel implements _Event {
+  const _EditLabel({required this.item, required this.newText});
+
+  @override
+  String toString() => _$toString();
+
+  final CollectionLabelItem item;
+  final String newText;
+}
+
+@toString
 class _RequestAddMap implements _Event {
   const _RequestAddMap();
 
@@ -194,6 +221,27 @@ class _AddMapToCollection implements _Event {
   String toString() => _$toString();
 
   final CameraPosition location;
+}
+
+@toString
+class _RequestEditMap implements _Event {
+  const _RequestEditMap(this.item);
+
+  @override
+  String toString() => _$toString();
+
+  final CollectionMapItem item;
+}
+
+@toString
+class _EditMap implements _Event {
+  const _EditMap({required this.item, required this.newLocation});
+
+  @override
+  String toString() => _$toString();
+
+  final CollectionMapItem item;
+  final CameraPosition newLocation;
 }
 
 @toString

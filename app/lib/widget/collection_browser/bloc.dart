@@ -35,8 +35,12 @@ class _Bloc extends Bloc<_Event, _State>
     on<_BeginEdit>(_onBeginEdit);
     on<_EditName>(_onEditName);
     on<_AddLabelToCollection>(_onAddLabelToCollection);
+    on<_RequestEditLabel>(_onRequestEditLabel);
+    on<_EditLabel>(_onEditLabel);
     on<_RequestAddMap>(_onRequestAddMap);
     on<_AddMapToCollection>(_onAddMapToCollection);
+    on<_RequestEditMap>(_onRequestEditMap);
+    on<_EditMap>(_onEditMap);
     on<_EditSort>(_onEditSort);
     on<_EditManualSort>(_onEditManualSort);
     on<_TransformEditItems>(_onTransformEditItems);
@@ -241,6 +245,27 @@ class _Bloc extends Bloc<_Event, _State>
     );
   }
 
+  void _onRequestEditLabel(_RequestEditLabel ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(editLabelRequest: Unique(_EditLabelRequest(ev.item))));
+  }
+
+  void _onEditLabel(_EditLabel ev, _Emitter emit) {
+    _log.info(ev);
+    emit(
+      state.copyWith(
+        editItems:
+            (state.editItems ?? state.items).map((e) {
+              if (e.id == ev.item.id) {
+                return NewCollectionLabelItem(ev.newText, clock.now().toUtc());
+              } else {
+                return e;
+              }
+            }).toList(),
+      ),
+    );
+  }
+
   Future<void> _onRequestAddMap(_RequestAddMap ev, _Emitter emit) async {
     _log.info(ev);
     emit(state.copyWith(isAddMapBusy: true));
@@ -286,6 +311,30 @@ class _Bloc extends Bloc<_Event, _State>
           NewCollectionMapItem(ev.location, clock.now().toUtc()),
           ...state.editItems ?? state.items,
         ],
+      ),
+    );
+  }
+
+  void _onRequestEditMap(_RequestEditMap ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(editMapRequest: Unique(_EditMapRequest(ev.item))));
+  }
+
+  void _onEditMap(_EditMap ev, _Emitter emit) {
+    _log.info(ev);
+    emit(
+      state.copyWith(
+        editItems:
+            (state.editItems ?? state.items).map((e) {
+              if (e.id == ev.item.id) {
+                return NewCollectionMapItem(
+                  ev.newLocation,
+                  clock.now().toUtc(),
+                );
+              } else {
+                return e;
+              }
+            }).toList(),
       ),
     );
   }
@@ -604,7 +653,7 @@ class _Bloc extends Bloc<_Event, _State>
             id: item.id,
             text: item.text,
             onEditPressed: () {
-              // TODO
+              add(_RequestEditLabel(item));
             },
           ),
         );
@@ -615,7 +664,7 @@ class _Bloc extends Bloc<_Event, _State>
             id: item.id,
             location: item.location,
             onEditPressed: () {
-              // TODO
+              add(_RequestEditMap(item));
             },
           ),
         );

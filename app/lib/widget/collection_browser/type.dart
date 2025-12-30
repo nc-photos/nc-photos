@@ -222,6 +222,18 @@ class _PlacePickerRequest {
   final MapCoord? initialPosition;
 }
 
+class _EditLabelRequest {
+  const _EditLabelRequest(this.original);
+
+  final CollectionLabelItem original;
+}
+
+class _EditMapRequest {
+  const _EditMapRequest(this.original);
+
+  final CollectionMapItem original;
+}
+
 @toString
 class _ArchiveFailedError implements Exception {
   const _ArchiveFailedError(this.count);
