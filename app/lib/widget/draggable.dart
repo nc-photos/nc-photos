@@ -55,7 +55,8 @@ class Draggable<T extends Object> extends StatelessWidget {
             ),
           ),
           childWhenDragging: Opacity(opacity: .25, child: child),
-          child: child,
+          // hack to make google map work
+          child: Opacity(opacity: 1, child: child),
         ),
         if (onDropBefore != null || onDropAfter != null)
           Positioned.fill(
