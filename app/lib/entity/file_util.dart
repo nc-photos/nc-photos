@@ -134,8 +134,8 @@ final supportedMetadataFormatMimes = [
   "image/heic",
   "image/gif",
   "image/jxl",
-  "video/mp4",
-  "video/quicktime",
+  // "video/mp4",
+  // "video/quicktime",
 ];
 
 final supportedImageFormatMimes =
