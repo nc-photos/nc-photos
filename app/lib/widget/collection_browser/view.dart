@@ -121,9 +121,34 @@ class _EditContentList extends StatelessWidget {
                         .toDouble(),
                 items: state.editTransformedItems ?? state.transformedItems,
                 itemBuilder:
-                    (context, _, item) => Padding(
-                      padding: const EdgeInsets.all(8),
-                      child: item.buildWidget(context),
+                    (context, _, item) => _BlocSelector(
+                      selector: (state) => state.editPickerMode,
+                      builder: (context, editPickerMode) {
+                        Widget child = Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: item.buildWidget(context),
+                        );
+                        if (editPickerMode != null && item is _ActualItem) {
+                          child = GestureDetector(
+                            onTap: () {
+                              switch (editPickerMode) {
+                                case _EditPickerMode.label:
+                                  context.addEvent(
+                                    _RequestAddLabel2(before: item),
+                                  );
+                                  break;
+                                case _EditPickerMode.map:
+                                  context.addEvent(
+                                    _RequestAddMap2(before: item),
+                                  );
+                                  break;
+                              }
+                            },
+                            child: child,
+                          );
+                        }
+                        return child;
+                      },
                     ),
                 itemDragFeedbackBuilder:
                     (context, _, item) =>

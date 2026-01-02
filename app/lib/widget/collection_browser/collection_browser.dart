@@ -3,6 +3,7 @@ import 'dart:collection';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart';
 import 'package:clock/clock.dart';
+import 'package:collection/collection.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -41,6 +42,7 @@ import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:nc_photos/use_case/find_file.dart';
 import 'package:nc_photos/widget/album_share_outlier_browser.dart';
 import 'package:nc_photos/widget/app_bar_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
@@ -61,6 +63,7 @@ import 'package:nc_photos/widget/share_collection_dialog/share_collection_dialog
 import 'package:nc_photos/widget/shared_album_info_dialog.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
+import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/size.dart';
@@ -153,13 +156,21 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
       buildWhen:
           (previous, current) =>
               previous.isEditMode != current.isEditMode ||
-              previous.selectedItems.isEmpty != current.selectedItems.isEmpty,
+              previous.selectedItems.isEmpty != current.selectedItems.isEmpty ||
+              previous.editPickerMode != current.editPickerMode,
       builder:
           (context, state) => PopScope(
-            canPop: !state.isEditMode && state.selectedItems.isEmpty,
+            canPop:
+                !state.isEditMode &&
+                state.selectedItems.isEmpty &&
+                state.editPickerMode == null,
             onPopInvokedWithResult: (didPop, result) {
               if (state.isEditMode) {
-                _bloc.add(const _CancelEdit());
+                if (state.editPickerMode != null) {
+                  _bloc.add(const _CancelEditPickerMode());
+                } else {
+                  _bloc.add(const _CancelEdit());
+                }
               } else if (state.selectedItems.isNotEmpty) {
                 _bloc.add(const _SetSelectedItems(items: {}));
               }
@@ -227,28 +238,117 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                     },
                   ),
                   _BlocListenerT(
+                    selector: (state) => state.newLabelRequest,
+                    listener: (context, newLabelRequest) async {
+                      if (newLabelRequest.value == null) {
+                        return;
+                      }
+                      final result = await showDialog<String>(
+                        context: context,
+                        builder:
+                            (context) => SimpleInputDialog(
+                              buttonText:
+                                  MaterialLocalizations.of(
+                                    context,
+                                  ).saveButtonLabel,
+                            ),
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      context.addEvent(
+                        _AddLabelToCollection(
+                          result,
+                          before: newLabelRequest.value!.before,
+                        ),
+                      );
+                    },
+                  ),
+                  _BlocListenerT(
                     selector: (state) => state.placePickerRequest,
                     listener: (context, placePickerRequest) async {
-                      if (placePickerRequest.value != null) {
-                        final result = await Navigator.of(
-                          context,
-                        ).pushNamed<CameraPosition>(
-                          PlacePicker.routeName,
-                          arguments: PlacePickerArguments(
-                            initialPosition:
-                                placePickerRequest.value!.initialPosition,
-                            initialZoom:
-                                placePickerRequest.value!.initialPosition ==
-                                        null
-                                    ? null
-                                    : 15.5,
-                          ),
-                        );
-                        if (result == null) {
-                          return;
-                        }
-                        context.read<_Bloc>().add(_AddMapToCollection(result));
+                      if (placePickerRequest.value == null) {
+                        return;
                       }
+                      final result = await Navigator.of(
+                        context,
+                      ).pushNamed<CameraPosition>(
+                        PlacePicker.routeName,
+                        arguments: PlacePickerArguments(
+                          initialPosition:
+                              placePickerRequest.value!.initialPosition,
+                          initialZoom:
+                              placePickerRequest.value!.initialPosition == null
+                                  ? null
+                                  : 15.5,
+                        ),
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      context.addEvent(
+                        _AddMapToCollection(
+                          result,
+                          before: placePickerRequest.value!.before,
+                        ),
+                      );
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.editLabelRequest,
+                    listener: (context, editLabelRequest) async {
+                      if (editLabelRequest.value == null) {
+                        return;
+                      }
+                      final result = await showDialog<String>(
+                        context: context,
+                        builder:
+                            (context) => SimpleInputDialog(
+                              buttonText:
+                                  MaterialLocalizations.of(
+                                    context,
+                                  ).saveButtonLabel,
+                              initialText:
+                                  editLabelRequest.value!.original.text,
+                            ),
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      context.addEvent(
+                        _EditLabel(
+                          item: editLabelRequest.value!.original,
+                          newText: result,
+                        ),
+                      );
+                    },
+                  ),
+                  _BlocListenerT(
+                    selector: (state) => state.editMapRequest,
+                    listener: (context, editMapRequest) async {
+                      if (editMapRequest.value == null) {
+                        return;
+                      }
+                      final result = await Navigator.of(
+                        context,
+                      ).pushNamed<CameraPosition>(
+                        PlacePicker.routeName,
+                        arguments: PlacePickerArguments(
+                          initialPosition:
+                              editMapRequest.value!.original.location.center,
+                          initialZoom:
+                              editMapRequest.value!.original.location.zoom,
+                        ),
+                      );
+                      if (result == null) {
+                        return;
+                      }
+                      context.addEvent(
+                        _EditMap(
+                          item: editMapRequest.value!.original,
+                          newLocation: result,
+                        ),
+                      );
                     },
                   ),
                   _BlocListenerT<ExceptionEvent?>(
@@ -335,10 +435,17 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                                   (previous, current) =>
                                       previous.selectedItems.isEmpty !=
                                           current.selectedItems.isEmpty ||
-                                      previous.isEditMode != current.isEditMode,
+                                      previous.isEditMode !=
+                                          current.isEditMode ||
+                                      previous.editPickerMode !=
+                                          current.editPickerMode,
                               builder: (context, state) {
                                 if (state.isEditMode) {
-                                  return const _EditAppBar();
+                                  if (state.editPickerMode != null) {
+                                    return const _EditPickerAppBar();
+                                  } else {
+                                    return const _EditAppBar();
+                                  }
                                 } else if (state.selectedItems.isNotEmpty) {
                                   return const _SelectionAppBar();
                                 } else {

@@ -18,6 +18,9 @@ class CollectionFileItemNcAlbumItemAdapter extends CollectionFileItem {
   String toString() => _$toString();
 
   @override
+  Object get id => file.fdId;
+
+  @override
   FileDescriptor get file => localFile ?? item.toFile();
 
   final NcAlbumItem item;

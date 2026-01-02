@@ -216,10 +216,29 @@ class _DateItem extends _Item {
   final Date date;
 }
 
+class _NewLabelRequest {
+  const _NewLabelRequest({this.before});
+
+  final _ActualItem? before;
+}
+
 class _PlacePickerRequest {
-  const _PlacePickerRequest({this.initialPosition});
+  const _PlacePickerRequest({this.initialPosition, this.before});
 
   final MapCoord? initialPosition;
+  final _ActualItem? before;
+}
+
+class _EditLabelRequest {
+  const _EditLabelRequest(this.original);
+
+  final CollectionLabelItem original;
+}
+
+class _EditMapRequest {
+  const _EditMapRequest(this.original);
+
+  final CollectionMapItem original;
 }
 
 @toString

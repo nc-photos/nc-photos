@@ -325,6 +325,25 @@ class _SelectionAppBar extends StatelessWidget {
   }
 }
 
+class _EditPickerAppBar extends StatelessWidget {
+  const _EditPickerAppBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      pinned: true,
+      leading: IconButton(
+        icon: const Icon(Icons.close),
+        tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+        onPressed: () {
+          context.addEvent(const _CancelEditPickerMode());
+        },
+      ),
+      title: Text(L10n.global().collectionAddItemTitle),
+    );
+  }
+}
+
 class _EditAppBar extends StatelessWidget {
   const _EditAppBar();
 
@@ -336,29 +355,23 @@ class _EditAppBar extends StatelessWidget {
       context.read<_Bloc>().state.collection,
     );
     return SliverAppBar(
-      floating: true,
-      expandedHeight: 160,
-      flexibleSpace: FlexibleSpaceBar(
-        background: const _AppBarCover(),
-        title: TextFormField(
-          initialValue: context.read<_Bloc>().state.currentEditName,
-          decoration: InputDecoration(hintText: L10n.global().nameInputHint),
-          validator: (_) {
-            // use text in state here because the value might be wrong if user
-            // scrolled the app bar off screen
-            if (context.read<_Bloc>().state.currentEditName.isNotEmpty) {
-              return null;
-            } else {
-              return L10n.global().nameInputInvalidEmpty;
-            }
-          },
-          onChanged: (value) {
-            context.read<_Bloc>().add(_EditName(value));
-          },
-          style: TextStyle(
-            color: Theme.of(context).appBarTheme.foregroundColor,
-          ),
-        ),
+      pinned: true,
+      title: TextFormField(
+        initialValue: context.read<_Bloc>().state.currentEditName,
+        decoration: InputDecoration(hintText: L10n.global().nameInputHint),
+        validator: (_) {
+          // use text in state here because the value might be wrong if user
+          // scrolled the app bar off screen
+          if (context.read<_Bloc>().state.currentEditName.isNotEmpty) {
+            return null;
+          } else {
+            return L10n.global().nameInputInvalidEmpty;
+          }
+        },
+        onChanged: (value) {
+          context.read<_Bloc>().add(_EditName(value));
+        },
+        style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor),
       ),
       leading: IconButton(
         icon: const Icon(Icons.check_outlined),
@@ -373,7 +386,9 @@ class _EditAppBar extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.text_fields_outlined),
             tooltip: L10n.global().albumAddTextTooltip,
-            onPressed: () => _onAddTextPressed(context),
+            onPressed: () {
+              context.addEvent(const _RequestAddLabel());
+            },
           ),
         if (capabilitiesAdapter.isPermitted(CollectionCapability.mapItem))
           _BlocSelector(
@@ -401,20 +416,6 @@ class _EditAppBar extends StatelessWidget {
           ),
       ],
     );
-  }
-
-  Future<void> _onAddTextPressed(BuildContext context) async {
-    final result = await showDialog<String>(
-      context: context,
-      builder:
-          (context) => SimpleInputDialog(
-            buttonText: MaterialLocalizations.of(context).saveButtonLabel,
-          ),
-    );
-    if (result == null) {
-      return;
-    }
-    context.read<_Bloc>().add(_AddLabelToCollection(result));
   }
 
   Future<void> _onSortPressed(BuildContext context) async {

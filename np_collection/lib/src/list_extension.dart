@@ -93,4 +93,6 @@ extension ListExtension<T> on List<T> {
 
   List<T> removedWhere(bool Function(T element) test) =>
       toList()..removeWhere(test);
+
+  List<T> inserted(int index, T element) => toList()..insert(index, element);
 }

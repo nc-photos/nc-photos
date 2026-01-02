@@ -32,7 +32,11 @@ abstract class $_StateCopyWithWorker {
     List<_Item>? editTransformedItems,
     CollectionItemSort? editSort,
     bool? isAddMapBusy,
+    _EditPickerMode? editPickerMode,
+    Unique<_NewLabelRequest?>? newLabelRequest,
     Unique<_PlacePickerRequest?>? placePickerRequest,
+    Unique<_EditLabelRequest?>? editLabelRequest,
+    Unique<_EditMapRequest?>? editMapRequest,
     bool? isDragging,
     int? zoom,
     double? scale,
@@ -65,7 +69,11 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic editTransformedItems = copyWithNull,
     dynamic editSort = copyWithNull,
     dynamic isAddMapBusy,
+    dynamic editPickerMode = copyWithNull,
+    dynamic newLabelRequest,
     dynamic placePickerRequest,
+    dynamic editLabelRequest,
+    dynamic editMapRequest,
     dynamic isDragging,
     dynamic zoom,
     dynamic scale = copyWithNull,
@@ -109,9 +117,20 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
               ? that.editSort
               : editSort as CollectionItemSort?,
       isAddMapBusy: isAddMapBusy as bool? ?? that.isAddMapBusy,
+      editPickerMode:
+          editPickerMode == copyWithNull
+              ? that.editPickerMode
+              : editPickerMode as _EditPickerMode?,
+      newLabelRequest:
+          newLabelRequest as Unique<_NewLabelRequest?>? ?? that.newLabelRequest,
       placePickerRequest:
           placePickerRequest as Unique<_PlacePickerRequest?>? ??
           that.placePickerRequest,
+      editLabelRequest:
+          editLabelRequest as Unique<_EditLabelRequest?>? ??
+          that.editLabelRequest,
+      editMapRequest:
+          editMapRequest as Unique<_EditMapRequest?>? ?? that.editMapRequest,
       isDragging: isDragging as bool? ?? that.isDragging,
       zoom: zoom as int? ?? that.zoom,
       scale: scale == copyWithNull ? that.scale : scale as double?,
@@ -171,7 +190,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, placePickerRequest: $placePickerRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
+    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
   }
 }
 
@@ -232,10 +251,38 @@ extension _$_EditNameToString on _EditName {
   }
 }
 
+extension _$_RequestAddLabelToString on _RequestAddLabel {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_RequestAddLabel {}";
+  }
+}
+
+extension _$_RequestAddLabel2ToString on _RequestAddLabel2 {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_RequestAddLabel2 {before: $before}";
+  }
+}
+
 extension _$_AddLabelToCollectionToString on _AddLabelToCollection {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_AddLabelToCollection {label: $label}";
+    return "_AddLabelToCollection {label: $label, before: $before}";
+  }
+}
+
+extension _$_RequestEditLabelToString on _RequestEditLabel {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_RequestEditLabel {item: $item}";
+  }
+}
+
+extension _$_EditLabelToString on _EditLabel {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_EditLabel {item: $item, newText: $newText}";
   }
 }
 
@@ -246,10 +293,31 @@ extension _$_RequestAddMapToString on _RequestAddMap {
   }
 }
 
+extension _$_RequestAddMap2ToString on _RequestAddMap2 {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_RequestAddMap2 {before: $before}";
+  }
+}
+
 extension _$_AddMapToCollectionToString on _AddMapToCollection {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_AddMapToCollection {location: $location}";
+    return "_AddMapToCollection {location: $location, before: $before}";
+  }
+}
+
+extension _$_RequestEditMapToString on _RequestEditMap {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_RequestEditMap {item: $item}";
+  }
+}
+
+extension _$_EditMapToString on _EditMap {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_EditMap {item: $item, newLocation: $newLocation}";
   }
 }
 
@@ -285,6 +353,13 @@ extension _$_CancelEditToString on _CancelEdit {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_CancelEdit {}";
+  }
+}
+
+extension _$_CancelEditPickerModeToString on _CancelEditPickerMode {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_CancelEditPickerMode {}";
   }
 }
 
