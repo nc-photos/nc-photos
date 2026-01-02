@@ -336,29 +336,23 @@ class _EditAppBar extends StatelessWidget {
       context.read<_Bloc>().state.collection,
     );
     return SliverAppBar(
-      floating: true,
-      expandedHeight: 160,
-      flexibleSpace: FlexibleSpaceBar(
-        background: const _AppBarCover(),
-        title: TextFormField(
-          initialValue: context.read<_Bloc>().state.currentEditName,
-          decoration: InputDecoration(hintText: L10n.global().nameInputHint),
-          validator: (_) {
-            // use text in state here because the value might be wrong if user
-            // scrolled the app bar off screen
-            if (context.read<_Bloc>().state.currentEditName.isNotEmpty) {
-              return null;
-            } else {
-              return L10n.global().nameInputInvalidEmpty;
-            }
-          },
-          onChanged: (value) {
-            context.read<_Bloc>().add(_EditName(value));
-          },
-          style: TextStyle(
-            color: Theme.of(context).appBarTheme.foregroundColor,
-          ),
-        ),
+      pinned: true,
+      title: TextFormField(
+        initialValue: context.read<_Bloc>().state.currentEditName,
+        decoration: InputDecoration(hintText: L10n.global().nameInputHint),
+        validator: (_) {
+          // use text in state here because the value might be wrong if user
+          // scrolled the app bar off screen
+          if (context.read<_Bloc>().state.currentEditName.isNotEmpty) {
+            return null;
+          } else {
+            return L10n.global().nameInputInvalidEmpty;
+          }
+        },
+        onChanged: (value) {
+          context.read<_Bloc>().add(_EditName(value));
+        },
+        style: TextStyle(color: Theme.of(context).appBarTheme.foregroundColor),
       ),
       leading: IconButton(
         icon: const Icon(Icons.check_outlined),
