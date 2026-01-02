@@ -663,7 +663,7 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<DbImageLatLng>> getImageLatLngWithFileIds({
+  Future<List<DbImageLatLng>> getImageLatLng({
     required DbAccount account,
     TimeRange? timeRange,
     List<String>? includeRelativeRoots,

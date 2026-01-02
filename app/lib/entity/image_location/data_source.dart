@@ -23,7 +23,7 @@ class ImageLocationNpDbDataSource implements ImageLocationDataSource {
     TimeRange timeRange,
   ) async {
     _log.info("[getLocations] timeRange: $timeRange");
-    final results = await db.getImageLatLngWithFileIds(
+    final results = await db.getImageLatLng(
       account: account.toDb(),
       timeRange: timeRange,
       includeRelativeRoots:
