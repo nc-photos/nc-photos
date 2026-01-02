@@ -465,8 +465,8 @@ packages:
     dependency: "direct main"
     description:
       path: "packages/flutter_background_service"
-      ref: "v5.1.0-nc-photos-1"
-      resolved-ref: f7b150959e40fdd28c879dc8e1c2ee27fcb002bc
+      ref: "v5.1.0-nc-photos-2"
+      resolved-ref: dce4c9bebd5f11f8352236280086d364c32528a1
       url: "https://github.com/nc-photos/flutter_background_service.git"
     source: git
     version: "5.1.0"
@@ -474,8 +474,8 @@ packages:
     dependency: transitive
     description:
       path: "packages/flutter_background_service_android"
-      ref: "v5.1.0-nc-photos-1"
-      resolved-ref: f7b150959e40fdd28c879dc8e1c2ee27fcb002bc
+      ref: "v5.1.0-nc-photos-2"
+      resolved-ref: dce4c9bebd5f11f8352236280086d364c32528a1
       url: "https://github.com/nc-photos/flutter_background_service.git"
     source: git
     version: "6.3.0"
@@ -483,8 +483,8 @@ packages:
     dependency: transitive
     description:
       path: "packages/flutter_background_service_ios"
-      ref: "v5.1.0-nc-photos-1"
-      resolved-ref: f7b150959e40fdd28c879dc8e1c2ee27fcb002bc
+      ref: "v5.1.0-nc-photos-2"
+      resolved-ref: dce4c9bebd5f11f8352236280086d364c32528a1
       url: "https://github.com/nc-photos/flutter_background_service.git"
     source: git
     version: "5.0.3"
@@ -492,8 +492,8 @@ packages:
     dependency: transitive
     description:
       path: "packages/flutter_background_service_platform_interface"
-      ref: "v5.1.0-nc-photos-1"
-      resolved-ref: f7b150959e40fdd28c879dc8e1c2ee27fcb002bc
+      ref: "v5.1.0-nc-photos-2"
+      resolved-ref: dce4c9bebd5f11f8352236280086d364c32528a1
       url: "https://github.com/nc-photos/flutter_background_service.git"
     source: git
     version: "5.1.2"

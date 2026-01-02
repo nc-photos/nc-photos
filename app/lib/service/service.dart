@@ -83,12 +83,14 @@ class _Service {
     _log.info("[call] Service started");
     final onStopSubscription = service.on("stop").listen(_onRecvStop);
     final onCancelSubscription = service.on("cancel").listen(_onRecvCancel);
+    final onTimeoutSubscription = service.on("timeout").listen(_onRecvTimeout);
 
     try {
       await _doWork();
     } catch (e, stackTrace) {
       _log.shout("[call] Uncaught exception", e, stackTrace);
     }
+    await onTimeoutSubscription.cancel();
     await onCancelSubscription.cancel();
     await onStopSubscription.cancel();
     await KiwiContainer().resolve<DiContainer>().npDb.dispose();
@@ -172,6 +174,11 @@ class _Service {
     } catch (e, stackTrace) {
       _log.shout("[_onRecvCancel] Uncaught exception", e, stackTrace);
     }
+  }
+
+  void _onRecvTimeout(Map<String, dynamic>? arg) {
+    _log.shout("[call] System timeout");
+    _stopSelf();
   }
 
   void _stopSelf() {

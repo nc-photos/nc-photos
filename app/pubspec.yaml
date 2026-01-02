@@ -69,7 +69,7 @@ dependencies:
   flutter_background_service:
     git:
       url: https://github.com/nc-photos/flutter_background_service.git
-      ref: v5.1.0-nc-photos-1
+      ref: v5.1.0-nc-photos-2
       path: packages/flutter_background_service
   flutter_bloc: ^8.1.5
   flutter_cache_manager: any
