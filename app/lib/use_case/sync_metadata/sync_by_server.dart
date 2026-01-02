@@ -10,6 +10,7 @@ class _SyncByServer {
     required this.db,
     this.interrupter,
     required this.fallback,
+    this.progressLogger,
   }) {
     interrupter?.listen((event) {
       _shouldRun = false;
@@ -86,6 +87,7 @@ class _SyncByServer {
 
   Future<File?> _syncOne(File file) async {
     _log.fine("[_syncOne] Syncing ${file.path}");
+    progressLogger?.add("(server) Sync ${file.path}");
     try {
       OrNull<ImageLocation>? locationUpdate;
 
@@ -132,6 +134,7 @@ class _SyncByServer {
   final NpDb db;
   final Stream<void>? interrupter;
   final _SyncByApp fallback;
+  final StreamController<String>? progressLogger;
 
   final _geocoder = ReverseGeocoder();
   var _shouldRun = true;

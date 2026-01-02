@@ -36,6 +36,7 @@ class SyncMetadata {
     this.interrupter,
     required this.wifiEnsurer,
     required this.batteryEnsurer,
+    this.progressLogger,
   });
 
   Stream<File> syncAccount(
@@ -75,6 +76,7 @@ class SyncMetadata {
       interrupter: interrupter,
       wifiEnsurer: wifiEnsurer,
       batteryEnsurer: batteryEnsurer,
+      progressLogger: progressLogger,
     );
     await op.init();
     final stream = op.syncFiles(
@@ -95,6 +97,7 @@ class SyncMetadata {
       interrupter: interrupter,
       wifiEnsurer: wifiEnsurer,
       batteryEnsurer: batteryEnsurer,
+      progressLogger: progressLogger,
     );
     await fallback.init();
     final op = _SyncByServer(
@@ -104,6 +107,7 @@ class SyncMetadata {
       db: db,
       interrupter: interrupter,
       fallback: fallback,
+      progressLogger: progressLogger,
     );
     await op.init();
     final fileIds = <int>[];
@@ -135,4 +139,5 @@ class SyncMetadata {
   final Stream<void>? interrupter;
   final WifiEnsurer wifiEnsurer;
   final BatteryEnsurer batteryEnsurer;
+  final StreamController<String>? progressLogger;
 }

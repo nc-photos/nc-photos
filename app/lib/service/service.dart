@@ -22,6 +22,7 @@ import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_message_relay/np_platform_message_relay.dart';
+import 'package:rxdart/subjects.dart';
 
 part 'config.dart';
 part 'l10n.dart';
@@ -108,7 +109,10 @@ class _Service {
     }
     final accountPrefController = AccountPrefController(account: account);
 
-    final wifiEnsurer = WifiEnsurer(interrupter: _shouldRun.stream);
+    final wifiEnsurer = WifiEnsurer(
+      interrupter: _shouldRun.stream,
+      progressLogger: _progressLogger,
+    );
     wifiEnsurer.isWaiting.listen((event) {
       if (event) {
         service
@@ -120,7 +124,10 @@ class _Service {
         service.resumeWakeLock();
       }
     });
-    final batteryEnsurer = BatteryEnsurer(interrupter: _shouldRun.stream);
+    final batteryEnsurer = BatteryEnsurer(
+      interrupter: _shouldRun.stream,
+      progressLogger: _progressLogger,
+    );
     batteryEnsurer.isWaiting.listen((event) {
       if (event) {
         service
@@ -141,6 +148,7 @@ class _Service {
       interrupter: _shouldRun.stream,
       wifiEnsurer: wifiEnsurer,
       batteryEnsurer: batteryEnsurer,
+      progressLogger: _progressLogger,
     );
     final processedIds = <int>[];
     await for (final f in syncOp.syncAccount(account, accountPrefController)) {
@@ -177,7 +185,7 @@ class _Service {
   }
 
   void _onRecvTimeout(Map<String, dynamic>? arg) {
-    _log.shout("[call] System timeout");
+    _log.shout("[call] System timeout: ${_progressLogger.valueOrNull}");
     _stopSelf();
   }
 
@@ -192,6 +200,7 @@ class _Service {
   final AndroidServiceInstance service;
 
   final _shouldRun = StreamController<void>.broadcast();
+  final _progressLogger = BehaviorSubject<String>();
 }
 
 @npLog

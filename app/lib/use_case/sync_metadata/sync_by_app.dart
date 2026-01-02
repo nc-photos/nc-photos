@@ -11,6 +11,7 @@ class _SyncByApp {
     this.interrupter,
     required this.wifiEnsurer,
     required this.batteryEnsurer,
+    this.progressLogger,
   }) {
     interrupter?.listen((event) {
       _shouldRun = false;
@@ -49,6 +50,7 @@ class _SyncByApp {
 
   Future<File?> syncOne(File file) async {
     _log.fine("[syncOne] Syncing ${file.path}");
+    progressLogger?.add("(app) Sync ${file.path}");
     try {
       OrNull<Metadata>? metadataUpdate;
       OrNull<ImageLocation>? locationUpdate;
@@ -116,6 +118,7 @@ class _SyncByApp {
   final Stream<void>? interrupter;
   final WifiEnsurer wifiEnsurer;
   final BatteryEnsurer batteryEnsurer;
+  final StreamController<String>? progressLogger;
 
   final _geocoder = ReverseGeocoder();
   var _shouldRun = true;
