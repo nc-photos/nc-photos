@@ -1,5 +1,7 @@
 part of 'collection_browser.dart';
 
+enum _EditPickerMode { label, map }
+
 @genCopyWith
 @toString
 class _State {
@@ -22,6 +24,8 @@ class _State {
     this.editTransformedItems,
     this.editSort,
     required this.isAddMapBusy,
+    this.editPickerMode,
+    required this.newLabelRequest,
     required this.placePickerRequest,
     required this.editLabelRequest,
     required this.editMapRequest,
@@ -52,6 +56,7 @@ class _State {
       isEditMode: false,
       isEditBusy: false,
       isAddMapBusy: false,
+      newLabelRequest: Unique(null),
       placePickerRequest: Unique(null),
       editLabelRequest: Unique(null),
       editMapRequest: Unique(null),
@@ -85,6 +90,8 @@ class _State {
   final List<_Item>? editTransformedItems;
   final CollectionItemSort? editSort;
   final bool isAddMapBusy;
+  final _EditPickerMode? editPickerMode;
+  final Unique<_NewLabelRequest?> newLabelRequest;
   final Unique<_PlacePickerRequest?> placePickerRequest;
   final Unique<_EditLabelRequest?> editLabelRequest;
   final Unique<_EditMapRequest?> editMapRequest;
@@ -175,13 +182,32 @@ class _EditName implements _Event {
 }
 
 @toString
+class _RequestAddLabel implements _Event {
+  const _RequestAddLabel();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _RequestAddLabel2 implements _Event {
+  const _RequestAddLabel2({required this.before});
+
+  @override
+  String toString() => _$toString();
+
+  final _ActualItem? before;
+}
+
+@toString
 class _AddLabelToCollection implements _Event {
-  const _AddLabelToCollection(this.label);
+  const _AddLabelToCollection(this.label, {this.before});
 
   @override
   String toString() => _$toString();
 
   final String label;
+  final _ActualItem? before;
 }
 
 @toString
@@ -214,13 +240,24 @@ class _RequestAddMap implements _Event {
 }
 
 @toString
+class _RequestAddMap2 implements _Event {
+  const _RequestAddMap2({required this.before});
+
+  @override
+  String toString() => _$toString();
+
+  final _ActualItem? before;
+}
+
+@toString
 class _AddMapToCollection implements _Event {
-  const _AddMapToCollection(this.location);
+  const _AddMapToCollection(this.location, {this.before});
 
   @override
   String toString() => _$toString();
 
   final CameraPosition location;
+  final _ActualItem? before;
 }
 
 @toString
@@ -285,6 +322,14 @@ class _DoneEdit implements _Event {
 @toString
 class _CancelEdit implements _Event {
   const _CancelEdit();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _CancelEditPickerMode implements _Event {
+  const _CancelEditPickerMode();
 
   @override
   String toString() => _$toString();

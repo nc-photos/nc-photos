@@ -1604,6 +1604,10 @@
 	},
 	"deleteMergedFileDialogContent": "Some of the files exist both on your server and your device. Where should we delete these files from?",
 	"deleteSingleMergedFileDialogContent": "File exists both on your server and your device. Where should we delete this file from?",
+	"collectionAddItemTitle": "Where to insert item?",
+	"@collectionAddItemTitle": {
+		"description": "When adding an item to a collection, ask the user where should we insert it to"
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

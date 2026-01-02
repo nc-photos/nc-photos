@@ -34,10 +34,13 @@ class _Bloc extends Bloc<_Event, _State>
 
     on<_BeginEdit>(_onBeginEdit);
     on<_EditName>(_onEditName);
+    on<_RequestAddLabel>(_onRequestAddLabel);
+    on<_RequestAddLabel2>(_onRequestAddLabel2);
     on<_AddLabelToCollection>(_onAddLabelToCollection);
     on<_RequestEditLabel>(_onRequestEditLabel);
     on<_EditLabel>(_onEditLabel);
     on<_RequestAddMap>(_onRequestAddMap);
+    on<_RequestAddMap2>(_onRequestAddMap2);
     on<_AddMapToCollection>(_onAddMapToCollection);
     on<_RequestEditMap>(_onRequestEditMap);
     on<_EditMap>(_onEditMap);
@@ -46,6 +49,10 @@ class _Bloc extends Bloc<_Event, _State>
     on<_TransformEditItems>(_onTransformEditItems);
     on<_DoneEdit>(_onDoneEdit, transformer: concurrent());
     on<_CancelEdit>(_onCancelEdit);
+    on<_CancelEditPickerMode>((ev, emit) {
+      _log.info(ev);
+      emit(state.copyWith(editPickerMode: null));
+    });
 
     on<_UnsetCover>(_onUnsetCover);
 
@@ -232,15 +239,41 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(editName: ev.name));
   }
 
+  void _onRequestAddLabel(_RequestAddLabel ev, _Emitter emit) {
+    _log.info(ev);
+    if (state.transformedItems.isNotEmpty) {
+      emit(state.copyWith(editPickerMode: _EditPickerMode.label));
+    } else {
+      add(const _RequestAddLabel2(before: null));
+    }
+  }
+
+  void _onRequestAddLabel2(_RequestAddLabel2 ev, _Emitter emit) {
+    _log.info(ev);
+    emit(
+      state.copyWith(
+        editPickerMode: null,
+        newLabelRequest: Unique(_NewLabelRequest(before: ev.before)),
+      ),
+    );
+  }
+
   void _onAddLabelToCollection(_AddLabelToCollection ev, Emitter<_State> emit) {
     _log.info(ev);
     assert(isCollectionCapabilityPermitted(CollectionCapability.labelItem));
+    var at = 0;
+    if (ev.before != null) {
+      at = (state.editItems ?? state.items).indexOf(ev.before!.original);
+      if (at == -1) {
+        at = 0;
+      }
+    }
     emit(
       state.copyWith(
-        editItems: [
+        editItems: (state.editItems ?? state.items).inserted(
+          at,
           NewCollectionLabelItem(ev.label, clock.now().toUtc()),
-          ...state.editItems ?? state.items,
-        ],
+        ),
       ),
     );
   }
@@ -266,36 +299,71 @@ class _Bloc extends Bloc<_Event, _State>
     );
   }
 
-  Future<void> _onRequestAddMap(_RequestAddMap ev, _Emitter emit) async {
+  void _onRequestAddMap(_RequestAddMap ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(isAddMapBusy: true));
+    if (state.transformedItems.isNotEmpty) {
+      emit(state.copyWith(editPickerMode: _EditPickerMode.map));
+    } else {
+      add(const _RequestAddMap2(before: null));
+    }
+  }
+
+  Future<void> _onRequestAddMap2(_RequestAddMap2 ev, _Emitter emit) async {
+    _log.info(ev);
+    emit(state.copyWith(isAddMapBusy: true, editPickerMode: null));
+    MapCoord? mapCoord;
     try {
-      final location = await db.getFirstLocationOfFileIds(
-        account: account.toDb(),
-        fileIds:
-            state.transformedItems
+      if (ev.before != null) {
+        final interest = state.editTransformedItems ?? state.transformedItems;
+        final i = interest.indexOf(ev.before!);
+        if (i != -1) {
+          // take the first gps data from the next 20 files
+          final files = await FindFile(_c).call(
+            account,
+            interest
+                .pySlice(i)
                 .whereType<_FileItem>()
                 .map((e) => e.file.fdId)
+                .take(20)
                 .toList(),
-      );
-      final mapCoord = location?.let(
-        (e) => MapCoord(e.latitude!, e.longitude!),
-      );
+            onFileNotFound: (_) {},
+          );
+          final location =
+              files
+                  .firstWhereOrNull((e) => e.metadata?.gpsCoord != null)
+                  ?.metadata
+                  ?.gpsCoord;
+          mapCoord = location?.let((e) => MapCoord(e.lat, e.lng));
+        }
+      }
+      if (mapCoord == null && state.transformedItems.isNotEmpty) {
+        final location = await db.getFirstLocationOfFileIds(
+          account: account.toDb(),
+          fileIds:
+              state.transformedItems
+                  .whereType<_FileItem>()
+                  .map((e) => e.file.fdId)
+                  .toList(),
+        );
+        mapCoord = location?.let((e) => MapCoord(e.latitude!, e.longitude!));
+      }
       emit(
         state.copyWith(
           placePickerRequest: Unique(
-            _PlacePickerRequest(initialPosition: mapCoord),
+            _PlacePickerRequest(initialPosition: mapCoord, before: ev.before),
           ),
         ),
       );
     } catch (e, stackTrace) {
       _log.severe(
-        "[_onRequestAddMap] Failed while getFirstLocationOfFileIds",
+        "[_onRequestAddMap2] Failed while getFirstLocationOfFileIds",
         e,
         stackTrace,
       );
       emit(
-        state.copyWith(placePickerRequest: Unique(const _PlacePickerRequest())),
+        state.copyWith(
+          placePickerRequest: Unique(_PlacePickerRequest(before: ev.before)),
+        ),
       );
     } finally {
       emit(state.copyWith(isAddMapBusy: false));
@@ -305,12 +373,19 @@ class _Bloc extends Bloc<_Event, _State>
   void _onAddMapToCollection(_AddMapToCollection ev, Emitter<_State> emit) {
     _log.info(ev);
     assert(isCollectionCapabilityPermitted(CollectionCapability.mapItem));
+    var at = 0;
+    if (ev.before != null) {
+      at = (state.editItems ?? state.items).indexOf(ev.before!.original);
+      if (at == -1) {
+        at = 0;
+      }
+    }
     emit(
       state.copyWith(
-        editItems: [
+        editItems: (state.editItems ?? state.items).inserted(
+          at,
           NewCollectionMapItem(ev.location, clock.now().toUtc()),
-          ...state.editItems ?? state.items,
-        ],
+        ),
       ),
     );
   }
