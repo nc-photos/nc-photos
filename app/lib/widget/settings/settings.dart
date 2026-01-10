@@ -230,9 +230,9 @@ class _SettingsState extends State<Settings> {
   var _devSettingsUnlockCount = 3;
   var _isShowDevSettings = false;
 
-  static const String _sourceRepo = "https://bit.ly/3LQerBv";
-  static const String _bugReportUrl = "https://bit.ly/3NANrr7";
-  static const String _translationUrl = "https://bit.ly/3NwmdSw";
+  static const String _sourceRepo = "https://nc-photos.web.app/link/repo";
+  static const String _bugReportUrl = "https://nc-photos.web.app/link/issue";
+  static const String _translationUrl = "https://nc-photos.web.app/link/localization";
 }
 
 class _SubPageItem extends StatelessWidget {
