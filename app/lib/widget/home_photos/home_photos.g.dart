@@ -40,8 +40,6 @@ abstract class $_StateCopyWithWorker {
     Date? scrollDate,
     bool? hasMissingVideoPreview,
     Unique<_ShareRequest?>? shareRequest,
-    Unique<_ShareLinkRequest?>? shareLinkRequest,
-    Unique<_DoShareRequest?>? doShareRequest,
     Unique<_UploadRequest?>? uploadRequest,
     Unique<_DeleteRequest?>? deleteRequest,
     bool? selectedCanArchive,
@@ -86,8 +84,6 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic scrollDate = copyWithNull,
     dynamic hasMissingVideoPreview,
     dynamic shareRequest,
-    dynamic shareLinkRequest,
-    dynamic doShareRequest,
     dynamic uploadRequest,
     dynamic deleteRequest,
     dynamic selectedCanArchive,
@@ -145,11 +141,6 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           hasMissingVideoPreview as bool? ?? that.hasMissingVideoPreview,
       shareRequest:
           shareRequest as Unique<_ShareRequest?>? ?? that.shareRequest,
-      shareLinkRequest:
-          shareLinkRequest as Unique<_ShareLinkRequest?>? ??
-          that.shareLinkRequest,
-      doShareRequest:
-          doShareRequest as Unique<_DoShareRequest?>? ?? that.doShareRequest,
       uploadRequest:
           uploadRequest as Unique<_UploadRequest?>? ?? that.uploadRequest,
       deleteRequest:
@@ -252,7 +243,7 @@ extension _$_ContentListBodyNpLog on _ContentListBody {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {anyFiles: [length: ${anyFiles.length}], anyFilesSummary: $anyFilesSummary, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, mergedCounts: {length: ${mergedCounts.length}}, hasRemoteData: $hasRemoteData, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, shareRequest: $shareRequest, shareLinkRequest: $shareLinkRequest, doShareRequest: $doShareRequest, uploadRequest: $uploadRequest, deleteRequest: $deleteRequest, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, selectedCanUpload: $selectedCanUpload, error: $error, shouldShowRemoteOnlyWarning: $shouldShowRemoteOnlyWarning, shouldShowLocalOnlyWarning: $shouldShowLocalOnlyWarning}";
+    return "_State {anyFiles: [length: ${anyFiles.length}], anyFilesSummary: $anyFilesSummary, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, mergedCounts: {length: ${mergedCounts.length}}, hasRemoteData: $hasRemoteData, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, shareRequest: $shareRequest, uploadRequest: $uploadRequest, deleteRequest: $deleteRequest, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, selectedCanUpload: $selectedCanUpload, error: $error, shouldShowRemoteOnlyWarning: $shouldShowRemoteOnlyWarning, shouldShowLocalOnlyWarning: $shouldShowLocalOnlyWarning}";
   }
 }
 
@@ -331,20 +322,6 @@ extension _$_ShareSelectedItemsToString on _ShareSelectedItems {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_ShareSelectedItems {}";
-  }
-}
-
-extension _$_SetShareRequestMethodToString on _SetShareRequestMethod {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_SetShareRequestMethod {request: $request, method: ${method.name}}";
-  }
-}
-
-extension _$_SetShareLinkRequestResultToString on _SetShareLinkRequestResult {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_SetShareLinkRequestResult {request: $request, name: $name, password: $password}";
   }
 }
 
@@ -506,27 +483,6 @@ extension _$_RemoveFailedErrorToString on _RemoveFailedError {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_RemoveFailedError {count: $count}";
-  }
-}
-
-extension _$_ShareRequestToString on _ShareRequest {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_ShareRequest {files: [length: ${files.length}], isRemoteShareOnly: $isRemoteShareOnly}";
-  }
-}
-
-extension _$_ShareLinkRequestToString on _ShareLinkRequest {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_ShareLinkRequest {shareRequest: $shareRequest, isPasswordProtected: $isPasswordProtected}";
-  }
-}
-
-extension _$_DoShareRequestToString on _DoShareRequest {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_DoShareRequest {functor: $functor}";
   }
 }
 

@@ -36,8 +36,6 @@ class _Bloc extends Bloc<_Event, _State>
     on<_DeleteItemsWithHint>(_onDeleteItemsWithHint);
     on<_DownloadSelectedItems>(_onDownloadSelectedItems);
     on<_ShareSelectedItems>(_onShareSelectedItems);
-    on<_SetShareRequestMethod>(_onSetShareRequestMethod);
-    on<_SetShareLinkRequestResult>(_onSetShareLinkRequestResult);
     on<_UploadSelectedItems>(_onUploadSelectedItems);
 
     on<_AddVisibleDate>(_onAddVisibleDate);
@@ -410,154 +408,12 @@ class _Bloc extends Bloc<_Event, _State>
     final selectedFiles =
         selected.whereType<_FileItem>().map((e) => e.file).toList();
     if (selectedFiles.isNotEmpty) {
-      final isAllRemoteShare = selectedFiles.every((f) {
-        final capability = AnyFileWorkerFactory.capability(f);
-        return capability.isPermitted(AnyFileCapability.remoteShare);
-      });
-      final isAllLocalShare = selectedFiles.every((f) {
-        final capability = AnyFileWorkerFactory.capability(f);
-        return capability.isPermitted(AnyFileCapability.localShare);
-      });
-      if (isAllLocalShare && !isAllRemoteShare) {
-        // no more user input needed
-        emit(
-          state.copyWith(
-            doShareRequest: Unique(
-              _DoShareRequest(
-                ({onProgress, onError, cancelSignal}) => ShareAnyFile(_c).call(
-                  selectedFiles,
-                  account: account,
-                  method: ShareAnyFileMethod.file,
-                  onProgress: onProgress,
-                  onError: onError,
-                  cancelSignal: cancelSignal,
-                ),
-              ),
-            ),
-          ),
-        );
-      } else {
-        final req = _ShareRequest(
-          files: selectedFiles,
-          isRemoteShareOnly: isAllRemoteShare,
-        );
-        emit(state.copyWith(shareRequest: Unique(req)));
-      }
-    }
-  }
-
-  void _onSetShareRequestMethod(_SetShareRequestMethod ev, _Emitter emit) {
-    _log.info(ev);
-    switch (ev.method) {
-      case ShareMethodDialogResult.file:
-        emit(
-          state.copyWith(
-            doShareRequest: Unique(
-              _DoShareRequest(
-                ({onProgress, onError, cancelSignal}) => ShareAnyFile(_c).call(
-                  ev.request.files,
-                  account: account,
-                  method: ShareAnyFileMethod.file,
-                  onProgress: onProgress,
-                  onError: onError,
-                  cancelSignal: cancelSignal,
-                ),
-              ),
-            ),
-          ),
-        );
-        break;
-
-      case ShareMethodDialogResult.preview:
-        emit(
-          state.copyWith(
-            doShareRequest: Unique(
-              _DoShareRequest(
-                ({onProgress, onError, cancelSignal}) => ShareAnyFile(_c).call(
-                  ev.request.files,
-                  account: account,
-                  method: ShareAnyFileMethod.preview,
-                  onProgress: onProgress,
-                  onError: onError,
-                  cancelSignal: cancelSignal,
-                ),
-              ),
-            ),
-          ),
-        );
-        break;
-
-      case ShareMethodDialogResult.publicLink:
-        if (ev.request.files.length == 1) {
-          emit(
-            state.copyWith(
-              doShareRequest: Unique(
-                _DoShareRequest(
-                  ({onProgress, onError, cancelSignal}) =>
-                      ShareAnyFile(_c).call(
-                        ev.request.files,
-                        account: account,
-                        method: ShareAnyFileMethod.link,
-                        onProgress: onProgress,
-                        onError: onError,
-                        cancelSignal: cancelSignal,
-                      ),
-                ),
-              ),
-            ),
-          );
-        } else {
-          emit(
-            state.copyWith(
-              shareLinkRequest: Unique(
-                _ShareLinkRequest(
-                  shareRequest: ev.request,
-                  isPasswordProtected: false,
-                ),
-              ),
-            ),
-          );
-        }
-        break;
-
-      case ShareMethodDialogResult.passwordLink:
-        emit(
-          state.copyWith(
-            shareLinkRequest: Unique(
-              _ShareLinkRequest(
-                shareRequest: ev.request,
-                isPasswordProtected: true,
-              ),
-            ),
-          ),
-        );
-        break;
-    }
-  }
-
-  void _onSetShareLinkRequestResult(
-    _SetShareLinkRequestResult ev,
-    _Emitter emit,
-  ) {
-    _log.info(ev);
-    emit(
-      state.copyWith(
-        doShareRequest: Unique(
-          _DoShareRequest(
-            ({onProgress, onError, cancelSignal}) => ShareAnyFile(_c).call(
-              ev.request.shareRequest.files,
-              account: account,
-              method: ShareAnyFileMethod.link,
-              linkName: ev.name,
-              linkPassword: ev.password,
-              onProgress: onProgress,
-              onError: onError,
-              cancelSignal: cancelSignal,
-            ),
-          ),
+      emit(
+        state.copyWith(
+          shareRequest: Unique(_ShareRequest(files: selectedFiles)),
         ),
-      ),
-    );
+      );
+    }
   }
 
   void _onUploadSelectedItems(_UploadSelectedItems ev, Emitter<_State> emit) {

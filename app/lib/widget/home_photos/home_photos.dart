@@ -37,9 +37,7 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/event/event.dart';
-import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/exception_event.dart';
-import 'package:nc_photos/exception_util.dart' as exception_util;
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/progress_util.dart';
@@ -49,26 +47,20 @@ import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/theme/dimension.dart';
-import 'package:nc_photos/toast.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/use_case/any_file/download_any_file.dart';
-import 'package:nc_photos/use_case/any_file/share_any_file.dart';
 import 'package:nc_photos/use_case/any_file/upload_any_file.dart';
 import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker/collection_picker.dart';
 import 'package:nc_photos/widget/double_tap_exit_container/double_tap_exit_container.dart';
-import 'package:nc_photos/widget/download_progress_dialog.dart';
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/home_app_bar.dart';
 import 'package:nc_photos/widget/navigation_bar_blur_filter.dart';
 import 'package:nc_photos/widget/photo_list_item.dart';
 import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
-import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/selectable_section_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
-import 'package:nc_photos/widget/share_link_multiple_files_dialog.dart';
-import 'package:nc_photos/widget/share_method_dialog.dart';
-import 'package:nc_photos/widget/simple_input_dialog.dart';
+import 'package:nc_photos/widget/share_helper/share_helper.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
 import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
@@ -101,24 +93,35 @@ class HomePhotos2 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
-    return BlocProvider(
-      create:
-          (_) => _Bloc(
-            KiwiContainer().resolve(),
-            account: accountController.account,
-            anyFilesController: accountController.anyFilesController,
-            filesController: accountController.filesController,
-            prefController: context.read(),
-            accountPrefController: accountController.accountPrefController,
-            collectionsController: accountController.collectionsController,
-            syncController: accountController.syncController,
-            personsController: accountController.personsController,
-            metadataController: accountController.metadataController,
-            serverController: accountController.serverController,
-            bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
-            draggableThumbSize:
-                AppDimension.of(context).timelineDraggableThumbSize,
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (_) => _Bloc(
+                KiwiContainer().resolve(),
+                account: accountController.account,
+                anyFilesController: accountController.anyFilesController,
+                filesController: accountController.filesController,
+                prefController: context.read(),
+                accountPrefController: accountController.accountPrefController,
+                collectionsController: accountController.collectionsController,
+                syncController: accountController.syncController,
+                personsController: accountController.personsController,
+                metadataController: accountController.metadataController,
+                serverController: accountController.serverController,
+                bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
+                draggableThumbSize:
+                    AppDimension.of(context).timelineDraggableThumbSize,
+              ),
+        ),
+        BlocProvider(
+          create:
+              (_) => ShareBloc(
+                KiwiContainer().resolve(),
+                account: accountController.account,
+              ),
+        ),
+      ],
       child: const _WrappedHomePhotos(),
     );
   }
@@ -175,14 +178,6 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
           _BlocListenerT(
             selector: (state) => state.shareRequest,
             listener: _onShareRequest,
-          ),
-          _BlocListenerT(
-            selector: (state) => state.shareLinkRequest,
-            listener: _onShareLinkRequest,
-          ),
-          _BlocListenerT(
-            selector: (state) => state.doShareRequest,
-            listener: _onDoShareRequest,
           ),
           _BlocListenerT(
             selector: (state) => state.uploadRequest,
@@ -251,165 +246,40 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
             },
           ),
         ],
-        child: _BlocSelector(
-          selector: (state) => state.selectedItems.isEmpty,
-          builder:
-              (context, isSelectedEmpty) =>
-                  isSelectedEmpty
-                      ? DoubleTapExitContainer(child: _BodyView(key: _bodyKey))
-                      : PopScope(
-                        canPop: false,
-                        onPopInvokedWithResult: (didPop, result) {
-                          context.addEvent(const _SetSelectedItems(items: {}));
-                        },
-                        child: _BodyView(key: _bodyKey),
-                      ),
+        child: ShareBlocListener(
+          child: _BlocSelector(
+            selector: (state) => state.selectedItems.isEmpty,
+            builder:
+                (context, isSelectedEmpty) =>
+                    isSelectedEmpty
+                        ? DoubleTapExitContainer(
+                          child: _BodyView(key: _bodyKey),
+                        )
+                        : PopScope(
+                          canPop: false,
+                          onPopInvokedWithResult: (didPop, result) {
+                            context.addEvent(
+                              const _SetSelectedItems(items: {}),
+                            );
+                          },
+                          child: _BodyView(key: _bodyKey),
+                        ),
+          ),
         ),
       ),
     );
   }
 
-  Future<void> _onShareRequest(
+  void _onShareRequest(
     BuildContext context,
     Unique<_ShareRequest?> shareRequest,
-  ) async {
+  ) {
     if (shareRequest.value == null) {
       return;
     }
-    final result = await showDialog<ShareMethodDialogResult>(
-      context: context,
-      builder:
-          (context) => ShareMethodDialog(
-            isSupportRemoteLink: shareRequest.value!.isRemoteShareOnly,
-          ),
+    context.read<ShareBloc>().add(
+      ShareBlocShareFiles(shareRequest.value!.files),
     );
-    if (result == null || !context.mounted) {
-      return;
-    }
-    context.addEvent(_SetShareRequestMethod(shareRequest.value!, result));
-  }
-
-  Future<void> _onShareLinkRequest(
-    BuildContext context,
-    Unique<_ShareLinkRequest?> shareLinkRequest,
-  ) async {
-    if (shareLinkRequest.value == null) {
-      return;
-    }
-    // ask for link share details
-    if (shareLinkRequest.value!.shareRequest.files.length == 1) {
-      final result = await showDialog<String>(
-        context: context,
-        builder:
-            (context) => SimpleInputDialog(
-              hintText: L10n.global().passwordInputHint,
-              buttonText: MaterialLocalizations.of(context).okButtonLabel,
-              validator: (value) {
-                if (value?.isNotEmpty != true) {
-                  return L10n.global().passwordInputInvalidEmpty;
-                }
-                return null;
-              },
-              obscureText: true,
-            ),
-      );
-      if (result == null || !context.mounted) {
-        return;
-      }
-      context.addEvent(
-        _SetShareLinkRequestResult(shareLinkRequest.value!, password: result),
-      );
-    } else {
-      final result = await showDialog<ShareLinkMultipleFilesDialogResult>(
-        context: context,
-        builder:
-            (_) => ShareLinkMultipleFilesDialog(
-              shouldAskPassword: shareLinkRequest.value!.isPasswordProtected,
-            ),
-      );
-      if (result == null || !context.mounted) {
-        return;
-      }
-      context.addEvent(
-        _SetShareLinkRequestResult(
-          shareLinkRequest.value!,
-          name: result.albumName,
-          password: result.password,
-        ),
-      );
-    }
-  }
-
-  Future<void> _onDoShareRequest(
-    BuildContext context,
-    Unique<_DoShareRequest?> doShareRequest,
-  ) async {
-    if (doShareRequest.value == null) {
-      return;
-    }
-    final controller = StreamController<ShareAnyFileProgress>();
-    final cancelSignal = StreamController<void>();
-    BuildContext? dialogContext;
-    unawaited(
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (context) {
-          dialogContext = context;
-          return PopScope(
-            canPop: false,
-            child: StreamBuilder(
-              stream: controller.stream,
-              builder: (context, snapshot) {
-                if (!snapshot.hasData) {
-                  return ProcessingDialog(
-                    text: L10n.global().genericProcessingDialogContent,
-                  );
-                } else {
-                  final progress = snapshot.requireData;
-                  return DownloadProgressDialog(
-                    max: progress.max,
-                    current: progress.current,
-                    progress: 0,
-                    label: progress.filename,
-                    onCancel: () {
-                      cancelSignal.add(null);
-                    },
-                  );
-                }
-              },
-            ),
-          );
-        },
-      ),
-    );
-    try {
-      var hasShowError = false;
-      await doShareRequest.value!.functor(
-        onProgress: (progress) {
-          controller.add(progress);
-        },
-        onError: (file, error, stackTrace) {
-          if (!hasShowError) {
-            hasShowError = true;
-            AppToast.showToast(
-              context,
-              msg: exception_util.toUserString(error),
-              duration: k.snackBarDurationNormal,
-            );
-          }
-        },
-        cancelSignal: cancelSignal.stream,
-      );
-    } on InterruptedException {
-      // user canceled
-    } finally {
-      if (dialogContext != null) {
-        Navigator.maybeOf(dialogContext!)?.pop();
-      }
-      unawaited(controller.close());
-      unawaited(cancelSignal.close());
-    }
   }
 
   Future<void> _onUploadRequest(
