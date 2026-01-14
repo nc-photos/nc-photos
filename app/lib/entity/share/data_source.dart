@@ -97,12 +97,16 @@ class ShareRemoteDataSource implements ShareDataSource {
   }
 
   @override
-  createLink(Account account, File file, {String? password}) async {
-    _log.info("[createLink] Share '${file.path}' with a share link");
+  Future<Share> createLink(
+    Account account,
+    String relativePath, {
+    String? password,
+  }) async {
+    _log.info("[createLink] Share '$relativePath' with a share link");
     final response = await ApiUtil.fromAccount(
       account,
     ).ocs().filesSharing().shares().post(
-      path: file.strippedPath,
+      path: relativePath,
       shareType: ShareType.publicLink.toValue(),
       password: password,
     );

@@ -243,11 +243,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     File file,
     String? password,
   ) async {
-    final share = await CreateLinkShare(_c.shareRepo)(
-      account,
-      file,
-      password: password,
-    );
+    final share = await CreateLinkShare(
+      _c.shareRepo,
+    ).fromFile(account, file, password: password);
     await Clipboard.setData(ClipboardData(text: share.url!));
 
     if (getRawPlatform() == NpPlatform.android) {

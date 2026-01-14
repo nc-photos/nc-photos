@@ -788,7 +788,7 @@ class FileRepo {
   /// See [FileDataSource.copy]
   Future<void> copy(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) => dataSrc.copy(account, f, destination, shouldOverwrite: shouldOverwrite);
@@ -851,7 +851,7 @@ abstract class FileDataSource {
   /// remote.php/dav/files/admin/new/location
   Future<void> copy(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   });

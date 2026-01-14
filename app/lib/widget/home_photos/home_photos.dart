@@ -58,8 +58,6 @@ import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/collection_picker/collection_picker.dart';
 import 'package:nc_photos/widget/double_tap_exit_container/double_tap_exit_container.dart';
 import 'package:nc_photos/widget/download_progress_dialog.dart';
-import 'package:nc_photos/widget/file_sharer_dialog/file_sharer_dialog.dart'
-    hide ShareMethod;
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/home_app_bar.dart';
 import 'package:nc_photos/widget/navigation_bar_blur_filter.dart';
@@ -68,7 +66,9 @@ import 'package:nc_photos/widget/photo_list_util.dart' as photo_list_util;
 import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:nc_photos/widget/selectable_section_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
+import 'package:nc_photos/widget/share_link_multiple_files_dialog.dart';
 import 'package:nc_photos/widget/share_method_dialog.dart';
+import 'package:nc_photos/widget/simple_input_dialog.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
 import 'package:nc_photos/widget/timeline_viewer/timeline_viewer.dart';
 import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
@@ -177,6 +177,14 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
             listener: _onShareRequest,
           ),
           _BlocListenerT(
+            selector: (state) => state.shareLinkRequest,
+            listener: _onShareLinkRequest,
+          ),
+          _BlocListenerT(
+            selector: (state) => state.doShareRequest,
+            listener: _onDoShareRequest,
+          ),
+          _BlocListenerT(
             selector: (state) => state.uploadRequest,
             listener: _onUploadRequest,
           ),
@@ -268,129 +276,139 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     if (shareRequest.value == null) {
       return;
     }
-    final files = shareRequest.value!.files;
-    if (shareRequest.value!.isLocalShareOnly) {
-      return _onLocalOnlyShareRequest(context, files);
-    } else if (shareRequest.value!.isRemoteShareOnly) {
-      return _onRemoteOnlyShareRequest(context, files);
+    final result = await showDialog<ShareMethodDialogResult>(
+      context: context,
+      builder:
+          (context) => ShareMethodDialog(
+            isSupportRemoteLink: shareRequest.value!.isRemoteShareOnly,
+          ),
+    );
+    if (result == null || !context.mounted) {
+      return;
+    }
+    context.addEvent(_SetShareRequestMethod(shareRequest.value!, result));
+  }
+
+  Future<void> _onShareLinkRequest(
+    BuildContext context,
+    Unique<_ShareLinkRequest?> shareLinkRequest,
+  ) async {
+    if (shareLinkRequest.value == null) {
+      return;
+    }
+    // ask for link share details
+    if (shareLinkRequest.value!.shareRequest.files.length == 1) {
+      final result = await showDialog<String>(
+        context: context,
+        builder:
+            (context) => SimpleInputDialog(
+              hintText: L10n.global().passwordInputHint,
+              buttonText: MaterialLocalizations.of(context).okButtonLabel,
+              validator: (value) {
+                if (value?.isNotEmpty != true) {
+                  return L10n.global().passwordInputInvalidEmpty;
+                }
+                return null;
+              },
+              obscureText: true,
+            ),
+      );
+      if (result == null || !context.mounted) {
+        return;
+      }
+      context.addEvent(
+        _SetShareLinkRequestResult(shareLinkRequest.value!, password: result),
+      );
     } else {
-      return _onMixedShareRequest(context, files);
+      final result = await showDialog<ShareLinkMultipleFilesDialogResult>(
+        context: context,
+        builder:
+            (_) => ShareLinkMultipleFilesDialog(
+              shouldAskPassword: shareLinkRequest.value!.isPasswordProtected,
+            ),
+      );
+      if (result == null || !context.mounted) {
+        return;
+      }
+      context.addEvent(
+        _SetShareLinkRequestResult(
+          shareLinkRequest.value!,
+          name: result.albumName,
+          password: result.password,
+        ),
+      );
     }
   }
 
-  Future<void> _onLocalOnlyShareRequest(
+  Future<void> _onDoShareRequest(
     BuildContext context,
-    List<AnyFile> files,
-  ) {
-    return ShareAnyFile()(
-      files,
-      account: context.bloc.account,
-      remoteMethod: ShareMethod.file,
-    );
-  }
-
-  Future<void> _onRemoteOnlyShareRequest(
-    BuildContext context,
-    List<AnyFile> files,
-  ) {
-    final remoteFiles =
-        files.map((e) {
-          final p = e.provider;
-          return switch (p) {
-            AnyFileNextcloudProvider _ => p.file,
-            AnyFileMergedProvider _ => p.remote.file,
-            AnyFileLocalProvider _ => throw ArgumentError("File not supported"),
-          };
-        }).toList();
-    return showDialog(
-      context: context,
-      builder:
-          (_) => FileSharerDialog(
-            account: context.bloc.account,
-            files: remoteFiles,
-          ),
-    );
-  }
-
-  Future<void> _onMixedShareRequest(
-    BuildContext context,
-    List<AnyFile> files,
+    Unique<_DoShareRequest?> doShareRequest,
   ) async {
-    final remoteMethod = await showDialog<ShareMethod>(
-      context: context,
-      builder:
-          (context) => const ShareMethodDialog(
-            isSupportPerview: true,
-            isSupportRemoteLink: false,
-          ),
+    if (doShareRequest.value == null) {
+      return;
+    }
+    final controller = StreamController<ShareAnyFileProgress>();
+    final cancelSignal = StreamController<void>();
+    BuildContext? dialogContext;
+    unawaited(
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          dialogContext = context;
+          return PopScope(
+            canPop: false,
+            child: StreamBuilder(
+              stream: controller.stream,
+              builder: (context, snapshot) {
+                if (!snapshot.hasData) {
+                  return ProcessingDialog(
+                    text: L10n.global().genericProcessingDialogContent,
+                  );
+                } else {
+                  final progress = snapshot.requireData;
+                  return DownloadProgressDialog(
+                    max: progress.max,
+                    current: progress.current,
+                    progress: 0,
+                    label: progress.filename,
+                    onCancel: () {
+                      cancelSignal.add(null);
+                    },
+                  );
+                }
+              },
+            ),
+          );
+        },
+      ),
     );
-    if (remoteMethod != null && context.mounted) {
-      final controller = StreamController<ShareAnyFileProgress>();
-      final cancelSignal = StreamController<void>();
-      BuildContext? dialogContext;
-      unawaited(
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) {
-            dialogContext = context;
-            return PopScope(
-              canPop: false,
-              child: StreamBuilder(
-                stream: controller.stream,
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return ProcessingDialog(
-                      text: L10n.global().genericProcessingDialogContent,
-                    );
-                  } else {
-                    final progress = snapshot.requireData;
-                    return DownloadProgressDialog(
-                      max: progress.max,
-                      current: progress.current,
-                      progress: progress.progress,
-                      label: progress.filename,
-                      onCancel: () {
-                        cancelSignal.add(null);
-                      },
-                    );
-                  }
-                },
-              ),
+    try {
+      var hasShowError = false;
+      await doShareRequest.value!.functor(
+        onProgress: (progress) {
+          controller.add(progress);
+        },
+        onError: (file, error, stackTrace) {
+          if (!hasShowError) {
+            hasShowError = true;
+            AppToast.showToast(
+              context,
+              msg: exception_util.toUserString(error),
+              duration: k.snackBarDurationNormal,
             );
-          },
-        ),
+          }
+        },
+        cancelSignal: cancelSignal.stream,
       );
-      try {
-        var hasShowError = false;
-        await ShareAnyFile()(
-          files,
-          account: context.bloc.account,
-          remoteMethod: remoteMethod,
-          onProgress: (progress) {
-            controller.add(progress);
-          },
-          onError: (error, stackTrace) {
-            if (!hasShowError) {
-              hasShowError = true;
-              AppToast.showToast(
-                context,
-                msg: exception_util.toUserString(error),
-                duration: k.snackBarDurationNormal,
-              );
-            }
-          },
-          cancelSignal: cancelSignal.stream,
-        );
-      } on InterruptedException {
-        // user canceled
-      } finally {
-        if (dialogContext != null) {
-          Navigator.maybeOf(dialogContext!)?.pop();
-        }
-        unawaited(controller.close());
-        unawaited(cancelSignal.close());
+    } on InterruptedException {
+      // user canceled
+    } finally {
+      if (dialogContext != null) {
+        Navigator.maybeOf(dialogContext!)?.pop();
       }
+      unawaited(controller.close());
+      unawaited(cancelSignal.close());
     }
   }
 

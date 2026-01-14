@@ -19,7 +19,8 @@ class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
     return switch (capability) {
       AnyFileCapability.delete ||
       AnyFileCapability.edit ||
-      AnyFileCapability.upload => true,
+      AnyFileCapability.upload ||
+      AnyFileCapability.localShare => true,
       AnyFileCapability.favorite ||
       AnyFileCapability.archive ||
       AnyFileCapability.download ||

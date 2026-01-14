@@ -12,7 +12,6 @@ import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
-import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/entity/share/data_source.dart';
@@ -74,11 +73,11 @@ class ShareHandler {
       if (method == null) {
         // user canceled
         return;
-      } else if (method == ShareMethod.publicLink) {
+      } else if (method == ShareMethodDialogResult.publicLink) {
         return await _shareAsLink(account, files, false);
-      } else if (method == ShareMethod.passwordLink) {
+      } else if (method == ShareMethodDialogResult.passwordLink) {
         return await _shareAsLink(account, files, true);
-      } else if (method == ShareMethod.preview) {
+      } else if (method == ShareMethodDialogResult.preview) {
         return await _shareAsPreview(account, files);
       } else {
         return await _shareAsFile(account, files);
@@ -93,16 +92,10 @@ class ShareHandler {
     }
   }
 
-  Future<ShareMethod?> _askShareMethod(List<File> files) {
-    return showDialog<ShareMethod>(
+  Future<ShareMethodDialogResult?> _askShareMethod(List<File> files) {
+    return showDialog<ShareMethodDialogResult>(
       context: context,
-      builder:
-          (context) => ShareMethodDialog(
-            isSupportPerview: files.any(
-              (f) => file_util.isSupportedImageFormat(f),
-            ),
-            isSupportRemoteLink: true,
-          ),
+      builder: (context) => const ShareMethodDialog(isSupportRemoteLink: true),
     );
   }
 
@@ -189,11 +182,9 @@ class ShareHandler {
   ) async {
     final shareRepo = ShareRepo(ShareRemoteDataSource());
     try {
-      final share = await CreateLinkShare(shareRepo)(
-        account,
-        file,
-        password: password,
-      );
+      final share = await CreateLinkShare(
+        shareRepo,
+      ).fromFile(account, file, password: password);
       await Clipboard.setData(ClipboardData(text: share.url!));
       SnackBarManager().showSnackBar(
         SnackBar(

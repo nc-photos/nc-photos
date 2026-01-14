@@ -21,6 +21,7 @@ class AnyFileMergedCapabilityWorker implements AnyFileCapabilityWorker {
       AnyFileCapability.edit ||
       AnyFileCapability.delete ||
       AnyFileCapability.remoteShare ||
+      AnyFileCapability.localShare ||
       AnyFileCapability.collection => true,
       AnyFileCapability.download || AnyFileCapability.upload => false,
     };

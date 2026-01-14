@@ -30,6 +30,8 @@ class _State {
     this.scrollDate,
     required this.hasMissingVideoPreview,
     required this.shareRequest,
+    required this.shareLinkRequest,
+    required this.doShareRequest,
     required this.uploadRequest,
     required this.deleteRequest,
     required this.selectedCanArchive,
@@ -63,6 +65,8 @@ class _State {
     minimapYRatio: 1,
     hasMissingVideoPreview: false,
     shareRequest: Unique(null),
+    shareLinkRequest: Unique(null),
+    doShareRequest: Unique(null),
     uploadRequest: Unique(null),
     deleteRequest: Unique(null),
     selectedCanArchive: false,
@@ -109,6 +113,8 @@ class _State {
   final bool hasMissingVideoPreview;
 
   final Unique<_ShareRequest?> shareRequest;
+  final Unique<_ShareLinkRequest?> shareLinkRequest;
+  final Unique<_DoShareRequest?> doShareRequest;
   final Unique<_UploadRequest?> uploadRequest;
   final Unique<_DeleteRequest?> deleteRequest;
 
@@ -230,6 +236,29 @@ class _ShareSelectedItems implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _SetShareRequestMethod implements _Event {
+  const _SetShareRequestMethod(this.request, this.method);
+
+  @override
+  String toString() => _$toString();
+
+  final _ShareRequest request;
+  final ShareMethodDialogResult method;
+}
+
+@toString
+class _SetShareLinkRequestResult implements _Event {
+  const _SetShareLinkRequestResult(this.request, {this.name, this.password});
+
+  @override
+  String toString() => _$toString();
+
+  final _ShareLinkRequest request;
+  final String? name;
+  final String? password;
 }
 
 @toString

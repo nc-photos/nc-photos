@@ -450,7 +450,11 @@ class MockShareRepo implements ShareRepo {
   }
 
   @override
-  Future<Share> createLink(Account account, File file, {String? password}) {
+  Future<Share> createLink(
+    Account account,
+    String relativePath, {
+    String? password,
+  }) {
     throw UnimplementedError();
   }
 
