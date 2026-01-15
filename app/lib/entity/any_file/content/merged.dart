@@ -35,6 +35,31 @@ class AnyFileMergedLargePreviewUriGetter
   final AnyFileLargePreviewUriGetter _delegate;
 }
 
+class AnyFileMergedLocalFileUriGetter implements AnyFileLocalFileUriGetter {
+  AnyFileMergedLocalFileUriGetter(AnyFile file)
+    : _delegate = AnyFileLocalUriGetter(
+        (file.provider as AnyFileMergedProvider).asLocalFile(),
+      );
+
+  @override
+  Future<Uri> get() => _delegate.get();
+
+  final AnyFileUriGetter _delegate;
+}
+
+class AnyFileMergedLocalPreviewUriGetter
+    implements AnyFileLocalPreviewUriGetter {
+  AnyFileMergedLocalPreviewUriGetter(AnyFile file)
+    : _delegate = AnyFileLocalUriGetter(
+        (file.provider as AnyFileMergedProvider).asLocalFile(),
+      );
+
+  @override
+  Future<Uri> get() => _delegate.get();
+
+  final AnyFileUriGetter _delegate;
+}
+
 class AnyFileMergedMetadataGetter implements AnyFileMetadataGetter {
   AnyFileMergedMetadataGetter(
     AnyFile file, {

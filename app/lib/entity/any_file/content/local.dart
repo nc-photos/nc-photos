@@ -38,6 +38,26 @@ class AnyFileLocalLargePreviewUriGetter
   final AnyFileLocalUriGetter _impl;
 }
 
+class AnyFileLocalLocalFileUriGetter implements AnyFileLocalFileUriGetter {
+  AnyFileLocalLocalFileUriGetter(AnyFile file)
+    : _impl = AnyFileLocalUriGetter(file);
+
+  @override
+  Future<Uri> get() => _impl.get();
+
+  final AnyFileLocalUriGetter _impl;
+}
+
+class AnyFileLocalLocalPreviewUriGetter implements AnyFileLocalPreviewUriGetter {
+  AnyFileLocalLocalPreviewUriGetter(AnyFile file)
+    : _impl = AnyFileLocalUriGetter(file);
+
+  @override
+  Future<Uri> get() => _impl.get();
+
+  final AnyFileLocalUriGetter _impl;
+}
+
 class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   AnyFileLocalMetadataGetter(this.file)
     : _provider = file.provider as AnyFileLocalProvider;

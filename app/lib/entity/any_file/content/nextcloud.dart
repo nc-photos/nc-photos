@@ -9,6 +9,8 @@ import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/file_view_util.dart';
+import 'package:nc_photos/use_case/download_file.dart';
+import 'package:nc_photos/use_case/download_preview.dart';
 import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
 import 'package:nc_photos/use_case/list_file_tag.dart';
 import 'package:np_common/size.dart';
@@ -45,6 +47,44 @@ class AnyFileNextcloudLargePreviewUriGetter
       _provider.file.fdMime,
     );
     return Uri.parse("file://${fileInfo!.file.path}");
+  }
+
+  final Account account;
+
+  final AnyFileNextcloudProvider _provider;
+}
+
+class AnyFileNextcloudLocalFileUriGetter implements AnyFileLocalFileUriGetter {
+  AnyFileNextcloudLocalFileUriGetter(AnyFile file, {required this.account})
+    : _provider = file.provider as AnyFileNextcloudProvider;
+
+  @override
+  Future<Uri> get() async {
+    return Uri.parse(
+      await DownloadFile()(account, _provider.file, shouldNotify: false),
+    );
+  }
+
+  final Account account;
+
+  final AnyFileNextcloudProvider _provider;
+}
+
+class AnyFileNextcloudLocalPreviewUriGetter
+    implements AnyFileLocalPreviewUriGetter {
+  AnyFileNextcloudLocalPreviewUriGetter(AnyFile file, {required this.account})
+    : _provider = file.provider as AnyFileNextcloudProvider;
+
+  @override
+  Future<Uri> get() async {
+    if (file_util.isSupportedImageFormat(_provider.file) &&
+        _provider.file.fdMime != "image/gif") {
+      return Uri.parse(await DownloadPreview()(account, _provider.file));
+    } else {
+      return Uri.parse(
+        await DownloadFile()(account, _provider.file, shouldNotify: false),
+      );
+    }
   }
 
   final Account account;

@@ -175,8 +175,11 @@ class ShareRepo {
   ) => dataSrc.create(account, file, shareWith);
 
   /// See [ShareDataSource.createLink]
-  Future<Share> createLink(Account account, File file, {String? password}) =>
-      dataSrc.createLink(account, file, password: password);
+  Future<Share> createLink(
+    Account account,
+    String relativePath, {
+    String? password,
+  }) => dataSrc.createLink(account, relativePath, password: password);
 
   /// See [ShareDataSource.delete]
   Future<void> delete(Account account, Share share) =>
@@ -211,7 +214,11 @@ abstract class ShareDataSource {
   /// Share a file/folder with a share link
   ///
   /// If [password] is not null, the share link will be password protected
-  Future<Share> createLink(Account account, File file, {String? password});
+  Future<Share> createLink(
+    Account account,
+    String relativePath, {
+    String? password,
+  });
 
   /// Remove the given share
   Future<void> delete(Account account, Share share);

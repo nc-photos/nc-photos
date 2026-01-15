@@ -102,21 +102,6 @@ abstract interface class AnyFileWorkerFactory {
     }
   }
 
-  static AnyFileShareWorker share(
-    AnyFile file, {
-    required Account account,
-    required DiContainer c,
-  }) {
-    switch (file.provider) {
-      case AnyFileNextcloudProvider _:
-        return AnyFileNextcloudShareWorker(file, account: account, c: c);
-      case AnyFileLocalProvider _:
-        return AnyFileLocalShareWorker(file);
-      case AnyFileMergedProvider _:
-        return AnyFileMergedShareWorker(file, account: account, c: c);
-    }
-  }
-
   static AnyFileSetAsWorker setAs(
     AnyFile file, {
     required Account account,
@@ -165,10 +150,6 @@ abstract interface class AnyFileDownloadWorker {
 
 abstract interface class AnyFileDeleteWorker {
   Future<bool> delete({AnyFileRemoveHint hint = AnyFileRemoveHint.both});
-}
-
-abstract interface class AnyFileShareWorker {
-  Future<void> share(BuildContext context);
 }
 
 abstract interface class AnyFileSetAsWorker {

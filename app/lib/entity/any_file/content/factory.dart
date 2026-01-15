@@ -38,6 +38,34 @@ abstract interface class AnyFileContentGetterFactory {
     }
   }
 
+  static AnyFileLocalFileUriGetter localFileUri(
+    AnyFile file, {
+    required Account account,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return AnyFileNextcloudLocalFileUriGetter(file, account: account);
+      case AnyFileLocalProvider _:
+        return AnyFileLocalLocalFileUriGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedLocalFileUriGetter(file);
+    }
+  }
+
+  static AnyFileLocalPreviewUriGetter localPreviewUri(
+    AnyFile file, {
+    required Account account,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return AnyFileNextcloudLocalPreviewUriGetter(file, account: account);
+      case AnyFileLocalProvider _:
+        return AnyFileLocalLocalPreviewUriGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedLocalPreviewUriGetter(file);
+    }
+  }
+
   static AnyFileMetadataGetter metadata(
     AnyFile file, {
     required DiContainer c,
@@ -79,6 +107,22 @@ abstract interface class AnyFileLargePreviewUriGetter {
   ///
   /// This might be identical to [AnyFileUriGetter.get] if a preview is not
   /// available
+  Future<Uri> get();
+}
+
+abstract interface class AnyFileLocalFileUriGetter {
+  /// Return the content uri of this file, accessible locally. For remote files,
+  /// this should download the file and return the uri of the downloaded file
+  Future<Uri> get();
+}
+
+abstract interface class AnyFileLocalPreviewUriGetter {
+  /// Return the content uri of this file's preview image, accessible locally.
+  /// For remote files, this should download the file and return the uri of the
+  /// downloaded file
+  ///
+  /// This might be identical to [AnyFileLocalFileUriGetter.get] if a preview is
+  /// not available
   Future<Uri> get();
 }
 

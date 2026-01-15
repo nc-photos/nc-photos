@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
-import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
@@ -21,6 +19,7 @@ class AnyFileMergedCapabilityWorker implements AnyFileCapabilityWorker {
       AnyFileCapability.edit ||
       AnyFileCapability.delete ||
       AnyFileCapability.remoteShare ||
+      AnyFileCapability.localShare ||
       AnyFileCapability.collection => true,
       AnyFileCapability.download || AnyFileCapability.upload => false,
     };
@@ -96,26 +95,6 @@ class AnyFileMergedDeleteWorker implements AnyFileDeleteWorker {
   final AnyFile file;
   final FilesController filesController;
   final LocalFilesController localFilesController;
-}
-
-class AnyFileMergedShareWorker implements AnyFileShareWorker {
-  AnyFileMergedShareWorker(
-    AnyFile file, {
-    required Account account,
-    required DiContainer c,
-  }) : _delegate = AnyFileNextcloudShareWorker(
-         (file.provider as AnyFileMergedProvider).asRemoteFile(),
-         account: account,
-         c: c,
-       );
-
-  @override
-  Future<void> share(BuildContext context) {
-    // TODO should specialize share for merged files
-    return _delegate.share(context);
-  }
-
-  final AnyFileShareWorker _delegate;
 }
 
 class AnyFileMergedSetAsWorker implements AnyFileSetAsWorker {

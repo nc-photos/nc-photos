@@ -289,29 +289,7 @@ class _SelectionAppBar extends StatelessWidget {
   }
 
   Future<void> _onSelectionSharePressed(BuildContext context) async {
-    final bloc = context.read<_Bloc>();
-    final selected =
-        bloc.state.selectedItems
-            .whereType<_FileItem>()
-            .map((e) => e.file)
-            .toList();
-    if (selected.isEmpty) {
-      SnackBarManager().showSnackBar(
-        SnackBar(
-          content: Text(L10n.global().shareSelectedEmptyNotification),
-          duration: k.snackBarDurationNormal,
-        ),
-      );
-      return;
-    }
-    final result = await showDialog(
-      context: context,
-      builder:
-          (context) => FileSharerDialog(account: bloc.account, files: selected),
-    );
-    if (result ?? false) {
-      bloc.add(const _SetSelectedItems(items: {}));
-    }
+    context.addEvent(const _ShareSelectedItems());
   }
 
   Future<void> _onSelectionAddPressed(BuildContext context) async {

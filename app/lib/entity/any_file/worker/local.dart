@@ -19,7 +19,8 @@ class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
     return switch (capability) {
       AnyFileCapability.delete ||
       AnyFileCapability.edit ||
-      AnyFileCapability.upload => true,
+      AnyFileCapability.upload ||
+      AnyFileCapability.localShare => true,
       AnyFileCapability.favorite ||
       AnyFileCapability.archive ||
       AnyFileCapability.download ||
@@ -65,25 +66,6 @@ class AnyFileLocalDeleteWorker implements AnyFileDeleteWorker {
   }
 
   final LocalFilesController localFilesController;
-
-  final AnyFileLocalProvider _provider;
-}
-
-class AnyFileLocalShareWorker implements AnyFileShareWorker {
-  AnyFileLocalShareWorker(AnyFile file)
-    : _provider = file.provider as AnyFileLocalProvider;
-
-  @override
-  Future<void> share(BuildContext context) {
-    final f = _provider.file;
-    if (f is LocalUriFile) {
-      if (getRawPlatform() == NpPlatform.android) {
-        final share = AndroidFileShare([AndroidFileShareFile(f.uri, f.mime)]);
-        return share.share();
-      }
-    }
-    throw UnsupportedError("Unsupported file");
-  }
 
   final AnyFileLocalProvider _provider;
 }

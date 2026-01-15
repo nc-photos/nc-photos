@@ -486,13 +486,6 @@ extension _$_RemoveFailedErrorToString on _RemoveFailedError {
   }
 }
 
-extension _$_ShareRequestToString on _ShareRequest {
-  String _$toString() {
-    // ignore: unnecessary_string_interpolations
-    return "_ShareRequest {files: [length: ${files.length}], isRemoteShareOnly: $isRemoteShareOnly, isLocalShareOnly: $isLocalShareOnly}";
-  }
-}
-
 extension _$_DeleteRequestToString on _DeleteRequest {
   String _$toString() {
     // ignore: unnecessary_string_interpolations

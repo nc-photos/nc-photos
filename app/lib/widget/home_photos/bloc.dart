@@ -408,20 +408,11 @@ class _Bloc extends Bloc<_Event, _State>
     final selectedFiles =
         selected.whereType<_FileItem>().map((e) => e.file).toList();
     if (selectedFiles.isNotEmpty) {
-      final isRemoteShareOnly = selectedFiles.every((f) {
-        final capability = AnyFileWorkerFactory.capability(f);
-        return capability.isPermitted(AnyFileCapability.remoteShare);
-      });
-      final isLocalShareOnly = selectedFiles.every((f) {
-        final capability = AnyFileWorkerFactory.capability(f);
-        return !capability.isPermitted(AnyFileCapability.remoteShare);
-      });
-      final req = _ShareRequest(
-        files: selectedFiles,
-        isRemoteShareOnly: isRemoteShareOnly,
-        isLocalShareOnly: isLocalShareOnly,
+      emit(
+        state.copyWith(
+          shareRequest: Unique(_ShareRequest(files: selectedFiles)),
+        ),
       );
-      emit(state.copyWith(shareRequest: Unique(req)));
     }
   }
 

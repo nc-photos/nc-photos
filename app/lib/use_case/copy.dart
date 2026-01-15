@@ -1,6 +1,7 @@
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/use_case/create_dir.dart';
@@ -16,7 +17,7 @@ class Copy {
   /// Copy a file from its original location to [destination]
   Future<void> call(
     Account account,
-    File file,
+    FileDescriptor file,
     String destination, {
     bool shouldCreateMissingDir = false,
     bool shouldOverwrite = false,
@@ -32,7 +33,7 @@ class Copy {
 
   Future<void> _doWork(
     Account account,
-    File file,
+    FileDescriptor file,
     String destination, {
     required bool shouldCreateMissingDir,
     required bool shouldOverwrite,

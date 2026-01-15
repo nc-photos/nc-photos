@@ -184,20 +184,10 @@ class _SummaryFileItem extends _Item {
   final int index;
 }
 
-@toString
 class _ShareRequest {
-  const _ShareRequest({
-    required this.files,
-    required this.isRemoteShareOnly,
-    required this.isLocalShareOnly,
-  });
-
-  @override
-  String toString() => _$toString();
+  const _ShareRequest({required this.files});
 
   final List<AnyFile> files;
-  final bool isRemoteShareOnly;
-  final bool isLocalShareOnly;
 }
 
 class _UploadRequest {

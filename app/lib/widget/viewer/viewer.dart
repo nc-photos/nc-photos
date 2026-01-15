@@ -46,6 +46,7 @@ import 'package:nc_photos/widget/image_enhancer.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/png_icon.dart';
 import 'package:nc_photos/widget/processing_dialog.dart';
+import 'package:nc_photos/widget/share_helper/share_helper.dart';
 import 'package:nc_photos/widget/slideshow_dialog.dart';
 import 'package:nc_photos/widget/slideshow_viewer/slideshow_viewer.dart';
 import 'package:nc_photos/widget/upload_dialog/upload_dialog.dart';
@@ -149,22 +150,33 @@ class Viewer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
-    return BlocProvider(
-      create:
-          (_) => _Bloc(
-            KiwiContainer().resolve(),
-            account: accountController.account,
-            anyFilesController: accountController.anyFilesController,
-            filesController: accountController.filesController,
-            localFilesController: context.read(),
-            collectionsController: accountController.collectionsController,
-            prefController: context.read(),
-            accountPrefController: accountController.accountPrefController,
-            contentProvider: contentProvider,
-            initialFile: initialFile,
-            brightness: Theme.of(context).brightness,
-            collectionId: collectionId,
-          )..add(const _Init()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (_) => _Bloc(
+                KiwiContainer().resolve(),
+                account: accountController.account,
+                anyFilesController: accountController.anyFilesController,
+                filesController: accountController.filesController,
+                localFilesController: context.read(),
+                collectionsController: accountController.collectionsController,
+                prefController: context.read(),
+                accountPrefController: accountController.accountPrefController,
+                contentProvider: contentProvider,
+                initialFile: initialFile,
+                brightness: Theme.of(context).brightness,
+                collectionId: collectionId,
+              )..add(const _Init()),
+        ),
+        BlocProvider(
+          create:
+              (_) => ShareBloc(
+                KiwiContainer().resolve(),
+                account: accountController.account,
+              ),
+        ),
+      ],
       child: const _WrappedViewer(),
     );
   }
@@ -267,63 +279,65 @@ class _WrappedViewerState extends State<_WrappedViewer>
               },
             ),
           ],
-          child: _BlocSelector(
-            selector: (state) => state.isBusy,
-            builder:
-                (context, isBusy) => PopScope(
-                  canPop: !isBusy,
-                  child: _BlocBuilder(
-                    buildWhen:
-                        (previous, current) =>
-                            previous.isShowAppBar != current.isShowAppBar ||
-                            previous.isDetailPaneActive !=
-                                current.isDetailPaneActive,
-                    builder:
-                        (context, state) => Scaffold(
-                          extendBodyBehindAppBar: true,
-                          extendBody: true,
-                          appBar:
-                              state.isShowAppBar
-                                  ? const PreferredSize(
-                                    preferredSize: Size.fromHeight(
-                                      kToolbarHeight,
-                                    ),
-                                    child: _AppBar(),
-                                  )
-                                  : null,
-                          bottomNavigationBar:
-                              state.isShowAppBar && !state.isDetailPaneActive
-                                  ? const _BottomAppBar()
-                                  : null,
-                          body: Stack(
-                            children: [
-                              OrientationBuilder(
-                                builder:
-                                    (context, orientation) => _ContentBody(
-                                      key: Key(
-                                        "viewer._ContentBody.${orientation.name}",
+          child: ShareBlocListener(
+            child: _BlocSelector(
+              selector: (state) => state.isBusy,
+              builder:
+                  (context, isBusy) => PopScope(
+                    canPop: !isBusy,
+                    child: _BlocBuilder(
+                      buildWhen:
+                          (previous, current) =>
+                              previous.isShowAppBar != current.isShowAppBar ||
+                              previous.isDetailPaneActive !=
+                                  current.isDetailPaneActive,
+                      builder:
+                          (context, state) => Scaffold(
+                            extendBodyBehindAppBar: true,
+                            extendBody: true,
+                            appBar:
+                                state.isShowAppBar
+                                    ? const PreferredSize(
+                                      preferredSize: Size.fromHeight(
+                                        kToolbarHeight,
                                       ),
-                                    ),
-                              ),
-                              _BlocSelector(
-                                selector: (state) => state.isBusy,
-                                builder:
-                                    (context, isBusy) =>
-                                        isBusy
-                                            ? AbsorbPointer(
-                                              child: ProcessingOverlay(
-                                                text:
-                                                    L10n.global()
-                                                        .genericProcessingDialogContent,
-                                              ),
-                                            )
-                                            : const SizedBox.shrink(),
-                              ),
-                            ],
+                                      child: _AppBar(),
+                                    )
+                                    : null,
+                            bottomNavigationBar:
+                                state.isShowAppBar && !state.isDetailPaneActive
+                                    ? const _BottomAppBar()
+                                    : null,
+                            body: Stack(
+                              children: [
+                                OrientationBuilder(
+                                  builder:
+                                      (context, orientation) => _ContentBody(
+                                        key: Key(
+                                          "viewer._ContentBody.${orientation.name}",
+                                        ),
+                                      ),
+                                ),
+                                _BlocSelector(
+                                  selector: (state) => state.isBusy,
+                                  builder:
+                                      (context, isBusy) =>
+                                          isBusy
+                                              ? AbsorbPointer(
+                                                child: ProcessingOverlay(
+                                                  text:
+                                                      L10n.global()
+                                                          .genericProcessingDialogContent,
+                                                ),
+                                              )
+                                              : const SizedBox.shrink(),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
+                    ),
                   ),
-                ),
+            ),
           ),
         ),
       ),
@@ -386,12 +400,9 @@ class _WrappedViewerState extends State<_WrappedViewer>
     if (shareRequest.value == null) {
       return;
     }
-    final f = shareRequest.value!.file;
-    AnyFileWorkerFactory.share(
-      f,
-      account: context.bloc.account,
-      c: context.bloc._c,
-    ).share(context);
+    context.read<ShareBloc>().add(
+      ShareBlocShareFiles([shareRequest.value!.file]),
+    );
   }
 
   void _onSetAsRequest(

@@ -67,6 +67,7 @@ class _Bloc extends Bloc<_Event, _State>
       transformer: concurrent(),
     );
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
+    on<_ShareSelectedItems>(_onShareSelectedItems);
 
     on<_SetDragging>(_onSetDragging);
 
@@ -612,6 +613,25 @@ class _Bloc extends Bloc<_Event, _State>
       );
       // deleting files will also remove them from the collection
       unawaited(itemsController.removeItems(selectedItems));
+    }
+  }
+
+  void _onShareSelectedItems(_ShareSelectedItems ev, Emitter<_State> emit) {
+    _log.info(ev);
+    final selected = state.selectedItems;
+    _clearSelection(emit);
+    final selectedFiles =
+        selected.whereType<_FileItem>().map((e) => e.file.toAnyFile()).toList();
+    if (selectedFiles.isNotEmpty) {
+      emit(
+        state.copyWith(
+          shareRequest: Unique(_ShareRequest(files: selectedFiles)),
+        ),
+      );
+    } else {
+      emit(
+        state.copyWith(message: L10n.global().shareSelectedEmptyNotification),
+      );
     }
   }
 

@@ -53,6 +53,8 @@ enum AnyFileCapability {
   delete,
   upload,
   remoteShare,
+  // share locally without needing to download first
+  localShare,
   collection,
 }
 
