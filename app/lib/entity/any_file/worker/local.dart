@@ -70,25 +70,6 @@ class AnyFileLocalDeleteWorker implements AnyFileDeleteWorker {
   final AnyFileLocalProvider _provider;
 }
 
-class AnyFileLocalShareWorker implements AnyFileShareWorker {
-  AnyFileLocalShareWorker(AnyFile file)
-    : _provider = file.provider as AnyFileLocalProvider;
-
-  @override
-  Future<void> share(BuildContext context) {
-    final f = _provider.file;
-    if (f is LocalUriFile) {
-      if (getRawPlatform() == NpPlatform.android) {
-        final share = AndroidFileShare([AndroidFileShareFile(f.uri, f.mime)]);
-        return share.share();
-      }
-    }
-    throw UnsupportedError("Unsupported file");
-  }
-
-  final AnyFileLocalProvider _provider;
-}
-
 class AnyFileLocalSetAsWorker implements AnyFileSetAsWorker {
   AnyFileLocalSetAsWorker(AnyFile file)
     : _provider = file.provider as AnyFileLocalProvider;

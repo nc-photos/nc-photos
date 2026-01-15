@@ -8,7 +8,6 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/set_as_handler.dart';
-import 'package:nc_photos/share_handler.dart';
 import 'package:np_common/or_null.dart';
 
 class AnyFileNextcloudCapabilityWorker implements AnyFileCapabilityWorker {
@@ -107,28 +106,6 @@ class AnyFileNextcloudDeleteWorker implements AnyFileDeleteWorker {
   }
 
   final FilesController filesController;
-
-  final AnyFileNextcloudProvider _provider;
-}
-
-class AnyFileNextcloudShareWorker implements AnyFileShareWorker {
-  AnyFileNextcloudShareWorker(
-    AnyFile file, {
-    required this.account,
-    required this.c,
-  }) : _provider = file.provider as AnyFileNextcloudProvider;
-
-  @override
-  Future<void> share(BuildContext context) {
-    // TODO move ui code out of this
-    return ShareHandler(
-      c,
-      context: context,
-    ).shareFiles(account, [_provider.file]);
-  }
-
-  final Account account;
-  final DiContainer c;
 
   final AnyFileNextcloudProvider _provider;
 }
