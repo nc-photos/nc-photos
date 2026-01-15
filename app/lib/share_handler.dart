@@ -12,6 +12,7 @@ import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
+import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/entity/share/data_source.dart';
@@ -95,7 +96,13 @@ class ShareHandler {
   Future<ShareMethodDialogResult?> _askShareMethod(List<File> files) {
     return showDialog<ShareMethodDialogResult>(
       context: context,
-      builder: (context) => const ShareMethodDialog(isSupportRemoteLink: true),
+      builder:
+          (context) => ShareMethodDialog(
+            isSupportPerview: files.any(
+              (f) => file_util.isSupportedImageFormat(f),
+            ),
+            isSupportRemoteLink: true,
+          ),
     );
   }
 

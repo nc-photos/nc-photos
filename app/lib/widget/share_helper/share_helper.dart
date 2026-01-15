@@ -10,6 +10,7 @@ import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
+import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/exception_util.dart' as exception_util;
 import 'package:nc_photos/k.dart' as k;
@@ -66,7 +67,8 @@ class ShareBlocListener extends StatelessWidget {
       context: context,
       builder:
           (context) => ShareMethodDialog(
-            isSupportRemoteLink: shareRequest.value!.isRemoteShareOnly,
+            isSupportPerview: shareRequest.value!.isSupportPerview,
+            isSupportRemoteLink: shareRequest.value!.isSupportRemoteLink,
           ),
     );
     if (result == null || !context.mounted) {

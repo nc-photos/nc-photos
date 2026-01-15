@@ -42,7 +42,12 @@ class _Bloc extends Bloc<_Event, _State>
     } else {
       final req = _ShareRequest(
         files: ev.files,
-        isRemoteShareOnly: isAllRemoteShare,
+        isSupportPerview: ev.files.any((f) {
+          final capability = AnyFileWorkerFactory.capability(f);
+          return !capability.isPermitted(AnyFileCapability.localShare) &&
+              !file_util.isSupportedVideoMime(f.mime ?? "");
+        }),
+        isSupportRemoteLink: isAllRemoteShare,
       );
       emit(state.copyWith(shareRequest: Unique(req)));
     }

@@ -2,13 +2,18 @@ part of 'share_helper.dart';
 
 @toString
 class _ShareRequest {
-  const _ShareRequest({required this.files, required this.isRemoteShareOnly});
+  const _ShareRequest({
+    required this.files,
+    required this.isSupportPerview,
+    required this.isSupportRemoteLink,
+  });
 
   @override
   String toString() => _$toString();
 
   final List<AnyFile> files;
-  final bool isRemoteShareOnly;
+  final bool isSupportPerview;
+  final bool isSupportRemoteLink;
 }
 
 @toString

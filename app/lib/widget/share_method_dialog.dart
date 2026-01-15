@@ -5,7 +5,11 @@ import 'package:np_platform_util/np_platform_util.dart';
 enum ShareMethodDialogResult { file, preview, publicLink, passwordLink }
 
 class ShareMethodDialog extends StatelessWidget {
-  const ShareMethodDialog({super.key, required this.isSupportRemoteLink});
+  const ShareMethodDialog({
+    super.key,
+    required this.isSupportPerview,
+    required this.isSupportRemoteLink,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,15 +17,16 @@ class ShareMethodDialog extends StatelessWidget {
       title: Text(L10n.global().shareMethodDialogTitle),
       children: [
         if (getRawPlatform() == NpPlatform.android) ...[
-          SimpleDialogOption(
-            child: ListTile(
-              title: Text(L10n.global().shareMethodPreviewTitle),
-              subtitle: Text(L10n.global().shareMethodPreviewDescription),
+          if (isSupportPerview)
+            SimpleDialogOption(
+              child: ListTile(
+                title: Text(L10n.global().shareMethodPreviewTitle),
+                subtitle: Text(L10n.global().shareMethodPreviewDescription),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop(ShareMethodDialogResult.preview);
+              },
             ),
-            onPressed: () {
-              Navigator.of(context).pop(ShareMethodDialogResult.preview);
-            },
-          ),
           SimpleDialogOption(
             child: ListTile(
               title: Text(L10n.global().shareMethodOriginalFileTitle),
@@ -56,5 +61,6 @@ class ShareMethodDialog extends StatelessWidget {
     );
   }
 
+  final bool isSupportPerview;
   final bool isSupportRemoteLink;
 }

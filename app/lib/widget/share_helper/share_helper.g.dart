@@ -94,7 +94,7 @@ extension _$ShareBlocShareFilesToString on ShareBlocShareFiles {
 extension _$_ShareRequestToString on _ShareRequest {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_ShareRequest {files: [length: ${files.length}], isRemoteShareOnly: $isRemoteShareOnly}";
+    return "_ShareRequest {files: [length: ${files.length}], isSupportPerview: $isSupportPerview, isSupportRemoteLink: $isSupportRemoteLink}";
   }
 }
 
