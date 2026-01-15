@@ -23,6 +23,7 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/download_handler.dart';
+import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection/content_provider/album.dart';
@@ -50,7 +51,6 @@ import 'package:nc_photos/widget/collection_picker/collection_picker.dart';
 import 'package:nc_photos/widget/collection_viewer/collection_viewer.dart';
 import 'package:nc_photos/widget/draggable_item_list.dart';
 import 'package:nc_photos/widget/export_collection_dialog/export_collection_dialog.dart';
-import 'package:nc_photos/widget/file_sharer_dialog/file_sharer_dialog.dart';
 import 'package:nc_photos/widget/finger_listener.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
@@ -60,6 +60,7 @@ import 'package:nc_photos/widget/place_picker/place_picker.dart';
 import 'package:nc_photos/widget/selectable_item_list.dart';
 import 'package:nc_photos/widget/selection_app_bar.dart';
 import 'package:nc_photos/widget/share_collection_dialog/share_collection_dialog.dart';
+import 'package:nc_photos/widget/share_helper/share_helper.dart';
 import 'package:nc_photos/widget/shared_album_info_dialog.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
@@ -109,17 +110,28 @@ class CollectionBrowser extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
-    return BlocProvider(
-      create:
-          (_) => _Bloc(
-            container: KiwiContainer().resolve(),
-            account: accountController.account,
-            prefController: context.read(),
-            collectionsController: accountController.collectionsController,
-            filesController: accountController.filesController,
-            db: context.read(),
-            collection: collection,
-          ),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create:
+              (_) => _Bloc(
+                container: KiwiContainer().resolve(),
+                account: accountController.account,
+                prefController: context.read(),
+                collectionsController: accountController.collectionsController,
+                filesController: accountController.filesController,
+                db: context.read(),
+                collection: collection,
+              ),
+        ),
+        BlocProvider(
+          create:
+              (_) => ShareBloc(
+                KiwiContainer().resolve(),
+                account: accountController.account,
+              ),
+        ),
+      ],
       child: const _WrappedCollectionBrowser(),
     );
   }
@@ -351,6 +363,10 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                       );
                     },
                   ),
+                  _BlocListenerT(
+                    selector: (state) => state.shareRequest,
+                    listener: _onShareRequest,
+                  ),
                   _BlocListenerT<ExceptionEvent?>(
                     selector: (state) => state.error,
                     listener: (context, error) {
@@ -403,116 +419,120 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                     },
                   ),
                 ],
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    FingerListener(
-                      onPointerMove: (event) => _onPointerMove(context, event),
-                      onFingerChanged: (finger) {
-                        setState(() {
-                          _finger = finger;
-                        });
-                      },
-                      child: GestureDetector(
-                        onScaleStart: (_) {
-                          _bloc.add(const _StartScaling());
+                child: ShareBlocListener(
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      FingerListener(
+                        onPointerMove:
+                            (event) => _onPointerMove(context, event),
+                        onFingerChanged: (finger) {
+                          setState(() {
+                            _finger = finger;
+                          });
                         },
-                        onScaleUpdate: (details) {
-                          _bloc.add(_SetScale(details.scale));
-                        },
-                        onScaleEnd: (_) {
-                          _bloc.add(const _EndScaling());
-                        },
-                        child: CustomScrollView(
-                          controller: _scrollController,
-                          physics:
-                              _finger >= 2
-                                  ? const NeverScrollableScrollPhysics()
-                                  : null,
-                          slivers: [
-                            _BlocBuilder(
-                              buildWhen:
-                                  (previous, current) =>
-                                      previous.selectedItems.isEmpty !=
-                                          current.selectedItems.isEmpty ||
-                                      previous.isEditMode !=
-                                          current.isEditMode ||
-                                      previous.editPickerMode !=
-                                          current.editPickerMode,
-                              builder: (context, state) {
-                                if (state.isEditMode) {
-                                  if (state.editPickerMode != null) {
-                                    return const _EditPickerAppBar();
-                                  } else {
-                                    return const _EditAppBar();
-                                  }
-                                } else if (state.selectedItems.isNotEmpty) {
-                                  return const _SelectionAppBar();
-                                } else {
-                                  return const _AppBar();
-                                }
-                              },
-                            ),
-                            SliverToBoxAdapter(
-                              child: _BlocBuilder(
+                        child: GestureDetector(
+                          onScaleStart: (_) {
+                            _bloc.add(const _StartScaling());
+                          },
+                          onScaleUpdate: (details) {
+                            _bloc.add(_SetScale(details.scale));
+                          },
+                          onScaleEnd: (_) {
+                            _bloc.add(const _EndScaling());
+                          },
+                          child: CustomScrollView(
+                            controller: _scrollController,
+                            physics:
+                                _finger >= 2
+                                    ? const NeverScrollableScrollPhysics()
+                                    : null,
+                            slivers: [
+                              _BlocBuilder(
                                 buildWhen:
                                     (previous, current) =>
-                                        previous.isLoading != current.isLoading,
-                                builder:
-                                    (context, state) =>
-                                        state.isLoading
-                                            ? const LinearProgressIndicator()
-                                            : const SizedBox(height: 4),
-                              ),
-                            ),
-                            _BlocBuilder(
-                              buildWhen:
-                                  (previous, current) =>
-                                      previous.isEditMode !=
-                                          current.isEditMode ||
-                                      previous.scale != current.scale,
-                              builder: (context, state) {
-                                if (!state.isEditMode) {
-                                  return SliverTransitionedScale(
-                                    scale: state.scale,
-                                    baseSliver: const _ContentList(),
-                                    overlaySliver: const _ScalingList(),
-                                  );
-                                } else {
-                                  if (context.bloc
-                                      .isCollectionCapabilityPermitted(
-                                        CollectionCapability.manualSort,
-                                      )) {
-                                    return const _EditContentList();
+                                        previous.selectedItems.isEmpty !=
+                                            current.selectedItems.isEmpty ||
+                                        previous.isEditMode !=
+                                            current.isEditMode ||
+                                        previous.editPickerMode !=
+                                            current.editPickerMode,
+                                builder: (context, state) {
+                                  if (state.isEditMode) {
+                                    if (state.editPickerMode != null) {
+                                      return const _EditPickerAppBar();
+                                    } else {
+                                      return const _EditAppBar();
+                                    }
+                                  } else if (state.selectedItems.isNotEmpty) {
+                                    return const _SelectionAppBar();
                                   } else {
-                                    return const _UnmodifiableEditContentList();
+                                    return const _AppBar();
                                   }
-                                }
-                              },
-                            ),
-                            const SliverSafeBottom(),
-                          ],
+                                },
+                              ),
+                              SliverToBoxAdapter(
+                                child: _BlocBuilder(
+                                  buildWhen:
+                                      (previous, current) =>
+                                          previous.isLoading !=
+                                          current.isLoading,
+                                  builder:
+                                      (context, state) =>
+                                          state.isLoading
+                                              ? const LinearProgressIndicator()
+                                              : const SizedBox(height: 4),
+                                ),
+                              ),
+                              _BlocBuilder(
+                                buildWhen:
+                                    (previous, current) =>
+                                        previous.isEditMode !=
+                                            current.isEditMode ||
+                                        previous.scale != current.scale,
+                                builder: (context, state) {
+                                  if (!state.isEditMode) {
+                                    return SliverTransitionedScale(
+                                      scale: state.scale,
+                                      baseSliver: const _ContentList(),
+                                      overlaySliver: const _ScalingList(),
+                                    );
+                                  } else {
+                                    if (context.bloc
+                                        .isCollectionCapabilityPermitted(
+                                          CollectionCapability.manualSort,
+                                        )) {
+                                      return const _EditContentList();
+                                    } else {
+                                      return const _UnmodifiableEditContentList();
+                                    }
+                                  }
+                                },
+                              ),
+                              const SliverSafeBottom(),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    _BlocBuilder(
-                      buildWhen:
-                          (previous, current) =>
-                              previous.isEditBusy != current.isEditBusy,
-                      builder: (context, state) {
-                        if (state.isEditBusy) {
-                          return Container(
-                            color: Colors.black.withValues(alpha: .5),
-                            alignment: Alignment.center,
-                            child:
-                                const AppIntermediateCircularProgressIndicator(),
-                          );
-                        } else {
-                          return const SizedBox.shrink();
-                        }
-                      },
-                    ),
-                  ],
+                      _BlocBuilder(
+                        buildWhen:
+                            (previous, current) =>
+                                previous.isEditBusy != current.isEditBusy,
+                        builder: (context, state) {
+                          if (state.isEditBusy) {
+                            return Container(
+                              color: Colors.black.withValues(alpha: .5),
+                              alignment: Alignment.center,
+                              child:
+                                  const AppIntermediateCircularProgressIndicator(),
+                            );
+                          } else {
+                            return const SizedBox.shrink();
+                          }
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -566,6 +586,18 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
       _scrollController.jumpTo(_scrollController.offset);
       _isDragScrollingDown = null;
     }
+  }
+
+  void _onShareRequest(
+    BuildContext context,
+    Unique<_ShareRequest?> shareRequest,
+  ) {
+    if (shareRequest.value == null) {
+      return;
+    }
+    context.read<ShareBloc>().add(
+      ShareBlocShareFiles(shareRequest.value!.files),
+    );
   }
 
   Future<void> _showSharedAlbumInfoDialog() async {

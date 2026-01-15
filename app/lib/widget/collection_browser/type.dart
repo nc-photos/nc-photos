@@ -216,6 +216,12 @@ class _DateItem extends _Item {
   final Date date;
 }
 
+class _ShareRequest {
+  const _ShareRequest({required this.files});
+
+  final List<AnyFile> files;
+}
+
 class _NewLabelRequest {
   const _NewLabelRequest({this.before});
 

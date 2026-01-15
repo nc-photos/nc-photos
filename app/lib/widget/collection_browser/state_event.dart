@@ -17,6 +17,7 @@ class _State {
     required this.isSelectionRemovable,
     required this.isSelectionManageableFile,
     required this.isSelectionDeletable,
+    required this.shareRequest,
     required this.isEditMode,
     required this.isEditBusy,
     this.editName,
@@ -53,6 +54,7 @@ class _State {
       isSelectionRemovable: true,
       isSelectionManageableFile: true,
       isSelectionDeletable: true,
+      shareRequest: Unique(null),
       isEditMode: false,
       isEditBusy: false,
       isAddMapBusy: false,
@@ -82,6 +84,7 @@ class _State {
   final bool isSelectionRemovable;
   final bool isSelectionManageableFile;
   final bool isSelectionDeletable;
+  final Unique<_ShareRequest?> shareRequest;
 
   final bool isEditMode;
   final bool isEditBusy;
@@ -395,6 +398,14 @@ class _ArchiveSelectedItems implements _Event {
 @toString
 class _DeleteSelectedItems implements _Event {
   const _DeleteSelectedItems();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _ShareSelectedItems implements _Event {
+  const _ShareSelectedItems();
 
   @override
   String toString() => _$toString();

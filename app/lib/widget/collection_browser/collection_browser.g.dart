@@ -25,6 +25,7 @@ abstract class $_StateCopyWithWorker {
     bool? isSelectionRemovable,
     bool? isSelectionManageableFile,
     bool? isSelectionDeletable,
+    Unique<_ShareRequest?>? shareRequest,
     bool? isEditMode,
     bool? isEditBusy,
     String? editName,
@@ -62,6 +63,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic isSelectionRemovable,
     dynamic isSelectionManageableFile,
     dynamic isSelectionDeletable,
+    dynamic shareRequest,
     dynamic isEditMode,
     dynamic isEditBusy,
     dynamic editName = copyWithNull,
@@ -101,6 +103,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           isSelectionManageableFile as bool? ?? that.isSelectionManageableFile,
       isSelectionDeletable:
           isSelectionDeletable as bool? ?? that.isSelectionDeletable,
+      shareRequest:
+          shareRequest as Unique<_ShareRequest?>? ?? that.shareRequest,
       isEditMode: isEditMode as bool? ?? that.isEditMode,
       isEditBusy: isEditBusy as bool? ?? that.isEditBusy,
       editName: editName == copyWithNull ? that.editName : editName as String?,
@@ -190,7 +194,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
+    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, shareRequest: $shareRequest, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
   }
 }
 
@@ -411,6 +415,13 @@ extension _$_DeleteSelectedItemsToString on _DeleteSelectedItems {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_DeleteSelectedItems {}";
+  }
+}
+
+extension _$_ShareSelectedItemsToString on _ShareSelectedItems {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_ShareSelectedItems {}";
   }
 }
 
