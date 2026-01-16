@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/file_view_util.dart';
@@ -150,7 +151,7 @@ class _ImageViewer extends StatefulWidget {
   });
 
   @override
-  createState() => _ImageViewerState();
+  State<StatefulWidget> createState() => _ImageViewerState();
 
   final Widget child;
   final bool canZoom;
@@ -163,7 +164,7 @@ class _ImageViewer extends StatefulWidget {
 class _ImageViewerState extends State<_ImageViewer>
     with TickerProviderStateMixin {
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     final content = Container(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height,
@@ -319,20 +320,19 @@ class _FullSizedImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CachedNetworkImageBuilder(
-      type: CachedNetworkImageType.largeImage,
-      imageUrl: getViewerUrlForImageFile(account, file),
-      mime: file.fdMime,
+    return AnyFilePresenterFactory.largeImage(
+      file.toAnyFile(),
       account: account,
+    ).buildWidget(
       fit: BoxFit.contain,
-      imageBuilder: (context, child, imageProvider) {
+      imageBuilder: (context, child) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           onItemLoaded?.call();
         });
         const SizeChangedLayoutNotification().dispatch(context);
         return child;
       },
-    ).build();
+    );
   }
 
   final Account account;

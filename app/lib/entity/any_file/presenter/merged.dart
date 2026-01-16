@@ -30,7 +30,12 @@ class AnyFileMergedLargeImagePresenter implements AnyFileLargeImagePresenter {
   Widget buildWidget({
     BoxFit? fit,
     Widget Function(BuildContext context, Widget child)? imageBuilder,
-  }) => _delegate.buildWidget(fit: fit, imageBuilder: imageBuilder);
+    Widget Function(BuildContext context)? errorBuilder,
+  }) => _delegate.buildWidget(
+    fit: fit,
+    imageBuilder: imageBuilder,
+    errorBuilder: errorBuilder,
+  );
 
   final AnyFileLargeImagePresenter _delegate;
 }

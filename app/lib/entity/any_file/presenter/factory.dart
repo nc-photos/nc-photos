@@ -105,6 +105,7 @@ abstract interface class AnyFileLargeImagePresenter {
   Widget buildWidget({
     BoxFit? fit,
     Widget Function(BuildContext context, Widget child)? imageBuilder,
+    Widget Function(BuildContext context)? errorBuilder,
   });
 }
 

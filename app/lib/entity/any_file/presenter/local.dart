@@ -52,6 +52,7 @@ class AnyFileLocalLargeImagePresenter implements AnyFileLargeImagePresenter {
   Widget buildWidget({
     BoxFit? fit,
     Widget Function(BuildContext context, Widget child)? imageBuilder,
+    Widget Function(BuildContext context)? errorBuilder,
   }) {
     if (_provider.file is LocalUriFile) {
       final provider = ContentUriImage((_provider.file as LocalUriFile).uri);
@@ -61,6 +62,12 @@ class AnyFileLocalLargeImagePresenter implements AnyFileLargeImagePresenter {
         frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
           return imageBuilder?.call(context, child) ?? child;
         },
+        errorBuilder:
+            errorBuilder == null
+                ? null
+                : (context, error, stackTrace) {
+                  return errorBuilder.call(context);
+                },
       );
     } else {
       throw StateError("File type not supported");

@@ -5,13 +5,12 @@ import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
-import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/di_container.dart';
+import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/entity/share/data_source.dart';
-import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
 import 'package:nc_photos/snack_bar_manager.dart';
@@ -89,20 +88,15 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
                 alignment: Alignment.center,
                 fit: BoxFit.cover,
                 clipBehavior: Clip.hardEdge,
-                child:
-                    CachedNetworkImageBuilder(
-                      type: CachedNetworkImageType.largeImage,
-                      imageUrl: getViewerUrlForImageFile(
-                        widget.account,
-                        widget.file,
-                      ),
-                      mime: widget.file.fdMime,
-                      account: widget.account,
-                      errorWidget: (context, url, error) {
-                        // just leave it empty
-                        return Container();
-                      },
-                    ).build(),
+                child: AnyFilePresenterFactory.largeImage(
+                  widget.file.toAnyFile(),
+                  account: widget.account,
+                ).buildWidget(
+                  errorBuilder: (context) {
+                    // just leave it empty
+                    return Container();
+                  },
+                ),
               ),
             ),
           ),

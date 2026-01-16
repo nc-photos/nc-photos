@@ -94,6 +94,7 @@ class AnyFileNextcloudLargeImagePresenter
   Widget buildWidget({
     BoxFit? fit,
     Widget Function(BuildContext context, Widget child)? imageBuilder,
+    Widget Function(BuildContext context)? errorBuilder,
   }) {
     return CachedNetworkImageBuilder(
       type: CachedNetworkImageType.largeImage,
@@ -104,6 +105,12 @@ class AnyFileNextcloudLargeImagePresenter
       imageBuilder: (context, child, imageProvider) {
         return imageBuilder?.call(context, child) ?? child;
       },
+      errorWidget:
+          errorBuilder == null
+              ? null
+              : (context, url, error) {
+                return errorBuilder.call(context);
+              },
     ).build();
   }
 
