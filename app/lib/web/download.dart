@@ -6,12 +6,13 @@ import 'package:np_http/np_http.dart';
 
 class DownloadBuilder extends itf.DownloadBuilder {
   @override
-  build({
+  itf.Download build({
     required String url,
     Map<String, String>? headers,
     String? mimeType,
     required String filename,
     String? parentDir,
+    required bool isPublic,
     bool? shouldNotify,
   }) {
     return _WebDownload(url: url, headers: headers, filename: filename);

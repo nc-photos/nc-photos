@@ -72,6 +72,7 @@ class InternalDownloadHandler {
             download = DownloadFile().build(
               account,
               f,
+              isPublic: false,
               shouldNotify: false,
               onProgress: (progress) {
                 controller.add(
@@ -141,6 +142,7 @@ class InternalDownloadHandler {
           download = DownloadFile().build(
             account,
             f,
+            isPublic: false,
             shouldNotify: false,
             onProgress: (progress) {
               controller.add(_DownloadProgress(current: i, progress: progress));

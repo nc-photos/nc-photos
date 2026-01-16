@@ -40,11 +40,16 @@ abstract interface class AnyFileContentGetterFactory {
 
   static AnyFileLocalFileUriGetter localFileUri(
     AnyFile file, {
+    required bool isPublic,
     required Account account,
   }) {
     switch (file.provider) {
       case AnyFileNextcloudProvider _:
-        return AnyFileNextcloudLocalFileUriGetter(file, account: account);
+        return AnyFileNextcloudLocalFileUriGetter(
+          file,
+          isPublic: isPublic,
+          account: account,
+        );
       case AnyFileLocalProvider _:
         return AnyFileLocalLocalFileUriGetter(file);
       case AnyFileMergedProvider _:

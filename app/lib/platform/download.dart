@@ -30,6 +30,7 @@ abstract class DownloadBuilder {
     String? mimeType,
     required String filename,
     String? parentDir,
+    required bool isPublic,
     bool? shouldNotify,
   });
 }

@@ -16,6 +16,7 @@ class DownloadFile {
     Account account,
     FileDescriptor file, {
     String? parentDir,
+    required bool isPublic,
     bool? shouldNotify,
     void Function(double progress)? onProgress,
   }) {
@@ -26,6 +27,7 @@ class DownloadFile {
       mimeType: file.fdMime,
       filename: file.filename,
       parentDir: parentDir,
+      isPublic: isPublic,
       shouldNotify: shouldNotify,
       onProgress: onProgress,
     );
@@ -38,6 +40,7 @@ class DownloadFile {
     Account account,
     FileDescriptor file, {
     String? parentDir,
+    required bool isPublic,
     bool? shouldNotify,
     void Function(double progress)? onProgress,
   }) =>
@@ -45,6 +48,7 @@ class DownloadFile {
         account,
         file,
         parentDir: parentDir,
+        isPublic: isPublic,
         shouldNotify: shouldNotify,
         onProgress: onProgress,
       )();

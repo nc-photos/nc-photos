@@ -108,6 +108,7 @@ class ShareAnyFile {
                 f,
                 await AnyFileContentGetterFactory.localFileUri(
                   f,
+                  isPublic: false,
                   account: account,
                 ).get(),
               );

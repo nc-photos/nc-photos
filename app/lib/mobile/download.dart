@@ -16,12 +16,13 @@ part 'download.g.dart';
 
 class DownloadBuilder extends itf.DownloadBuilder {
   @override
-  build({
+  itf.Download build({
     required String url,
     Map<String, String>? headers,
     String? mimeType,
     required String filename,
     String? parentDir,
+    required bool isPublic,
     bool? shouldNotify,
     void Function(double progress)? onProgress,
   }) {
@@ -32,7 +33,7 @@ class DownloadBuilder extends itf.DownloadBuilder {
         mimeType: mimeType,
         filename: filename,
         parentDir: parentDir,
-        shouldNotify: shouldNotify,
+        isPublic: isPublic,
         onProgress: onProgress,
       );
     } else {
@@ -49,7 +50,7 @@ class _AndroidDownload extends itf.Download {
     this.mimeType,
     required this.filename,
     this.parentDir,
-    this.shouldNotify,
+    required this.isPublic,
     this.onProgress,
   });
 
@@ -109,11 +110,16 @@ class _AndroidDownload extends itf.Download {
       }
 
       // copy the file to the actual dir
-      return await MediaStore.copyFileToDownload(
-        file.path,
-        filename: filename,
-        subDir: parentDir,
-      );
+      if (isPublic) {
+        return await MediaStore.copyFileToDownload(
+          file.path,
+          filename: filename,
+          subDir: parentDir,
+        );
+      } else {
+        final dstFile = await _copyFileToInternal(file);
+        return await ContentUri.getUriForFile(dstFile.absolute.path);
+      }
     } finally {
       await file.delete();
     }
@@ -125,21 +131,21 @@ class _AndroidDownload extends itf.Download {
     return true;
   }
 
-  Future<Directory> _openDownloadDir() async {
-    final tempDir = await getTemporaryDirectory();
-    final downloadDir = Directory("${tempDir.path}/downloads");
-    if (!await downloadDir.exists()) {
-      return downloadDir.create();
+  Future<Directory> _openTempDir() async {
+    final root = await getTemporaryDirectory();
+    final dir = Directory("${root.path}/downloads");
+    if (!await dir.exists()) {
+      return dir.create();
     } else {
-      return downloadDir;
+      return dir;
     }
   }
 
   Future<File> _createTempFile() async {
-    final downloadDir = await _openDownloadDir();
+    final dstDir = await _openTempDir();
     while (true) {
       final fileName = const Uuid().v4();
-      final file = File("${downloadDir.path}/$fileName");
+      final file = File("${dstDir.path}/$fileName");
       if (await file.exists()) {
         continue;
       }
@@ -151,11 +157,42 @@ class _AndroidDownload extends itf.Download {
   ///
   /// Normally the files will be deleted automatically
   Future<void> _cleanUp() async {
-    final downloadDir = await _openDownloadDir();
-    await for (final f in downloadDir.list(followLinks: false)) {
+    final tempDir = await _openTempDir();
+    await for (final f in tempDir.list(followLinks: false)) {
       _log.warning("[_cleanUp] Deleting file: ${f.path}");
-      await f.delete();
+      try {
+        await f.delete();
+      } catch (e, stackTrace) {
+        _log.warning("[_cleanUp] Failed while delete", e, stackTrace);
+      }
     }
+
+    final shareDir = await _openShareDir();
+    await for (final f in shareDir.list(followLinks: false)) {
+      _log.warning("[_cleanUp] Deleting file: ${f.path}");
+      try {
+        await f.delete();
+      } catch (e, stackTrace) {
+        _log.warning("[_cleanUp] Failed while delete", e, stackTrace);
+      }
+    }
+  }
+
+  Future<Directory> _openShareDir() async {
+    final root = await getTemporaryDirectory();
+    final dir = Directory("${root.path}/shares");
+    if (!await dir.exists()) {
+      return dir.create();
+    } else {
+      return dir;
+    }
+  }
+
+  Future<File> _copyFileToInternal(File src) async {
+    final dstDir = await _openShareDir();
+    final dst = File("${dstDir.path}/$filename");
+    await src.copy(dst.path);
+    return dst;
   }
 
   final String url;
@@ -163,7 +200,7 @@ class _AndroidDownload extends itf.Download {
   final String? mimeType;
   final String filename;
   final String? parentDir;
-  final bool? shouldNotify;
+  final bool isPublic;
   final void Function(double progress)? onProgress;
 
   bool shouldInterrupt = false;

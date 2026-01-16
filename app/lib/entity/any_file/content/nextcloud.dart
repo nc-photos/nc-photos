@@ -55,16 +55,25 @@ class AnyFileNextcloudLargePreviewUriGetter
 }
 
 class AnyFileNextcloudLocalFileUriGetter implements AnyFileLocalFileUriGetter {
-  AnyFileNextcloudLocalFileUriGetter(AnyFile file, {required this.account})
-    : _provider = file.provider as AnyFileNextcloudProvider;
+  AnyFileNextcloudLocalFileUriGetter(
+    AnyFile file, {
+    required this.isPublic,
+    required this.account,
+  }) : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
   Future<Uri> get() async {
     return Uri.parse(
-      await DownloadFile()(account, _provider.file, shouldNotify: false),
+      await DownloadFile()(
+        account,
+        _provider.file,
+        isPublic: isPublic,
+        shouldNotify: false,
+      ),
     );
   }
 
+  final bool isPublic;
   final Account account;
 
   final AnyFileNextcloudProvider _provider;
@@ -82,7 +91,12 @@ class AnyFileNextcloudLocalPreviewUriGetter
       return Uri.parse(await DownloadPreview()(account, _provider.file));
     } else {
       return Uri.parse(
-        await DownloadFile()(account, _provider.file, shouldNotify: false),
+        await DownloadFile()(
+          account,
+          _provider.file,
+          isPublic: false,
+          shouldNotify: false,
+        ),
       );
     }
   }

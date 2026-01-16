@@ -101,6 +101,7 @@ class _DownlaodHandlerAndroid extends _DownloadHandlerBase {
             account,
             f,
             parentDir: parentDir,
+            isPublic: true,
             shouldNotify: false,
           );
           itemSubscription = DownloadEvent.downloadCancelStream().listen((
@@ -189,7 +190,7 @@ class _DownloadHandlerWeb extends _DownloadHandlerBase {
     int successCount = 0;
     for (final f in files) {
       try {
-        await DownloadFile()(account, f, parentDir: parentDir);
+        await DownloadFile()(account, f, parentDir: parentDir, isPublic: true);
         ++successCount;
       } on PermissionException catch (_) {
         _log.warning("[downloadFiles] Permission not granted");
