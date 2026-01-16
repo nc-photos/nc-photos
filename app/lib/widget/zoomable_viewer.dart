@@ -76,7 +76,7 @@ class _ZoomableViewerState extends State<ZoomableViewer>
         },
         child: InteractiveViewer(
           minScale: 1.0,
-          maxScale: 3.5,
+          maxScale: 10,
           transformationController: _transformationController,
           panEnabled: _isZoomed,
           // allow the image to be zoomed to fill the whole screen
