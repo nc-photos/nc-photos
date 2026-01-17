@@ -19,7 +19,7 @@ import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/settings/collection_settings.dart';
 import 'package:nc_photos/widget/settings/developer_settings.dart';
 import 'package:nc_photos/widget/settings/enhancement_settings.dart';
-import 'package:nc_photos/widget/settings/expert_settings.dart';
+import 'package:nc_photos/widget/settings/expert/expert_settings.dart';
 import 'package:nc_photos/widget/settings/language_settings.dart';
 import 'package:nc_photos/widget/settings/metadata_settings.dart';
 import 'package:nc_photos/widget/settings/misc_settings.dart';

@@ -13,7 +13,11 @@ part of 'expert_settings.dart';
 // **************************************************************************
 
 abstract class $_StateCopyWithWorker {
-  _State call({bool? isNewHttpEngine, _Event? lastSuccessful});
+  _State call({
+    bool? isNewHttpEngine,
+    _Event? lastSuccessful,
+    ExceptionEvent? error,
+  });
 }
 
 class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
@@ -23,6 +27,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _State call({
     dynamic isNewHttpEngine,
     dynamic lastSuccessful = copyWithNull,
+    dynamic error = copyWithNull,
   }) {
     return _State(
       isNewHttpEngine: isNewHttpEngine as bool? ?? that.isNewHttpEngine,
@@ -30,6 +35,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           lastSuccessful == copyWithNull
               ? that.lastSuccessful
               : lastSuccessful as _Event?,
+      error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }
 
@@ -68,7 +74,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {isNewHttpEngine: $isNewHttpEngine, lastSuccessful: $lastSuccessful}";
+    return "_State {isNewHttpEngine: $isNewHttpEngine, lastSuccessful: $lastSuccessful, error: $error}";
   }
 }
 
@@ -76,6 +82,13 @@ extension _$_InitToString on _Init {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_Init {}";
+  }
+}
+
+extension _$_SetErrorToString on _SetError {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetError {error: $error, stackTrace: $stackTrace}";
   }
 }
 

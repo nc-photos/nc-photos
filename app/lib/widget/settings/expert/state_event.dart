@@ -1,9 +1,13 @@
-part of '../expert_settings.dart';
+part of 'expert_settings.dart';
 
 @genCopyWith
 @toString
 class _State {
-  const _State({required this.isNewHttpEngine, this.lastSuccessful});
+  const _State({
+    required this.isNewHttpEngine,
+    this.lastSuccessful,
+    this.error,
+  });
 
   factory _State.init({required bool isNewHttpEngine}) {
     return _State(isNewHttpEngine: isNewHttpEngine);
@@ -13,11 +17,12 @@ class _State {
   String toString() => _$toString();
 
   final bool isNewHttpEngine;
-
   final _Event? lastSuccessful;
+
+  final ExceptionEvent? error;
 }
 
-abstract class _Event {}
+sealed class _Event {}
 
 @toString
 class _Init implements _Event {
@@ -25,6 +30,17 @@ class _Init implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _SetError implements _Event {
+  const _SetError(this.error, [this.stackTrace]);
+
+  @override
+  String toString() => _$toString();
+
+  final Object error;
+  final StackTrace? stackTrace;
 }
 
 @toString
