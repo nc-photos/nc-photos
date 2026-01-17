@@ -2,7 +2,7 @@ group 'com.example.np_platform_image_format_jxl'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.8.20'
+    ext.kotlin_version = '2.2.21'
     repositories {
         google()
         mavenCentral()
@@ -48,5 +48,5 @@ android {
 
 dependencies {
     implementation 'com.nkming.nc_photos.np_android_core:np_android_core'
-    implementation 'io.github.awxkee:jxl-coder:2.3.0'
+    implementation 'io.github.awxkee:jxl-coder:2.5.2'
 }

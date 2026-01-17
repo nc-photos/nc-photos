@@ -2,7 +2,7 @@ group 'com.nkming.nc_photos.np_platform_raw_image'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.8.20'
+    ext.kotlin_version = '2.2.21'
     repositories {
         google()
         mavenCentral()
