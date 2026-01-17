@@ -113,8 +113,6 @@ android {
 
     packagingOptions {
         jniLibs {
-            pickFirst "lib/**/libbrotlicommon.so"
-            pickFirst "lib/**/libbrotlidec.so"
             pickFirst "lib/**/libjxl.so"
         }
     }
