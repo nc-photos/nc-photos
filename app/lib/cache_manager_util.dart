@@ -82,6 +82,18 @@ class LargeImageCacheManager {
   );
 }
 
+class OriginalImageCacheManager {
+  static const key = "originalImageCache";
+  static CacheManager inst = CacheManager(
+    Config(
+      key,
+      stalePeriod: const Duration(days: 30),
+      maxNrOfCacheObjects: 1000,
+      fileService: HttpFileService(httpClient: getHttpClient()),
+    ),
+  );
+}
+
 /// Cache manager for covers
 ///
 /// Covers are larger than thumbnails but smaller than full sized photos. They
@@ -134,7 +146,7 @@ class JxlThumbnailCacheManager {
   }
 }
 
-enum CachedNetworkImageType { thumbnail, largeImage, cover }
+enum CachedNetworkImageType { thumbnail, largeImage, originalImage, cover }
 
 @npLog
 class CachedNetworkImageBuilder {
@@ -190,13 +202,15 @@ CacheManager getCacheManager(CachedNetworkImageType type, String? mime) {
   if (mime == "image/jxl") {
     return switch (type) {
       CachedNetworkImageType.thumbnail => JxlThumbnailCacheManager.inst,
-      CachedNetworkImageType.largeImage => JxlCacheManager.inst,
+      CachedNetworkImageType.largeImage ||
+      CachedNetworkImageType.originalImage => JxlCacheManager.inst,
       CachedNetworkImageType.cover => JxlCacheManager.inst,
     };
   } else {
     return switch (type) {
       CachedNetworkImageType.thumbnail => ThumbnailCacheManager.inst,
       CachedNetworkImageType.largeImage => LargeImageCacheManager.inst,
+      CachedNetworkImageType.originalImage => OriginalImageCacheManager.inst,
       CachedNetworkImageType.cover => CoverCacheManager.inst,
     };
   }
@@ -213,6 +227,7 @@ Future<FileInfo?> getFileFromCache(
 
 SizeInt _boundingBoxFor(CachedNetworkImageType type) => switch (type) {
   CachedNetworkImageType.thumbnail => SizeInt.square(k.photoThumbSize),
-  CachedNetworkImageType.largeImage => SizeInt.square(k.photoLargeSize),
+  CachedNetworkImageType.largeImage ||
+  CachedNetworkImageType.originalImage => SizeInt.square(k.photoLargeSize),
   CachedNetworkImageType.cover => SizeInt.square(k.coverSize),
 };

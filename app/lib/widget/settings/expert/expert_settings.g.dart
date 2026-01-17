@@ -15,6 +15,7 @@ part of 'expert_settings.dart';
 abstract class $_StateCopyWithWorker {
   _State call({
     bool? isNewHttpEngine,
+    bool? isViewerUseOriginalImage,
     _Event? lastSuccessful,
     ExceptionEvent? error,
   });
@@ -26,11 +27,14 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({
     dynamic isNewHttpEngine,
+    dynamic isViewerUseOriginalImage,
     dynamic lastSuccessful = copyWithNull,
     dynamic error = copyWithNull,
   }) {
     return _State(
       isNewHttpEngine: isNewHttpEngine as bool? ?? that.isNewHttpEngine,
+      isViewerUseOriginalImage:
+          isViewerUseOriginalImage as bool? ?? that.isViewerUseOriginalImage,
       lastSuccessful:
           lastSuccessful == copyWithNull
               ? that.lastSuccessful
@@ -56,7 +60,7 @@ extension _$_WrappedExpertSettingsStateNpLog on _WrappedExpertSettingsState {
   Logger get _log => log;
 
   static final log = Logger(
-    "widget.settings.expert_settings._WrappedExpertSettingsState",
+    "widget.settings.expert.expert_settings._WrappedExpertSettingsState",
   );
 }
 
@@ -64,7 +68,7 @@ extension _$_BlocNpLog on _Bloc {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("widget.settings.expert_settings._Bloc");
+  static final log = Logger("widget.settings.expert.expert_settings._Bloc");
 }
 
 // **************************************************************************
@@ -74,7 +78,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {isNewHttpEngine: $isNewHttpEngine, lastSuccessful: $lastSuccessful, error: $error}";
+    return "_State {isNewHttpEngine: $isNewHttpEngine, isViewerUseOriginalImage: $isViewerUseOriginalImage, lastSuccessful: $lastSuccessful, error: $error}";
   }
 }
 
@@ -103,5 +107,12 @@ extension _$_SetNewHttpEngineToString on _SetNewHttpEngine {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetNewHttpEngine {value: $value}";
+  }
+}
+
+extension _$_SetViewerUseOriginalImageToString on _SetViewerUseOriginalImage {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetViewerUseOriginalImage {value: $value}";
   }
 }

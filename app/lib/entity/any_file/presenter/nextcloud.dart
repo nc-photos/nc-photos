@@ -3,6 +3,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
 import 'package:nc_photos/cache_manager_util.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -119,10 +120,47 @@ class AnyFileNextcloudLargeImagePresenter
   final AnyFileNextcloudProvider _provider;
 }
 
+class AnyFileNextcloudOriginalImagePresenter
+    implements AnyFileLargeImagePresenter {
+  AnyFileNextcloudOriginalImagePresenter(AnyFile file, {required this.account})
+    : _provider = file.provider as AnyFileNextcloudProvider;
+
+  @override
+  Widget buildWidget({
+    BoxFit? fit,
+    Widget Function(BuildContext context, Widget child)? imageBuilder,
+    Widget Function(BuildContext context)? errorBuilder,
+  }) {
+    return CachedNetworkImageBuilder(
+      type: CachedNetworkImageType.originalImage,
+      imageUrl: getViewerUrlForOriginalImageFile(account, _provider.file),
+      mime: _provider.file.fdMime,
+      account: account,
+      fit: fit,
+      imageBuilder: (context, child, imageProvider) {
+        return imageBuilder?.call(context, child) ?? child;
+      },
+      errorWidget:
+          errorBuilder == null
+              ? null
+              : (context, url, error) {
+                return errorBuilder.call(context);
+              },
+    ).build();
+  }
+
+  final Account account;
+
+  final AnyFileNextcloudProvider _provider;
+}
+
 class AnyFileNextcloudImageViewerPresenter
     implements AnyFileImageViewerPresenter {
-  AnyFileNextcloudImageViewerPresenter(AnyFile file, {required this.account})
-    : _provider = file.provider as AnyFileNextcloudProvider;
+  AnyFileNextcloudImageViewerPresenter(
+    AnyFile file, {
+    required this.prefController,
+    required this.account,
+  }) : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
   Widget buildWidget({
@@ -145,9 +183,10 @@ class AnyFileNextcloudImageViewerPresenter
 
   @override
   void preloadImage() {
-    RemoteImageViewer.preloadImage(account, _provider.file);
+    RemoteImageViewer.preloadImage(account, prefController, _provider.file);
   }
 
+  final PrefController? prefController;
   final Account account;
 
   final AnyFileNextcloudProvider _provider;

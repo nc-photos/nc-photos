@@ -12,6 +12,7 @@ import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
@@ -89,6 +90,7 @@ class SlideshowViewer extends StatelessWidget {
             account: accountController.account,
             anyFilesController: accountController.anyFilesController,
             collectionsController: accountController.collectionsController,
+            prefController: context.read(),
             afIds: afIds,
             startIndex: startIndex,
             collectionId: collectionId,

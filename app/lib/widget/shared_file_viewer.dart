@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -91,6 +92,7 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
                 child: AnyFilePresenterFactory.largeImage(
                   widget.file.toAnyFile(),
                   account: widget.account,
+                  prefController: context.read(),
                 ).buildWidget(
                   errorBuilder: (context) {
                     // just leave it empty

@@ -302,13 +302,21 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
       if (index > 0) {
         final prevFile = widget.streamFiles[index - 1];
         if (file_util.isSupportedImageFormat(prevFile)) {
-          RemoteImageViewer.preloadImage(widget.account, prevFile);
+          RemoteImageViewer.preloadImage(
+            widget.account,
+            context.read(),
+            prevFile,
+          );
         }
       }
       if (index + 1 < widget.streamFiles.length) {
         final nextFile = widget.streamFiles[index + 1];
         if (file_util.isSupportedImageFormat(nextFile)) {
-          RemoteImageViewer.preloadImage(widget.account, nextFile);
+          RemoteImageViewer.preloadImage(
+            widget.account,
+            context.read(),
+            nextFile,
+          );
         }
       }
       setState(() {

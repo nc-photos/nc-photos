@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/presenter/local.dart';
 import 'package:nc_photos/entity/any_file/presenter/merged.dart';
@@ -29,10 +30,15 @@ abstract interface class AnyFilePresenterFactory {
   static AnyFileLargeImagePresenter largeImage(
     AnyFile file, {
     required Account account,
+    required PrefController? prefController,
   }) {
     switch (file.provider) {
       case AnyFileNextcloudProvider _:
-        return AnyFileNextcloudLargeImagePresenter(file, account: account);
+        if (prefController?.isViewerUseOriginalImageValue ?? false) {
+          return AnyFileNextcloudOriginalImagePresenter(file, account: account);
+        } else {
+          return AnyFileNextcloudLargeImagePresenter(file, account: account);
+        }
       case AnyFileLocalProvider _:
         return AnyFileLocalLargeImagePresenter(file);
       case AnyFileMergedProvider _:
@@ -43,10 +49,15 @@ abstract interface class AnyFilePresenterFactory {
   static AnyFileImageViewerPresenter imageViewer(
     AnyFile file, {
     required Account account,
+    required PrefController? prefController,
   }) {
     switch (file.provider) {
       case AnyFileNextcloudProvider _:
-        return AnyFileNextcloudImageViewerPresenter(file, account: account);
+        return AnyFileNextcloudImageViewerPresenter(
+          file,
+          prefController: prefController,
+          account: account,
+        );
       case AnyFileLocalProvider _:
         return AnyFileLocalImageViewerPresenter(file);
       case AnyFileMergedProvider _:

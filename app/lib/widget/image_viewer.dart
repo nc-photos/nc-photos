@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/cache_manager_util.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/presenter/factory.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -99,15 +101,34 @@ class RemoteImageViewer extends StatelessWidget {
     this.onZoomEnded,
   });
 
-  static void preloadImage(Account account, FileDescriptor file) {
-    final cacheManager = getCacheManager(
-      CachedNetworkImageType.largeImage,
-      file.fdMime,
-    );
-    cacheManager.getFileStream(
-      getViewerUrlForImageFile(account, file),
-      headers: {"Authorization": AuthUtil.fromAccount(account).toHeaderValue()},
-    );
+  static void preloadImage(
+    Account account,
+    PrefController? prefController,
+    FileDescriptor file,
+  ) {
+    if (prefController?.isViewerUseOriginalImageValue ?? false) {
+      final cacheManager = getCacheManager(
+        CachedNetworkImageType.originalImage,
+        file.fdMime,
+      );
+      cacheManager.getFileStream(
+        getViewerUrlForOriginalImageFile(account, file),
+        headers: {
+          "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+        },
+      );
+    } else {
+      final cacheManager = getCacheManager(
+        CachedNetworkImageType.largeImage,
+        file.fdMime,
+      );
+      cacheManager.getFileStream(
+        getViewerUrlForImageFile(account, file),
+        headers: {
+          "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+        },
+      );
+    }
   }
 
   @override
@@ -323,6 +344,7 @@ class _FullSizedImage extends StatelessWidget {
     return AnyFilePresenterFactory.largeImage(
       file.toAnyFile(),
       account: account,
+      prefController: context.read(),
     ).buildWidget(
       fit: BoxFit.contain,
       imageBuilder: (context, child) {

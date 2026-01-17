@@ -248,6 +248,11 @@ extension on Pref {
   bool? isEnableLocalFile() => provider.getBool(PrefKey.isEnableLocalFile);
   Future<bool> setEnableLocalFile(bool value) =>
       provider.setBool(PrefKey.isEnableLocalFile, value);
+
+  bool? isViewerUseOriginalImage() =>
+      provider.getBool(PrefKey.isViewerUseOriginalImage);
+  Future<bool> setViewerUseOriginalImage(bool value) =>
+      provider.setBool(PrefKey.isViewerUseOriginalImage, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

@@ -178,6 +178,20 @@ class _WrappedExpertSettingsState extends State<_WrappedExpertSettings>
                         },
                       ),
                 ),
+                _BlocSelector<bool>(
+                  selector: (state) => state.isViewerUseOriginalImage,
+                  builder: (_, state) {
+                    return SwitchListTile(
+                      title: Text(
+                        L10n.global().settingsViewerUseOriginalImageTitle,
+                      ),
+                      value: state,
+                      onChanged: (value) {
+                        context.addEvent(_SetViewerUseOriginalImage(value));
+                      },
+                    );
+                  },
+                ),
               ]),
             ),
             const SliverSafeBottom(),

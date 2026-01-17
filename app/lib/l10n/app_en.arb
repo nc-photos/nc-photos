@@ -462,6 +462,7 @@
 	"settingsAppLockConfirmPinDialogTitle": "Input the same PIN again",
 	"settingsAppLockSetupPasswordDialogTitle": "Set the password to unlock app",
 	"settingsAppLockConfirmPasswordDialogTitle": "Input the same password again",
+	"settingsViewerUseOriginalImageTitle": "Show original image instead of high quality preview in viewer",
 	"settingsExperimentalTitle": "Experimental",
 	"settingsExperimentalDescription": "Features that are not ready for everyday use",
 	"settingsExpertTitle": "Advanced",

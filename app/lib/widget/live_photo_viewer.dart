@@ -173,7 +173,11 @@ class _PlaceHolderView extends StatelessWidget {
     return Stack(
       fit: StackFit.expand,
       children: [
-        AnyFilePresenterFactory.largeImage(file, account: account).buildWidget(
+        AnyFilePresenterFactory.largeImage(
+          file,
+          account: account,
+          prefController: null,
+        ).buildWidget(
           fit: BoxFit.contain,
           imageBuilder: (context, child) {
             const SizeChangedLayoutNotification().dispatch(context);

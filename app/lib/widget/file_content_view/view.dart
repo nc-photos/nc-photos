@@ -39,6 +39,7 @@ class _PhotoPageContentView extends StatelessWidget {
     final presenter = AnyFilePresenterFactory.imageViewer(
       context.bloc.file,
       account: context.bloc.account,
+      prefController: context.read(),
     );
     return _BlocBuilder(
       buildWhen: (previous, current) => previous.canZoom != current.canZoom,

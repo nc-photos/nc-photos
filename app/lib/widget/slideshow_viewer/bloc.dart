@@ -7,6 +7,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.account,
     required this.anyFilesController,
     required this.collectionsController,
+    required this.prefController,
     required this.afIds,
     required this.startIndex,
     required this.collectionId,
@@ -185,6 +186,7 @@ class _Bloc extends Bloc<_Event, _State>
           file_util.isSupportedImageMime(prevFile.mime ?? "")) {
         AnyFilePresenterFactory.imageViewer(
           prevFile,
+          prefController: prefController,
           account: account,
         ).preloadImage();
       }
@@ -195,6 +197,7 @@ class _Bloc extends Bloc<_Event, _State>
           file_util.isSupportedImageMime(nextFile.mime ?? "")) {
         AnyFilePresenterFactory.imageViewer(
           nextFile,
+          prefController: prefController,
           account: account,
         ).preloadImage();
       }
@@ -352,6 +355,7 @@ class _Bloc extends Bloc<_Event, _State>
   final Account account;
   final AnyFilesController anyFilesController;
   final CollectionsController collectionsController;
+  final PrefController prefController;
   final List<String> afIds;
   final int startIndex;
   final String? collectionId;

@@ -7,10 +7,17 @@ class _Bloc extends Bloc<_Event, _State>
         BlocForEachMixin<_Event, _State>,
         BlocErrorCatcher<_Event, _State> {
   _Bloc({required this.db, required this.prefController})
-    : super(_State.init(isNewHttpEngine: prefController.isNewHttpEngineValue)) {
+    : super(
+        _State.init(
+          isNewHttpEngine: prefController.isNewHttpEngineValue,
+          isViewerUseOriginalImage:
+              prefController.isViewerUseOriginalImageValue,
+        ),
+      ) {
     on<_Init>(_onInit);
     on<_ClearCacheDatabase>(_onClearCacheDatabase);
     on<_SetNewHttpEngine>(_onSetNewHttpEngine);
+    on<_SetViewerUseOriginalImage>(_onSetViewerUseOriginalImage);
     on<_SetError>((ev, emit) {
       _log.info(ev);
       emit(state.copyWith(error: ExceptionEvent(ev.error, ev.stackTrace)));
@@ -27,11 +34,22 @@ class _Bloc extends Bloc<_Event, _State>
 
   Future<void> _onInit(_Init ev, _Emitter emit) async {
     _log.info(ev);
-    return forEach(
-      emit,
-      prefController.isNewHttpEngineChange,
-      onData: (data) => state.copyWith(isNewHttpEngine: data),
-    );
+    await Future.wait([
+      forEach(
+        emit,
+        prefController.isNewHttpEngineChange,
+        onData: (data) => state.copyWith(isNewHttpEngine: data),
+      ),
+      forEach(
+        emit,
+        prefController.isViewerUseOriginalImageChange,
+        onData: (data) => state.copyWith(isViewerUseOriginalImage: data),
+        onError: (e, stackTrace) {
+          _log.severe("[_onInit] Uncaught exception", e, stackTrace);
+          return state.copyWith(error: ExceptionEvent(e, stackTrace));
+        },
+      ),
+    ]);
   }
 
   Future<void> _onClearCacheDatabase(
@@ -52,6 +70,14 @@ class _Bloc extends Bloc<_Event, _State>
   void _onSetNewHttpEngine(_SetNewHttpEngine ev, _Emitter emit) {
     _log.info(ev);
     prefController.setNewHttpEngine(ev.value);
+  }
+
+  void _onSetViewerUseOriginalImage(
+    _SetViewerUseOriginalImage ev,
+    _Emitter emit,
+  ) {
+    _log.info(ev);
+    prefController.setViewerUseOriginalImage(ev.value);
   }
 
   final NpDb db;

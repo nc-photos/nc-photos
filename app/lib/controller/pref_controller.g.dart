@@ -339,6 +339,15 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<bool> get isEnableLocalFileChange =>
       isEnableLocalFile.distinct().skip(1);
   bool get isEnableLocalFileValue => _isEnableLocalFileController.value;
+  // _isViewerUseOriginalImageController
+  ValueStream<bool> get isViewerUseOriginalImage =>
+      _isViewerUseOriginalImageController.stream;
+  Stream<bool> get isViewerUseOriginalImageNew =>
+      isViewerUseOriginalImage.skip(1);
+  Stream<bool> get isViewerUseOriginalImageChange =>
+      isViewerUseOriginalImage.distinct().skip(1);
+  bool get isViewerUseOriginalImageValue =>
+      _isViewerUseOriginalImageController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {
