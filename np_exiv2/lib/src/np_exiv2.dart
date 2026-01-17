@@ -145,9 +145,9 @@ class Value {
         case TypeId.xmpText:
           return _removeNullTerminator(utf8.decode(_data));
         case TypeId.xmpSeq:
+        case TypeId.xmpBag:
           return _removeNullTerminator(utf8.decode(_data)).split(", ");
         case TypeId.xmpAlt:
-        case TypeId.xmpBag:
         case TypeId.langAlt:
           throw UnsupportedError("XMP not fully supported");
       }
