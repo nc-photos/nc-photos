@@ -129,8 +129,8 @@ class JxlThumbnailCacheManager {
   static CacheManager inst = CacheManager(
     Config(
       key,
-      stalePeriod: const Duration(days: 30),
-      maxNrOfCacheObjects: 50000,
+      stalePeriod: const Duration(days: 90),
+      maxNrOfCacheObjects: 75000,
       fileService: HttpFileService(httpClient: getHttpClient()),
       cacheFileTransformer: (url, key, cacheFile) async {
         await _replaceWithJpegThumbnail(cacheFile);
