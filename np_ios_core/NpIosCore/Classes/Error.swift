@@ -20,3 +20,6 @@ public class AppError: Error {
 
 public class NilError: AppError {
 }
+
+public class ArgumentError: AppError {
+}
