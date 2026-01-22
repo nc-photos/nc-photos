@@ -1,6 +1,7 @@
 import Flutter
 import Foundation
 import Logging
+import UIKit
 
 /**
  * Container of pixel data stored in RGBA format
@@ -83,6 +84,13 @@ public class Rgba8Image {
     @unknown default:
       throw ArgumentError("Unknown alpha info: \(image.alphaInfo)")
     }
+  }
+
+  public convenience init(uiImage image: UIImage) throws {
+    guard let cgImage = image.cgImage else {
+      throw ArgumentError("UIImage has no CGImage")
+    }
+    try self.init(cgImage: cgImage)
   }
 
   public func toFlutterJson() throws -> [String:Any] {

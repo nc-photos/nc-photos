@@ -8,6 +8,7 @@ import 'package:pigeon/pigeon.dart';
     kotlinOptions: KotlinOptions(
       package: "com.nkming.nc_photos.np_platform_image_format_jxl",
     ),
+    swiftOut: "ios/Classes/Messages.g.swift",
   ),
 )
 class Image {

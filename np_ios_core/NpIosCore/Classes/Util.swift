@@ -22,3 +22,12 @@ public extension FlutterStandardTypedData {
     return [T](UnsafeBufferPointer(start: ptr, count: data.count / MemoryLayout<T>.stride))
   }
 }
+
+public extension Array {
+  func toFlutterTypedData() -> FlutterStandardTypedData {
+    let data = withUnsafeBytes {
+      Data(bytes: $0.baseAddress!, count: $0.count)
+    }
+    return FlutterStandardTypedData(bytes: data)
+  }
+}

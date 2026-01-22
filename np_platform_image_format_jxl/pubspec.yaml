@@ -48,3 +48,5 @@ flutter:
       android:
         package: com.nkming.nc_photos.np_platform_image_format_jxl
         pluginClass: NpPlatformImageFormatJxlPlugin
+      ios:
+        pluginClass: NpPlatformImageFormatJxlPlugin
