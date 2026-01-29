@@ -17,7 +17,7 @@ import java.io.File
 
 private class PigeonApiImpl : MyHostApi, CoroutineScope by MainScope() {
 	companion object {
-		private const val TAG = "PigeonApiImpl"
+		private const val TAG = "NpPlatformImageFormatJxlPlugin"
 
 		// Limit number of jobs to avoid overloading the phone
 		private val lock = Semaphore(3)
