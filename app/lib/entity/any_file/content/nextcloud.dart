@@ -13,6 +13,7 @@ import 'package:nc_photos/use_case/download_file.dart';
 import 'package:nc_photos/use_case/download_preview.dart';
 import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
 import 'package:nc_photos/use_case/list_file_tag.dart';
+import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:np_common/size.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_gps_map/np_gps_map.dart';
@@ -63,6 +64,7 @@ class AnyFileNextcloudLocalFileUriGetter implements AnyFileLocalFileUriGetter {
 
   @override
   Future<Uri> get() async {
+    await const PermissionHandler().ensureStorageWritePermission();
     return Uri.parse(
       await DownloadFile()(
         account,

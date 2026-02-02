@@ -62,4 +62,16 @@ abstract class MyHostApi {
     required int width,
     required int height,
   });
+
+  /// Copy a media file in internal storage to a public directory and return the
+  /// platform identifier of the new file
+  ///
+  /// On Android, the file will be copied to Download/. On iOS, the file will be
+  /// copied to the Photos library.
+  @async
+  String copyPrivateFileToPublicDir(
+    String srcFilePath, {
+    String? srcMime,
+    String? dstDir,
+  });
 }

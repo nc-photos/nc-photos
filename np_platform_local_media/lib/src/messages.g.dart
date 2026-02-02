@@ -100,7 +100,7 @@ class _PigeonCodec extends StandardMessageCodec {
   @override
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
-      case 129:
+      case 129: 
         return QueryResult.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);
@@ -233,6 +233,38 @@ class MyHostApi {
       );
     } else {
       return (pigeonVar_replyList[0] as Uint8List?)!;
+    }
+  }
+
+  /// Copy a media file in internal storage to a public directory and return the
+  /// platform identifier of the new file
+  ///
+  /// On Android, the file will be copied to Download/. On iOS, the file will be
+  /// copied to the Photos library.
+  Future<String> copyPrivateFileToPublicDir(String srcFilePath, {String? srcMime, String? dstDir, }) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.np_platform_local_media.MyHostApi.copyPrivateFileToPublicDir$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_channel.send(<Object?>[srcFilePath, srcMime, dstDir]) as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else if (pigeonVar_replyList[0] == null) {
+      throw PlatformException(
+        code: 'null-error',
+        message: 'Host platform returned null value for non-null return value.',
+      );
+    } else {
+      return (pigeonVar_replyList[0] as String?)!;
     }
   }
 }

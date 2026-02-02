@@ -5,12 +5,15 @@ import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.MediaStore
 import android.util.Size
 import androidx.core.database.getLongOrNull
 import androidx.core.net.toUri
+import com.nkming.nc_photos.np_android_core.MediaStoreUtil
+import com.nkming.nc_photos.np_android_core.PermissionException
 import com.nkming.nc_photos.np_android_core.PermissionUtil
 import com.nkming.nc_photos.np_android_core.UriUtil
 import com.nkming.nc_photos.np_android_core.logE
@@ -22,6 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import java.io.ByteArrayOutputStream
+import java.io.File
 import java.io.FileNotFoundException
 import java.time.Instant
 import java.time.ZoneId
@@ -384,6 +388,30 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, CoroutineScope by MainSc
                 callback(Result.success(bytes))
             } catch (e: FileNotFoundException) {
                 callback(Result.failure(FlutterError("fileNotFoundException", e.message, null)))
+            } catch (e: Throwable) {
+                callback(Result.failure(FlutterError("systemException", e.message, null)))
+            }
+        }
+    }
+
+    override fun copyPrivateFileToPublicDir(
+        srcFilePath: String, srcMime: String?, dstDir: String?, callback: (Result<String>) -> Unit
+    ) {
+        if (activity == null) {
+            callback(Result.failure(IllegalStateException("Context is null")))
+            return
+        }
+        launch(Dispatchers.IO) {
+            try {
+                val fromUri = Uri.fromFile(File(srcFilePath))
+                val uri = MediaStoreUtil.copyFileToDownload(
+                    context!!, fromUri, null, dstDir
+                )
+                callback(Result.success(uri.toString()))
+            } catch (e: PermissionException) {
+                callback(
+                    Result.failure(FlutterError("permissionError", "Permission not granted", null))
+                )
             } catch (e: Throwable) {
                 callback(Result.failure(FlutterError("systemException", e.message, null)))
             }

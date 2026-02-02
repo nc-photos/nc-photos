@@ -1,10 +1,6 @@
 abstract class Download {
-  /// Download a file
-  ///
-  /// The return data depends on the platform
-  /// - web: null
-  /// - android: Uri to the downloaded file
-  Future call();
+  /// Download a file and return the platform identifier of the downloaded file
+  Future<String> call();
 
   /// Cancel a download
   ///

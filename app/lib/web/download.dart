@@ -23,7 +23,7 @@ class _WebDownload extends itf.Download {
   _WebDownload({required this.url, this.headers, required this.filename});
 
   @override
-  call() async {
+  Future<String> call() async {
     final uri = Uri.parse(url);
     final req = http.Request("GET", uri)..headers.addAll(headers ?? {});
     final response = await http.Response.fromStream(
@@ -36,6 +36,7 @@ class _WebDownload extends itf.Download {
     }
     final saver = FileSaver();
     await saver.saveFile(filename, response.bodyBytes);
+    return "";
   }
 
   @override

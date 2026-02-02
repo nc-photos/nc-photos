@@ -93,6 +93,28 @@ interface class LocalMedia {
     }
   }
 
+  static Future<String> copyPrivateFileToPublicDir(
+    String srcFilePath, {
+    String? srcMime,
+    String? dstDir,
+  }) async {
+    try {
+      return await _hostApi.copyPrivateFileToPublicDir(
+        srcFilePath,
+        srcMime: srcMime,
+        dstDir: dstDir,
+      );
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else if (e.code == _exceptionFileNotFound) {
+        throw const FileNotFoundException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   static final _hostApi = api.MyHostApi();
 
   static const _exceptionCodePermissionError = "permissionError";

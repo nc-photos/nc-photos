@@ -130,6 +130,14 @@ interface MyHostApi {
    * Also see [readFile].
    */
   fun readThumbnail(platformIdentifier: String, width: Long, height: Long, callback: (Result<ByteArray>) -> Unit)
+  /**
+   * Copy a media file in internal storage to a public directory and return the
+   * platform identifier of the new file
+   *
+   * On Android, the file will be copied to Download/. On iOS, the file will be
+   * copied to the Photos library.
+   */
+  fun copyPrivateFileToPublicDir(srcFilePath: String, srcMime: String?, dstDir: String?, callback: (Result<String>) -> Unit)
 
   companion object {
     /** The codec used by MyHostApi. */
@@ -217,6 +225,28 @@ interface MyHostApi {
             val widthArg = args[1] as Long
             val heightArg = args[2] as Long
             api.readThumbnail(platformIdentifierArg, widthArg, heightArg) { result: Result<ByteArray> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(wrapError(error))
+              } else {
+                val data = result.getOrNull()
+                reply.reply(wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.np_platform_local_media.MyHostApi.copyPrivateFileToPublicDir$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val srcFilePathArg = args[0] as String
+            val srcMimeArg = args[1] as String?
+            val dstDirArg = args[2] as String?
+            api.copyPrivateFileToPublicDir(srcFilePathArg, srcMimeArg, dstDirArg) { result: Result<String> ->
               val error = result.exceptionOrNull()
               if (error != null) {
                 reply.reply(wrapError(error))

@@ -36,7 +36,7 @@ class DownloadFile {
   /// Download [file]
   ///
   /// See [DownloadBuilder]
-  Future<dynamic> call(
+  Future<String> call(
     Account account,
     FileDescriptor file, {
     String? parentDir,

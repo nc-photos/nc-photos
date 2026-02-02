@@ -6,9 +6,9 @@ part of 'download.dart';
 // NpLogGenerator
 // **************************************************************************
 
-extension _$_AndroidDownloadNpLog on _AndroidDownload {
+extension _$_DownloadNpLog on _Download {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("mobile.download._AndroidDownload");
+  static final log = Logger("mobile.download._Download");
 }
