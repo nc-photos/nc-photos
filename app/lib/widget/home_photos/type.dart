@@ -39,10 +39,19 @@ class _PhotoItem extends _FileItem {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return AnyFilePresenterFactory.photoListImage(
-      file,
-      account: account,
-    ).buildWidget(shouldShowFavorite: true, shouldUseHero: true);
+    return _BlocSelector(
+      selector: (state) => state.uploadingFiles,
+      builder:
+          (context, uploadingFiles) => AnyFilePresenterFactory.photoListImage(
+            file,
+            account: account,
+          ).buildWidget(
+            shouldShowFavorite: true,
+            shouldUseHero: true,
+            isUploading:
+                uploadingFiles.indexWhere((e) => e.id == file.id) != -1,
+          ),
+    );
   }
 
   final Account account;
@@ -56,13 +65,21 @@ class _VideoItem extends _FileItem {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return AnyFilePresenterFactory.photoListVideo(
-      file,
-      account: account,
-      onError: () {
-        context.addEvent(const _TripMissingVideoPreview());
-      },
-    ).buildWidget(shouldShowFavorite: true);
+    return _BlocSelector(
+      selector: (state) => state.uploadingFiles,
+      builder:
+          (context, uploadingFiles) => AnyFilePresenterFactory.photoListVideo(
+            file,
+            account: account,
+            onError: () {
+              context.addEvent(const _TripMissingVideoPreview());
+            },
+          ).buildWidget(
+            shouldShowFavorite: true,
+            isUploading:
+                uploadingFiles.indexWhere((e) => e.id == file.id) != -1,
+          ),
+    );
   }
 
   final Account account;

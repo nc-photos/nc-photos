@@ -31,6 +31,7 @@ class _State {
     required this.hasMissingVideoPreview,
     required this.shareRequest,
     required this.uploadRequest,
+    required this.uploadingFiles,
     required this.deleteRequest,
     required this.selectedCanArchive,
     required this.selectedCanDownload,
@@ -64,6 +65,7 @@ class _State {
     hasMissingVideoPreview: false,
     shareRequest: Unique(null),
     uploadRequest: Unique(null),
+    uploadingFiles: const [],
     deleteRequest: Unique(null),
     selectedCanArchive: false,
     selectedCanDownload: false,
@@ -110,6 +112,7 @@ class _State {
 
   final Unique<_ShareRequest?> shareRequest;
   final Unique<_UploadRequest?> uploadRequest;
+  final List<AnyFile> uploadingFiles;
   final Unique<_DeleteRequest?> deleteRequest;
 
   final bool selectedCanArchive;
@@ -238,6 +241,28 @@ class _UploadSelectedItems implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _UploadRequestResult implements _Event {
+  const _UploadRequestResult({required this.request, required this.config});
+
+  @override
+  String toString() => _$toString();
+
+  final _UploadRequest request;
+  final UploadConfig config;
+}
+
+@toString
+class _SetFileUploadResult implements _Event {
+  const _SetFileUploadResult(this.file, this.isSuccess);
+
+  @override
+  String toString() => _$toString();
+
+  final AnyFile file;
+  final bool isSuccess;
 }
 
 @toString

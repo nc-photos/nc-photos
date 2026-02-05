@@ -7,10 +7,11 @@ import 'package:np_platform_uploader/np_platform_uploader.dart';
 class UploadAnyFile {
   const UploadAnyFile({required this.account});
 
-  Future<void> call(
+  void call(
     List<AnyFile> files, {
     required String relativePath,
     ConvertConfig? convertConfig,
+    void Function(AnyFile file, bool isSuccess)? onResult,
   }) {
     final groups = groupBy(
       files,
@@ -21,15 +22,21 @@ class UploadAnyFile {
       },
     );
     if (groups[AnyFileProviderType.local]?.isNotEmpty == true) {
-      return UploadLocalFile(account: account).multiple(
+      UploadLocalFile(account: account).multiple(
         groups[AnyFileProviderType.local]!
             .map((e) => (e.provider as AnyFileLocalProvider).file)
             .toList(),
         relativePath: relativePath,
         convertConfig: convertConfig,
+        onResult: (file, isSuccess) {
+          final f = groups[AnyFileProviderType.local]!.firstWhereOrNull(
+            (e) => (e.provider as AnyFileLocalProvider).file.id == file.id,
+          );
+          if (f != null) {
+            onResult?.call(f, isSuccess);
+          }
+        },
       );
-    } else {
-      return Future.value();
     }
   }
 

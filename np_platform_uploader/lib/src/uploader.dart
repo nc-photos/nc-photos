@@ -1,18 +1,24 @@
 import 'package:copy_with/copy_with.dart';
-import 'package:flutter/services.dart';
-import 'package:np_platform_uploader/src/k.dart' as k;
-import 'package:np_platform_util/np_platform_util.dart';
+import 'package:equatable/equatable.dart';
+import 'package:np_platform_uploader/src/messages.g.dart' as api;
 import 'package:to_string/to_string.dart';
+import 'package:uuid/uuid.dart';
 
 part 'uploader.g.dart';
 
-abstract class Uploadable {
-  String get uploadPath;
-  bool get canConvert;
-}
+class Uploadable with EquatableMixin {
+  const Uploadable({
+    required this.platformIdentifier,
+    required this.uploadPath,
+    required this.canConvert,
+  });
 
-abstract class AndroidUploadable implements Uploadable {
-  String get contentUri;
+  @override
+  List<Object?> get props => [platformIdentifier, uploadPath, canConvert];
+
+  final String platformIdentifier;
+  final String uploadPath;
+  final bool canConvert;
 }
 
 enum ConvertFormat {
@@ -57,38 +63,103 @@ class ConvertConfig {
 }
 
 class Uploader {
-  static Future<void> asyncUpload({
+  static void asyncUpload({
     required List<Uploadable> uploadables,
     required Map<String, String> headers,
     ConvertConfig? convertConfig,
+    void Function(Uploadable uploadable, bool isSuccess)? onResult,
   }) {
-    if (getRawPlatform() == NpPlatform.android) {
-      return _asyncUploadAndroid(
-        uploadables: uploadables,
-        headers: headers,
-        convertConfig: convertConfig,
-      );
-    } else {
-      throw UnsupportedError("Unsupported platform");
+    _ensureInit();
+    String taskId;
+    do {
+      taskId = const Uuid().v4();
+    } while (_listeners.containsKey(taskId));
+    final remainings = uploadables.toList();
+    _listeners[taskId] = (
+      onResult: (uploadable, isSuccess) {
+        remainings.removeWhere(
+          (e) => e.platformIdentifier == uploadable.platformIdentifier,
+        );
+        onResult?.call(uploadable, isSuccess);
+      },
+      onComplete: () {
+        // assume all remaining files as failed
+        for (final e in remainings) {
+          onResult?.call(e, false);
+        }
+      },
+    );
+    _hostApi.asyncUpload(
+      taskId: taskId,
+      uploadables: uploadables.map((e) => e.toPigeon()).toList(),
+      httpHeaders: headers,
+      convertConfig: convertConfig?.toPigeon(),
+    );
+  }
+
+  static void _ensureInit() {
+    if (!_isInit) {
+      _isInit = true;
+      const flutterApi = _PigeonApiImpl();
+      api.MyFlutterApi.setUp(flutterApi);
     }
   }
 
-  static Future<void> _asyncUploadAndroid({
-    required List<Uploadable> uploadables,
-    required Map<String, String> headers,
-    ConvertConfig? convertConfig,
-  }) async {
-    final androidUploadables = uploadables.cast<AndroidUploadable>();
-    await _methodChannel.invokeMethod("asyncUpload", {
-      "contentUris": androidUploadables.map((e) => e.contentUri).toList(),
-      "endPoints": uploadables.map((e) => e.uploadPath).toList(),
-      "canConverts": uploadables.map((e) => e.canConvert).toList(),
-      "headers": headers,
-      "convertFormat": convertConfig?.format.value,
-      "convertQuality": convertConfig?.quality,
-      "convertDownsizeMp": convertConfig?.downsizeMp,
-    });
+  static final _hostApi = api.MyHostApi();
+
+  static var _isInit = false;
+  static final _listeners =
+      <
+        String,
+        ({
+          void Function(Uploadable uploadable, bool isSuccess) onResult,
+          void Function() onComplete,
+        })
+      >{};
+}
+
+class _PigeonApiImpl implements api.MyFlutterApi {
+  const _PigeonApiImpl();
+
+  @override
+  void notifyUploadResult(
+    String taskId,
+    api.Uploadable uploadable,
+    bool isSuccess,
+  ) {
+    Uploader._listeners[taskId]?.onResult(
+      Uploadable(
+        platformIdentifier: uploadable.platformIdentifier,
+        uploadPath: uploadable.endPoint,
+        canConvert: uploadable.canConvert,
+      ),
+      isSuccess,
+    );
   }
 
-  static const _methodChannel = MethodChannel("${k.libId}/uploader_method");
+  @override
+  void notifyTaskComplete(String taskId) {
+    Uploader._listeners[taskId]?.onComplete();
+    Uploader._listeners.remove(taskId);
+  }
+}
+
+extension on Uploadable {
+  api.Uploadable toPigeon() {
+    return api.Uploadable(
+      platformIdentifier: platformIdentifier,
+      endPoint: uploadPath,
+      canConvert: canConvert,
+    );
+  }
+}
+
+extension on ConvertConfig {
+  api.ConvertConfig toPigeon() {
+    return api.ConvertConfig(
+      format: format.value,
+      quality: quality,
+      downsizeMp: downsizeMp,
+    );
+  }
 }

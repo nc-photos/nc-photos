@@ -157,5 +157,9 @@ abstract interface class AnyFileSetAsWorker {
 }
 
 abstract interface class AnyFileUploadWorker {
-  void upload(String relativePath, {ConvertConfig? convertConfig});
+  void upload(
+    String relativePath, {
+    ConvertConfig? convertConfig,
+    void Function(bool isSuccess)? onResult,
+  });
 }

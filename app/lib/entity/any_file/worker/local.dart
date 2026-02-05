@@ -94,12 +94,17 @@ class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  void upload(String relativePath, {ConvertConfig? convertConfig}) {
+  void upload(
+    String relativePath, {
+    ConvertConfig? convertConfig,
+    void Function(bool isSuccess)? onResult,
+  }) {
     final f = _provider.file;
     UploadLocalFile(account: account)(
       f,
       relativePath: relativePath,
       convertConfig: convertConfig,
+      onResult: onResult,
     );
   }
 

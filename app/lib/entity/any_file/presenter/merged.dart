@@ -73,7 +73,11 @@ class AnyFileMergedPhotoListImagePresenter
     : _provider = file.provider as AnyFileMergedProvider;
 
   @override
-  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero}) {
+  Widget buildWidget({
+    bool? shouldShowFavorite,
+    bool? shouldUseHero,
+    bool? isUploading,
+  }) {
     return PhotoListLocalImage(
       file: _provider.local.file,
       backupStatus: PhotoListLocalFileBackupStatus.backedUp,
@@ -89,7 +93,7 @@ class AnyFileMergedPhotoListVideoPresenter
     : _provider = file.provider as AnyFileMergedProvider;
 
   @override
-  Widget buildWidget({bool? shouldShowFavorite}) {
+  Widget buildWidget({bool? shouldShowFavorite, bool? isUploading}) {
     return PhotoListLocalVideo(
       file: _provider.local.file,
       backupStatus: PhotoListLocalFileBackupStatus.backedUp,

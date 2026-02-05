@@ -107,10 +107,17 @@ class AnyFileLocalPhotoListImagePresenter
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero}) {
+  Widget buildWidget({
+    bool? shouldShowFavorite,
+    bool? shouldUseHero,
+    bool? isUploading,
+  }) {
     return PhotoListLocalImage(
       file: _provider.file,
-      backupStatus: PhotoListLocalFileBackupStatus.none,
+      backupStatus:
+          isUploading == true
+              ? PhotoListLocalFileBackupStatus.uploading
+              : PhotoListLocalFileBackupStatus.none,
     );
   }
 
@@ -123,10 +130,13 @@ class AnyFileLocalPhotoListVideoPresenter
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  Widget buildWidget({bool? shouldShowFavorite}) {
+  Widget buildWidget({bool? shouldShowFavorite, bool? isUploading}) {
     return PhotoListLocalVideo(
       file: _provider.file,
-      backupStatus: PhotoListLocalFileBackupStatus.none,
+      backupStatus:
+          isUploading == true
+              ? PhotoListLocalFileBackupStatus.uploading
+              : PhotoListLocalFileBackupStatus.none,
     );
   }
 

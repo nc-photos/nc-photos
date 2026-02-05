@@ -1,3 +1,4 @@
+import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/api/api_util.dart' as api_util;
@@ -14,54 +15,65 @@ part 'upload_local_file.g.dart';
 class UploadLocalFile {
   const UploadLocalFile({required this.account});
 
-  Future<void> call(
+  void call(
     LocalFile file, {
     required String relativePath,
     ConvertConfig? convertConfig,
+    void Function(bool isSuccess)? onResult,
   }) {
-    if (file is LocalUriFile) {
-      return _uploadUriFile([file], relativePath, convertConfig: convertConfig);
-    } else {
-      throw UnsupportedError("Unsupported local file");
-    }
+    _uploadFile(
+      [file],
+      relativePath,
+      convertConfig: convertConfig,
+      onResult: (_, isSuccess) {
+        onResult?.call(isSuccess);
+      },
+    );
   }
 
-  Future<void> multiple(
+  void multiple(
     List<LocalFile> files, {
     required String relativePath,
     ConvertConfig? convertConfig,
+    void Function(LocalFile file, bool isSuccess)? onResult,
   }) {
-    final uriFiles = files.whereType<LocalUriFile>().toList();
-    return _uploadUriFile(uriFiles, relativePath, convertConfig: convertConfig);
+    _uploadFile(
+      files,
+      relativePath,
+      convertConfig: convertConfig,
+      onResult: onResult,
+    );
   }
 
-  Future<void> _uploadUriFile(
-    List<LocalUriFile> files,
+  void _uploadFile(
+    List<LocalFile> files,
     String relativePath, {
     ConvertConfig? convertConfig,
-  }) async {
+    void Function(LocalFile file, bool isSuccess)? onResult,
+  }) {
     _log.info(
-      "[_uploadUriFile] Uploading ${files.length} files to $relativePath, convertConfig: $convertConfig",
+      "[_uploadFile] Uploading ${files.length} files to $relativePath, convertConfig: $convertConfig",
     );
     if (relativePath.startsWith("/")) {
       relativePath = relativePath.substring(1);
     }
     final dir = "${api_util.getWebdavRootUrl(account)}/$relativePath";
-    await Uploader.asyncUpload(
+    Uploader.asyncUpload(
       uploadables:
           files.map((e) {
             final canConvert = supportedConvertSrcMimes.contains(e.mime);
-            final String filename;
+            final srcFilename = e.filename ?? "file";
+            final String dstFilename;
             if (convertConfig != null && canConvert) {
-              final basename = path_lib.basenameWithoutExtension(e.filename);
-              filename = "$basename.${convertConfig.getExtension()}";
+              final basename = path_lib.basenameWithoutExtension(srcFilename);
+              dstFilename = "$basename.${convertConfig.getExtension()}";
             } else {
-              filename = e.filename;
+              dstFilename = srcFilename;
             }
-            final path = "$dir/$filename";
-            return _LocalUriUploadable(
+            final path = "$dir/$dstFilename";
+            return Uploadable(
+              platformIdentifier: e.platformIdentifier,
               uploadPath: path,
-              contentUri: e.uri,
               canConvert: canConvert,
             );
           }).toList(),
@@ -71,25 +83,18 @@ class UploadLocalFile {
         "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
       },
       convertConfig: convertConfig,
+      onResult: (uploadable, isSuccess) {
+        final localFile = files.firstWhereOrNull(
+          (e) => e.platformIdentifier == uploadable.platformIdentifier,
+        );
+        if (localFile != null) {
+          onResult?.call(localFile, isSuccess);
+        }
+      },
     );
   }
 
   final Account account;
-}
-
-class _LocalUriUploadable implements AndroidUploadable {
-  const _LocalUriUploadable({
-    required this.uploadPath,
-    required this.contentUri,
-    required this.canConvert,
-  });
-
-  @override
-  final String uploadPath;
-  @override
-  final String contentUri;
-  @override
-  final bool canConvert;
 }
 
 extension on ConvertConfig {

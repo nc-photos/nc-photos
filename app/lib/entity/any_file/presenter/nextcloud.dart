@@ -198,7 +198,11 @@ class AnyFileNextcloudPhotoListImagePresenter
     : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
-  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero}) {
+  Widget buildWidget({
+    bool? shouldShowFavorite,
+    bool? shouldUseHero,
+    bool? isUploading,
+  }) {
     return PhotoListImage(
       account: account,
       previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),
@@ -224,7 +228,7 @@ class AnyFileNextcloudPhotoListVideoPresenter
   }) : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
-  Widget buildWidget({bool? shouldShowFavorite}) {
+  Widget buildWidget({bool? shouldShowFavorite, bool? isUploading}) {
     return PhotoListVideo(
       account: account,
       previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),

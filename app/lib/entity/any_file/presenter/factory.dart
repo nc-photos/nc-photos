@@ -124,9 +124,13 @@ abstract interface class AnyFileImageViewerPresenter {
 }
 
 abstract interface class AnyFilePhotoListImagePresenter {
-  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero});
+  Widget buildWidget({
+    bool? shouldShowFavorite,
+    bool? shouldUseHero,
+    bool? isUploading,
+  });
 }
 
 abstract interface class AnyFilePhotoListVideoPresenter {
-  Widget buildWidget({bool? shouldShowFavorite});
+  Widget buildWidget({bool? shouldShowFavorite, bool? isUploading});
 }

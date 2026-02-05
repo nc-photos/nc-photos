@@ -42,7 +42,11 @@ mixin AnyFileWorkerNoDeleteTag implements AnyFileDeleteWorker {
 
 mixin AnyFileWorkerNoUploadTag implements AnyFileUploadWorker {
   @override
-  void upload(String relativePath, {ConvertConfig? convertConfig}) {
+  void upload(
+    String relativePath, {
+    ConvertConfig? convertConfig,
+    void Function(bool isSuccess)? onResult,
+  }) {
     throw UnsupportedError("Operation not supported");
   }
 }

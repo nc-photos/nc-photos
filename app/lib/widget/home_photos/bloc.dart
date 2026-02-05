@@ -37,6 +37,8 @@ class _Bloc extends Bloc<_Event, _State>
     on<_DownloadSelectedItems>(_onDownloadSelectedItems);
     on<_ShareSelectedItems>(_onShareSelectedItems);
     on<_UploadSelectedItems>(_onUploadSelectedItems);
+    on<_UploadRequestResult>(_onUploadRequestResult);
+    on<_SetFileUploadResult>(_onSetFileUploadResult);
 
     on<_AddVisibleDate>(_onAddVisibleDate);
     on<_RemoveVisibleDate>(_onRemoveVisibleDate);
@@ -432,6 +434,32 @@ class _Bloc extends Bloc<_Event, _State>
       final req = _UploadRequest(files: selectedFiles);
       emit(state.copyWith(uploadRequest: Unique(req)));
     }
+  }
+
+  void _onUploadRequestResult(_UploadRequestResult ev, _Emitter emit) {
+    _log.info(ev);
+    final newUploadingFiles = state.uploadingFiles.addedAll(ev.request.files);
+    emit(
+      state.copyWith(uploadRequest: null, uploadingFiles: newUploadingFiles),
+    );
+    UploadAnyFile(account: account)(
+      ev.request.files,
+      relativePath: ev.config.relativePath,
+      convertConfig: ev.config.convertConfig,
+      onResult: (file, isSuccess) {
+        if (!isClosed) {
+          add(_SetFileUploadResult(file, isSuccess));
+        }
+      },
+    );
+  }
+
+  void _onSetFileUploadResult(_SetFileUploadResult ev, _Emitter emit) {
+    _log.info(ev);
+    final newUploadingFiles = state.uploadingFiles.removedFirstWhere(
+      (e) => e.compareIdentity(ev.file),
+    );
+    emit(state.copyWith(uploadingFiles: newUploadingFiles));
   }
 
   void _onAddVisibleDate(_AddVisibleDate ev, Emitter<_State> emit) {

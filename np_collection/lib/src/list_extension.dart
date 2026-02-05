@@ -91,12 +91,25 @@ extension ListExtension<T> on List<T> {
 
   List<T> added(T value) => toList()..add(value);
 
+  List<T> addedAll(Iterable<T> values) => toList()..addAll(values);
+
   List<T> removed(T value) => toList()..remove(value);
 
   List<T> removedAt(int index) => toList()..removeAt(index);
 
   List<T> removedWhere(bool Function(T element) test) =>
       toList()..removeWhere(test);
+
+  /// Removes first object from this list that satisfies [test].
+  void removeFirstWhere(bool Function(T element) test) {
+    final found = indexWhere(test);
+    if (found != -1) {
+      removeAt(found);
+    }
+  }
+
+  List<T> removedFirstWhere(bool Function(T element) test) =>
+      toList()..removeFirstWhere(test);
 
   List<T> inserted(int index, T element) => toList()..insert(index, element);
 }

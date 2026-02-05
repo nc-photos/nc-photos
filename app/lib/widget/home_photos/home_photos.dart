@@ -289,7 +289,6 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     if (uploadRequest.value == null) {
       return;
     }
-    final files = uploadRequest.value!.files;
     final config = await showDialog<UploadConfig>(
       context: context,
       builder: (context) => const UploadDialog(),
@@ -297,12 +296,8 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
     if (config == null || !context.mounted) {
       return;
     }
-    unawaited(
-      UploadAnyFile(account: context.bloc.account)(
-        files,
-        relativePath: config.relativePath,
-        convertConfig: config.convertConfig,
-      ),
+    context.addEvent(
+      _UploadRequestResult(request: uploadRequest.value!, config: config),
     );
   }
 

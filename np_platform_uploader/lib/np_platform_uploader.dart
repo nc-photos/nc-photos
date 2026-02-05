@@ -1,4 +1,4 @@
-library np_platform_uploader;
+library;
 
 export 'src/uploader.dart';
 

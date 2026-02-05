@@ -368,7 +368,7 @@ class PhotoListDate extends StatelessWidget {
   final bool isMonthOnly;
 }
 
-enum PhotoListLocalFileBackupStatus { none, backedUp }
+enum PhotoListLocalFileBackupStatus { none, uploading, backedUp }
 
 class PhotoListLocalImage extends StatelessWidget {
   const PhotoListLocalImage({
@@ -428,7 +428,10 @@ class PhotoListLocalImage extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  child: const Icon(Icons.cloud_done_outlined, size: 20),
+                  child:
+                      backupStatus == PhotoListLocalFileBackupStatus.uploading
+                          ? const Icon(Icons.file_upload_outlined, size: 20)
+                          : const Icon(Icons.cloud_done_outlined, size: 20),
                 ),
               ],
             ],
@@ -504,7 +507,10 @@ class PhotoListLocalVideo extends StatelessWidget {
                     horizontal: 8,
                     vertical: 4,
                   ),
-                  child: const Icon(Icons.cloud_done_outlined, size: 20),
+                  child:
+                      backupStatus == PhotoListLocalFileBackupStatus.uploading
+                          ? const Icon(Icons.file_upload_outlined, size: 20)
+                          : const Icon(Icons.cloud_done_outlined, size: 20),
                 ),
               ],
               Container(

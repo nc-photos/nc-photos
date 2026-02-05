@@ -8,7 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_DATA_SYNC
 import android.net.Uri
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
 import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationCompat
@@ -20,6 +22,7 @@ import com.nkming.nc_photos.np_android_core.getPendingIntentFlagImmutable
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
 import com.nkming.nc_photos.np_android_core.use
+import com.nkming.nc_photos.np_platform_uploader.pigeon.Uploadable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -34,6 +37,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
     companion object {
         private const val CHANNEL_ID = "UploadService"
         private const val ACTION_CANCEL = "cancel"
+        const val EXTRA_TASK_ID = "taskId"
+        const val EXTRA_FLUTTER_API_ID = "flutterApiId"
         const val EXTRA_CONTENT_URIS = "contentUris"
         const val EXTRA_END_POINTS = "endPoints"
         const val EXTRA_CAN_CONVERTS = "canConverts"
@@ -111,6 +116,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
             }
             shouldCancel = true
         } else {
+            val taskId = intent.extras!!.getString(EXTRA_TASK_ID)!!
+            val flutterApiId = intent.extras!!.getInt(EXTRA_FLUTTER_API_ID)
             val contentUris = intent.extras!!.getStringArrayList(EXTRA_CONTENT_URIS)!!
             val endPoints = intent.extras!!.getStringArrayList(EXTRA_END_POINTS)!!
             val canConverts = intent.extras!!.getBooleanArray(EXTRA_CAN_CONVERTS)!!.toList()
@@ -141,7 +148,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
                 }
                 workQueue.add(
                     UploadJob(
-                        contentUris, endPoints, canConverts, headers, convertConfig
+                        taskId, flutterApiId, contentUris, endPoints, canConverts, headers,
+                        convertConfig
                     )
                 )
                 if (workQueue.size == 1) {
@@ -228,7 +236,12 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
                         job.convertConfig.quality, job.convertConfig.downsizeMp
                     )
                     if (converted == null) {
-                        continue;
+                        handler.post {
+                            NpPlatformUploaderPlugin.flutterApis[job.flutterApiId]?.notifyUploadResult(
+                                job.taskId, Uploadable(uri, endPoint, canConvert), false
+                            ) {}
+                        }
+                        continue
                     }
                 }
                 (URL(endPoint).openConnection() as HttpURLConnection).apply {
@@ -256,13 +269,28 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
                             responseCode, "Failed uploading file (HTTP$responseCode)"
                         )
                     }
+                    handler.post {
+                        NpPlatformUploaderPlugin.flutterApis[job.flutterApiId]?.notifyUploadResult(
+                            job.taskId, Uploadable(uri, endPoint, canConvert), true
+                        ) {}
+                    }
                     count += 1
                 }
             } catch (e: Throwable) {
                 logE(TAG, "[workOnce] Exception", e)
+                handler.post {
+                    NpPlatformUploaderPlugin.flutterApis[job.flutterApiId]?.notifyUploadResult(
+                        job.taskId, Uploadable(uri, endPoint, canConvert), false
+                    ) {}
+                }
             } finally {
                 converted?.delete()
             }
+        }
+        handler.post {
+            NpPlatformUploaderPlugin.flutterApis[job.flutterApiId]?.notifyTaskComplete(
+                job.taskId
+            ) {}
         }
         return count
     }
@@ -375,12 +403,14 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
         NotificationManagerCompat.from(this)
     }
     private val wakeLock: PowerManager.WakeLock by lazy {
-        (getSystemService(Context.POWER_SERVICE) as PowerManager).newWakeLock(
+        (getSystemService(POWER_SERVICE) as PowerManager).newWakeLock(
             PowerManager.PARTIAL_WAKE_LOCK, "nc-photos:UploadService"
         ).apply {
             setReferenceCounted(false)
         }
     }
+
+    private val handler by lazy { Handler(Looper.getMainLooper()) }
 }
 
 private data class ConvertConfig(
@@ -390,6 +420,8 @@ private data class ConvertConfig(
 )
 
 private data class UploadJob(
+    val taskId: String,
+    val flutterApiId: Int,
     val contentUris: List<String>,
     val endPoints: List<String>,
     val canConverts: List<Boolean>,
