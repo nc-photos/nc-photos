@@ -68,17 +68,10 @@ abstract interface class AnyFilePresenterFactory {
   static AnyFilePhotoListImagePresenter photoListImage(
     AnyFile file, {
     required Account account,
-    bool shouldShowFavorite = false,
-    bool shouldUseHero = false,
   }) {
     switch (file.provider) {
       case AnyFileNextcloudProvider _:
-        return AnyFileNextcloudPhotoListImagePresenter(
-          file,
-          account: account,
-          shouldShowFavorite: shouldShowFavorite,
-          shouldUseHero: shouldUseHero,
-        );
+        return AnyFileNextcloudPhotoListImagePresenter(file, account: account);
       case AnyFileLocalProvider _:
         return AnyFileLocalPhotoListImagePresenter(file);
       case AnyFileMergedProvider _:
@@ -89,7 +82,6 @@ abstract interface class AnyFilePresenterFactory {
   static AnyFilePhotoListVideoPresenter photoListVideo(
     AnyFile file, {
     required Account account,
-    bool shouldShowFavorite = false,
     VoidCallback? onError,
   }) {
     switch (file.provider) {
@@ -97,7 +89,6 @@ abstract interface class AnyFilePresenterFactory {
         return AnyFileNextcloudPhotoListVideoPresenter(
           file,
           account: account,
-          shouldShowFavorite: shouldShowFavorite,
           onError: onError,
         );
       case AnyFileLocalProvider _:
@@ -133,9 +124,9 @@ abstract interface class AnyFileImageViewerPresenter {
 }
 
 abstract interface class AnyFilePhotoListImagePresenter {
-  Widget buildWidget();
+  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero});
 }
 
 abstract interface class AnyFilePhotoListVideoPresenter {
-  Widget buildWidget();
+  Widget buildWidget({bool? shouldShowFavorite});
 }

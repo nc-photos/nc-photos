@@ -194,28 +194,23 @@ class AnyFileNextcloudImageViewerPresenter
 
 class AnyFileNextcloudPhotoListImagePresenter
     implements AnyFilePhotoListImagePresenter {
-  AnyFileNextcloudPhotoListImagePresenter(
-    this.file, {
-    required this.account,
-    required this.shouldShowFavorite,
-    required this.shouldUseHero,
-  }) : _provider = file.provider as AnyFileNextcloudProvider;
+  AnyFileNextcloudPhotoListImagePresenter(this.file, {required this.account})
+    : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
-  Widget buildWidget() {
+  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero}) {
     return PhotoListImage(
       account: account,
       previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),
       mime: _provider.file.fdMime,
-      isFavorite: shouldShowFavorite && _provider.file.fdIsFavorite,
-      heroKey: shouldUseHero ? flutter_util.HeroTag.fromAnyFile(file) : null,
+      isFavorite: shouldShowFavorite == true && _provider.file.fdIsFavorite,
+      heroKey:
+          shouldUseHero == true ? flutter_util.HeroTag.fromAnyFile(file) : null,
     );
   }
 
   final AnyFile file;
   final Account account;
-  final bool shouldShowFavorite;
-  final bool shouldUseHero;
 
   final AnyFileNextcloudProvider _provider;
 }
@@ -225,24 +220,22 @@ class AnyFileNextcloudPhotoListVideoPresenter
   AnyFileNextcloudPhotoListVideoPresenter(
     this.file, {
     required this.account,
-    required this.shouldShowFavorite,
     this.onError,
   }) : _provider = file.provider as AnyFileNextcloudProvider;
 
   @override
-  Widget buildWidget() {
+  Widget buildWidget({bool? shouldShowFavorite}) {
     return PhotoListVideo(
       account: account,
       previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),
       mime: _provider.file.fdMime,
-      isFavorite: shouldShowFavorite && _provider.file.fdIsFavorite,
+      isFavorite: shouldShowFavorite == true && _provider.file.fdIsFavorite,
       onError: onError,
     );
   }
 
   final AnyFile file;
   final Account account;
-  final bool shouldShowFavorite;
   final VoidCallback? onError;
 
   final AnyFileNextcloudProvider _provider;

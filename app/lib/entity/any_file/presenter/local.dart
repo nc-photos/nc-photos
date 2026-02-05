@@ -115,8 +115,11 @@ class AnyFileLocalPhotoListImagePresenter
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  Widget buildWidget() {
-    return PhotoListLocalImage(file: _provider.file);
+  Widget buildWidget({bool? shouldShowFavorite, bool? shouldUseHero}) {
+    return PhotoListLocalImage(
+      file: _provider.file,
+      backupStatus: PhotoListLocalFileBackupStatus.none,
+    );
   }
 
   final AnyFileLocalProvider _provider;
@@ -128,8 +131,11 @@ class AnyFileLocalPhotoListVideoPresenter
     : _provider = file.provider as AnyFileLocalProvider;
 
   @override
-  Widget buildWidget() {
-    return PhotoListLocalVideo(file: _provider.file);
+  Widget buildWidget({bool? shouldShowFavorite}) {
+    return PhotoListLocalVideo(
+      file: _provider.file,
+      backupStatus: PhotoListLocalFileBackupStatus.none,
+    );
   }
 
   final AnyFileLocalProvider _provider;

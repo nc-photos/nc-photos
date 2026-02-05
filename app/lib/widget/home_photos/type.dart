@@ -42,9 +42,7 @@ class _PhotoItem extends _FileItem {
     return AnyFilePresenterFactory.photoListImage(
       file,
       account: account,
-      shouldShowFavorite: true,
-      shouldUseHero: true,
-    ).buildWidget();
+    ).buildWidget(shouldShowFavorite: true, shouldUseHero: true);
   }
 
   final Account account;
@@ -61,11 +59,10 @@ class _VideoItem extends _FileItem {
     return AnyFilePresenterFactory.photoListVideo(
       file,
       account: account,
-      shouldShowFavorite: true,
       onError: () {
         context.addEvent(const _TripMissingVideoPreview());
       },
-    ).buildWidget();
+    ).buildWidget(shouldShowFavorite: true);
   }
 
   final Account account;

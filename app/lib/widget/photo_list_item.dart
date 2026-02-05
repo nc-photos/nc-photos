@@ -137,7 +137,10 @@ class PhotoListLocalImageItem extends PhotoListLocalFileItem {
   });
 
   @override
-  Widget buildWidget(BuildContext context) => PhotoListLocalImage(file: file);
+  Widget buildWidget(BuildContext context) => PhotoListLocalImage(
+    file: file,
+    backupStatus: PhotoListLocalFileBackupStatus.none,
+  );
 }
 
 class PhotoListImage extends StatelessWidget {
@@ -185,6 +188,12 @@ class PhotoListImage extends StatelessWidget {
               color: Theme.of(context).listPlaceholderBackgroundColor,
               child: child,
             ),
+            const _BottomGradientOverlay(),
+            Container(
+              alignment: AlignmentDirectional.bottomEnd,
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              child: const Icon(Icons.cloud_done_outlined, size: 16),
+            ),
             if (mime == "image/gif")
               Container(
                 alignment: AlignmentDirectional.topEnd,
@@ -194,7 +203,7 @@ class PhotoListImage extends StatelessWidget {
             if (isFavorite)
               Container(
                 alignment: AlignmentDirectional.bottomStart,
-                padding: const EdgeInsets.all(6),
+                padding: const EdgeInsets.all(4),
                 child: const Icon(Icons.star, size: 15),
               ),
           ],
@@ -248,10 +257,16 @@ class PhotoListVideo extends StatelessWidget {
                 },
               ),
             ),
+            const _BottomGradientOverlay(),
+            Container(
+              alignment: AlignmentDirectional.bottomEnd,
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 4),
+              child: const Icon(Icons.cloud_done_outlined, size: 16),
+            ),
             Positioned.directional(
               textDirection: Directionality.of(context),
-              top: 6,
-              end: 6,
+              top: 5,
+              end: 5,
               child: const Icon(Icons.play_circle_outlined, size: 17),
             ),
             if (isFavorite)
@@ -353,11 +368,13 @@ class PhotoListDate extends StatelessWidget {
   final bool isMonthOnly;
 }
 
+enum PhotoListLocalFileBackupStatus { none, backedUp }
+
 class PhotoListLocalImage extends StatelessWidget {
   const PhotoListLocalImage({
     super.key,
     required this.file,
-    this.isMerged = false,
+    required this.backupStatus,
   });
 
   @override
@@ -372,74 +389,70 @@ class PhotoListLocalImage extends StatelessWidget {
       throw ArgumentError("Invalid file");
     }
 
-    return Padding(
-      padding: const EdgeInsets.all(2),
-      child: FittedBox(
-        clipBehavior: Clip.hardEdge,
-        fit: BoxFit.cover,
-        child: Stack(
-          children: [
-            Container(
-              // arbitrary size here
-              constraints: BoxConstraints.tight(const Size(128, 128)),
-              color: Theme.of(context).listPlaceholderBackgroundColor,
-              child: Hero(
-                tag: flutter_util.HeroTag.fromLocalFile(file),
-                child: Image(
-                  image: provider,
-                  filterQuality: FilterQuality.high,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, e, stackTrace) {
-                    return Center(
-                      child: Icon(
-                        Icons.image_not_supported,
-                        size: 64,
-                        color: Theme.of(context).listPlaceholderForegroundColor,
-                      ),
-                    );
-                  },
-                ),
-              ),
-            ),
-            if (isMerged)
+    return IconTheme(
+      data: const IconThemeData(color: Colors.white),
+      child: Padding(
+        padding: const EdgeInsets.all(2),
+        child: FittedBox(
+          clipBehavior: Clip.hardEdge,
+          fit: BoxFit.cover,
+          child: Stack(
+            children: [
               Container(
                 // arbitrary size here
                 constraints: BoxConstraints.tight(const Size(128, 128)),
-                alignment: AlignmentDirectional.bottomEnd,
-                padding: const EdgeInsets.all(8),
-                child: const Icon(
-                  Icons.cloud_done_outlined,
-                  size: 20,
-                  color: Colors.white,
-                ),
-              )
-            else
-              Container(
-                // arbitrary size here
-                constraints: BoxConstraints.tight(const Size(128, 128)),
-                alignment: AlignmentDirectional.bottomEnd,
-                padding: const EdgeInsets.all(8),
-                child: const Icon(
-                  Icons.cloud_off,
-                  size: 20,
-                  color: Colors.white,
+                color: Theme.of(context).listPlaceholderBackgroundColor,
+                child: Hero(
+                  tag: flutter_util.HeroTag.fromLocalFile(file),
+                  child: Image(
+                    image: provider,
+                    filterQuality: FilterQuality.high,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, e, stackTrace) {
+                      return Center(
+                        child: Icon(
+                          Icons.image_not_supported,
+                          size: 64,
+                          color:
+                              Theme.of(context).listPlaceholderForegroundColor,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ),
-          ],
+              if (backupStatus != PhotoListLocalFileBackupStatus.none) ...[
+                ConstrainedBox(
+                  constraints: BoxConstraints.tight(const Size(128, 128)),
+                  child: const _BottomGradientOverlay(),
+                ),
+                Container(
+                  // arbitrary size here
+                  constraints: BoxConstraints.tight(const Size(128, 128)),
+                  alignment: AlignmentDirectional.bottomEnd,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: const Icon(Icons.cloud_done_outlined, size: 20),
+                ),
+              ],
+            ],
+          ),
         ),
       ),
     );
   }
 
   final LocalFile file;
-  final bool isMerged;
+  final PhotoListLocalFileBackupStatus backupStatus;
 }
 
 class PhotoListLocalVideo extends StatelessWidget {
   const PhotoListLocalVideo({
     super.key,
     required this.file,
-    this.isMerged = false,
+    required this.backupStatus,
   });
 
   @override
@@ -490,35 +503,27 @@ class PhotoListLocalVideo extends StatelessWidget {
                   ),
                 ),
               ),
-              if (isMerged)
-                Container(
-                  // arbitrary size here
+              if (backupStatus != PhotoListLocalFileBackupStatus.none) ...[
+                ConstrainedBox(
                   constraints: BoxConstraints.tight(const Size(128, 128)),
-                  alignment: AlignmentDirectional.bottomEnd,
-                  padding: const EdgeInsets.all(8),
-                  child: const Icon(
-                    Icons.cloud_done_outlined,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                )
-              else
-                Container(
-                  // arbitrary size here
-                  constraints: BoxConstraints.tight(const Size(128, 128)),
-                  alignment: AlignmentDirectional.bottomEnd,
-                  padding: const EdgeInsets.all(8),
-                  child: const Icon(
-                    Icons.cloud_off,
-                    size: 20,
-                    color: Colors.white,
-                  ),
+                  child: const _BottomGradientOverlay(),
                 ),
+                Container(
+                  // arbitrary size here
+                  constraints: BoxConstraints.tight(const Size(128, 128)),
+                  alignment: AlignmentDirectional.bottomEnd,
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: const Icon(Icons.cloud_done_outlined, size: 20),
+                ),
+              ],
               Container(
                 // arbitrary size here
                 constraints: BoxConstraints.tight(const Size(128, 128)),
                 alignment: AlignmentDirectional.topEnd,
-                padding: const EdgeInsets.all(8),
+                padding: const EdgeInsets.all(7),
                 child: const Icon(Icons.play_circle_outlined, size: 22),
               ),
             ],
@@ -529,5 +534,23 @@ class PhotoListLocalVideo extends StatelessWidget {
   }
 
   final LocalFile file;
-  final bool isMerged;
+  final PhotoListLocalFileBackupStatus backupStatus;
+}
+
+class _BottomGradientOverlay extends StatelessWidget {
+  const _BottomGradientOverlay();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: AlignmentDirectional.bottomCenter,
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          colors: [Colors.black12, Colors.transparent],
+          begin: Alignment(0, .75),
+          end: Alignment(0, .5),
+        ),
+      ),
+    );
+  }
 }
