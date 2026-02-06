@@ -10,8 +10,8 @@ environment:
 dependencies:
   analyzer: '>=6.2.0'
   build: ">=2.4.1 <2.5.0"
-  np_log:
-    path: ../np_log
+  np_log_annotation:
+    path: ../np_log_annotation
   source_gen: ^2.0.0
 
 dev_dependencies:

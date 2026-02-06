@@ -1,6 +1,6 @@
 import 'package:analyzer/dart/element/element.dart';
 import 'package:build/build.dart';
-import 'package:np_log/np_log.dart';
+import 'package:np_log_annotation/np_log_annotation.dart';
 import 'package:source_gen/source_gen.dart';
 
 /// Add a properly tagged logger to a class or extension

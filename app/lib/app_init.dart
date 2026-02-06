@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:event_bus/event_bus.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -99,10 +98,7 @@ void initLog() {
     return;
   }
 
-  np_log.initLog(
-    isDebugMode: np_log.isDevMode,
-    print: (log) => debugPrint(log, wrapWidth: 1024),
-  );
+  np_log.initLog(isDebugMode: np_log.isDevMode);
 }
 
 Future<void> _initPref() async {

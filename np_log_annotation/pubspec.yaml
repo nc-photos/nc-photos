@@ -1,20 +1,13 @@
-name: np_log
+name: np_log_annotation
 description: A starting point for Dart libraries or applications.
 version: 1.0.0
+# repository: https://github.com/my_org/my_repo
 publish_to: none
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
-  flutter: ">=3.29.0"
 
 dependencies:
-  flutter:
-    sdk: flutter
-  logging: ^1.2.0
-  np_log_annotation:
-    path: ../np_log_annotation
-  np_platform_util:
-    path: ../np_platform_util
 
 dev_dependencies:
   dart_style: 3.0.1
