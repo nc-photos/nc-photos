@@ -63,7 +63,7 @@ private class PigeonApiImpl(private val flutterApiId: Int) : MyHostApi, Activity
                 UploadService.EXTRA_CAN_CONVERTS, canConverts.toBooleanArray()
             )
             putExtra(UploadService.EXTRA_HEADERS, HashMap(httpHeaders))
-            putExtra(UploadService.EXTRA_CONVERT_FORMAT, convertConfig?.format?.toInt())
+            putExtra(UploadService.EXTRA_CONVERT_FORMAT, convertConfig?.format?.raw)
             putExtra(UploadService.EXTRA_CONVERT_QUALITY, convertConfig?.quality?.toInt())
             putExtra(UploadService.EXTRA_CONVERT_DOWNSIZE_MP, convertConfig?.downsizeMp)
         }

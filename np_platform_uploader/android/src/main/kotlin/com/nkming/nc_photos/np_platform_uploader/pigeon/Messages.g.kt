@@ -49,6 +49,17 @@ class FlutterError (
   val details: Any? = null
 ) : Throwable()
 
+enum class ConvertFormat(val raw: Int) {
+  JPEG(0),
+  JXL(1);
+
+  companion object {
+    fun ofRaw(raw: Int): ConvertFormat? {
+      return values().firstOrNull { it.raw == raw }
+    }
+  }
+}
+
 /** Generated class from Pigeon that represents data sent in messages. */
 data class Uploadable (
   val platformIdentifier: String,
@@ -75,14 +86,14 @@ data class Uploadable (
 
 /** Generated class from Pigeon that represents data sent in messages. */
 data class ConvertConfig (
-  val format: Long,
+  val format: ConvertFormat,
   val quality: Long,
   val downsizeMp: Double? = null
 )
  {
   companion object {
     fun fromList(pigeonVar_list: List<Any?>): ConvertConfig {
-      val format = pigeonVar_list[0] as Long
+      val format = pigeonVar_list[0] as ConvertFormat
       val quality = pigeonVar_list[1] as Long
       val downsizeMp = pigeonVar_list[2] as Double?
       return ConvertConfig(format, quality, downsizeMp)
@@ -100,11 +111,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   override fun readValueOfType(type: Byte, buffer: ByteBuffer): Any? {
     return when (type) {
       129.toByte() -> {
+        return (readValue(buffer) as Long?)?.let {
+          ConvertFormat.ofRaw(it.toInt())
+        }
+      }
+      130.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           Uploadable.fromList(it)
         }
       }
-      130.toByte() -> {
+      131.toByte() -> {
         return (readValue(buffer) as? List<Any?>)?.let {
           ConvertConfig.fromList(it)
         }
@@ -114,12 +130,16 @@ private open class MessagesPigeonCodec : StandardMessageCodec() {
   }
   override fun writeValue(stream: ByteArrayOutputStream, value: Any?)   {
     when (value) {
-      is Uploadable -> {
+      is ConvertFormat -> {
         stream.write(129)
+        writeValue(stream, value.raw)
+      }
+      is Uploadable -> {
+        stream.write(130)
         writeValue(stream, value.toList())
       }
       is ConvertConfig -> {
-        stream.write(130)
+        stream.write(131)
         writeValue(stream, value.toList())
       }
       else -> super.writeValue(stream, value)

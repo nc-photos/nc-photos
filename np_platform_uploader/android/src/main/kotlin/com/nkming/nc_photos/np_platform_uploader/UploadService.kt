@@ -22,6 +22,7 @@ import com.nkming.nc_photos.np_android_core.getPendingIntentFlagImmutable
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.logI
 import com.nkming.nc_photos.np_android_core.use
+import com.nkming.nc_photos.np_platform_uploader.pigeon.ConvertFormat
 import com.nkming.nc_photos.np_platform_uploader.pigeon.Uploadable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -125,9 +126,8 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
             val headers = intent.extras!!.getSerializable(
                 EXTRA_HEADERS
             ) as HashMap<String, String>
-            val convertFormat = intent.extras!!.getIntOrNull(
-                EXTRA_CONVERT_FORMAT
-            )
+            val convertFormat =
+                intent.extras!!.getIntOrNull(EXTRA_CONVERT_FORMAT)?.let { ConvertFormat.ofRaw(it) }
             val convertQuality = intent.extras!!.getIntOrNull(
                 EXTRA_CONVERT_QUALITY
             )
@@ -139,8 +139,7 @@ internal class UploadService : Service(), CoroutineScope by MainScope() {
                 if (convertFormat != null) {
                     try {
                         convertConfig = ConvertConfig(
-                            FormatConverter.Format.values()[convertFormat], convertQuality!!,
-                            convertDownsizeMp
+                            convertFormat.toFormatConverter(), convertQuality!!, convertDownsizeMp
                         )
                     } catch (e: Throwable) {
                         logE(TAG, "[doWork] Invalid convert config", e)

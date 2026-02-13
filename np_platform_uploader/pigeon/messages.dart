@@ -11,6 +11,8 @@ import 'package:pigeon/pigeon.dart';
     swiftOut: "ios/Classes/Messages.g.swift",
   ),
 )
+enum ConvertFormat { jpeg, jxl }
+
 class Uploadable {
   late final String platformIdentifier;
   late final String endPoint;
@@ -18,7 +20,7 @@ class Uploadable {
 }
 
 class ConvertConfig {
-  late final int format;
+  late final ConvertFormat format;
   late final int quality;
   late final double? downsizeMp;
 }

@@ -4,6 +4,7 @@ import android.content.ContentResolver
 import android.net.Uri
 import com.nkming.nc_photos.np_android_core.logE
 import com.nkming.nc_photos.np_android_core.measureTime
+import com.nkming.nc_photos.np_platform_uploader.pigeon.ConvertFormat
 import java.io.File
 
 class FormatConverter(
@@ -57,4 +58,11 @@ class FormatConverter(
     private external fun convertNative(
         srcFd: Int, dstPath: String, format: Int, quality: Int, downsizeMp: Double
     ): Int
+}
+
+fun ConvertFormat.toFormatConverter(): FormatConverter.Format {
+    return when (this) {
+        ConvertFormat.JPEG -> FormatConverter.Format.JPEG
+        ConvertFormat.JXL -> FormatConverter.Format.JXL
+    }
 }

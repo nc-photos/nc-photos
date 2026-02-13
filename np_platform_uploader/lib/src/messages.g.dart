@@ -25,6 +25,11 @@ List<Object?> wrapResponse({Object? result, PlatformException? error, bool empty
   return <Object?>[error.code, error.message, error.details];
 }
 
+enum ConvertFormat {
+  jpeg,
+  jxl,
+}
+
 class Uploadable {
   Uploadable({
     required this.platformIdentifier,
@@ -63,7 +68,7 @@ class ConvertConfig {
     this.downsizeMp,
   });
 
-  int format;
+  ConvertFormat format;
 
   int quality;
 
@@ -80,7 +85,7 @@ class ConvertConfig {
   static ConvertConfig decode(Object result) {
     result as List<Object?>;
     return ConvertConfig(
-      format: result[0]! as int,
+      format: result[0]! as ConvertFormat,
       quality: result[1]! as int,
       downsizeMp: result[2] as double?,
     );
@@ -95,11 +100,14 @@ class _PigeonCodec extends StandardMessageCodec {
     if (value is int) {
       buffer.putUint8(4);
       buffer.putInt64(value);
-    }    else if (value is Uploadable) {
+    }    else if (value is ConvertFormat) {
       buffer.putUint8(129);
+      writeValue(buffer, value.index);
+    }    else if (value is Uploadable) {
+      buffer.putUint8(130);
       writeValue(buffer, value.encode());
     }    else if (value is ConvertConfig) {
-      buffer.putUint8(130);
+      buffer.putUint8(131);
       writeValue(buffer, value.encode());
     } else {
       super.writeValue(buffer, value);
@@ -110,8 +118,11 @@ class _PigeonCodec extends StandardMessageCodec {
   Object? readValueOfType(int type, ReadBuffer buffer) {
     switch (type) {
       case 129: 
-        return Uploadable.decode(readValue(buffer)!);
+        final int? value = readValue(buffer) as int?;
+        return value == null ? null : ConvertFormat.values[value];
       case 130: 
+        return Uploadable.decode(readValue(buffer)!);
+      case 131: 
         return ConvertConfig.decode(readValue(buffer)!);
       default:
         return super.readValueOfType(type, buffer);

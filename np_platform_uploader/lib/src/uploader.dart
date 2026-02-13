@@ -157,9 +157,18 @@ extension on Uploadable {
 extension on ConvertConfig {
   api.ConvertConfig toPigeon() {
     return api.ConvertConfig(
-      format: format.value,
+      format: format.toPigeon(),
       quality: quality,
       downsizeMp: downsizeMp,
     );
+  }
+}
+
+extension on ConvertFormat {
+  api.ConvertFormat toPigeon() {
+    return switch (this) {
+      ConvertFormat.jpeg => api.ConvertFormat.jpeg,
+      ConvertFormat.jxl => api.ConvertFormat.jxl,
+    };
   }
 }
