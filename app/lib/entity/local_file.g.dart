@@ -12,3 +12,10 @@ extension _$LocalUriFileToString on LocalUriFile {
     return "LocalUriFile {id: $id, uri: $uri, displayName: $displayName, path: $path, lastModified: $lastModified, ${mime == null ? "" : "mime: $mime, "}${dateTaken == null ? "" : "dateTaken: $dateTaken, "}${size == null ? "" : "size: $size, "}byteSize: $byteSize}";
   }
 }
+
+extension _$LocalMediaIosFileToString on LocalMediaIosFile {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "LocalMediaIosFile {id: $id, ${filename == null ? "" : "filename: $filename, "}${dateModified == null ? "" : "dateModified: $dateModified, "}${mime == null ? "" : "mime: $mime, "}${dateTaken == null ? "" : "dateTaken: $dateTaken, "}size: $size, ${byteSize == null ? "" : "byteSize: $byteSize"}}";
+  }
+}

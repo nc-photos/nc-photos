@@ -222,13 +222,9 @@ Future<void> _initDiContainer(InitIsolateType isolateType) async {
   c.imageLocationRepo = BasicImageLocationRepo(
     ImageLocationNpDbDataSource(c.npDb),
   );
+  c.localFileRepo = const LocalFileRepo(LocalFileMediaStoreDataSource());
 
   c.touchManager = TouchManager(c);
-
-  if (getRawPlatform() == NpPlatform.android) {
-    // local file currently only supported on Android
-    c.localFileRepo = const LocalFileRepo(LocalFileMediaStoreDataSource());
-  }
 
   KiwiContainer().registerInstance<DiContainer>(c);
 }

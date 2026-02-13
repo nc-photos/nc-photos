@@ -18,7 +18,7 @@ class AnyFileLocalProvider implements AnyFileProvider {
   String get id => toAfId(file.id);
 
   @override
-  String get name => file.filename;
+  String get name => file.filename ?? "photo";
 
   @override
   String? get mime => file.mime;

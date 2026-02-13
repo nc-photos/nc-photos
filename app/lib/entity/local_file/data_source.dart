@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 
 import 'package:collection/collection.dart';
 import 'package:logging/logging.dart';
@@ -16,6 +17,8 @@ import 'package:np_common/object_util.dart';
 import 'package:np_common/size.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_platform_local_media/np_platform_local_media.dart';
+import 'package:np_platform_util/np_platform_util.dart';
 
 part 'data_source.g.dart';
 
@@ -43,15 +46,15 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
     );
 
     Future<List<LocalFile>> queryFiles(Iterable<String>? ids) async {
-      final results = await MediaStore.queryFiles2(
-        fileIds: ids?.map(int.parse).toList(),
+      final results = await LocalMedia.queryFiles(
+        fileIds: ids?.toList(),
         timeRange: timeRange,
         dirWhitelist: dirWhitelist,
         isAscending: isAscending,
         offset: offset,
         limit: limit,
       );
-      return results.map(_toLocalFile).toList();
+      return results.map((e) => e.toLocalFile()).toList();
     }
 
     if (fileIds != null) {
@@ -132,10 +135,12 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
     List<String>? dirWhitelist,
   }) async {
     _log.info("[getFilesSummary] dirWhitelist: $dirWhitelist");
-    final results = await MediaStore.getFilesSummary(
+    final results = await LocalMedia.getFilesSummary(
       dirWhitelist: dirWhitelist,
     );
-    return LocalFilesSummary(items: results);
+    return LocalFilesSummary(
+      items: SplayTreeMap.from(results, (a, b) => b.compareTo(a)),
+    );
   }
 
   @override
@@ -282,5 +287,35 @@ class LocalFileMediaStoreDataSource implements LocalFileDataSource {
       size: size,
       byteSize: r.size,
     );
+  }
+}
+
+extension on LocalMediaQueryResult {
+  LocalFile toLocalFile() {
+    if (getRawPlatform() == NpPlatform.android) {
+      return LocalUriFile(
+        id: id,
+        uri: androidUri!,
+        displayName: displayName!,
+        path: androidPath!,
+        lastModified: dateModified!,
+        mime: mimeType,
+        dateTaken: dateTaken,
+        size: resolution,
+        byteSize: size!,
+      );
+    } else if (getRawPlatform() == NpPlatform.iOs) {
+      return LocalMediaIosFile(
+        id: id,
+        filename: displayName,
+        dateModified: dateModified,
+        mime: mimeType,
+        dateTaken: dateTaken,
+        size: resolution!,
+        byteSize: size,
+      );
+    } else {
+      throw UnsupportedError("Unsupported platform");
+    }
   }
 }

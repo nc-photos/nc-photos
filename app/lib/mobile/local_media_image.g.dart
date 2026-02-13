@@ -1,14 +1,14 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'content_uri_image_provider.dart';
+part of 'local_media_image.dart';
 
 // **************************************************************************
 // ToStringGenerator
 // **************************************************************************
 
-extension _$ContentUriImageToString on ContentUriImage {
+extension _$LocalMediaImageToString on LocalMediaImage {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "ContentUriImage {uri: $uri, thumbnailSizeHint: $thumbnailSizeHint, scale: ${scale.toStringAsFixed(3)}}";
+    return "LocalMediaImage {platformIdentifier: $platformIdentifier, thumbnailSizeHint: $thumbnailSizeHint, scale: ${scale.toStringAsFixed(3)}}";
   }
 }

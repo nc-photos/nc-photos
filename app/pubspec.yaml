@@ -135,6 +135,8 @@ dependencies:
     path: ../np_platform_image_format_jxl
   np_platform_image_processor:
     path: ../np_platform_image_processor
+  np_platform_local_media:
+    path: ../np_platform_local_media
   np_platform_lock:
     path: ../np_platform_lock
   np_platform_log:

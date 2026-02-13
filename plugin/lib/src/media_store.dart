@@ -1,9 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:logging/logging.dart';
-import 'package:nc_photos_plugin/src/exception.dart';
 import 'package:nc_photos_plugin/src/k.dart' as k;
-import 'package:np_common/object_util.dart';
-import 'package:np_datetime/np_datetime.dart';
+import 'package:np_common/exception.dart';
 
 class MediaStoreQueryResult {
   const MediaStoreQueryResult({
@@ -141,57 +139,6 @@ class MediaStore {
     }
   }
 
-  static Future<List<MediaStoreQueryResult>> queryFiles2({
-    List<int>? fileIds,
-    TimeRange? timeRange,
-    List<String>? dirWhitelist,
-    bool? isAscending,
-    int? offset,
-    int? limit,
-  }) async {
-    try {
-      final List results = await _methodChannel
-          .invokeMethod("queryFiles2", <String, dynamic>{
-            "fileIds": fileIds,
-            "timeRangeBeg": timeRange?.from?.millisecondsSinceEpoch,
-            "isTimeRangeBegInclusive": timeRange?.let(
-              (e) => e.fromBound == TimeRangeBound.inclusive,
-            ),
-            "timeRangeEnd": timeRange?.to?.millisecondsSinceEpoch,
-            "isTimeRangeEndInclusive": timeRange?.let(
-              (e) => e.toBound == TimeRangeBound.inclusive,
-            ),
-            if (dirWhitelist != null) "dirWhitelist": dirWhitelist,
-            "isAscending": isAscending,
-            "offset": offset,
-            "limit": limit,
-          });
-      return results
-          .cast<Map>()
-          .map(
-            (e) => MediaStoreQueryResult(
-              id: e["id"],
-              uri: e["uri"],
-              displayName: e["displayName"],
-              path: e["path"],
-              dateModified: e["dateModified"],
-              mimeType: e["mimeType"],
-              dateTaken: e["dateTaken"],
-              width: e["width"],
-              height: e["height"],
-              size: e["size"],
-            ),
-          )
-          .toList();
-    } on PlatformException catch (e) {
-      if (e.code == _exceptionCodePermissionError) {
-        throw const PermissionException();
-      } else {
-        rethrow;
-      }
-    }
-  }
-
   static Future<List<String>?> deleteFiles(List<String> uris) async {
     return (await _methodChannel.invokeMethod<List>(
       "deleteFiles",
@@ -206,30 +153,6 @@ class MediaStore {
       "trashFiles",
       <String, dynamic>{"uris": uris},
     ))!.cast<String>();
-  }
-
-  static Future<Map<Date, int>> getFilesSummary({
-    List<String>? dirWhitelist,
-  }) async {
-    try {
-      return (await _methodChannel.invokeMethod<Map>(
-        "getFilesSummary",
-        <String, dynamic>{
-          if (dirWhitelist != null) "dirWhitelist": dirWhitelist,
-        },
-      ))!.cast<int, int>().map(
-        (key, value) => MapEntry(
-          Date.fromDateTime(DateTime.fromMillisecondsSinceEpoch(key)),
-          value,
-        ),
-      );
-    } on PlatformException catch (e) {
-      if (e.code == _exceptionCodePermissionError) {
-        throw const PermissionException();
-      } else {
-        rethrow;
-      }
-    }
   }
 
   static Future<List<({int fileId, int timestamp, String filename})>>

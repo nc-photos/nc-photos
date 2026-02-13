@@ -1,0 +1,59 @@
+group = "com.nkming.nc_photos.np_platform_local_media"
+version = "1.0-SNAPSHOT"
+
+buildscript {
+    ext.kotlin_version = '2.2.21'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath("com.android.tools.build:gradle:8.8.2")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+apply plugin: "com.android.library"
+apply plugin: "kotlin-android"
+
+android {
+    namespace = "com.nkming.nc_photos.np_platform_local_media"
+    compileSdk = 36
+
+    compileOptions {
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_17
+    }
+
+    defaultConfig {
+        minSdk = 23
+    }
+
+    buildTypes {
+   		release {
+   			minifyEnabled false
+   		}
+   	}
+
+    lintOptions {
+        disable 'LongLogTag'
+    }
+
+    dependencies {
+        coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.3")
+        implementation("com.nkming.nc_photos.np_android_core:np_android_core")
+    }
+}

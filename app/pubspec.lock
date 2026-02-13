@@ -1280,6 +1280,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  np_platform_local_media:
+    dependency: "direct main"
+    description:
+      path: "../np_platform_local_media"
+      relative: true
+    source: path
+    version: "0.0.1"
   np_platform_lock:
     dependency: "direct main"
     description:

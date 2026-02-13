@@ -11,7 +11,7 @@ import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
 import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
+import 'package:nc_photos/mobile/local_media_image.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/zoomable_viewer.dart';
@@ -33,18 +33,11 @@ class LocalImageViewer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final ImageProvider provider;
-    final ImageProvider heroProvider;
-    if (file is LocalUriFile) {
-      provider = ContentUriImage((file as LocalUriFile).uri);
-      heroProvider = ContentUriImage(
-        (file as LocalUriFile).uri,
-        thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
-      );
-    } else {
-      throw ArgumentError("Invalid file");
-    }
-
+    final provider = LocalMediaImage(file.platformIdentifier);
+    final heroProvider = LocalMediaImage(
+      file.platformIdentifier,
+      thumbnailSizeHint: SizeInt.square(k.photoThumbSize),
+    );
     return _ImageViewer(
       canZoom: canZoom,
       onHeightChanged: onHeightChanged,

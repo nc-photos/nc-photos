@@ -6,10 +6,10 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/use_case/load_metadata.dart';
-import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_common/size.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_gps_map/np_gps_map.dart';
+import 'package:np_platform_local_media/np_platform_local_media.dart';
 
 class AnyFileLocalUriGetter implements AnyFileUriGetter {
   AnyFileLocalUriGetter(AnyFile file)
@@ -48,7 +48,8 @@ class AnyFileLocalLocalFileUriGetter implements AnyFileLocalFileUriGetter {
   final AnyFileLocalUriGetter _impl;
 }
 
-class AnyFileLocalLocalPreviewUriGetter implements AnyFileLocalPreviewUriGetter {
+class AnyFileLocalLocalPreviewUriGetter
+    implements AnyFileLocalPreviewUriGetter {
   AnyFileLocalLocalPreviewUriGetter(AnyFile file)
     : _impl = AnyFileLocalUriGetter(file);
 
@@ -129,12 +130,8 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
 
   Future<Metadata?> _loadMetadata() async {
     if (file_util.isSupportedImageMime(file.mime ?? "")) {
-      if (_provider.file is LocalUriFile) {
-        final data = await ContentUri.readUri(
-          (_provider.file as LocalUriFile).uri,
-        );
-        return LoadMetadata().loadAnyfile(file, data);
-      }
+      final data = await LocalMedia.readFile(_provider.file.platformIdentifier);
+      return LoadMetadata().loadAnyfile(file, data);
     }
     return null;
   }

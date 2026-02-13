@@ -19,7 +19,7 @@ import 'package:nc_photos/mobile/platform.dart'
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/download_file.dart';
 import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
-import 'package:nc_photos_plugin/nc_photos_plugin.dart';
+import 'package:np_common/exception.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_util/np_platform_util.dart';
 

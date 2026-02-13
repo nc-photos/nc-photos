@@ -18,8 +18,8 @@ import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/help_utils.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/android_info.dart';
-import 'package:nc_photos/mobile/android/content_uri_image_provider.dart';
 import 'package:nc_photos/mobile/android/k.dart' as android;
+import 'package:nc_photos/mobile/local_media_image.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
@@ -918,7 +918,7 @@ class _StylePickerState extends State<_StylePicker> {
                   image: ResizeImage.resizeIfNeeded(
                     128,
                     null,
-                    ContentUriImage(_getSelectedUri()),
+                    LocalMediaImage(_getSelectedUri()),
                   ),
                   fit: BoxFit.cover,
                 ),
@@ -937,7 +937,7 @@ class _StylePickerState extends State<_StylePicker> {
                     image: ResizeImage.resizeIfNeeded(
                       _thumbSize,
                       null,
-                      ContentUriImage(e),
+                      LocalMediaImage(e),
                     ),
                     fit: BoxFit.cover,
                   ),
@@ -950,7 +950,7 @@ class _StylePickerState extends State<_StylePicker> {
                     image: ResizeImage.resizeIfNeeded(
                       _thumbSize,
                       null,
-                      ContentUriImage(_customUri!),
+                      LocalMediaImage(_customUri!),
                     ),
                     fit: BoxFit.cover,
                   ),

@@ -19,14 +19,18 @@ abstract class LocalFile with EquatableMixin {
 
   String get logTag;
 
+  /// [platformIdentifier] should return the same value returned by the
+  /// [LocalMedia] APIs
+  String get platformIdentifier;
+
   String get id;
-  String get filename;
+  String? get filename;
   DateTime get lastModified;
   String? get mime;
   DateTime? get dateTaken;
   SizeInt? get size;
   String? get path;
-  int get byteSize;
+  int? get byteSize;
 }
 
 extension LocalFileExtension on LocalFile {
@@ -71,6 +75,9 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   String get logTag => path;
 
   @override
+  String get platformIdentifier => uri;
+
+  @override
   String get filename => displayName;
 
   @override
@@ -83,6 +90,7 @@ class LocalUriFile with EquatableMixin implements LocalFile {
     mime,
     dateTaken,
     size,
+    byteSize,
   ];
 
   @override
@@ -105,6 +113,72 @@ class LocalUriFile with EquatableMixin implements LocalFile {
   final int byteSize;
 }
 
+@ToString(ignoreNull: true)
+class LocalMediaIosFile with EquatableMixin implements LocalFile {
+  const LocalMediaIosFile({
+    required this.id,
+    required this.filename,
+    required this.dateModified,
+    required this.mime,
+    required this.dateTaken,
+    required this.size,
+    required this.byteSize,
+  });
+
+  @override
+  bool compareIdentity(LocalFile other) {
+    if (other is! LocalMediaIosFile) {
+      return false;
+    } else {
+      return id == other.id;
+    }
+  }
+
+  @override
+  int get identityHashCode => id.hashCode;
+
+  @override
+  String toString() => _$toString();
+
+  @override
+  String get logTag => filename ?? id;
+
+  @override
+  String get platformIdentifier => id;
+
+  @override
+  List<Object?> get props => [
+    id,
+    filename,
+    lastModified,
+    mime,
+    dateTaken,
+    size,
+    byteSize,
+  ];
+
+  @override
+  DateTime get lastModified =>
+      dateModified ?? DateTime.fromMillisecondsSinceEpoch(0);
+
+  @override
+  String? get path => null;
+
+  @override
+  final String id;
+  @override
+  final String? filename;
+  final DateTime? dateModified;
+  @override
+  final String? mime;
+  @override
+  final DateTime? dateTaken;
+  @override
+  final SizeInt size;
+  @override
+  final int? byteSize;
+}
+
 typedef LocalFileOnFailureListener =
     void Function(LocalFile file, Object? error, StackTrace? stackTrace);
 
@@ -112,8 +186,10 @@ int compareLocalFileDateTimeDescending(LocalFile x, LocalFile y) {
   final tmp = y.bestDateTime.compareTo(x.bestDateTime);
   if (tmp != 0) {
     return tmp;
-  } else {
+  } else if (x.filename != null && y.filename != null) {
     // compare file name if files are modified at the same time
-    return y.filename.compareTo(x.filename);
+    return y.filename!.compareTo(x.filename!);
+  } else {
+    return y.id.compareTo(x.id);
   }
 }

@@ -15,8 +15,8 @@ import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/use_case/download_file.dart';
 import 'package:nc_photos/use_case/download_preview.dart';
 import 'package:nc_photos/widget/download_progress_dialog.dart';
-import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/exception.dart';
 import 'package:np_log/np_log.dart';
 import 'package:rxdart/rxdart.dart';
 
