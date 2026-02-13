@@ -35,9 +35,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _initNotification() async {
-    if (!await Permission.hasPostNotifications()) {
-      await requestPostNotificationsForResult();
-    }
+    await Permission.notification.request();
   }
 
   Future<void> _initFirstRun() async {

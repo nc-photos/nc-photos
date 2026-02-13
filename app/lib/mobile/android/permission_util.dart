@@ -9,9 +9,6 @@ Future<Map<String, int>> requestPermissionsForResult(
 Future<Map<String, int>> requestReadMediaForResult() =>
     _doRequest(() => Permission.requestReadMedia());
 
-Future<Map<String, int>> requestPostNotificationsForResult() =>
-    _doRequest(() => Permission.requestPostNotifications());
-
 Future<Map<String, int>> _doRequest(Future Function() op) async {
   Map<String, int>? result;
   final resultFuture = Permission.stream

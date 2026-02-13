@@ -29,13 +29,6 @@ class Permission {
   static Future<void> requestReadMedia() =>
       _methodChannel.invokeMethod("requestReadMedia");
 
-  static Future<bool> hasPostNotifications() async {
-    return (await _methodChannel.invokeMethod<bool>("hasPostNotifications"))!;
-  }
-
-  static Future<void> requestPostNotifications() =>
-      _methodChannel.invokeMethod("requestPostNotifications");
-
   static Stream get stream => _eventStream;
 
   static final _eventStream = _eventChannel.receiveBroadcastStream().map((

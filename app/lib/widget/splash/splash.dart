@@ -11,7 +11,6 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/mobile/android/activity.dart';
-import 'package:nc_photos/mobile/android/permission_util.dart';
 import 'package:nc_photos/protected_page_handler.dart';
 import 'package:nc_photos/use_case/compat/v29.dart';
 import 'package:nc_photos/use_case/compat/v46.dart';
@@ -27,8 +26,8 @@ import 'package:nc_photos/widget/setup.dart';
 import 'package:nc_photos/widget/sign_in/sign_in.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
-import 'package:np_platform_permission/np_platform_permission.dart';
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:to_string/to_string.dart';
 
 part 'bloc.dart';
