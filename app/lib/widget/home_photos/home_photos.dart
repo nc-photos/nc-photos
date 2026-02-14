@@ -472,7 +472,12 @@ class _BodyState extends State<_Body> {
                       // status bar + app bar
                       topOffset: _getAppBarExtent(context),
                       bottomOffset: MediaQuery.paddingOf(context).bottom,
-                      labelTextBuilder: (_) => const _ScrollLabel(),
+                      onDragBegin: () {
+                        context.addEvent(const _SetIsDragging(true));
+                      },
+                      onDragEnd: () {
+                        context.addEvent(const _SetIsDragging(false));
+                      },
                       labelPadding: const EdgeInsets.symmetric(horizontal: 40),
                       backgroundColor:
                           Theme.of(context).colorScheme.secondaryContainer,
@@ -526,6 +531,22 @@ class _BodyState extends State<_Body> {
                                                       ? const _AppBar()
                                                       : const _SelectionAppBar(),
                                         ),
+                                        _BlocSelector<bool>(
+                                          selector:
+                                              (state) => state.isScrolling,
+                                          builder:
+                                              (context, isScrolling) =>
+                                                  isScrolling
+                                                      ? const SliverPersistentHeader(
+                                                        delegate:
+                                                            _AppBarAnchorDelegate(),
+                                                        pinned: true,
+                                                      )
+                                                      : const SliverToBoxAdapter(
+                                                        child:
+                                                            SizedBox.shrink(),
+                                                      ),
+                                        ),
                                         _BlocBuilder(
                                           buildWhen:
                                               (previous, current) =>
@@ -566,6 +587,7 @@ class _BodyState extends State<_Body> {
                                       ],
                                     ),
                               ),
+                              const _DateBar(),
                               _BlocSelector<bool>(
                                 selector: (state) => state.isScrolling,
                                 builder:

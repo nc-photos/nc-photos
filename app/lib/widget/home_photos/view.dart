@@ -331,37 +331,6 @@ class _MemoryCollectionItemView extends StatelessWidget {
   final VoidCallback? onTap;
 }
 
-class _ScrollLabel extends StatelessWidget {
-  const _ScrollLabel();
-
-  @override
-  Widget build(BuildContext context) {
-    return _BlocSelector<Date?>(
-      selector: (state) => state.scrollDate,
-      builder: (context, scrollDate) {
-        if (scrollDate == null) {
-          return const SizedBox.shrink();
-        }
-        final text = DateFormat(
-          DateFormat.YEAR_ABBR_MONTH,
-          Localizations.localeOf(context).languageCode,
-        ).format(scrollDate.toUtcDateTime());
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          child: DefaultTextStyle(
-            style:
-                Theme.of(context).textStyleColored(
-                  (textTheme) => textTheme.titleMedium,
-                  (colorScheme) => colorScheme.onSecondaryContainer,
-                )!,
-            child: Text(text),
-          ),
-        );
-      },
-    );
-  }
-}
-
 class _VideoPreviewHintDialog extends StatelessWidget {
   const _VideoPreviewHintDialog();
 
@@ -385,6 +354,60 @@ class _VideoPreviewHintDialog extends StatelessWidget {
           child: Text(L10n.global().dontShowAgain),
         ),
       ],
+    );
+  }
+}
+
+class _DateBar extends StatelessWidget {
+  const _DateBar();
+
+  @override
+  Widget build(BuildContext context) {
+    return _BlocBuilder(
+      buildWhen:
+          (previous, current) =>
+              previous.dateBarContent != current.dateBarContent ||
+              previous.appBarPosition != current.appBarPosition,
+      builder: (context, state) {
+        if (state.dateBarContent == null) {
+          return const SizedBox.shrink();
+        }
+        final appBarY = state.appBarPosition?.dy;
+        double y = 8;
+        if (appBarY != null) {
+          y += max(appBarY, MediaQuery.paddingOf(context).top);
+        }
+
+        final String datePattern;
+        if (context.bloc.prefController.homePhotosZoomLevelValue >= 0) {
+          datePattern = DateFormat.YEAR_MONTH_DAY;
+        } else {
+          datePattern = DateFormat.YEAR_MONTH;
+        }
+        final text = DateFormat(
+          datePattern,
+          Localizations.localeOf(context).languageCode,
+        ).format(state.dateBarContent!.toLocalDateTime());
+        return Padding(
+          padding: EdgeInsets.only(top: max(y, 0), left: 16, right: 16),
+          child: Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(32),
+              color: Theme.of(
+                context,
+              ).colorScheme.primaryContainer.withValues(alpha: .85),
+            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Text(
+              text,
+              style: Theme.of(context).textStyleColored(
+                (textTheme) => textTheme.titleMedium,
+                (colorScheme) => colorScheme.onPrimaryContainer,
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

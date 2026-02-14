@@ -133,3 +133,74 @@ class _SelectionAppBarMenu extends StatelessWidget {
     );
   }
 }
+
+class _AppBarAnchorDelegate extends SliverPersistentHeaderDelegate {
+  const _AppBarAnchorDelegate();
+
+  @override
+  Widget build(
+    BuildContext context,
+    double shrinkOffset,
+    bool overlapsContent,
+  ) {
+    return const _AppBarAnchor();
+  }
+
+  @override
+  double get maxExtent => 0;
+
+  @override
+  double get minExtent => 0;
+
+  @override
+  bool shouldRebuild(covariant SliverPersistentHeaderDelegate oldDelegate) {
+    return false;
+  }
+}
+
+class _AppBarAnchor extends StatefulWidget {
+  const _AppBarAnchor();
+
+  @override
+  State<StatefulWidget> createState() => _AppBarAnchorState();
+}
+
+class _AppBarAnchorState extends State<_AppBarAnchor>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updatePoisiton();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox.shrink(key: _key);
+  }
+
+  void _updatePoisiton() {
+    if (!mounted) {
+      return;
+    }
+    final translation =
+        _key.currentContext
+            ?.findRenderObject()
+            ?.getTransformTo(null)
+            .getTranslation();
+    if (translation != null) {
+      final p = Offset(translation.x, translation.y);
+      if (_position != p) {
+        _position = p;
+        context.addEvent(_SetAppBarPosition(p));
+      }
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _updatePoisiton();
+    });
+  }
+
+  final _key = GlobalKey();
+  Offset? _position;
+}

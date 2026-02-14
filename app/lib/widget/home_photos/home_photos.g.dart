@@ -20,6 +20,7 @@ abstract class $_StateCopyWithWorker {
     List<List<_Item>>? transformedItems,
     Set<_Item>? selectedItems,
     Set<_VisibleDate>? visibleDates,
+    Date? dateBarContent,
     Set<Date>? queriedDates,
     Map<Date, int>? mergedCounts,
     bool? hasRemoteData,
@@ -38,6 +39,8 @@ abstract class $_StateCopyWithWorker {
     List<_MinimapItem>? minimapItems,
     double? minimapYRatio,
     Date? scrollDate,
+    Offset? appBarPosition,
+    bool? isDragging,
     bool? hasMissingVideoPreview,
     Unique<_ShareRequest?>? shareRequest,
     Unique<_UploadRequest?>? uploadRequest,
@@ -65,6 +68,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic transformedItems,
     dynamic selectedItems,
     dynamic visibleDates,
+    dynamic dateBarContent = copyWithNull,
     dynamic queriedDates,
     dynamic mergedCounts,
     dynamic hasRemoteData,
@@ -83,6 +87,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic minimapItems = copyWithNull,
     dynamic minimapYRatio,
     dynamic scrollDate = copyWithNull,
+    dynamic appBarPosition = copyWithNull,
+    dynamic isDragging,
     dynamic hasMissingVideoPreview,
     dynamic shareRequest,
     dynamic uploadRequest,
@@ -106,6 +112,10 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           transformedItems as List<List<_Item>>? ?? that.transformedItems,
       selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
       visibleDates: visibleDates as Set<_VisibleDate>? ?? that.visibleDates,
+      dateBarContent:
+          dateBarContent == copyWithNull
+              ? that.dateBarContent
+              : dateBarContent as Date?,
       queriedDates: queriedDates as Set<Date>? ?? that.queriedDates,
       mergedCounts: mergedCounts as Map<Date, int>? ?? that.mergedCounts,
       hasRemoteData: hasRemoteData as bool? ?? that.hasRemoteData,
@@ -139,6 +149,11 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       minimapYRatio: minimapYRatio as double? ?? that.minimapYRatio,
       scrollDate:
           scrollDate == copyWithNull ? that.scrollDate : scrollDate as Date?,
+      appBarPosition:
+          appBarPosition == copyWithNull
+              ? that.appBarPosition
+              : appBarPosition as Offset?,
+      isDragging: isDragging as bool? ?? that.isDragging,
       hasMissingVideoPreview:
           hasMissingVideoPreview as bool? ?? that.hasMissingVideoPreview,
       shareRequest:
@@ -246,7 +261,7 @@ extension _$_ContentListBodyNpLog on _ContentListBody {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {anyFiles: [length: ${anyFiles.length}], anyFilesSummary: $anyFilesSummary, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, visibleDates: {length: ${visibleDates.length}}, queriedDates: {length: ${queriedDates.length}}, mergedCounts: {length: ${mergedCounts.length}}, hasRemoteData: $hasRemoteData, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, hasMissingVideoPreview: $hasMissingVideoPreview, shareRequest: $shareRequest, uploadRequest: $uploadRequest, uploadingFiles: [length: ${uploadingFiles.length}], deleteRequest: $deleteRequest, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, selectedCanUpload: $selectedCanUpload, error: $error, shouldShowRemoteOnlyWarning: $shouldShowRemoteOnlyWarning, shouldShowLocalOnlyWarning: $shouldShowLocalOnlyWarning}";
+    return "_State {anyFiles: [length: ${anyFiles.length}], anyFilesSummary: $anyFilesSummary, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, visibleDates: {length: ${visibleDates.length}}, dateBarContent: $dateBarContent, queriedDates: {length: ${queriedDates.length}}, mergedCounts: {length: ${mergedCounts.length}}, hasRemoteData: $hasRemoteData, isEnableMemoryCollection: $isEnableMemoryCollection, memoryCollections: [length: ${memoryCollections.length}], syncProgress: $syncProgress, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, finger: $finger, viewWidth: ${viewWidth == null ? null : "${viewWidth!.toStringAsFixed(3)}"}, viewHeight: ${viewHeight == null ? null : "${viewHeight!.toStringAsFixed(3)}"}, viewOverlayPadding: ${viewOverlayPadding == null ? null : "${viewOverlayPadding!.toStringAsFixed(3)}"}, itemPerRow: $itemPerRow, itemSize: ${itemSize == null ? null : "${itemSize!.toStringAsFixed(3)}"}, isScrolling: $isScrolling, minimapItems: ${minimapItems == null ? null : "[length: ${minimapItems!.length}]"}, minimapYRatio: ${minimapYRatio.toStringAsFixed(3)}, scrollDate: $scrollDate, appBarPosition: $appBarPosition, isDragging: $isDragging, hasMissingVideoPreview: $hasMissingVideoPreview, shareRequest: $shareRequest, uploadRequest: $uploadRequest, uploadingFiles: [length: ${uploadingFiles.length}], deleteRequest: $deleteRequest, selectedCanArchive: $selectedCanArchive, selectedCanDownload: $selectedCanDownload, selectedCanDelete: $selectedCanDelete, selectedCanAddToCollection: $selectedCanAddToCollection, selectedCanUpload: $selectedCanUpload, error: $error, shouldShowRemoteOnlyWarning: $shouldShowRemoteOnlyWarning, shouldShowLocalOnlyWarning: $shouldShowLocalOnlyWarning}";
   }
 }
 
@@ -412,6 +427,13 @@ extension _$_EndScrollingToString on _EndScrolling {
   }
 }
 
+extension _$_SetIsDraggingToString on _SetIsDragging {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetIsDragging {value: $value}";
+  }
+}
+
 extension _$_SetLayoutConstraintToString on _SetLayoutConstraint {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
@@ -430,6 +452,20 @@ extension _$_UpdateScrollDateToString on _UpdateScrollDate {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_UpdateScrollDate {}";
+  }
+}
+
+extension _$_UpdateDateBarToString on _UpdateDateBar {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_UpdateDateBar {}";
+  }
+}
+
+extension _$_SetAppBarPositionToString on _SetAppBarPosition {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetAppBarPosition {value: $value}";
   }
 }
 

@@ -10,6 +10,7 @@ class _State {
     required this.transformedItems,
     required this.selectedItems,
     required this.visibleDates,
+    this.dateBarContent,
     required this.queriedDates,
     required this.mergedCounts,
     required this.hasRemoteData,
@@ -28,6 +29,8 @@ class _State {
     this.minimapItems,
     required this.minimapYRatio,
     this.scrollDate,
+    this.appBarPosition,
+    required this.isDragging,
     required this.hasMissingVideoPreview,
     required this.shareRequest,
     required this.uploadRequest,
@@ -62,6 +65,7 @@ class _State {
     finger: 0,
     isScrolling: false,
     minimapYRatio: 1,
+    isDragging: false,
     hasMissingVideoPreview: false,
     shareRequest: Unique(null),
     uploadRequest: Unique(null),
@@ -85,6 +89,7 @@ class _State {
   final List<List<_Item>> transformedItems;
   final Set<_Item> selectedItems;
   final Set<_VisibleDate> visibleDates;
+  final Date? dateBarContent;
   final Set<Date> queriedDates;
   final Map<Date, int> mergedCounts;
   final bool hasRemoteData;
@@ -107,6 +112,8 @@ class _State {
   final List<_MinimapItem>? minimapItems;
   final double minimapYRatio;
   final Date? scrollDate;
+  final Offset? appBarPosition;
+  final bool isDragging;
 
   final bool hasMissingVideoPreview;
 
@@ -348,6 +355,16 @@ class _EndScrolling implements _Event {
 }
 
 @toString
+class _SetIsDragging implements _Event {
+  const _SetIsDragging(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
+}
+
+@toString
 class _SetLayoutConstraint implements _Event {
   const _SetLayoutConstraint(
     this.viewWidth,
@@ -377,6 +394,24 @@ class _UpdateScrollDate implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _UpdateDateBar implements _Event {
+  const _UpdateDateBar();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _SetAppBarPosition implements _Event {
+  const _SetAppBarPosition(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Offset value;
 }
 
 @toString

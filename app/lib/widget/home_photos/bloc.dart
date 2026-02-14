@@ -52,9 +52,16 @@ class _Bloc extends Bloc<_Event, _State>
 
     on<_StartScrolling>(_onStartScrolling);
     on<_EndScrolling>(_onEndScrolling);
+    on<_SetIsDragging>((ev, emit) {
+      emit(state.copyWith(isDragging: ev.value));
+    });
     on<_SetLayoutConstraint>(_onSetLayoutConstraint);
     on<_TransformMinimap>(_onTransformMinimap);
     on<_UpdateScrollDate>(_onUpdateScrollDate);
+    on<_UpdateDateBar>(_onUpdateDateBar);
+    on<_SetAppBarPosition>((ev, emit) {
+      emit(state.copyWith(appBarPosition: ev.value));
+    });
 
     on<_SetEnableMemoryCollection>(_onSetEnableMemoryCollection);
     on<_UpdateZoom>(_onUpdateZoom);
@@ -129,6 +136,17 @@ class _Bloc extends Bloc<_Event, _State>
       stream
           .distinct(
             (previous, next) =>
+                previous.visibleDates == next.visibleDates &&
+                previous.isDragging == next.isDragging,
+          )
+          .listen((event) {
+            add(const _UpdateDateBar());
+          }),
+    );
+    _subscriptions.add(
+      stream
+          .distinct(
+            (previous, next) =>
                 previous.anyFilesSummary == next.anyFilesSummary,
           )
           .listen((_) {
@@ -161,7 +179,9 @@ class _Bloc extends Bloc<_Event, _State>
     return currentState.scale == nextState.scale &&
         currentState.visibleDates == nextState.visibleDates &&
         currentState.syncProgress == nextState.syncProgress &&
-        currentState.scrollDate == nextState.scrollDate;
+        currentState.scrollDate == nextState.scrollDate &&
+        currentState.dateBarContent == nextState.dateBarContent &&
+        currentState.appBarPosition == nextState.appBarPosition;
   };
 
   @override
@@ -594,6 +614,54 @@ class _Bloc extends Bloc<_Event, _State>
       "[_onTransformMinimap] content height: $contentHeight, logical height: $totalHeight",
     );
     emit(state.copyWith(minimapItems: minimapItems, minimapYRatio: ratio));
+  }
+
+  void _onUpdateDateBar(_UpdateDateBar ev, _Emitter emit) {
+    // _log.info(ev);
+    if (state.itemPerRow == null || state.visibleDates.isEmpty) {
+      return;
+    }
+    final Map<Date, int> groups;
+    final Date date;
+    var count = 0;
+    var visibleCount = 0;
+    if (prefController.homePhotosZoomLevelValue >= 0) {
+      groups = state.visibleDates.groupFoldBy<Date, int>(
+        (e) => e.date,
+        (previous, element) => (previous ?? 0) + 1,
+      );
+      final firstDate = groups.keys.sortedBySelf().lastOrNull;
+      if (firstDate == null) {
+        emit(state.copyWith(dateBarContent: null));
+        return;
+      }
+      count = state.anyFilesSummary.items[firstDate] ?? 0;
+      visibleCount = groups[firstDate] ?? 0;
+      date = firstDate;
+    } else {
+      groups = state.visibleDates.groupFoldBy<Date, int>(
+        (e) => e.date.copyWith(day: 1),
+        (previous, element) => (previous ?? 0) + 1,
+      );
+      final firstMonth = groups.keys.sortedBySelf().lastOrNull;
+      if (firstMonth == null) {
+        emit(state.copyWith(dateBarContent: null));
+        return;
+      }
+      for (final e in state.anyFilesSummary.items.entries) {
+        if (e.key >= firstMonth && e.key < firstMonth.add(month: 1)) {
+          count += e.value;
+        }
+      }
+      visibleCount = groups[firstMonth] ?? 0;
+      date = firstMonth;
+    }
+    if ((count > state.itemPerRow! * 2 && count > visibleCount) ||
+        state.isDragging) {
+      emit(state.copyWith(dateBarContent: date));
+    } else {
+      emit(state.copyWith(dateBarContent: null));
+    }
   }
 
   void _onUpdateScrollDate(_UpdateScrollDate ev, Emitter<_State> emit) {
