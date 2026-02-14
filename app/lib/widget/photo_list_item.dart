@@ -4,6 +4,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
+import 'package:nc_photos/cache_manager_util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/flutter_util.dart' as flutter_util;
@@ -143,15 +144,15 @@ class PhotoListLocalImageItem extends PhotoListLocalFileItem {
   );
 }
 
-class PhotoListImage extends StatelessWidget {
-  const PhotoListImage({
+class PhotoListImageOnly extends StatelessWidget {
+  const PhotoListImageOnly({
     super.key,
     required this.account,
     required this.previewUrl,
     required this.mime,
-    this.padding = const EdgeInsets.all(2),
-    this.isFavorite = false,
+    this.cacheType = CachedNetworkImageType.thumbnail,
     this.heroKey,
+    this.onDominantColor,
   });
 
   @override
@@ -171,22 +172,54 @@ class PhotoListImage extends StatelessWidget {
         account: account,
         imageUrl: previewUrl!,
         mime: mime,
+        cacheType: cacheType,
         errorBuilder: (_) => buildPlaceholder(),
+        onDominantColor: onDominantColor,
       );
       if (heroKey != null) {
         child = Hero(tag: heroKey!, child: child);
       }
     }
 
+    return Container(
+      color: Theme.of(context).listPlaceholderBackgroundColor,
+      child: child,
+    );
+  }
+
+  final Account account;
+  final String? previewUrl;
+  final String? mime;
+  final CachedNetworkImageType cacheType;
+  // if not null, the image will be contained by a Hero widget
+  final Object? heroKey;
+  final ValueChanged<ColorScheme>? onDominantColor;
+}
+
+class PhotoListImage extends StatelessWidget {
+  const PhotoListImage({
+    super.key,
+    required this.account,
+    required this.previewUrl,
+    required this.mime,
+    this.padding = const EdgeInsets.all(2),
+    this.isFavorite = false,
+    this.heroKey,
+  });
+
+  @override
+  Widget build(BuildContext context) {
     return IconTheme(
       data: const IconThemeData(color: Colors.white),
       child: Padding(
         padding: padding,
         child: Stack(
           children: [
-            Container(
-              color: Theme.of(context).listPlaceholderBackgroundColor,
-              child: child,
+            PhotoListImageOnly(
+              account: account,
+              previewUrl: previewUrl,
+              mime: mime,
+              heroKey: heroKey,
             ),
             const _BottomGradientOverlay(),
             Container(

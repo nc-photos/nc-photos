@@ -11,6 +11,12 @@ import 'package:np_ui/np_ui.dart';
 
 const defaultSeedColor = ColorInt(0xFF2196F3);
 
+extension ColorSchemeExtension on ColorScheme {
+  Color get onDarkSurface {
+    return brightness == Brightness.light ? onInverseSurface : onSurface;
+  }
+}
+
 extension ThemeExtension on ThemeData {
   double get widthLimitedContentMaxWidth => 550.0;
 
@@ -23,11 +29,7 @@ extension ThemeExtension on ThemeData {
   Color get homeNavigationBarBackgroundColor =>
       elevate(colorScheme.surface, 2).withValues(alpha: .55);
 
-  Color get onDarkSurface {
-    return brightness == Brightness.light
-        ? colorScheme.onInverseSurface
-        : colorScheme.onSurface;
-  }
+  Color get onDarkSurface => colorScheme.onDarkSurface;
 
   ImageFilter get appBarBlurFilter =>
       ImageFilter.blur(sigmaX: 12, sigmaY: 12, tileMode: TileMode.mirror);

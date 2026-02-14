@@ -225,15 +225,14 @@ class _MemoryCollectionList extends StatelessWidget {
                 itemCount: memoryCollections.length,
                 itemBuilder: (context, index) {
                   final c = memoryCollections[index];
-                  final result = c.getCoverUrl(
-                    k.photoThumbSize,
-                    k.photoThumbSize,
-                    isKeepAspectRatio: true,
-                  );
+                  final result = c.getCoverUrl(k.coverSize, k.coverSize);
+                  final year =
+                      (c.contentProvider as CollectionMemoryProvider).year;
                   return _MemoryCollectionItemView(
                     coverUrl: result?.url,
                     coverMime: result?.mime,
                     label: c.name,
+                    year: year,
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         CollectionBrowser.routeName,
@@ -250,85 +249,112 @@ class _MemoryCollectionList extends StatelessWidget {
   }
 }
 
-class _MemoryCollectionItemView extends StatelessWidget {
-  static const width = 96.0;
-  static const height = 128.0;
+class _MemoryCollectionItemView extends StatefulWidget {
+  static const width = 140.0;
+  static const height = 190.0;
 
   const _MemoryCollectionItemView({
     required this.coverUrl,
     required this.coverMime,
     required this.label,
+    required this.year,
     this.onTap,
   });
 
   @override
+  State<StatefulWidget> createState() => _MemoryCollectionItemViewState();
+
+  final String? coverUrl;
+  final String? coverMime;
+  final String label;
+  final int year;
+  final VoidCallback? onTap;
+}
+
+class _MemoryCollectionItemViewState extends State<_MemoryCollectionItemView> {
+  @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: AlignmentDirectional.topStart,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: SizedBox(
-          width: width,
-          height: height,
-          child: Stack(
-            fit: StackFit.expand,
-            children: [
-              OverflowBox(
-                maxHeight: height,
-                maxWidth: height,
-                child: SizedBox.square(
-                  dimension: height,
-                  child: PhotoListImage(
-                    account: context.bloc.account,
-                    previewUrl: coverUrl,
-                    mime: coverMime,
-                    padding: const EdgeInsets.all(0),
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(24),
+      child: SizedBox(
+        width: _MemoryCollectionItemView.width,
+        height: _MemoryCollectionItemView.height,
+        child: Stack(
+          fit: StackFit.expand,
+          children: [
+            OverflowBox(
+              maxHeight: _MemoryCollectionItemView.height,
+              maxWidth: _MemoryCollectionItemView.height,
+              child: SizedBox.square(
+                dimension: _MemoryCollectionItemView.height,
+                child: PhotoListImageOnly(
+                  account: context.bloc.account,
+                  previewUrl: widget.coverUrl,
+                  mime: widget.coverMime,
+                  cacheType: CachedNetworkImageType.cover,
+                  onDominantColor: (value) {
+                    setState(() {
+                      _colorScheme = value;
+                    });
+                  },
+                ),
+              ),
+            ),
+            Positioned.fill(
+              child: FittedBox(
+                alignment: Alignment.center,
+                fit: BoxFit.none,
+                child: Text(
+                  "${widget.year}".substring(2),
+                  style: TextStyle(
+                    fontSize: 184,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: -8,
+                    color:
+                        (Theme.of(context).brightness == Brightness.light
+                                ? _colorScheme?.primary
+                                : _colorScheme?.inversePrimary)
+                            ?.withValues(alpha: .26) ??
+                        Colors.black12,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+            ),
+            Positioned(
+              bottom: 0,
+              left: 0,
+              right: 0,
+              child: Container(
+                color: (_colorScheme?.primaryContainer ??
+                        Theme.of(context).colorScheme.inverseSurface)
+                    .withValues(alpha: 0.75),
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(4),
+                child: Text(
+                  widget.label,
+                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    color:
+                        _colorScheme?.onPrimaryContainer ??
+                        Theme.of(context).colorScheme.onInverseSurface,
                   ),
                 ),
               ),
+            ),
+            if (widget.onTap != null)
               Positioned.fill(
-                child: Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.center,
-                      end: Alignment.bottomCenter,
-                      colors: [Colors.transparent, Colors.black87],
-                    ),
-                  ),
+                child: Material(
+                  type: MaterialType.transparency,
+                  child: InkWell(onTap: widget.onTap),
                 ),
               ),
-              Positioned.fill(
-                child: Align(
-                  alignment: AlignmentDirectional.bottomStart,
-                  child: Padding(
-                    padding: const EdgeInsets.all(4),
-                    child: Text(
-                      label,
-                      style: Theme.of(context).textTheme.labelMedium?.copyWith(
-                        color: Theme.of(context).onDarkSurface,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (onTap != null)
-                Positioned.fill(
-                  child: Material(
-                    type: MaterialType.transparency,
-                    child: InkWell(onTap: onTap),
-                  ),
-                ),
-            ],
-          ),
+          ],
         ),
       ),
     );
   }
 
-  final String? coverUrl;
-  final String? coverMime;
-  final String label;
-  final VoidCallback? onTap;
+  ColorScheme? _colorScheme;
 }
 
 class _VideoPreviewHintDialog extends StatelessWidget {
