@@ -237,7 +237,7 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
       ),
       const AppDimension(
         homeBottomAppBarHeight: 64,
-        timelineDateItemHeight: 32,
+        timelineDateItemHeight: 40,
         timelineDraggableThumbSize: 60,
       ),
     ],

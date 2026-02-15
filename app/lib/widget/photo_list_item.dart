@@ -388,12 +388,10 @@ class PhotoListDate extends StatelessWidget {
       pattern,
       Localizations.localeOf(context).languageCode,
     ).format(date.toUtcDateTime());
-    return Align(
+    return Container(
       alignment: AlignmentDirectional.centerStart,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 8),
-        child: Text(subtitle, style: Theme.of(context).textTheme.labelMedium),
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 12),
+      child: Text(subtitle, style: Theme.of(context).textTheme.bodyMedium),
     );
   }
 

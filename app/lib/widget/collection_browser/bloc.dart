@@ -11,6 +11,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.filesController,
     required this.db,
     required Collection collection,
+    required this.dateHeight,
   }) : _c = container,
        _isAdHocCollection =
            !collectionsController.stream.value.data.any(
@@ -724,7 +725,7 @@ class _Bloc extends Bloc<_Event, _State>
             item.file.fdDateTime.toLocal().toDate(),
           );
           if (date != null) {
-            transformed.add(_DateItem(date: date));
+            transformed.add(_DateItem(date: date, height: dateHeight));
           }
         }
 
@@ -837,6 +838,7 @@ class _Bloc extends Bloc<_Event, _State>
   final CollectionsController collectionsController;
   final FilesController filesController;
   final NpDb db;
+  final double dateHeight;
   late final CollectionItemsController itemsController;
 
   /// Specify if the supplied [collection] is an "inline" one, which means it's

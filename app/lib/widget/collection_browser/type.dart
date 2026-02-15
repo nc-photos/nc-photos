@@ -197,7 +197,7 @@ class _MapItem extends _ActualItem {
 }
 
 class _DateItem extends _Item {
-  const _DateItem({required this.date});
+  const _DateItem({required this.date, required this.height});
 
   @override
   bool get isSelectable => false;
@@ -206,14 +206,15 @@ class _DateItem extends _Item {
   bool get isDraggable => false;
 
   @override
-  StaggeredTile get staggeredTile => const StaggeredTile.extent(99, 32);
+  StaggeredTile get staggeredTile => StaggeredTile.extent(99, height);
 
   @override
   Widget buildWidget(BuildContext context) {
-    return PhotoListDate(date: date);
+    return SizedBox(height: height, child: PhotoListDate(date: date));
   }
 
   final Date date;
+  final double height;
 }
 
 class _ShareRequest {

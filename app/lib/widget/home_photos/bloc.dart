@@ -17,6 +17,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.serverController,
     required this.bottomAppBarHeight,
     required this.draggableThumbSize,
+    required this.dateHeight,
   }) : super(
          _State.init(
            zoom: prefController.homePhotosZoomLevelValue,
@@ -848,6 +849,7 @@ class _Bloc extends Bloc<_Event, _State>
         itemPerRow: state.itemPerRow,
         itemSize: state.itemSize,
         isGroupByDay: prefController.homePhotosZoomLevelValue >= 0,
+        dateHeight: dateHeight,
       ),
       _buildItem,
       (result) {
@@ -989,6 +991,7 @@ class _Bloc extends Bloc<_Event, _State>
             itemCount: currentMonthCount,
             rowHeight: itemSize,
             itemPerRow: itemPerRow,
+            dateHeight: dateHeight,
           );
           results.add(
             _MinimapItem(
@@ -1012,6 +1015,7 @@ class _Bloc extends Bloc<_Event, _State>
         itemCount: currentMonthCount,
         rowHeight: itemSize,
         itemPerRow: itemPerRow,
+        dateHeight: dateHeight,
       );
       results.add(
         _MinimapItem(
@@ -1044,6 +1048,7 @@ class _Bloc extends Bloc<_Event, _State>
         itemCount: e.value,
         rowHeight: itemSize,
         itemPerRow: itemPerRow,
+        dateHeight: dateHeight,
       );
       if (currentMonth != thisMonth) {
         if (currentMonth != null) {
@@ -1089,6 +1094,7 @@ class _Bloc extends Bloc<_Event, _State>
   final ServerController serverController;
   final double bottomAppBarHeight;
   final double draggableThumbSize;
+  final double dateHeight;
 
   final _itemTransformerQueue =
       ComputeQueue<_ItemTransformerArgument, _ItemTransformerResult>();
@@ -1104,8 +1110,8 @@ double _getLogicalHeightByItemCount({
   required int itemCount,
   required double rowHeight,
   required int itemPerRow,
+  required double dateHeight,
 }) {
-  const dateHeight = 32.0;
   return dateHeight + (itemCount / itemPerRow).ceil() * rowHeight;
 }
 
@@ -1136,7 +1142,13 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
   for (final d in dateTimeSet) {
     final date = dateHelper.onDate(d);
     if (date != null) {
-      transformed.add([_DateItem(date: d, isMonthOnly: !arg.isGroupByDay)]);
+      transformed.add([
+        _DateItem(
+          date: d,
+          isMonthOnly: !arg.isGroupByDay,
+          height: arg.dateHeight,
+        ),
+      ]);
     }
 
     var items = <_FileItem>[];

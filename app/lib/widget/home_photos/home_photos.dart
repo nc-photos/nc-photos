@@ -113,6 +113,7 @@ class HomePhotos2 extends StatelessWidget {
                 bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
                 draggableThumbSize:
                     AppDimension.of(context).timelineDraggableThumbSize,
+                dateHeight: AppDimension.of(context).timelineDateItemHeight,
               ),
         ),
         BlocProvider(

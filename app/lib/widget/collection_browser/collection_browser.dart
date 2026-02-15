@@ -43,6 +43,7 @@ import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/use_case/find_file.dart';
 import 'package:nc_photos/widget/album_share_outlier_browser.dart';
 import 'package:nc_photos/widget/app_bar_circular_progress_indicator.dart';
@@ -122,6 +123,7 @@ class CollectionBrowser extends StatelessWidget {
                 filesController: accountController.filesController,
                 db: context.read(),
                 collection: collection,
+                dateHeight: AppDimension.of(context).timelineDateItemHeight,
               ),
         ),
         BlocProvider(

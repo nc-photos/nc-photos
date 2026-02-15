@@ -86,7 +86,11 @@ class _VideoItem extends _FileItem {
 }
 
 class _DateItem extends _Item {
-  const _DateItem({required this.date, required this.isMonthOnly});
+  const _DateItem({
+    required this.date,
+    required this.isMonthOnly,
+    required this.height,
+  });
 
   @override
   String get id => "date-$date";
@@ -95,18 +99,19 @@ class _DateItem extends _Item {
   bool get isSelectable => false;
 
   @override
-  StaggeredTile get staggeredTile => const StaggeredTile.extent(99, 32);
+  StaggeredTile get staggeredTile => StaggeredTile.extent(99, height);
 
   @override
   Widget buildWidget(BuildContext context) {
     return SizedBox(
-      height: AppDimension.of(context).timelineDateItemHeight,
+      height: height,
       child: PhotoListDate(date: date, isMonthOnly: isMonthOnly),
     );
   }
 
   final Date date;
   final bool isMonthOnly;
+  final double height;
 }
 
 class _ItemTransformerArgument {
@@ -118,6 +123,7 @@ class _ItemTransformerArgument {
     this.itemPerRow,
     this.itemSize,
     required this.isGroupByDay,
+    required this.dateHeight,
   });
 
   final Account account;
@@ -127,6 +133,7 @@ class _ItemTransformerArgument {
   final int? itemPerRow;
   final double? itemSize;
   final bool isGroupByDay;
+  final double dateHeight;
 }
 
 class _ItemTransformerResult {
