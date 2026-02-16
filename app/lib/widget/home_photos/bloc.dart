@@ -31,6 +31,8 @@ class _Bloc extends Bloc<_Event, _State>
     on<_OnItemTransformed>(_onOnItemTransformed);
 
     on<_SetSelectedItems>(_onSetSelectedItems);
+    on<_SelectSection>(_onSelectSection);
+    on<_UnselectSection>(_onUnselectSection);
     on<_AddSelectedItemsToCollection>(_onAddSelectedItemsToCollection);
     on<_ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
@@ -318,6 +320,42 @@ class _Bloc extends Bloc<_Event, _State>
         selectedCanDelete: canDelete,
         selectedCanAddToCollection: canAddToCollection,
         selectedCanUpload: canUpload,
+      ),
+    );
+  }
+
+  void _onSelectSection(_SelectSection ev, _Emitter emit) {
+    _log.info(ev);
+    final section = state.transformedItems.firstWhereOrNull(
+      (e) => e.firstOrNull?.as<_SectionHeaderItem>()?.date == ev.value,
+    );
+    if (section == null) {
+      _log.severe("[_onSelectSection] Section not found: ${ev.value}");
+      return;
+    }
+    emit(
+      state.copyWith(
+        selectedItems: state.selectedItems.addedAll(
+          section.whereType<_FileItem>(),
+        ),
+      ),
+    );
+  }
+
+  void _onUnselectSection(_UnselectSection ev, _Emitter emit) {
+    _log.info(ev);
+    final section = state.transformedItems.firstWhereOrNull(
+      (e) => e.firstOrNull?.as<_SectionHeaderItem>()?.date == ev.value,
+    );
+    if (section == null) {
+      _log.severe("[_onUnselectSection] Section not found: ${ev.value}");
+      return;
+    }
+    emit(
+      state.copyWith(
+        selectedItems: state.selectedItems.removedAll(
+          section.whereType<_FileItem>(),
+        ),
       ),
     );
   }
@@ -1139,16 +1177,22 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
   ], (key1, key2) => key2.compareTo(key1));
   final transformed = <List<_Item>>[];
   final dates = <Date>{};
+  ({Date date, List<_Item> items})? section;
   for (final d in dateTimeSet) {
     final date = dateHelper.onDate(d);
     if (date != null) {
-      transformed.add([
-        _DateItem(
-          date: d,
-          isMonthOnly: !arg.isGroupByDay,
-          height: arg.dateHeight,
-        ),
-      ]);
+      if (section != null) {
+        transformed.add([
+          _SectionHeaderItem(
+            date: section.date,
+            isMonthOnly: !arg.isGroupByDay,
+            height: arg.dateHeight,
+            children: section.items,
+          ),
+          ...section.items,
+        ]);
+      }
+      section = (date: date, items: []);
     }
 
     var items = <_FileItem>[];
@@ -1169,12 +1213,24 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
         summaryItems.add(_SummaryFileItem(date: d, index: summaryItems.length));
       }
     }
-    transformed.last.addAll(items);
-    transformed.last.addAll(summaryItems);
+    section?.items.addAll(items);
+    section?.items.addAll(summaryItems);
 
     if (summaryItems.isEmpty) {
       dates.add(d);
     }
+  }
+  if (section != null && section.items.isNotEmpty) {
+    // insert last section
+    transformed.add([
+      _SectionHeaderItem(
+        date: section.date,
+        isMonthOnly: !arg.isGroupByDay,
+        height: arg.dateHeight,
+        children: section.items,
+      ),
+      ...section.items,
+    ]);
   }
   return _ItemTransformerResult(items: transformed, dates: dates);
 }

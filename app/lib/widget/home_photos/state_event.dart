@@ -190,6 +190,26 @@ class _SetSelectedItems implements _Event {
 }
 
 @toString
+class _SelectSection implements _Event {
+  const _SelectSection(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Date value;
+}
+
+@toString
+class _UnselectSection implements _Event {
+  const _UnselectSection(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Date value;
+}
+
+@toString
 class _AddSelectedItemsToCollection implements _Event {
   const _AddSelectedItemsToCollection(this.collection);
 

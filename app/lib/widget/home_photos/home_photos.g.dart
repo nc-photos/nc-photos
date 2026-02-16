@@ -300,6 +300,20 @@ extension _$_SetSelectedItemsToString on _SetSelectedItems {
   }
 }
 
+extension _$_SelectSectionToString on _SelectSection {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SelectSection {value: $value}";
+  }
+}
+
+extension _$_UnselectSectionToString on _UnselectSection {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_UnselectSection {value: $value}";
+  }
+}
+
 extension _$_AddSelectedItemsToCollectionToString
     on _AddSelectedItemsToCollection {
   String _$toString() {

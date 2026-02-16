@@ -85,11 +85,12 @@ class _VideoItem extends _FileItem {
   final Account account;
 }
 
-class _DateItem extends _Item {
-  const _DateItem({
+class _SectionHeaderItem extends _Item {
+  const _SectionHeaderItem({
     required this.date,
     required this.isMonthOnly,
     required this.height,
+    required this.children,
   });
 
   @override
@@ -103,15 +104,64 @@ class _DateItem extends _Item {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return SizedBox(
-      height: height,
-      child: PhotoListDate(date: date, isMonthOnly: isMonthOnly),
+    return _BlocSelector(
+      selector: (state) => state.selectedItems,
+      builder: (context, selectedItems) {
+        final isSectionSelected = selectedItems.containsAll(children);
+        return InkWell(
+          onTap:
+              isSectionSelected
+                  ? () {
+                    context.addEvent(_UnselectSection(date));
+                  }
+                  : null,
+          onLongPress: () {
+            if (isSectionSelected) {
+              context.addEvent(_UnselectSection(date));
+            } else {
+              context.addEvent(_SelectSection(date));
+            }
+          },
+          child: SizedBox(
+            height: height,
+            child: Row(
+              children: [
+                Expanded(
+                  child: PhotoListDate(date: date, isMonthOnly: isMonthOnly),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: IconButton(
+                    icon:
+                        isSectionSelected
+                            ? Icon(
+                              Icons.check_circle,
+                              size: 20,
+                              color: Theme.of(context).colorScheme.primary,
+                            )
+                            : const Icon(Icons.check_circle_outline, size: 20),
+                    color: Theme.of(context).colorScheme.onSurfaceLow,
+                    onPressed: () {
+                      if (isSectionSelected) {
+                        context.addEvent(_UnselectSection(date));
+                      } else {
+                        context.addEvent(_SelectSection(date));
+                      }
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
   final Date date;
   final bool isMonthOnly;
   final double height;
+  final List<_Item> children;
 }
 
 class _ItemTransformerArgument {
