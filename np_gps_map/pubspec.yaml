@@ -12,8 +12,8 @@ dependencies:
   equatable: ^2.0.5
   flutter:
     sdk: flutter
-  flutter_map: ^6.1.0
-  flutter_map_marker_cluster: ^1.3.6
+  flutter_map: ^8.2.2
+  flutter_map_marker_cluster: ^8.2.2
   google_maps_flutter: 2.5.3
   google_maps_cluster_manager:
     git:

@@ -28,6 +28,7 @@ class OsmGpsMap extends StatelessWidget {
           children: [
             TileLayer(
               urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+              userAgentPackageName: "com.nkming.nc_photos",
             ),
             MarkerLayer(
               rotate: true,
