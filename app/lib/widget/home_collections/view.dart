@@ -35,6 +35,7 @@ class _ItemView extends StatelessWidget {
         account: account,
         url: item.coverUrl,
         mime: item.coverMime,
+        collection: item.collection,
       ),
       title: item.name,
       subtitle: subtitle,
@@ -52,6 +53,7 @@ class _CollectionCover extends StatelessWidget {
     required this.account,
     required this.url,
     required this.mime,
+    required this.collection,
   });
 
   @override
@@ -63,20 +65,23 @@ class _CollectionCover extends StatelessWidget {
         constraints: const BoxConstraints.expand(),
         child:
             url != null
-                ? FittedBox(
-                  clipBehavior: Clip.hardEdge,
-                  fit: BoxFit.cover,
-                  child:
-                      CachedNetworkImageBuilder(
-                        type: CachedNetworkImageType.cover,
-                        imageUrl: url!,
-                        mime: mime,
-                        account: account,
-                        errorWidget: (context, url, error) {
-                          // just leave it empty
-                          return Container();
-                        },
-                      ).build(),
+                ? Hero(
+                  tag: flutter_util.HeroTag.fromCollection(collection),
+                  child: FittedBox(
+                    clipBehavior: Clip.hardEdge,
+                    fit: BoxFit.cover,
+                    child:
+                        CachedNetworkImageBuilder(
+                          type: CachedNetworkImageType.cover,
+                          imageUrl: url!,
+                          mime: mime,
+                          account: account,
+                          errorWidget: (context, url, error) {
+                            // just leave it empty
+                            return Container();
+                          },
+                        ).build(),
+                  ),
                 )
                 : Icon(
                   Icons.panorama,
@@ -90,4 +95,5 @@ class _CollectionCover extends StatelessWidget {
   final Account account;
   final String? url;
   final String? mime;
+  final Collection collection;
 }

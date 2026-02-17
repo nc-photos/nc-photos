@@ -43,6 +43,7 @@ import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/session_storage.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/theme/dimension.dart';
 import 'package:nc_photos/use_case/find_file.dart';
 import 'package:nc_photos/widget/album_share_outlier_browser.dart';
@@ -450,29 +451,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                                     ? const NeverScrollableScrollPhysics()
                                     : null,
                             slivers: [
-                              _BlocBuilder(
-                                buildWhen:
-                                    (previous, current) =>
-                                        previous.selectedItems.isEmpty !=
-                                            current.selectedItems.isEmpty ||
-                                        previous.isEditMode !=
-                                            current.isEditMode ||
-                                        previous.editPickerMode !=
-                                            current.editPickerMode,
-                                builder: (context, state) {
-                                  if (state.isEditMode) {
-                                    if (state.editPickerMode != null) {
-                                      return const _EditPickerAppBar();
-                                    } else {
-                                      return const _EditAppBar();
-                                    }
-                                  } else if (state.selectedItems.isNotEmpty) {
-                                    return const _SelectionAppBar();
-                                  } else {
-                                    return const _AppBar();
-                                  }
-                                },
-                              ),
+                              const SliverToBoxAdapter(child: _CoverView()),
                               SliverToBoxAdapter(
                                 child: _BlocBuilder(
                                   buildWhen:
@@ -514,6 +493,33 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                               const SliverSafeBottom(),
                             ],
                           ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        child: _BlocBuilder(
+                          buildWhen:
+                              (previous, current) =>
+                                  previous.selectedItems.isEmpty !=
+                                      current.selectedItems.isEmpty ||
+                                  previous.isEditMode != current.isEditMode ||
+                                  previous.editPickerMode !=
+                                      current.editPickerMode,
+                          builder: (context, state) {
+                            if (state.isEditMode) {
+                              if (state.editPickerMode != null) {
+                                return const _EditPickerAppBar();
+                              } else {
+                                return const _EditAppBar();
+                              }
+                            } else if (state.selectedItems.isNotEmpty) {
+                              return const _SelectionAppBar();
+                            } else {
+                              return const _AppBar();
+                            }
+                          },
                         ),
                       ),
                       _BlocBuilder(

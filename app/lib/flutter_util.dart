@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
+import 'package:nc_photos/entity/collection.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/local_file.dart';
 
@@ -30,6 +31,9 @@ class HeroTag {
       HeroTag("imageHero(${AnyFileLocalProvider.toAfId(file.id)})");
 
   factory HeroTag.fromAnyFile(AnyFile file) => HeroTag("imageHero(${file.id})");
+
+  factory HeroTag.fromCollection(Collection collection) =>
+      HeroTag("collectionHero(${collection.id})");
 
   @override
   bool operator ==(Object other) =>
