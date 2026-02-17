@@ -233,6 +233,7 @@ class _MemoryCollectionList extends StatelessWidget {
                     coverMime: result?.mime,
                     label: c.name,
                     year: year,
+                    heroTag: flutter_util.HeroTag.fromCollection(c),
                     onTap: () {
                       Navigator.of(context).pushNamed(
                         CollectionBrowser.routeName,
@@ -258,6 +259,7 @@ class _MemoryCollectionItemView extends StatefulWidget {
     required this.coverMime,
     required this.label,
     required this.year,
+    required this.heroTag,
     this.onTap,
   });
 
@@ -268,6 +270,7 @@ class _MemoryCollectionItemView extends StatefulWidget {
   final String? coverMime;
   final String label;
   final int year;
+  final flutter_util.HeroTag heroTag;
   final VoidCallback? onTap;
 }
 
@@ -287,20 +290,27 @@ class _MemoryCollectionItemViewState extends State<_MemoryCollectionItemView> {
               maxWidth: _MemoryCollectionItemView.height,
               child: SizedBox.square(
                 dimension: _MemoryCollectionItemView.height,
-                child: PhotoListImageOnly(
-                  account: context.bloc.account,
-                  previewUrl: widget.coverUrl,
-                  mime: widget.coverMime,
-                  cacheType: CachedNetworkImageType.cover,
-                  onDominantColor: (value) {
-                    setState(() {
-                      _colorScheme = value;
-                    });
-                  },
+                child: Hero(
+                  tag: widget.heroTag,
+                  child: PhotoListImageOnly(
+                    account: context.bloc.account,
+                    previewUrl: widget.coverUrl,
+                    mime: widget.coverMime,
+                    cacheType: CachedNetworkImageType.cover,
+                    onDominantColor: (value) {
+                      setState(() {
+                        _colorScheme = value;
+                      });
+                    },
+                  ),
                 ),
               ),
             ),
-            Positioned.fill(
+            Positioned(
+              top: 0,
+              bottom: 8,
+              left: 0,
+              right: 0,
               child: FittedBox(
                 alignment: Alignment.center,
                 fit: BoxFit.none,
@@ -314,7 +324,7 @@ class _MemoryCollectionItemViewState extends State<_MemoryCollectionItemView> {
                         (Theme.of(context).brightness == Brightness.light
                                 ? _colorScheme?.primary
                                 : _colorScheme?.inversePrimary)
-                            ?.withValues(alpha: .26) ??
+                            ?.withValues(alpha: .20) ??
                         Colors.black12,
                   ),
                   textAlign: TextAlign.center,
