@@ -426,19 +426,28 @@ class _DateBar extends StatelessWidget {
         ).format(state.dateBarContent!.toLocalDateTime());
         return Padding(
           padding: EdgeInsets.only(top: max(y, 0), left: 16, right: 16),
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(32),
-              color: Theme.of(
-                context,
-              ).colorScheme.primaryContainer.withValues(alpha: .85),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: Text(
-              text,
-              style: Theme.of(context).textStyleColored(
-                (textTheme) => textTheme.titleMedium,
-                (colorScheme) => colorScheme.onPrimaryContainer,
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(32),
+            child: BackdropFilter(
+              filter: Theme.of(context).appBarBlurFilter,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(32),
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.primaryContainer.withValues(alpha: .75),
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
+                child: Text(
+                  text,
+                  style: Theme.of(context).textStyleColored(
+                    (textTheme) => textTheme.titleMedium,
+                    (colorScheme) => colorScheme.onPrimaryContainer,
+                  ),
+                ),
               ),
             ),
           ),
