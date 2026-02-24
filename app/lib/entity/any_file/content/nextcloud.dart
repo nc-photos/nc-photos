@@ -64,7 +64,9 @@ class AnyFileNextcloudLocalFileUriGetter implements AnyFileLocalFileUriGetter {
 
   @override
   Future<Uri> get() async {
-    await const PermissionHandler().ensureStorageWritePermission();
+    if (isPublic) {
+      await const PermissionHandler().ensureStorageWritePermission();
+    }
     return Uri.parse(
       await DownloadFile()(
         account,
