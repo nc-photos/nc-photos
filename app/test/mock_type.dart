@@ -148,7 +148,7 @@ class MockFileDataSource implements FileDataSource {
   }
 
   @override
-  Future<Uint8List> getBinary(Account account, File f) {
+  Future<Uint8List> getBinary(Account account, FileDescriptor f) {
     throw UnimplementedError();
   }
 
@@ -254,7 +254,8 @@ class MockFileWebdavDataSource implements FileWebdavDataSource {
   createDir(Account account, String path) => src.createDir(account, path);
 
   @override
-  getBinary(Account account, File f) => src.getBinary(account, f);
+  Future<Uint8List> getBinary(Account account, FileDescriptor f) =>
+      src.getBinary(account, f);
 
   @override
   list(Account account, File dir, {int? depth}) async {

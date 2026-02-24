@@ -101,11 +101,11 @@ class FileWebdavDataSource implements FileDataSource {
   }
 
   @override
-  getBinary(Account account, File f) async {
-    _log.info("[getBinary] ${f.path}");
+  Future<Uint8List> getBinary(Account account, FileDescriptor f) async {
+    _log.info("[getBinary] ${f.fdPath}");
     final response = await ApiUtil.fromAccount(
       account,
-    ).files().get(path: f.path);
+    ).files().get(path: f.fdPath);
     if (!response.isGood) {
       _log.severe("[getBinary] Failed requesting server: $response");
       throw ApiException(
@@ -435,8 +435,8 @@ class FileSqliteDbDataSource implements FileDataSource {
   }
 
   @override
-  getBinary(Account account, File f) {
-    _log.severe("[getBinary] ${f.path}");
+  Future<Uint8List> getBinary(Account account, FileDescriptor f) {
+    _log.severe("[getBinary] ${f.fdPath}");
     throw UnimplementedError();
   }
 
@@ -694,7 +694,7 @@ class FileCachedDataSource implements FileDataSource {
   }
 
   @override
-  getBinary(Account account, File f) {
+  Future<Uint8List> getBinary(Account account, FileDescriptor f) {
     return _remoteSrc.getBinary(account, f);
   }
 

@@ -759,7 +759,7 @@ class FileRepo {
       dataSrc.remove(account, file);
 
   /// See [FileDataSource.getBinary]
-  Future<Uint8List> getBinary(Account account, File file) =>
+  Future<Uint8List> getBinary(Account account, FileDescriptor file) =>
       dataSrc.getBinary(account, file);
 
   /// See [FileDataSource.putBinary]
@@ -829,7 +829,7 @@ abstract class FileDataSource {
   Future<void> remove(Account account, FileDescriptor f);
 
   /// Read file as binary array
-  Future<Uint8List> getBinary(Account account, File f);
+  Future<Uint8List> getBinary(Account account, FileDescriptor f);
 
   /// Upload content to [path]
   Future<void> putBinary(Account account, String path, Uint8List content);
