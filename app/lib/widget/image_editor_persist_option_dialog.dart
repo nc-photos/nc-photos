@@ -1,9 +1,11 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/app_localizations.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
@@ -63,8 +65,10 @@ class ImageEditorPersistOptionDialog extends StatelessWidget {
     BuildContext context,
     bool isSaveEditResultToServer,
   ) async {
-    final c = KiwiContainer().resolve<DiContainer>();
-    if (!await c.pref.setSaveEditResultToServer(isSaveEditResultToServer)) {
+    final prefController = context.read<PrefController>();
+    if (!await prefController.setSaveEditResultToServer(
+      isSaveEditResultToServer,
+    )) {
       _log.severe("[_onDevicePressed] Failed writing pref");
       SnackBarManager().showSnackBar(
         SnackBar(
@@ -75,6 +79,7 @@ class ImageEditorPersistOptionDialog extends StatelessWidget {
       return;
     }
 
+    final c = KiwiContainer().resolve<DiContainer>();
     unawaited(c.pref.setHasShownSaveEditResultDialog(true));
     Navigator.of(context).pop();
   }

@@ -476,11 +476,7 @@ class _Bloc extends Bloc<_Event, _State>
       _log.severe("[_onEdit] file is null: ${ev.afId}");
       return;
     }
-    emit(
-      state.copyWith(
-        imageEditorRequest: Unique(ImageEditorArguments(account, f)),
-      ),
-    );
+    emit(state.copyWith(imageEditorRequest: Unique(ImageEditorArguments(f))));
   }
 
   void _onEnhance(_Enhance ev, _Emitter emit) {

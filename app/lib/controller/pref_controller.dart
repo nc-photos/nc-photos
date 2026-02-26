@@ -439,7 +439,7 @@ class PrefController {
   );
   @npSubjectAccessor
   late final _isSaveEditResultToServerController = BehaviorSubject.seeded(
-    pref.isSaveEditResultToServerOr(true),
+    pref.isSaveEditResultToServer() ?? true,
   );
   @npSubjectAccessor
   late final _enhanceMaxSizeController = BehaviorSubject.seeded(

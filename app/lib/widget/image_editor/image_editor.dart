@@ -1,17 +1,24 @@
 import 'dart:async';
 
+import 'package:copy_with/copy_with.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kiwi/kiwi.dart';
+import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
+import 'package:nc_photos/bloc_util.dart';
+import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/pref.dart';
+import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/np_api_util.dart';
-import 'package:nc_photos/object_extension.dart';
+import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
@@ -19,18 +26,26 @@ import 'package:nc_photos/widget/image_editor/color_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/crop_controller.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
+import 'package:np_common/object_util.dart';
+import 'package:np_common/unique.dart';
 import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 import 'package:np_ui/np_ui.dart';
+import 'package:to_string/to_string.dart';
+
+part 'app_bar.dart';
+part 'bloc.dart';
+part 'image_editor.g.dart';
+part 'state_event.dart';
+part 'tool_bar.dart';
 
 class ImageEditorArguments {
-  const ImageEditorArguments(this.account, this.file);
+  const ImageEditorArguments(this.file);
 
-  final Account account;
   final AnyFile file;
 }
 
-class ImageEditor extends StatefulWidget {
+class ImageEditor extends StatelessWidget {
   static const routeName = "/image-editor";
 
   static Route buildRoute(ImageEditorArguments args, RouteSettings settings) =>
@@ -39,23 +54,39 @@ class ImageEditor extends StatefulWidget {
         settings: settings,
       );
 
-  const ImageEditor({super.key, required this.account, required this.file});
+  const ImageEditor({super.key, required this.file});
 
   ImageEditor.fromArgs(ImageEditorArguments args, {Key? key})
-    : this(key: key, account: args.account, file: args.file);
+    : this(key: key, file: args.file);
 
   @override
-  createState() => _ImageEditorState();
+  Widget build(BuildContext context) {
+    final accountController = context.read<AccountController>();
+    return BlocProvider(
+      create:
+          (context) => _IeBloc(
+            account: accountController.account,
+            prefController: context.read(),
+            file: file,
+          ),
+      child: const _WrappedImageEditor(),
+    );
+  }
 
-  final Account account;
   final AnyFile file;
 }
 
-class _ImageEditorState extends State<ImageEditor> {
+class _WrappedImageEditor extends StatefulWidget {
+  const _WrappedImageEditor();
+
   @override
-  initState() {
+  State<StatefulWidget> createState() => _WrappedImageEditorState();
+}
+
+class _WrappedImageEditorState extends State<_WrappedImageEditor> {
+  @override
+  void initState() {
     super.initState();
-    _initImage();
     _ensurePermission().then((value) {
       if (value && mounted) {
         final c = KiwiContainer().resolve<DiContainer>();
@@ -78,218 +109,73 @@ class _ImageEditorState extends State<ImageEditor> {
   }
 
   @override
-  build(BuildContext context) => Theme(
-    data: buildDarkTheme(context),
-    child: AnnotatedRegion<SystemUiOverlayStyle>(
-      value: const SystemUiOverlayStyle(
-        systemNavigationBarColor: Colors.black,
-        systemNavigationBarIconBrightness: Brightness.dark,
-      ),
-      child: Scaffold(body: Builder(builder: _buildContent)),
-    ),
-  );
-
-  Future<void> _initImage() async {
-    final uriGetter = AnyFileContentGetterFactory.largePreviewuri(
-      widget.file,
-      account: widget.account,
-    );
-    // no need to set shouldfixOrientation because the previews are always in
-    // the correct orientation
-    _src = await ImageLoader.loadUri(
-      await uriGetter.get(),
-      _previewWidth,
-      _previewHeight,
-      ImageLoaderResizeMethod.fit,
-      isAllowSwapSide: true,
-    );
-    if (mounted) {
-      setState(() {
-        _isDoneInit = true;
-      });
-    }
-  }
-
-  Widget _buildContent(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          _onBackButton(context);
-        }
-      },
-      child: ColoredBox(
-        color: Colors.black,
-        child: Column(
-          children: [
-            _buildAppBar(context),
-            Expanded(
-              child:
-                  _isDoneInit
-                      ? _isCropMode
-                          ? CropController(
-                            // crop always work on the src, otherwise we'll be
-                            // cropping repeatedly
-                            image: _src,
-                            initialState: _cropFilter,
-                            onCropChanged: (cropFilter) {
-                              _cropFilter = cropFilter;
-                              _applyFilters();
-                            },
-                          )
-                          : Image(
-                            image: (_dst ?? _src).run(
-                              (obj) =>
-                                  PixelImage(obj.pixel, obj.width, obj.height),
+  Widget build(BuildContext context) {
+    return Theme(
+      data: buildDarkTheme(context),
+      child: AnnotatedRegion<SystemUiOverlayStyle>(
+        value: const SystemUiOverlayStyle(
+          systemNavigationBarColor: Colors.black,
+          systemNavigationBarIconBrightness: Brightness.dark,
+        ),
+        child: MultiBlocListener(
+          listeners: [
+            _BlocListenerT(
+              selector: (state) => state.quitRequest,
+              listener: (context, quitRequest) async {
+                final result = await showDialog<bool>(
+                  context: context,
+                  builder:
+                      (context) => AlertDialog(
+                        title: Text(L10n.global().imageEditDiscardDialogTitle),
+                        content: Text(
+                          L10n.global().imageEditDiscardDialogContent,
+                        ),
+                        actions: [
+                          TextButton(
+                            child: Text(
+                              MaterialLocalizations.of(
+                                context,
+                              ).cancelButtonLabel,
                             ),
-                            fit: BoxFit.contain,
-                            gaplessPlayback: true,
-                          )
-                      : Container(),
-            ),
-            if (_activeTool == _ToolType.color)
-              ColorToolbar(
-                initialState: _colorFilters,
-                onActiveFiltersChanged: (colorFilters) {
-                  _colorFilters = colorFilters.toList();
-                  _applyFilters();
-                },
-              )
-            else if (_activeTool == _ToolType.transform)
-              TransformToolbar(
-                initialState: _transformFilters,
-                onActiveFiltersChanged: (transformFilters) {
-                  _transformFilters = transformFilters.toList();
-                  _applyFilters();
-                },
-                isCropModeChanged: (value) {
-                  setState(() {
-                    _isCropMode = value;
-                  });
-                },
-                onCropToolDeactivated: () {
-                  _cropFilter = null;
-                  _applyFilters();
-                },
-              ),
-            const SizedBox(height: 4),
-            _buildToolBar(context),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAppBar(BuildContext context) => AppBar(
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-    leading: BackButton(onPressed: () => _onBackButton(context)),
-    title: Text(L10n.global().imageEditTitle),
-    actions: [
-      if (_isModified)
-        IconButton(
-          icon: const Icon(Icons.save_outlined),
-          tooltip: L10n.global().saveTooltip,
-          onPressed: () => _onSavePressed(context),
-        ),
-      IconButton(
-        icon: const Icon(Icons.help_outline),
-        tooltip: L10n.global().helpTooltip,
-        onPressed: () {
-          launch(help_util.editPhotosUrl);
-        },
-      ),
-    ],
-  );
-
-  Widget _buildToolBar(BuildContext context) {
-    return Align(
-      alignment: AlignmentDirectional.centerStart,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Row(
-          children: [
-            const SizedBox(width: 16),
-            _ToolButton(
-              icon: Icons.palette_outlined,
-              label: L10n.global().imageEditToolbarColorLabel,
-              isSelected: _activeTool == _ToolType.color,
-              onPressed: () {
-                setState(() {
-                  _setActiveTool(_ToolType.color);
-                });
+                            onPressed: () {
+                              Navigator.of(context).pop(false);
+                            },
+                          ),
+                          TextButton(
+                            child: Text(L10n.global().discardButtonLabel),
+                            onPressed: () {
+                              Navigator.of(context).pop(true);
+                            },
+                          ),
+                        ],
+                      ),
+                );
+                if (result == true) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
-            _ToolButton(
-              icon: Icons.transform_outlined,
-              label: L10n.global().imageEditToolbarTransformLabel,
-              isSelected: _activeTool == _ToolType.transform,
-              onPressed: () {
-                setState(() {
-                  _setActiveTool(_ToolType.transform);
-                });
+            _BlocListenerT(
+              selector: (state) => state.isSaved,
+              listener: (context, isSaved) {
+                if (isSaved) {
+                  Navigator.of(context).pop();
+                }
               },
             ),
-            const SizedBox(width: 16),
+            _BlocListenerT(
+              selector: (state) => state.error,
+              listener: (context, error) {
+                if (error != null) {
+                  SnackBarManager().showSnackBarForException(error.error);
+                }
+              },
+            ),
           ],
+          child: const Scaffold(body: _Body()),
         ),
       ),
     );
-  }
-
-  Future<void> _onBackButton(BuildContext context) async {
-    if (!_isModified) {
-      Navigator.of(context).pop();
-      return;
-    }
-
-    final result = await showDialog<bool>(
-      context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().imageEditDiscardDialogTitle),
-            content: Text(L10n.global().imageEditDiscardDialogContent),
-            actions: [
-              TextButton(
-                child: Text(
-                  MaterialLocalizations.of(context).cancelButtonLabel,
-                ),
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-              ),
-              TextButton(
-                child: Text(L10n.global().discardButtonLabel),
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-              ),
-            ],
-          ),
-    );
-    if (result == true) {
-      Navigator.of(context).pop();
-    }
-  }
-
-  Future<void> _onSavePressed(BuildContext context) async {
-    final c = KiwiContainer().resolve<DiContainer>();
-    final uriGetter = AnyFileContentGetterFactory.uri(
-      widget.file,
-      account: widget.account,
-    );
-    await ImageProcessor.filter(
-      await uriGetter.get(),
-      widget.file.name,
-      4096,
-      3072,
-      _buildFilterList(),
-      headers: {
-        "Authorization": AuthUtil.fromAccount(widget.account).toHeaderValue(),
-      },
-      isSaveToServer: c.pref.isSaveEditResultToServerOr(),
-    );
-    Navigator.of(context).pop();
   }
 
   Future<void> _showSaveEditResultDialog(BuildContext context) async {
@@ -300,110 +186,107 @@ class _ImageEditorState extends State<ImageEditor> {
           (context) => const ImageEditorPersistOptionDialog(isFromEditor: true),
     );
   }
-
-  void _setActiveTool(_ToolType tool) {
-    _activeTool = tool;
-    _isCropMode = false;
-  }
-
-  List<ImageFilter> _buildFilterList() {
-    return [
-      if (_cropFilter != null) _cropFilter!.toImageFilter()!,
-      ..._transformFilters.map((f) => f.toImageFilter()).nonNulls,
-      ..._colorFilters.map((f) => f.toImageFilter()),
-    ];
-  }
-
-  Future<void> _applyFilters() async {
-    final result = await ImageProcessor.filterPreview(_src, _buildFilterList());
-    setState(() {
-      _dst = result;
-    });
-  }
-
-  bool get _isModified =>
-      _cropFilter != null ||
-      _transformFilters.isNotEmpty ||
-      _colorFilters.isNotEmpty;
-
-  bool _isDoneInit = false;
-  late final Rgba8Image _src;
-  Rgba8Image? _dst;
-  var _activeTool = _ToolType.color;
-  var _isCropMode = false;
-
-  var _colorFilters = <ColorArguments>[];
-  var _transformFilters = <TransformArguments>[];
-  TransformArguments? _cropFilter;
 }
 
-enum _ToolType { color, transform }
-
-class _ToolButton extends StatelessWidget {
-  const _ToolButton({
-    required this.icon,
-    required this.label,
-    required this.onPressed,
-    this.isSelected = false,
-  });
+class _Body extends StatelessWidget {
+  const _Body();
 
   @override
-  build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: ClipRRect(
-        borderRadius: const BorderRadius.all(Radius.circular(24)),
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
-            onTap: onPressed,
-            child: Container(
-              decoration: BoxDecoration(
-                color:
-                    isSelected
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : null,
-                // borderRadius: const BorderRadius.all(Radius.circular(24)),
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              alignment: Alignment.center,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
+  Widget build(BuildContext context) {
+    return _BlocSelector(
+      selector: (state) => state.isModified,
+      builder:
+          (context, isModified) => PopScope(
+            canPop: !isModified,
+            onPopInvokedWithResult: (didPop, result) {
+              if (!didPop) {
+                context.addEvent(const _RequestQuit());
+              }
+            },
+            child: ColoredBox(
+              color: Colors.black,
+              child: Column(
                 children: [
-                  Icon(
-                    icon,
-                    color:
-                        isSelected
-                            ? Theme.of(context).colorScheme.onSecondaryContainer
-                            : M3.of(context).filterChip.disabled.labelText,
-                    size: 18,
-                  ),
-                  const SizedBox(width: 4),
-                  Text(
-                    label,
-                    style: TextStyle(
-                      color:
-                          isSelected
-                              ? Theme.of(
-                                context,
-                              ).colorScheme.onSecondaryContainer
-                              : Theme.of(context).colorScheme.onSurface,
+                  const _AppBar(),
+                  Expanded(
+                    child: _BlocBuilder(
+                      buildWhen:
+                          (previous, current) =>
+                              previous.src != current.src ||
+                              previous.dst != current.dst ||
+                              previous.isCropMode != current.isCropMode,
+                      builder: (context, state) {
+                        if (state.src == null) {
+                          return const SizedBox.shrink();
+                        } else if (state.isCropMode) {
+                          return CropController(
+                            // crop always work on the src, otherwise we'll be
+                            // cropping repeatedly
+                            image: state.src!,
+                            initialState: context.state.cropFilter,
+                            onCropChanged: (cropFilter) {
+                              context.addEvent(_SetCropFilter(cropFilter));
+                            },
+                          );
+                        } else {
+                          return Image(
+                            image: (state.dst ?? state.src!).let(
+                              (obj) =>
+                                  PixelImage(obj.pixel, obj.width, obj.height),
+                            ),
+                            fit: BoxFit.contain,
+                            gaplessPlayback: true,
+                          );
+                        }
+                      },
                     ),
                   ),
+                  _BlocSelector(
+                    selector: (state) => state.activeTool,
+                    builder:
+                        (context, activeTool) => switch (activeTool) {
+                          _ToolType.color => ColorToolbar(
+                            initialState: context.state.colorFilters,
+                            onActiveFiltersChanged: (colorFilters) {
+                              context.addEvent(
+                                _SetColorFilters(colorFilters.toList()),
+                              );
+                            },
+                          ),
+                          _ToolType.transform => TransformToolbar(
+                            initialState: context.state.transformFilters,
+                            onActiveFiltersChanged: (transformFilters) {
+                              context.addEvent(
+                                _SetTransformFilters(transformFilters.toList()),
+                              );
+                            },
+                            isCropModeChanged: (value) {
+                              context.addEvent(_SetCropMode(value));
+                            },
+                            onCropToolDeactivated: () {
+                              context.addEvent(const _SetCropFilter(null));
+                            },
+                          ),
+                        },
+                  ),
+                  const SizedBox(height: 4),
+                  const _ToolBar(),
                 ],
               ),
             ),
           ),
-        ),
-      ),
     );
   }
-
-  final IconData icon;
-  final String label;
-  final VoidCallback? onPressed;
-  final bool isSelected;
 }
 
-const _previewWidth = 640;
-const _previewHeight = 480;
+typedef _BlocBuilder = BlocBuilder<_IeBloc, _State>;
+// typedef _BlocListener = BlocListener<_IeBloc, _State>;
+typedef _BlocListenerT<T> = BlocListenerT<_IeBloc, _State, T>;
+typedef _BlocSelector<T> = BlocSelector<_IeBloc, _State, T>;
+typedef _Emitter = Emitter<_State>;
+
+extension on BuildContext {
+  _IeBloc get bloc => read();
+  _State get state => bloc.state;
+  void addEvent(_Event event) => bloc.add(event);
+}

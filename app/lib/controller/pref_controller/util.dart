@@ -132,6 +132,11 @@ extension on Pref {
     }
   }
 
+  bool? isSaveEditResultToServer() =>
+      provider.getBool(PrefKey.saveEditResultToServer);
+  Future<bool> setSaveEditResultToServer(bool value) =>
+      provider.setBool(PrefKey.saveEditResultToServer, value);
+
   PrefMapDefaultRangeType? getMapDefaultRangeType() => provider
       .getInt(PrefKey.mapDefaultRangeType)
       ?.let(PrefMapDefaultRangeType.fromValue);

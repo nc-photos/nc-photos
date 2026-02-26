@@ -162,16 +162,6 @@ extension PrefExtension on Pref {
     (key, value) => provider.setInt(key, value),
   );
 
-  bool? isSaveEditResultToServer() =>
-      provider.getBool(PrefKey.saveEditResultToServer);
-  bool isSaveEditResultToServerOr([bool def = true]) =>
-      isSaveEditResultToServer() ?? def;
-  Future<bool> setSaveEditResultToServer(bool value) => _set<bool>(
-    PrefKey.saveEditResultToServer,
-    value,
-    (key, value) => provider.setBool(key, value),
-  );
-
   bool? hasShownSaveEditResultDialog() =>
       provider.getBool(PrefKey.hasShownSaveEditResultDialog);
   bool hasShownSaveEditResultDialogOr([bool def = false]) =>
