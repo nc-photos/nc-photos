@@ -28,6 +28,7 @@ import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/unique.dart';
+import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
 import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 import 'package:np_ui/np_ui.dart';

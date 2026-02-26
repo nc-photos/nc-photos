@@ -3,6 +3,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/widget/image_editor/toolbar_button.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
 import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_string/np_string.dart';
 import 'package:np_ui/np_ui.dart';
@@ -19,6 +20,7 @@ enum ColorToolType {
 
 abstract class ColorArguments {
   ImageFilter toImageFilter();
+  image_editor.Edit toEdit();
 
   ColorToolType _getToolType();
 }
@@ -365,6 +367,9 @@ class _BrightnessArguments implements ColorArguments {
   toImageFilter() => ColorBrightnessFilter(value / 100);
 
   @override
+  image_editor.Edit toEdit() => image_editor.BrightnessEdit(value / 100);
+
+  @override
   _getToolType() => ColorToolType.brightness;
 
   final double value;
@@ -375,6 +380,9 @@ class _ContrastArguments implements ColorArguments {
 
   @override
   toImageFilter() => ColorContrastFilter(value / 100);
+
+  @override
+  image_editor.Edit toEdit() => image_editor.ContrastEdit(value / 100);
 
   @override
   _getToolType() => ColorToolType.contrast;
@@ -389,6 +397,9 @@ class _WhitePointArguments implements ColorArguments {
   toImageFilter() => ColorWhitePointFilter(value / 100);
 
   @override
+  image_editor.Edit toEdit() => image_editor.WhitePointEdit(value / 100);
+
+  @override
   _getToolType() => ColorToolType.whitePoint;
 
   final double value;
@@ -399,6 +410,9 @@ class _BlackPointArguments implements ColorArguments {
 
   @override
   toImageFilter() => ColorBlackPointFilter(value / 100);
+
+  @override
+  image_editor.Edit toEdit() => image_editor.BlackPointEdit(value / 100);
 
   @override
   _getToolType() => ColorToolType.blackPoint;
@@ -413,6 +427,9 @@ class _SaturationArguments implements ColorArguments {
   toImageFilter() => ColorSaturationFilter(value / 100);
 
   @override
+  image_editor.Edit toEdit() => image_editor.SaturationEdit(value / 100);
+
+  @override
   _getToolType() => ColorToolType.saturation;
 
   final double value;
@@ -425,6 +442,9 @@ class _WarmthArguments implements ColorArguments {
   toImageFilter() => ColorWarmthFilter(value / 100);
 
   @override
+  image_editor.Edit toEdit() => image_editor.WarmthEdit(value / 100);
+
+  @override
   _getToolType() => ColorToolType.warmth;
 
   final double value;
@@ -435,6 +455,9 @@ class _TintArguments implements ColorArguments {
 
   @override
   toImageFilter() => ColorTintFilter(value / 100);
+
+  @override
+  image_editor.Edit toEdit() => image_editor.TintEdit(value / 100);
 
   @override
   _getToolType() => ColorToolType.tint;

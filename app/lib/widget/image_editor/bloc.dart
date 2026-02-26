@@ -95,7 +95,11 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         file.name,
         4096,
         3072,
-        _buildFilterList(),
+        [
+          if (state.cropFilter != null) state.cropFilter!.toImageFilter()!,
+          ...state.transformFilters.map((f) => f.toImageFilter()).nonNulls,
+          ...state.colorFilters.map((f) => f.toImageFilter()),
+        ],
         headers: {
           "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
         },
@@ -122,19 +126,23 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     if (state.src == null) {
       return;
     }
-    final result = await ImageProcessor.filterPreview(
-      state.src!,
-      _buildFilterList(),
-    );
+    var result = state.src!;
+    final legacy = [
+      if (state.cropFilter != null) state.cropFilter!.toImageFilter()!,
+      ...state.transformFilters.map((f) => f.toImageFilter()).nonNulls,
+    ];
+    if (legacy.isNotEmpty) {
+      result = await ImageProcessor.filterPreview(result, legacy);
+    }
+    final edits = _buildEditList();
+    if (edits.isNotEmpty) {
+      result = await image_editor.edit(result, edits);
+    }
     add(_SetDst(result));
   }
 
-  List<ImageFilter> _buildFilterList() {
-    return [
-      if (state.cropFilter != null) state.cropFilter!.toImageFilter()!,
-      ...state.transformFilters.map((f) => f.toImageFilter()).nonNulls,
-      ...state.colorFilters.map((f) => f.toImageFilter()),
-    ];
+  List<image_editor.Edit> _buildEditList() {
+    return [...state.colorFilters.map((f) => f.toEdit())];
   }
 
   final Account account;

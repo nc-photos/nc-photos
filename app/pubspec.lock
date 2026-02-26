@@ -1219,6 +1219,13 @@ packages:
       relative: true
     source: path
     version: "0.0.1"
+  np_ffi_image_editor:
+    dependency: "direct main"
+    description:
+      path: "../np_ffi_image_editor"
+      relative: true
+    source: path
+    version: "0.0.1"
   np_geocoder:
     dependency: "direct main"
     description:
