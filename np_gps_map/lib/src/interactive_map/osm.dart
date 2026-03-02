@@ -90,6 +90,7 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
       children: [
         TileLayer(
           urlTemplate: "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+          userAgentPackageName: "com.nkming.nc_photos",
         ),
         if (widget.dataPoints != null)
           MarkerClusterLayerWidget(
