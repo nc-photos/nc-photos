@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
@@ -7,6 +9,7 @@ import 'package:nc_photos/entity/any_file/content/nextcloud.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/size.dart';
 import 'package:np_gps_map/np_gps_map.dart';
+import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 
 abstract interface class AnyFileContentGetterFactory {
   /// Return the uri of this file
@@ -98,6 +101,20 @@ abstract interface class AnyFileContentGetterFactory {
         return const AnyFileLocalTagGetter();
       case AnyFileMergedProvider _:
         return AnyFileMergedTagGetter(file, c: c, account: account);
+    }
+  }
+
+  static AnyFileBinaryBitmapGetter binaryBitmap(
+    AnyFile file, {
+    required Account account,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return AnyFileNextcloudBinaryBitmapGetter(file, account: account);
+      case AnyFileLocalProvider _:
+        return AnyFileLocalBinaryBitmapGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedBinaryBitmapGetter(file);
     }
   }
 }
@@ -192,4 +209,14 @@ class AnyFileTag {
 abstract interface class AnyFileTagGetter {
   /// Return the list of tags associated to this file
   Future<List<AnyFileTag>?> get();
+}
+
+abstract interface class AnyFileBinaryBitmapGetter {
+  /// Return the file bytes with the decoded bitmap of this file
+  Future<({Uint8List bytes, Rgba8Image bitmap})> get({
+    required int maxWidth,
+    required int maxHeight,
+    bool shouldFixOrientation = false,
+    void Function(double progress)? onProgress,
+  });
 }

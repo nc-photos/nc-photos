@@ -1332,6 +1332,10 @@
 	"@imageEditTransformCrop": {
 		"description": "Crop the image"
 	},
+	"imageEditSaveErrorMessage": "Error saving image",
+	"@imageEditSaveErrorMessage": {
+		"description": "Shown when app failed to save the edited image"
+	},
 	"categoriesLabel": "Categories",
 	"searchLandingPeopleListEmptyText2": "Press settings to switch provider or press help to learn more",
 	"@searchLandingPeopleListEmptyText2": {

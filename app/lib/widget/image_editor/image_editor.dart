@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io' as io;
+import 'dart:isolate';
 
 import 'package:copy_with/copy_with.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:image/image.dart' as imagelib;
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
@@ -16,8 +20,9 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/exception_event.dart';
+import 'package:nc_photos/exception_util.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
-import 'package:nc_photos/np_api_util.dart';
+import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
@@ -28,15 +33,20 @@ import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/unique.dart';
+import 'package:np_exiv2/np_exiv2.dart' as exiv2;
 import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
-import 'package:np_platform_image_processor/np_platform_image_processor.dart';
+import 'package:np_platform_local_media/np_platform_local_media.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 import 'package:np_ui/np_ui.dart';
+import 'package:path/path.dart' as pathlib;
+import 'package:path_provider/path_provider.dart';
 import 'package:to_string/to_string.dart';
+import 'package:uuid/uuid.dart';
 
 part 'app_bar.dart';
 part 'bloc.dart';
 part 'image_editor.g.dart';
+part 'save_dialog.dart';
 part 'state_event.dart';
 part 'tool_bar.dart';
 
@@ -172,8 +182,56 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
                 }
               },
             ),
+            _BlocListenerT(
+              selector: (state) => state.saveError,
+              listener: (context, saveError) {
+                if (saveError != null) {
+                  final (text, action) = exceptionToSnackBarData(
+                    saveError.error,
+                  );
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "${L10n.global().imageEditSaveErrorMessage} ($text)",
+                      ),
+                      action: action,
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
+                }
+              },
+            ),
           ],
-          child: const Scaffold(body: _Body()),
+          child: _BlocBuilder(
+            buildWhen:
+                (previous, current) =>
+                    previous.isModified != current.isModified ||
+                    previous.saveState != current.saveState,
+            builder:
+                (context, state) => PopScope(
+                  canPop: !state.isModified && state.saveState == null,
+                  onPopInvokedWithResult: (didPop, result) {
+                    if (!didPop && state.saveState == null) {
+                      context.addEvent(const _RequestQuit());
+                    }
+                  },
+                  child: Scaffold(
+                    body: Stack(
+                      children: [
+                        const _Body(),
+                        _BlocSelector(
+                          selector: (state) => state.saveState,
+                          builder:
+                              (context, saveState) =>
+                                  saveState != null
+                                      ? const _SaveDialog()
+                                      : const SizedBox.shrink(),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+          ),
         ),
       ),
     );
@@ -194,88 +252,74 @@ class _Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.isModified,
-      builder:
-          (context, isModified) => PopScope(
-            canPop: !isModified,
-            onPopInvokedWithResult: (didPop, result) {
-              if (!didPop) {
-                context.addEvent(const _RequestQuit());
-              }
-            },
-            child: ColoredBox(
-              color: Colors.black,
-              child: Column(
-                children: [
-                  const _AppBar(),
-                  Expanded(
-                    child: _BlocBuilder(
-                      buildWhen:
-                          (previous, current) =>
-                              previous.src != current.src ||
-                              previous.dst != current.dst ||
-                              previous.isCropMode != current.isCropMode,
-                      builder: (context, state) {
-                        if (state.src == null) {
-                          return const SizedBox.shrink();
-                        } else if (state.isCropMode) {
-                          return CropController(
-                            // crop always work on the src, otherwise we'll be
-                            // cropping repeatedly
-                            image: state.src!,
-                            initialState: context.state.cropFilter,
-                            onCropChanged: (cropFilter) {
-                              context.addEvent(_SetCropFilter(cropFilter));
-                            },
-                          );
-                        } else {
-                          return Image(
-                            image: (state.dst ?? state.src!).let(
-                              (obj) =>
-                                  PixelImage(obj.pixel, obj.width, obj.height),
-                            ),
-                            fit: BoxFit.contain,
-                            gaplessPlayback: true,
-                          );
-                        }
-                      },
+    return ColoredBox(
+      color: Colors.black,
+      child: Column(
+        children: [
+          const _AppBar(),
+          Expanded(
+            child: _BlocBuilder(
+              buildWhen:
+                  (previous, current) =>
+                      previous.src != current.src ||
+                      previous.dst != current.dst ||
+                      previous.isCropMode != current.isCropMode,
+              builder: (context, state) {
+                if (state.src == null) {
+                  return const SizedBox.shrink();
+                } else if (state.isCropMode) {
+                  return CropController(
+                    // crop always work on the src, otherwise we'll be
+                    // cropping repeatedly
+                    image: state.src!,
+                    initialState: context.state.cropFilter,
+                    onCropChanged: (cropFilter) {
+                      context.addEvent(_SetCropFilter(cropFilter));
+                    },
+                  );
+                } else {
+                  return Image(
+                    image: (state.dst ?? state.src!).let(
+                      (obj) => PixelImage(obj.pixel, obj.width, obj.height),
                     ),
-                  ),
-                  _BlocSelector(
-                    selector: (state) => state.activeTool,
-                    builder:
-                        (context, activeTool) => switch (activeTool) {
-                          _ToolType.color => ColorToolbar(
-                            initialState: context.state.colorFilters,
-                            onActiveFiltersChanged: (colorFilters) {
-                              context.addEvent(
-                                _SetColorFilters(colorFilters.toList()),
-                              );
-                            },
-                          ),
-                          _ToolType.transform => TransformToolbar(
-                            initialState: context.state.transformFilters,
-                            onActiveFiltersChanged: (transformFilters) {
-                              context.addEvent(
-                                _SetTransformFilters(transformFilters.toList()),
-                              );
-                            },
-                            isCropModeChanged: (value) {
-                              context.addEvent(_SetCropMode(value));
-                            },
-                            onCropToolDeactivated: () {
-                              context.addEvent(const _SetCropFilter(null));
-                            },
-                          ),
-                        },
-                  ),
-                  const SizedBox(height: 4),
-                  const _ToolBar(),
-                ],
-              ),
+                    fit: BoxFit.contain,
+                    gaplessPlayback: true,
+                  );
+                }
+              },
             ),
           ),
+          _BlocSelector(
+            selector: (state) => state.activeTool,
+            builder:
+                (context, activeTool) => switch (activeTool) {
+                  _ToolType.color => ColorToolbar(
+                    initialState: context.state.colorFilters,
+                    onActiveFiltersChanged: (colorFilters) {
+                      context.addEvent(_SetColorFilters(colorFilters.toList()));
+                    },
+                  ),
+                  _ToolType.transform => TransformToolbar(
+                    initialState: context.state.transformFilters,
+                    onActiveFiltersChanged: (transformFilters) {
+                      context.addEvent(
+                        _SetTransformFilters(transformFilters.toList()),
+                      );
+                    },
+                    isCropModeChanged: (value) {
+                      context.addEvent(_SetCropMode(value));
+                    },
+                    onCropToolDeactivated: () {
+                      context.addEvent(const _SetCropFilter(null));
+                    },
+                  ),
+                },
+          ),
+          const SizedBox(height: 4),
+          const _ToolBar(),
+          SizedBox(height: MediaQuery.paddingOf(context).bottom),
+        ],
+      ),
     );
   }
 }

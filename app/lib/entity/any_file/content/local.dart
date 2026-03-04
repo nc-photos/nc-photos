@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
@@ -10,6 +11,7 @@ import 'package:np_common/size.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_platform_local_media/np_platform_local_media.dart';
+import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 
 class AnyFileLocalUriGetter implements AnyFileUriGetter {
   AnyFileLocalUriGetter(AnyFile file)
@@ -147,6 +149,40 @@ class AnyFileLocalTagGetter implements AnyFileTagGetter {
 
   @override
   Future<List<AnyFileTag>?> get() => Future.value(null);
+}
+
+class AnyFileLocalBinaryBitmapGetter implements AnyFileBinaryBitmapGetter {
+  AnyFileLocalBinaryBitmapGetter(AnyFile file)
+    : _provider = file.provider as AnyFileLocalProvider;
+
+  @override
+  Future<({Uint8List bytes, Rgba8Image bitmap})> get({
+    required int maxWidth,
+    required int maxHeight,
+    bool shouldFixOrientation = false,
+    void Function(double progress)? onProgress,
+  }) async {
+    final bytes = await LocalMedia.readFile(_provider.file.platformIdentifier);
+    if (_provider.file is LocalUriFile) {
+      final fileUri = Uri.parse((_provider.file as LocalUriFile).uri);
+      return (
+        bytes: bytes,
+        bitmap: await ImageLoader.loadUri(
+          fileUri,
+          maxWidth,
+          maxHeight,
+          ImageLoaderResizeMethod.fit,
+          isAllowSwapSide: true,
+          shouldUpscale: false,
+          shouldFixOrientation: shouldFixOrientation,
+        ),
+      );
+    } else {
+      throw UnimplementedError();
+    }
+  }
+
+  final AnyFileLocalProvider _provider;
 }
 
 extension on Rational {

@@ -17,12 +17,20 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_RequestQuit>(_onRequestQuit);
 
     on<_SetError>(_onSetError);
+    on<_SetSaveError>(_onSetSaveError);
 
     add(const _InitSrc());
   }
 
   @override
   String get tag => _log.fullName;
+
+  @override
+  bool Function(dynamic, dynamic)? get shouldLog => (currentState, nextState) {
+    currentState = currentState as _State;
+    nextState = nextState as _State;
+    return currentState.downloadProgress == nextState.downloadProgress;
+  };
 
   @override
   void onError(Object error, StackTrace stackTrace) {
@@ -67,19 +75,19 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   void _onSetColorFilters(_SetColorFilters ev, _Emitter emit) {
     _log.info(ev);
     emit(state.copyWith(colorFilters: ev.value));
-    _applyFilters();
+    _updatePreview();
   }
 
   void _onSetTransformFilters(_SetTransformFilters ev, _Emitter emit) {
     _log.info(ev);
     emit(state.copyWith(transformFilters: ev.value));
-    _applyFilters();
+    _updatePreview();
   }
 
   void _onSetCropFilter(_SetCropFilter ev, _Emitter emit) {
     _log.info(ev);
     emit(state.copyWith(cropFilter: ev.value));
-    _applyFilters();
+    _updatePreview();
   }
 
   void _onSetDst(_SetDst ev, _Emitter emit) {
@@ -88,28 +96,59 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   Future<void> _onSave(_Save ev, _Emitter emit) async {
+    emit(state.copyWith(saveState: _SaveState.init, downloadProgress: 0));
     try {
-      final uriGetter = AnyFileContentGetterFactory.uri(file, account: account);
-      await ImageProcessor.filter(
-        await uriGetter.get(),
-        file.name,
-        4096,
-        3072,
-        [
-          if (state.cropFilter != null) state.cropFilter!.toImageFilter()!,
-          ...state.transformFilters.map((f) => f.toImageFilter()).nonNulls,
-          ...state.colorFilters.map((f) => f.toImageFilter()),
-        ],
-        headers: {
-          "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-        },
-        isSaveToServer: prefController.isSaveEditResultToServerValue,
+      // download
+      final bitmapGetter = AnyFileContentGetterFactory.binaryBitmap(
+        file,
+        account: account,
       );
+      final (:bytes, :bitmap) = await bitmapGetter.get(
+        maxWidth: 4096,
+        maxHeight: 3072,
+        onProgress: (progress) {
+          emit(
+            state.copyWith(
+              saveState: _SaveState.download,
+              downloadProgress: progress,
+            ),
+          );
+        },
+      );
+
+      // do the edits
+      emit(state.copyWith(saveState: _SaveState.process));
+      final (:dir, file: jpegFile) = await _createTempFile();
+      try {
+        await _processFullBitmapToJpeg(
+          bitmap,
+          srcBytes: bytes,
+          dstJpegPath: jpegFile.path,
+          colorFilters: state.colorFilters,
+          transformFilters: state.transformFilters,
+          cropFilter: state.cropFilter,
+        );
+        // save to public dir
+        if (prefController.isSaveEditResultToServerValue) {
+          // TODO save to server
+        } else {
+          await LocalMedia.copyPrivateFileToPublicDir(
+            jpegFile.path,
+            srcMime: "image/jpeg",
+            dstDir: "Photos (for Nextcloud)/Edited Photos",
+          );
+        }
+      } finally {
+        await dir.delete(recursive: true);
+      }
+
+      emit(state.copyWith(isSaved: true));
     } catch (e, stackTrace) {
       _log.severe("Failed while filter", e, stackTrace);
-      add(_SetError(e, stackTrace));
+      add(_SetSaveError(e, stackTrace));
+    } finally {
+      emit(state.copyWith(saveState: null, downloadProgress: 0));
     }
-    emit(state.copyWith(isSaved: true));
   }
 
   Future<void> _onRequestQuit(_RequestQuit ev, _Emitter emit) async {
@@ -122,27 +161,109 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     emit(state.copyWith(error: ExceptionEvent(ev.error, ev.stackTrace)));
   }
 
-  Future<void> _applyFilters() async {
+  void _onSetSaveError(_SetSaveError ev, Emitter<_State> emit) {
+    _log.info(ev);
+    emit(state.copyWith(saveError: ExceptionEvent(ev.error, ev.stackTrace)));
+  }
+
+  Future<void> _updatePreview() async {
     if (state.src == null) {
       return;
     }
-    var result = state.src!;
+    final result = await _applyFilters(
+      state.src!,
+      colorFilters: state.colorFilters,
+      transformFilters: state.transformFilters,
+      cropFilter: state.cropFilter,
+    );
+    add(_SetDst(result));
+  }
+
+  static Future<Rgba8Image> _applyFilters(
+    Rgba8Image src, {
+    required List<ColorArguments> colorFilters,
+    required List<TransformArguments> transformFilters,
+    required TransformArguments? cropFilter,
+  }) async {
+    var result = src;
     final legacy = [
-      if (state.cropFilter != null) state.cropFilter!.toImageFilter()!,
-      ...state.transformFilters.map((f) => f.toImageFilter()).nonNulls,
+      if (cropFilter != null) cropFilter.toImageFilter()!,
+      ...transformFilters.map((f) => f.toImageFilter()).nonNulls,
     ];
     if (legacy.isNotEmpty) {
       result = await ImageProcessor.filterPreview(result, legacy);
     }
-    final edits = _buildEditList();
+    final edits = [...colorFilters.map((f) => f.toEdit())];
     if (edits.isNotEmpty) {
       result = await image_editor.edit(result, edits);
     }
-    add(_SetDst(result));
+    return result;
   }
 
-  List<image_editor.Edit> _buildEditList() {
-    return [...state.colorFilters.map((f) => f.toEdit())];
+  static Future<void> _processFullBitmapToJpeg(
+    Rgba8Image src, {
+    required Uint8List srcBytes,
+    required String dstJpegPath,
+    required List<ColorArguments> colorFilters,
+    required List<TransformArguments> transformFilters,
+    required TransformArguments? cropFilter,
+  }) async {
+    await Isolate.run(() async {
+      final result = await _applyFilters(
+        src,
+        colorFilters: colorFilters,
+        transformFilters: transformFilters,
+        cropFilter: cropFilter,
+      );
+
+      // jpeg encode and save to internal
+      final isEncodeOk = await imagelib.encodeJpgFile(
+        dstJpegPath,
+        imagelib.Image.fromBytes(
+          width: result.width,
+          height: result.height,
+          bytes: result.pixel.buffer,
+          numChannels: 4,
+          order: imagelib.ChannelOrder.rgba,
+        ),
+        quality: 85,
+      );
+      if (!isEncodeOk) {
+        throw StateError("Unable to encode image to JPEG");
+      }
+      if (!await exiv2.copyMetadata(srcBytes, io.File(dstJpegPath))) {
+        throw StateError("Unable to copy metadata to JPEG");
+      }
+    });
+  }
+
+  Future<io.Directory> _openTempDir() async {
+    final root = await getTemporaryDirectory();
+    final dir = io.Directory("${root.path}/image_editor");
+    if (!await dir.exists()) {
+      return dir.create();
+    } else {
+      return dir;
+    }
+  }
+
+  Future<({io.Directory dir, io.File file})> _createTempFile() async {
+    final dstDir = await _openTempDir();
+    while (true) {
+      final dirName = const Uuid().v4();
+      final dir = io.Directory("${dstDir.path}/$dirName");
+      if (await io.FileSystemEntity.type(dir.path) !=
+          io.FileSystemEntityType.notFound) {
+        continue;
+      }
+      await dir.create();
+      return (
+        dir: dir,
+        file: io.File(
+          "${dir.path}/${pathlib.basenameWithoutExtension(file.name)}.jpg",
+        ),
+      );
+    }
   }
 
   final Account account;

@@ -22,8 +22,11 @@ abstract class $_StateCopyWithWorker {
     _ToolType? activeTool,
     bool? isCropMode,
     Unique<void>? quitRequest,
+    _SaveState? saveState,
+    double? downloadProgress,
     bool? isSaved,
     ExceptionEvent? error,
+    ExceptionEvent? saveError,
   });
 }
 
@@ -40,8 +43,11 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic activeTool,
     dynamic isCropMode,
     dynamic quitRequest = copyWithNull,
+    dynamic saveState = copyWithNull,
+    dynamic downloadProgress,
     dynamic isSaved,
     dynamic error = copyWithNull,
+    dynamic saveError = copyWithNull,
   }) {
     return _State(
       src: src == copyWithNull ? that.src : src as Rgba8Image?,
@@ -60,8 +66,15 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           quitRequest == copyWithNull
               ? that.quitRequest
               : quitRequest as Unique<void>?,
+      saveState:
+          saveState == copyWithNull ? that.saveState : saveState as _SaveState?,
+      downloadProgress: downloadProgress as double? ?? that.downloadProgress,
       isSaved: isSaved as bool? ?? that.isSaved,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      saveError:
+          saveError == copyWithNull
+              ? that.saveError
+              : saveError as ExceptionEvent?,
     );
   }
 
@@ -80,7 +93,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, colorFilters: [length: ${colorFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, isSaved: $isSaved, error: $error}";
+    return "_State {src: $src, dst: $dst, colorFilters: [length: ${colorFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, isSaved: $isSaved, error: $error, saveError: $saveError}";
   }
 }
 
@@ -151,5 +164,12 @@ extension _$_SetErrorToString on _SetError {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetError {error: $error, stackTrace: $stackTrace}";
+  }
+}
+
+extension _$_SetSaveErrorToString on _SetSaveError {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetSaveError {error: $error, stackTrace: $stackTrace}";
   }
 }

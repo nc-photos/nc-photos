@@ -92,6 +92,15 @@ exiv2_read_http(const char *url, const char **header_keys,
                 const int is_read_xmp);
 
 /**
+ * Copy metadata from one file to another
+ *
+ * @return boolean
+ */
+FFI_PLUGIN_EXPORT int
+exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
+                                const size_t from_size, const char *to_path);
+
+/**
  * Release the resources of a Exiv2ReadResult object returned by
  * @a exiv2_read_file
  */

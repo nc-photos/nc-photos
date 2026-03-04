@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
@@ -9,6 +10,7 @@ import 'package:nc_photos/entity/any_file/content/nextcloud.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:np_common/size.dart';
 import 'package:np_gps_map/np_gps_map.dart';
+import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 
 class AnyFileMergedUriGetter implements AnyFileUriGetter {
   AnyFileMergedUriGetter(AnyFile file)
@@ -134,4 +136,25 @@ class AnyFileMergedTagGetter implements AnyFileTagGetter {
   Future<List<AnyFileTag>?> get() => _delegate.get();
 
   final AnyFileTagGetter _delegate;
+}
+
+class AnyFileMergedBinaryBitmapGetter implements AnyFileBinaryBitmapGetter {
+  AnyFileMergedBinaryBitmapGetter(AnyFile file)
+    : _delegate = AnyFileLocalBinaryBitmapGetter(
+        (file.provider as AnyFileMergedProvider).asLocalFile(),
+      );
+
+  @override
+  Future<({Uint8List bytes, Rgba8Image bitmap})> get({
+    required int maxWidth,
+    required int maxHeight,
+    bool shouldFixOrientation = false,
+    void Function(double progress)? onProgress,
+  }) => _delegate.get(
+    maxWidth: maxWidth,
+    maxHeight: maxHeight,
+    shouldFixOrientation: shouldFixOrientation,
+  );
+
+  final AnyFileBinaryBitmapGetter _delegate;
 }
