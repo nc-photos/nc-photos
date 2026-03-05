@@ -4,21 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import androidx.core.content.ContextCompat
-import com.nkming.nc_photos.np_android_core.Rgba8Image
 import com.nkming.nc_photos.np_android_core.logE
-import com.nkming.nc_photos.np_platform_image_processor.processor.BlackPoint
-import com.nkming.nc_photos.np_platform_image_processor.processor.Brightness
-import com.nkming.nc_photos.np_platform_image_processor.processor.Contrast
-import com.nkming.nc_photos.np_platform_image_processor.processor.Crop
-import com.nkming.nc_photos.np_platform_image_processor.processor.Orientation
-import com.nkming.nc_photos.np_platform_image_processor.processor.Saturation
-import com.nkming.nc_photos.np_platform_image_processor.processor.Tint
-import com.nkming.nc_photos.np_platform_image_processor.processor.Warmth
-import com.nkming.nc_photos.np_platform_image_processor.processor.WhitePoint
 import io.flutter.plugin.common.EventChannel
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
-import java.io.Serializable
 
 internal class ImageProcessorChannelHandler(context: Context) :
 	MethodChannel.MethodCallHandler, EventChannel.StreamHandler {
@@ -139,34 +128,6 @@ internal class ImageProcessorChannelHandler(context: Context) :
 				}
 			}
 
-			"filter" -> {
-				try {
-					filter(
-						call.argument("fileUri")!!, call.argument("headers"),
-						call.argument("filename")!!,
-						call.argument("maxWidth")!!,
-						call.argument("maxHeight")!!,
-						call.argument<Boolean>("isSaveToServer")!!,
-						call.argument("filters")!!, result
-					)
-				} catch (e: Throwable) {
-					logE(TAG, "Uncaught exception", e)
-					result.error("systemException", e.toString(), null)
-				}
-			}
-
-			"filterPreview" -> {
-				try {
-					filterPreview(
-						call.argument("rgba8")!!, call.argument("filters")!!,
-						result
-					)
-				} catch (e: Throwable) {
-					logE(TAG, "Uncaught exception", e)
-					result.error("systemException", e.toString(), null)
-				}
-			}
-
 			else -> result.notImplemented()
 		}
 	}
@@ -241,31 +202,6 @@ internal class ImageProcessorChannelHandler(context: Context) :
 		ImageProcessorService.METHOD_NEUR_OP, result
 	)
 
-	private fun filter(
-		fileUri: String, headers: Map<String, String>?, filename: String,
-		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean,
-		filters: List<Map<String, Any>>, result: MethodChannel.Result
-	) {
-		// convert to serializable
-		val l = arrayListOf<Serializable>()
-		filters.mapTo(l, { HashMap(it) })
-		method(fileUri, headers, filename, maxWidth, maxHeight, isSaveToServer,
-			ImageProcessorService.METHOD_FILTER, result, onIntent = {
-				it.putExtra(ImageProcessorService.EXTRA_FILTERS, l)
-			})
-	}
-
-	private fun filterPreview(
-		rgba8: Map<String, Any>, filters: List<Map<String, Any>>,
-		result: MethodChannel.Result
-	) {
-		var img = Rgba8Image.fromJson(rgba8)
-		for (f in filters.map(ImageFilter::fromJson)) {
-			img = f.apply(img)
-		}
-		result.success(img.toJson())
-	}
-
 	private fun method(
 		fileUri: String, headers: Map<String, String>?, filename: String,
 		maxWidth: Int, maxHeight: Int, isSaveToServer: Boolean, method: String,
@@ -290,31 +226,4 @@ internal class ImageProcessorChannelHandler(context: Context) :
 
 	private val context = context
 	private val id = nextId++
-}
-
-interface ImageFilter {
-	companion object {
-		fun fromJson(json: Map<String, Any>): ImageFilter {
-			return when (json["type"]) {
-				"brightness" -> Brightness((json["weight"] as Double).toFloat())
-				"contrast" -> Contrast((json["weight"] as Double).toFloat())
-				"whitePoint" -> WhitePoint((json["weight"] as Double).toFloat())
-				"blackPoint" -> BlackPoint((json["weight"] as Double).toFloat())
-				"saturation" -> Saturation((json["weight"] as Double).toFloat())
-				"warmth" -> Warmth((json["weight"] as Double).toFloat())
-				"tint" -> Tint((json["weight"] as Double).toFloat())
-				"orientation" -> Orientation(json["degree"] as Int)
-				"crop" -> Crop(
-					json["top"] as Double, json["left"] as Double,
-					json["bottom"] as Double, json["right"] as Double
-				)
-
-				else -> throw IllegalArgumentException(
-					"Unknown type: ${json["type"]}"
-				)
-			}
-		}
-	}
-
-	fun apply(rgba8: Rgba8Image): Rgba8Image
 }

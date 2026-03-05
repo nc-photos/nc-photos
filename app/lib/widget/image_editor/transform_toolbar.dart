@@ -2,12 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/widget/image_editor/toolbar_button.dart';
 import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
-import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 
 enum TransformToolType { crop, orientation }
 
 abstract class TransformArguments {
-  ImageFilter? toImageFilter();
   image_editor.Edit? toEdit();
 
   TransformToolType getToolType();
@@ -220,9 +218,6 @@ class _DummyCropArguments implements TransformArguments {
   const _DummyCropArguments();
 
   @override
-  toImageFilter() => null;
-
-  @override
   image_editor.Edit? toEdit() => null;
 
   @override
@@ -231,9 +226,6 @@ class _DummyCropArguments implements TransformArguments {
 
 class _OrientationArguments implements TransformArguments {
   const _OrientationArguments(this.value);
-
-  @override
-  toImageFilter() => TransformOrientationFilter(value);
 
   @override
   image_editor.Edit toEdit() => image_editor.OrientationEdit(value);

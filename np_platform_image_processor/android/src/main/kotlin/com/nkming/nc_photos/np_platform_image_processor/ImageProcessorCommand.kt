@@ -7,7 +7,6 @@ import com.nkming.nc_photos.np_platform_image_processor.processor.ArbitraryStyle
 import com.nkming.nc_photos.np_platform_image_processor.processor.DeepLab3ColorPop
 import com.nkming.nc_photos.np_platform_image_processor.processor.DeepLab3Portrait
 import com.nkming.nc_photos.np_platform_image_processor.processor.Esrgan
-import com.nkming.nc_photos.np_platform_image_processor.processor.ImageFilterProcessor
 import com.nkming.nc_photos.np_platform_image_processor.processor.NeurOp
 import com.nkming.nc_photos.np_platform_image_processor.processor.ZeroDce
 
@@ -126,19 +125,6 @@ class ImageProcessorNeurOpCommand(
 	}
 
 	override fun isEnhanceCommand() = true
-}
-
-class ImageProcessorFilterCommand(
-	params: Params,
-	val filters: List<ImageFilter>,
-) : ImageProcessorImageCommand(params) {
-	override fun apply(context: Context, fileUri: Uri): Bitmap {
-		return ImageFilterProcessor(
-			context, maxWidth, maxHeight, filters
-		).apply(fileUri)
-	}
-
-	override fun isEnhanceCommand() = false
 }
 
 class ImageProcessorGracePeriodCommand : ImageProcessorCommand

@@ -4,7 +4,6 @@ import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/widget/image_editor/toolbar_button.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
-import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_string/np_string.dart';
 import 'package:np_ui/np_ui.dart';
 
@@ -19,7 +18,6 @@ enum ColorToolType {
 }
 
 abstract class ColorArguments {
-  ImageFilter toImageFilter();
   image_editor.Edit toEdit();
 
   ColorToolType _getToolType();
@@ -364,9 +362,6 @@ class _BrightnessArguments implements ColorArguments {
   const _BrightnessArguments(this.value);
 
   @override
-  toImageFilter() => ColorBrightnessFilter(value / 100);
-
-  @override
   image_editor.Edit toEdit() => image_editor.BrightnessEdit(value / 100);
 
   @override
@@ -377,9 +372,6 @@ class _BrightnessArguments implements ColorArguments {
 
 class _ContrastArguments implements ColorArguments {
   const _ContrastArguments(this.value);
-
-  @override
-  toImageFilter() => ColorContrastFilter(value / 100);
 
   @override
   image_editor.Edit toEdit() => image_editor.ContrastEdit(value / 100);
@@ -394,9 +386,6 @@ class _WhitePointArguments implements ColorArguments {
   const _WhitePointArguments(this.value);
 
   @override
-  toImageFilter() => ColorWhitePointFilter(value / 100);
-
-  @override
   image_editor.Edit toEdit() => image_editor.WhitePointEdit(value / 100);
 
   @override
@@ -407,9 +396,6 @@ class _WhitePointArguments implements ColorArguments {
 
 class _BlackPointArguments implements ColorArguments {
   const _BlackPointArguments(this.value);
-
-  @override
-  toImageFilter() => ColorBlackPointFilter(value / 100);
 
   @override
   image_editor.Edit toEdit() => image_editor.BlackPointEdit(value / 100);
@@ -424,9 +410,6 @@ class _SaturationArguments implements ColorArguments {
   const _SaturationArguments(this.value);
 
   @override
-  toImageFilter() => ColorSaturationFilter(value / 100);
-
-  @override
   image_editor.Edit toEdit() => image_editor.SaturationEdit(value / 100);
 
   @override
@@ -439,9 +422,6 @@ class _WarmthArguments implements ColorArguments {
   const _WarmthArguments(this.value);
 
   @override
-  toImageFilter() => ColorWarmthFilter(value / 100);
-
-  @override
   image_editor.Edit toEdit() => image_editor.WarmthEdit(value / 100);
 
   @override
@@ -452,9 +432,6 @@ class _WarmthArguments implements ColorArguments {
 
 class _TintArguments implements ColorArguments {
   const _TintArguments(this.value);
-
-  @override
-  toImageFilter() => ColorTintFilter(value / 100);
 
   @override
   image_editor.Edit toEdit() => image_editor.TintEdit(value / 100);
