@@ -210,6 +210,14 @@ class _UnselectSection implements _Event {
 }
 
 @toString
+class _SelectedItemsUpdated implements _Event {
+  const _SelectedItemsUpdated();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
 class _AddSelectedItemsToCollection implements _Event {
   const _AddSelectedItemsToCollection(this.collection);
 

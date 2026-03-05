@@ -314,6 +314,13 @@ extension _$_UnselectSectionToString on _UnselectSection {
   }
 }
 
+extension _$_SelectedItemsUpdatedToString on _SelectedItemsUpdated {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SelectedItemsUpdated {}";
+  }
+}
+
 extension _$_AddSelectedItemsToCollectionToString
     on _AddSelectedItemsToCollection {
   String _$toString() {

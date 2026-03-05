@@ -33,6 +33,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_SetSelectedItems>(_onSetSelectedItems);
     on<_SelectSection>(_onSelectSection);
     on<_UnselectSection>(_onUnselectSection);
+    on<_SelectedItemsUpdated>(_onSelectedItemsUpdated);
     on<_AddSelectedItemsToCollection>(_onAddSelectedItemsToCollection);
     on<_ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
@@ -161,6 +162,15 @@ class _Bloc extends Bloc<_Event, _State>
         add(const _UpdateMemories());
       }),
     );
+    _subscriptions.add(
+      stream
+          .distinct(
+            (previous, next) => previous.selectedItems == next.selectedItems,
+          )
+          .listen((event) {
+            add(const _SelectedItemsUpdated());
+          }),
+    );
   }
 
   @override
@@ -286,42 +296,7 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetSelectedItems(_SetSelectedItems ev, Emitter<_State> emit) {
     _log.info(ev);
-    final canArchive = ev.items.whereType<_FileItem>().any(
-      (e) => AnyFileWorkerFactory.capability(
-        e.file,
-      ).isPermitted(AnyFileCapability.archive),
-    );
-    final canDownload = ev.items.whereType<_FileItem>().any(
-      (e) => AnyFileWorkerFactory.capability(
-        e.file,
-      ).isPermitted(AnyFileCapability.download),
-    );
-    final canDelete = ev.items.whereType<_FileItem>().any(
-      (e) => AnyFileWorkerFactory.capability(
-        e.file,
-      ).isPermitted(AnyFileCapability.delete),
-    );
-    // TODO let collection to make this decision
-    final canAddToCollection = ev.items.whereType<_FileItem>().any(
-      (e) => AnyFileWorkerFactory.capability(
-        e.file,
-      ).isPermitted(AnyFileCapability.collection),
-    );
-    final canUpload = ev.items.whereType<_FileItem>().any(
-      (e) => AnyFileWorkerFactory.capability(
-        e.file,
-      ).isPermitted(AnyFileCapability.upload),
-    );
-    emit(
-      state.copyWith(
-        selectedItems: ev.items,
-        selectedCanArchive: canArchive,
-        selectedCanDownload: canDownload,
-        selectedCanDelete: canDelete,
-        selectedCanAddToCollection: canAddToCollection,
-        selectedCanUpload: canUpload,
-      ),
-    );
+    emit(state.copyWith(selectedItems: ev.items));
   }
 
   void _onSelectSection(_SelectSection ev, _Emitter emit) {
@@ -356,6 +331,45 @@ class _Bloc extends Bloc<_Event, _State>
         selectedItems: state.selectedItems.removedAll(
           section.whereType<_FileItem>(),
         ),
+      ),
+    );
+  }
+
+  void _onSelectedItemsUpdated(_SelectedItemsUpdated ev, _Emitter emit) {
+    _log.info(ev);
+    final canArchive = state.selectedItems.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.archive),
+    );
+    final canDownload = state.selectedItems.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.download),
+    );
+    final canDelete = state.selectedItems.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.delete),
+    );
+    // TODO let collection to make this decision
+    final canAddToCollection = state.selectedItems.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.collection),
+    );
+    final canUpload = state.selectedItems.whereType<_FileItem>().any(
+      (e) => AnyFileWorkerFactory.capability(
+        e.file,
+      ).isPermitted(AnyFileCapability.upload),
+    );
+    emit(
+      state.copyWith(
+        selectedCanArchive: canArchive,
+        selectedCanDownload: canDownload,
+        selectedCanDelete: canDelete,
+        selectedCanAddToCollection: canAddToCollection,
+        selectedCanUpload: canUpload,
       ),
     );
   }
