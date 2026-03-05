@@ -41,6 +41,35 @@ class ContrastEdit implements Edit {
   final double weight;
 }
 
+class CropEdit implements Edit {
+  const CropEdit(this.top, this.left, this.bottom, this.right);
+
+  @override
+  JsonObj toJson() => {
+    "type": "crop",
+    "top": top,
+    "left": left,
+    "bottom": bottom,
+    "right": right,
+  };
+
+  // normalized coords, [0, 1]
+  final double top;
+  final double left;
+  final double bottom;
+  final double right;
+}
+
+class OrientationEdit implements Edit {
+  const OrientationEdit(this.degree);
+
+  @override
+  JsonObj toJson() => {"type": "orientation", "degree": degree};
+
+  // rotation degree, [-180, -90, 0, 90, 180]
+  final int degree;
+}
+
 class SaturationEdit implements Edit {
   const SaturationEdit(this.weight);
 

@@ -185,19 +185,17 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     required List<TransformArguments> transformFilters,
     required TransformArguments? cropFilter,
   }) async {
-    var result = src;
-    final legacy = [
-      if (cropFilter != null) cropFilter.toImageFilter()!,
-      ...transformFilters.map((f) => f.toImageFilter()).nonNulls,
-    ];
-    if (legacy.isNotEmpty) {
-      result = await ImageProcessor.filterPreview(result, legacy);
-    }
-    final edits = [...colorFilters.map((f) => f.toEdit())];
+    final edits =
+        [
+          cropFilter?.toEdit(),
+          ...transformFilters.map((f) => f.toEdit()),
+          ...colorFilters.map((f) => f.toEdit()),
+        ].nonNulls.toList();
     if (edits.isNotEmpty) {
-      result = await image_editor.edit(result, edits);
+      return await image_editor.edit(src, edits);
+    } else {
+      return src;
     }
-    return result;
   }
 
   static Future<void> _processFullBitmapToJpeg(

@@ -3,7 +3,9 @@
 #include "edit/black_point.h"
 #include "edit/brightness.h"
 #include "edit/contrast.h"
+#include "edit/crop.h"
 #include "edit/gpupixel_composite.h"
+#include "edit/orientation.h"
 #include "edit/saturation.h"
 #include "edit/tint.h"
 #include "edit/warmth.h"
@@ -98,6 +100,18 @@ parseEdits(const nlohmann::json &json) {
       if (gpupixel) {
         products.push_back(std::move(gpupixel));
         gpupixel.reset();
+      }
+      if (type == "crop") {
+        const auto top = e["top"].get<float>();
+        const auto left = e["left"].get<float>();
+        const auto bottom = e["bottom"].get<float>();
+        const auto right = e["right"].get<float>();
+        products.push_back(
+            make_unique<np_image_editor::edit::Crop>(top, left, bottom, right));
+      } else if (type == "orientation") {
+        const auto degree = e["degree"].get<int>();
+        products.push_back(
+            make_unique<np_image_editor::edit::Orientation>(degree));
       }
     }
   }

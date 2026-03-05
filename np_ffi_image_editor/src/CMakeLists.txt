@@ -24,7 +24,9 @@ add_library(np_ffi_image_editor SHARED
   "edit/black_point.cpp"
   "edit/brightness.cpp"
   "edit/contrast.cpp"
+  "edit/crop.cpp"
   "edit/gpupixel_composite.cpp"
+  "edit/orientation.cpp"
   "edit/saturation.cpp"
   "edit/tint.cpp"
   "edit/warmth.cpp"
@@ -53,6 +55,7 @@ target_link_libraries(
   ${android-lib}
   gpupixel
   EGL
+  -fopenmp -static-openmp
 )
 target_compile_definitions(np_ffi_image_editor PUBLIC DART_SHARED_LIB)
 
