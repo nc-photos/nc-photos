@@ -17,6 +17,7 @@ class _SaveDialog extends StatelessWidget {
                 _SaveState.init => const _ProcessSaveDialog(),
                 _SaveState.download => const _DownloadSaveDialog(),
                 _SaveState.process => const _ProcessSaveDialog(),
+                _SaveState.save => const _SavingSaveDialog(),
                 null => const _ProcessSaveDialog(),
               },
         ),
@@ -48,6 +49,18 @@ class _ProcessSaveDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return const AlertDialog(
       title: Text("Processing image..."),
+      content: LinearProgressIndicator(),
+    );
+  }
+}
+
+class _SavingSaveDialog extends StatelessWidget {
+  const _SavingSaveDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    return const AlertDialog(
+      title: Text("Saving result..."),
       content: LinearProgressIndicator(),
     );
   }

@@ -2,7 +2,7 @@ part of 'image_editor.dart';
 
 enum _ToolType { color, effect, transform }
 
-enum _SaveState { init, download, process }
+enum _SaveState { init, download, process, save }
 
 @genCopyWith
 @toString

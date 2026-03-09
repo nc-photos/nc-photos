@@ -3,6 +3,7 @@ part of 'image_editor.dart';
 class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   _IeBloc({
     required this.account,
+    required this.fileRepo,
     required this.prefController,
     required this.file,
   }) : super(_State.init()) {
@@ -128,16 +129,8 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
           transformFilters: state.transformFilters,
           cropFilter: state.cropFilter,
         );
-        // save to public dir
-        if (prefController.isSaveEditResultToServerValue) {
-          // TODO save to server
-        } else {
-          await LocalMedia.copyPrivateFileToPublicDir(
-            jpegFile.path,
-            srcMime: "image/jpeg",
-            dstDir: "Photos (for Nextcloud)/Edited Photos",
-          );
-        }
+        emit(state.copyWith(saveState: _SaveState.save));
+        await _persistResult(jpegFile);
       } finally {
         await dir.delete(recursive: true);
       }
@@ -235,6 +228,35 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     });
   }
 
+  Future<void> _persistResult(io.File jpegFile) async {
+    final isRemoteFile = file.provider is AnyFileNextcloudProvider;
+    if (isRemoteFile && prefController.isSaveEditResultToServerValue) {
+      try {
+        final remoteFile = (file.provider as AnyFileNextcloudProvider).file;
+        final fileSuffix =
+            "edited_${clock.now().millisecondsSinceEpoch / 1000}";
+        final path =
+            "${pathlib.dirname(remoteFile.fdPath)}/${pathlib.basenameWithoutExtension(remoteFile.fdPath)}_$fileSuffix.jpg";
+        await PutFileBinary(
+          fileRepo,
+        ).call(account, path, await jpegFile.readAsBytes());
+        return;
+      } catch (e, stackTrace) {
+        _log.severe(
+          "[_persistResult] Failed while PutFileBinary",
+          e,
+          stackTrace,
+        );
+        // fallback to local
+      }
+    }
+    await LocalMedia.copyPrivateFileToPublicDir(
+      jpegFile.path,
+      srcMime: "image/jpeg",
+      dstDir: "Photos (for Nextcloud)/Edited Photos",
+    );
+  }
+
   Future<io.Directory> _openTempDir() async {
     final root = await getTemporaryDirectory();
     final dir = io.Directory("${root.path}/image_editor");
@@ -265,6 +287,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   final Account account;
+  final FileRepo fileRepo;
   final PrefController prefController;
   final AnyFile file;
 

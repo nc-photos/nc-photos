@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io' as io;
 import 'dart:isolate';
 
+import 'package:clock/clock.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,7 @@ import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
+import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/pref.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/exception_util.dart';
@@ -26,6 +28,7 @@ import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
+import 'package:nc_photos/use_case/put_file_binary.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:nc_photos/widget/image_editor/color_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/crop_controller.dart';
@@ -79,6 +82,7 @@ class ImageEditor extends StatelessWidget {
       create:
           (context) => _IeBloc(
             account: accountController.account,
+            fileRepo: KiwiContainer().resolve<DiContainer>().fileRepo,
             prefController: context.read(),
             file: file,
           ),
