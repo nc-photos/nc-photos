@@ -35,7 +35,7 @@ class _DownloadSaveDialog extends StatelessWidget {
       selector: (state) => state.downloadProgress,
       builder:
           (context, downloadProgress) => AlertDialog(
-            title: const Text("Downloading image from server"),
+            title: Text(L10n.global().imageEditDownloadDialogTitle),
             content: LinearProgressIndicator(value: downloadProgress),
           ),
     );
@@ -47,9 +47,9 @@ class _ProcessSaveDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AlertDialog(
-      title: Text("Processing image..."),
-      content: LinearProgressIndicator(),
+    return AlertDialog(
+      title: Text(L10n.global().imageEditProcessDialogTitle),
+      content: const LinearProgressIndicator(),
     );
   }
 }
@@ -59,9 +59,9 @@ class _SavingSaveDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const AlertDialog(
-      title: Text("Saving result..."),
-      content: LinearProgressIndicator(),
+    return AlertDialog(
+      title: Text(L10n.global().imageEditSaveDialogTitle),
+      content: const LinearProgressIndicator(),
     );
   }
 }

@@ -1276,6 +1276,9 @@
 	"@saveTooltip": {
 		"description": "Save the current content"
 	},
+	"imageEditDownloadDialogTitle": "Downloading image from server...",
+	"imageEditProcessDialogTitle": "Processing image...",
+	"imageEditSaveDialogTitle": "Saving result...",
 	"imageEditColorBrightness": "Brightness",
 	"@imageEditColorBrightness": {
 		"description": "Adjust the brightness of an image"
