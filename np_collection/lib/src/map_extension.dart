@@ -15,4 +15,6 @@ extension MapExtension<T, U> on Map<T, U> {
   }
 
   Map<T, U> addedAll(Map<T, U> other) => {...this, ...other};
+
+  Map<T, U> removed(T key) => Map.of(this)..remove(key);
 }

@@ -16,7 +16,7 @@ abstract class $_StateCopyWithWorker {
   _State call({
     Rgba8Image? src,
     Rgba8Image? dst,
-    List<ColorArguments>? colorFilters,
+    List<PixelArguments>? pixelFilters,
     List<TransformArguments>? transformFilters,
     TransformArguments? cropFilter,
     _ToolType? activeTool,
@@ -37,7 +37,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _State call({
     dynamic src = copyWithNull,
     dynamic dst = copyWithNull,
-    dynamic colorFilters,
+    dynamic pixelFilters,
     dynamic transformFilters,
     dynamic cropFilter = copyWithNull,
     dynamic activeTool,
@@ -52,7 +52,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     return _State(
       src: src == copyWithNull ? that.src : src as Rgba8Image?,
       dst: dst == copyWithNull ? that.dst : dst as Rgba8Image?,
-      colorFilters: colorFilters as List<ColorArguments>? ?? that.colorFilters,
+      pixelFilters: pixelFilters as List<PixelArguments>? ?? that.pixelFilters,
       transformFilters:
           transformFilters as List<TransformArguments>? ??
           that.transformFilters,
@@ -93,7 +93,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, colorFilters: [length: ${colorFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, isSaved: $isSaved, error: $error, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, isSaved: $isSaved, error: $error, saveError: $saveError}";
   }
 }
 
@@ -118,10 +118,10 @@ extension _$_SetCropModeToString on _SetCropMode {
   }
 }
 
-extension _$_SetColorFiltersToString on _SetColorFilters {
+extension _$_SetPixelFiltersToString on _SetPixelFilters {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetColorFilters {value: [length: ${value.length}]}";
+    return "_SetPixelFilters {value: [length: ${value.length}]}";
   }
 }
 

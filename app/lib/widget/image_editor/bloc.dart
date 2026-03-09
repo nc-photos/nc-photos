@@ -9,7 +9,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_InitSrc>(_onInitSrc);
     on<_SetActiveTool>(_onSetActiveTool);
     on<_SetCropMode>(_onSetCropMode);
-    on<_SetColorFilters>(_onSetColorFilters);
+    on<_SetPixelFilters>(_onSetPixelFilters);
     on<_SetTransformFilters>(_onSetTransformFilters);
     on<_SetCropFilter>(_onSetCropFilter);
     on<_SetDst>(_onSetDst);
@@ -72,9 +72,9 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     emit(state.copyWith(isCropMode: ev.value));
   }
 
-  void _onSetColorFilters(_SetColorFilters ev, _Emitter emit) {
+  void _onSetPixelFilters(_SetPixelFilters ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(colorFilters: ev.value));
+    emit(state.copyWith(pixelFilters: ev.value));
     _updatePreview();
   }
 
@@ -124,7 +124,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
           bitmap,
           srcBytes: bytes,
           dstJpegPath: jpegFile.path,
-          colorFilters: state.colorFilters,
+          pixelFilters: state.pixelFilters,
           transformFilters: state.transformFilters,
           cropFilter: state.cropFilter,
         );
@@ -172,7 +172,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     }
     final result = await _applyFilters(
       state.src!,
-      colorFilters: state.colorFilters,
+      pixelFilters: state.pixelFilters,
       transformFilters: state.transformFilters,
       cropFilter: state.cropFilter,
     );
@@ -181,7 +181,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
 
   static Future<Rgba8Image> _applyFilters(
     Rgba8Image src, {
-    required List<ColorArguments> colorFilters,
+    required List<PixelArguments> pixelFilters,
     required List<TransformArguments> transformFilters,
     required TransformArguments? cropFilter,
   }) async {
@@ -189,7 +189,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         [
           cropFilter?.toEdit(),
           ...transformFilters.map((f) => f.toEdit()),
-          ...colorFilters.map((f) => f.toEdit()),
+          ...pixelFilters.map((f) => f.toEdit()),
         ].nonNulls.toList();
     if (edits.isNotEmpty) {
       return await image_editor.edit(src, edits);
@@ -202,14 +202,14 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     Rgba8Image src, {
     required Uint8List srcBytes,
     required String dstJpegPath,
-    required List<ColorArguments> colorFilters,
+    required List<PixelArguments> pixelFilters,
     required List<TransformArguments> transformFilters,
     required TransformArguments? cropFilter,
   }) async {
     await Isolate.run(() async {
       final result = await _applyFilters(
         src,
-        colorFilters: colorFilters,
+        pixelFilters: pixelFilters,
         transformFilters: transformFilters,
         cropFilter: cropFilter,
       );

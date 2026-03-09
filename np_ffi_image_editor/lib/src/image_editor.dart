@@ -60,6 +60,13 @@ class CropEdit implements Edit {
   final double right;
 }
 
+class HalftoneEdit implements Edit {
+  const HalftoneEdit();
+
+  @override
+  JsonObj toJson() => {"type": "halftone"};
+}
+
 class OrientationEdit implements Edit {
   const OrientationEdit(this.degree);
 
@@ -68,6 +75,25 @@ class OrientationEdit implements Edit {
 
   // rotation degree, [-180, -90, 0, 90, 180]
   final int degree;
+}
+
+class PixelationEdit implements Edit {
+  const PixelationEdit(this.weight);
+
+  @override
+  JsonObj toJson() => {"type": "pixelation", "weight": weight};
+
+  // [0, 1]
+  final double weight;
+}
+
+class PosterizationEdit implements Edit {
+  const PosterizationEdit(this.level);
+
+  @override
+  JsonObj toJson() => {"type": "posterization", "levels": level};
+
+  final int level;
 }
 
 class SaturationEdit implements Edit {
@@ -79,6 +105,29 @@ class SaturationEdit implements Edit {
   final double weight;
 }
 
+class SketchEdit implements Edit {
+  const SketchEdit({
+    required this.edgeStrength,
+    required this.edgeThreshold,
+    required this.hatching,
+  });
+
+  @override
+  JsonObj toJson() => {
+    "type": "sketch",
+    "edgeStrength": edgeStrength,
+    "edgeThreshold": edgeThreshold,
+    "hatching": hatching,
+  };
+
+  // [.5, 2]
+  final double edgeStrength;
+  // [0, 1]
+  final double edgeThreshold;
+  // [0, 1]
+  final double hatching;
+}
+
 class TintEdit implements Edit {
   const TintEdit(this.weight);
 
@@ -86,6 +135,20 @@ class TintEdit implements Edit {
   JsonObj toJson() => {"type": "tint", "weight": weight};
 
   final double weight;
+}
+
+class ToonEdit implements Edit {
+  const ToonEdit({required this.edgeThreshold, required this.quantization});
+
+  @override
+  JsonObj toJson() => {
+    "type": "toon",
+    "edgeThreshold": edgeThreshold,
+    "quantization": quantization,
+  };
+
+  final double edgeThreshold;
+  final double quantization;
 }
 
 class WarmthEdit implements Edit {

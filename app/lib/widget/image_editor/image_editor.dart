@@ -29,6 +29,8 @@ import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:nc_photos/widget/image_editor/color_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/crop_controller.dart';
+import 'package:nc_photos/widget/image_editor/effect_toolbar/effect_toolbar.dart';
+import 'package:nc_photos/widget/image_editor/pixel_toolbar_util.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:np_common/object_util.dart';
@@ -294,9 +296,15 @@ class _Body extends StatelessWidget {
             builder:
                 (context, activeTool) => switch (activeTool) {
                   _ToolType.color => ColorToolbar(
-                    initialState: context.state.colorFilters,
-                    onActiveFiltersChanged: (colorFilters) {
-                      context.addEvent(_SetColorFilters(colorFilters.toList()));
+                    initialState: context.state.pixelFilters,
+                    onActiveFiltersChanged: (pixelFilters) {
+                      context.addEvent(_SetPixelFilters(pixelFilters.toList()));
+                    },
+                  ),
+                  _ToolType.effect => EffectToolbar(
+                    initialFilters: context.state.pixelFilters,
+                    onActiveFiltersChanged: (pixelFilters) {
+                      context.addEvent(_SetPixelFilters(pixelFilters.toList()));
                     },
                   ),
                   _ToolType.transform => TransformToolbar(
@@ -317,6 +325,7 @@ class _Body extends StatelessWidget {
           ),
           const SizedBox(height: 4),
           const _ToolBar(),
+          const SizedBox(height: 8),
           SizedBox(height: MediaQuery.paddingOf(context).bottom),
         ],
       ),

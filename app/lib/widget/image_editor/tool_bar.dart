@@ -28,6 +28,18 @@ class _ToolBar extends StatelessWidget {
               selector: (state) => state.activeTool,
               builder:
                   (context, activeTool) => _ToolButton(
+                    icon: Icons.auto_awesome,
+                    label: L10n.global().imageEditToolbarEffectLabel,
+                    isSelected: activeTool == _ToolType.effect,
+                    onPressed: () {
+                      context.addEvent(const _SetActiveTool(_ToolType.effect));
+                    },
+                  ),
+            ),
+            _BlocSelector(
+              selector: (state) => state.activeTool,
+              builder:
+                  (context, activeTool) => _ToolButton(
                     icon: Icons.transform_outlined,
                     label: L10n.global().imageEditToolbarTransformLabel,
                     isSelected: activeTool == _ToolType.transform,

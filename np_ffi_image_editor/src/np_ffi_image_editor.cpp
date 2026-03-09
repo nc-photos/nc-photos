@@ -5,9 +5,14 @@
 #include "edit/contrast.h"
 #include "edit/crop.h"
 #include "edit/gpupixel_composite.h"
+#include "edit/halftone.h"
 #include "edit/orientation.h"
+#include "edit/pixelation.h"
+#include "edit/posterization.h"
 #include "edit/saturation.h"
+#include "edit/sketch.h"
 #include "edit/tint.h"
+#include "edit/toon.h"
 #include "edit/warmth.h"
 #include "edit/white_point.h"
 #include "gpupixel_helper.h"
@@ -64,8 +69,9 @@ parseEdits(const nlohmann::json &json) {
   for (const auto &e : json) {
     const auto type = e["type"].get<string>();
     if (type == "blackPoint" || type == "brightness" || type == "contrast" ||
-        type == "saturation" || type == "tint" || type == "warmth" ||
-        type == "whitePoint") {
+        type == "halftone" || type == "pixelation" || type == "posterization" ||
+        type == "saturation" || type == "sketch" || type == "tint" ||
+        type == "toon" || type == "warmth" || type == "whitePoint") {
       if (!gpupixel) {
         gpupixel = make_unique<np_image_editor::edit::GpupixelComposite>();
       }
@@ -81,13 +87,34 @@ parseEdits(const nlohmann::json &json) {
         const auto weight = e["weight"].get<float>();
         gpupixel->pushBack(
             make_unique<np_image_editor::edit::Contrast>(weight));
+      } else if (type == "halftone") {
+        gpupixel->pushBack(make_unique<np_image_editor::edit::Halftone>());
+      } else if (type == "pixelation") {
+        const auto weight = e["weight"].get<float>();
+        gpupixel->pushBack(
+            make_unique<np_image_editor::edit::Pixelation>(weight));
+      } else if (type == "posterization") {
+        const auto levels = e["levels"].get<int>();
+        gpupixel->pushBack(
+            make_unique<np_image_editor::edit::Posterization>(levels));
       } else if (type == "saturation") {
         const auto weight = e["weight"].get<float>();
         gpupixel->pushBack(
             make_unique<np_image_editor::edit::Saturation>(weight));
+      } else if (type == "sketch") {
+        const auto edgeStrength = e["edgeStrength"].get<float>();
+        const auto edgeThreshold = e["edgeThreshold"].get<float>();
+        const auto hatching = e["hatching"].get<float>();
+        gpupixel->pushBack(make_unique<np_image_editor::edit::Sketch>(
+            edgeStrength, edgeThreshold, hatching));
       } else if (type == "tint") {
         const auto weight = e["weight"].get<float>();
         gpupixel->pushBack(make_unique<np_image_editor::edit::Tint>(weight));
+      } else if (type == "toon") {
+        const auto edgeThreshold = e["edgeThreshold"].get<float>();
+        const auto quantization = e["quantization"].get<float>();
+        gpupixel->pushBack(make_unique<np_image_editor::edit::Toon>(
+            edgeThreshold, quantization));
       } else if (type == "warmth") {
         const auto weight = e["weight"].get<float>();
         gpupixel->pushBack(make_unique<np_image_editor::edit::Warmth>(weight));

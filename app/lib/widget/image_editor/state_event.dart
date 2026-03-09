@@ -1,6 +1,6 @@
 part of 'image_editor.dart';
 
-enum _ToolType { color, transform }
+enum _ToolType { color, effect, transform }
 
 enum _SaveState { init, download, process }
 
@@ -10,7 +10,7 @@ class _State {
   const _State({
     this.src,
     this.dst,
-    required this.colorFilters,
+    required this.pixelFilters,
     required this.transformFilters,
     this.cropFilter,
     required this.activeTool,
@@ -25,7 +25,7 @@ class _State {
 
   factory _State.init() {
     return const _State(
-      colorFilters: [],
+      pixelFilters: [],
       transformFilters: [],
       activeTool: _ToolType.color,
       isCropMode: false,
@@ -40,12 +40,12 @@ class _State {
   bool get isModified =>
       cropFilter != null ||
       transformFilters.isNotEmpty ||
-      colorFilters.isNotEmpty;
+      pixelFilters.isNotEmpty;
 
   final Rgba8Image? src;
   final Rgba8Image? dst;
 
-  final List<ColorArguments> colorFilters;
+  final List<PixelArguments> pixelFilters;
   final List<TransformArguments> transformFilters;
   final TransformArguments? cropFilter;
 
@@ -92,13 +92,13 @@ class _SetCropMode implements _Event {
 }
 
 @toString
-class _SetColorFilters implements _Event {
-  const _SetColorFilters(this.value);
+class _SetPixelFilters implements _Event {
+  const _SetPixelFilters(this.value);
 
   @override
   String toString() => _$toString();
 
-  final List<ColorArguments> value;
+  final List<PixelArguments> value;
 }
 
 @toString
