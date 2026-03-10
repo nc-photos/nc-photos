@@ -18,7 +18,7 @@ class _State {
     this.quitRequest,
     this.saveState,
     required this.downloadProgress,
-    required this.isSaved,
+    this.savedFile,
     this.error,
     this.saveError,
   });
@@ -30,7 +30,6 @@ class _State {
       activeTool: _ToolType.color,
       isCropMode: false,
       downloadProgress: 0,
-      isSaved: false,
     );
   }
 
@@ -55,7 +54,7 @@ class _State {
   final Unique<void>? quitRequest;
   final _SaveState? saveState;
   final double downloadProgress;
-  final bool isSaved;
+  final io.File? savedFile;
 
   final ExceptionEvent? error;
   final ExceptionEvent? saveError;

@@ -36,6 +36,7 @@ import 'package:nc_photos/widget/image_editor/effect_toolbar/effect_toolbar.dart
 import 'package:nc_photos/widget/image_editor/pixel_toolbar_util.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
+import 'package:nc_photos/widget/local_result_viewer/local_result_viewer.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/unique.dart';
 import 'package:np_exiv2/np_exiv2.dart' as exiv2;
@@ -173,10 +174,13 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
               },
             ),
             _BlocListenerT(
-              selector: (state) => state.isSaved,
-              listener: (context, isSaved) {
-                if (isSaved) {
-                  Navigator.of(context).pop();
+              selector: (state) => state.savedFile,
+              listener: (context, savedFile) {
+                if (savedFile != null) {
+                  Navigator.of(context).pushReplacementNamed(
+                    LocalResultViewer.routeName,
+                    arguments: LocalResultViewerArguments(savedFile),
+                  );
                 }
               },
             ),

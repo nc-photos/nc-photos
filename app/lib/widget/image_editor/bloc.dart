@@ -131,11 +131,11 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         );
         emit(state.copyWith(saveState: _SaveState.save));
         await _persistResult(jpegFile);
-      } finally {
+        emit(state.copyWith(savedFile: jpegFile));
+      } catch (e) {
         await dir.delete(recursive: true);
+        rethrow;
       }
-
-      emit(state.copyWith(isSaved: true));
     } catch (e, stackTrace) {
       _log.severe("Failed while filter", e, stackTrace);
       add(_SetSaveError(e, stackTrace));
