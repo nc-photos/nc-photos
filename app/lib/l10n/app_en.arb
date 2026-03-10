@@ -1347,6 +1347,10 @@
 	"@imageEditEffectParamHatching": {
 		"description": "Hatching is an artistic technique used to create shading and tonal effects by drawing closely spaced parallel lines"
 	},
+	"imageEditOpenErrorMessage": "Unable to open file",
+	"@imageEditOpenErrorMessage": {
+		"description": "Shown when app failed to open the image for editing"
+	},
 	"imageEditSaveErrorMessage": "Error saving image",
 	"@imageEditSaveErrorMessage": {
 		"description": "Shown when app failed to save the edited image"

@@ -18,6 +18,7 @@ import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
 import 'package:nc_photos/use_case/list_file_tag.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
+import 'package:np_common/exception.dart';
 import 'package:np_common/size.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_gps_map/np_gps_map.dart';
@@ -53,7 +54,10 @@ class AnyFileNextcloudLargePreviewUriGetter
       getViewerUrlForImageFile(account, _provider.file),
       _provider.file.fdMime,
     );
-    return Uri.parse("file://${fileInfo!.file.path}");
+    if (fileInfo == null) {
+      throw const FileNotFoundException();
+    }
+    return Uri.parse("file://${fileInfo.file.path}");
   }
 
   final Account account;

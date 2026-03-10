@@ -20,6 +20,7 @@ class _State {
     required this.downloadProgress,
     this.savedFile,
     this.error,
+    this.initError,
     this.saveError,
   });
 
@@ -57,6 +58,7 @@ class _State {
   final io.File? savedFile;
 
   final ExceptionEvent? error;
+  final ExceptionEvent? initError;
   final ExceptionEvent? saveError;
 }
 

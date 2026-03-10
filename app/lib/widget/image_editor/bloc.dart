@@ -53,14 +53,24 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     );
     // no need to set shouldfixOrientation because the previews are always in
     // the correct orientation
-    final src = await ImageLoader.loadUri(
-      await uriGetter.get(),
-      _previewWidth,
-      _previewHeight,
-      ImageLoaderResizeMethod.fit,
-      isAllowSwapSide: true,
-    );
-    emit(state.copyWith(src: src));
+    try {
+      final src = await ImageLoader.loadUri(
+        await uriGetter.get(),
+        _previewWidth,
+        _previewHeight,
+        ImageLoaderResizeMethod.fit,
+        isAllowSwapSide: true,
+      );
+      emit(state.copyWith(src: src));
+    } on FileNotFoundException catch (e, stackTrace) {
+      _log.severe("[_onInitSrc] Failed while loadUri", e, stackTrace);
+      emit(
+        state.copyWith(initError: const ExceptionEvent(io.SocketException(""))),
+      );
+    } catch (e, stackTrace) {
+      _log.severe("[_onInitSrc] Failed while loadUri", e, stackTrace);
+      emit(state.copyWith(initError: ExceptionEvent(e, stackTrace)));
+    }
   }
 
   void _onSetActiveTool(_SetActiveTool ev, _Emitter emit) {

@@ -37,6 +37,7 @@ import 'package:nc_photos/widget/image_editor/pixel_toolbar_util.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:nc_photos/widget/local_result_viewer/local_result_viewer.dart';
+import 'package:np_common/exception.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/unique.dart';
 import 'package:np_exiv2/np_exiv2.dart' as exiv2;
@@ -189,6 +190,26 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
               listener: (context, error) {
                 if (error != null) {
                   SnackBarManager().showSnackBarForException(error.error);
+                }
+              },
+            ),
+            _BlocListenerT(
+              selector: (state) => state.initError,
+              listener: (context, initError) {
+                if (initError != null) {
+                  final (text, action) = exceptionToSnackBarData(
+                    initError.error,
+                  );
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        "${L10n.global().imageEditOpenErrorMessage} ($text)",
+                      ),
+                      action: action,
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
+                  Navigator.of(context).pop();
                 }
               },
             ),

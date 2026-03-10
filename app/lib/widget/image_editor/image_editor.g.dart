@@ -26,6 +26,7 @@ abstract class $_StateCopyWithWorker {
     double? downloadProgress,
     io.File? savedFile,
     ExceptionEvent? error,
+    ExceptionEvent? initError,
     ExceptionEvent? saveError,
   });
 }
@@ -47,6 +48,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic downloadProgress,
     dynamic savedFile = copyWithNull,
     dynamic error = copyWithNull,
+    dynamic initError = copyWithNull,
     dynamic saveError = copyWithNull,
   }) {
     return _State(
@@ -72,6 +74,10 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       savedFile:
           savedFile == copyWithNull ? that.savedFile : savedFile as io.File?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      initError:
+          initError == copyWithNull
+              ? that.initError
+              : initError as ExceptionEvent?,
       saveError:
           saveError == copyWithNull
               ? that.saveError
@@ -94,7 +100,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
