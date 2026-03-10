@@ -1276,6 +1276,9 @@
 	"@saveTooltip": {
 		"description": "Save the current content"
 	},
+	"imageEditDownloadDialogTitle": "Downloading image from server...",
+	"imageEditProcessDialogTitle": "Processing image...",
+	"imageEditSaveDialogTitle": "Saving result...",
 	"imageEditColorBrightness": "Brightness",
 	"@imageEditColorBrightness": {
 		"description": "Adjust the brightness of an image"
@@ -1331,6 +1334,26 @@
 	"imageEditTransformCrop": "Crop",
 	"@imageEditTransformCrop": {
 		"description": "Crop the image"
+	},
+	"imageEditToolbarEffectLabel": "Effect",
+	"imageEditEffectHalftone": "Halftone",
+	"imageEditEffectPixelation": "Pixelation",
+	"imageEditEffectPosterization": "Posterization",
+	"imageEditEffectSketch": "Sketch",
+	"imageEditEffectToon": "Toon",
+	"imageEditEffectParamEdge": "Edge",
+	"imageEditEffectParamColor": "Color",
+	"imageEditEffectParamHatching": "Hatching",
+	"@imageEditEffectParamHatching": {
+		"description": "Hatching is an artistic technique used to create shading and tonal effects by drawing closely spaced parallel lines"
+	},
+	"imageEditOpenErrorMessage": "Unable to open file",
+	"@imageEditOpenErrorMessage": {
+		"description": "Shown when app failed to open the image for editing"
+	},
+	"imageEditSaveErrorMessage": "Error saving image",
+	"@imageEditSaveErrorMessage": {
+		"description": "Shown when app failed to save the edited image"
 	},
 	"categoriesLabel": "Categories",
 	"searchLandingPeopleListEmptyText2": "Press settings to switch provider or press help to learn more",

@@ -39,6 +39,7 @@ import 'package:nc_photos/widget/home/home.dart';
 import 'package:nc_photos/widget/image_editor/image_editor.dart';
 import 'package:nc_photos/widget/image_enhancer.dart';
 import 'package:nc_photos/widget/local_file_viewer.dart';
+import 'package:nc_photos/widget/local_result_viewer/local_result_viewer.dart';
 import 'package:nc_photos/widget/map_browser/map_browser.dart';
 import 'package:nc_photos/widget/people_browser/people_browser.dart';
 import 'package:nc_photos/widget/place_picker/place_picker.dart';
@@ -253,6 +254,7 @@ class _WrappedAppState extends State<_WrappedApp>
     route ??= _handleTimelineViewerRoute(settings);
     route ??= _handleCollectionViewerRoute(settings);
     route ??= _handleUploadFolderPickerRoute(settings);
+    route ??= _handleLocalResultViewerRoute(settings);
     return route;
   }
 
@@ -616,6 +618,22 @@ class _WrappedAppState extends State<_WrappedApp>
     } catch (e) {
       _log.severe(
         "[_handleUploadFolderPickerRoute] Failed while handling route",
+        e,
+      );
+    }
+    return null;
+  }
+
+  Route<dynamic>? _handleLocalResultViewerRoute(RouteSettings settings) {
+    try {
+      if (settings.name == LocalResultViewer.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as LocalResultViewerArguments;
+        return LocalResultViewer.buildRoute(args, settings);
+      }
+    } catch (e) {
+      _log.severe(
+        "[_handleLocalResultViewerRoute] Failed while handling route",
         e,
       );
     }

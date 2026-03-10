@@ -1,3 +1,5 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
@@ -148,6 +150,48 @@ class RemoteImageViewer extends StatelessWidget {
 
   final Account account;
   final FileDescriptor file;
+  final bool canZoom;
+  final VoidCallback? onLoaded;
+  final ValueChanged<double>? onHeightChanged;
+  final VoidCallback? onZoomStarted;
+  final VoidCallback? onZoomEnded;
+}
+
+class IoFileImageViewer extends StatelessWidget {
+  const IoFileImageViewer({
+    super.key,
+    required this.file,
+    required this.canZoom,
+    this.onLoaded,
+    this.onHeightChanged,
+    this.onZoomStarted,
+    this.onZoomEnded,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return _ImageViewer(
+      canZoom: canZoom,
+      onHeightChanged: onHeightChanged,
+      onZoomStarted: onZoomStarted,
+      onZoomEnded: onZoomEnded,
+      child: Image.file(
+        file,
+        fit: BoxFit.contain,
+        frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+          if (frame != null) {
+            WidgetsBinding.instance.addPostFrameCallback((_) {
+              onLoaded?.call();
+            });
+          }
+          const SizeChangedLayoutNotification().dispatch(context);
+          return child;
+        },
+      ),
+    );
+  }
+
+  final io.File file;
   final bool canZoom;
   final VoidCallback? onLoaded;
   final ValueChanged<double>? onHeightChanged;

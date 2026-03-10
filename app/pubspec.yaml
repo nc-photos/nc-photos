@@ -84,6 +84,7 @@ dependencies:
   flutter_typeahead: ^5.2.0
   google_maps_flutter: 2.5.3
   http: ^1.1.2
+  image: ^4.8.0
   image_size_getter:
     git:
       url: https://github.com/nc-photos/dart_image_size_getter.git
@@ -119,6 +120,8 @@ dependencies:
     path: ../np_db
   np_exiv2:
     path: ../np_exiv2
+  np_ffi_image_editor:
+    path: ../np_ffi_image_editor
   np_geocoder:
     path: ../np_geocoder
   np_gps_map:

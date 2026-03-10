@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:io' as io;
+import 'dart:typed_data';
 
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
@@ -10,14 +12,19 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/use_case/download_file.dart';
+import 'package:nc_photos/use_case/download_file2.dart';
 import 'package:nc_photos/use_case/download_preview.dart';
 import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
 import 'package:nc_photos/use_case/list_file_tag.dart';
 import 'package:nc_photos/widget/handler/permission_handler.dart';
+import 'package:nc_photos_plugin/nc_photos_plugin.dart';
+import 'package:np_common/exception.dart';
 import 'package:np_common/size.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_platform_raw_image/np_platform_raw_image.dart';
+import 'package:np_platform_util/np_platform_util.dart';
 
 part 'nextcloud.g.dart';
 
@@ -47,7 +54,10 @@ class AnyFileNextcloudLargePreviewUriGetter
       getViewerUrlForImageFile(account, _provider.file),
       _provider.file.fdMime,
     );
-    return Uri.parse("file://${fileInfo!.file.path}");
+    if (fileInfo == null) {
+      throw const FileNotFoundException();
+    }
+    return Uri.parse("file://${fileInfo.file.path}");
   }
 
   final Account account;
@@ -274,6 +284,47 @@ class AnyFileNextcloudTagGetter implements AnyFileTagGetter {
 
   final AnyFileNextcloudProvider _provider;
   Completer<List<AnyFileTag>?>? _initCompleter;
+}
+
+class AnyFileNextcloudBinaryBitmapGetter implements AnyFileBinaryBitmapGetter {
+  AnyFileNextcloudBinaryBitmapGetter(AnyFile file, {required this.account})
+    : _provider = file.provider as AnyFileNextcloudProvider;
+
+  @override
+  Future<({Uint8List bytes, Rgba8Image bitmap})> get({
+    required int maxWidth,
+    required int maxHeight,
+    bool shouldFixOrientation = false,
+    void Function(double progress)? onProgress,
+  }) async {
+    final filePath = await DownloadInternalTempFile()(
+      account,
+      _provider.file,
+      onProgress: onProgress,
+    );
+    final bytes = await io.File(filePath).readAsBytes();
+    if (getRawPlatform() == NpPlatform.android) {
+      final uri = await ContentUri.getUriForFile(filePath);
+      return (
+        bytes: bytes,
+        bitmap: await ImageLoader.loadUri(
+          Uri.parse(uri),
+          maxWidth,
+          maxHeight,
+          ImageLoaderResizeMethod.fit,
+          isAllowSwapSide: true,
+          shouldUpscale: false,
+          shouldFixOrientation: shouldFixOrientation,
+        ),
+      );
+    } else {
+      throw UnimplementedError();
+    }
+  }
+
+  final Account account;
+
+  final AnyFileNextcloudProvider _provider;
 }
 
 extension on Rational {

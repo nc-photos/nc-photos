@@ -3,8 +3,8 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
+import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
 import 'package:np_log/np_log.dart';
-import 'package:np_platform_image_processor/np_platform_image_processor.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 import 'package:np_ui/np_ui.dart';
 
@@ -511,7 +511,7 @@ class _CropArguments implements TransformArguments {
   const _CropArguments(this.top, this.left, this.bottom, this.right);
 
   @override
-  toImageFilter() => TransformCropFilter(top, left, bottom, right);
+  image_editor.Edit toEdit() => image_editor.CropEdit(top, left, bottom, right);
 
   @override
   getToolType() => TransformToolType.crop;

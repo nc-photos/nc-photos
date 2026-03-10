@@ -94,7 +94,23 @@ const Exiv2ReadResult *exiv2_read_http(const char *url,
   return nullptr;
 }
 
-// {{"Authorization", "YWRtaW46MTIzNDU2Nzg5"}}
+int exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
+                                    const size_t from_size, const char *to) {
+  try {
+    auto src = Exiv2::ImageFactory::open(from_buffer, from_size);
+    auto dst = Exiv2::ImageFactory::open(to);
+    src->readMetadata();
+    dst->setMetadata(*src);
+    dst->writeMetadata();
+    return true;
+  } catch (const exception &e) {
+    LOGE(TAG, "Exception copying metadata: %s", e.what());
+    return false;
+  } catch (...) {
+    LOGE(TAG, "Exception copying metadata");
+    return false;
+  }
+}
 
 void exiv2_result_free(const Exiv2ReadResult *that) {
   if (that->iptc_data) {

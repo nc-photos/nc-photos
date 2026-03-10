@@ -392,6 +392,41 @@ Future<ReadResult> readHttp(
   });
 }
 
+Future<bool> copyMetadata(Uint8List from, File to) async {
+  try {
+    return await _copyMetadata(from, to.path);
+  } catch (e, stackTrace) {
+    _log.severe("[copyMetadata] Failed while copyMetadata", e, stackTrace);
+    return false;
+  }
+}
+
+Future<bool> _copyMetadata(Uint8List from, String toPath) {
+  return Isolate.run(() {
+    Pointer<Uint8>? fromBufferC;
+    final toC = toPath.toNativeUtf8();
+    try {
+      _log.fine("[_copyMetadata] Allocating buffer with size: ${from.length}");
+      fromBufferC = ffi.malloc.allocate<Uint8>(from.length);
+      final fromBufferView = fromBufferC.asTypedList(from.length);
+      fromBufferView.setAll(0, from);
+      final result =
+          _bindings.exiv2_copy_metadata_from_buffer(
+            fromBufferC,
+            from.length,
+            toC.cast(),
+          ) !=
+          0;
+      return result;
+    } finally {
+      if (fromBufferC != null) {
+        ffi.malloc.free(fromBufferC);
+      }
+      ffi.malloc.free(toC);
+    }
+  });
+}
+
 extension PointerListExtension<T extends NativeType> on List<Pointer<T>> {
   Pointer<Pointer<T>> toNativeArray() {
     final result = ffi.malloc.allocate<Pointer<T>>(length);

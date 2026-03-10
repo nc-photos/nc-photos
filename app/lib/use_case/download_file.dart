@@ -6,6 +6,7 @@ import 'package:nc_photos/mobile/platform.dart'
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/platform/download.dart';
 
+@Deprecated("Use DownloadPublicFile or DownloadInternalTempFile")
 class DownloadFile {
   /// Create a new download but don't start it yet
   ///

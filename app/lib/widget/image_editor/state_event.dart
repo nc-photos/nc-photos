@@ -1,6 +1,8 @@
 part of 'image_editor.dart';
 
-enum _ToolType { color, transform }
+enum _ToolType { color, effect, transform }
+
+enum _SaveState { init, download, process, save }
 
 @genCopyWith
 @toString
@@ -8,23 +10,27 @@ class _State {
   const _State({
     this.src,
     this.dst,
-    required this.colorFilters,
+    required this.pixelFilters,
     required this.transformFilters,
     this.cropFilter,
     required this.activeTool,
     required this.isCropMode,
     this.quitRequest,
-    required this.isSaved,
+    this.saveState,
+    required this.downloadProgress,
+    this.savedFile,
     this.error,
+    this.initError,
+    this.saveError,
   });
 
   factory _State.init() {
     return const _State(
-      colorFilters: [],
+      pixelFilters: [],
       transformFilters: [],
       activeTool: _ToolType.color,
       isCropMode: false,
-      isSaved: false,
+      downloadProgress: 0,
     );
   }
 
@@ -34,12 +40,12 @@ class _State {
   bool get isModified =>
       cropFilter != null ||
       transformFilters.isNotEmpty ||
-      colorFilters.isNotEmpty;
+      pixelFilters.isNotEmpty;
 
   final Rgba8Image? src;
   final Rgba8Image? dst;
 
-  final List<ColorArguments> colorFilters;
+  final List<PixelArguments> pixelFilters;
   final List<TransformArguments> transformFilters;
   final TransformArguments? cropFilter;
 
@@ -47,9 +53,13 @@ class _State {
   final bool isCropMode;
 
   final Unique<void>? quitRequest;
-  final bool isSaved;
+  final _SaveState? saveState;
+  final double downloadProgress;
+  final io.File? savedFile;
 
   final ExceptionEvent? error;
+  final ExceptionEvent? initError;
+  final ExceptionEvent? saveError;
 }
 
 sealed class _Event {}
@@ -83,13 +93,13 @@ class _SetCropMode implements _Event {
 }
 
 @toString
-class _SetColorFilters implements _Event {
-  const _SetColorFilters(this.value);
+class _SetPixelFilters implements _Event {
+  const _SetPixelFilters(this.value);
 
   @override
   String toString() => _$toString();
 
-  final List<ColorArguments> value;
+  final List<PixelArguments> value;
 }
 
 @toString
@@ -141,6 +151,17 @@ class _RequestQuit implements _Event {
 @toString
 class _SetError implements _Event {
   const _SetError(this.error, [this.stackTrace]);
+
+  @override
+  String toString() => _$toString();
+
+  final Object error;
+  final StackTrace? stackTrace;
+}
+
+@toString
+class _SetSaveError implements _Event {
+  const _SetSaveError(this.error, [this.stackTrace]);
 
   @override
   String toString() => _$toString();

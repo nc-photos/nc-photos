@@ -16,14 +16,18 @@ abstract class $_StateCopyWithWorker {
   _State call({
     Rgba8Image? src,
     Rgba8Image? dst,
-    List<ColorArguments>? colorFilters,
+    List<PixelArguments>? pixelFilters,
     List<TransformArguments>? transformFilters,
     TransformArguments? cropFilter,
     _ToolType? activeTool,
     bool? isCropMode,
     Unique<void>? quitRequest,
-    bool? isSaved,
+    _SaveState? saveState,
+    double? downloadProgress,
+    io.File? savedFile,
     ExceptionEvent? error,
+    ExceptionEvent? initError,
+    ExceptionEvent? saveError,
   });
 }
 
@@ -34,19 +38,23 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _State call({
     dynamic src = copyWithNull,
     dynamic dst = copyWithNull,
-    dynamic colorFilters,
+    dynamic pixelFilters,
     dynamic transformFilters,
     dynamic cropFilter = copyWithNull,
     dynamic activeTool,
     dynamic isCropMode,
     dynamic quitRequest = copyWithNull,
-    dynamic isSaved,
+    dynamic saveState = copyWithNull,
+    dynamic downloadProgress,
+    dynamic savedFile = copyWithNull,
     dynamic error = copyWithNull,
+    dynamic initError = copyWithNull,
+    dynamic saveError = copyWithNull,
   }) {
     return _State(
       src: src == copyWithNull ? that.src : src as Rgba8Image?,
       dst: dst == copyWithNull ? that.dst : dst as Rgba8Image?,
-      colorFilters: colorFilters as List<ColorArguments>? ?? that.colorFilters,
+      pixelFilters: pixelFilters as List<PixelArguments>? ?? that.pixelFilters,
       transformFilters:
           transformFilters as List<TransformArguments>? ??
           that.transformFilters,
@@ -60,8 +68,20 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           quitRequest == copyWithNull
               ? that.quitRequest
               : quitRequest as Unique<void>?,
-      isSaved: isSaved as bool? ?? that.isSaved,
+      saveState:
+          saveState == copyWithNull ? that.saveState : saveState as _SaveState?,
+      downloadProgress: downloadProgress as double? ?? that.downloadProgress,
+      savedFile:
+          savedFile == copyWithNull ? that.savedFile : savedFile as io.File?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
+      initError:
+          initError == copyWithNull
+              ? that.initError
+              : initError as ExceptionEvent?,
+      saveError:
+          saveError == copyWithNull
+              ? that.saveError
+              : saveError as ExceptionEvent?,
     );
   }
 
@@ -80,7 +100,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, colorFilters: [length: ${colorFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, isSaved: $isSaved, error: $error}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
@@ -105,10 +125,10 @@ extension _$_SetCropModeToString on _SetCropMode {
   }
 }
 
-extension _$_SetColorFiltersToString on _SetColorFilters {
+extension _$_SetPixelFiltersToString on _SetPixelFilters {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_SetColorFilters {value: [length: ${value.length}]}";
+    return "_SetPixelFilters {value: [length: ${value.length}]}";
   }
 }
 
@@ -151,5 +171,12 @@ extension _$_SetErrorToString on _SetError {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetError {error: $error, stackTrace: $stackTrace}";
+  }
+}
+
+extension _$_SetSaveErrorToString on _SetSaveError {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetSaveError {error: $error, stackTrace: $stackTrace}";
   }
 }

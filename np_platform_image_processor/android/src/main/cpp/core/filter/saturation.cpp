@@ -5,7 +5,6 @@
 #include <memory>
 #include <vector>
 
-#include "../log.h"
 #include "hslhsv.h"
 #include "saturation.h"
 
@@ -21,7 +20,6 @@ vector<uint8_t> applySaturation(const uint8_t *rgba8, const size_t width,
 
 vector<uint8_t> Saturation::apply(const uint8_t *rgba8, const size_t width,
                                   const size_t height, const float weight) {
-  LOGI(TAG, "[apply] weight: %.2f", weight);
   if (weight == 0) {
     // shortcut
     return vector<uint8_t>(rgba8, rgba8 + width * height * 4);
