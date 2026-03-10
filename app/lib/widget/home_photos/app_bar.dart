@@ -168,19 +168,47 @@ class _AppBarAnchor extends StatefulWidget {
 class _AppBarAnchorState extends State<_AppBarAnchor>
     with WidgetsBindingObserver {
   @override
-  void initState() {
-    super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updatePoisiton();
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
-    return SizedBox.shrink(key: _key);
+    return MultiBlocListener(
+      listeners: [
+        _BlocListenerT(
+          selector: (state) => state.isScrolling,
+          listener: (context, isScrolling) {
+            if (isScrolling) {
+              if (!_shouldWork) {
+                _shouldWork = true;
+                _updatePoisiton();
+              }
+            } else {
+              _shouldWork = false;
+            }
+          },
+        ),
+        _BlocListenerT(
+          selector: (state) => state.appBarPositionUpdateRequest,
+          listener: (context, appBarPositionUpdateRequest) {
+            if (appBarPositionUpdateRequest?.value == true) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                _updatePoisitonOnce();
+              });
+            }
+          },
+        ),
+      ],
+      child: SizedBox.shrink(key: _key),
+    );
   }
 
   void _updatePoisiton() {
+    _updatePoisitonOnce();
+    if (_shouldWork) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _updatePoisiton();
+      });
+    }
+  }
+
+  void _updatePoisitonOnce() {
     if (!mounted) {
       return;
     }
@@ -196,11 +224,9 @@ class _AppBarAnchorState extends State<_AppBarAnchor>
         context.addEvent(_SetAppBarPosition(p));
       }
     }
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _updatePoisiton();
-    });
   }
 
   final _key = GlobalKey();
   Offset? _position;
+  var _shouldWork = false;
 }

@@ -34,6 +34,7 @@ class _Bloc extends Bloc<_Event, _State>
     on<_SelectSection>(_onSelectSection);
     on<_UnselectSection>(_onUnselectSection);
     on<_SelectedItemsUpdated>(_onSelectedItemsUpdated);
+    on<_SelectionModeUpdated>(_onSelectionModeUpdated);
     on<_AddSelectedItemsToCollection>(_onAddSelectedItemsToCollection);
     on<_ArchiveSelectedItems>(_onArchiveSelectedItems);
     on<_DeleteSelectedItems>(_onDeleteSelectedItems);
@@ -169,6 +170,16 @@ class _Bloc extends Bloc<_Event, _State>
           )
           .listen((event) {
             add(const _SelectedItemsUpdated());
+          }),
+    );
+    _subscriptions.add(
+      stream
+          .distinct(
+            (previous, next) =>
+                previous.selectedItems.isEmpty == next.selectedItems.isEmpty,
+          )
+          .listen((event) {
+            add(const _SelectionModeUpdated());
           }),
     );
   }
@@ -372,6 +383,11 @@ class _Bloc extends Bloc<_Event, _State>
         selectedCanUpload: canUpload,
       ),
     );
+  }
+
+  void _onSelectionModeUpdated(_SelectionModeUpdated ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(appBarPositionUpdateRequest: Unique(true)));
   }
 
   void _onAddSelectedItemsToCollection(

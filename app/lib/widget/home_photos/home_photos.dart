@@ -534,21 +534,9 @@ class _BodyState extends State<_Body> {
                                                       ? const _AppBar()
                                                       : const _SelectionAppBar(),
                                         ),
-                                        _BlocSelector<bool>(
-                                          selector:
-                                              (state) => state.isScrolling,
-                                          builder:
-                                              (context, isScrolling) =>
-                                                  isScrolling
-                                                      ? const SliverPersistentHeader(
-                                                        delegate:
-                                                            _AppBarAnchorDelegate(),
-                                                        pinned: true,
-                                                      )
-                                                      : const SliverToBoxAdapter(
-                                                        child:
-                                                            SizedBox.shrink(),
-                                                      ),
+                                        const SliverPersistentHeader(
+                                          delegate: _AppBarAnchorDelegate(),
+                                          pinned: true,
                                         ),
                                         _BlocBuilder(
                                           buildWhen:

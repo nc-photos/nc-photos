@@ -30,6 +30,7 @@ class _State {
     required this.minimapYRatio,
     this.scrollDate,
     this.appBarPosition,
+    this.appBarPositionUpdateRequest,
     required this.isDragging,
     required this.hasMissingVideoPreview,
     required this.shareRequest,
@@ -113,6 +114,7 @@ class _State {
   final double minimapYRatio;
   final Date? scrollDate;
   final Offset? appBarPosition;
+  final Unique<bool>? appBarPositionUpdateRequest;
   final bool isDragging;
 
   final bool hasMissingVideoPreview;
@@ -212,6 +214,14 @@ class _UnselectSection implements _Event {
 @toString
 class _SelectedItemsUpdated implements _Event {
   const _SelectedItemsUpdated();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _SelectionModeUpdated implements _Event {
+  const _SelectionModeUpdated();
 
   @override
   String toString() => _$toString();
