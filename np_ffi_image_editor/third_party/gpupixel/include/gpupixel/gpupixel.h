@@ -63,6 +63,7 @@
 #include "gpupixel/filter/ios_blur_filter.h"
 #include "gpupixel/filter/levels_filter.h"
 #include "gpupixel/filter/luminance_range_filter.h"
+#include "gpupixel/filter/mlkit_face_reshape_filter.h"
 #include "gpupixel/filter/nearby_sampling3x3_filter.h"
 #include "gpupixel/filter/non_maximum_suppression_filter.h"
 #include "gpupixel/filter/pixellation_filter.h"

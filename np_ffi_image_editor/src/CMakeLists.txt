@@ -25,6 +25,7 @@ add_library(np_ffi_image_editor SHARED
   "edit/brightness.cpp"
   "edit/contrast.cpp"
   "edit/crop.cpp"
+  "edit/face_reshape.cpp"
   "edit/halftone.cpp"
   "edit/gpupixel_composite.cpp"
   "edit/orientation.cpp"
