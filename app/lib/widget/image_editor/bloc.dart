@@ -177,18 +177,25 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     if (state.src == null) {
       return;
     }
-    add(const _SetIsApplyingFilters(true));
-    try {
-      final result = await _applyFilters(
-        state.src!,
-        pixelFilters: state.pixelFilters,
-        transformFilters: state.transformFilters,
-        cropFilter: state.cropFilter,
-      );
-      add(_SetDst(result));
-    } finally {
-      add(const _SetIsApplyingFilters(false));
-    }
+    final token = await _getProcessorToken();
+    await _processorMutex.protect(() async {
+      if (token != _processorToken) {
+        // outdated
+        return;
+      }
+      add(const _SetIsApplyingFilters(true));
+      try {
+        final result = await _applyFilters(
+          state.src!,
+          pixelFilters: state.pixelFilters,
+          transformFilters: state.transformFilters,
+          cropFilter: state.cropFilter,
+        );
+        add(_SetDst(result));
+      } finally {
+        add(const _SetIsApplyingFilters(false));
+      }
+    });
   }
 
   static Future<Rgba8Image> _applyFilters(
@@ -305,10 +312,20 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     }
   }
 
+  Future<int> _getProcessorToken() async {
+    return _processorTokenMutex.protect(() async {
+      return ++_processorToken;
+    });
+  }
+
   final Account account;
   final FileRepo fileRepo;
   final PrefController prefController;
   final AnyFile file;
+
+  var _processorToken = 0;
+  final _processorTokenMutex = Mutex();
+  final _processorMutex = Mutex();
 
   var _isHandlingError = false;
 
