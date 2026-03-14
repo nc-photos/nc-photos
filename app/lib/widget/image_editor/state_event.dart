@@ -13,6 +13,7 @@ class _State {
     required this.pixelFilters,
     required this.transformFilters,
     this.cropFilter,
+    required this.isApplyingFilters,
     required this.activeTool,
     required this.isCropMode,
     this.quitRequest,
@@ -28,6 +29,7 @@ class _State {
     return const _State(
       pixelFilters: [],
       transformFilters: [],
+      isApplyingFilters: false,
       activeTool: _ToolType.color,
       isCropMode: false,
       downloadProgress: 0,
@@ -48,6 +50,7 @@ class _State {
   final List<PixelArguments> pixelFilters;
   final List<TransformArguments> transformFilters;
   final TransformArguments? cropFilter;
+  final bool isApplyingFilters;
 
   final _ToolType activeTool;
   final bool isCropMode;
@@ -130,6 +133,16 @@ class _SetDst implements _Event {
   String toString() => _$toString();
 
   final Rgba8Image value;
+}
+
+@toString
+class _SetIsApplyingFilters implements _Event {
+  const _SetIsApplyingFilters(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
 }
 
 @toString

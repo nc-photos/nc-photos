@@ -14,6 +14,10 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_SetTransformFilters>(_onSetTransformFilters);
     on<_SetCropFilter>(_onSetCropFilter);
     on<_SetDst>(_onSetDst);
+    on<_SetIsApplyingFilters>((ev, emit) {
+      _log.info(ev);
+      emit(state.copyWith(isApplyingFilters: ev.value));
+    });
     on<_Save>(_onSave);
     on<_RequestQuit>(_onRequestQuit);
 
@@ -173,13 +177,18 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     if (state.src == null) {
       return;
     }
-    final result = await _applyFilters(
-      state.src!,
-      pixelFilters: state.pixelFilters,
-      transformFilters: state.transformFilters,
-      cropFilter: state.cropFilter,
-    );
-    add(_SetDst(result));
+    add(const _SetIsApplyingFilters(true));
+    try {
+      final result = await _applyFilters(
+        state.src!,
+        pixelFilters: state.pixelFilters,
+        transformFilters: state.transformFilters,
+        cropFilter: state.cropFilter,
+      );
+      add(_SetDst(result));
+    } finally {
+      add(const _SetIsApplyingFilters(false));
+    }
   }
 
   static Future<Rgba8Image> _applyFilters(

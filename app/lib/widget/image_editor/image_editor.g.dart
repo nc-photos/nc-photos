@@ -19,6 +19,7 @@ abstract class $_StateCopyWithWorker {
     List<PixelArguments>? pixelFilters,
     List<TransformArguments>? transformFilters,
     TransformArguments? cropFilter,
+    bool? isApplyingFilters,
     _ToolType? activeTool,
     bool? isCropMode,
     Unique<void>? quitRequest,
@@ -41,6 +42,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic pixelFilters,
     dynamic transformFilters,
     dynamic cropFilter = copyWithNull,
+    dynamic isApplyingFilters,
     dynamic activeTool,
     dynamic isCropMode,
     dynamic quitRequest = copyWithNull,
@@ -62,6 +64,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           cropFilter == copyWithNull
               ? that.cropFilter
               : cropFilter as TransformArguments?,
+      isApplyingFilters: isApplyingFilters as bool? ?? that.isApplyingFilters,
       activeTool: activeTool as _ToolType? ?? that.activeTool,
       isCropMode: isCropMode as bool? ?? that.isCropMode,
       quitRequest:
@@ -100,7 +103,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, isApplyingFilters: $isApplyingFilters, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
@@ -150,6 +153,13 @@ extension _$_SetDstToString on _SetDst {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetDst {value: $value}";
+  }
+}
+
+extension _$_SetIsApplyingFiltersToString on _SetIsApplyingFilters {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetIsApplyingFilters {value: $value}";
   }
 }
 

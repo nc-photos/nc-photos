@@ -5,10 +5,13 @@ class _AppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.isModified,
+    return _BlocBuilder(
+      buildWhen:
+          (previous, current) =>
+              previous.isModified != current.isModified ||
+              previous.isApplyingFilters != current.isApplyingFilters,
       builder:
-          (context, isModified) => AppBar(
+          (context, state) => AppBar(
             backgroundColor: Colors.transparent,
             elevation: 0,
             leading: BackButton(
@@ -18,7 +21,12 @@ class _AppBar extends StatelessWidget {
             ),
             title: Text(L10n.global().imageEditTitle),
             actions: [
-              if (isModified)
+              if (state.isApplyingFilters)
+                const IconButton(
+                  icon: AppBarProgressIndicator(),
+                  onPressed: null,
+                )
+              else if (state.isModified)
                 IconButton(
                   icon: const Icon(Icons.save_outlined),
                   tooltip: L10n.global().saveTooltip,
