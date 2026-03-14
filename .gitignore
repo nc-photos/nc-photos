@@ -1,6 +1,7 @@
 .vscode/
 *.code-workspace
 compile_flags.txt
+.DS_Store
 
 .flutter-plugins
 .flutter-plugins-dependencies
