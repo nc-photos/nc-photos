@@ -331,6 +331,6 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
 
   static final _log = Logger("ImageEditorBloc");
 
-  static const _previewWidth = 1280;
-  static const _previewHeight = 1280;
+  static const _previewWidth = 1024;
+  static const _previewHeight = 1024;
 }
