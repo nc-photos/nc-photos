@@ -1,5 +1,7 @@
 part of 'effect_toolbar.dart';
 
+enum _FaceReshapeOptionType { jawline, eyeSize }
+
 enum _SketchOptionType { edge, hatching }
 
 enum _ToonOptionType { edge, quantization }
@@ -10,6 +12,7 @@ class _State {
   const _State({
     required this.filters,
     this.selectedFilter,
+    required this.faceReshapeOptionType,
     required this.sketchOptionType,
     required this.toonOptionType,
   });
@@ -18,6 +21,7 @@ class _State {
     final filters = {for (final f in initialFilters) f.getToolType(): f};
     return _State(
       filters: filters,
+      faceReshapeOptionType: _FaceReshapeOptionType.jawline,
       sketchOptionType: _SketchOptionType.edge,
       toonOptionType: _ToonOptionType.edge,
     );
@@ -29,6 +33,7 @@ class _State {
   final Map<PixelToolType, PixelArguments> filters;
   final PixelToolType? selectedFilter;
 
+  final _FaceReshapeOptionType faceReshapeOptionType;
   final _SketchOptionType sketchOptionType;
   final _ToonOptionType toonOptionType;
 }
@@ -43,6 +48,36 @@ class _ToggleActiveTool implements _Event {
   String toString() => _$toString();
 
   final PixelToolType value;
+}
+
+@toString
+class _SetFaceReshapeOptionType implements _Event {
+  const _SetFaceReshapeOptionType(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final _FaceReshapeOptionType value;
+}
+
+@toString
+class _SetFaceReshapeOptionJawline implements _Event {
+  const _SetFaceReshapeOptionJawline(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final double value;
+}
+
+@toString
+class _SetFaceReshapeOptionEyeSize implements _Event {
+  const _SetFaceReshapeOptionEyeSize(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final double value;
 }
 
 @toString
@@ -126,9 +161,15 @@ class _SetToonOptionQuantization implements _Event {
 }
 
 class _EtBloc extends Bloc<_Event, _State> {
-  _EtBloc({required this.initialFilters, required this.onActiveFiltersChanged})
-    : super(_State.init(initialFilters: initialFilters)) {
+  _EtBloc({
+    required this.initialFilters,
+    required this.onActiveFiltersChanged,
+    required this.isFaceSelectionModeChanged,
+  }) : super(_State.init(initialFilters: initialFilters)) {
     on<_ToggleActiveTool>(_onToggleActiveTool);
+    on<_SetFaceReshapeOptionType>(_onSetFaceReshapeOptionType);
+    on<_SetFaceReshapeOptionJawline>(_onSetFaceReshapeOptionJawline);
+    on<_SetFaceReshapeOptionEyeSize>(_onSetFaceReshapeOptionEyeSize);
     on<_SetPixelationOption>(_onSetPixelationOption);
     on<_SetPosterizationOption>(_onSetPosterizationOption);
     on<_SetSketchOptionType>(_onSetSketchOptionType);
@@ -149,10 +190,20 @@ class _EtBloc extends Bloc<_Event, _State> {
           filters: state.filters.removed(ev.value),
         ),
       );
+      if (ev.value == PixelToolType.faceReshape) {
+        isFaceSelectionModeChanged(false);
+      }
     } else {
       // activate
+      if (state.selectedFilter == PixelToolType.faceReshape) {
+        isFaceSelectionModeChanged(false);
+      }
       final next = Map.of(state.filters);
       next[ev.value] ??= switch (ev.value) {
+        PixelToolType.faceReshape => const _FaceReshapeArguments(
+          jawline: 0,
+          eyeSize: 0,
+        ),
         PixelToolType.halftone => const _HalftoneArguments(),
         PixelToolType.pixelation => const _PixelationArguments(0),
         PixelToolType.posterization => const _PosterizationArguments(5),
@@ -161,7 +212,44 @@ class _EtBloc extends Bloc<_Event, _State> {
         _ => throw ArgumentError("Unknown PixelToolType: ${ev.value}"),
       };
       emit(state.copyWith(selectedFilter: ev.value, filters: next));
+      if (ev.value == PixelToolType.faceReshape) {
+        isFaceSelectionModeChanged(true);
+      }
     }
+    onActiveFiltersChanged(state.filters.values);
+  }
+
+  void _onSetFaceReshapeOptionType(
+    _SetFaceReshapeOptionType ev,
+    _Emitter emit,
+  ) {
+    _log.info(ev);
+    emit(state.copyWith(faceReshapeOptionType: ev.value));
+  }
+
+  void _onSetFaceReshapeOptionJawline(
+    _SetFaceReshapeOptionJawline ev,
+    _Emitter emit,
+  ) {
+    _log.info(ev);
+    final next = Map.of(state.filters);
+    next[PixelToolType.faceReshape] = (next[PixelToolType.faceReshape]
+            as _FaceReshapeArguments)
+        .copyWith(jawline: ev.value);
+    emit(state.copyWith(filters: next));
+    onActiveFiltersChanged(state.filters.values);
+  }
+
+  void _onSetFaceReshapeOptionEyeSize(
+    _SetFaceReshapeOptionEyeSize ev,
+    _Emitter emit,
+  ) {
+    _log.info(ev);
+    final next = Map.of(state.filters);
+    next[PixelToolType.faceReshape] = (next[PixelToolType.faceReshape]
+            as _FaceReshapeArguments)
+        .copyWith(eyeSize: ev.value);
+    emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
   }
 
@@ -234,6 +322,7 @@ class _EtBloc extends Bloc<_Event, _State> {
 
   final List<PixelArguments> initialFilters;
   final ValueChanged<Iterable<PixelArguments>> onActiveFiltersChanged;
+  final ValueChanged<bool> isFaceSelectionModeChanged;
 
   static final _log = Logger("EffectToolbarBloc");
 }

@@ -21,6 +21,7 @@ class EffectToolbar extends StatelessWidget {
     super.key,
     required this.initialFilters,
     required this.onActiveFiltersChanged,
+    required this.isFaceSelectionModeChanged,
   });
 
   @override
@@ -30,6 +31,7 @@ class EffectToolbar extends StatelessWidget {
           (context) => _EtBloc(
             initialFilters: initialFilters,
             onActiveFiltersChanged: onActiveFiltersChanged,
+            isFaceSelectionModeChanged: isFaceSelectionModeChanged,
           ),
       child: const _WrappedEffectToolbar(),
     );
@@ -37,6 +39,7 @@ class EffectToolbar extends StatelessWidget {
 
   final List<PixelArguments> initialFilters;
   final ValueChanged<Iterable<PixelArguments>> onActiveFiltersChanged;
+  final ValueChanged<bool> isFaceSelectionModeChanged;
 }
 
 class _WrappedEffectToolbar extends StatelessWidget {
@@ -60,6 +63,7 @@ class _EffectOption extends StatelessWidget {
             height: 80,
             alignment: Alignment.bottomCenter,
             child: switch (selectedFilter) {
+              PixelToolType.faceReshape => const _FaceReshapeOption(),
               PixelToolType.halftone => null,
               PixelToolType.pixelation => _PixelationOption(
                 (context.state.filters[PixelToolType.pixelation]
@@ -94,6 +98,7 @@ class _EffectBar extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 16),
           child: Row(
             children: [
+              _FaceReshapeButton(),
               _HalftoneButton(),
               _PixelationButton(),
               _PosterizationButton(),

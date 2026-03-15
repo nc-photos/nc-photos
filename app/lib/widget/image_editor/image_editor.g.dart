@@ -20,8 +20,14 @@ abstract class $_StateCopyWithWorker {
     List<TransformArguments>? transformFilters,
     TransformArguments? cropFilter,
     bool? isApplyingFilters,
+    Rgba8Image? postTransformSrc,
+    List<image_editor.FaceDetectorResult>? faceLandmarks,
+    List<image_editor.FaceDetectorResult>? selectedFaces,
+    Unique<bool>? hasSelectedFaceReset,
     _ToolType? activeTool,
     bool? isCropMode,
+    bool? isFaceSelectionMode,
+    Size? faceSelectorImageSize,
     Unique<void>? quitRequest,
     _SaveState? saveState,
     double? downloadProgress,
@@ -43,8 +49,14 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic transformFilters,
     dynamic cropFilter = copyWithNull,
     dynamic isApplyingFilters,
+    dynamic postTransformSrc = copyWithNull,
+    dynamic faceLandmarks = copyWithNull,
+    dynamic selectedFaces,
+    dynamic hasSelectedFaceReset = copyWithNull,
     dynamic activeTool,
     dynamic isCropMode,
+    dynamic isFaceSelectionMode,
+    dynamic faceSelectorImageSize = copyWithNull,
     dynamic quitRequest = copyWithNull,
     dynamic saveState = copyWithNull,
     dynamic downloadProgress,
@@ -65,8 +77,29 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
               ? that.cropFilter
               : cropFilter as TransformArguments?,
       isApplyingFilters: isApplyingFilters as bool? ?? that.isApplyingFilters,
+      postTransformSrc:
+          postTransformSrc == copyWithNull
+              ? that.postTransformSrc
+              : postTransformSrc as Rgba8Image?,
+      faceLandmarks:
+          faceLandmarks == copyWithNull
+              ? that.faceLandmarks
+              : faceLandmarks as List<image_editor.FaceDetectorResult>?,
+      selectedFaces:
+          selectedFaces as List<image_editor.FaceDetectorResult>? ??
+          that.selectedFaces,
+      hasSelectedFaceReset:
+          hasSelectedFaceReset == copyWithNull
+              ? that.hasSelectedFaceReset
+              : hasSelectedFaceReset as Unique<bool>?,
       activeTool: activeTool as _ToolType? ?? that.activeTool,
       isCropMode: isCropMode as bool? ?? that.isCropMode,
+      isFaceSelectionMode:
+          isFaceSelectionMode as bool? ?? that.isFaceSelectionMode,
+      faceSelectorImageSize:
+          faceSelectorImageSize == copyWithNull
+              ? that.faceSelectorImageSize
+              : faceSelectorImageSize as Size?,
       quitRequest:
           quitRequest == copyWithNull
               ? that.quitRequest
@@ -103,7 +136,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, isApplyingFilters: $isApplyingFilters, activeTool: ${activeTool.name}, isCropMode: $isCropMode, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, activeTool: ${activeTool.name}, isCropMode: $isCropMode, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
@@ -128,6 +161,20 @@ extension _$_SetCropModeToString on _SetCropMode {
   }
 }
 
+extension _$_SetFaceSelectionModeToString on _SetFaceSelectionMode {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFaceSelectionMode {value: $value}";
+  }
+}
+
+extension _$_SetFaceSelectorImageSizeToString on _SetFaceSelectorImageSize {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFaceSelectorImageSize {value: $value}";
+  }
+}
+
 extension _$_SetPixelFiltersToString on _SetPixelFilters {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
@@ -146,6 +193,20 @@ extension _$_SetCropFilterToString on _SetCropFilter {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetCropFilter {value: $value}";
+  }
+}
+
+extension _$_SetFaceLandmarksToString on _SetFaceLandmarks {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFaceLandmarks {postTransformSrc: $postTransformSrc, landmarks: [length: ${landmarks.length}]}";
+  }
+}
+
+extension _$_ToggleFaceSelectionToString on _ToggleFaceSelection {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_ToggleFaceSelection {value: $value}";
   }
 }
 

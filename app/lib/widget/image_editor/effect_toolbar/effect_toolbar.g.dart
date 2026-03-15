@@ -12,6 +12,31 @@ part of 'effect_toolbar.dart';
 // CopyWithGenerator
 // **************************************************************************
 
+abstract class $_FaceReshapeArgumentsCopyWithWorker {
+  _FaceReshapeArguments call({double? jawline, double? eyeSize});
+}
+
+class _$_FaceReshapeArgumentsCopyWithWorkerImpl
+    implements $_FaceReshapeArgumentsCopyWithWorker {
+  _$_FaceReshapeArgumentsCopyWithWorkerImpl(this.that);
+
+  @override
+  _FaceReshapeArguments call({dynamic jawline, dynamic eyeSize}) {
+    return _FaceReshapeArguments(
+      jawline: jawline as double? ?? that.jawline,
+      eyeSize: eyeSize as double? ?? that.eyeSize,
+    );
+  }
+
+  final _FaceReshapeArguments that;
+}
+
+extension $_FaceReshapeArgumentsCopyWith on _FaceReshapeArguments {
+  $_FaceReshapeArgumentsCopyWithWorker get copyWith => _$copyWith;
+  $_FaceReshapeArgumentsCopyWithWorker get _$copyWith =>
+      _$_FaceReshapeArgumentsCopyWithWorkerImpl(this);
+}
+
 abstract class $_SketchArgumentsCopyWithWorker {
   _SketchArguments call({double? edge, double? hatching});
 }
@@ -66,6 +91,7 @@ abstract class $_StateCopyWithWorker {
   _State call({
     Map<PixelToolType, PixelArguments>? filters,
     PixelToolType? selectedFilter,
+    _FaceReshapeOptionType? faceReshapeOptionType,
     _SketchOptionType? sketchOptionType,
     _ToonOptionType? toonOptionType,
   });
@@ -78,6 +104,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _State call({
     dynamic filters,
     dynamic selectedFilter = copyWithNull,
+    dynamic faceReshapeOptionType,
     dynamic sketchOptionType,
     dynamic toonOptionType,
   }) {
@@ -87,6 +114,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           selectedFilter == copyWithNull
               ? that.selectedFilter
               : selectedFilter as PixelToolType?,
+      faceReshapeOptionType:
+          faceReshapeOptionType as _FaceReshapeOptionType? ??
+          that.faceReshapeOptionType,
       sketchOptionType:
           sketchOptionType as _SketchOptionType? ?? that.sketchOptionType,
       toonOptionType: toonOptionType as _ToonOptionType? ?? that.toonOptionType,
@@ -108,7 +138,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {filters: {length: ${filters.length}}, selectedFilter: ${selectedFilter == null ? null : "${selectedFilter!.name}"}, sketchOptionType: ${sketchOptionType.name}, toonOptionType: ${toonOptionType.name}}";
+    return "_State {filters: {length: ${filters.length}}, selectedFilter: ${selectedFilter == null ? null : "${selectedFilter!.name}"}, faceReshapeOptionType: ${faceReshapeOptionType.name}, sketchOptionType: ${sketchOptionType.name}, toonOptionType: ${toonOptionType.name}}";
   }
 }
 
@@ -116,6 +146,29 @@ extension _$_ToggleActiveToolToString on _ToggleActiveTool {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_ToggleActiveTool {value: ${value.name}}";
+  }
+}
+
+extension _$_SetFaceReshapeOptionTypeToString on _SetFaceReshapeOptionType {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFaceReshapeOptionType {value: ${value.name}}";
+  }
+}
+
+extension _$_SetFaceReshapeOptionJawlineToString
+    on _SetFaceReshapeOptionJawline {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFaceReshapeOptionJawline {value: ${value.toStringAsFixed(3)}}";
+  }
+}
+
+extension _$_SetFaceReshapeOptionEyeSizeToString
+    on _SetFaceReshapeOptionEyeSize {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFaceReshapeOptionEyeSize {value: ${value.toStringAsFixed(3)}}";
   }
 }
 
