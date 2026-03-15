@@ -80,6 +80,10 @@ class NpPlatformUploaderPlugin : FlutterPlugin, ActivityAware {
     companion object {
         val flutterApis = mutableMapOf<Int, MyFlutterApi>()
         private var nextFlutterApiId = 0
+
+		init {
+			System.loadLibrary("np_platform_uploader")
+		}
     }
 
     override fun onAttachedToEngine(
