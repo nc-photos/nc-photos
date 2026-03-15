@@ -98,7 +98,8 @@ exiv2_read_http(const char *url, const char **header_keys,
  */
 FFI_PLUGIN_EXPORT int
 exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
-                                const size_t from_size, const char *to_path);
+                                const size_t from_size, const char *to_path,
+                                const int should_copy_orientation);
 
 /**
  * Release the resources of a Exiv2ReadResult object returned by

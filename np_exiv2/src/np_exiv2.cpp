@@ -1,6 +1,7 @@
 #include <cstdio>
 #include <cstring>
 #include <exception>
+#include <exiv2/exiv2.hpp>
 #include <map>
 #include <string>
 
@@ -95,12 +96,28 @@ const Exiv2ReadResult *exiv2_read_http(const char *url,
 }
 
 int exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
-                                    const size_t from_size, const char *to) {
+                                    const size_t from_size, const char *to,
+                                    const int should_copy_orientation) {
   try {
     auto src = Exiv2::ImageFactory::open(from_buffer, from_size);
     auto dst = Exiv2::ImageFactory::open(to);
     src->readMetadata();
     dst->setMetadata(*src);
+    if (!should_copy_orientation) {
+      try {
+        auto &exif_data = dst->exifData();
+        auto it = exif_data.findKey(Exiv2::ExifKey("Exif.Image.Orientation"));
+        if (it != exif_data.end() && it->value().toUint32() != 1) {
+          // set orientation to 1 = Horizontal (normal)
+          const auto val = Exiv2::ValueType<uint16_t>(1);
+          it->setValue(&val);
+        }
+      } catch (const exception &e) {
+        LOGE(TAG, "Exception setting exif orientation: %s", e.what());
+      } catch (...) {
+        LOGE(TAG, "Exception setting exif orientation");
+      }
+    }
     dst->writeMetadata();
     return true;
   } catch (const exception &e) {

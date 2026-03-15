@@ -55,8 +55,6 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       file,
       account: account,
     );
-    // no need to set shouldfixOrientation because the previews are always in
-    // the correct orientation
     try {
       final src = await ImageLoader.loadUri(
         await uriGetter.get(),
@@ -64,6 +62,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         _previewHeight,
         ImageLoaderResizeMethod.fit,
         isAllowSwapSide: true,
+        shouldFixOrientation: true,
       );
       emit(state.copyWith(src: src));
     } on FileNotFoundException catch (e, stackTrace) {
@@ -121,6 +120,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       final (:bytes, :bitmap) = await bitmapGetter.get(
         maxWidth: 4096,
         maxHeight: 3072,
+        shouldFixOrientation: true,
         onProgress: (progress) {
           emit(
             state.copyWith(
@@ -248,7 +248,12 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       if (!isEncodeOk) {
         throw StateError("Unable to encode image to JPEG");
       }
-      if (!await exiv2.copyMetadata(srcBytes, io.File(dstJpegPath))) {
+      // don't copy orientation as it's applied to the src before processing
+      if (!await exiv2.copyMetadata(
+        srcBytes,
+        io.File(dstJpegPath),
+        shouldCopyOrientation: false,
+      )) {
         throw StateError("Unable to copy metadata to JPEG");
       }
     });

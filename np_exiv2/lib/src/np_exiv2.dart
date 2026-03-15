@@ -392,16 +392,28 @@ Future<ReadResult> readHttp(
   });
 }
 
-Future<bool> copyMetadata(Uint8List from, File to) async {
+Future<bool> copyMetadata(
+  Uint8List from,
+  File to, {
+  bool shouldCopyOrientation = true,
+}) async {
   try {
-    return await _copyMetadata(from, to.path);
+    return await _copyMetadata(
+      from,
+      to.path,
+      shouldCopyOrientation: shouldCopyOrientation,
+    );
   } catch (e, stackTrace) {
     _log.severe("[copyMetadata] Failed while copyMetadata", e, stackTrace);
     return false;
   }
 }
 
-Future<bool> _copyMetadata(Uint8List from, String toPath) {
+Future<bool> _copyMetadata(
+  Uint8List from,
+  String toPath, {
+  required bool shouldCopyOrientation,
+}) {
   return Isolate.run(() {
     Pointer<Uint8>? fromBufferC;
     final toC = toPath.toNativeUtf8();
@@ -415,6 +427,7 @@ Future<bool> _copyMetadata(Uint8List from, String toPath) {
             fromBufferC,
             from.length,
             toC.cast(),
+            shouldCopyOrientation ? 1 : 0,
           ) !=
           0;
       return result;

@@ -109,21 +109,27 @@ class NpExiv2Bindings {
     ffi.Pointer<ffi.Uint8> from_buffer,
     int from_size,
     ffi.Pointer<ffi.Char> to_path,
+    int should_copy_orientation,
   ) {
     return _exiv2_copy_metadata_from_buffer(
       from_buffer,
       from_size,
       to_path,
+      should_copy_orientation,
     );
   }
 
   late final _exiv2_copy_metadata_from_bufferPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(ffi.Pointer<ffi.Uint8>, ffi.Size,
-              ffi.Pointer<ffi.Char>)>>('exiv2_copy_metadata_from_buffer');
+          ffi.Int Function(
+              ffi.Pointer<ffi.Uint8>,
+              ffi.Size,
+              ffi.Pointer<ffi.Char>,
+              ffi.Int)>>('exiv2_copy_metadata_from_buffer');
   late final _exiv2_copy_metadata_from_buffer =
       _exiv2_copy_metadata_from_bufferPtr.asFunction<
-          int Function(ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Char>)>();
+          int Function(
+              ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Char>, int)>();
 
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file
