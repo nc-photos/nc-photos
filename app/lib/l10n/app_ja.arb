@@ -246,7 +246,7 @@
 	"@rootPickerListEmptyNotification": {
 		"description": "Error when user pressing confirm without picking any folders"
 	},
-	"setupWidgetTitle": "初める",
+	"setupWidgetTitle": "始める",
 	"@setupWidgetTitle": {
 		"description": "Title of the introductory widget"
 	},
@@ -274,7 +274,7 @@
 	"@settingsExifSupportTrueSubtitle": {
 		"description": "Subtitle of the EXIF support setting when the value is true. The goal is to warn user about the possible side effects of enabling this setting"
 	},
-	"settingsExifWifiOnlyTitle": "Wifi使用時のみEFIXを処理する",
+	"settingsExifWifiOnlyTitle": "Wifi使用時のみEXIFを処理する",
 	"@settingsExifWifiOnlyTitle": {
 		"description": "Whether to only process EXIF data when connected to a Wi-Fi network"
 	},
@@ -282,6 +282,14 @@
 	"@settingsExifWifiOnlyFalseSubtitle": {
 		"description": "Shown when users allow processing exif data over any network"
 	},
+	"settingsFallbackClientExifTitle": "サーバー側の処理が失敗した場合にアプリで処理する",
+	"@settingsFallbackClientExifTitle": {
+		"description": "Fallback to client side EXIF parser"
+	},
+	"settingsFallbackClientExifTrueText": "サーバー側の処理が失敗した場合にアプリでEXIFデータを読み込みます",
+	"settingsFallbackClientExifFalseText": "サーバー側の処理が失敗した場合でもアプリでEXIFデータを読み込みません",
+	"settingsFallbackClientExifConfirmDialogTitle": "サーバー側の処理が失敗した場合にアプリで処理しますか？",
+	"settingsFallbackClientExifConfirmDialogText": "通常、サーバー側は自動的に写真を処理し、EXIFデータを処理し、保存します。しかし、設定の問題やサーバーのバグにより、処理が失敗することがあります。有効にすると、これらのファイルをアプリで処理します。",
 	"settingsMemoriesTitle": "思い出",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
@@ -336,6 +344,14 @@
 				"example": "1"
 			}
 		}
+	},
+	"settingsDeviceMediaTitle": "デバイスの写真を表示する",
+	"@settingsDeviceMediaTitle": {
+		"description": "Control which device folders to be included in the timeline"
+	},
+	"settingsDeviceMediaDescription": "選択したフォルダ内の写真がタイムラインに表示されます",
+	"@settingsDeviceMediaDescription": {
+		"description": "Control which device folders to be included in the timeline"
 	},
 	"settingsViewerTitle": "ビューア",
 	"settingsViewerDescription": "画像/動画ビューアをカスタマイズする",
@@ -445,6 +461,7 @@
 	"@enableButtonLabel": {
 		"description": "Label of the enable button"
 	},
+	"enableButtonLabel2": "有効にする",
 	"exifSupportDetails": "EXIFサポートを有効にすると、撮影日やカメラモデルなどの様々なメタデータが利用可能になります。これらのメタデータを読み取るには、元のフルサイズ画像をダウンロードするために追加のネットワーク使用が必要になります。アプリはWi-Fiネットワークに接続している場合にのみダウンロードを開始します。",
 	"@exifSupportDetails": {
 		"description": "Detailed description of the exif support feature"
@@ -482,7 +499,7 @@
 			}
 		}
 	},
-	"secondCountSymbol": "{count}個",
+	"secondCountSymbol": "{count}秒",
 	"@secondCountSymbol": {
 		"description": "Number of seconds",
 		"placeholders": {
@@ -547,7 +564,7 @@
 	"dateDayInputHint": "日",
 	"timeHourInputHint": "時間",
 	"timeMinuteInputHint": "分",
-	"timeSecondInputHint": "2番",
+	"timeSecondInputHint": "秒",
 	"dateTimeInputInvalid": "無効な値です",
 	"@dateTimeInputInvalid": {
 		"description": "Invalid date/time input (e.g., non-numeric characters)"
@@ -564,7 +581,7 @@
 	"@albumDirPickerSubHeaderText": {
 		"description": "Pick the folders for a folder based album"
 	},
-	"albumDirPickerListEmptyNotification": "\n少なくとも1つのフォルダを選択してください",
+	"albumDirPickerListEmptyNotification": "少なくとも1つのフォルダを選択してください",
 	"@albumDirPickerListEmptyNotification": {
 		"description": "Error when user pressing confirm without picking any folders"
 	},
@@ -661,7 +678,7 @@
 	"@listEmptyText": {
 		"description": "When there's nothing in a list"
 	},
-	"albumTrashLabel": "削除",
+	"albumTrashLabel": "ゴミ箱",
 	"@albumTrashLabel": {
 		"description": "Deleted photos"
 	},
@@ -728,7 +745,7 @@
 		"description": "Shown when the app has paused reading image metadata"
 	},
 	"configButtonLabel": "設定",
-	"useAsAlbumCoverTooltip": "アイテムカバーとして使用",
+	"useAsAlbumCoverTooltip": "アルバムカバーとして使用",
 	"helpTooltip": "ヘルプ",
 	"helpButtonLabel": "ヘルプ",
 	"removeFromAlbumTooltip": "アルバムから削除",
@@ -811,7 +828,7 @@
 	"@slideshowSetupDialogTitle": {
 		"description": "Setup slideshow before starting"
 	},
-	"slideshowSetupDialogDurationTitle": "画像の長さ (MM:SS",
+	"slideshowSetupDialogDurationTitle": "画像の長さ (MM:SS)",
 	"@slideshowSetupDialogDurationTitle": {
 		"description": "Set the duration of each image in MM:SS format. This setting is ignored for videos"
 	},
@@ -1190,6 +1207,9 @@
 	"@saveTooltip": {
 		"description": "Save the current content"
 	},
+	"imageEditDownloadDialogTitle": "サーバーから写真をダウンロード中...",
+	"imageEditProcessDialogTitle": "写真を処理中...",
+	"imageEditSaveDialogTitle": "処理した写真を保存中...",
 	"imageEditColorBrightness": "明るさ",
 	"@imageEditColorBrightness": {
 		"description": "Adjust the brightness of an image"
@@ -1245,6 +1265,45 @@
 	"imageEditTransformCrop": "切り抜き",
 	"@imageEditTransformCrop": {
 		"description": "Crop the image"
+	},
+	"imageEditToolbarEffectLabel": "エフェクト",
+	"imageEditEffectHalftone": "網点",
+	"imageEditEffectPixelation": "ピクセル化",
+	"imageEditEffectPosterization": "ポスタリゼーション",
+	"imageEditEffectSketch": "スケッチ化",
+	"imageEditEffectToon": "漫画化",
+	"imageEditEffectFace": "顔",
+	"imageEditEffectParamEdge": "エッジ",
+	"imageEditEffectParamColor": "色",
+	"imageEditEffectParamHatching": "ハッチング",
+	"@imageEditEffectParamHatching": {
+		"description": "Hatching is an artistic technique used to create shading and tonal effects by drawing closely spaced parallel lines"
+	},
+	"imageEditEffectParamJawline": "あごの輪郭",
+	"@imageEditEffectParamJawline": {
+		"description": "Adjust face jawline"
+	},
+	"imageEditEffectParamEyeSize": "目の大きさ",
+	"@imageEditEffectParamEyeSize": {
+		"description": "Adjust size of the eye"
+	},
+	"imageEditFaceDetectionRunningMessage": "顔を検出中...",
+	"imageEditNoFaceDetected": "顔が検出されませんでした",
+	"imageEditFaceNotSelected": "検出された顔を1つ以上選択してエフェクトを適用してください",
+	"@imageEditFaceNotSelected": {
+		"description": "Shown when there are one or more detected faces but none of them is selected"
+	},
+	"imageEditResetSelectedFaceMessage": "画像の変形設定を調整した後、選択した顔はクリアされます。お手数ですが、もう一度選択してください",
+	"@imageEditResetSelectedFaceMessage": {
+		"description": "Changing the image transformation will affect the result of face detection. This message is used to notify user to select the faces again afterwards"
+	},
+	"imageEditOpenErrorMessage": "写真を読み込むことができません",
+	"@imageEditOpenErrorMessage": {
+		"description": "Shown when app failed to open the image for editing"
+	},
+	"imageEditSaveErrorMessage": "写真を保存できません",
+	"@imageEditSaveErrorMessage": {
+		"description": "Shown when app failed to save the edited image"
 	},
 	"categoriesLabel": "カテゴリ",
 	"searchLandingCategoryVideosLabel": "動画",
@@ -1468,6 +1527,7 @@
 	"settingsAppLockConfirmPinDialogTitle": "同じPINをもう一度入力してください",
 	"settingsAppLockSetupPasswordDialogTitle": "アプリのロックを解除するためのパスワードを設定してください",
 	"settingsAppLockConfirmPasswordDialogTitle": "同じパスワードをもう一度入力してください",
+	"settingsViewerUseOriginalImageTitle": "ビュアーでやや画質が下げた画像よりオリジナル画像を使用",
 	"appLockUnlockHint": "アプリのロックを解除",
 	"@appLockUnlockHint": {
 		"description": "Unlock app via selected means (e.g., password) in case app lock is enabled by user"
@@ -1562,5 +1622,73 @@
 	"@albumAddMapTooltip": {
 		"description": "Add a map that display between photos to an album"
 	},
-	"fileNotFound": "ファイルが見つかりません"
+	"fileNotFound": "ファイルが見つかりません",
+	"signInViaNextcloudLoginFlowV2": "NextcloudのLogin Flow v2でサインイン",
+	"signInViaUsernamePassword": "ユーザー名とパスワードでサインイン",
+	"fileOnDevice": "デバイス内",
+	"@fileOnDevice": {
+		"description": "Local files on your device"
+	},
+	"fileOnCloud": "アップロード済み",
+	"@fileOnCloud": {
+		"description": "Filed uploaded to your Nextcloud server"
+	},
+	"uploadTooltip": "アップロード",
+	"@uploadTooltip": {
+		"description": "Upload files to your Nextcloud server"
+	},
+	"uploadFolderPickerTitle": "アップロード先を選択します",
+	"@uploadFolderPickerTitle": {
+		"description": "Pick a folder on your server where the files will be uploaded to"
+	},
+	"opOnlySupportRemoteFiles": "この機能はバックアップ済みの写真のみをサポートします。バックアップされていない写真は無視されます",
+	"@opOnlySupportRemoteFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a remote only action"
+	},
+	"opOnlySupportLocalFiles": "この機能はデバイス内の写真のみをサポートします。サーバー上の写真は無視されます",
+	"@opOnlySupportLocalFiles": {
+		"description": "While it's possible to select both remote and local files in timeline, some features only work with one kind of them. We'll show this warning when user selected a mixture of files and tried to perform a local only action"
+	},
+	"uploadDialogPath": "パス",
+	"@uploadDialogPath": {
+		"description": "Upload path"
+	},
+	"uploadDialogBatchConvert": "一括変換",
+	"@uploadDialogBatchConvert": {
+		"description": "Batch convert files"
+	},
+	"uploadBatchConvertWarningText1": "写真は圧縮または変換したのちアップロードされます。",
+	"uploadBatchConvertWarningText2": "モーションフォトはサポートされておらず、静止画像としてアップロードされます。",
+	"uploadBatchConvertWarningText3": "一部のメタデータは変更または削除される場合があります。",
+	"uploadBatchConvertWarningText4": "サポートされている画像ファイル形式はJPEG、PNG、WEBP、BMPおよびHEICのみ。",
+	"uploadBatchConvertSettings": "変換設定",
+	"uploadBatchConvertSettingsFormat": "ファイル形式",
+	"@uploadBatchConvertSettingsFormat": {
+		"description": "Image format"
+	},
+	"uploadBatchConvertSettingsQuality": "画質",
+	"uploadBatchConvertSettingsDownscaling": "縮小",
+	"viewerLastPageText": "最後の写真です",
+	"deleteMergedFileDialogServerOnlyButton": "サーバー上のみ",
+	"@deleteMergedFileDialogServerOnlyButton": {
+		"description": "Remove the file from server but keep the device copy"
+	},
+	"deleteMergedFileDialogLocalOnlyButton": "デバイス内のみ",
+	"@deleteMergedFileDialogLocalOnlyButton": {
+		"description": "Remove the file from device but keep the server copy"
+	},
+	"deleteMergedFileDialogBothButton": "両方",
+	"@deleteMergedFileDialogBothButton": {
+		"description": "Remove the file from device and server"
+	},
+	"deleteMergedFileDialogContent": "一部の写真はサーバーとデバイスの両方にあります。これらの写真をどこから削除しますか？",
+	"deleteSingleMergedFileDialogContent": "この写真はサーバーとデバイスの両方にあります。この写真をどこから削除しますか？",
+	"collectionAddItemTitle": "どこに入れますか？",
+	"@collectionAddItemTitle": {
+		"description": "When adding an item to a collection, ask the user where should we insert it to"
+	},
+	"errorServerNoCert": "サーバー証明書が正しく設定されていません。暗号化されていないHTTPで接続しますか？",
+	"@errorServerNoCert": {
+		"description": "No cert to establish HTTPS connection"
+	}
 }
