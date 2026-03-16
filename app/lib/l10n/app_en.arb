@@ -274,7 +274,7 @@
 	"@settingsMetadataTitle": {
 		"description": "Metadata (e.g., date, resolution, GPS, etc)"
 	},
-	"settingsExifSupportTitle2": "Client side EXIF support",
+	"settingsExifSupportTitle2": "Client-side EXIF support",
 	"@settingsExifSupportTitle2": {
 		"description": "Title of the EXIF support setting"
 	},
@@ -290,14 +290,14 @@
 	"@settingsExifWifiOnlyFalseSubtitle": {
 		"description": "Shown when users allow processing exif data over any network"
 	},
-	"settingsFallbackClientExifTitle": "Fallback to client side parser",
+	"settingsFallbackClientExifTitle": "Fall back to client-side parser",
 	"@settingsFallbackClientExifTitle": {
 		"description": "Fallback to client side EXIF parser"
 	},
-	"settingsFallbackClientExifTrueText": "If Nextcloud failed to extract the file metadata, use the client side parser instead",
+	"settingsFallbackClientExifTrueText": "If Nextcloud failed to extract the file metadata, use the client-side parser instead",
 	"settingsFallbackClientExifFalseText": "If Nextcloud failed to extract the file metadata, leave it as is",
-	"settingsFallbackClientExifConfirmDialogTitle": "Enable client side fallback?",
-	"settingsFallbackClientExifConfirmDialogText": "Normally Nextcloud server will automatically process your photos and store the EXIF metadata in background. However the background job may fail due to configuration issue or server bug. If enabled, we will process those files ourselves instead.",
+	"settingsFallbackClientExifConfirmDialogTitle": "Enable client-side fallback?",
+	"settingsFallbackClientExifConfirmDialogText": "Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.",
 	"settingsMemoriesTitle": "Memories",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
@@ -388,7 +388,7 @@
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
 	},
-	"settingsImageEditSaveResultsToServerTrueDescription": "Results are saved to server, fallback to device storage if failed",
+	"settingsImageEditSaveResultsToServerTrueDescription": "Results are saved to server, falling back to device storage if the upload fails",
 	"settingsImageEditSaveResultsToServerFalseDescription": "Results are saved to this device",
 	"settingsThemeTitle": "Theme",
 	"settingsThemeDescription": "Customize the appearance of the app",
@@ -459,9 +459,9 @@
 	"settingsAppLockDescription": "If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.",
 	"settingsAppLockSetupBiometricFallbackDialogTitle": "Pick the fallback when biometric is not available",
 	"settingsAppLockSetupPinDialogTitle": "Set the PIN to unlock app",
-	"settingsAppLockConfirmPinDialogTitle": "Input the same PIN again",
+	"settingsAppLockConfirmPinDialogTitle": "Enter the same PIN again",
 	"settingsAppLockSetupPasswordDialogTitle": "Set the password to unlock app",
-	"settingsAppLockConfirmPasswordDialogTitle": "Input the same password again",
+	"settingsAppLockConfirmPasswordDialogTitle": "Enter the same password again",
 	"settingsViewerUseOriginalImageTitle": "Show original image instead of high quality preview in viewer",
 	"settingsExperimentalTitle": "Experimental",
 	"settingsExperimentalDescription": "Features that are not ready for everyday use",
@@ -505,7 +505,7 @@
 	"@settingsTranslatorTitle": {
 		"description": "Title of the translator item"
 	},
-	"settingsRestartNeededDialog": "Please restart app to apply change",
+	"settingsRestartNeededDialog": "Please restart the app to apply changes",
 	"writePreferenceFailureNotification": "Failed setting preference",
 	"@writePreferenceFailureNotification": {
 		"description": "Inform user that the preference file cannot be modified"
@@ -519,15 +519,15 @@
 	"@exifSupportDetails": {
 		"description": "Detailed description of the exif support feature"
 	},
-	"exifSupportNextcloud28Notes": "Client side support complements your server. The app will process files and attributes not supported by Nextcloud",
+	"exifSupportNextcloud28Notes": "Client-side support complements your server. The app will process files and attributes not supported by Nextcloud",
 	"@exifSupportNextcloud28Notes": {
 		"description": "Extra notes for Nextcloud 28+"
 	},
-	"exifSupportConfirmationDialogTitle2": "Enable client side EXIF support?",
+	"exifSupportConfirmationDialogTitle2": "Enable client-side EXIF support?",
 	"@exifSupportConfirmationDialogTitle2": {
 		"description": "Title of the dialog to confirm enabling exif support"
 	},
-	"captureLogDetails": "To take logs for a bug report:\n\n1. Enable this setting\n2. Reproduce the issue\n3. Disable this setting\n4. Look for nc-photos.log in the download folder\n\n*If the issue causes the app to crash, no logs could be captured. In such case, please contact the developer for further instructions",
+	"captureLogDetails": "To take logs for a bug report:\n\n1. Enable this setting\n2. Reproduce the issue\n3. Disable this setting\n4. Look for nc-photos.log in the download folder\n\n*If the issue causes the app to crash, no logs could be captured. In such cases, please contact the developer for further instructions",
 	"@captureLogDetails": {
 		"description": "Detailed description on capturing logs"
 	},
@@ -789,7 +789,7 @@
 	"@deletePermanentlyConfirmationDialogTitle": {
 		"description": "Make sure the user wants to delete the items"
 	},
-	"deletePermanentlyConfirmationDialogContent": "Selected items will be deleted permanently from the server.\n\nThis action is nonreversible",
+	"deletePermanentlyConfirmationDialogContent": "Selected items will be deleted permanently from the server.\n\nThis action is irreversible",
 	"@deletePermanentlyConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete the items"
 	},
@@ -797,7 +797,7 @@
 	"@albumSharedLabel": {
 		"description": "A small label placed next to a shared album"
 	},
-	"metadataTaskProcessingNotification": "Processing image metadata in background",
+	"metadataTaskProcessingNotification": "Processing image metadata in the background",
 	"@metadataTaskProcessingNotification": {
 		"description": "Shown when the app is reading image metadata"
 	},
@@ -861,7 +861,7 @@
 	"@emptyTrashbinConfirmationDialogTitle": {
 		"description": "Make sure the user wants to delete all items"
 	},
-	"emptyTrashbinConfirmationDialogContent": "All items will be deleted permanently from the server.\n\nThis action is nonreversible",
+	"emptyTrashbinConfirmationDialogContent": "All items will be deleted permanently from the server.\n\nThis action is irreversible",
 	"@emptyTrashbinConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete all items"
 	},
@@ -885,9 +885,9 @@
 	"@slideshowTooltip": {
 		"description": "A button to start a slideshow from the current collection"
 	},
-	"slideshowSetupDialogTitle": "Setup slideshow",
+	"slideshowSetupDialogTitle": "Set up slideshow",
 	"@slideshowSetupDialogTitle": {
-		"description": "Setup slideshow before starting"
+		"description": "Set up slideshow before starting"
 	},
 	"slideshowSetupDialogDurationTitle": "Image duration (MM:SS)",
 	"@slideshowSetupDialogDurationTitle": {
@@ -917,7 +917,7 @@
 	"@shareMethodPreviewTitle": {
 		"description": "Share the preview of a file"
 	},
-	"shareMethodPreviewDescription": "Share a reduced quality preview to other apps (only support images)",
+	"shareMethodPreviewDescription": "Share a reduced quality preview to other apps (only supports images)",
 	"shareMethodOriginalFileTitle": "Original file",
 	"@shareMethodOriginalFileTitle": {
 		"description": "Share the original file"
@@ -989,7 +989,7 @@
 	"@locationLabel": {
 		"description": "Show where the file is located"
 	},
-	"multipleFilesLinkShareDialogContent": "Nextcloud does not support share link for multiple files. The app will instead COPY the files to a new folder and share the folder instead.",
+	"multipleFilesLinkShareDialogContent": "Nextcloud does not support share links for multiple files. The app will instead COPY the files to a new folder and share the folder instead.",
 	"@multipleFilesLinkShareDialogContent": {
 		"description": "Dialog shown when sharing multiple files as link"
 	},
@@ -1126,7 +1126,7 @@
 	"@createCollectionTooltip": {
 		"description": "Create a new collection. A collection can be an album, a folder, or something else in the future"
 	},
-	"createCollectionDialogAlbumLabel2": "Client side album",
+	"createCollectionDialogAlbumLabel2": "Client-side album",
 	"@createCollectionDialogAlbumLabel2": {
 		"description": "Create an album as collection"
 	},
@@ -1214,7 +1214,7 @@
 	"@collectionEditedPhotosLabel": {
 		"description": "List photos on your device that were modified by the app, via image enhancements or the image editor"
 	},
-	"deletePermanentlyLocalConfirmationDialogContent": "Selected items will be deleted permanently from this device.\n\nThis action is nonreversible",
+	"deletePermanentlyLocalConfirmationDialogContent": "Selected items will be deleted permanently from this device.\n\nThis action is irreversible",
 	"@deletePermanentlyLocalConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete the items from the current device"
 	},
@@ -1222,7 +1222,7 @@
 	"@enhancePortraitBlurTitle": {
 		"description": "Blur the background of a photo"
 	},
-	"enhancePortraitBlurDescription": "Blur the background of your photos, work best with portraits",
+	"enhancePortraitBlurDescription": "Blur the background of your photos, works best with portraits",
 	"enhancePortraitBlurParamBlurLabel": "Blurriness",
 	"@enhancePortraitBlurParamBlurLabel": {
 		"description": "This parameter sets the radius of the blur filter"
@@ -1231,7 +1231,7 @@
 	"@enhanceSuperResolution4xTitle": {
 		"description": "Upscale an image. The algorithm implemented in the app will upscale to 4x the original resolution (eg, 100x100 to 400x400)"
 	},
-	"enhanceSuperResolution4xDescription": "Enlarge your photos to 4x of its original resolution (see Help for details on how max resolution applies here)",
+	"enhanceSuperResolution4xDescription": "Enlarge your photos to 4x of their original resolution (see Help for details on how max resolution applies here)",
 	"enhanceStyleTransferTitle": "Style transfer",
 	"@enhanceStyleTransferTitle": {
 		"description": "Transfer the image style from a reference image to a photo"
@@ -1249,7 +1249,7 @@
 	"@enhanceColorPopTitle": {
 		"description": "Desaturate the background of a photo"
 	},
-	"enhanceColorPopDescription": "Desaturate the background of your photos, work best with portraits",
+	"enhanceColorPopDescription": "Desaturate the background of your photos, works best with portraits",
 	"enhanceGenericParamWeightLabel": "Weight",
 	"@enhanceGenericParamWeightLabel": {
 		"description": "This generic parameter sets the weight of the applied effect. The effect will be more obvious when the weight is high."
@@ -1507,7 +1507,7 @@
 		"description": "Export an arbitrary Collection (typical one with generated contents) as a new static Collection"
 	},
 	"exportCollectionDialogTitle": "Export collection",
-	"createCollectionDialogNextcloudAlbumLabel2": "Server side album",
+	"createCollectionDialogNextcloudAlbumLabel2": "Server-side album",
 	"@createCollectionDialogNextcloudAlbumLabel2": {
 		"description": "Server-side albums that are available in Nextcloud 25+"
 	},
@@ -1672,7 +1672,7 @@
 	"@errorWrongPassword": {
 		"description": "Error message when the username or password is wrong"
 	},
-	"errorServerError": "Server error. Please make sure the server is setup correctly",
+	"errorServerError": "Server error. Please make sure the server is set up correctly",
 	"@errorServerError": {
 		"description": "HTTP 500"
 	},
@@ -1680,7 +1680,7 @@
 	"@errorAlbumDowngrade": {
 		"description": "Album files are versioned. Overwriting a newer version is disallowed as it will lead to unexpected data loss"
 	},
-	"errorNoStoragePermission": "Require storage access permission",
+	"errorNoStoragePermission": "Requires storage access permission",
 	"@errorNoStoragePermission": {
 		"description": "Missing permission on Android"
 	},
