@@ -24,6 +24,7 @@ abstract class $_StateCopyWithWorker {
     List<image_editor.FaceDetectorResult>? faceLandmarks,
     List<image_editor.FaceDetectorResult>? selectedFaces,
     Unique<bool>? hasSelectedFaceReset,
+    bool? shouldNotifySelectFace,
     _ToolType? activeTool,
     bool? isCropMode,
     bool? isFaceSelectionMode,
@@ -53,6 +54,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic faceLandmarks = copyWithNull,
     dynamic selectedFaces,
     dynamic hasSelectedFaceReset = copyWithNull,
+    dynamic shouldNotifySelectFace,
     dynamic activeTool,
     dynamic isCropMode,
     dynamic isFaceSelectionMode,
@@ -92,6 +94,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           hasSelectedFaceReset == copyWithNull
               ? that.hasSelectedFaceReset
               : hasSelectedFaceReset as Unique<bool>?,
+      shouldNotifySelectFace:
+          shouldNotifySelectFace as bool? ?? that.shouldNotifySelectFace,
       activeTool: activeTool as _ToolType? ?? that.activeTool,
       isCropMode: isCropMode as bool? ?? that.isCropMode,
       isFaceSelectionMode:
@@ -136,7 +140,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, activeTool: ${activeTool.name}, isCropMode: $isCropMode, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], cropFilter: $cropFilter, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, shouldNotifySelectFace: $shouldNotifySelectFace, activeTool: ${activeTool.name}, isCropMode: $isCropMode, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
@@ -207,6 +211,13 @@ extension _$_ToggleFaceSelectionToString on _ToggleFaceSelection {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_ToggleFaceSelection {value: $value}";
+  }
+}
+
+extension _$_FaceFilterValueChangedToString on _FaceFilterValueChanged {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_FaceFilterValueChanged {}";
   }
 }
 

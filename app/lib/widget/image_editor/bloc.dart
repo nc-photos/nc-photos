@@ -17,6 +17,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_SetCropFilter>(_onSetCropFilter);
     on<_SetFaceLandmarks>(_onSetFaceLandmarks);
     on<_ToggleFaceSelection>(_onToggleFaceSelection);
+    on<_FaceFilterValueChanged>(_onFaceFilterValueChanged);
     on<_SetDst>(_onSetDst);
     on<_SetIsApplyingFilters>((ev, emit) {
       _log.info(ev);
@@ -166,6 +167,14 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     }
     emit(state.copyWith(selectedFaces: next));
     _updatePreview();
+  }
+
+  void _onFaceFilterValueChanged(_FaceFilterValueChanged ev, _Emitter emit) {
+    _log.info(ev);
+    if (state.faceLandmarks?.isNotEmpty == true &&
+        state.selectedFaces.isEmpty) {
+      emit(state.copyWith(shouldNotifySelectFace: true));
+    }
   }
 
   void _onSetDst(_SetDst ev, _Emitter emit) {

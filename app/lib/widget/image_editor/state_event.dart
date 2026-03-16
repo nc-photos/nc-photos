@@ -18,6 +18,7 @@ class _State {
     this.faceLandmarks,
     required this.selectedFaces,
     this.hasSelectedFaceReset,
+    required this.shouldNotifySelectFace,
     required this.activeTool,
     required this.isCropMode,
     required this.isFaceSelectionMode,
@@ -37,6 +38,7 @@ class _State {
       transformFilters: [],
       isApplyingFilters: false,
       selectedFaces: [],
+      shouldNotifySelectFace: false,
       activeTool: _ToolType.color,
       isCropMode: false,
       isFaceSelectionMode: false,
@@ -65,6 +67,8 @@ class _State {
   final List<image_editor.FaceDetectorResult>? faceLandmarks;
   final List<image_editor.FaceDetectorResult> selectedFaces;
   final Unique<bool>? hasSelectedFaceReset;
+  // not unique as we only want to show once
+  final bool shouldNotifySelectFace;
 
   final _ToolType activeTool;
   final bool isCropMode;
@@ -180,6 +184,14 @@ class _ToggleFaceSelection implements _Event {
   String toString() => _$toString();
 
   final image_editor.FaceDetectorResult value;
+}
+
+@toString
+class _FaceFilterValueChanged implements _Event {
+  const _FaceFilterValueChanged();
+
+  @override
+  String toString() => _$toString();
 }
 
 @toString

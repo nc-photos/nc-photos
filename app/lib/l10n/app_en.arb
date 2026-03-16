@@ -1357,6 +1357,11 @@
 		"description": "Adjust size of the eye"
 	},
 	"imageEditFaceDetectionRunningMessage": "Detecting faces...",
+	"imageEditNoFaceDetected": "No faces detected",
+	"imageEditFaceNotSelected": "Select one or more faces on your photos to apply the effects",
+	"@imageEditFaceNotSelected": {
+		"description": "Shown when there are one or more detected faces but none of them is selected"
+	},
 	"imageEditResetSelectedFaceMessage": "Selected faces are cleared after adjusting image transformation settings",
 	"@imageEditResetSelectedFaceMessage": {
 		"description": "Changing the image transformation will affect the result of face detection. This message is used to notify user to select the faces again afterwards"

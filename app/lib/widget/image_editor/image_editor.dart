@@ -204,6 +204,19 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
               },
             ),
             _BlocListenerT(
+              selector: (state) => state.shouldNotifySelectFace,
+              listener: (context, shouldNotifySelectFace) {
+                if (shouldNotifySelectFace) {
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(L10n.global().imageEditFaceNotSelected),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
+                }
+              },
+            ),
+            _BlocListenerT(
               selector: (state) => state.error,
               listener: (context, error) {
                 if (error != null) {
@@ -360,6 +373,9 @@ class _Body extends StatelessWidget {
                     },
                     isFaceSelectionModeChanged: (value) {
                       context.addEvent(_SetFaceSelectionMode(value));
+                    },
+                    onFaceFilterValueChanged: () {
+                      context.addEvent(const _FaceFilterValueChanged());
                     },
                   ),
                   _ToolType.transform => TransformToolbar(

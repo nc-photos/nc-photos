@@ -22,6 +22,7 @@ class EffectToolbar extends StatelessWidget {
     required this.initialFilters,
     required this.onActiveFiltersChanged,
     required this.isFaceSelectionModeChanged,
+    this.onFaceFilterValueChanged,
   });
 
   @override
@@ -32,6 +33,7 @@ class EffectToolbar extends StatelessWidget {
             initialFilters: initialFilters,
             onActiveFiltersChanged: onActiveFiltersChanged,
             isFaceSelectionModeChanged: isFaceSelectionModeChanged,
+            onFaceFilterValueChanged: onFaceFilterValueChanged,
           ),
       child: const _WrappedEffectToolbar(),
     );
@@ -40,6 +42,7 @@ class EffectToolbar extends StatelessWidget {
   final List<PixelArguments> initialFilters;
   final ValueChanged<Iterable<PixelArguments>> onActiveFiltersChanged;
   final ValueChanged<bool> isFaceSelectionModeChanged;
+  final VoidCallback? onFaceFilterValueChanged;
 }
 
 class _WrappedEffectToolbar extends StatelessWidget {

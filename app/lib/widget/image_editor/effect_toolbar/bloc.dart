@@ -165,6 +165,7 @@ class _EtBloc extends Bloc<_Event, _State> {
     required this.initialFilters,
     required this.onActiveFiltersChanged,
     required this.isFaceSelectionModeChanged,
+    this.onFaceFilterValueChanged,
   }) : super(_State.init(initialFilters: initialFilters)) {
     on<_ToggleActiveTool>(_onToggleActiveTool);
     on<_SetFaceReshapeOptionType>(_onSetFaceReshapeOptionType);
@@ -238,6 +239,7 @@ class _EtBloc extends Bloc<_Event, _State> {
         .copyWith(jawline: ev.value);
     emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
+    onFaceFilterValueChanged?.call();
   }
 
   void _onSetFaceReshapeOptionEyeSize(
@@ -251,6 +253,7 @@ class _EtBloc extends Bloc<_Event, _State> {
         .copyWith(eyeSize: ev.value);
     emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
+    onFaceFilterValueChanged?.call();
   }
 
   void _onSetPixelationOption(_SetPixelationOption ev, _Emitter emit) {
@@ -323,6 +326,7 @@ class _EtBloc extends Bloc<_Event, _State> {
   final List<PixelArguments> initialFilters;
   final ValueChanged<Iterable<PixelArguments>> onActiveFiltersChanged;
   final ValueChanged<bool> isFaceSelectionModeChanged;
+  final VoidCallback? onFaceFilterValueChanged;
 
   static final _log = Logger("EffectToolbarBloc");
 }

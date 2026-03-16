@@ -72,6 +72,10 @@ class _FaceSelectorState extends State<_FaceSelector> {
                     if (state.faceSelectorImageSize == null ||
                         state.faceLandmarks == null)
                       const Positioned.fill(child: _FaceSelectorDetectingView())
+                    else if (state.faceLandmarks!.isEmpty)
+                      const Positioned.fill(
+                        child: _FaceSelectorNoFaceDetectedView(),
+                      )
                     else
                       ...state.faceLandmarks!.map((f) {
                         final src = state.postTransformSrc ?? state.src!;
@@ -149,6 +153,27 @@ class _FaceSelectorDetectingView extends StatelessWidget {
             const CircularProgressIndicator(),
             const SizedBox(height: 8),
             Text(L10n.global().imageEditFaceDetectionRunningMessage),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _FaceSelectorNoFaceDetectedView extends StatelessWidget {
+  const _FaceSelectorNoFaceDetectedView();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black54,
+      child: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(Icons.face_retouching_off_outlined),
+            const SizedBox(height: 8),
+            Text(L10n.global().imageEditNoFaceDetected),
           ],
         ),
       ),
