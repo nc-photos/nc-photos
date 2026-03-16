@@ -14,8 +14,15 @@ class _State {
     required this.transformFilters,
     this.cropFilter,
     required this.isApplyingFilters,
+    this.postTransformSrc,
+    this.faceLandmarks,
+    required this.selectedFaces,
+    this.hasSelectedFaceReset,
+    required this.shouldNotifySelectFace,
     required this.activeTool,
     required this.isCropMode,
+    required this.isFaceSelectionMode,
+    this.faceSelectorImageSize,
     this.quitRequest,
     this.saveState,
     required this.downloadProgress,
@@ -30,8 +37,11 @@ class _State {
       pixelFilters: [],
       transformFilters: [],
       isApplyingFilters: false,
+      selectedFaces: [],
+      shouldNotifySelectFace: false,
       activeTool: _ToolType.color,
       isCropMode: false,
+      isFaceSelectionMode: false,
       downloadProgress: 0,
     );
   }
@@ -52,8 +62,18 @@ class _State {
   final TransformArguments? cropFilter;
   final bool isApplyingFilters;
 
+  // image used for face detection
+  final Rgba8Image? postTransformSrc;
+  final List<image_editor.FaceDetectorResult>? faceLandmarks;
+  final List<image_editor.FaceDetectorResult> selectedFaces;
+  final Unique<bool>? hasSelectedFaceReset;
+  // not unique as we only want to show once
+  final bool shouldNotifySelectFace;
+
   final _ToolType activeTool;
   final bool isCropMode;
+  final bool isFaceSelectionMode;
+  final Size? faceSelectorImageSize;
 
   final Unique<void>? quitRequest;
   final _SaveState? saveState;
@@ -96,6 +116,26 @@ class _SetCropMode implements _Event {
 }
 
 @toString
+class _SetFaceSelectionMode implements _Event {
+  const _SetFaceSelectionMode(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final bool value;
+}
+
+@toString
+class _SetFaceSelectorImageSize implements _Event {
+  const _SetFaceSelectorImageSize(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Size value;
+}
+
+@toString
 class _SetPixelFilters implements _Event {
   const _SetPixelFilters(this.value);
 
@@ -123,6 +163,35 @@ class _SetCropFilter implements _Event {
   String toString() => _$toString();
 
   final TransformArguments? value;
+}
+
+@toString
+class _SetFaceLandmarks implements _Event {
+  const _SetFaceLandmarks({this.postTransformSrc, required this.landmarks});
+
+  @override
+  String toString() => _$toString();
+
+  final Rgba8Image? postTransformSrc;
+  final List<image_editor.FaceDetectorResult> landmarks;
+}
+
+@toString
+class _ToggleFaceSelection implements _Event {
+  const _ToggleFaceSelection(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final image_editor.FaceDetectorResult value;
+}
+
+@toString
+class _FaceFilterValueChanged implements _Event {
+  const _FaceFilterValueChanged();
+
+  @override
+  String toString() => _$toString();
 }
 
 @toString

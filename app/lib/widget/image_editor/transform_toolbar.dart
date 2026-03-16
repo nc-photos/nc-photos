@@ -165,12 +165,14 @@ class _TransformToolbarState extends State<TransformToolbar> {
   }
 
   void _onFilterPressed(TransformToolType type, TransformArguments defArgs) {
+    var isChanged = false;
     if (_selectedFilter == type) {
       // deactivate filter
       setState(() {
         _selectedFilter = null;
         _filters.remove(type);
       });
+      isChanged = true;
       if (type == TransformToolType.crop) {
         widget.isCropModeChanged(false);
         widget.onCropToolDeactivated();
@@ -181,13 +183,18 @@ class _TransformToolbarState extends State<TransformToolbar> {
       }
       setState(() {
         _selectedFilter = type;
-        _filters[type] ??= defArgs;
+        if (!_filters.containsKey(type)) {
+          _filters[type] = defArgs;
+          isChanged = true;
+        }
       });
       if (type == TransformToolType.crop) {
         widget.isCropModeChanged(true);
       }
     }
-    _notifyFiltersChanged();
+    if (isChanged) {
+      _notifyFiltersChanged();
+    }
   }
 
   void _onCropPressed() =>

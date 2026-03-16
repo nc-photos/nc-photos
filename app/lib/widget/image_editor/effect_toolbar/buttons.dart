@@ -1,5 +1,133 @@
 part of 'effect_toolbar.dart';
 
+class _FaceReshapeButton extends StatelessWidget {
+  const _FaceReshapeButton();
+
+  @override
+  Widget build(BuildContext context) {
+    return _BlocBuilder(
+      buildWhen:
+          (previous, current) =>
+              previous.selectedFilter != current.selectedFilter ||
+              previous.filters != current.filters,
+      builder:
+          (context, state) => ToolbarButton(
+            icon: Icons.face_retouching_natural_outlined,
+            label: L10n.global().imageEditEffectFace,
+            onPressed: () {
+              context.addEvent(
+                const _ToggleActiveTool(PixelToolType.faceReshape),
+              );
+            },
+            isSelected: state.selectedFilter == PixelToolType.faceReshape,
+            activationOrder: state.filters.keys
+                .indexOf(PixelToolType.faceReshape)
+                .let((i) => i == -1 ? null : i),
+          ),
+    );
+  }
+}
+
+class _FaceReshapeOption extends StatelessWidget {
+  const _FaceReshapeOption();
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _BlocSelector(
+              selector: (state) => state.faceReshapeOptionType,
+              builder:
+                  (context, faceReshapeOptionType) => Row(
+                    children: [
+                      ChoiceChip(
+                        label: Text(L10n.global().imageEditEffectParamJawline),
+                        selected:
+                            faceReshapeOptionType ==
+                            _FaceReshapeOptionType.jawline,
+                        showCheckmark: false,
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                        onSelected: (value) {
+                          context.addEvent(
+                            const _SetFaceReshapeOptionType(
+                              _FaceReshapeOptionType.jawline,
+                            ),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 8),
+                      ChoiceChip(
+                        label: Text(L10n.global().imageEditEffectParamEyeSize),
+                        selected:
+                            faceReshapeOptionType ==
+                            _FaceReshapeOptionType.eyeSize,
+                        showCheckmark: false,
+                        visualDensity: const VisualDensity(
+                          horizontal: VisualDensity.minimumDensity,
+                          vertical: VisualDensity.minimumDensity,
+                        ),
+                        onSelected: (value) {
+                          context.addEvent(
+                            const _SetFaceReshapeOptionType(
+                              _FaceReshapeOptionType.eyeSize,
+                            ),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+            ),
+          ),
+          _BlocBuilder(
+            buildWhen:
+                (previous, current) =>
+                    previous.faceReshapeOptionType !=
+                    current.faceReshapeOptionType,
+            builder:
+                (context, state) => switch (state.faceReshapeOptionType) {
+                  _FaceReshapeOptionType.jawline => StatefulSlider(
+                    key: Key(
+                      PixelToolType.faceReshape.name +
+                          _FaceReshapeOptionType.jawline.name,
+                    ),
+                    min: -1,
+                    initialValue:
+                        (state.filters[PixelToolType.faceReshape]
+                                as _FaceReshapeArguments)
+                            .jawline,
+                    onChangeEnd: (value) {
+                      context.addEvent(_SetFaceReshapeOptionJawline(value));
+                    },
+                  ),
+                  _FaceReshapeOptionType.eyeSize => StatefulSlider(
+                    key: Key(
+                      PixelToolType.faceReshape.name +
+                          _FaceReshapeOptionType.eyeSize.name,
+                    ),
+                    initialValue:
+                        (state.filters[PixelToolType.faceReshape]
+                                as _FaceReshapeArguments)
+                            .eyeSize,
+                    onChangeEnd: (value) {
+                      context.addEvent(_SetFaceReshapeOptionEyeSize(value));
+                    },
+                  ),
+                },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _HalftoneButton extends StatelessWidget {
   const _HalftoneButton();
 

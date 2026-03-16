@@ -10,9 +10,14 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_InitSrc>(_onInitSrc);
     on<_SetActiveTool>(_onSetActiveTool);
     on<_SetCropMode>(_onSetCropMode);
+    on<_SetFaceSelectionMode>(_onSetFaceSelectionMode);
+    on<_SetFaceSelectorImageSize>(_onSetFaceSelectorImageSize);
     on<_SetPixelFilters>(_onSetPixelFilters);
     on<_SetTransformFilters>(_onSetTransformFilters);
     on<_SetCropFilter>(_onSetCropFilter);
+    on<_SetFaceLandmarks>(_onSetFaceLandmarks);
+    on<_ToggleFaceSelection>(_onToggleFaceSelection);
+    on<_FaceFilterValueChanged>(_onFaceFilterValueChanged);
     on<_SetDst>(_onSetDst);
     on<_SetIsApplyingFilters>((ev, emit) {
       _log.info(ev);
@@ -78,12 +83,31 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onSetActiveTool(_SetActiveTool ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(activeTool: ev.value, isCropMode: false));
+    emit(
+      state.copyWith(
+        activeTool: ev.value,
+        isCropMode: false,
+        isFaceSelectionMode: false,
+      ),
+    );
   }
 
   void _onSetCropMode(_SetCropMode ev, _Emitter emit) {
     _log.info(ev);
     emit(state.copyWith(isCropMode: ev.value));
+  }
+
+  void _onSetFaceSelectionMode(_SetFaceSelectionMode ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(isFaceSelectionMode: ev.value));
+  }
+
+  void _onSetFaceSelectorImageSize(
+    _SetFaceSelectorImageSize ev,
+    _Emitter emit,
+  ) {
+    _log.info(ev);
+    emit(state.copyWith(faceSelectorImageSize: ev.value));
   }
 
   void _onSetPixelFilters(_SetPixelFilters ev, _Emitter emit) {
@@ -94,14 +118,63 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onSetTransformFilters(_SetTransformFilters ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(transformFilters: ev.value));
+    emit(
+      state.copyWith(
+        transformFilters: ev.value,
+        // modifying transformation filters resets face detection
+        faceLandmarks: null,
+        selectedFaces: const [],
+        hasSelectedFaceReset:
+            state.selectedFaces.isNotEmpty ? Unique(true) : null,
+      ),
+    );
     _updatePreview();
   }
 
   void _onSetCropFilter(_SetCropFilter ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(cropFilter: ev.value));
+    emit(
+      state.copyWith(
+        cropFilter: ev.value,
+        // modifying transformation filters resets face detection
+        faceLandmarks: null,
+        selectedFaces: const [],
+        hasSelectedFaceReset:
+            state.selectedFaces.isNotEmpty ? Unique(true) : null,
+      ),
+    );
     _updatePreview();
+  }
+
+  void _onSetFaceLandmarks(_SetFaceLandmarks ev, _Emitter emit) {
+    _log.info(ev);
+    emit(
+      state.copyWith(
+        postTransformSrc: ev.postTransformSrc,
+        faceLandmarks: ev.landmarks,
+        selectedFaces: const [],
+      ),
+    );
+  }
+
+  void _onToggleFaceSelection(_ToggleFaceSelection ev, _Emitter emit) {
+    _log.info(ev);
+    final next = List.of(state.selectedFaces);
+    if (next.contains(ev.value)) {
+      next.remove(ev.value);
+    } else {
+      next.add(ev.value);
+    }
+    emit(state.copyWith(selectedFaces: next));
+    _updatePreview();
+  }
+
+  void _onFaceFilterValueChanged(_FaceFilterValueChanged ev, _Emitter emit) {
+    _log.info(ev);
+    if (state.faceLandmarks?.isNotEmpty == true &&
+        state.selectedFaces.isEmpty) {
+      emit(state.copyWith(shouldNotifySelectFace: true));
+    }
   }
 
   void _onSetDst(_SetDst ev, _Emitter emit) {
@@ -135,11 +208,12 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       emit(state.copyWith(saveState: _SaveState.process));
       final (:dir, file: jpegFile) = await _createTempFile();
       try {
+        final pixelFilters = await _preparePixelFilters();
         await _processFullBitmapToJpeg(
           bitmap,
           srcBytes: bytes,
           dstJpegPath: jpegFile.path,
-          pixelFilters: state.pixelFilters,
+          pixelFilters: pixelFilters,
           transformFilters: state.transformFilters,
           cropFilter: state.cropFilter,
         );
@@ -185,9 +259,10 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       }
       add(const _SetIsApplyingFilters(true));
       try {
+        final pixelFilters = await _preparePixelFilters();
         final result = await _applyFilters(
           state.src!,
-          pixelFilters: state.pixelFilters,
+          pixelFilters: pixelFilters,
           transformFilters: state.transformFilters,
           cropFilter: state.cropFilter,
         );
@@ -198,22 +273,67 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     });
   }
 
+  Future<List<image_editor.Edit>> _preparePixelFilters() async {
+    if (state.pixelFilters.any((e) => e is PixelFaceArguments)) {
+      var landmarks = state.faceLandmarks;
+      if (landmarks == null) {
+        var src = state.src!;
+        var isTransofrmed = false;
+        if (state.transformFilters.isNotEmpty || state.cropFilter != null) {
+          // apply transformation filters as they will affect face detection
+          src = await _applyFilters(
+            src,
+            pixelFilters: [],
+            transformFilters: state.transformFilters,
+            cropFilter: state.cropFilter,
+          );
+          isTransofrmed = true;
+        }
+        landmarks = await image_editor.FaceDetector().detect(src);
+        add(
+          _SetFaceLandmarks(
+            postTransformSrc: isTransofrmed ? src : null,
+            landmarks: landmarks,
+          ),
+        );
+      }
+      return state.pixelFilters.map((e) {
+        if (e is PixelFaceArguments) {
+          return e.toEdit()..setLandmarks(state.selectedFaces);
+        } else {
+          return e.toEdit();
+        }
+      }).toList();
+    } else {
+      return state.pixelFilters.map((e) => e.toEdit()).toList();
+    }
+  }
+
   static Future<Rgba8Image> _applyFilters(
     Rgba8Image src, {
-    required List<PixelArguments> pixelFilters,
+    required List<image_editor.Edit> pixelFilters,
     required List<TransformArguments> transformFilters,
     required TransformArguments? cropFilter,
+    bool useIsolate = true,
   }) async {
-    final edits =
-        [
-          cropFilter?.toEdit(),
-          ...transformFilters.map((f) => f.toEdit()),
-          ...pixelFilters.map((f) => f.toEdit()),
-        ].nonNulls.toList();
-    if (edits.isNotEmpty) {
-      return await image_editor.edit(src, edits);
+    Future<Rgba8Image> _do() async {
+      final edits =
+          [
+            cropFilter?.toEdit(),
+            ...transformFilters.map((f) => f.toEdit()),
+            ...pixelFilters,
+          ].nonNulls.toList();
+      if (edits.isNotEmpty) {
+        return await image_editor.edit(src, edits);
+      } else {
+        return src;
+      }
+    }
+
+    if (useIsolate) {
+      return await Isolate.run(() => _do());
     } else {
-      return src;
+      return await _do();
     }
   }
 
@@ -221,7 +341,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     Rgba8Image src, {
     required Uint8List srcBytes,
     required String dstJpegPath,
-    required List<PixelArguments> pixelFilters,
+    required List<image_editor.Edit> pixelFilters,
     required List<TransformArguments> transformFilters,
     required TransformArguments? cropFilter,
   }) async {
@@ -231,6 +351,8 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         pixelFilters: pixelFilters,
         transformFilters: transformFilters,
         cropFilter: cropFilter,
+        // already in isolate
+        useIsolate: false,
       );
 
       // jpeg encode and save to internal

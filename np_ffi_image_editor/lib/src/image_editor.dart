@@ -5,6 +5,7 @@ import 'dart:isolate';
 
 import 'package:ffi/ffi.dart';
 import 'package:np_common/type.dart';
+import 'package:np_ffi_image_editor/src/face_detector.dart';
 import 'package:np_ffi_image_editor/src/image_util.dart';
 import 'package:np_ffi_image_editor/src/np_ffi_image_editor_bindings_generated.dart'
     as ffi;
@@ -12,6 +13,16 @@ import 'package:np_platform_raw_image/np_platform_raw_image.dart';
 
 sealed class Edit {
   JsonObj toJson();
+}
+
+abstract class FaceEdit implements Edit {
+  void setLandmarks(List<FaceDetectorResult> landmarks) {
+    this.landmarks
+      ..clear()
+      ..addAll(landmarks);
+  }
+
+  final landmarks = <FaceDetectorResult>[];
 }
 
 class BlackPointEdit implements Edit {
@@ -58,6 +69,42 @@ class CropEdit implements Edit {
   final double left;
   final double bottom;
   final double right;
+}
+
+class FaceReshapeEdit extends FaceEdit {
+  FaceReshapeEdit({required this.jawline, required this.eyeSize});
+
+  @override
+  JsonObj toJson() => {
+    "type": "faceReshape",
+    "jawline": jawline,
+    "eyeSize": eyeSize,
+    "landmarks":
+        landmarks
+            .where(
+              (l) =>
+                  l.face != null &&
+                  l.leftEye != null &&
+                  l.rightEye != null &&
+                  l.noseBridge != null &&
+                  l.noseBottom != null,
+            )
+            .map(
+              (l) => {
+                "face": l.face!.expand((e) => [e.x, e.y]).toList(),
+                "leftEye": l.leftEye!.expand((e) => [e.x, e.y]).toList(),
+                "rightEye": l.rightEye!.expand((e) => [e.x, e.y]).toList(),
+                "noseBridge": l.noseBridge!.expand((e) => [e.x, e.y]).toList(),
+                "noseBottom": l.noseBottom!.expand((e) => [e.x, e.y]).toList(),
+              },
+            )
+            .toList(),
+  };
+
+  // [-1, 1]
+  final double jawline;
+  // [-1, 1]
+  final double eyeSize;
 }
 
 class HalftoneEdit implements Edit {

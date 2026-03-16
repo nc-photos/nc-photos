@@ -1,5 +1,22 @@
 part of 'effect_toolbar.dart';
 
+@genCopyWith
+class _FaceReshapeArguments implements PixelFaceArguments {
+  const _FaceReshapeArguments({required this.jawline, required this.eyeSize});
+
+  @override
+  image_editor.FaceEdit toEdit() => image_editor.FaceReshapeEdit(
+    jawline: jawline,
+    eyeSize: eyeSize,
+  );
+
+  @override
+  PixelToolType getToolType() => PixelToolType.faceReshape;
+
+  final double jawline;
+  final double eyeSize;
+}
+
 class _HalftoneArguments implements PixelArguments {
   const _HalftoneArguments();
 

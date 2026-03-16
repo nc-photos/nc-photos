@@ -18,12 +18,19 @@ enum PixelToolType {
   posterization,
   sketch,
   toon,
+  // face
+  faceReshape,
 }
 
 abstract class PixelArguments {
   image_editor.Edit toEdit();
 
   PixelToolType getToolType();
+}
+
+abstract class PixelFaceArguments implements PixelArguments {
+  @override
+  image_editor.FaceEdit toEdit();
 }
 
 class PixelToolSlider extends StatelessWidget {

@@ -54,6 +54,7 @@ import 'package:uuid/uuid.dart';
 
 part 'app_bar.dart';
 part 'bloc.dart';
+part 'face_selector.dart';
 part 'image_editor.g.dart';
 part 'save_dialog.dart';
 part 'state_event.dart';
@@ -188,6 +189,34 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
               },
             ),
             _BlocListenerT(
+              selector: (state) => state.hasSelectedFaceReset,
+              listener: (context, hasSelectedFaceReset) {
+                if (hasSelectedFaceReset?.value == true) {
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        L10n.global().imageEditResetSelectedFaceMessage,
+                      ),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
+                }
+              },
+            ),
+            _BlocListenerT(
+              selector: (state) => state.shouldNotifySelectFace,
+              listener: (context, shouldNotifySelectFace) {
+                if (shouldNotifySelectFace) {
+                  SnackBarManager().showSnackBar(
+                    SnackBar(
+                      content: Text(L10n.global().imageEditFaceNotSelected),
+                      duration: k.snackBarDurationNormal,
+                    ),
+                  );
+                }
+              },
+            ),
+            _BlocListenerT(
               selector: (state) => state.error,
               listener: (context, error) {
                 if (error != null) {
@@ -296,7 +325,9 @@ class _Body extends StatelessWidget {
                   (previous, current) =>
                       previous.src != current.src ||
                       previous.dst != current.dst ||
-                      previous.isCropMode != current.isCropMode,
+                      previous.isCropMode != current.isCropMode ||
+                      previous.isFaceSelectionMode !=
+                          current.isFaceSelectionMode,
               builder: (context, state) {
                 if (state.src == null) {
                   return const SizedBox.shrink();
@@ -310,6 +341,8 @@ class _Body extends StatelessWidget {
                       context.addEvent(_SetCropFilter(cropFilter));
                     },
                   );
+                } else if (state.isFaceSelectionMode) {
+                  return const _FaceSelector();
                 } else {
                   return Image(
                     image: (state.dst ?? state.src!).let(
@@ -322,6 +355,7 @@ class _Body extends StatelessWidget {
               },
             ),
           ),
+          const SizedBox(height: 8),
           _BlocSelector(
             selector: (state) => state.activeTool,
             builder:
@@ -336,6 +370,12 @@ class _Body extends StatelessWidget {
                     initialFilters: context.state.pixelFilters,
                     onActiveFiltersChanged: (pixelFilters) {
                       context.addEvent(_SetPixelFilters(pixelFilters.toList()));
+                    },
+                    isFaceSelectionModeChanged: (value) {
+                      context.addEvent(_SetFaceSelectionMode(value));
+                    },
+                    onFaceFilterValueChanged: () {
+                      context.addEvent(const _FaceFilterValueChanged());
                     },
                   ),
                   _ToolType.transform => TransformToolbar(

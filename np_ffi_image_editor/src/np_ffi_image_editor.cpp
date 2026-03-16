@@ -4,6 +4,7 @@
 #include "edit/brightness.h"
 #include "edit/contrast.h"
 #include "edit/crop.h"
+#include "edit/face_reshape.h"
 #include "edit/gpupixel_composite.h"
 #include "edit/halftone.h"
 #include "edit/orientation.h"
@@ -69,9 +70,10 @@ parseEdits(const nlohmann::json &json) {
   for (const auto &e : json) {
     const auto type = e["type"].get<string>();
     if (type == "blackPoint" || type == "brightness" || type == "contrast" ||
-        type == "halftone" || type == "pixelation" || type == "posterization" ||
-        type == "saturation" || type == "sketch" || type == "tint" ||
-        type == "toon" || type == "warmth" || type == "whitePoint") {
+        type == "faceReshape" || type == "halftone" || type == "pixelation" ||
+        type == "posterization" || type == "saturation" || type == "sketch" ||
+        type == "tint" || type == "toon" || type == "warmth" ||
+        type == "whitePoint") {
       if (!gpupixel) {
         gpupixel = make_unique<np_image_editor::edit::GpupixelComposite>();
       }
@@ -87,6 +89,20 @@ parseEdits(const nlohmann::json &json) {
         const auto weight = e["weight"].get<float>();
         gpupixel->pushBack(
             make_unique<np_image_editor::edit::Contrast>(weight));
+      } else if (type == "faceReshape") {
+        const auto jawline = e["jawline"].get<float>();
+        const auto eyeSize = e["eyeSize"].get<float>();
+        const auto landmarks = e["landmarks"].get<vector<nlohmann::json>>();
+        for (const auto &l : landmarks) {
+          const auto face = l["face"].get<vector<float>>();
+          const auto leftEye = l["leftEye"].get<vector<float>>();
+          const auto rightEye = l["rightEye"].get<vector<float>>();
+          const auto noseBridge = l["noseBridge"].get<vector<float>>();
+          const auto noseBottom = l["noseBottom"].get<vector<float>>();
+          gpupixel->pushBack(make_unique<np_image_editor::edit::FaceReshape>(
+              jawline, eyeSize, face, leftEye, rightEye, noseBridge,
+              noseBottom));
+        }
       } else if (type == "halftone") {
         gpupixel->pushBack(make_unique<np_image_editor::edit::Halftone>());
       } else if (type == "pixelation") {

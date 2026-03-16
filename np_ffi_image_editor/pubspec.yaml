@@ -12,6 +12,7 @@ dependencies:
   ffi: ^2.1.4
   flutter:
     sdk: flutter
+  google_mlkit_face_detection: ^0.13.1
   logging: ^1.2.0
   np_common:
     path: ../np_common
