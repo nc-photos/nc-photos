@@ -136,16 +136,6 @@ extension PrefExtension on Pref {
     (key, value) => provider.setBool(key, value),
   );
 
-  bool? shouldProcessExifWifiOnly() =>
-      provider.getBool(PrefKey.shouldProcessExifWifiOnly);
-  bool shouldProcessExifWifiOnlyOr([bool def = true]) =>
-      shouldProcessExifWifiOnly() ?? def;
-  Future<bool> setProcessExifWifiOnly(bool value) => _set<bool>(
-    PrefKey.shouldProcessExifWifiOnly,
-    value,
-    (key, value) => provider.setBool(key, value),
-  );
-
   bool? isDoubleTapExit() => provider.getBool(PrefKey.doubleTapExit);
   bool isDoubleTapExitOr([bool def = false]) => isDoubleTapExit() ?? def;
   Future<bool> setDoubleTapExit(bool value) => _set<bool>(

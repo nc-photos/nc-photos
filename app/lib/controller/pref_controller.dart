@@ -77,12 +77,6 @@ class PrefController {
     value: value,
   );
 
-  Future<bool> setProcessExifWifiOnly(bool value) => _set<bool>(
-    controller: _shouldProcessExifWifiOnlyController,
-    setter: (pref, value) => pref.setProcessExifWifiOnly(value),
-    value: value,
-  );
-
   Future<bool> setMemoriesRange(int value) => _set<int>(
     controller: _memoriesRangeController,
     setter: (pref, value) => pref.setMemoriesRange(value),
@@ -408,10 +402,6 @@ class PrefController {
   @npSubjectAccessor
   late final _isEnableClientExifController = BehaviorSubject.seeded(
     pref.isEnableClientExif() ?? true,
-  );
-  @npSubjectAccessor
-  late final _shouldProcessExifWifiOnlyController = BehaviorSubject.seeded(
-    pref.shouldProcessExifWifiOnlyOr(true),
   );
   @npSubjectAccessor
   late final _memoriesRangeController = BehaviorSubject.seeded(

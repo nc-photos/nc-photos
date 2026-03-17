@@ -11,10 +11,8 @@ import 'package:nc_photos/entity/file/repo.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/geocoder_util.dart';
 import 'package:nc_photos/service/service.dart';
-import 'package:nc_photos/use_case/battery_ensurer.dart';
 import 'package:nc_photos/use_case/load_metadata.dart';
 import 'package:nc_photos/use_case/update_property.dart';
-import 'package:nc_photos/use_case/wifi_ensurer.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_db/np_db.dart';
@@ -34,8 +32,6 @@ class SyncMetadata {
     required this.fileRepoRemote,
     required this.db,
     this.interrupter,
-    required this.wifiEnsurer,
-    required this.batteryEnsurer,
     this.progressLogger,
   });
 
@@ -74,8 +70,6 @@ class SyncMetadata {
       fileRepo2: fileRepo2,
       db: db,
       interrupter: interrupter,
-      wifiEnsurer: wifiEnsurer,
-      batteryEnsurer: batteryEnsurer,
       progressLogger: progressLogger,
     );
     await op.init();
@@ -95,8 +89,6 @@ class SyncMetadata {
       fileRepo2: fileRepo2,
       db: db,
       interrupter: interrupter,
-      wifiEnsurer: wifiEnsurer,
-      batteryEnsurer: batteryEnsurer,
       progressLogger: progressLogger,
     );
     await fallback.init();
@@ -137,7 +129,5 @@ class SyncMetadata {
   final FileRepo fileRepoRemote;
   final NpDb db;
   final Stream<void>? interrupter;
-  final WifiEnsurer wifiEnsurer;
-  final BatteryEnsurer batteryEnsurer;
   final StreamController<String>? progressLogger;
 }

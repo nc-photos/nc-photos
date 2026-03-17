@@ -9,8 +9,6 @@ class _SyncByApp {
     required this.fileRepo2,
     required this.db,
     this.interrupter,
-    required this.wifiEnsurer,
-    required this.batteryEnsurer,
     this.progressLogger,
   }) {
     interrupter?.listen((event) {
@@ -55,10 +53,6 @@ class _SyncByApp {
       OrNull<Metadata>? metadataUpdate;
       OrNull<ImageLocation>? locationUpdate;
       if (file.metadata == null) {
-        // since we need to download multiple images in their original size,
-        // we only do it with WiFi
-        await wifiEnsurer();
-        await batteryEnsurer();
         if (!_shouldRun) {
           return null;
         }
@@ -116,8 +110,6 @@ class _SyncByApp {
   final FileRepo2 fileRepo2;
   final NpDb db;
   final Stream<void>? interrupter;
-  final WifiEnsurer wifiEnsurer;
-  final BatteryEnsurer batteryEnsurer;
   final StreamController<String>? progressLogger;
 
   final _geocoder = ReverseGeocoder();

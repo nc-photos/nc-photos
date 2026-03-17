@@ -5,7 +5,6 @@ part of '../metadata_settings.dart';
 class _State {
   const _State({
     required this.isEnable,
-    required this.isWifiOnly,
     required this.isFallback,
     this.error,
   });
@@ -14,7 +13,6 @@ class _State {
   String toString() => _$toString();
 
   final bool isEnable;
-  final bool isWifiOnly;
   final bool isFallback;
 
   final ExceptionEvent? error;
@@ -35,16 +33,6 @@ class _Init implements _Event {
 @toString
 class _SetEnable implements _Event {
   const _SetEnable(this.value);
-
-  @override
-  String toString() => _$toString();
-
-  final bool value;
-}
-
-@toString
-class _SetWifiOnly implements _Event {
-  const _SetWifiOnly(this.value);
 
   @override
   String toString() => _$toString();

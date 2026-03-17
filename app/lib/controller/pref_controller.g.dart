@@ -63,15 +63,6 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<bool> get isEnableClientExifChange =>
       isEnableClientExif.distinct().skip(1);
   bool get isEnableClientExifValue => _isEnableClientExifController.value;
-  // _shouldProcessExifWifiOnlyController
-  ValueStream<bool> get shouldProcessExifWifiOnly =>
-      _shouldProcessExifWifiOnlyController.stream;
-  Stream<bool> get shouldProcessExifWifiOnlyNew =>
-      shouldProcessExifWifiOnly.skip(1);
-  Stream<bool> get shouldProcessExifWifiOnlyChange =>
-      shouldProcessExifWifiOnly.distinct().skip(1);
-  bool get shouldProcessExifWifiOnlyValue =>
-      _shouldProcessExifWifiOnlyController.value;
   // _memoriesRangeController
   ValueStream<int> get memoriesRange => _memoriesRangeController.stream;
   Stream<int> get memoriesRangeNew => memoriesRange.skip(1);

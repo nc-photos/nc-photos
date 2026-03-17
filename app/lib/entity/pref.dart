@@ -102,7 +102,7 @@ enum PrefKey implements PrefKeyInterface {
   firstRunTime,
   @Deprecated("unused")
   isPhotosTabSortByName,
-  shouldProcessExifWifiOnly,
+  // shouldProcessExifWifiOnly,
   doubleTapExit,
   memoriesRange,
   saveEditResultToServer,
@@ -163,7 +163,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.firstRunTime => "firstRunTime",
       // ignore: deprecated_member_use_from_same_package
       PrefKey.isPhotosTabSortByName => "isPhotosTabSortByName",
-      PrefKey.shouldProcessExifWifiOnly => "shouldProcessExifWifiOnly",
+      // PrefKey.shouldProcessExifWifiOnly => "shouldProcessExifWifiOnly",
       PrefKey.doubleTapExit => "doubleTapExit",
       PrefKey.memoriesRange => "memoriesRange",
       PrefKey.saveEditResultToServer => "saveEditResultToServer",

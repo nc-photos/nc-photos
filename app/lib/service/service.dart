@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:battery_plus/battery_plus.dart';
 import 'package:devicelocale/devicelocale.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_background_service/flutter_background_service.dart';
@@ -15,9 +16,7 @@ import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/event/native_event.dart';
 import 'package:nc_photos/language_util.dart' as language_util;
-import 'package:nc_photos/use_case/battery_ensurer.dart';
 import 'package:nc_photos/use_case/sync_metadata/sync_metadata.dart';
-import 'package:nc_photos/use_case/wifi_ensurer.dart';
 import 'package:nc_photos_plugin/nc_photos_plugin.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_log/np_log.dart';
@@ -30,7 +29,13 @@ part 'service.g.dart';
 
 /// Start the background service
 Future<void> startService({required PrefController prefController}) async {
-  _$__NpLog.log.info("[startService] Starting service");
+  if (await Battery().batteryLevel <= 10) {
+    _$__NpLog.log.info(
+      "[startService] Service not started due to low battery level",
+    );
+    return;
+  }
+  _$__NpLog.log.info("[_doStartService] Starting service");
   final service = FlutterBackgroundService();
   await service.configure(
     androidConfiguration: AndroidConfiguration(
@@ -46,9 +51,6 @@ Future<void> startService({required PrefController prefController}) async {
     ),
   );
   // sync settings
-  await ServiceConfig.setProcessExifWifiOnly(
-    prefController.shouldProcessExifWifiOnlyValue,
-  );
   await ServiceConfig.setEnableClientExif(
     prefController.isEnableClientExifValue,
   );
@@ -109,45 +111,12 @@ class _Service {
     }
     final accountPrefController = AccountPrefController(account: account);
 
-    final wifiEnsurer = WifiEnsurer(
-      interrupter: _shouldRun.stream,
-      progressLogger: _progressLogger,
-    );
-    wifiEnsurer.isWaiting.listen((event) {
-      if (event) {
-        service
-          ..setForegroundNotificationInfo(
-            title: _L10n.global().metadataTaskPauseNoWiFiNotification,
-          )
-          ..pauseWakeLock();
-      } else {
-        service.resumeWakeLock();
-      }
-    });
-    final batteryEnsurer = BatteryEnsurer(
-      interrupter: _shouldRun.stream,
-      progressLogger: _progressLogger,
-    );
-    batteryEnsurer.isWaiting.listen((event) {
-      if (event) {
-        service
-          ..setForegroundNotificationInfo(
-            title: _L10n.global().metadataTaskPauseLowBatteryNotification,
-          )
-          ..pauseWakeLock();
-      } else {
-        service.resumeWakeLock();
-      }
-    });
-
     final syncOp = SyncMetadata(
       fileRepo: c.fileRepo,
       fileRepo2: c.fileRepo2,
       fileRepoRemote: c.fileRepoRemote,
       db: c.npDb,
       interrupter: _shouldRun.stream,
-      wifiEnsurer: wifiEnsurer,
-      batteryEnsurer: batteryEnsurer,
       progressLogger: _progressLogger,
     );
     final processedIds = <int>[];

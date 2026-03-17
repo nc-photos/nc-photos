@@ -77,32 +77,6 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
                     );
                   },
                 ),
-                if (getRawPlatform().isMobile)
-                  _BlocBuilder(
-                    buildWhen:
-                        (previous, current) =>
-                            previous.isEnable != current.isEnable ||
-                            previous.isWifiOnly != current.isWifiOnly,
-                    builder: (context, state) {
-                      return SwitchListTile(
-                        title: Text(L10n.global().settingsExifWifiOnlyTitle),
-                        subtitle:
-                            state.isWifiOnly
-                                ? null
-                                : Text(
-                                  L10n.global()
-                                      .settingsExifWifiOnlyFalseSubtitle,
-                                ),
-                        value: state.isWifiOnly,
-                        onChanged:
-                            state.isEnable
-                                ? (value) {
-                                  context.addEvent(_SetWifiOnly(value));
-                                }
-                                : null,
-                      );
-                    },
-                  ),
                 _BlocBuilder(
                   buildWhen:
                       (previous, current) =>

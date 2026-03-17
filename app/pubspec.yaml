@@ -48,7 +48,6 @@ dependencies:
   circular_reveal_animation: ^2.0.1
   clock: ^1.1.1
   collection: ^1.18.0
-  connectivity_plus: ^4.0.2
   copy_with:
     git:
       url: https://github.com/nkming2/dart-copy-with.git

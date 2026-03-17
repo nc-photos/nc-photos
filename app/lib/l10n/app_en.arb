@@ -282,14 +282,6 @@
 	"@settingsExifSupportTrueSubtitle": {
 		"description": "Subtitle of the EXIF support setting when the value is true. The goal is to warn user about the possible side effects of enabling this setting"
 	},
-	"settingsExifWifiOnlyTitle": "Process EXIF over Wi-Fi only",
-	"@settingsExifWifiOnlyTitle": {
-		"description": "Whether to only process EXIF data when connected to a Wi-Fi network"
-	},
-	"settingsExifWifiOnlyFalseSubtitle": "Data charges may apply",
-	"@settingsExifWifiOnlyFalseSubtitle": {
-		"description": "Shown when users allow processing exif data over any network"
-	},
 	"settingsFallbackClientExifTitle": "Fall back to client-side parser",
 	"@settingsFallbackClientExifTitle": {
 		"description": "Fallback to client side EXIF parser"
