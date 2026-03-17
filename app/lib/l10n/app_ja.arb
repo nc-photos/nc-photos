@@ -1,10 +1,10 @@
 {
-	"appTitle": "画像",
-	"translator": "yoking",
+	"appTitle": "写真",
+	"translator": "yoking\nnkming2",
 	"@translator": {
 		"description": "Name of the translator(s) for this language"
 	},
-	"photosTabLabel": "画像",
+	"photosTabLabel": "写真",
 	"@photosTabLabel": {
 		"description": "Label of the tab that lists user photos"
 	},
@@ -15,10 +15,6 @@
 	"zoomTooltip": "拡大",
 	"@zoomTooltip": {
 		"description": "Tooltip of the zoom button"
-	},
-	"refreshMenuLabel": "リフレッシュ",
-	"@refreshMenuLabel": {
-		"description": "Label of the refresh entry in menu"
 	},
 	"settingsMenuLabel": "設定",
 	"@settingsMenuLabel": {
@@ -55,24 +51,15 @@
 			}
 		}
 	},
-	"archiveTooltip": "アーカイブ",
+	"archiveTooltip": "アーカイブに移動",
 	"@archiveTooltip": {
 		"description": "Archive selected items"
 	},
-	"archiveSelectedProcessingNotification": "{count, plural, one{1個のアイテムをアーカイブ中} other{{count}個のアイテムをアーカイブ中}}",
-	"@archiveSelectedProcessingNotification": {
-		"description": "Archiving the selected items",
-		"placeholders": {
-			"count": {
-				"example": "1"
-			}
-		}
-	},
-	"archiveSelectedSuccessNotification": "全てのアイテムをアーカイブしました",
+	"archiveSelectedSuccessNotification": "全てのファイルをアーカイブに移動しました",
 	"@archiveSelectedSuccessNotification": {
 		"description": "Archived all selected items successfully"
 	},
-	"archiveSelectedFailureNotification": "{count, plural, one{1個のアイテムのアーカイブに失敗しました} other{{count}個のアイテムのアーカイブに失敗しました}}",
+	"archiveSelectedFailureNotification": "{count, plural, one{1個のファイルをアーカイブに移動できませんでした} other{{count}個のファイルをアーカイブに移動できませんでした}}",
 	"@archiveSelectedFailureNotification": {
 		"description": "Cannot archive some of the selected items",
 		"placeholders": {
@@ -85,20 +72,11 @@
 	"@unarchiveTooltip": {
 		"description": "Unarchive selected items"
 	},
-	"unarchiveSelectedProcessingNotification": "{count, plural, one{1個のアイテムのアーカイブを解除中} other{{count}個のアイテムのアーカイブを解除中}}",
-	"@unarchiveSelectedProcessingNotification": {
-		"description": "Unarchiving selected items",
-		"placeholders": {
-			"count": {
-				"example": "1"
-			}
-		}
-	},
-	"unarchiveSelectedSuccessNotification": "全てのアイテムのアーカイブを解除しました",
+	"unarchiveSelectedSuccessNotification": "全てのファイルのアーカイブを解除しました",
 	"@unarchiveSelectedSuccessNotification": {
 		"description": "Unarchived all selected items successfully"
 	},
-	"unarchiveSelectedFailureNotification": "{count, plural, one{1個のアイテムのアーカイブ解除に失敗しました} other{{count}個のアイテムのアーカイブ解除に失敗しました}}",
+	"unarchiveSelectedFailureNotification": "{count, plural, one{1個のファイルのアーカイブ解除に失敗しました} other{{count}個のファイルのアーカイブ解除に失敗しました}}",
 	"@unarchiveSelectedFailureNotification": {
 		"description": "Cannot unarchive some of the selected items",
 		"placeholders": {
@@ -111,15 +89,11 @@
 	"@deleteTooltip": {
 		"description": "Delete selected items"
 	},
-	"deleteProcessingNotification": "アイテムを削除中...",
-	"@deleteProcessingNotification": {
-		"description": "Inform user that the item is being deleted"
-	},
-	"deleteSuccessNotification": "アイテムを削除しました",
+	"deleteSuccessNotification": "ファイルを削除しました",
 	"@deleteSuccessNotification": {
 		"description": "Inform user that the item is deleted successfully"
 	},
-	"deleteFailureNotification": "アイテムを削除できませんでした",
+	"deleteFailureNotification": "ファイルを削除できませんでした",
 	"@deleteFailureNotification": {
 		"description": "Inform user that the item cannot be deleted"
 	},
@@ -186,7 +160,7 @@
 	"@skipButtonLabel": {
 		"description": "Label of the skip button"
 	},
-	"confirmButtonLabel": "確認する",
+	"confirmButtonLabel": "確認",
 	"@confirmButtonLabel": {
 		"description": "Label of the confirm button"
 	},
@@ -1481,7 +1455,7 @@
 	},
 	"accountSettingsTooltip": "アカウント設定",
 	"contributorsTooltip": "貢献者",
-	"setAsTooltip": "設定",
+	"setAsTooltip": "他で使う",
 	"@setAsTooltip": {
 		"description": "e.g., set as wallpaper"
 	},
@@ -1592,11 +1566,7 @@
 		"description": "Server-side albums that are available in Nextcloud 25+"
 	},
 	"createCollectionDialogNextcloudAlbumDescription2": "サーバー上にアルバムを作成し、どのアプリからでもアクセス可能",
-	"alternativeSignIn": "代わりにユーザー名とパスワードでサインイン",
-	"@alternativeSignIn": {
-		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
-	},
-	"livePhotoTooltip": "ライブフォト",
+	"livePhotoTooltip": "Live Photos",
 	"dragAndDropRearrangeButtons": "ドラッグ＆ドロップでボタンを並べ替え",
 	"@dragAndDropRearrangeButtons": {
 		"description": "Instruction to customize buttons layout"
@@ -1650,7 +1620,7 @@
 		"description": "Batch convert files"
 	},
 	"uploadBatchConvertWarningText1": "写真は圧縮または変換したのちアップロードされます。",
-	"uploadBatchConvertWarningText2": "モーションフォトはサポートされておらず、静止画像としてアップロードされます。",
+	"uploadBatchConvertWarningText2": "Live Photosおよびモーションフォトはサポートされておらず、静止画像としてアップロードされます。",
 	"uploadBatchConvertWarningText3": "一部のメタデータは変更または削除される場合があります。",
 	"uploadBatchConvertWarningText4": "サポートされている画像ファイル形式はJPEG、PNG、WEBP、BMPおよびHEICのみ。",
 	"uploadBatchConvertSettings": "変換設定",
