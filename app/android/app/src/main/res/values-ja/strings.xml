@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">写真</string>
+
+	<string name="download_successful_notification_action_share">共有</string>
+	<string name="download_successful_notification_action_share_chooser">共有先：</string>
+	<string name="attach_data_chooser_title">他で使う</string>
+</resources>

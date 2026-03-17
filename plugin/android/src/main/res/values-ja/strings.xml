@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="download_notification_channel_name">ダウンロード</string>
+	<string name="download_notification_channel_description">ダウンロードの通知</string>
+	<string name="download_successful_notification_title">ダウンロードが完了しました</string>
+	<string name="download_successful_notification_text">タップしてダウンロードしたファイルを開きます</string>
+	<string name="download_successful_notification_action_share">共有</string>
+	<string name="download_successful_notification_action_share_chooser">共有先：</string>
+	<string name="download_multiple_successful_notification_title">%1$d件のアイテムをダウンロードしました</string>
+	<string name="download_progress_notification_text">%1$sをダウンロードしています</string>
+	<string name="download_progress_notification_untitled_text">ダウンロード中</string>
+	<string name="log_save_successful_notification_title">ログを保存しました</string>
+	<string name="log_save_successful_notification_text">タップして保存したログを開きます</string>
+</resources>
