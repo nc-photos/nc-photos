@@ -1643,6 +1643,30 @@
 	"@collectionAddItemTitle": {
 		"description": "When adding an item to a collection, ask the user where should we insert it to"
 	},
+	"greetingsMorning": "Good morning, {user}",
+	"@greetingsMorning": {
+		"placeholders": {
+			"user": {
+				"example": "alice"
+			}
+		}
+	},
+	"greetingsAfternoon": "Good afternoon, {user}",
+	"@greetingsAfternoon": {
+		"placeholders": {
+			"user": {
+				"example": "alice"
+			}
+		}
+	},
+	"greetingsNight": "Good evening, {user}",
+	"@greetingsNight": {
+		"placeholders": {
+			"user": {
+				"example": "alice"
+			}
+		}
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

@@ -327,6 +327,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -394,6 +397,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -465,6 +471,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -682,6 +691,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -741,6 +753,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -853,6 +868,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -912,6 +930,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -1029,6 +1050,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -1474,6 +1498,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1598,6 +1625,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -1728,6 +1758,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -1840,6 +1873,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -1899,6 +1935,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -1942,7 +1981,10 @@
     "deleteMergedFileDialogBothButton",
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
-    "collectionAddItemTitle"
+    "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight"
   ],
 
   "zh": [
@@ -2085,6 +2127,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ],
 
@@ -2318,6 +2363,9 @@
     "deleteMergedFileDialogContent",
     "deleteSingleMergedFileDialogContent",
     "collectionAddItemTitle",
+    "greetingsMorning",
+    "greetingsAfternoon",
+    "greetingsNight",
     "errorServerNoCert"
   ]
 }

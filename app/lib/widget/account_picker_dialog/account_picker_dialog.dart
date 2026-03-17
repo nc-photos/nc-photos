@@ -37,9 +37,6 @@ part 'account_picker_dialog.g.dart';
 part 'bloc.dart';
 part 'state_event.dart';
 
-typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
-typedef _BlocListener = BlocListener<_Bloc, _State>;
-
 class AccountPickerDialog extends StatelessWidget {
   const AccountPickerDialog({super.key});
 
@@ -104,39 +101,12 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     const SizedBox(height: 8),
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            L10n.global().appTitle,
-                            style: Theme.of(context).textTheme.titleLarge,
-                          ),
-                        ),
-                        ValueStreamBuilder<bool>(
-                          stream:
-                              context
-                                  .read<PrefController>()
-                                  .isFollowSystemTheme,
-                          builder: (_, isFollowSystemTheme) {
-                            if (!isFollowSystemTheme.requireData) {
-                              return Align(
-                                alignment: AlignmentDirectional.centerEnd,
-                                child: _DarkModeSwitch(
-                                  onChanged: (value) {
-                                    context.read<_Bloc>().add(
-                                      _SetDarkTheme(value),
-                                    );
-                                  },
-                                ),
-                              );
-                            } else {
-                              return const SizedBox.shrink();
-                            }
-                          },
-                        ),
-                      ],
+                    const Padding(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
+                      child: Center(child: _GreetingText()),
                     ),
                     const SizedBox(height: 8),
                     ClipRRect(
@@ -201,7 +171,34 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                         launch(help_util.mainUrl);
                       },
                     ),
-                    const _AboutChin(),
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        const _AboutChin(),
+                        ValueStreamBuilder<bool>(
+                          stream:
+                              context
+                                  .read<PrefController>()
+                                  .isFollowSystemTheme,
+                          builder: (_, isFollowSystemTheme) {
+                            if (!isFollowSystemTheme.requireData) {
+                              return Align(
+                                alignment: AlignmentDirectional.centerEnd,
+                                child: _DarkModeSwitch(
+                                  onChanged: (value) {
+                                    context.read<_Bloc>().add(
+                                      _SetDarkTheme(value),
+                                    );
+                                  },
+                                ),
+                              );
+                            } else {
+                              return const SizedBox.shrink();
+                            }
+                          },
+                        ),
+                      ],
+                    ),
                   ],
                 ),
               ),
@@ -210,6 +207,31 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _GreetingText extends StatelessWidget {
+  const _GreetingText();
+
+  @override
+  Widget build(BuildContext context) {
+    final account = context.bloc.activeAccount;
+    var name = account.username2;
+    if (name.contains(RegExp(r".+@.+\..+"))) {
+      // looks like an email
+      name = name.substring(0, name.indexOf("@"));
+    }
+    final now = clock.now();
+    final hour = now.hour;
+    String greeting;
+    if (hour >= 5 && hour < 12) {
+      greeting = L10n.global().greetingsMorning(name);
+    } else if (hour >= 12 && hour < 18) {
+      greeting = L10n.global().greetingsAfternoon(name);
+    } else {
+      greeting = L10n.global().greetingsNight(name);
+    }
+    return Text(greeting, style: Theme.of(context).textTheme.titleLarge);
   }
 }
 
@@ -511,4 +533,16 @@ class _DeleteAccountConfirmDialog extends StatelessWidget {
   }
 
   final String accountLabel;
+}
+
+typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
+typedef _BlocListener = BlocListener<_Bloc, _State>;
+// typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
+// typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+// typedef _Emitter = Emitter<_State>;
+
+extension on BuildContext {
+  _Bloc get bloc => read();
+  // _State get state => bloc.state;
+  // void addEvent(_Event event) => bloc.add(event);
 }

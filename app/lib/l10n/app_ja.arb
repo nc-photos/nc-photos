@@ -1687,6 +1687,30 @@
 	"@collectionAddItemTitle": {
 		"description": "When adding an item to a collection, ask the user where should we insert it to"
 	},
+	"greetingsMorning": "{user}さん、おはよう",
+	"@greetingsMorning": {
+		"placeholders": {
+			"user": {
+				"example": "alice"
+			}
+		}
+	},
+	"greetingsAfternoon": "{user}さん、こんにちは",
+	"@greetingsAfternoon": {
+		"placeholders": {
+			"user": {
+				"example": "alice"
+			}
+		}
+	},
+	"greetingsNight": "{user}さん、こんばんは",
+	"@greetingsNight": {
+		"placeholders": {
+			"user": {
+				"example": "alice"
+			}
+		}
+	},
 	"errorServerNoCert": "サーバー証明書が正しく設定されていません。暗号化されていないHTTPで接続しますか？",
 	"@errorServerNoCert": {
 		"description": "No cert to establish HTTPS connection"
