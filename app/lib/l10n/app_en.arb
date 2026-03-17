@@ -16,10 +16,6 @@
 	"@zoomTooltip": {
 		"description": "Tooltip of the zoom button"
 	},
-	"refreshMenuLabel": "Refresh",
-	"@refreshMenuLabel": {
-		"description": "Label of the refresh entry in menu"
-	},
 	"settingsMenuLabel": "Settings",
 	"@settingsMenuLabel": {
 		"description": "Label of the settings entry in menu"
@@ -59,15 +55,6 @@
 	"@archiveTooltip": {
 		"description": "Archive selected items"
 	},
-	"archiveSelectedProcessingNotification": "{count, plural, one{Archiving 1 item} other{Archiving {count} items}}",
-	"@archiveSelectedProcessingNotification": {
-		"description": "Archiving the selected items",
-		"placeholders": {
-			"count": {
-				"example": "1"
-			}
-		}
-	},
 	"archiveSelectedSuccessNotification": "All items archived successfully",
 	"@archiveSelectedSuccessNotification": {
 		"description": "Archived all selected items successfully"
@@ -85,15 +72,6 @@
 	"@unarchiveTooltip": {
 		"description": "Unarchive selected items"
 	},
-	"unarchiveSelectedProcessingNotification": "{count, plural, one{Unarchiving 1 item} other{Unarchiving {count} items}}",
-	"@unarchiveSelectedProcessingNotification": {
-		"description": "Unarchiving selected items",
-		"placeholders": {
-			"count": {
-				"example": "1"
-			}
-		}
-	},
 	"unarchiveSelectedSuccessNotification": "All items unarchived successfully",
 	"@unarchiveSelectedSuccessNotification": {
 		"description": "Unarchived all selected items successfully"
@@ -110,10 +88,6 @@
 	"deleteTooltip": "Delete",
 	"@deleteTooltip": {
 		"description": "Delete selected items"
-	},
-	"deleteProcessingNotification": "Deleting item",
-	"@deleteProcessingNotification": {
-		"description": "Inform user that the item is being deleted"
 	},
 	"deleteSuccessNotification": "Deleted item successfully",
 	"@deleteSuccessNotification": {
@@ -507,10 +481,6 @@
 		"description": "Label of the enable button"
 	},
 	"enableButtonLabel2": "Enable",
-	"exifSupportDetails": "Enabling EXIF support will make various metadata available like date taken, camera model, etc. In order to read these metadata, extra network usage is required to download the original full-sized image. The app will only start downloading when connected to a Wi-Fi network",
-	"@exifSupportDetails": {
-		"description": "Detailed description of the exif support feature"
-	},
 	"exifSupportNextcloud28Notes": "Client-side support complements your server. The app will process files and attributes not supported by Nextcloud",
 	"@exifSupportNextcloud28Notes": {
 		"description": "Extra notes for Nextcloud 28+"
@@ -792,10 +762,6 @@
 	"metadataTaskProcessingNotification": "Processing image metadata in the background",
 	"@metadataTaskProcessingNotification": {
 		"description": "Shown when the app is reading image metadata"
-	},
-	"metadataTaskPauseNoWiFiNotification": "Waiting for WiFi",
-	"@metadataTaskPauseNoWiFiNotification": {
-		"description": "Shown when the app has paused reading image metadata"
 	},
 	"configButtonLabel": "CONFIG",
 	"useAsAlbumCoverTooltip": "Use as album cover",

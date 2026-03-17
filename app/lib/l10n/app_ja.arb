@@ -462,10 +462,6 @@
 		"description": "Label of the enable button"
 	},
 	"enableButtonLabel2": "有効にする",
-	"exifSupportDetails": "EXIFサポートを有効にすると、撮影日やカメラモデルなどの様々なメタデータが利用可能になります。これらのメタデータを読み取るには、元のフルサイズ画像をダウンロードするために追加のネットワーク使用が必要になります。アプリはWi-Fiネットワークに接続している場合にのみダウンロードを開始します。",
-	"@exifSupportDetails": {
-		"description": "Detailed description of the exif support feature"
-	},
 	"captureLogDetails": "バグレポート用のログを取得するには：\n1. この設定を有効にする\n2. 問題を発生させる\n3. この設定を無効にする\n4. ダウンロードフォルダでnc-photos.logを探す\n\n※問題によってアプリがクラッシュした場合は、ログを取得できません。その場合は、開発者に連絡して詳細な手順をご確認ください。",
 	"@captureLogDetails": {
 		"description": "Detailed description on capturing logs"
@@ -739,10 +735,6 @@
 	"metadataTaskProcessingNotification": "バックグラウンドで画像のメタデータを処理",
 	"@metadataTaskProcessingNotification": {
 		"description": "Shown when the app is reading image metadata"
-	},
-	"metadataTaskPauseNoWiFiNotification": "WiFiを待っています",
-	"@metadataTaskPauseNoWiFiNotification": {
-		"description": "Shown when the app has paused reading image metadata"
 	},
 	"configButtonLabel": "設定",
 	"useAsAlbumCoverTooltip": "アルバムカバーとして使用",
