@@ -380,7 +380,7 @@
 		"description": "When black in dark theme is set to false"
 	},
 	"settingsMiscellaneousTitle": "その他",
-	"settingsDoubleTapExitTitle": "終了するにはダブルタップ",
+	"settingsDoubleTapExitTitle": "終了前に確認する",
 	"@settingsDoubleTapExitTitle": {
 		"description": "If enabled, users need to tap the back button twice to exit app"
 	},
@@ -390,13 +390,13 @@
 	},
 	"settingsExperimentalTitle": "実験的",
 	"settingsExperimentalDescription": "通常用途には適さない機能です。",
-	"settingsExpertTitle": "アドバンスド",
+	"settingsExpertTitle": "上級者向け設定",
 	"@settingsExpertTitle": {
 		"description": "Settings that must be tweaked with caution"
 	},
 	"settingsExpertWarningText": "続行する前に、各設定の機能を十分に理解してください。",
 	"settingsClearCacheDatabaseTitle": "ファイルデータベースをクリア",
-	"settingsClearCacheDatabaseDescription": "キャッシュされたファイル情報をクリアして、サーバーと再同期を行います。",
+	"settingsClearCacheDatabaseDescription": "キャッシュされたファイル情報をクリアして、サーバーと再同期を行います",
 	"settingsClearCacheDatabaseSuccessNotification": "データベースが正常にクリアされました。アプリを再起動してください。",
 	"settingsAboutSectionTitle": "このアプリについて",
 	"@settingsAboutSectionTitle": {
@@ -1433,11 +1433,11 @@
 	"@errorNoStoragePermission": {
 		"description": "Missing permission on Android"
 	},
-	"settingsMetadataTitle": "ファイルメタデータ",
+	"settingsMetadataTitle": "メタデータ",
 	"@settingsMetadataTitle": {
 		"description": "Metadata (e.g., date, resolution, GPS, etc)"
 	},
-	"settingsPersonProviderTitle": "人物プロバイダー",
+	"settingsPersonProviderTitle": "顔検出プロバイダー",
 	"@settingsPersonProviderTitle": {
 		"description": "Select the server app for face recognition"
 	},
@@ -1538,18 +1538,18 @@
 	"homeTabMapBrowser": "地図",
 	"mapBrowserSetDefaultDateRangeButton": "デフォルトとして設定",
 	"todayText": "今日",
-	"settingsExifSupportTitle2": "クライアント側EXIFサポート",
+	"settingsExifSupportTitle2": "内蔵EXIFリーダーを使う",
 	"@settingsExifSupportTitle2": {
 		"description": "Title of the EXIF support setting"
 	},
 	"settingsViewerCustomizeAppBarTitle": "アプリバーをカスタマイズ",
 	"settingsViewerCustomizeBottomAppBarTitle": "下部アプリバーをカスタマイズ",
 	"settingsCollectionsCustomizeNavigationBarTitle": "ナビゲーションバーをカスタマイズ",
-	"exifSupportNextcloud28Notes": "クライアント側のサポートはサーバーを補完します。アプリはNextcloudでサポートされていないファイルと属性を処理します",
+	"exifSupportNextcloud28Notes": "有効にすると、Nextcloudでサポートされていない画像や動画をアプリ側で処理します",
 	"@exifSupportNextcloud28Notes": {
 		"description": "Extra notes for Nextcloud 28+"
 	},
-	"exifSupportConfirmationDialogTitle2": "クライアント側のEXIFサポートを有効にしますか？",
+	"exifSupportConfirmationDialogTitle2": "アプリ内蔵のEXIFリーダーを有効にしますか？",
 	"@exifSupportConfirmationDialogTitle2": {
 		"description": "Title of the dialog to confirm enabling exif support"
 	},
