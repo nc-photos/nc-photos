@@ -15,6 +15,7 @@ import 'package:nc_photos/entity/file/data_source.dart';
 import 'package:nc_photos/entity/file/repo.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/entity/share.dart';
 import 'package:nc_photos/entity/sharee.dart';
 import 'package:nc_photos/entity/tag.dart';

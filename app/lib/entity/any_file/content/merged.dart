@@ -7,7 +7,7 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/any_file/content/local.dart';
 import 'package:nc_photos/entity/any_file/content/nextcloud.dart';
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:np_common/size.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';

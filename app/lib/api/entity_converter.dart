@@ -5,6 +5,7 @@ import 'package:nc_photos/entity/face_recognition_face.dart';
 import 'package:nc_photos/entity/face_recognition_person.dart';
 import 'package:nc_photos/entity/favorite.dart';
 import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/entity/nc_album.dart';
 import 'package:nc_photos/entity/nc_album_item.dart';
 import 'package:nc_photos/entity/recognize_face.dart';

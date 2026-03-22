@@ -5,6 +5,7 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/use_case/load_metadata.dart';
 import 'package:np_common/size.dart';

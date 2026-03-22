@@ -1,4 +1,4 @@
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:np_geocoder/np_geocoder.dart';
 
 extension ReverseGeocoderExtension on ReverseGeocoderLocation {

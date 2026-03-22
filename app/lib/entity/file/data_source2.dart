@@ -7,6 +7,7 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file/repo.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;

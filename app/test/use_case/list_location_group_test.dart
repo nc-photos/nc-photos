@@ -1,6 +1,6 @@
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:np_db_sqlite/np_db_sqlite_compat.dart' as compat;
 import 'package:test/test.dart';
