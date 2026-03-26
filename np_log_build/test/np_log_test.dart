@@ -34,7 +34,7 @@ extension _$FooNpLog on Foo {
 
 String _genSrc(String src) {
   return """
-import 'package:np_log/np_log.dart';
+import 'package:np_log_annotation/np_log_annotation.dart';
 part 'test.g.dart';
 $src
 """;
