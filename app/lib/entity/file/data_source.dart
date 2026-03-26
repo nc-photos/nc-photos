@@ -21,7 +21,6 @@ import 'package:np_api/np_api.dart' as api;
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
-import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_log/np_log.dart';
 import 'package:path/path.dart' as path_lib;
@@ -407,27 +406,6 @@ class FileSqliteDbDataSource implements FileDataSource {
 
   @override
   listMinimal(Account account, File dir) => list(account, dir);
-
-  /// List files with date between [fromEpochMs] (inclusive) and [toEpochMs]
-  /// (exclusive)
-  Future<List<File>> listByDate(
-    Account account,
-    int fromEpochMs,
-    int toEpochMs,
-  ) async {
-    _log.info("[listByDate] [$fromEpochMs, $toEpochMs]");
-    final results = await _c.npDb.getFilesByTimeRange(
-      account: account.toDb(),
-      dirRoots: account.roots,
-      range: TimeRange(
-        from: DateTime.fromMillisecondsSinceEpoch(fromEpochMs),
-        to: DateTime.fromMillisecondsSinceEpoch(toEpochMs),
-      ),
-    );
-    return results
-        .map((e) => DbFileConverter.fromDb(account.userId.toString(), e))
-        .toList();
-  }
 
   @override
   Future<void> remove(Account account, FileDescriptor f) {

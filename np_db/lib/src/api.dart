@@ -295,13 +295,6 @@ abstract class NpDb {
     required Iterable<int> fileIds,
   });
 
-  /// Return [DbFile]s by their date time value
-  Future<List<DbFile>> getFilesByTimeRange({
-    required DbAccount account,
-    required List<String> dirRoots,
-    required TimeRange range,
-  });
-
   /// Update one or more file properties of a single file
   Future<void> updateFileByFileId({
     required DbAccount account,

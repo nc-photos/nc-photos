@@ -165,35 +165,6 @@ extension SqliteDbFileExtension on SqliteDb {
     }, _maxByFileIdsSize);
   }
 
-  @Deprecated("query file descriptor instead")
-  Future<List<CompleteFile>> queryFilesByTimeRange({
-    required ByAccount account,
-    required List<String> dirRoots,
-    required TimeRange range,
-  }) async {
-    _log.info("[queryFilesByTimeRange] range: $range");
-    final query = _queryFiles().let((q) {
-      q
-        ..setQueryMode(FilesQueryMode.completeFile)
-        ..setAccount(account);
-      for (final r in dirRoots) {
-        if (r.isNotEmpty) {
-          q.byOrRelativePathPattern("$r/%");
-        }
-      }
-      return q.build();
-    });
-    accountFiles.bestDateTime
-        .isBetweenTimeRange(range)
-        ?.let((e) => query.where(e));
-    query.orderBy([
-      OrderingTerm.desc(accountFiles.bestDateTime),
-      OrderingTerm.desc(files.fileId),
-    ]);
-    final acf = await _mapAlmostCompleteFile(query);
-    return _populateCompleteFile(acf);
-  }
-
   Future<List<QueryFileIdResult>> queryFileIds({
     required ByAccount account,
     List<String>? includeRelativeRoots,

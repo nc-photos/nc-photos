@@ -247,22 +247,6 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<DbFile>> getFilesByTimeRange({
-    required DbAccount account,
-    required List<String> dirRoots,
-    required TimeRange range,
-  }) async {
-    final sqlObjs = await _db.use((db) async {
-      return await db.queryFilesByTimeRange(
-        account: ByAccount.db(account),
-        dirRoots: dirRoots,
-        range: range,
-      );
-    });
-    return sqlObjs.toDbFiles();
-  }
-
-  @override
   Future<void> updateFileByFileId({
     required DbAccount account,
     required int fileId,
