@@ -185,3 +185,10 @@ extension _$DbFileMissingMetadataResultToString on DbFileMissingMetadataResult {
     return "DbFileMissingMetadataResult {items: [length: ${items.length}]}";
   }
 }
+
+extension _$DbFileQueryByLocationToString on DbFileQueryByLocation {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "DbFileQueryByLocation {place: $place, countryCode: $countryCode, isFuzzy: $isFuzzy}";
+  }
+}

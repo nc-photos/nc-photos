@@ -97,7 +97,7 @@ class FilesQueryBuilder {
     _byServerRowId = serverRowId;
   }
 
-  void byLocation(String location) {
+  void byLocation(DbFileQueryByLocation location) {
     _byLocation = location;
   }
 
@@ -254,20 +254,44 @@ class FilesQueryBuilder {
           useColumns: false,
         ),
       ])..addColumns([db.imageLocations.accountFile]);
-      var clause =
-          db.imageLocationNames.name.like(_byLocation!) |
-          db.imageLocationNames.admin1.like(_byLocation!) |
-          db.imageLocationNames.admin2.like(_byLocation!);
-      final countryCode = nameToAlpha2Code(_byLocation!.toCi());
-      if (countryCode != null) {
-        clause = clause | db.imageLocations.countryCode.equals(countryCode);
-      } else if (_byLocation!.length == 2 &&
-          alpha2CodeToName(_byLocation!.toUpperCase()) != null) {
-        clause =
-            clause |
-            db.imageLocations.countryCode.equals(_byLocation!.toUpperCase());
+
+      if (_byLocation!.countryCode != null) {
+        subquery.where(
+          db.imageLocations.countryCode.equals(
+            _byLocation!.countryCode!.toUpperCase(),
+          ),
+        );
       }
-      subquery.where(clause);
+      if (_byLocation!.isFuzzy) {
+        var clause =
+            db.imageLocationNames.name.like(_byLocation!.place) |
+            db.imageLocationNames.admin1.like(_byLocation!.place) |
+            db.imageLocationNames.admin2.like(_byLocation!.place);
+        final countryCode = nameToAlpha2Code(_byLocation!.place.toCi());
+        if (countryCode != null) {
+          clause = clause | db.imageLocations.countryCode.equals(countryCode);
+        } else if (_byLocation!.place.length == 2 &&
+            alpha2CodeToName(_byLocation!.place.toUpperCase()) != null) {
+          clause =
+              clause |
+              db.imageLocations.countryCode.equals(
+                _byLocation!.place.toUpperCase(),
+              );
+        }
+        subquery.where(clause);
+      } else {
+        if (_byLocation!.countryCode != null &&
+            alpha2CodeToName(_byLocation!.countryCode!) == _byLocation!.place) {
+          // some places in the DB have the same name as the country, in such
+          // cases, we return all photos from the country
+        } else {
+          subquery.where(
+            db.imageLocationNames.name.equals(_byLocation!.place) |
+                db.imageLocationNames.admin1.equals(_byLocation!.place) |
+                db.imageLocationNames.admin2.equals(_byLocation!.place),
+          );
+        }
+      }
       query.where(db.accountFiles.rowId.isInQuery(subquery));
     }
     return query;
@@ -298,5 +322,5 @@ class FilesQueryBuilder {
   bool? _byArchived;
   int? _byDirRowId;
   int? _byServerRowId;
-  String? _byLocation;
+  DbFileQueryByLocation? _byLocation;
 }

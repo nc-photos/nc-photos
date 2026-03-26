@@ -204,6 +204,24 @@ class DbFileMissingMetadataResult {
   final List<({int fileId, String relativePath})> items;
 }
 
+@toString
+class DbFileQueryByLocation {
+  const DbFileQueryByLocation({
+    required this.place,
+    this.countryCode,
+    required this.isFuzzy,
+  });
+
+  @override
+  String toString() => _$toString();
+
+  final String place;
+
+  /// If set, only places inside this country will be matched
+  final String? countryCode;
+  final bool isFuzzy;
+}
+
 @npLog
 abstract class NpDb {
   factory NpDb() => NpDbSqlite();
@@ -276,13 +294,6 @@ abstract class NpDb {
   Future<List<DbFile>> getFilesByDirKey({
     required DbAccount account,
     required DbFileKey dir,
-  });
-
-  Future<List<DbFile>> getFilesByDirKeyAndLocation({
-    required DbAccount account,
-    required String dirRelativePath,
-    required String? place,
-    required String countryCode,
   });
 
   /// Return [DbFile]s by their corresponding file ids
@@ -390,7 +401,7 @@ abstract class NpDb {
     List<String>? includeRelativeDirs,
     List<String>? excludeRelativeRoots,
     List<String>? relativePathKeywords,
-    String? location,
+    DbFileQueryByLocation? location,
     bool? isFavorite,
     bool? isArchived,
     List<String>? mimes,

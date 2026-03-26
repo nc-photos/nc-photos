@@ -97,51 +97,6 @@ extension SqliteDbFileExtension on SqliteDb {
     return _populateCompleteFile(acf);
   }
 
-  // TODO broken, remove this
-  /// Return files located inside [dirRelativePath]
-  Future<List<CompleteFile>> queryFilesByLocation({
-    required ByAccount account,
-    required String dirRelativePath,
-    required String? place,
-    required String countryCode,
-  }) async {
-    _log.info(
-      "[queryFilesByLocation] dirRelativePath: $dirRelativePath, "
-      "place: $place, "
-      "countryCode: $countryCode",
-    );
-    final query = _queryFiles().let((q) {
-      q
-        ..setQueryMode(FilesQueryMode.completeFile)
-        ..setExtraJoins([
-          innerJoin(
-            imageLocationNames,
-            imageLocationNames.accountFile.equalsExp(accountFiles.rowId),
-          ),
-        ])
-        ..setAccount(account);
-      if (dirRelativePath.isNotEmpty) {
-        q.byOrRelativePathPattern("$dirRelativePath/%");
-      }
-      return q.build();
-    });
-    if (place == null || alpha2CodeToName(countryCode) == place) {
-      // some places in the DB have the same name as the country, in such
-      // cases, we return all photos from the country
-      query.where(imageLocations.countryCode.equals(countryCode));
-    } else {
-      query
-        ..where(
-          imageLocationNames.name.equals(place) |
-              imageLocationNames.admin1.equals(place) |
-              imageLocationNames.admin2.equals(place),
-        )
-        ..where(imageLocations.countryCode.equals(countryCode));
-    }
-    final acf = await _mapAlmostCompleteFile(query);
-    return _populateCompleteFile(acf);
-  }
-
   /// Query [CompleteFile]s by file id
   ///
   /// Returned files are NOT guaranteed to be sorted as [fileIds]
@@ -629,7 +584,7 @@ extension SqliteDbFileExtension on SqliteDb {
     List<String>? includeRelativeDirs,
     List<String>? excludeRelativeRoots,
     List<String>? relativePathKeywords,
-    String? location,
+    DbFileQueryByLocation? location,
     bool? isFavorite,
     bool? isArchived,
     List<String>? mimes,

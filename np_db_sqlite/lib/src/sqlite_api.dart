@@ -215,24 +215,6 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<DbFile>> getFilesByDirKeyAndLocation({
-    required DbAccount account,
-    required String dirRelativePath,
-    required String? place,
-    required String countryCode,
-  }) async {
-    final sqlObjs = await _db.use((db) async {
-      return await db.queryFilesByLocation(
-        account: ByAccount.db(account),
-        dirRelativePath: dirRelativePath,
-        place: place,
-        countryCode: countryCode,
-      );
-    });
-    return sqlObjs.toDbFiles();
-  }
-
-  @override
   Future<List<DbFile>> getFilesByFileIds({
     required DbAccount account,
     required Iterable<int> fileIds,
@@ -442,7 +424,7 @@ class NpDbSqlite implements NpDb {
     List<String>? includeRelativeDirs,
     List<String>? excludeRelativeRoots,
     List<String>? relativePathKeywords,
-    String? location,
+    DbFileQueryByLocation? location,
     bool? isFavorite,
     bool? isArchived,
     List<String>? mimes,
