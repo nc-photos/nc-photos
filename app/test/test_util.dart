@@ -493,6 +493,13 @@ Future<void> insertFiles(
             ),
           );
     }
+    if (insert.imageLocationNames != null) {
+      for (final e in insert.imageLocationNames!) {
+        await db
+            .into(db.imageLocationNames)
+            .insert(e.copyWith(accountFile: sql.Value(dbAccountFile.rowId)));
+      }
+    }
     if (insert.trash != null) {
       await db
           .into(db.trashes)
@@ -574,11 +581,12 @@ Future<Set<File>> listSqliteDbFiles(compat.SqliteDb db) async {
     ),
     sql.leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
   ]);
-  return (await query
+  final results =
+      await query
           .map(
-            (r) => _SqliteFileConverter.fromSql(
-              r.readTable(db.accounts).userId,
-              compat.CompleteFile(
+            (r) => (
+              uid: r.readTable(db.accounts).userId,
+              asf: compat.AlmostCompleteFile(
                 r.readTable(db.files),
                 r.readTable(db.accountFiles),
                 r.readTableOrNull(db.images),
@@ -587,8 +595,13 @@ Future<Set<File>> listSqliteDbFiles(compat.SqliteDb db) async {
               ),
             ),
           )
-          .get())
-      .toSet();
+          .get();
+  return (await results.asyncMap(
+    (e) async => _SqliteFileConverter.fromSql(
+      e.uid,
+      await _populateCompleteFile(db, [e.asf]).first,
+    ),
+  )).toSet();
 }
 
 Future<Map<File, Set<File>>> listSqliteDbDirs(compat.SqliteDb db) async {
@@ -611,21 +624,33 @@ Future<Map<File, Set<File>>> listSqliteDbDirs(compat.SqliteDb db) async {
     ),
     sql.leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
   ]);
-  final fileMap = Map.fromEntries(
-    await query.map((r) {
-      final f = compat.CompleteFile(
-        r.readTable(db.files),
-        r.readTable(db.accountFiles),
-        r.readTableOrNull(db.images),
-        r.readTableOrNull(db.imageLocations),
-        r.readTableOrNull(db.trashes),
-      );
-      return MapEntry(
-        f.file.rowId,
-        _SqliteFileConverter.fromSql(r.readTable(db.accounts).userId, f),
-      );
-    }).get(),
-  );
+  final results =
+      await query
+          .map(
+            (r) => (
+              uid: r.readTable(db.accounts).userId,
+              asf: compat.AlmostCompleteFile(
+                r.readTable(db.files),
+                r.readTable(db.accountFiles),
+                r.readTableOrNull(db.images),
+                r.readTableOrNull(db.imageLocations),
+                r.readTableOrNull(db.trashes),
+              ),
+            ),
+          )
+          .get();
+  final fileMap =
+      await results
+          .asyncMap(
+            (e) async => MapEntry(
+              e.asf.file.rowId,
+              _SqliteFileConverter.fromSql(
+                e.uid,
+                await _populateCompleteFile(db, [e.asf]).first,
+              ),
+            ),
+          )
+          .toMap();
 
   final dirQuery = db.select(db.dirFiles);
   final dirs =
@@ -656,6 +681,7 @@ Future<Set<Album>> listSqliteDbAlbums(compat.SqliteDb db) async {
           compat.CompleteFile(
             r.readTable(db.files),
             r.readTable(db.accountFiles),
+            null,
             null,
             null,
             null,
@@ -717,6 +743,49 @@ Future<Set<SqlAccountWithServer>> listSqliteDbServerAccounts(
           )
           .get())
       .toSet();
+}
+
+Future<List<compat.CompleteFile>> _populateCompleteFile(
+  compat.SqliteDb db,
+  List<compat.AlmostCompleteFile> acf,
+) async {
+  if (acf.isEmpty) {
+    return const [];
+  }
+  final accountFileRowIds = acf.map((e) => e.accountFile.rowId).toList();
+
+  final query = db.select(db.imageLocationNames).join([
+    sql.innerJoin(
+      db.accountFiles,
+      db.accountFiles.rowId.equalsExp(db.imageLocationNames.accountFile),
+      useColumns: false,
+    ),
+  ]);
+  query
+    ..where(db.accountFiles.rowId.isIn(accountFileRowIds))
+    ..orderBy([sql.OrderingTerm.asc(db.accountFiles.rowId)]);
+  final locationNames =
+      await query.map((r) => r.readTable(db.imageLocationNames)).get();
+
+  final locationNamesMap = <int, List<compat.ImageLocationName>>{};
+  for (final e in locationNames) {
+    locationNamesMap
+        .putIfAbsent(e.accountFile, () => <compat.ImageLocationName>[])
+        .add(e);
+  }
+
+  return acf
+      .map(
+        (e) => compat.CompleteFile(
+          e.file,
+          e.accountFile,
+          e.image,
+          e.imageLocation,
+          locationNamesMap[e.accountFile.rowId],
+          e.trash,
+        ),
+      )
+      .toList();
 }
 
 bool shouldPrintSql = false;

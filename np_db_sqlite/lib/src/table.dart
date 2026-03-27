@@ -94,16 +94,25 @@ class Images extends Table {
 class ImageLocations extends Table {
   IntColumn get accountFile =>
       integer().references(AccountFiles, #rowId, onDelete: KeyAction.cascade)();
-  IntColumn get version => integer()();
-  TextColumn get name => text().nullable()();
+  IntColumn get dataRevision => integer()();
   RealColumn get latitude => real().nullable()();
   RealColumn get longitude => real().nullable()();
   TextColumn get countryCode => text().nullable()();
+
+  @override
+  Set<Column> get primaryKey => {accountFile};
+}
+
+class ImageLocationNames extends Table {
+  IntColumn get accountFile =>
+      integer().references(AccountFiles, #rowId, onDelete: KeyAction.cascade)();
+  TextColumn get lang => text()();
+  TextColumn get name => text().nullable()();
   TextColumn get admin1 => text().nullable()();
   TextColumn get admin2 => text().nullable()();
 
   @override
-  Set<Column> get primaryKey => {accountFile};
+  Set<Column> get primaryKey => {accountFile, lang};
 }
 
 /// A file inside trashbin

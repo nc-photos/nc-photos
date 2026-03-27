@@ -18,6 +18,7 @@ part 'reverse_geocoder.g.dart';
 @toString
 class ReverseGeocoderLocation {
   const ReverseGeocoderLocation(
+    this.dataRevision,
     this.latitude,
     this.longitude,
     this.countryCode,
@@ -27,6 +28,7 @@ class ReverseGeocoderLocation {
   @override
   String toString() => _$toString();
 
+  final int dataRevision;
   final double latitude;
   final double longitude;
   final String countryCode;
@@ -174,12 +176,15 @@ class ReverseGeocoder {
     }
 
     return ReverseGeocoderLocation(
+      ReverseGeocoder.dataRevision,
       cityResult.columnAt(0) / 10000,
       cityResult.columnAt(1) / 10000,
       cityResult.columnAt(2),
       localizedNames,
     );
   }
+
+  static const dataRevision = 202603;
 
   late final CommonDatabase _db;
   late final KDTree _searchTree;

@@ -115,7 +115,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     _log.info("[groupImageLocationsByName]");
     return _groupImageLocationsBy(
       account: account,
-      by: imageLocations.name,
+      by: imageLocationNames.name,
       includeRelativeRoots: includeRelativeRoots,
       excludeRelativeRoots: excludeRelativeRoots,
     );
@@ -129,7 +129,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     _log.info("[groupImageLocationsByAdmin1]");
     return _groupImageLocationsBy(
       account: account,
-      by: imageLocations.admin1,
+      by: imageLocationNames.admin1,
       includeRelativeRoots: includeRelativeRoots,
       excludeRelativeRoots: excludeRelativeRoots,
     );
@@ -143,7 +143,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     _log.info("[groupImageLocationsByAdmin2]");
     return _groupImageLocationsBy(
       account: account,
-      by: imageLocations.admin2,
+      by: imageLocationNames.admin2,
       includeRelativeRoots: includeRelativeRoots,
       excludeRelativeRoots: excludeRelativeRoots,
     );
@@ -305,6 +305,15 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     return reusltQuery.getSingleOrNull();
   }
 
+  Future<List<ImageLocationName>> queryImageLocationNamesByLocation({
+    required ImageLocation location,
+  }) async {
+    final query = select(imageLocationNames)
+      ..where((t) => t.accountFile.equals(location.accountFile));
+    return query.get();
+  }
+
+  // TODO not really working with multilang
   Future<List<ImageLocationGroup>> _groupImageLocationsBy({
     required ByAccount account,
     required GeneratedColumn<String> by,
@@ -320,6 +329,11 @@ extension SqliteDbImageLocationExtension on SqliteDb {
       innerJoin(
         files,
         files.rowId.equalsExp(accountFiles.file),
+        useColumns: false,
+      ),
+      innerJoin(
+        imageLocationNames,
+        imageLocationNames.accountFile.equalsExp(imageLocations.accountFile),
         useColumns: false,
       ),
     ]);

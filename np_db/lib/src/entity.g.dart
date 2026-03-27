@@ -363,13 +363,11 @@ extension $DbImageDataCopyWith on DbImageData {
 
 abstract class $DbLocationCopyWithWorker {
   DbLocation call({
-    int? version,
-    String? name,
+    int? dataRevision,
     double? latitude,
     double? longitude,
     String? countryCode,
-    String? admin1,
-    String? admin2,
+    Map<String, DbLocationName>? names,
   });
 }
 
@@ -378,17 +376,14 @@ class _$DbLocationCopyWithWorkerImpl implements $DbLocationCopyWithWorker {
 
   @override
   DbLocation call({
-    dynamic version,
-    dynamic name = copyWithNull,
+    dynamic dataRevision,
     dynamic latitude = copyWithNull,
     dynamic longitude = copyWithNull,
     dynamic countryCode = copyWithNull,
-    dynamic admin1 = copyWithNull,
-    dynamic admin2 = copyWithNull,
+    dynamic names = copyWithNull,
   }) {
     return DbLocation(
-      version: version as int? ?? that.version,
-      name: name == copyWithNull ? that.name : name as String?,
+      dataRevision: dataRevision as int? ?? that.dataRevision,
       latitude: latitude == copyWithNull ? that.latitude : latitude as double?,
       longitude:
           longitude == copyWithNull ? that.longitude : longitude as double?,
@@ -396,8 +391,10 @@ class _$DbLocationCopyWithWorkerImpl implements $DbLocationCopyWithWorker {
           countryCode == copyWithNull
               ? that.countryCode
               : countryCode as String?,
-      admin1: admin1 == copyWithNull ? that.admin1 : admin1 as String?,
-      admin2: admin2 == copyWithNull ? that.admin2 : admin2 as String?,
+      names:
+          names == copyWithNull
+              ? that.names
+              : names as Map<String, DbLocationName>?,
     );
   }
 
@@ -408,6 +405,36 @@ extension $DbLocationCopyWith on DbLocation {
   $DbLocationCopyWithWorker get copyWith => _$copyWith;
   $DbLocationCopyWithWorker get _$copyWith =>
       _$DbLocationCopyWithWorkerImpl(this);
+}
+
+abstract class $DbLocationNameCopyWithWorker {
+  DbLocationName call({String? name, String? admin1, String? admin2});
+}
+
+class _$DbLocationNameCopyWithWorkerImpl
+    implements $DbLocationNameCopyWithWorker {
+  _$DbLocationNameCopyWithWorkerImpl(this.that);
+
+  @override
+  DbLocationName call({
+    dynamic name,
+    dynamic admin1 = copyWithNull,
+    dynamic admin2 = copyWithNull,
+  }) {
+    return DbLocationName(
+      name: name as String? ?? that.name,
+      admin1: admin1 == copyWithNull ? that.admin1 : admin1 as String?,
+      admin2: admin2 == copyWithNull ? that.admin2 : admin2 as String?,
+    );
+  }
+
+  final DbLocationName that;
+}
+
+extension $DbLocationNameCopyWith on DbLocationName {
+  $DbLocationNameCopyWithWorker get copyWith => _$copyWith;
+  $DbLocationNameCopyWithWorker get _$copyWith =>
+      _$DbLocationNameCopyWithWorkerImpl(this);
 }
 
 abstract class $DbNcAlbumCopyWithWorker {
@@ -762,7 +789,14 @@ extension _$DbImageDataToString on DbImageData {
 extension _$DbLocationToString on DbLocation {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbLocation {version: $version, name: $name, latitude: ${latitude == null ? null : "${latitude!.toStringAsFixed(3)}"}, longitude: ${longitude == null ? null : "${longitude!.toStringAsFixed(3)}"}, countryCode: $countryCode, admin1: $admin1, admin2: $admin2}";
+    return "DbLocation {dataRevision: $dataRevision, latitude: ${latitude == null ? null : "${latitude!.toStringAsFixed(3)}"}, longitude: ${longitude == null ? null : "${longitude!.toStringAsFixed(3)}"}, countryCode: $countryCode, names: $names}";
+  }
+}
+
+extension _$DbLocationNameToString on DbLocationName {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "DbLocationName {name: $name, admin1: $admin1, admin2: $admin2}";
   }
 }
 

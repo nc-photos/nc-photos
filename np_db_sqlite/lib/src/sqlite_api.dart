@@ -654,12 +654,17 @@ class NpDbSqlite implements NpDb {
     required List<int> fileIds,
   }) async {
     final sqlObj = await _db.use((db) async {
-      return await db.queryFirstImageLocationByFileIds(
+      final location = await db.queryFirstImageLocationByFileIds(
         account: ByAccount.db(account),
         fileIds: fileIds,
       );
+      List<ImageLocationName>? names;
+      if (location != null) {
+        names = await db.queryImageLocationNamesByLocation(location: location);
+      }
+      return (location, names);
     });
-    return sqlObj?.let(ImageLocationConverter.fromSql);
+    return sqlObj.$1?.let((l) => ImageLocationConverter.fromSql(l, sqlObj.$2));
   }
 
   @override

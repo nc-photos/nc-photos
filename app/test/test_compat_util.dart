@@ -226,13 +226,23 @@ class _SqliteFileConverter {
     );
     final location = f.imageLocation?.let(
       (obj) => ImageLocation(
-        version: obj.version,
-        name: obj.name,
+        dataRevision: obj.dataRevision,
         latitude: obj.latitude,
         longitude: obj.longitude,
         countryCode: obj.countryCode,
-        admin1: obj.admin1,
-        admin2: obj.admin2,
+        names:
+            f.imageLocationNames
+                ?.map(
+                  (e) => MapEntry(
+                    e.lang,
+                    ImageLocationName(
+                      name: e.name,
+                      admin1: e.admin1,
+                      admin2: e.admin2,
+                    ),
+                  ),
+                )
+                .toMap(),
       ),
     );
     return File(
@@ -301,15 +311,23 @@ class _SqliteFileConverter {
     );
     final dbImageLocation = file.location?.let(
       (l) => compat.ImageLocationsCompanion.insert(
-        version: l.version,
-        name: sql.Value(l.name),
+        dataRevision: l.dataRevision,
         latitude: sql.Value(l.latitude),
         longitude: sql.Value(l.longitude),
         countryCode: sql.Value(l.countryCode),
-        admin1: sql.Value(l.admin1),
-        admin2: sql.Value(l.admin2),
       ),
     );
+    final dbImageLocationNames =
+        file.location?.names?.entries
+            .map(
+              (e) => compat.ImageLocationNamesCompanion(
+                lang: sql.Value(e.key),
+                name: sql.Value(e.value.name),
+                admin1: sql.Value(e.value.admin1),
+                admin2: sql.Value(e.value.admin2),
+              ),
+            )
+            .toList();
     final dbTrash =
         file.trashbinDeletionTime == null
             ? null
@@ -323,6 +341,7 @@ class _SqliteFileConverter {
       dbAccountFile,
       dbImage,
       dbImageLocation,
+      dbImageLocationNames?.isNotEmpty == true ? dbImageLocationNames : null,
       dbTrash,
     );
   }
@@ -529,10 +548,19 @@ class _FilesQueryBuilder {
       query.where(db.files.server.equals(_byServerRowId!));
     }
     if (_byLocation != null) {
+      final subquery = db.selectOnly(db.imageLocations).join([
+        sql.innerJoin(
+          db.imageLocationNames,
+          db.imageLocationNames.accountFile.equalsExp(
+            db.imageLocations.accountFile,
+          ),
+          useColumns: false,
+        ),
+      ])..addColumns([db.imageLocations.accountFile]);
       var clause =
-          db.imageLocations.name.like(_byLocation!) |
-          db.imageLocations.admin1.like(_byLocation!) |
-          db.imageLocations.admin2.like(_byLocation!);
+          db.imageLocationNames.name.like(_byLocation!) |
+          db.imageLocationNames.admin1.like(_byLocation!) |
+          db.imageLocationNames.admin2.like(_byLocation!);
       final countryCode = nameToAlpha2Code(_byLocation!.toCi());
       if (countryCode != null) {
         clause = clause | db.imageLocations.countryCode.equals(countryCode);
@@ -542,7 +570,8 @@ class _FilesQueryBuilder {
             clause |
             db.imageLocations.countryCode.equals(_byLocation!.toUpperCase());
       }
-      query.where(clause);
+      subquery.where(clause);
+      query.where(db.accountFiles.rowId.isInQuery(subquery));
     }
     return query;
   }

@@ -70,6 +70,7 @@ extension SqliteDbCompat55Extension on SqliteDb {
                   r.readTable(images),
                   null,
                   null,
+                  null,
                 ),
               )
               .get();

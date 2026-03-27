@@ -245,10 +245,19 @@ class FilesQueryBuilder {
       query.where(db.files.server.equals(_byServerRowId!));
     }
     if (_byLocation != null) {
+      final subquery = db.selectOnly(db.imageLocations).join([
+        innerJoin(
+          db.imageLocationNames,
+          db.imageLocationNames.accountFile.equalsExp(
+            db.imageLocations.accountFile,
+          ),
+          useColumns: false,
+        ),
+      ])..addColumns([db.imageLocations.accountFile]);
       var clause =
-          db.imageLocations.name.like(_byLocation!) |
-          db.imageLocations.admin1.like(_byLocation!) |
-          db.imageLocations.admin2.like(_byLocation!);
+          db.imageLocationNames.name.like(_byLocation!) |
+          db.imageLocationNames.admin1.like(_byLocation!) |
+          db.imageLocationNames.admin2.like(_byLocation!);
       final countryCode = nameToAlpha2Code(_byLocation!.toCi());
       if (countryCode != null) {
         clause = clause | db.imageLocations.countryCode.equals(countryCode);
@@ -258,7 +267,8 @@ class FilesQueryBuilder {
             clause |
             db.imageLocations.countryCode.equals(_byLocation!.toUpperCase());
       }
-      query.where(clause);
+      subquery.where(clause);
+      query.where(db.accountFiles.rowId.isInQuery(subquery));
     }
     return query;
   }

@@ -590,13 +590,17 @@ class _LocationItem extends StatelessWidget {
       selector: (state) => state.location,
       builder:
           (context, location) =>
-              location?.name != null
+              location?.names != null
                   ? ListTile(
                     leading: const ListTileCenterLeading(
                       child: Icon(Icons.location_on_outlined),
                     ),
-                    title: Text(L10n.global().gpsPlaceText(location!.name!)),
-                    subtitle: _toSubtitle(location)?.let(Text.new),
+                    title: Text(
+                      L10n.global().gpsPlaceText(
+                        location!.localizedNameOf(context) ?? "",
+                      ),
+                    ),
+                    subtitle: _toSubtitle(context, location)?.let(Text.new),
                     trailing: const Icon(Icons.info_outline),
                     onTap: () {
                       showDialog(
@@ -609,15 +613,19 @@ class _LocationItem extends StatelessWidget {
     );
   }
 
-  static String? _toSubtitle(ImageLocation location) {
+  static String? _toSubtitle(BuildContext context, ImageLocation location) {
     if (location.countryCode == null) {
       return null;
-    } else if (location.admin1 == null) {
+    }
+    final admin1 = location.localizedAdmin1Of(context);
+    if (admin1 == null) {
       return alpha2CodeToName(location.countryCode!);
-    } else if (location.admin2 == null) {
-      return "${location.admin1}, ${alpha2CodeToName(location.countryCode!)}";
+    }
+    final admin2 = location.localizedAdmin2Of(context);
+    if (admin2 == null) {
+      return "$admin1, ${alpha2CodeToName(location.countryCode!)}";
     } else {
-      return "${location.admin2}, ${location.admin1}, ${alpha2CodeToName(location.countryCode!)}";
+      return "$admin2, $admin1, ${alpha2CodeToName(location.countryCode!)}";
     }
   }
 }

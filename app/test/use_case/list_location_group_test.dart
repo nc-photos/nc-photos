@@ -76,7 +76,8 @@ Future<void> _nFile1Location() async {
             ..addJpeg(
               "admin/test1.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -85,7 +86,8 @@ Future<void> _nFile1Location() async {
             ..addJpeg(
               "admin/test2.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -143,7 +145,8 @@ Future<void> _nFileNLocation() async {
             ..addJpeg(
               "admin/test1.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -152,7 +155,8 @@ Future<void> _nFileNLocation() async {
             ..addJpeg(
               "admin/test2.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -161,7 +165,8 @@ Future<void> _nFileNLocation() async {
             ..addJpeg(
               "admin/test3.jpg",
               location: const ImageLocation(
-                name: "Another place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Another place")},
                 latitude: 4.3,
                 longitude: 2.1,
                 countryCode: "ZW",
@@ -170,7 +175,8 @@ Future<void> _nFileNLocation() async {
             ..addJpeg(
               "admin/test4.jpg",
               location: const ImageLocation(
-                name: "Another place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Another place")},
                 latitude: 4.3,
                 longitude: 2.1,
                 countryCode: "ZW",
@@ -249,7 +255,8 @@ Future<void> _multipleRoots() async {
             ..addJpeg(
               "admin/test1/test1.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -258,7 +265,8 @@ Future<void> _multipleRoots() async {
             ..addJpeg(
               "admin/test1/test2.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -267,7 +275,8 @@ Future<void> _multipleRoots() async {
             ..addJpeg(
               "admin/test2/test3.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -276,7 +285,8 @@ Future<void> _multipleRoots() async {
             ..addJpeg(
               "admin/test2/test4.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -285,7 +295,8 @@ Future<void> _multipleRoots() async {
             ..addJpeg(
               "admin/test3/test5.jpg",
               location: const ImageLocation(
-                name: "Some place",
+                dataRevision: 202603,
+                names: {"en": ImageLocationName(name: "Some place")},
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",

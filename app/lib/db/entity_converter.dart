@@ -182,13 +182,20 @@ abstract class DbFileConverter {
       ),
       location: src.location?.let(
         (s) => DbLocation(
-          version: s.version,
-          name: s.name,
+          dataRevision: s.dataRevision,
           latitude: s.latitude,
           longitude: s.longitude,
           countryCode: s.countryCode,
-          admin1: s.admin1,
-          admin2: s.admin2,
+          names: s.names?.map(
+            (key, value) => MapEntry(
+              key,
+              DbLocationName(
+                name: value.name,
+                admin1: value.admin1,
+                admin2: value.admin2,
+              ),
+            ),
+          ),
         ),
       ),
       trashData:
@@ -254,25 +261,39 @@ extension MetadataExtension on Metadata {
 abstract class DbImageLocationConverter {
   static ImageLocation fromDb(DbLocation src) {
     return ImageLocation(
-      version: src.version,
-      name: src.name,
+      dataRevision: src.dataRevision,
       latitude: src.latitude,
       longitude: src.longitude,
       countryCode: src.countryCode,
-      admin1: src.admin1,
-      admin2: src.admin2,
+      names: src.names?.map(
+        (key, value) => MapEntry(
+          key,
+          ImageLocationName(
+            name: value.name,
+            admin1: value.admin1,
+            admin2: value.admin2,
+          ),
+        ),
+      ),
     );
   }
 
   static DbLocation toDb(ImageLocation src) {
     return DbLocation(
-      version: src.version,
-      name: src.name,
+      dataRevision: src.dataRevision,
       latitude: src.latitude,
       longitude: src.longitude,
       countryCode: src.countryCode,
-      admin1: src.admin1,
-      admin2: src.admin2,
+      names: src.names?.map(
+        (key, value) => MapEntry(
+          key,
+          DbLocationName(
+            name: value.name,
+            admin1: value.admin1,
+            admin2: value.admin2,
+          ),
+        ),
+      ),
     );
   }
 }

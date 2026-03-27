@@ -8,66 +8,93 @@ part 'image_location.g.dart';
 class ImageLocation with EquatableMixin {
   const ImageLocation({
     this.version = appVersion,
-    required this.name,
-    required this.latitude,
-    required this.longitude,
-    required this.countryCode,
-    this.admin1,
-    this.admin2,
+    required this.dataRevision,
+    this.latitude,
+    this.longitude,
+    this.countryCode,
+    this.names,
   });
 
-  factory ImageLocation.empty() => const ImageLocation(
-    name: null,
-    latitude: null,
-    longitude: null,
-    countryCode: null,
-  );
+  factory ImageLocation.empty() => const ImageLocation(dataRevision: 0);
 
   static ImageLocation fromJson(JsonObj json) {
     return ImageLocation(
       version: json["v"],
-      name: json["name"],
+      dataRevision: json["drev"] ?? 0,
       latitude: json["lat"] == null ? null : json["lat"] / 10000,
       longitude: json["lng"] == null ? null : json["lng"] / 10000,
       countryCode: json["cc"],
+      names:
+          json["names"] == null
+              ? null
+              : (json["names"] as Map).cast<String, dynamic>().map(
+                (key, value) =>
+                    MapEntry(key, ImageLocationName.fromJson(value)),
+              ),
+    );
+  }
+
+  JsonObj toJson() => {
+    "v": version,
+    "drev": dataRevision,
+    if (latitude != null) "lat": (latitude! * 10000).round(),
+    if (longitude != null) "lng": (longitude! * 10000).round(),
+    if (countryCode != null) "cc": countryCode,
+    if (names != null)
+      "names": names!.map((key, value) => MapEntry(key, value.toJson())),
+  };
+
+  @override
+  String toString() => _$toString();
+
+  @override
+  List<Object?> get props => [
+    version,
+    dataRevision,
+    latitude,
+    longitude,
+    countryCode,
+    names,
+  ];
+
+  // json revision
+  final int version;
+  // revision of the location data used for reverse geolocation
+  final int dataRevision;
+  final double? latitude;
+  final double? longitude;
+  final String? countryCode;
+  // key: ISO-3166 alpha2 code
+  final Map<String, ImageLocationName>? names;
+
+  static const appVersion = 2;
+}
+
+@ToString(ignoreNull: true)
+class ImageLocationName with EquatableMixin {
+  const ImageLocationName({required this.name, this.admin1, this.admin2});
+
+  factory ImageLocationName.fromJson(JsonObj json) {
+    return ImageLocationName(
+      name: json["name"],
       admin1: json["admin1"],
       admin2: json["admin2"],
     );
   }
 
   JsonObj toJson() => {
-    "v": version,
     if (name != null) "name": name,
-    if (latitude != null) "lat": (latitude! * 10000).round(),
-    if (longitude != null) "lng": (longitude! * 10000).round(),
-    if (countryCode != null) "cc": countryCode,
     if (admin1 != null) "admin1": admin1,
     if (admin2 != null) "admin2": admin2,
   };
-
-  bool isEmpty() => name == null;
 
   @override
   String toString() => _$toString();
 
   @override
-  get props => [
-    version,
-    name,
-    latitude,
-    longitude,
-    countryCode,
-    admin1,
-    admin2,
-  ];
+  List<Object?> get props => [name, admin1, admin2];
 
-  final int version;
   final String? name;
-  final double? latitude;
-  final double? longitude;
-  final String? countryCode;
   final String? admin1;
   final String? admin2;
-
-  static const appVersion = 1;
 }

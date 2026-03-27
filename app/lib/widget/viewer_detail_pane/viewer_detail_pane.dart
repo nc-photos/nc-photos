@@ -21,6 +21,7 @@ import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/image_location/image_location.dart';
+import 'package:nc_photos/entity/image_location/util.dart';
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/gps_map_util.dart';
 import 'package:nc_photos/k.dart' as k;

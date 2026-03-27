@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:drift/drift.dart';
 import 'package:np_async/np_async.dart';
+import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/type.dart';
 import 'package:np_db/np_db.dart';
@@ -119,7 +120,9 @@ abstract class FileConverter {
       overrideDateTime: f.accountFile.overrideDateTime,
       bestDateTime: f.accountFile.bestDateTime,
       imageData: f.image?.let(ImageConverter.fromSql),
-      location: f.imageLocation?.let(ImageLocationConverter.fromSql),
+      location: f.imageLocation?.let(
+        (e) => ImageLocationConverter.fromSql(e, f.imageLocationNames),
+      ),
       trashData: f.trash?.let(TrashConverter.fromSql),
     );
   }
@@ -157,16 +160,24 @@ abstract class FileConverter {
       ),
     );
     final sqlImageLocation = file.location?.let(
-      (l) => ImageLocationsCompanion.insert(
-        version: l.version,
-        name: Value(l.name),
+      (l) => ImageLocationsCompanion(
+        dataRevision: Value(l.dataRevision),
         latitude: Value(l.latitude),
         longitude: Value(l.longitude),
         countryCode: Value(l.countryCode),
-        admin1: Value(l.admin1),
-        admin2: Value(l.admin2),
       ),
     );
+    final sqlImageLocationNames =
+        file.location?.names?.entries
+            .map(
+              (e) => ImageLocationNamesCompanion(
+                lang: Value(e.key),
+                name: Value(e.value.name),
+                admin1: Value(e.value.admin1),
+                admin2: Value(e.value.admin2),
+              ),
+            )
+            .toList();
     final sqlTrash =
         file.trashData == null
             ? null
@@ -180,6 +191,7 @@ abstract class FileConverter {
       sqlAccountFile,
       sqlImage,
       sqlImageLocation,
+      sqlImageLocationNames,
       sqlTrash,
     );
   }
@@ -202,15 +214,30 @@ abstract class ImageConverter {
 }
 
 abstract class ImageLocationConverter {
-  static DbLocation fromSql(ImageLocation src) {
+  static DbLocation fromSql(
+    ImageLocation location,
+    List<ImageLocationName>? names,
+  ) {
     return DbLocation(
-      version: src.version,
-      name: src.name,
-      latitude: src.latitude,
-      longitude: src.longitude,
-      countryCode: src.countryCode,
-      admin1: src.admin1,
-      admin2: src.admin2,
+      dataRevision: location.dataRevision,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      countryCode: location.countryCode,
+      names:
+          names?.isNotEmpty == true
+              ? names!
+                  .map(
+                    (e) => MapEntry(
+                      e.lang,
+                      DbLocationName(
+                        name: e.name,
+                        admin1: e.admin1,
+                        admin2: e.admin2,
+                      ),
+                    ),
+                  )
+                  .toMap()
+              : null,
     );
   }
 }
