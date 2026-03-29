@@ -7,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_datetime/np_datetime.dart';
@@ -130,6 +131,7 @@ extension SqliteDbExtension on SqliteDb {
     await delete(ncAlbumItems).go();
     await delete(recognizeFaces).go();
     await delete(recognizeFaceItems).go();
+    await delete(imageLocationIds).go();
     await delete(imageLocationNames).go();
 
     // reset the auto increment counter

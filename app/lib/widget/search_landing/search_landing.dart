@@ -33,7 +33,9 @@ import 'package:nc_photos/widget/people_browser/people_browser.dart';
 import 'package:nc_photos/widget/person_thumbnail.dart';
 import 'package:nc_photos/widget/places_browser/places_browser.dart';
 import 'package:nc_photos/widget/settings/account_settings.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -58,6 +60,7 @@ class SearchLanding extends StatelessWidget {
             account: accountController.account,
             personsController: accountController.personsController,
             placesController: accountController.placesController,
+            lang: Localizations.localeOf(context).languageCode,
           ),
       child: _WrappedSearchLanding(
         onFavoritePressed: onFavoritePressed,
@@ -384,7 +387,11 @@ class _PlaceSection extends StatelessWidget {
     Navigator.of(context).pushNamed(
       CollectionBrowser.routeName,
       arguments: CollectionBrowserArguments(
-        CollectionBuilder.byLocationGroup(context.read<_Bloc>().account, place),
+        CollectionBuilder.byLocationGroup(
+          context.read<_Bloc>().account,
+          place,
+          Localizations.localeOf(context).languageCode,
+        ),
       ),
     );
   }

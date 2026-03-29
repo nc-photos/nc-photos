@@ -590,7 +590,7 @@ class _LocationItem extends StatelessWidget {
       selector: (state) => state.location,
       builder:
           (context, location) =>
-              location?.names != null
+              location?.countryCode != null
                   ? ListTile(
                     leading: const ListTileCenterLeading(
                       child: Icon(Icons.location_on_outlined),

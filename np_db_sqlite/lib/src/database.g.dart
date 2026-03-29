@@ -7731,19 +7731,27 @@ class $ImageLocationNamesTable extends ImageLocationNames
   final GeneratedDatabase attachedDatabase;
   final String? _alias;
   $ImageLocationNamesTable(this.attachedDatabase, [this._alias]);
-  static const VerificationMeta _accountFileMeta = const VerificationMeta(
-    'accountFile',
+  static const VerificationMeta _dataRevisionMeta = const VerificationMeta(
+    'dataRevision',
   );
   @override
-  late final GeneratedColumn<int> accountFile = GeneratedColumn<int>(
-    'account_file',
+  late final GeneratedColumn<int> dataRevision = GeneratedColumn<int>(
+    'data_revision',
     aliasedName,
     false,
     type: DriftSqlType.int,
     requiredDuringInsert: true,
-    defaultConstraints: GeneratedColumn.constraintIsAlways(
-      'REFERENCES account_files (row_id) ON DELETE CASCADE',
-    ),
+  );
+  static const VerificationMeta _geonameIdMeta = const VerificationMeta(
+    'geonameId',
+  );
+  @override
+  late final GeneratedColumn<int> geonameId = GeneratedColumn<int>(
+    'geoname_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
   );
   static const VerificationMeta _langMeta = const VerificationMeta('lang');
   @override
@@ -7759,36 +7767,12 @@ class $ImageLocationNamesTable extends ImageLocationNames
   late final GeneratedColumn<String> name = GeneratedColumn<String>(
     'name',
     aliasedName,
-    true,
+    false,
     type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _admin1Meta = const VerificationMeta('admin1');
-  @override
-  late final GeneratedColumn<String> admin1 = GeneratedColumn<String>(
-    'admin1',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
-  );
-  static const VerificationMeta _admin2Meta = const VerificationMeta('admin2');
-  @override
-  late final GeneratedColumn<String> admin2 = GeneratedColumn<String>(
-    'admin2',
-    aliasedName,
-    true,
-    type: DriftSqlType.string,
-    requiredDuringInsert: false,
+    requiredDuringInsert: true,
   );
   @override
-  List<GeneratedColumn> get $columns => [
-    accountFile,
-    lang,
-    name,
-    admin1,
-    admin2,
-  ];
+  List<GeneratedColumn> get $columns => [dataRevision, geonameId, lang, name];
   @override
   String get aliasedName => _alias ?? actualTableName;
   @override
@@ -7797,6 +7781,323 @@ class $ImageLocationNamesTable extends ImageLocationNames
   @override
   VerificationContext validateIntegrity(
     Insertable<ImageLocationName> instance, {
+    bool isInserting = false,
+  }) {
+    final context = VerificationContext();
+    final data = instance.toColumns(true);
+    if (data.containsKey('data_revision')) {
+      context.handle(
+        _dataRevisionMeta,
+        dataRevision.isAcceptableOrUnknown(
+          data['data_revision']!,
+          _dataRevisionMeta,
+        ),
+      );
+    } else if (isInserting) {
+      context.missing(_dataRevisionMeta);
+    }
+    if (data.containsKey('geoname_id')) {
+      context.handle(
+        _geonameIdMeta,
+        geonameId.isAcceptableOrUnknown(data['geoname_id']!, _geonameIdMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_geonameIdMeta);
+    }
+    if (data.containsKey('lang')) {
+      context.handle(
+        _langMeta,
+        lang.isAcceptableOrUnknown(data['lang']!, _langMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_langMeta);
+    }
+    if (data.containsKey('name')) {
+      context.handle(
+        _nameMeta,
+        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
+      );
+    } else if (isInserting) {
+      context.missing(_nameMeta);
+    }
+    return context;
+  }
+
+  @override
+  Set<GeneratedColumn> get $primaryKey => {dataRevision, geonameId, lang};
+  @override
+  ImageLocationName map(Map<String, dynamic> data, {String? tablePrefix}) {
+    final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
+    return ImageLocationName(
+      dataRevision:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}data_revision'],
+          )!,
+      geonameId:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.int,
+            data['${effectivePrefix}geoname_id'],
+          )!,
+      lang:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}lang'],
+          )!,
+      name:
+          attachedDatabase.typeMapping.read(
+            DriftSqlType.string,
+            data['${effectivePrefix}name'],
+          )!,
+    );
+  }
+
+  @override
+  $ImageLocationNamesTable createAlias(String alias) {
+    return $ImageLocationNamesTable(attachedDatabase, alias);
+  }
+}
+
+class ImageLocationName extends DataClass
+    implements Insertable<ImageLocationName> {
+  final int dataRevision;
+  final int geonameId;
+  final String lang;
+  final String name;
+  const ImageLocationName({
+    required this.dataRevision,
+    required this.geonameId,
+    required this.lang,
+    required this.name,
+  });
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    map['data_revision'] = Variable<int>(dataRevision);
+    map['geoname_id'] = Variable<int>(geonameId);
+    map['lang'] = Variable<String>(lang);
+    map['name'] = Variable<String>(name);
+    return map;
+  }
+
+  ImageLocationNamesCompanion toCompanion(bool nullToAbsent) {
+    return ImageLocationNamesCompanion(
+      dataRevision: Value(dataRevision),
+      geonameId: Value(geonameId),
+      lang: Value(lang),
+      name: Value(name),
+    );
+  }
+
+  factory ImageLocationName.fromJson(
+    Map<String, dynamic> json, {
+    ValueSerializer? serializer,
+  }) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return ImageLocationName(
+      dataRevision: serializer.fromJson<int>(json['dataRevision']),
+      geonameId: serializer.fromJson<int>(json['geonameId']),
+      lang: serializer.fromJson<String>(json['lang']),
+      name: serializer.fromJson<String>(json['name']),
+    );
+  }
+  @override
+  Map<String, dynamic> toJson({ValueSerializer? serializer}) {
+    serializer ??= driftRuntimeOptions.defaultSerializer;
+    return <String, dynamic>{
+      'dataRevision': serializer.toJson<int>(dataRevision),
+      'geonameId': serializer.toJson<int>(geonameId),
+      'lang': serializer.toJson<String>(lang),
+      'name': serializer.toJson<String>(name),
+    };
+  }
+
+  ImageLocationName copyWith({
+    int? dataRevision,
+    int? geonameId,
+    String? lang,
+    String? name,
+  }) => ImageLocationName(
+    dataRevision: dataRevision ?? this.dataRevision,
+    geonameId: geonameId ?? this.geonameId,
+    lang: lang ?? this.lang,
+    name: name ?? this.name,
+  );
+  ImageLocationName copyWithCompanion(ImageLocationNamesCompanion data) {
+    return ImageLocationName(
+      dataRevision:
+          data.dataRevision.present
+              ? data.dataRevision.value
+              : this.dataRevision,
+      geonameId: data.geonameId.present ? data.geonameId.value : this.geonameId,
+      lang: data.lang.present ? data.lang.value : this.lang,
+      name: data.name.present ? data.name.value : this.name,
+    );
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImageLocationName(')
+          ..write('dataRevision: $dataRevision, ')
+          ..write('geonameId: $geonameId, ')
+          ..write('lang: $lang, ')
+          ..write('name: $name')
+          ..write(')'))
+        .toString();
+  }
+
+  @override
+  int get hashCode => Object.hash(dataRevision, geonameId, lang, name);
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      (other is ImageLocationName &&
+          other.dataRevision == this.dataRevision &&
+          other.geonameId == this.geonameId &&
+          other.lang == this.lang &&
+          other.name == this.name);
+}
+
+class ImageLocationNamesCompanion extends UpdateCompanion<ImageLocationName> {
+  final Value<int> dataRevision;
+  final Value<int> geonameId;
+  final Value<String> lang;
+  final Value<String> name;
+  final Value<int> rowid;
+  const ImageLocationNamesCompanion({
+    this.dataRevision = const Value.absent(),
+    this.geonameId = const Value.absent(),
+    this.lang = const Value.absent(),
+    this.name = const Value.absent(),
+    this.rowid = const Value.absent(),
+  });
+  ImageLocationNamesCompanion.insert({
+    required int dataRevision,
+    required int geonameId,
+    required String lang,
+    required String name,
+    this.rowid = const Value.absent(),
+  }) : dataRevision = Value(dataRevision),
+       geonameId = Value(geonameId),
+       lang = Value(lang),
+       name = Value(name);
+  static Insertable<ImageLocationName> custom({
+    Expression<int>? dataRevision,
+    Expression<int>? geonameId,
+    Expression<String>? lang,
+    Expression<String>? name,
+    Expression<int>? rowid,
+  }) {
+    return RawValuesInsertable({
+      if (dataRevision != null) 'data_revision': dataRevision,
+      if (geonameId != null) 'geoname_id': geonameId,
+      if (lang != null) 'lang': lang,
+      if (name != null) 'name': name,
+      if (rowid != null) 'rowid': rowid,
+    });
+  }
+
+  ImageLocationNamesCompanion copyWith({
+    Value<int>? dataRevision,
+    Value<int>? geonameId,
+    Value<String>? lang,
+    Value<String>? name,
+    Value<int>? rowid,
+  }) {
+    return ImageLocationNamesCompanion(
+      dataRevision: dataRevision ?? this.dataRevision,
+      geonameId: geonameId ?? this.geonameId,
+      lang: lang ?? this.lang,
+      name: name ?? this.name,
+      rowid: rowid ?? this.rowid,
+    );
+  }
+
+  @override
+  Map<String, Expression> toColumns(bool nullToAbsent) {
+    final map = <String, Expression>{};
+    if (dataRevision.present) {
+      map['data_revision'] = Variable<int>(dataRevision.value);
+    }
+    if (geonameId.present) {
+      map['geoname_id'] = Variable<int>(geonameId.value);
+    }
+    if (lang.present) {
+      map['lang'] = Variable<String>(lang.value);
+    }
+    if (name.present) {
+      map['name'] = Variable<String>(name.value);
+    }
+    if (rowid.present) {
+      map['rowid'] = Variable<int>(rowid.value);
+    }
+    return map;
+  }
+
+  @override
+  String toString() {
+    return (StringBuffer('ImageLocationNamesCompanion(')
+          ..write('dataRevision: $dataRevision, ')
+          ..write('geonameId: $geonameId, ')
+          ..write('lang: $lang, ')
+          ..write('name: $name, ')
+          ..write('rowid: $rowid')
+          ..write(')'))
+        .toString();
+  }
+}
+
+class $ImageLocationIdsTable extends ImageLocationIds
+    with TableInfo<$ImageLocationIdsTable, ImageLocationId> {
+  @override
+  final GeneratedDatabase attachedDatabase;
+  final String? _alias;
+  $ImageLocationIdsTable(this.attachedDatabase, [this._alias]);
+  static const VerificationMeta _accountFileMeta = const VerificationMeta(
+    'accountFile',
+  );
+  @override
+  late final GeneratedColumn<int> accountFile = GeneratedColumn<int>(
+    'account_file',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+    defaultConstraints: GeneratedColumn.constraintIsAlways(
+      'REFERENCES account_files (row_id) ON DELETE CASCADE',
+    ),
+  );
+  static const VerificationMeta _geonameIdMeta = const VerificationMeta(
+    'geonameId',
+  );
+  @override
+  late final GeneratedColumn<int> geonameId = GeneratedColumn<int>(
+    'geoname_id',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: true,
+  );
+  static const VerificationMeta _typeMeta = const VerificationMeta('type');
+  @override
+  late final GeneratedColumnWithTypeConverter<ImageLocationType, int> type =
+      GeneratedColumn<int>(
+        'type',
+        aliasedName,
+        false,
+        type: DriftSqlType.int,
+        requiredDuringInsert: true,
+      ).withConverter<ImageLocationType>($ImageLocationIdsTable.$convertertype);
+  @override
+  List<GeneratedColumn> get $columns => [accountFile, geonameId, type];
+  @override
+  String get aliasedName => _alias ?? actualTableName;
+  @override
+  String get actualTableName => $name;
+  static const String $name = 'image_location_ids';
+  @override
+  VerificationContext validateIntegrity(
+    Insertable<ImageLocationId> instance, {
     bool isInserting = false,
   }) {
     final context = VerificationContext();
@@ -7812,126 +8113,91 @@ class $ImageLocationNamesTable extends ImageLocationNames
     } else if (isInserting) {
       context.missing(_accountFileMeta);
     }
-    if (data.containsKey('lang')) {
+    if (data.containsKey('geoname_id')) {
       context.handle(
-        _langMeta,
-        lang.isAcceptableOrUnknown(data['lang']!, _langMeta),
+        _geonameIdMeta,
+        geonameId.isAcceptableOrUnknown(data['geoname_id']!, _geonameIdMeta),
       );
     } else if (isInserting) {
-      context.missing(_langMeta);
+      context.missing(_geonameIdMeta);
     }
-    if (data.containsKey('name')) {
-      context.handle(
-        _nameMeta,
-        name.isAcceptableOrUnknown(data['name']!, _nameMeta),
-      );
-    }
-    if (data.containsKey('admin1')) {
-      context.handle(
-        _admin1Meta,
-        admin1.isAcceptableOrUnknown(data['admin1']!, _admin1Meta),
-      );
-    }
-    if (data.containsKey('admin2')) {
-      context.handle(
-        _admin2Meta,
-        admin2.isAcceptableOrUnknown(data['admin2']!, _admin2Meta),
-      );
-    }
+    context.handle(_typeMeta, const VerificationResult.success());
     return context;
   }
 
   @override
-  Set<GeneratedColumn> get $primaryKey => {accountFile, lang};
+  Set<GeneratedColumn> get $primaryKey => const {};
   @override
-  ImageLocationName map(Map<String, dynamic> data, {String? tablePrefix}) {
+  ImageLocationId map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
-    return ImageLocationName(
+    return ImageLocationId(
       accountFile:
           attachedDatabase.typeMapping.read(
             DriftSqlType.int,
             data['${effectivePrefix}account_file'],
           )!,
-      lang:
+      geonameId:
           attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}lang'],
+            DriftSqlType.int,
+            data['${effectivePrefix}geoname_id'],
           )!,
-      name: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}name'],
-      ),
-      admin1: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}admin1'],
-      ),
-      admin2: attachedDatabase.typeMapping.read(
-        DriftSqlType.string,
-        data['${effectivePrefix}admin2'],
+      type: $ImageLocationIdsTable.$convertertype.fromSql(
+        attachedDatabase.typeMapping.read(
+          DriftSqlType.int,
+          data['${effectivePrefix}type'],
+        )!,
       ),
     );
   }
 
   @override
-  $ImageLocationNamesTable createAlias(String alias) {
-    return $ImageLocationNamesTable(attachedDatabase, alias);
+  $ImageLocationIdsTable createAlias(String alias) {
+    return $ImageLocationIdsTable(attachedDatabase, alias);
   }
+
+  static TypeConverter<ImageLocationType, int> $convertertype =
+      const ImageLocationTypeConverter();
 }
 
-class ImageLocationName extends DataClass
-    implements Insertable<ImageLocationName> {
+class ImageLocationId extends DataClass implements Insertable<ImageLocationId> {
   final int accountFile;
-  final String lang;
-  final String? name;
-  final String? admin1;
-  final String? admin2;
-  const ImageLocationName({
+  final int geonameId;
+  final ImageLocationType type;
+  const ImageLocationId({
     required this.accountFile,
-    required this.lang,
-    this.name,
-    this.admin1,
-    this.admin2,
+    required this.geonameId,
+    required this.type,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
     final map = <String, Expression>{};
     map['account_file'] = Variable<int>(accountFile);
-    map['lang'] = Variable<String>(lang);
-    if (!nullToAbsent || name != null) {
-      map['name'] = Variable<String>(name);
-    }
-    if (!nullToAbsent || admin1 != null) {
-      map['admin1'] = Variable<String>(admin1);
-    }
-    if (!nullToAbsent || admin2 != null) {
-      map['admin2'] = Variable<String>(admin2);
+    map['geoname_id'] = Variable<int>(geonameId);
+    {
+      map['type'] = Variable<int>(
+        $ImageLocationIdsTable.$convertertype.toSql(type),
+      );
     }
     return map;
   }
 
-  ImageLocationNamesCompanion toCompanion(bool nullToAbsent) {
-    return ImageLocationNamesCompanion(
+  ImageLocationIdsCompanion toCompanion(bool nullToAbsent) {
+    return ImageLocationIdsCompanion(
       accountFile: Value(accountFile),
-      lang: Value(lang),
-      name: name == null && nullToAbsent ? const Value.absent() : Value(name),
-      admin1:
-          admin1 == null && nullToAbsent ? const Value.absent() : Value(admin1),
-      admin2:
-          admin2 == null && nullToAbsent ? const Value.absent() : Value(admin2),
+      geonameId: Value(geonameId),
+      type: Value(type),
     );
   }
 
-  factory ImageLocationName.fromJson(
+  factory ImageLocationId.fromJson(
     Map<String, dynamic> json, {
     ValueSerializer? serializer,
   }) {
     serializer ??= driftRuntimeOptions.defaultSerializer;
-    return ImageLocationName(
+    return ImageLocationId(
       accountFile: serializer.fromJson<int>(json['accountFile']),
-      lang: serializer.fromJson<String>(json['lang']),
-      name: serializer.fromJson<String?>(json['name']),
-      admin1: serializer.fromJson<String?>(json['admin1']),
-      admin2: serializer.fromJson<String?>(json['admin2']),
+      geonameId: serializer.fromJson<int>(json['geonameId']),
+      type: serializer.fromJson<ImageLocationType>(json['type']),
     );
   }
   @override
@@ -7939,118 +8205,93 @@ class ImageLocationName extends DataClass
     serializer ??= driftRuntimeOptions.defaultSerializer;
     return <String, dynamic>{
       'accountFile': serializer.toJson<int>(accountFile),
-      'lang': serializer.toJson<String>(lang),
-      'name': serializer.toJson<String?>(name),
-      'admin1': serializer.toJson<String?>(admin1),
-      'admin2': serializer.toJson<String?>(admin2),
+      'geonameId': serializer.toJson<int>(geonameId),
+      'type': serializer.toJson<ImageLocationType>(type),
     };
   }
 
-  ImageLocationName copyWith({
+  ImageLocationId copyWith({
     int? accountFile,
-    String? lang,
-    Value<String?> name = const Value.absent(),
-    Value<String?> admin1 = const Value.absent(),
-    Value<String?> admin2 = const Value.absent(),
-  }) => ImageLocationName(
+    int? geonameId,
+    ImageLocationType? type,
+  }) => ImageLocationId(
     accountFile: accountFile ?? this.accountFile,
-    lang: lang ?? this.lang,
-    name: name.present ? name.value : this.name,
-    admin1: admin1.present ? admin1.value : this.admin1,
-    admin2: admin2.present ? admin2.value : this.admin2,
+    geonameId: geonameId ?? this.geonameId,
+    type: type ?? this.type,
   );
-  ImageLocationName copyWithCompanion(ImageLocationNamesCompanion data) {
-    return ImageLocationName(
+  ImageLocationId copyWithCompanion(ImageLocationIdsCompanion data) {
+    return ImageLocationId(
       accountFile:
           data.accountFile.present ? data.accountFile.value : this.accountFile,
-      lang: data.lang.present ? data.lang.value : this.lang,
-      name: data.name.present ? data.name.value : this.name,
-      admin1: data.admin1.present ? data.admin1.value : this.admin1,
-      admin2: data.admin2.present ? data.admin2.value : this.admin2,
+      geonameId: data.geonameId.present ? data.geonameId.value : this.geonameId,
+      type: data.type.present ? data.type.value : this.type,
     );
   }
 
   @override
   String toString() {
-    return (StringBuffer('ImageLocationName(')
+    return (StringBuffer('ImageLocationId(')
           ..write('accountFile: $accountFile, ')
-          ..write('lang: $lang, ')
-          ..write('name: $name, ')
-          ..write('admin1: $admin1, ')
-          ..write('admin2: $admin2')
+          ..write('geonameId: $geonameId, ')
+          ..write('type: $type')
           ..write(')'))
         .toString();
   }
 
   @override
-  int get hashCode => Object.hash(accountFile, lang, name, admin1, admin2);
+  int get hashCode => Object.hash(accountFile, geonameId, type);
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      (other is ImageLocationName &&
+      (other is ImageLocationId &&
           other.accountFile == this.accountFile &&
-          other.lang == this.lang &&
-          other.name == this.name &&
-          other.admin1 == this.admin1 &&
-          other.admin2 == this.admin2);
+          other.geonameId == this.geonameId &&
+          other.type == this.type);
 }
 
-class ImageLocationNamesCompanion extends UpdateCompanion<ImageLocationName> {
+class ImageLocationIdsCompanion extends UpdateCompanion<ImageLocationId> {
   final Value<int> accountFile;
-  final Value<String> lang;
-  final Value<String?> name;
-  final Value<String?> admin1;
-  final Value<String?> admin2;
+  final Value<int> geonameId;
+  final Value<ImageLocationType> type;
   final Value<int> rowid;
-  const ImageLocationNamesCompanion({
+  const ImageLocationIdsCompanion({
     this.accountFile = const Value.absent(),
-    this.lang = const Value.absent(),
-    this.name = const Value.absent(),
-    this.admin1 = const Value.absent(),
-    this.admin2 = const Value.absent(),
+    this.geonameId = const Value.absent(),
+    this.type = const Value.absent(),
     this.rowid = const Value.absent(),
   });
-  ImageLocationNamesCompanion.insert({
+  ImageLocationIdsCompanion.insert({
     required int accountFile,
-    required String lang,
-    this.name = const Value.absent(),
-    this.admin1 = const Value.absent(),
-    this.admin2 = const Value.absent(),
+    required int geonameId,
+    required ImageLocationType type,
     this.rowid = const Value.absent(),
   }) : accountFile = Value(accountFile),
-       lang = Value(lang);
-  static Insertable<ImageLocationName> custom({
+       geonameId = Value(geonameId),
+       type = Value(type);
+  static Insertable<ImageLocationId> custom({
     Expression<int>? accountFile,
-    Expression<String>? lang,
-    Expression<String>? name,
-    Expression<String>? admin1,
-    Expression<String>? admin2,
+    Expression<int>? geonameId,
+    Expression<int>? type,
     Expression<int>? rowid,
   }) {
     return RawValuesInsertable({
       if (accountFile != null) 'account_file': accountFile,
-      if (lang != null) 'lang': lang,
-      if (name != null) 'name': name,
-      if (admin1 != null) 'admin1': admin1,
-      if (admin2 != null) 'admin2': admin2,
+      if (geonameId != null) 'geoname_id': geonameId,
+      if (type != null) 'type': type,
       if (rowid != null) 'rowid': rowid,
     });
   }
 
-  ImageLocationNamesCompanion copyWith({
+  ImageLocationIdsCompanion copyWith({
     Value<int>? accountFile,
-    Value<String>? lang,
-    Value<String?>? name,
-    Value<String?>? admin1,
-    Value<String?>? admin2,
+    Value<int>? geonameId,
+    Value<ImageLocationType>? type,
     Value<int>? rowid,
   }) {
-    return ImageLocationNamesCompanion(
+    return ImageLocationIdsCompanion(
       accountFile: accountFile ?? this.accountFile,
-      lang: lang ?? this.lang,
-      name: name ?? this.name,
-      admin1: admin1 ?? this.admin1,
-      admin2: admin2 ?? this.admin2,
+      geonameId: geonameId ?? this.geonameId,
+      type: type ?? this.type,
       rowid: rowid ?? this.rowid,
     );
   }
@@ -8061,17 +8302,13 @@ class ImageLocationNamesCompanion extends UpdateCompanion<ImageLocationName> {
     if (accountFile.present) {
       map['account_file'] = Variable<int>(accountFile.value);
     }
-    if (lang.present) {
-      map['lang'] = Variable<String>(lang.value);
+    if (geonameId.present) {
+      map['geoname_id'] = Variable<int>(geonameId.value);
     }
-    if (name.present) {
-      map['name'] = Variable<String>(name.value);
-    }
-    if (admin1.present) {
-      map['admin1'] = Variable<String>(admin1.value);
-    }
-    if (admin2.present) {
-      map['admin2'] = Variable<String>(admin2.value);
+    if (type.present) {
+      map['type'] = Variable<int>(
+        $ImageLocationIdsTable.$convertertype.toSql(type.value),
+      );
     }
     if (rowid.present) {
       map['rowid'] = Variable<int>(rowid.value);
@@ -8081,12 +8318,10 @@ class ImageLocationNamesCompanion extends UpdateCompanion<ImageLocationName> {
 
   @override
   String toString() {
-    return (StringBuffer('ImageLocationNamesCompanion(')
+    return (StringBuffer('ImageLocationIdsCompanion(')
           ..write('accountFile: $accountFile, ')
-          ..write('lang: $lang, ')
-          ..write('name: $name, ')
-          ..write('admin1: $admin1, ')
-          ..write('admin2: $admin2, ')
+          ..write('geonameId: $geonameId, ')
+          ..write('type: $type, ')
           ..write('rowid: $rowid')
           ..write(')'))
         .toString();
@@ -8116,6 +8351,9 @@ abstract class _$SqliteDb extends GeneratedDatabase {
       $RecognizeFaceItemsTable(this);
   late final $ImageLocationNamesTable imageLocationNames =
       $ImageLocationNamesTable(this);
+  late final $ImageLocationIdsTable imageLocationIds = $ImageLocationIdsTable(
+    this,
+  );
   @override
   Iterable<TableInfo<Table, Object?>> get allTables =>
       allSchemaEntities.whereType<TableInfo<Table, Object?>>();
@@ -8138,6 +8376,7 @@ abstract class _$SqliteDb extends GeneratedDatabase {
     recognizeFaces,
     recognizeFaceItems,
     imageLocationNames,
+    imageLocationIds,
   ];
   @override
   StreamQueryUpdateRules get streamUpdateRules => const StreamQueryUpdateRules([
@@ -8267,7 +8506,7 @@ abstract class _$SqliteDb extends GeneratedDatabase {
         'account_files',
         limitUpdateKind: UpdateKind.delete,
       ),
-      result: [TableUpdate('image_location_names', kind: UpdateKind.delete)],
+      result: [TableUpdate('image_location_ids', kind: UpdateKind.delete)],
     ),
   ]);
 }
@@ -10342,23 +10581,23 @@ final class $$AccountFilesTableReferences
     );
   }
 
-  static MultiTypedResultKey<$ImageLocationNamesTable, List<ImageLocationName>>
-  _imageLocationNamesRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
-    db.imageLocationNames,
+  static MultiTypedResultKey<$ImageLocationIdsTable, List<ImageLocationId>>
+  _imageLocationIdsRefsTable(_$SqliteDb db) => MultiTypedResultKey.fromTable(
+    db.imageLocationIds,
     aliasName: $_aliasNameGenerator(
       db.accountFiles.rowId,
-      db.imageLocationNames.accountFile,
+      db.imageLocationIds.accountFile,
     ),
   );
 
-  $$ImageLocationNamesTableProcessedTableManager get imageLocationNamesRefs {
-    final manager = $$ImageLocationNamesTableTableManager(
+  $$ImageLocationIdsTableProcessedTableManager get imageLocationIdsRefs {
+    final manager = $$ImageLocationIdsTableTableManager(
       $_db,
-      $_db.imageLocationNames,
+      $_db.imageLocationIds,
     ).filter((f) => f.accountFile.rowId($_item.rowId));
 
     final cache = $_typedResult.readTableOrNull(
-      _imageLocationNamesRefsTable($_db),
+      _imageLocationIdsRefsTable($_db),
     );
     return ProcessedTableManager(
       manager.$state.copyWith(prefetchedData: cache),
@@ -10503,22 +10742,22 @@ class $$AccountFilesTableFilterComposer
     return f(composer);
   }
 
-  Expression<bool> imageLocationNamesRefs(
-    Expression<bool> Function($$ImageLocationNamesTableFilterComposer f) f,
+  Expression<bool> imageLocationIdsRefs(
+    Expression<bool> Function($$ImageLocationIdsTableFilterComposer f) f,
   ) {
-    final $$ImageLocationNamesTableFilterComposer composer = $composerBuilder(
+    final $$ImageLocationIdsTableFilterComposer composer = $composerBuilder(
       composer: this,
       getCurrentColumn: (t) => t.rowId,
-      referencedTable: $db.imageLocationNames,
+      referencedTable: $db.imageLocationIds,
       getReferencedColumn: (t) => t.accountFile,
       builder:
           (
             joinBuilder, {
             $addJoinBuilderToRootComposer,
             $removeJoinBuilderFromRootComposer,
-          }) => $$ImageLocationNamesTableFilterComposer(
+          }) => $$ImageLocationIdsTableFilterComposer(
             $db: $db,
-            $table: $db.imageLocationNames,
+            $table: $db.imageLocationIds,
             $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
             joinBuilder: joinBuilder,
             $removeJoinBuilderFromRootComposer:
@@ -10750,29 +10989,28 @@ class $$AccountFilesTableAnnotationComposer
     return f(composer);
   }
 
-  Expression<T> imageLocationNamesRefs<T extends Object>(
-    Expression<T> Function($$ImageLocationNamesTableAnnotationComposer a) f,
+  Expression<T> imageLocationIdsRefs<T extends Object>(
+    Expression<T> Function($$ImageLocationIdsTableAnnotationComposer a) f,
   ) {
-    final $$ImageLocationNamesTableAnnotationComposer composer =
-        $composerBuilder(
-          composer: this,
-          getCurrentColumn: (t) => t.rowId,
-          referencedTable: $db.imageLocationNames,
-          getReferencedColumn: (t) => t.accountFile,
-          builder:
-              (
-                joinBuilder, {
-                $addJoinBuilderToRootComposer,
+    final $$ImageLocationIdsTableAnnotationComposer composer = $composerBuilder(
+      composer: this,
+      getCurrentColumn: (t) => t.rowId,
+      referencedTable: $db.imageLocationIds,
+      getReferencedColumn: (t) => t.accountFile,
+      builder:
+          (
+            joinBuilder, {
+            $addJoinBuilderToRootComposer,
+            $removeJoinBuilderFromRootComposer,
+          }) => $$ImageLocationIdsTableAnnotationComposer(
+            $db: $db,
+            $table: $db.imageLocationIds,
+            $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
+            joinBuilder: joinBuilder,
+            $removeJoinBuilderFromRootComposer:
                 $removeJoinBuilderFromRootComposer,
-              }) => $$ImageLocationNamesTableAnnotationComposer(
-                $db: $db,
-                $table: $db.imageLocationNames,
-                $addJoinBuilderToRootComposer: $addJoinBuilderToRootComposer,
-                joinBuilder: joinBuilder,
-                $removeJoinBuilderFromRootComposer:
-                    $removeJoinBuilderFromRootComposer,
-              ),
-        );
+          ),
+    );
     return f(composer);
   }
 }
@@ -10795,7 +11033,7 @@ class $$AccountFilesTableTableManager
             bool file,
             bool imagesRefs,
             bool imageLocationsRefs,
-            bool imageLocationNamesRefs,
+            bool imageLocationIdsRefs,
           })
         > {
   $$AccountFilesTableTableManager(_$SqliteDb db, $AccountFilesTable table)
@@ -10865,14 +11103,14 @@ class $$AccountFilesTableTableManager
             file = false,
             imagesRefs = false,
             imageLocationsRefs = false,
-            imageLocationNamesRefs = false,
+            imageLocationIdsRefs = false,
           }) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [
                 if (imagesRefs) db.images,
                 if (imageLocationsRefs) db.imageLocations,
-                if (imageLocationNamesRefs) db.imageLocationNames,
+                if (imageLocationIdsRefs) db.imageLocationIds,
               ],
               addJoins: <
                 T extends TableManagerState<
@@ -10958,18 +11196,18 @@ class $$AccountFilesTableTableManager
                           ),
                       typedResults: items,
                     ),
-                  if (imageLocationNamesRefs)
+                  if (imageLocationIdsRefs)
                     await $_getPrefetchedData(
                       currentTable: table,
                       referencedTable: $$AccountFilesTableReferences
-                          ._imageLocationNamesRefsTable(db),
+                          ._imageLocationIdsRefsTable(db),
                       managerFromTypedResult:
                           (p0) =>
                               $$AccountFilesTableReferences(
                                 db,
                                 table,
                                 p0,
-                              ).imageLocationNamesRefs,
+                              ).imageLocationIdsRefs,
                       referencedItemsForCurrentItem:
                           (item, referencedItems) => referencedItems.where(
                             (e) => e.accountFile == item.rowId,
@@ -11001,7 +11239,7 @@ typedef $$AccountFilesTableProcessedTableManager =
         bool file,
         bool imagesRefs,
         bool imageLocationsRefs,
-        bool imageLocationNamesRefs,
+        bool imageLocationIdsRefs,
       })
     >;
 typedef $$ImagesTableCreateCompanionBuilder =
@@ -15751,31 +15989,228 @@ typedef $$RecognizeFaceItemsTableProcessedTableManager =
     >;
 typedef $$ImageLocationNamesTableCreateCompanionBuilder =
     ImageLocationNamesCompanion Function({
-      required int accountFile,
+      required int dataRevision,
+      required int geonameId,
       required String lang,
-      Value<String?> name,
-      Value<String?> admin1,
-      Value<String?> admin2,
+      required String name,
       Value<int> rowid,
     });
 typedef $$ImageLocationNamesTableUpdateCompanionBuilder =
     ImageLocationNamesCompanion Function({
-      Value<int> accountFile,
+      Value<int> dataRevision,
+      Value<int> geonameId,
       Value<String> lang,
-      Value<String?> name,
-      Value<String?> admin1,
-      Value<String?> admin2,
+      Value<String> name,
       Value<int> rowid,
     });
 
-final class $$ImageLocationNamesTableReferences
+class $$ImageLocationNamesTableFilterComposer
+    extends Composer<_$SqliteDb, $ImageLocationNamesTable> {
+  $$ImageLocationNamesTableFilterComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnFilters<int> get dataRevision => $composableBuilder(
+    column: $table.dataRevision,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<int> get geonameId => $composableBuilder(
+    column: $table.geonameId,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get lang => $composableBuilder(
+    column: $table.lang,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnFilters(column),
+  );
+}
+
+class $$ImageLocationNamesTableOrderingComposer
+    extends Composer<_$SqliteDb, $ImageLocationNamesTable> {
+  $$ImageLocationNamesTableOrderingComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  ColumnOrderings<int> get dataRevision => $composableBuilder(
+    column: $table.dataRevision,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<int> get geonameId => $composableBuilder(
+    column: $table.geonameId,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get lang => $composableBuilder(
+    column: $table.lang,
+    builder: (column) => ColumnOrderings(column),
+  );
+
+  ColumnOrderings<String> get name => $composableBuilder(
+    column: $table.name,
+    builder: (column) => ColumnOrderings(column),
+  );
+}
+
+class $$ImageLocationNamesTableAnnotationComposer
+    extends Composer<_$SqliteDb, $ImageLocationNamesTable> {
+  $$ImageLocationNamesTableAnnotationComposer({
+    required super.$db,
+    required super.$table,
+    super.joinBuilder,
+    super.$addJoinBuilderToRootComposer,
+    super.$removeJoinBuilderFromRootComposer,
+  });
+  GeneratedColumn<int> get dataRevision => $composableBuilder(
+    column: $table.dataRevision,
+    builder: (column) => column,
+  );
+
+  GeneratedColumn<int> get geonameId =>
+      $composableBuilder(column: $table.geonameId, builder: (column) => column);
+
+  GeneratedColumn<String> get lang =>
+      $composableBuilder(column: $table.lang, builder: (column) => column);
+
+  GeneratedColumn<String> get name =>
+      $composableBuilder(column: $table.name, builder: (column) => column);
+}
+
+class $$ImageLocationNamesTableTableManager
     extends
-        BaseReferences<
+        RootTableManager<
           _$SqliteDb,
           $ImageLocationNamesTable,
-          ImageLocationName
+          ImageLocationName,
+          $$ImageLocationNamesTableFilterComposer,
+          $$ImageLocationNamesTableOrderingComposer,
+          $$ImageLocationNamesTableAnnotationComposer,
+          $$ImageLocationNamesTableCreateCompanionBuilder,
+          $$ImageLocationNamesTableUpdateCompanionBuilder,
+          (
+            ImageLocationName,
+            BaseReferences<
+              _$SqliteDb,
+              $ImageLocationNamesTable,
+              ImageLocationName
+            >,
+          ),
+          ImageLocationName,
+          PrefetchHooks Function()
         > {
-  $$ImageLocationNamesTableReferences(
+  $$ImageLocationNamesTableTableManager(
+    _$SqliteDb db,
+    $ImageLocationNamesTable table,
+  ) : super(
+        TableManagerState(
+          db: db,
+          table: table,
+          createFilteringComposer:
+              () => $$ImageLocationNamesTableFilterComposer(
+                $db: db,
+                $table: table,
+              ),
+          createOrderingComposer:
+              () => $$ImageLocationNamesTableOrderingComposer(
+                $db: db,
+                $table: table,
+              ),
+          createComputedFieldComposer:
+              () => $$ImageLocationNamesTableAnnotationComposer(
+                $db: db,
+                $table: table,
+              ),
+          updateCompanionCallback:
+              ({
+                Value<int> dataRevision = const Value.absent(),
+                Value<int> geonameId = const Value.absent(),
+                Value<String> lang = const Value.absent(),
+                Value<String> name = const Value.absent(),
+                Value<int> rowid = const Value.absent(),
+              }) => ImageLocationNamesCompanion(
+                dataRevision: dataRevision,
+                geonameId: geonameId,
+                lang: lang,
+                name: name,
+                rowid: rowid,
+              ),
+          createCompanionCallback:
+              ({
+                required int dataRevision,
+                required int geonameId,
+                required String lang,
+                required String name,
+                Value<int> rowid = const Value.absent(),
+              }) => ImageLocationNamesCompanion.insert(
+                dataRevision: dataRevision,
+                geonameId: geonameId,
+                lang: lang,
+                name: name,
+                rowid: rowid,
+              ),
+          withReferenceMapper:
+              (p0) =>
+                  p0
+                      .map(
+                        (e) => (
+                          e.readTable(table),
+                          BaseReferences(db, table, e),
+                        ),
+                      )
+                      .toList(),
+          prefetchHooksCallback: null,
+        ),
+      );
+}
+
+typedef $$ImageLocationNamesTableProcessedTableManager =
+    ProcessedTableManager<
+      _$SqliteDb,
+      $ImageLocationNamesTable,
+      ImageLocationName,
+      $$ImageLocationNamesTableFilterComposer,
+      $$ImageLocationNamesTableOrderingComposer,
+      $$ImageLocationNamesTableAnnotationComposer,
+      $$ImageLocationNamesTableCreateCompanionBuilder,
+      $$ImageLocationNamesTableUpdateCompanionBuilder,
+      (
+        ImageLocationName,
+        BaseReferences<_$SqliteDb, $ImageLocationNamesTable, ImageLocationName>,
+      ),
+      ImageLocationName,
+      PrefetchHooks Function()
+    >;
+typedef $$ImageLocationIdsTableCreateCompanionBuilder =
+    ImageLocationIdsCompanion Function({
+      required int accountFile,
+      required int geonameId,
+      required ImageLocationType type,
+      Value<int> rowid,
+    });
+typedef $$ImageLocationIdsTableUpdateCompanionBuilder =
+    ImageLocationIdsCompanion Function({
+      Value<int> accountFile,
+      Value<int> geonameId,
+      Value<ImageLocationType> type,
+      Value<int> rowid,
+    });
+
+final class $$ImageLocationIdsTableReferences
+    extends
+        BaseReferences<_$SqliteDb, $ImageLocationIdsTable, ImageLocationId> {
+  $$ImageLocationIdsTableReferences(
     super.$_db,
     super.$_table,
     super.$_typedResult,
@@ -15784,7 +16219,7 @@ final class $$ImageLocationNamesTableReferences
   static $AccountFilesTable _accountFileTable(_$SqliteDb db) =>
       db.accountFiles.createAlias(
         $_aliasNameGenerator(
-          db.imageLocationNames.accountFile,
+          db.imageLocationIds.accountFile,
           db.accountFiles.rowId,
         ),
       );
@@ -15802,33 +16237,24 @@ final class $$ImageLocationNamesTableReferences
   }
 }
 
-class $$ImageLocationNamesTableFilterComposer
-    extends Composer<_$SqliteDb, $ImageLocationNamesTable> {
-  $$ImageLocationNamesTableFilterComposer({
+class $$ImageLocationIdsTableFilterComposer
+    extends Composer<_$SqliteDb, $ImageLocationIdsTable> {
+  $$ImageLocationIdsTableFilterComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnFilters<String> get lang => $composableBuilder(
-    column: $table.lang,
+  ColumnFilters<int> get geonameId => $composableBuilder(
+    column: $table.geonameId,
     builder: (column) => ColumnFilters(column),
   );
 
-  ColumnFilters<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get admin1 => $composableBuilder(
-    column: $table.admin1,
-    builder: (column) => ColumnFilters(column),
-  );
-
-  ColumnFilters<String> get admin2 => $composableBuilder(
-    column: $table.admin2,
-    builder: (column) => ColumnFilters(column),
+  ColumnWithTypeConverterFilters<ImageLocationType, ImageLocationType, int>
+  get type => $composableBuilder(
+    column: $table.type,
+    builder: (column) => ColumnWithTypeConverterFilters(column),
   );
 
   $$AccountFilesTableFilterComposer get accountFile {
@@ -15855,32 +16281,22 @@ class $$ImageLocationNamesTableFilterComposer
   }
 }
 
-class $$ImageLocationNamesTableOrderingComposer
-    extends Composer<_$SqliteDb, $ImageLocationNamesTable> {
-  $$ImageLocationNamesTableOrderingComposer({
+class $$ImageLocationIdsTableOrderingComposer
+    extends Composer<_$SqliteDb, $ImageLocationIdsTable> {
+  $$ImageLocationIdsTableOrderingComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  ColumnOrderings<String> get lang => $composableBuilder(
-    column: $table.lang,
+  ColumnOrderings<int> get geonameId => $composableBuilder(
+    column: $table.geonameId,
     builder: (column) => ColumnOrderings(column),
   );
 
-  ColumnOrderings<String> get name => $composableBuilder(
-    column: $table.name,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get admin1 => $composableBuilder(
-    column: $table.admin1,
-    builder: (column) => ColumnOrderings(column),
-  );
-
-  ColumnOrderings<String> get admin2 => $composableBuilder(
-    column: $table.admin2,
+  ColumnOrderings<int> get type => $composableBuilder(
+    column: $table.type,
     builder: (column) => ColumnOrderings(column),
   );
 
@@ -15908,26 +16324,20 @@ class $$ImageLocationNamesTableOrderingComposer
   }
 }
 
-class $$ImageLocationNamesTableAnnotationComposer
-    extends Composer<_$SqliteDb, $ImageLocationNamesTable> {
-  $$ImageLocationNamesTableAnnotationComposer({
+class $$ImageLocationIdsTableAnnotationComposer
+    extends Composer<_$SqliteDb, $ImageLocationIdsTable> {
+  $$ImageLocationIdsTableAnnotationComposer({
     required super.$db,
     required super.$table,
     super.joinBuilder,
     super.$addJoinBuilderToRootComposer,
     super.$removeJoinBuilderFromRootComposer,
   });
-  GeneratedColumn<String> get lang =>
-      $composableBuilder(column: $table.lang, builder: (column) => column);
+  GeneratedColumn<int> get geonameId =>
+      $composableBuilder(column: $table.geonameId, builder: (column) => column);
 
-  GeneratedColumn<String> get name =>
-      $composableBuilder(column: $table.name, builder: (column) => column);
-
-  GeneratedColumn<String> get admin1 =>
-      $composableBuilder(column: $table.admin1, builder: (column) => column);
-
-  GeneratedColumn<String> get admin2 =>
-      $composableBuilder(column: $table.admin2, builder: (column) => column);
+  GeneratedColumnWithTypeConverter<ImageLocationType, int> get type =>
+      $composableBuilder(column: $table.type, builder: (column) => column);
 
   $$AccountFilesTableAnnotationComposer get accountFile {
     final $$AccountFilesTableAnnotationComposer composer = $composerBuilder(
@@ -15953,73 +16363,63 @@ class $$ImageLocationNamesTableAnnotationComposer
   }
 }
 
-class $$ImageLocationNamesTableTableManager
+class $$ImageLocationIdsTableTableManager
     extends
         RootTableManager<
           _$SqliteDb,
-          $ImageLocationNamesTable,
-          ImageLocationName,
-          $$ImageLocationNamesTableFilterComposer,
-          $$ImageLocationNamesTableOrderingComposer,
-          $$ImageLocationNamesTableAnnotationComposer,
-          $$ImageLocationNamesTableCreateCompanionBuilder,
-          $$ImageLocationNamesTableUpdateCompanionBuilder,
-          (ImageLocationName, $$ImageLocationNamesTableReferences),
-          ImageLocationName,
+          $ImageLocationIdsTable,
+          ImageLocationId,
+          $$ImageLocationIdsTableFilterComposer,
+          $$ImageLocationIdsTableOrderingComposer,
+          $$ImageLocationIdsTableAnnotationComposer,
+          $$ImageLocationIdsTableCreateCompanionBuilder,
+          $$ImageLocationIdsTableUpdateCompanionBuilder,
+          (ImageLocationId, $$ImageLocationIdsTableReferences),
+          ImageLocationId,
           PrefetchHooks Function({bool accountFile})
         > {
-  $$ImageLocationNamesTableTableManager(
+  $$ImageLocationIdsTableTableManager(
     _$SqliteDb db,
-    $ImageLocationNamesTable table,
+    $ImageLocationIdsTable table,
   ) : super(
         TableManagerState(
           db: db,
           table: table,
           createFilteringComposer:
-              () => $$ImageLocationNamesTableFilterComposer(
-                $db: db,
-                $table: table,
-              ),
+              () =>
+                  $$ImageLocationIdsTableFilterComposer($db: db, $table: table),
           createOrderingComposer:
-              () => $$ImageLocationNamesTableOrderingComposer(
+              () => $$ImageLocationIdsTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
           createComputedFieldComposer:
-              () => $$ImageLocationNamesTableAnnotationComposer(
+              () => $$ImageLocationIdsTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
           updateCompanionCallback:
               ({
                 Value<int> accountFile = const Value.absent(),
-                Value<String> lang = const Value.absent(),
-                Value<String?> name = const Value.absent(),
-                Value<String?> admin1 = const Value.absent(),
-                Value<String?> admin2 = const Value.absent(),
+                Value<int> geonameId = const Value.absent(),
+                Value<ImageLocationType> type = const Value.absent(),
                 Value<int> rowid = const Value.absent(),
-              }) => ImageLocationNamesCompanion(
+              }) => ImageLocationIdsCompanion(
                 accountFile: accountFile,
-                lang: lang,
-                name: name,
-                admin1: admin1,
-                admin2: admin2,
+                geonameId: geonameId,
+                type: type,
                 rowid: rowid,
               ),
           createCompanionCallback:
               ({
                 required int accountFile,
-                required String lang,
-                Value<String?> name = const Value.absent(),
-                Value<String?> admin1 = const Value.absent(),
-                Value<String?> admin2 = const Value.absent(),
+                required int geonameId,
+                required ImageLocationType type,
                 Value<int> rowid = const Value.absent(),
-              }) => ImageLocationNamesCompanion.insert(
+              }) => ImageLocationIdsCompanion.insert(
                 accountFile: accountFile,
-                lang: lang,
-                name: name,
-                admin1: admin1,
-                admin2: admin2,
+                geonameId: geonameId,
+                type: type,
                 rowid: rowid,
               ),
           withReferenceMapper:
@@ -16028,7 +16428,7 @@ class $$ImageLocationNamesTableTableManager
                       .map(
                         (e) => (
                           e.readTable(table),
-                          $$ImageLocationNamesTableReferences(db, table, e),
+                          $$ImageLocationIdsTableReferences(db, table, e),
                         ),
                       )
                       .toList(),
@@ -16056,10 +16456,10 @@ class $$ImageLocationNamesTableTableManager
                       state.withJoin(
                             currentTable: table,
                             currentColumn: table.accountFile,
-                            referencedTable: $$ImageLocationNamesTableReferences
+                            referencedTable: $$ImageLocationIdsTableReferences
                                 ._accountFileTable(db),
                             referencedColumn:
-                                $$ImageLocationNamesTableReferences
+                                $$ImageLocationIdsTableReferences
                                     ._accountFileTable(db)
                                     .rowId,
                           )
@@ -16077,18 +16477,18 @@ class $$ImageLocationNamesTableTableManager
       );
 }
 
-typedef $$ImageLocationNamesTableProcessedTableManager =
+typedef $$ImageLocationIdsTableProcessedTableManager =
     ProcessedTableManager<
       _$SqliteDb,
-      $ImageLocationNamesTable,
-      ImageLocationName,
-      $$ImageLocationNamesTableFilterComposer,
-      $$ImageLocationNamesTableOrderingComposer,
-      $$ImageLocationNamesTableAnnotationComposer,
-      $$ImageLocationNamesTableCreateCompanionBuilder,
-      $$ImageLocationNamesTableUpdateCompanionBuilder,
-      (ImageLocationName, $$ImageLocationNamesTableReferences),
-      ImageLocationName,
+      $ImageLocationIdsTable,
+      ImageLocationId,
+      $$ImageLocationIdsTableFilterComposer,
+      $$ImageLocationIdsTableOrderingComposer,
+      $$ImageLocationIdsTableAnnotationComposer,
+      $$ImageLocationIdsTableCreateCompanionBuilder,
+      $$ImageLocationIdsTableUpdateCompanionBuilder,
+      (ImageLocationId, $$ImageLocationIdsTableReferences),
+      ImageLocationId,
       PrefetchHooks Function({bool accountFile})
     >;
 
@@ -16131,6 +16531,8 @@ class $SqliteDbManager {
       $$RecognizeFaceItemsTableTableManager(_db, _db.recognizeFaceItems);
   $$ImageLocationNamesTableTableManager get imageLocationNames =>
       $$ImageLocationNamesTableTableManager(_db, _db.imageLocationNames);
+  $$ImageLocationIdsTableTableManager get imageLocationIds =>
+      $$ImageLocationIdsTableTableManager(_db, _db.imageLocationIds);
 }
 
 // **************************************************************************

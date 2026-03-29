@@ -257,6 +257,7 @@ Future<void> _truncate() async {
       "nc_album_items",
       "recognize_faces",
       "recognize_face_items",
+      "image_location_ids",
       "image_location_names",
     });
     for (final t in tables) {

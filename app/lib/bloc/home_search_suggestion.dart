@@ -16,6 +16,7 @@ import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:nc_photos/use_case/list_tag.dart';
 import 'package:nc_photos/use_case/person/list_person.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
 import 'package:to_string/to_string.dart';
@@ -130,8 +131,9 @@ class HomeSearchSuggestionBloc
     this.account,
     this.collectionsController,
     this.serverController,
-    this.accountPrefController,
-  ) : super(const HomeSearchSuggestionBlocInit()) {
+    this.accountPrefController, {
+    required this.lang,
+  }) : super(const HomeSearchSuggestionBlocInit()) {
     final c = KiwiContainer().resolve<DiContainer>();
     assert(require(c));
     assert(ListTag.require(c));
@@ -239,15 +241,15 @@ class HomeSearchSuggestionBloc
     try {
       final locations = await ListLocationGroup(_c)(account);
       // make sure no duplicates
-      final map = <String, LocationGroup>{};
+      final map = <LocalizedString, LocationGroup>{};
       for (final l
           in locations.name +
               locations.admin1 +
               locations.admin2 +
               locations.countryCode) {
-        map[l.place] = l;
+        map[l.name] = l;
       }
-      product.addAll(map.values.map((e) => _LocationSearcheable(e)));
+      product.addAll(map.values.map((e) => _LocationSearcheable(e, lang)));
       _log.info(
         "[_onEventPreloadData] Loaded ${locations.name.length + locations.countryCode.length} locations",
       );
@@ -272,6 +274,7 @@ class HomeSearchSuggestionBloc
   final ServerController serverController;
   final AccountPrefController accountPrefController;
   late final DiContainer _c;
+  final String lang;
 
   final _search = Woozy<_Searcheable>(limit: 10);
 }
@@ -318,13 +321,14 @@ class _PersonSearcheable implements _Searcheable {
 }
 
 class _LocationSearcheable implements _Searcheable {
-  const _LocationSearcheable(this.location);
+  const _LocationSearcheable(this.location, this.lang);
 
   @override
-  toKeywords() => [location.place.toCi()];
+  List<CiString> toKeywords() => [location.name[lang].toCi()];
 
   @override
   toResult() => HomeSearchLocationResult(location);
 
   final LocationGroup location;
+  final String lang;
 }

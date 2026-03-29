@@ -3,6 +3,7 @@ import 'dart:io' as io;
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
 import 'package:np_datetime/np_datetime.dart';
@@ -81,7 +82,7 @@ class DbSyncIdResult {
 @toString
 class DbLocationGroup with EquatableMixin {
   const DbLocationGroup({
-    required this.place,
+    required this.name,
     required this.countryCode,
     required this.count,
     required this.latestFileId,
@@ -95,7 +96,7 @@ class DbLocationGroup with EquatableMixin {
 
   @override
   List<Object?> get props => [
-    place,
+    name,
     countryCode,
     count,
     latestFileId,
@@ -104,7 +105,7 @@ class DbLocationGroup with EquatableMixin {
     latestFileRelativePath,
   ];
 
-  final String place;
+  final LocalizedString name;
   final String countryCode;
   final int count;
   final int latestFileId;
@@ -454,7 +455,7 @@ abstract class NpDb {
 
   /// Return the location data of the first file (sorted by date time in
   /// descending order) in a group of files
-  Future<DbLocation?> getFirstLocationOfFileIds({
+  Future<({double lat, double lng})?> getFirstLocationLatLngOfFileIds({
     required DbAccount account,
     required List<int> fileIds,
   });

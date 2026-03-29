@@ -106,7 +106,7 @@ class _PlaceItemView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CollectionListSmall(
-      label: item.name,
+      label: item.name.of(context),
       onTap: onTap,
       child: _LocationThumbnail(
         account: account,
@@ -144,7 +144,7 @@ class _CountryItemView extends StatelessWidget {
                 coverMime: item.coverMime,
               ),
               const SizedBox(width: 8),
-              Text(item.name),
+              Text(item.name.of(context)),
               const SizedBox(width: 8),
             ],
           ),

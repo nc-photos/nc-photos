@@ -1,5 +1,6 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/type.dart';
 import 'package:np_string/np_string.dart';
 import 'package:to_string/to_string.dart';
@@ -262,7 +263,9 @@ class DbLocation with EquatableMixin {
     required this.latitude,
     required this.longitude,
     required this.countryCode,
-    required this.names,
+    required this.city,
+    required this.admin1,
+    required this.admin2,
   });
 
   @override
@@ -274,30 +277,33 @@ class DbLocation with EquatableMixin {
     latitude,
     longitude,
     countryCode,
-    names,
+    city,
+    admin1,
+    admin2,
   ];
 
   final int dataRevision;
   final double? latitude;
   final double? longitude;
   final String? countryCode;
-  final Map<String, DbLocationName>? names;
+  final DbLocationName? city;
+  final DbLocationName? admin1;
+  final DbLocationName? admin2;
 }
 
 @genCopyWith
 @toString
 class DbLocationName with EquatableMixin {
-  const DbLocationName({required this.name, this.admin1, this.admin2});
+  const DbLocationName({required this.geonameId, required this.name});
 
   @override
   String toString() => _$toString();
 
   @override
-  List<Object?> get props => [name, admin1, admin2];
+  List<Object?> get props => [geonameId, name];
 
-  final String? name;
-  final String? admin1;
-  final String? admin2;
+  final int geonameId;
+  final LocalizedString name;
 }
 
 @genCopyWith

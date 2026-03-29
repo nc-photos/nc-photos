@@ -15,6 +15,7 @@ import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
+import 'package:np_ui/np_ui.dart';
 
 part 'home_search_suggestion.g.dart';
 
@@ -83,6 +84,7 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
           context.read<AccountController>().collectionsController,
           context.read<AccountController>().serverController,
           context.read<AccountController>().accountPrefController,
+          lang: Localizations.localeOf(context).languageCode,
         ));
     if (_bloc.state is! HomeSearchSuggestionBlocInit) {
       // process the current state
@@ -168,7 +170,11 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
         context,
         CollectionBrowser.routeName,
         arguments: CollectionBrowserArguments(
-          CollectionBuilder.byLocationGroup(widget.account, item.location),
+          CollectionBuilder.byLocationGroup(
+            widget.account,
+            item.location,
+            Localizations.localeOf(context).languageCode,
+          ),
         ),
       );
     }
@@ -254,7 +260,7 @@ class _LocationListItem implements _ListItem {
   @override
   buildWidget(BuildContext context) => ListTile(
     leading: const Icon(Icons.location_on_outlined),
-    title: Text(location.place),
+    title: Text(location.name.of(context)),
     onTap: onTap == null ? null : () => onTap!(this),
   );
 

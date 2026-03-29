@@ -339,7 +339,7 @@ class _Bloc extends Bloc<_Event, _State>
         }
       }
       if (mapCoord == null && state.transformedItems.isNotEmpty) {
-        final location = await db.getFirstLocationOfFileIds(
+        final latlng = await db.getFirstLocationLatLngOfFileIds(
           account: account.toDb(),
           fileIds:
               state.transformedItems
@@ -347,7 +347,7 @@ class _Bloc extends Bloc<_Event, _State>
                   .map((e) => e.file.fdId)
                   .toList(),
         );
-        mapCoord = location?.let((e) => MapCoord(e.latitude!, e.longitude!));
+        mapCoord = latlng?.let((e) => MapCoord(e.lat, e.lng));
       }
       emit(
         state.copyWith(

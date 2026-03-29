@@ -247,9 +247,16 @@ class FilesQueryBuilder {
     if (_byLocation != null) {
       final subquery = db.selectOnly(db.imageLocations).join([
         innerJoin(
-          db.imageLocationNames,
-          db.imageLocationNames.accountFile.equalsExp(
+          db.imageLocationIds,
+          db.imageLocationIds.accountFile.equalsExp(
             db.imageLocations.accountFile,
+          ),
+          useColumns: false,
+        ),
+        innerJoin(
+          db.imageLocationNames,
+          db.imageLocationNames.geonameId.equalsExp(
+            db.imageLocationIds.geonameId,
           ),
           useColumns: false,
         ),
@@ -263,10 +270,7 @@ class FilesQueryBuilder {
         );
       }
       if (_byLocation!.isFuzzy) {
-        var clause =
-            db.imageLocationNames.name.like(_byLocation!.place) |
-            db.imageLocationNames.admin1.like(_byLocation!.place) |
-            db.imageLocationNames.admin2.like(_byLocation!.place);
+        var clause = db.imageLocationNames.name.like(_byLocation!.place);
         final countryCode = nameToAlpha2Code(_byLocation!.place.toCi());
         if (countryCode != null) {
           clause = clause | db.imageLocations.countryCode.equals(countryCode);
@@ -285,11 +289,7 @@ class FilesQueryBuilder {
           // some places in the DB have the same name as the country, in such
           // cases, we return all photos from the country
         } else {
-          subquery.where(
-            db.imageLocationNames.name.equals(_byLocation!.place) |
-                db.imageLocationNames.admin1.equals(_byLocation!.place) |
-                db.imageLocationNames.admin2.equals(_byLocation!.place),
-          );
+          subquery.where(db.imageLocationNames.name.equals(_byLocation!.place));
         }
       }
       query.where(db.accountFiles.rowId.isInQuery(subquery));

@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:logging/logging.dart';
+import 'package:np_db_sqlite/src/database_extension.dart';
 import 'package:np_db_sqlite/src/table.dart';
 import 'package:np_db_sqlite/src/util.dart';
 import 'package:np_log/np_log.dart';
@@ -27,6 +28,7 @@ part 'database.g.dart';
     RecognizeFaces,
     RecognizeFaceItems,
     ImageLocationNames,
+    ImageLocationIds,
   ],
 )
 class SqliteDb extends _$SqliteDb {
@@ -151,6 +153,7 @@ class SqliteDb extends _$SqliteDb {
           if (from < 10) {
             await m.deleteTable("image_locations");
             await m.createTable(imageLocations);
+            await m.createTable(imageLocationIds);
             await m.createTable(imageLocationNames);
             await _createIndexV10(m);
           }
@@ -188,26 +191,14 @@ class SqliteDb extends _$SqliteDb {
   Future<void> _createIndexV10(Migrator m) async {
     await m.createIndex(
       Index(
-        "image_locations_country_code_index",
-        "CREATE INDEX image_locations_country_code_index ON image_locations(country_code);",
+        "image_location_names_data_revision_geoname_id_index",
+        "CREATE INDEX image_location_names_data_revision_geoname_id_index ON image_location_names(data_revision, geoname_id);",
       ),
     );
     await m.createIndex(
       Index(
         "image_location_names_name_index",
         "CREATE INDEX image_location_names_name_index ON image_location_names(name);",
-      ),
-    );
-    await m.createIndex(
-      Index(
-        "image_location_names_admin1_index",
-        "CREATE INDEX image_location_names_admin1_index ON image_location_names(admin1);",
-      ),
-    );
-    await m.createIndex(
-      Index(
-        "image_location_names_admin2_index",
-        "CREATE INDEX image_location_names_admin2_index ON image_location_names(admin2);",
       ),
     );
   }

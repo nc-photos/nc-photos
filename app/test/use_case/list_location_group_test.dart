@@ -2,6 +2,7 @@ import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_db_sqlite/np_db_sqlite_compat.dart' as compat;
 import 'package:test/test.dart';
 
@@ -14,6 +15,7 @@ void main() {
     test("N File to 1 Location", _nFile1Location);
     test("N File to N Location", _nFileNLocation);
     test("multiple roots", _multipleRoots);
+    test("multiple langs", _multipleLangs);
   });
 }
 
@@ -77,7 +79,10 @@ Future<void> _nFile1Location() async {
               "admin/test1.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -87,7 +92,10 @@ Future<void> _nFile1Location() async {
               "admin/test2.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -104,7 +112,7 @@ Future<void> _nFile1Location() async {
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
     LocationGroup(
-      "Some place",
+      const LocalizedString({"en": "Some place"}),
       "AD",
       2,
       2,
@@ -117,7 +125,7 @@ Future<void> _nFile1Location() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      "Andorra",
+      const LocalizedString({"en": "Andorra"}),
       "AD",
       2,
       2,
@@ -146,7 +154,10 @@ Future<void> _nFileNLocation() async {
               "admin/test1.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -156,7 +167,10 @@ Future<void> _nFileNLocation() async {
               "admin/test2.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -166,7 +180,10 @@ Future<void> _nFileNLocation() async {
               "admin/test3.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Another place")},
+                city: ImageLocationName(
+                  geonameId: 2,
+                  name: LocalizedString({"en": "Another place"}),
+                ),
                 latitude: 4.3,
                 longitude: 2.1,
                 countryCode: "ZW",
@@ -176,7 +193,10 @@ Future<void> _nFileNLocation() async {
               "admin/test4.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Another place")},
+                city: ImageLocationName(
+                  geonameId: 2,
+                  name: LocalizedString({"en": "Another place"}),
+                ),
                 latitude: 4.3,
                 longitude: 2.1,
                 countryCode: "ZW",
@@ -193,7 +213,7 @@ Future<void> _nFileNLocation() async {
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
     LocationGroup(
-      "Some place",
+      const LocalizedString({"en": "Some place"}),
       "AD",
       2,
       2,
@@ -202,7 +222,7 @@ Future<void> _nFileNLocation() async {
       "test2.jpg",
     ),
     LocationGroup(
-      "Another place",
+      const LocalizedString({"en": "Another place"}),
       "ZW",
       2,
       4,
@@ -215,7 +235,7 @@ Future<void> _nFileNLocation() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      "Andorra",
+      const LocalizedString({"en": "Andorra"}),
       "AD",
       2,
       2,
@@ -224,7 +244,7 @@ Future<void> _nFileNLocation() async {
       "test2.jpg",
     ),
     LocationGroup(
-      "Zimbabwe",
+      const LocalizedString({"en": "Zimbabwe"}),
       "ZW",
       2,
       4,
@@ -256,7 +276,10 @@ Future<void> _multipleRoots() async {
               "admin/test1/test1.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -266,7 +289,10 @@ Future<void> _multipleRoots() async {
               "admin/test1/test2.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -276,7 +302,10 @@ Future<void> _multipleRoots() async {
               "admin/test2/test3.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -286,7 +315,10 @@ Future<void> _multipleRoots() async {
               "admin/test2/test4.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -296,7 +328,10 @@ Future<void> _multipleRoots() async {
               "admin/test3/test5.jpg",
               location: const ImageLocation(
                 dataRevision: 202603,
-                names: {"en": ImageLocationName(name: "Some place")},
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({"en": "Some place"}),
+                ),
                 latitude: 1.2,
                 longitude: 3.4,
                 countryCode: "AD",
@@ -313,7 +348,7 @@ Future<void> _multipleRoots() async {
   final result = await ListLocationGroup(c)(account);
   expect(result.name.toSet(), {
     LocationGroup(
-      "Some place",
+      const LocalizedString({"en": "Some place"}),
       "AD",
       4,
       7,
@@ -326,13 +361,98 @@ Future<void> _multipleRoots() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      "Andorra",
+      const LocalizedString({"en": "Andorra"}),
       "AD",
       4,
       7,
       DateTime.utc(2020, 1, 2, 3, 4, 5 + 7),
       "image/jpeg",
       "test2/test4.jpg",
+    ),
+  });
+}
+
+/// List and group locations for files in DB
+///
+/// DB: [
+///   File(test1, location: {"en": "Some place", "fr": "Un endroit", "ja": "とある場所"}),
+///   File(test2, location: {"en": "Some place", "fr": "Un endroit", "ja": "とある場所"}),
+/// ]
+/// Expect: ["Some place"]
+Future<void> _multipleLangs() async {
+  final account = util.buildAccount();
+  final files =
+      (util.FilesBuilder()
+            ..addDir("admin")
+            ..addJpeg(
+              "admin/test1.jpg",
+              location: const ImageLocation(
+                dataRevision: 202603,
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({
+                    "en": "Some place",
+                    "fr": "Un endroit",
+                    "ja": "とある場所",
+                  }),
+                ),
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            )
+            ..addJpeg(
+              "admin/test2.jpg",
+              location: const ImageLocation(
+                dataRevision: 202603,
+                city: ImageLocationName(
+                  geonameId: 1,
+                  name: LocalizedString({
+                    "en": "Some place",
+                    "fr": "Un endroit",
+                    "ja": "とある場所",
+                  }),
+                ),
+                latitude: 1.2,
+                longitude: 3.4,
+                countryCode: "AD",
+              ),
+            ))
+          .build();
+  final c = DiContainer(npDb: util.buildTestDb());
+  addTearDown(() => c.sqliteDb.close());
+  await c.sqliteDb.transaction(() async {
+    await c.sqliteDb.insertAccounts([account.toDb()]);
+    await util.insertFiles(c.sqliteDb, account, files);
+  });
+
+  final result = await ListLocationGroup(c)(account);
+  expect(result.name.toSet(), {
+    LocationGroup(
+      const LocalizedString({
+        "en": "Some place",
+        "fr": "Un endroit",
+        "ja": "とある場所",
+      }),
+      "AD",
+      2,
+      2,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+      "image/jpeg",
+      "test2.jpg",
+    ),
+  });
+  expect(result.admin1.toSet(), <LocationGroup>{});
+  expect(result.admin2.toSet(), <LocationGroup>{});
+  expect(result.countryCode.toSet(), {
+    LocationGroup(
+      const LocalizedString({"en": "Andorra"}),
+      "AD",
+      2,
+      2,
+      DateTime.utc(2020, 1, 2, 3, 4, 5 + 2),
+      "image/jpeg",
+      "test2.jpg",
     ),
   });
 }

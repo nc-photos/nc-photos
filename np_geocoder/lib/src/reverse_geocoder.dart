@@ -6,6 +6,7 @@ import 'package:copy_with/copy_with.dart';
 import 'package:flutter/foundation.dart';
 import 'package:kdtree/kdtree.dart';
 import 'package:logging/logging.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_geocoder/src/native/db_util.dart'
     if (dart.library.html) 'package:np_geocoder/src/web/db_util.dart';
 import 'package:np_log/np_log.dart';
@@ -22,7 +23,9 @@ class ReverseGeocoderLocation {
     this.latitude,
     this.longitude,
     this.countryCode,
-    this.names,
+    this.city,
+    this.admin1,
+    this.admin2,
   );
 
   @override
@@ -32,23 +35,24 @@ class ReverseGeocoderLocation {
   final double latitude;
   final double longitude;
   final String countryCode;
-  final Map<String, ReverseGeocoderLocationName> names;
+  final ReverseGeocoderLocationName? city;
+  final ReverseGeocoderLocationName? admin1;
+  final ReverseGeocoderLocationName? admin2;
 }
 
 @genCopyWith
 @toString
 class ReverseGeocoderLocationName {
-  const ReverseGeocoderLocationName({this.name, this.admin1, this.admin2});
-
-  const ReverseGeocoderLocationName.empty()
-    : this(name: null, admin1: null, admin2: null);
+  const ReverseGeocoderLocationName({
+    required this.geonameId,
+    required this.name,
+  });
 
   @override
   String toString() => _$toString();
 
-  final String? name;
-  final String? admin1;
-  final String? admin2;
+  final int geonameId;
+  final LocalizedString name;
 }
 
 @npLog
@@ -130,13 +134,13 @@ class ReverseGeocoder {
     }
     final ids = [
       cityResult.columnAt(3),
-      if (cityResult.columnAt(4) != null) cityResult.columnAt(4),
-      if (cityResult.columnAt(5) != null) cityResult.columnAt(5),
+      cityResult.columnAt(4),
+      cityResult.columnAt(5),
     ];
     final nameSql = """
       SELECT names.geonameId, names.lang, names.name
       FROM names
-      WHERE geonameId IN (${ids.join(", ")});
+      WHERE geonameId IN (${ids.nonNulls.join(", ")});
       """;
     var nameMap = <int, Map<String, String>>{};
     for (final r in _db.select(nameSql)) {
@@ -145,42 +149,41 @@ class ReverseGeocoder {
     }
 
     // lang: names
-    final localizedNames = <String, ReverseGeocoderLocationName>{};
+    final city = <String, String>{};
+    final admin1 = <String, String>{};
+    final admin2 = <String, String>{};
     for (final r in _db.select(nameSql)) {
-      localizedNames[r.columnAt(1)] ??=
-          const ReverseGeocoderLocationName.empty();
       if (r.columnAt(0) == ids[0]) {
-        // city
-        localizedNames[r.columnAt(1)] = localizedNames[r.columnAt(1)]!.copyWith(
-          name: r.columnAt(2),
-        );
-      } else if (r.columnAt(0) == ids[1]) {
-        // admin1
-        localizedNames[r.columnAt(1)] = localizedNames[r.columnAt(1)]!.copyWith(
-          admin1: r.columnAt(2),
-        );
-      } else if (r.columnAt(0) == ids[2]) {
-        // admin2
-        localizedNames[r.columnAt(1)] = localizedNames[r.columnAt(1)]!.copyWith(
-          admin2: r.columnAt(2),
-        );
-      } else {
-        _log.warning("[_queryPoint] Unknown geonameId: ${r.columnAt(0)}");
+        city[r.columnAt(1)] = r.columnAt(2);
+      } else if (ids[1] != null && r.columnAt(0) == ids[1]) {
+        admin1[r.columnAt(1)] = r.columnAt(2);
+      } else if (ids[2] != null && r.columnAt(0) == ids[2]) {
+        admin2[r.columnAt(1)] = r.columnAt(2);
       }
     }
-    localizedNames.removeWhere(
-      (key, value) => value == const ReverseGeocoderLocationName.empty(),
-    );
-    if (localizedNames.isEmpty) {
-      return null;
-    }
-
     return ReverseGeocoderLocation(
       ReverseGeocoder.dataRevision,
       cityResult.columnAt(0) / 10000,
       cityResult.columnAt(1) / 10000,
       cityResult.columnAt(2),
-      localizedNames,
+      city.isNotEmpty
+          ? ReverseGeocoderLocationName(
+            geonameId: ids[0],
+            name: LocalizedString(city),
+          )
+          : null,
+      admin1.isNotEmpty
+          ? ReverseGeocoderLocationName(
+            geonameId: ids[1],
+            name: LocalizedString(admin1),
+          )
+          : null,
+      admin2.isNotEmpty
+          ? ReverseGeocoderLocationName(
+            geonameId: ids[2],
+            name: LocalizedString(admin2),
+          )
+          : null,
     );
   }
 

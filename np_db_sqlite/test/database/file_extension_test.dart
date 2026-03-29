@@ -1,4 +1,5 @@
 import 'package:clock/clock.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_datetime/np_datetime.dart';
 import 'package:np_db/np_db.dart';
@@ -91,11 +92,16 @@ Future<void> _queryByIdsMultilangLocation() async {
                   latitude: 12.3,
                   longitude: -32.1,
                   countryCode: "XA",
-                  names: {
-                    "en": DbLocationName(name: "Some place 1"),
-                    "fr": DbLocationName(name: "Un endroit 1"),
-                    "ja": DbLocationName(name: "とある場所 1"),
-                  },
+                  city: DbLocationName(
+                    geonameId: 1,
+                    name: LocalizedString({
+                      "en": "Some place 1",
+                      "fr": "Un endroit 1",
+                      "ja": "とある場所 1",
+                    }),
+                  ),
+                  admin1: null,
+                  admin2: null,
                 ),
               )
               ..addJpeg(
@@ -105,11 +111,16 @@ Future<void> _queryByIdsMultilangLocation() async {
                   latitude: -23.4,
                   longitude: -23.4,
                   countryCode: "XB",
-                  names: {
-                    "en": DbLocationName(name: "Some place 2"),
-                    "fr": DbLocationName(name: "Un endroit 2"),
-                    "ja": DbLocationName(name: "とある場所 2"),
-                  },
+                  city: DbLocationName(
+                    geonameId: 2,
+                    name: LocalizedString({
+                      "en": "Some place 2",
+                      "fr": "Un endroit 2",
+                      "ja": "とある場所 2",
+                    }),
+                  ),
+                  admin1: null,
+                  admin2: null,
                 ),
               ))
             .build();
@@ -125,28 +136,38 @@ Future<void> _queryByIdsMultilangLocation() async {
           account: ByAccount.db(account),
           fileIds: [1, 2],
         )).map(FileConverter.fromSql).toList();
-    expect(result.map((e) => e.location), [
+    expect(result.map((e) => e.location).toList(), [
       const DbLocation(
         dataRevision: 202603,
         latitude: 12.3,
         longitude: -32.1,
         countryCode: "XA",
-        names: {
-          "en": DbLocationName(name: "Some place 1"),
-          "fr": DbLocationName(name: "Un endroit 1"),
-          "ja": DbLocationName(name: "とある場所 1"),
-        },
+        city: DbLocationName(
+          geonameId: 1,
+          name: LocalizedString({
+            "en": "Some place 1",
+            "fr": "Un endroit 1",
+            "ja": "とある場所 1",
+          }),
+        ),
+        admin1: null,
+        admin2: null,
       ),
       const DbLocation(
         dataRevision: 202603,
         latitude: -23.4,
         longitude: -23.4,
         countryCode: "XB",
-        names: {
-          "en": DbLocationName(name: "Some place 2"),
-          "fr": DbLocationName(name: "Un endroit 2"),
-          "ja": DbLocationName(name: "とある場所 2"),
-        },
+        city: DbLocationName(
+          geonameId: 2,
+          name: LocalizedString({
+            "en": "Some place 2",
+            "fr": "Un endroit 2",
+            "ja": "とある場所 2",
+          }),
+        ),
+        admin1: null,
+        admin2: null,
       ),
     ]);
   });

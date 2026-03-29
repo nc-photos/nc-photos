@@ -13,11 +13,7 @@ part of 'reverse_geocoder.dart';
 // **************************************************************************
 
 abstract class $ReverseGeocoderLocationNameCopyWithWorker {
-  ReverseGeocoderLocationName call({
-    String? name,
-    String? admin1,
-    String? admin2,
-  });
+  ReverseGeocoderLocationName call({int? geonameId, LocalizedString? name});
 }
 
 class _$ReverseGeocoderLocationNameCopyWithWorkerImpl
@@ -25,15 +21,10 @@ class _$ReverseGeocoderLocationNameCopyWithWorkerImpl
   _$ReverseGeocoderLocationNameCopyWithWorkerImpl(this.that);
 
   @override
-  ReverseGeocoderLocationName call({
-    dynamic name = copyWithNull,
-    dynamic admin1 = copyWithNull,
-    dynamic admin2 = copyWithNull,
-  }) {
+  ReverseGeocoderLocationName call({dynamic geonameId, dynamic name}) {
     return ReverseGeocoderLocationName(
-      name: name == copyWithNull ? that.name : name as String?,
-      admin1: admin1 == copyWithNull ? that.admin1 : admin1 as String?,
-      admin2: admin2 == copyWithNull ? that.admin2 : admin2 as String?,
+      geonameId: geonameId as int? ?? that.geonameId,
+      name: name as LocalizedString? ?? that.name,
     );
   }
 
@@ -64,13 +55,13 @@ extension _$ReverseGeocoderNpLog on ReverseGeocoder {
 extension _$ReverseGeocoderLocationToString on ReverseGeocoderLocation {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "ReverseGeocoderLocation {latitude: $latitude, longitude: $longitude, countryCode: $countryCode, names: $names}";
+    return "ReverseGeocoderLocation {dataRevision: $dataRevision, latitude: $latitude, longitude: $longitude, countryCode: $countryCode, city: $city, admin1: $admin1, admin2: $admin2}";
   }
 }
 
 extension _$ReverseGeocoderLocationNameToString on ReverseGeocoderLocationName {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "ReverseGeocoderLocationName {name: $name, admin1: $admin1, admin2: $admin2}";
+    return "ReverseGeocoderLocationName {geonameId: $geonameId, name: $name}";
   }
 }

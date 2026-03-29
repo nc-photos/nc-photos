@@ -19,9 +19,13 @@ class CollectionBuilder {
     );
   }
 
-  static Collection byLocationGroup(Account account, LocationGroup location) {
+  static Collection byLocationGroup(
+    Account account,
+    LocationGroup location,
+    String lang,
+  ) {
     return Collection(
-      name: location.place,
+      name: location.name[lang],
       contentProvider: CollectionLocationGroupProvider(
         account: account,
         location: location,

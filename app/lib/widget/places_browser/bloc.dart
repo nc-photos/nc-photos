@@ -3,8 +3,11 @@ part of 'places_browser.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocForEachMixin<_Event, _State> {
-  _Bloc({required this.account, required this.placesController})
-    : super(_State.init()) {
+  _Bloc({
+    required this.account,
+    required this.placesController,
+    required this.lang,
+  }) : super(_State.init()) {
     on<_LoadPlaces>(_onLoad);
     on<_Reload>(_onReload);
     on<_TransformItems>(_onTransformItems);
@@ -43,12 +46,12 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final transformedPlaces =
         ev.places.name
-            .sorted(_sorter)
+            .sorted((a, b) => _sorter(a, b, lang))
             .map((e) => _Item(account: account, place: e))
             .toList();
     final transformedCountries =
         ev.places.countryCode
-            .sorted(_sorter)
+            .sorted((a, b) => _sorter(a, b, lang))
             .map((e) => _Item(account: account, place: e))
             .toList();
     emit(
@@ -61,12 +64,13 @@ class _Bloc extends Bloc<_Event, _State>
 
   final Account account;
   final PlacesController placesController;
+  final String lang;
 }
 
-int _sorter(LocationGroup a, LocationGroup b) {
+int _sorter(LocationGroup a, LocationGroup b, String lang) {
   final compare = b.count.compareTo(a.count);
   if (compare == 0) {
-    return a.place.compareTo(b.place);
+    return a.name[lang].compareTo(b.name[lang]);
   } else {
     return compare;
   }

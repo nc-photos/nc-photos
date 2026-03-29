@@ -25,6 +25,8 @@ dependencies:
   logging: ^1.2.0
   np_collection:
     path: ../np_collection
+  np_common:
+    path: ../np_common
   np_log:
     path: ../np_log
   np_math:

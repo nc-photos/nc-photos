@@ -21,7 +21,7 @@ class CollectionLocationGroupProvider
   String get fourCc => "LOCG";
 
   @override
-  String get id => location.place;
+  String get id => location.name.en;
 
   @override
   int? get count => location.count;

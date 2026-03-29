@@ -367,7 +367,9 @@ abstract class $DbLocationCopyWithWorker {
     double? latitude,
     double? longitude,
     String? countryCode,
-    Map<String, DbLocationName>? names,
+    DbLocationName? city,
+    DbLocationName? admin1,
+    DbLocationName? admin2,
   });
 }
 
@@ -380,7 +382,9 @@ class _$DbLocationCopyWithWorkerImpl implements $DbLocationCopyWithWorker {
     dynamic latitude = copyWithNull,
     dynamic longitude = copyWithNull,
     dynamic countryCode = copyWithNull,
-    dynamic names = copyWithNull,
+    dynamic city = copyWithNull,
+    dynamic admin1 = copyWithNull,
+    dynamic admin2 = copyWithNull,
   }) {
     return DbLocation(
       dataRevision: dataRevision as int? ?? that.dataRevision,
@@ -391,10 +395,9 @@ class _$DbLocationCopyWithWorkerImpl implements $DbLocationCopyWithWorker {
           countryCode == copyWithNull
               ? that.countryCode
               : countryCode as String?,
-      names:
-          names == copyWithNull
-              ? that.names
-              : names as Map<String, DbLocationName>?,
+      city: city == copyWithNull ? that.city : city as DbLocationName?,
+      admin1: admin1 == copyWithNull ? that.admin1 : admin1 as DbLocationName?,
+      admin2: admin2 == copyWithNull ? that.admin2 : admin2 as DbLocationName?,
     );
   }
 
@@ -408,7 +411,7 @@ extension $DbLocationCopyWith on DbLocation {
 }
 
 abstract class $DbLocationNameCopyWithWorker {
-  DbLocationName call({String? name, String? admin1, String? admin2});
+  DbLocationName call({int? geonameId, LocalizedString? name});
 }
 
 class _$DbLocationNameCopyWithWorkerImpl
@@ -416,15 +419,10 @@ class _$DbLocationNameCopyWithWorkerImpl
   _$DbLocationNameCopyWithWorkerImpl(this.that);
 
   @override
-  DbLocationName call({
-    dynamic name,
-    dynamic admin1 = copyWithNull,
-    dynamic admin2 = copyWithNull,
-  }) {
+  DbLocationName call({dynamic geonameId, dynamic name}) {
     return DbLocationName(
-      name: name as String? ?? that.name,
-      admin1: admin1 == copyWithNull ? that.admin1 : admin1 as String?,
-      admin2: admin2 == copyWithNull ? that.admin2 : admin2 as String?,
+      geonameId: geonameId as int? ?? that.geonameId,
+      name: name as LocalizedString? ?? that.name,
     );
   }
 
@@ -789,14 +787,14 @@ extension _$DbImageDataToString on DbImageData {
 extension _$DbLocationToString on DbLocation {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbLocation {dataRevision: $dataRevision, latitude: ${latitude == null ? null : "${latitude!.toStringAsFixed(3)}"}, longitude: ${longitude == null ? null : "${longitude!.toStringAsFixed(3)}"}, countryCode: $countryCode, names: $names}";
+    return "DbLocation {dataRevision: $dataRevision, latitude: ${latitude == null ? null : "${latitude!.toStringAsFixed(3)}"}, longitude: ${longitude == null ? null : "${longitude!.toStringAsFixed(3)}"}, countryCode: $countryCode, city: $city, admin1: $admin1, admin2: $admin2}";
   }
 }
 
 extension _$DbLocationNameToString on DbLocationName {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbLocationName {name: $name, admin1: $admin1, admin2: $admin2}";
+    return "DbLocationName {geonameId: $geonameId, name: $name}";
   }
 }
 

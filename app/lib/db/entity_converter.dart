@@ -180,24 +180,7 @@ abstract class DbFileConverter {
           src: s.src.index,
         ),
       ),
-      location: src.location?.let(
-        (s) => DbLocation(
-          dataRevision: s.dataRevision,
-          latitude: s.latitude,
-          longitude: s.longitude,
-          countryCode: s.countryCode,
-          names: s.names?.map(
-            (key, value) => MapEntry(
-              key,
-              DbLocationName(
-                name: value.name,
-                admin1: value.admin1,
-                admin2: value.admin2,
-              ),
-            ),
-          ),
-        ),
-      ),
+      location: src.location?.toDb(),
       trashData:
           src.trashbinDeletionTime == null
               ? null
@@ -265,15 +248,14 @@ abstract class DbImageLocationConverter {
       latitude: src.latitude,
       longitude: src.longitude,
       countryCode: src.countryCode,
-      names: src.names?.map(
-        (key, value) => MapEntry(
-          key,
-          ImageLocationName(
-            name: value.name,
-            admin1: value.admin1,
-            admin2: value.admin2,
-          ),
-        ),
+      city: src.city?.let(
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin1: src.admin1?.let(
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin2: src.admin2?.let(
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
       ),
     );
   }
@@ -284,15 +266,14 @@ abstract class DbImageLocationConverter {
       latitude: src.latitude,
       longitude: src.longitude,
       countryCode: src.countryCode,
-      names: src.names?.map(
-        (key, value) => MapEntry(
-          key,
-          DbLocationName(
-            name: value.name,
-            admin1: value.admin1,
-            admin2: value.admin2,
-          ),
-        ),
+      city: src.city?.let(
+        (e) => DbLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin1: src.admin1?.let(
+        (e) => DbLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin2: src.admin2?.let(
+        (e) => DbLocationName(geonameId: e.geonameId, name: e.name),
       ),
     );
   }
@@ -305,7 +286,7 @@ extension ImageLocationExtension on ImageLocation {
 abstract class DbLocationGroupConverter {
   static LocationGroup fromDb(DbLocationGroup src) {
     return LocationGroup(
-      src.place,
+      src.name,
       src.countryCode,
       src.count,
       src.latestFileId,

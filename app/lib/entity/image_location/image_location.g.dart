@@ -9,13 +9,13 @@ part of 'image_location.dart';
 extension _$ImageLocationToString on ImageLocation {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "ImageLocation {version: $version, ${latitude == null ? "" : "latitude: ${latitude!.toStringAsFixed(3)}, "}${longitude == null ? "" : "longitude: ${longitude!.toStringAsFixed(3)}, "}${countryCode == null ? "" : "countryCode: $countryCode, "}${names == null ? "" : "names: {length: ${names!.length}}"}}";
+    return "ImageLocation {version: $version, dataRevision: $dataRevision, ${latitude == null ? "" : "latitude: ${latitude!.toStringAsFixed(3)}, "}${longitude == null ? "" : "longitude: ${longitude!.toStringAsFixed(3)}, "}${countryCode == null ? "" : "countryCode: $countryCode, "}${city == null ? "" : "city: $city, "}${admin1 == null ? "" : "admin1: $admin1, "}${admin2 == null ? "" : "admin2: $admin2"}}";
   }
 }
 
-extension _$ImageLocalizedLocationToString on ImageLocationName {
+extension _$ImageLocationNameToString on ImageLocationName {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "ImageLocalizedLocation {name: $name, ${admin1 == null ? "" : "admin1: $admin1, "}${admin2 == null ? "" : "admin2: $admin2"}}";
+    return "ImageLocationName {geonameId: $geonameId, name: $name}";
   }
 }

@@ -1,5 +1,4 @@
 import 'dart:io' as io;
-import 'dart:isolate';
 
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:logging/logging.dart';
@@ -18,22 +17,20 @@ Future<CommonDatabase> openRawSqliteDbFromAsset({
   final dir = await _openDir();
   final file = io.File(path_lib.join(dir.path, "cities_2.sqlite"));
   if (!await file.exists()) {
-    await Isolate.run(() async {
-      // remove old dbs
-      await _cleanUp();
-      // copy file from assets
-      final blob = await rootBundle.load(
-        "packages/np_geocoder/assets/cities_2.sqlite.zst",
-      );
-      final buffer = blob.buffer;
-      final zstd = Zstandard();
-      final decompressed = await zstd.decompress(
-        buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes),
-      );
-      final tempFile = io.File(path_lib.join(dir.path, "cities_2.sqlite.tmp"));
-      await tempFile.writeAsBytes(decompressed!, flush: true);
-      await tempFile.rename(file.path);
-    });
+    // remove old dbs
+    await _cleanUp();
+    // copy file from assets
+    final blob = await rootBundle.load(
+      "packages/np_geocoder/assets/cities_2.sqlite.zst",
+    );
+    final buffer = blob.buffer;
+    final zstd = Zstandard();
+    final decompressed = await zstd.decompress(
+      buffer.asUint8List(blob.offsetInBytes, blob.lengthInBytes),
+    );
+    final tempFile = io.File(path_lib.join(dir.path, "cities_2.sqlite.tmp"));
+    await tempFile.writeAsBytes(decompressed!, flush: true);
+    await tempFile.rename(file.path);
   }
   return sqlite3.open(
     file.path,

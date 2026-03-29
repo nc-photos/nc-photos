@@ -2,7 +2,8 @@ part of '../database_extension.dart';
 
 class ImageLocationGroup {
   const ImageLocationGroup({
-    required this.place,
+    required this.name,
+    required this.type,
     required this.countryCode,
     required this.count,
     required this.latestFileId,
@@ -11,7 +12,8 @@ class ImageLocationGroup {
     required this.latestFileRelativePath,
   });
 
-  final String place;
+  final LocalizedString name;
+  final ImageLocationType type;
   final String countryCode;
   final int count;
   final int latestFileId;
@@ -34,6 +36,17 @@ class ImageLatLng {
   final int fileId;
   final String fileRelativePath;
   final String? mime;
+}
+
+enum ImageLocationType {
+  city(0),
+  admin1(1),
+  admin2(2),
+  country(3);
+
+  const ImageLocationType(this.value);
+
+  final int value;
 }
 
 extension SqliteDbImageLocationExtension on SqliteDb {
@@ -107,46 +120,123 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         .get();
   }
 
-  Future<List<ImageLocationGroup>> groupImageLocationsByName({
+  Future<List<ImageLocationGroup>> groupImageLocations({
     required ByAccount account,
     List<String>? includeRelativeRoots,
     List<String>? excludeRelativeRoots,
-  }) {
-    _log.info("[groupImageLocationsByName]");
-    return _groupImageLocationsBy(
-      account: account,
-      by: imageLocationNames.name,
-      includeRelativeRoots: includeRelativeRoots,
-      excludeRelativeRoots: excludeRelativeRoots,
-    );
-  }
+  }) async {
+    final query = selectOnly(imageLocations).join([
+      innerJoin(
+        accountFiles,
+        accountFiles.rowId.equalsExp(imageLocations.accountFile),
+        useColumns: false,
+      ),
+      innerJoin(
+        files,
+        files.rowId.equalsExp(accountFiles.file),
+        useColumns: false,
+      ),
+      innerJoin(
+        imageLocationIds,
+        imageLocationIds.accountFile.equalsExp(imageLocations.accountFile),
+        useColumns: false,
+      ),
+    ]);
+    if (account.sqlAccount != null) {
+      query.where(accountFiles.account.equals(account.sqlAccount!.rowId));
+    } else {
+      query.join([
+          innerJoin(
+            accounts,
+            accounts.rowId.equalsExp(accountFiles.account),
+            useColumns: false,
+          ),
+          innerJoin(
+            servers,
+            servers.rowId.equalsExp(accounts.server),
+            useColumns: false,
+          ),
+        ])
+        ..where(servers.address.equals(account.dbAccount!.serverAddress))
+        ..where(
+          accounts.userId.equals(
+            account.dbAccount!.userId.toCaseInsensitiveString(),
+          ),
+        );
+    }
 
-  Future<List<ImageLocationGroup>> groupImageLocationsByAdmin1({
-    required ByAccount account,
-    List<String>? includeRelativeRoots,
-    List<String>? excludeRelativeRoots,
-  }) {
-    _log.info("[groupImageLocationsByAdmin1]");
-    return _groupImageLocationsBy(
-      account: account,
-      by: imageLocationNames.admin1,
-      includeRelativeRoots: includeRelativeRoots,
-      excludeRelativeRoots: excludeRelativeRoots,
-    );
-  }
+    final count = imageLocations.rowId.count();
+    final latest = accountFiles.bestDateTime.max();
+    query
+      ..addColumns([
+        imageLocationIds.geonameId,
+        imageLocationIds.type,
+        imageLocations.countryCode,
+        count,
+        files.fileId,
+        files.contentType,
+        accountFiles.relativePath,
+        latest,
+      ])
+      ..groupBy([
+        imageLocationIds.geonameId,
+        imageLocationIds.type,
+        imageLocations.countryCode,
+      ], having: accountFiles.bestDateTime.equalsExp(latest));
 
-  Future<List<ImageLocationGroup>> groupImageLocationsByAdmin2({
-    required ByAccount account,
-    List<String>? includeRelativeRoots,
-    List<String>? excludeRelativeRoots,
-  }) {
-    _log.info("[groupImageLocationsByAdmin2]");
-    return _groupImageLocationsBy(
-      account: account,
-      by: imageLocationNames.admin2,
-      includeRelativeRoots: includeRelativeRoots,
-      excludeRelativeRoots: excludeRelativeRoots,
-    );
+    if (includeRelativeRoots != null &&
+        includeRelativeRoots.isNotEmpty &&
+        includeRelativeRoots.none((r) => r.isEmpty)) {
+      final expr = includeRelativeRoots
+          .map((r) => accountFiles.relativePath.like("$r/%"))
+          .reduce((value, element) => value | element);
+      query.where(expr);
+    }
+    if (excludeRelativeRoots != null) {
+      for (final r in excludeRelativeRoots) {
+        query.where(accountFiles.relativePath.like("$r/%").not());
+      }
+    }
+    final idResults =
+        await query
+            .map(
+              (r) => (
+                geonameId: r.read(imageLocationIds.geonameId)!,
+                type: r.readWithConverter(imageLocationIds.type)!,
+                countryCode: r.read(imageLocations.countryCode)!,
+                count: r.read(count)!,
+                latestFileId: r.read(files.fileId)!,
+                latestDateTime: r.read(latest)!.toUtc(),
+                latestFileMime: r.read(files.contentType),
+                latestFileRelativePath: r.read(accountFiles.relativePath)!,
+              ),
+            )
+            .get();
+
+    final nameQuery = select(imageLocationNames)
+      ..where((t) => t.geonameId.isIn(idResults.map((e) => e.geonameId)));
+    final nameMap = <int, Map<String, String>>{};
+    for (final e in await nameQuery.get()) {
+      nameMap[e.geonameId] ??= <String, String>{};
+      nameMap[e.geonameId]![e.lang] = e.name;
+    }
+    return idResults
+        .map(
+          (e) => nameMap[e.geonameId]?.let(
+            (n) => ImageLocationGroup(
+              name: LocalizedString(n),
+              type: e.type,
+              countryCode: e.countryCode,
+              count: e.count,
+              latestFileId: e.latestFileId,
+              latestDateTime: e.latestDateTime,
+              latestFileMime: e.latestFileMime,
+              latestFileRelativePath: e.latestFileRelativePath,
+            ),
+          ),
+        )
+        .nonNulls
+        .toList();
   }
 
   Future<List<ImageLocationGroup>> groupImageLocationsByCountryCode({
@@ -221,7 +311,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     return query.map((r) {
       final cc = r.read(imageLocations.countryCode)!;
       return ImageLocationGroup(
-        place: alpha2CodeToName(cc) ?? cc,
+        name: LocalizedString({"en": alpha2CodeToName(cc) ?? cc}),
+        type: ImageLocationType.country,
         countryCode: cc,
         count: r.read(count)!,
         latestFileId: r.read(files.fileId)!,
@@ -232,7 +323,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     }).get();
   }
 
-  Future<ImageLocation?> queryFirstImageLocationByFileIds({
+  Future<({double lat, double lng})?> queryFirstLocationLatLngByFileIds({
     required ByAccount account,
     required List<int> fileIds,
   }) async {
@@ -302,106 +393,8 @@ extension SqliteDbImageLocationExtension on SqliteDb {
 
     final reusltQuery = select(imageLocations)
       ..where((t) => t.accountFile.equals(winner.rowId));
-    return reusltQuery.getSingleOrNull();
-  }
-
-  Future<List<ImageLocationName>> queryImageLocationNamesByLocation({
-    required ImageLocation location,
-  }) async {
-    final query = select(imageLocationNames)
-      ..where((t) => t.accountFile.equals(location.accountFile));
-    return query.get();
-  }
-
-  // TODO not really working with multilang
-  Future<List<ImageLocationGroup>> _groupImageLocationsBy({
-    required ByAccount account,
-    required GeneratedColumn<String> by,
-    List<String>? includeRelativeRoots,
-    List<String>? excludeRelativeRoots,
-  }) {
-    final query = selectOnly(imageLocations).join([
-      innerJoin(
-        accountFiles,
-        accountFiles.rowId.equalsExp(imageLocations.accountFile),
-        useColumns: false,
-      ),
-      innerJoin(
-        files,
-        files.rowId.equalsExp(accountFiles.file),
-        useColumns: false,
-      ),
-      innerJoin(
-        imageLocationNames,
-        imageLocationNames.accountFile.equalsExp(imageLocations.accountFile),
-        useColumns: false,
-      ),
-    ]);
-    if (account.sqlAccount != null) {
-      query.where(accountFiles.account.equals(account.sqlAccount!.rowId));
-    } else {
-      query.join([
-          innerJoin(
-            accounts,
-            accounts.rowId.equalsExp(accountFiles.account),
-            useColumns: false,
-          ),
-          innerJoin(
-            servers,
-            servers.rowId.equalsExp(accounts.server),
-            useColumns: false,
-          ),
-        ])
-        ..where(servers.address.equals(account.dbAccount!.serverAddress))
-        ..where(
-          accounts.userId.equals(
-            account.dbAccount!.userId.toCaseInsensitiveString(),
-          ),
-        );
-    }
-
-    final count = imageLocations.rowId.count();
-    final latest = accountFiles.bestDateTime.max();
-    query
-      ..addColumns([
-        by,
-        imageLocations.countryCode,
-        count,
-        files.fileId,
-        files.contentType,
-        accountFiles.relativePath,
-        latest,
-      ])
-      ..groupBy([
-        by,
-        imageLocations.countryCode,
-      ], having: accountFiles.bestDateTime.equalsExp(latest))
-      ..where(by.isNotNull());
-    if (includeRelativeRoots != null &&
-        includeRelativeRoots.isNotEmpty &&
-        includeRelativeRoots.none((r) => r.isEmpty)) {
-      final expr = includeRelativeRoots
-          .map((r) => accountFiles.relativePath.like("$r/%"))
-          .reduce((value, element) => value | element);
-      query.where(expr);
-    }
-    if (excludeRelativeRoots != null) {
-      for (final r in excludeRelativeRoots) {
-        query.where(accountFiles.relativePath.like("$r/%").not());
-      }
-    }
-    return query
-        .map(
-          (r) => ImageLocationGroup(
-            place: r.read(by)!,
-            countryCode: r.read(imageLocations.countryCode)!,
-            count: r.read(count)!,
-            latestFileId: r.read(files.fileId)!,
-            latestDateTime: r.read(latest)!.toUtc(),
-            latestFileMime: r.read(files.contentType),
-            latestFileRelativePath: r.read(accountFiles.relativePath)!,
-          ),
-        )
-        .get();
+    return reusltQuery
+        .map((r) => (lat: r.latitude!, lng: r.longitude!))
+        .getSingleOrNull();
   }
 }

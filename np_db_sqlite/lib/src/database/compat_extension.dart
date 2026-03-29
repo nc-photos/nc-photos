@@ -71,6 +71,7 @@ extension SqliteDbCompat55Extension on SqliteDb {
                   null,
                   null,
                   null,
+                  null,
                 ),
               )
               .get();

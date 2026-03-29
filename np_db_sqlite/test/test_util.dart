@@ -222,11 +222,20 @@ Future<void> insertFiles(
             ),
           );
     }
+    if (insert.imageLocationIds != null) {
+      for (final e in insert.imageLocationIds!) {
+        await db
+            .into(db.imageLocationIds)
+            .insert(e.copyWith(accountFile: Value(sqlAccountFile.rowId)));
+      }
+    }
     if (insert.imageLocationNames != null) {
       for (final e in insert.imageLocationNames!) {
         await db
             .into(db.imageLocationNames)
-            .insert(e.copyWith(accountFile: Value(sqlAccountFile.rowId)));
+            .insertOnConflictUpdate(
+              e.copyWith(dataRevision: insert.imageLocation!.dataRevision),
+            );
       }
     }
     if (insert.trash != null) {

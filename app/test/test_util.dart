@@ -23,12 +23,12 @@ import 'package:nc_photos/entity/sharee.dart';
 import 'package:nc_photos/entity/xmp.dart';
 import 'package:np_async/np_async.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_db_sqlite/np_db_sqlite.dart';
 import 'package:np_db_sqlite/np_db_sqlite_compat.dart' as compat;
-import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_string/np_string.dart';
 
 part 'test_compat_util.dart';
@@ -493,11 +493,20 @@ Future<void> insertFiles(
             ),
           );
     }
+    if (insert.imageLocationIds != null) {
+      for (final e in insert.imageLocationIds!) {
+        await db
+            .into(db.imageLocationIds)
+            .insert(e.copyWith(accountFile: sql.Value(dbAccountFile.rowId)));
+      }
+    }
     if (insert.imageLocationNames != null) {
       for (final e in insert.imageLocationNames!) {
         await db
             .into(db.imageLocationNames)
-            .insert(e.copyWith(accountFile: sql.Value(dbAccountFile.rowId)));
+            .insertOnConflictUpdate(
+              e.copyWith(dataRevision: insert.imageLocation!.dataRevision),
+            );
       }
     }
     if (insert.trash != null) {
@@ -685,6 +694,7 @@ Future<Set<Album>> listSqliteDbAlbums(compat.SqliteDb db) async {
             null,
             null,
             null,
+            null,
           ),
         );
         return (
@@ -753,39 +763,70 @@ Future<List<compat.CompleteFile>> _populateCompleteFile(
     return const [];
   }
   final accountFileRowIds = acf.map((e) => e.accountFile.rowId).toList();
-
-  final query = db.select(db.imageLocationNames).join([
+  final query = db.select(db.imageLocationIds).join([
     sql.innerJoin(
       db.accountFiles,
-      db.accountFiles.rowId.equalsExp(db.imageLocationNames.accountFile),
+      db.accountFiles.rowId.equalsExp(db.imageLocationIds.accountFile),
       useColumns: false,
+    ),
+    sql.innerJoin(
+      db.imageLocationNames,
+      db.imageLocationNames.geonameId.equalsExp(db.imageLocationIds.geonameId),
     ),
   ]);
   query
     ..where(db.accountFiles.rowId.isIn(accountFileRowIds))
     ..orderBy([sql.OrderingTerm.asc(db.accountFiles.rowId)]);
   final locationNames =
-      await query.map((r) => r.readTable(db.imageLocationNames)).get();
+      await query
+          .map(
+            (r) => (
+              accountFile: r.read(db.imageLocationIds.accountFile)!,
+              geonameId: r.read(db.imageLocationIds.geonameId)!,
+              type: r.readWithConverter(db.imageLocationIds.type)!,
+              lang: r.read(db.imageLocationNames.lang)!,
+              name: r.read(db.imageLocationNames.name)!,
+            ),
+          )
+          .get();
 
-  final locationNamesMap = <int, List<compat.ImageLocationName>>{};
-  for (final e in locationNames) {
-    locationNamesMap
-        .putIfAbsent(e.accountFile, () => <compat.ImageLocationName>[])
-        .add(e);
-  }
-
-  return acf
-      .map(
-        (e) => compat.CompleteFile(
-          e.file,
-          e.accountFile,
-          e.image,
-          e.imageLocation,
-          locationNamesMap[e.accountFile.rowId],
-          e.trash,
-        ),
-      )
-      .toList();
+  final locationNamesMap = locationNames.groupBy(key: (e) => e.accountFile);
+  return acf.map((e) {
+    List<compat.ImageLocationId>? locationIds;
+    List<compat.ImageLocationName>? locationNames;
+    if (e.imageLocation != null) {
+      locationIds =
+          locationNamesMap[e.accountFile.rowId]
+              ?.map(
+                (ee) => compat.ImageLocationId(
+                  accountFile: e.accountFile.rowId,
+                  geonameId: ee.geonameId,
+                  type: ee.type,
+                ),
+              )
+              .toList();
+      locationNames =
+          locationNamesMap[e.accountFile.rowId]
+              ?.map(
+                (ee) => compat.ImageLocationName(
+                  dataRevision: e.imageLocation!.dataRevision,
+                  geonameId: ee.geonameId,
+                  lang: ee.lang,
+                  name: ee.name,
+                ),
+              )
+              .toList();
+    }
+    return compat.CompleteFile(
+      e.file,
+      e.accountFile,
+      e.image,
+      e.imageLocation,
+      locationIds,
+      locationNames,
+      e.trash,
+    );
+  }).toList();
 }
 
 bool shouldPrintSql = false;
