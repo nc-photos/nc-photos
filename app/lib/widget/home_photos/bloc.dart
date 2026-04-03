@@ -205,7 +205,8 @@ class _Bloc extends Bloc<_Event, _State>
         currentState.syncProgress == nextState.syncProgress &&
         currentState.scrollDate == nextState.scrollDate &&
         currentState.dateBarContent == nextState.dateBarContent &&
-        currentState.appBarPosition == nextState.appBarPosition;
+        currentState.appBarPosition == nextState.appBarPosition &&
+        !identical(currentState, nextState);
   };
 
   @override
