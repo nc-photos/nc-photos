@@ -18,11 +18,26 @@ class LocalizedString with EquatableMixin {
 
   String get en => value["en"]!;
 
-  String? lang(String lang) => value[lang.toLowerCase()];
+  String? lang(String lang, [String? scriptCode]) {
+    final l = lang.toLowerCase();
+    if (l == "zh") {
+      final s = scriptCode?.toLowerCase();
+      if (s == "hans") {
+        return value["zh-hans"] ?? value["zh"] ?? value["zh-hant"];
+      } else if (s == "hant") {
+        return value["zh-hant"] ?? value["zh"] ?? value["zh-hans"];
+      } else {
+        return value["zh-hans"] ?? value["zh"] ?? value["zh-hant"];
+      }
+    } else {
+      return value[l];
+    }
+  }
 
-  /// Return string in [preferredLang], or en if not available
-  String operator [](String preferredLang) {
-    return lang(preferredLang) ?? en;
+  /// Return string in [preferredLang] and optionally with [preferredScriptCode],
+  /// or en if not available
+  String get(String preferredLang, [String? preferredScriptCode]) {
+    return lang(preferredLang, preferredScriptCode) ?? en;
   }
 
   @override

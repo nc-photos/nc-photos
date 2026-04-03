@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -19,6 +20,7 @@ import 'package:np_collection/np_collection.dart';
 import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 import 'package:woozy_search/woozy_search.dart';
 
@@ -132,7 +134,7 @@ class HomeSearchSuggestionBloc
     this.collectionsController,
     this.serverController,
     this.accountPrefController, {
-    required this.lang,
+    required this.locale,
   }) : super(const HomeSearchSuggestionBlocInit()) {
     final c = KiwiContainer().resolve<DiContainer>();
     assert(require(c));
@@ -249,7 +251,7 @@ class HomeSearchSuggestionBloc
               locations.countryCode) {
         map[l.name] = l;
       }
-      product.addAll(map.values.map((e) => _LocationSearcheable(e, lang)));
+      product.addAll(map.values.map((e) => _LocationSearcheable(e, locale)));
       _log.info(
         "[_onEventPreloadData] Loaded ${locations.name.length + locations.countryCode.length} locations",
       );
@@ -274,7 +276,7 @@ class HomeSearchSuggestionBloc
   final ServerController serverController;
   final AccountPrefController accountPrefController;
   late final DiContainer _c;
-  final String lang;
+  final Locale locale;
 
   final _search = Woozy<_Searcheable>(limit: 10);
 }
@@ -321,14 +323,14 @@ class _PersonSearcheable implements _Searcheable {
 }
 
 class _LocationSearcheable implements _Searcheable {
-  const _LocationSearcheable(this.location, this.lang);
+  const _LocationSearcheable(this.location, this.locale);
 
   @override
-  List<CiString> toKeywords() => [location.name[lang].toCi()];
+  List<CiString> toKeywords() => [location.name.ofLocale(locale).toCi()];
 
   @override
   toResult() => HomeSearchLocationResult(location);
 
   final LocationGroup location;
-  final String lang;
+  final Locale locale;
 }

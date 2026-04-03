@@ -57,7 +57,7 @@ class PlacesBrowser extends StatelessWidget {
           (_) => _Bloc(
             account: accountController.account,
             placesController: accountController.placesController,
-            lang: Localizations.localeOf(context).languageCode,
+            locale: Localizations.localeOf(context),
           ),
       child: const _WrappedPlacesBrowser(),
     );
@@ -151,7 +151,7 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
         CollectionBuilder.byLocationGroup(
           _bloc.account,
           item.place,
-          Localizations.localeOf(context).languageCode,
+          Localizations.localeOf(context),
         ),
       ),
     );

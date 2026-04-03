@@ -187,7 +187,7 @@ class ReverseGeocoder {
     );
   }
 
-  static const dataRevision = 202603;
+  static const dataRevision = 20260301;
 
   late final CommonDatabase _db;
   late final KDTree _searchTree;

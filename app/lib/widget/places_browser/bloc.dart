@@ -6,7 +6,7 @@ class _Bloc extends Bloc<_Event, _State>
   _Bloc({
     required this.account,
     required this.placesController,
-    required this.lang,
+    required this.locale,
   }) : super(_State.init()) {
     on<_LoadPlaces>(_onLoad);
     on<_Reload>(_onReload);
@@ -46,12 +46,12 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final transformedPlaces =
         ev.places.name
-            .sorted((a, b) => _sorter(a, b, lang))
+            .sorted((a, b) => _sorter(a, b, locale))
             .map((e) => _Item(account: account, place: e))
             .toList();
     final transformedCountries =
         ev.places.countryCode
-            .sorted((a, b) => _sorter(a, b, lang))
+            .sorted((a, b) => _sorter(a, b, locale))
             .map((e) => _Item(account: account, place: e))
             .toList();
     emit(
@@ -64,13 +64,13 @@ class _Bloc extends Bloc<_Event, _State>
 
   final Account account;
   final PlacesController placesController;
-  final String lang;
+  final Locale locale;
 }
 
-int _sorter(LocationGroup a, LocationGroup b, String lang) {
+int _sorter(LocationGroup a, LocationGroup b, Locale locale) {
   final compare = b.count.compareTo(a.count);
   if (compare == 0) {
-    return a.name[lang].compareTo(b.name[lang]);
+    return a.name.ofLocale(locale).compareTo(b.name.ofLocale(locale));
   } else {
     return compare;
   }

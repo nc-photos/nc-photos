@@ -33,6 +33,20 @@ void main() {
         expect(result.admin2?.name.lang("ja"), "台東区");
       });
     });
+    group("zh", () {
+      test("hant string w/ hans locale", () async {
+        final rg = ReverseGeocoder();
+        await rg.init(dbBuilder: _openDb);
+        final result = await rg(42.69751, 23.32415);
+        expect(result!.city?.name.lang("zh", "hans"), "索菲亞");
+      });
+      test("hans string w/ hant locale", () async {
+        final rg = ReverseGeocoder();
+        await rg.init(dbBuilder: _openDb);
+        final result = await rg(32.75893, 119.88512);
+        expect(result!.city?.name.lang("zh", "hant"), "陈堡镇");
+      });
+    });
     test("admin only", () async {
       final rg = ReverseGeocoder();
       await rg.init(dbBuilder: _openDb);

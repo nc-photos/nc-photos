@@ -12,6 +12,7 @@ import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
+import 'package:nc_photos/widget/my_app/my_app.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
@@ -84,7 +85,7 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
           context.read<AccountController>().collectionsController,
           context.read<AccountController>().serverController,
           context.read<AccountController>().accountPrefController,
-          lang: Localizations.localeOf(context).languageCode,
+          locale: Localizations.localeOf(MyApp.globalContext),
         ));
     if (_bloc.state is! HomeSearchSuggestionBlocInit) {
       // process the current state
@@ -173,7 +174,7 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
           CollectionBuilder.byLocationGroup(
             widget.account,
             item.location,
-            Localizations.localeOf(context).languageCode,
+            Localizations.localeOf(context),
           ),
         ),
       );

@@ -60,7 +60,7 @@ class SearchLanding extends StatelessWidget {
             account: accountController.account,
             personsController: accountController.personsController,
             placesController: accountController.placesController,
-            lang: Localizations.localeOf(context).languageCode,
+            locale: Localizations.localeOf(context),
           ),
       child: _WrappedSearchLanding(
         onFavoritePressed: onFavoritePressed,
@@ -390,7 +390,7 @@ class _PlaceSection extends StatelessWidget {
         CollectionBuilder.byLocationGroup(
           context.read<_Bloc>().account,
           place,
-          Localizations.localeOf(context).languageCode,
+          Localizations.localeOf(context),
         ),
       ),
     );

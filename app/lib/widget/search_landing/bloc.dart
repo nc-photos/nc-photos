@@ -7,7 +7,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.account,
     required this.personsController,
     required this.placesController,
-    required this.lang,
+    required this.locale,
   }) : super(_State.init()) {
     on<_LoadPersons>(_onLoadPersons);
     on<_TransformPersonItems>(_onTransformPersonItems);
@@ -89,7 +89,9 @@ class _Bloc extends Bloc<_Event, _State>
             .sorted((a, b) {
               final compare = b.count.compareTo(a.count);
               if (compare == 0) {
-                return a.name[lang].compareTo(b.name[lang]);
+                return a.name
+                    .ofLocale(locale)
+                    .compareTo(b.name.ofLocale(locale));
               } else {
                 return compare;
               }
@@ -103,5 +105,5 @@ class _Bloc extends Bloc<_Event, _State>
   final Account account;
   final PersonsController personsController;
   final PlacesController placesController;
-  final String lang;
+  final Locale locale;
 }
