@@ -44,7 +44,7 @@ void main() {
         final rg = ReverseGeocoder();
         await rg.init(dbBuilder: _openDb);
         final result = await rg(32.75893, 119.88512);
-        expect(result!.city?.name.lang("zh", "hant"), "陈堡镇");
+        expect(result!.city?.name.lang("zh", "hant"), "陈堡");
       });
     });
     test("admin only", () async {

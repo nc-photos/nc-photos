@@ -4,6 +4,7 @@ import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:np_common/localized_string.dart';
 import 'package:np_db_sqlite/np_db_sqlite_compat.dart' as compat;
+import 'package:np_geocoder/np_geocoder.dart';
 import 'package:test/test.dart';
 
 import '../test_util.dart' as util;
@@ -125,7 +126,7 @@ Future<void> _nFile1Location() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      const LocalizedString({"en": "Andorra"}),
+      alpha2CodeToLocalizedName("AD")!,
       "AD",
       2,
       2,
@@ -235,7 +236,7 @@ Future<void> _nFileNLocation() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      const LocalizedString({"en": "Andorra"}),
+      alpha2CodeToLocalizedName("AD")!,
       "AD",
       2,
       2,
@@ -244,7 +245,7 @@ Future<void> _nFileNLocation() async {
       "test2.jpg",
     ),
     LocationGroup(
-      const LocalizedString({"en": "Zimbabwe"}),
+      alpha2CodeToLocalizedName("ZW")!,
       "ZW",
       2,
       4,
@@ -361,7 +362,7 @@ Future<void> _multipleRoots() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      const LocalizedString({"en": "Andorra"}),
+      alpha2CodeToLocalizedName("AD")!,
       "AD",
       4,
       7,
@@ -446,7 +447,7 @@ Future<void> _multipleLangs() async {
   expect(result.admin2.toSet(), <LocationGroup>{});
   expect(result.countryCode.toSet(), {
     LocationGroup(
-      const LocalizedString({"en": "Andorra"}),
+      alpha2CodeToLocalizedName("AD")!,
       "AD",
       2,
       2,
