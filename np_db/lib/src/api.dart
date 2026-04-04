@@ -1,4 +1,5 @@
 import 'dart:io' as io;
+import 'dart:ui';
 
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
@@ -209,6 +210,7 @@ class DbFileMissingMetadataResult {
 class DbFileQueryByLocation {
   const DbFileQueryByLocation({
     required this.place,
+    required this.locale,
     this.countryCode,
     required this.isFuzzy,
   });
@@ -216,7 +218,8 @@ class DbFileQueryByLocation {
   @override
   String toString() => _$toString();
 
-  final String place;
+  final LocalizedString place;
+  final Locale locale;
 
   /// If set, only places inside this country will be matched
   final String? countryCode;

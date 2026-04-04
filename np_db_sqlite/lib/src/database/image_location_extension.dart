@@ -311,7 +311,7 @@ extension SqliteDbImageLocationExtension on SqliteDb {
     return query.map((r) {
       final cc = r.read(imageLocations.countryCode)!;
       return ImageLocationGroup(
-        name: LocalizedString({"en": alpha2CodeToName(cc) ?? cc}),
+        name: alpha2CodeToLocalizedName(cc) ?? LocalizedString({"en": cc}),
         type: ImageLocationType.country,
         countryCode: cc,
         count: r.read(count)!,

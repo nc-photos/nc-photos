@@ -28,7 +28,8 @@ class CollectionLocationGroupAdapter
         AccountPref.of(account).getShareFolderOr(),
       ),
       location: DbFileQueryByLocation(
-        place: _provider.location.name.en,
+        place: _provider.location.name,
+        locale: _provider.locale,
         countryCode: _provider.location.countryCode,
         isFuzzy: false,
       ),

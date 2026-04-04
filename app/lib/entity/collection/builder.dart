@@ -31,6 +31,7 @@ class CollectionBuilder {
       contentProvider: CollectionLocationGroupProvider(
         account: account,
         location: location,
+        locale: locale,
       ),
     );
   }

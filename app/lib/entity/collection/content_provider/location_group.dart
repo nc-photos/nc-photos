@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/collection.dart';
@@ -15,6 +17,7 @@ class CollectionLocationGroupProvider
   const CollectionLocationGroupProvider({
     required this.account,
     required this.location,
+    required this.locale,
   });
 
   @override
@@ -81,4 +84,5 @@ class CollectionLocationGroupProvider
 
   final Account account;
   final LocationGroup location;
+  final Locale locale;
 }

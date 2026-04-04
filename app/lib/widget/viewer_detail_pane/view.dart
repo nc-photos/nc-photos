@@ -617,15 +617,16 @@ class _LocationItem extends StatelessWidget {
     if (location.countryCode == null) {
       return null;
     }
+    final country = alpha2CodeToNameOf(location.countryCode!, context);
     final admin1 = location.localizedAdmin1Of(context);
     if (admin1 == null) {
-      return alpha2CodeToName(location.countryCode!);
+      return country;
     }
     final admin2 = location.localizedAdmin2Of(context);
     if (admin2 == null) {
-      return "$admin1, ${alpha2CodeToName(location.countryCode!)}";
+      return "$admin1, $country";
     } else {
-      return "$admin2, $admin1, ${alpha2CodeToName(location.countryCode!)}";
+      return "$admin2, $admin1, $country";
     }
   }
 }
