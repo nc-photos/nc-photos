@@ -1,9 +1,11 @@
+import 'dart:ui';
+
 import 'package:drift/drift.dart';
 import 'package:np_db/np_db.dart';
 import 'package:np_db_sqlite/src/database.dart';
 import 'package:np_db_sqlite/src/database_extension.dart';
 import 'package:np_geocoder/np_geocoder.dart';
-import 'package:np_string/np_string.dart';
+import 'package:np_ui/np_ui.dart';
 
 enum FilesQueryMode { file, completeFile, expression }
 
@@ -97,7 +99,7 @@ class FilesQueryBuilder {
     _byServerRowId = serverRowId;
   }
 
-  void byLocation(String location) {
+  void byLocation(DbFileQueryByLocation location) {
     _byLocation = location;
   }
 
@@ -245,20 +247,81 @@ class FilesQueryBuilder {
       query.where(db.files.server.equals(_byServerRowId!));
     }
     if (_byLocation != null) {
-      var clause =
-          db.imageLocations.name.like(_byLocation!) |
-          db.imageLocations.admin1.like(_byLocation!) |
-          db.imageLocations.admin2.like(_byLocation!);
-      final countryCode = nameToAlpha2Code(_byLocation!.toCi());
-      if (countryCode != null) {
-        clause = clause | db.imageLocations.countryCode.equals(countryCode);
-      } else if (_byLocation!.length == 2 &&
-          alpha2CodeToName(_byLocation!.toUpperCase()) != null) {
-        clause =
-            clause |
-            db.imageLocations.countryCode.equals(_byLocation!.toUpperCase());
+      final subquery = db.selectOnly(db.imageLocations).join([
+        innerJoin(
+          db.imageLocationIds,
+          db.imageLocationIds.accountFile.equalsExp(
+            db.imageLocations.accountFile,
+          ),
+          useColumns: false,
+        ),
+        innerJoin(
+          db.imageLocationNames,
+          db.imageLocationNames.geonameId.equalsExp(
+            db.imageLocationIds.geonameId,
+          ),
+          useColumns: false,
+        ),
+      ])..addColumns([db.imageLocations.accountFile]);
+
+      if (_byLocation!.countryCode != null) {
+        subquery.where(
+          db.imageLocations.countryCode.equals(
+            _byLocation!.countryCode!.toUpperCase(),
+          ),
+        );
       }
-      query.where(clause);
+      if (_byLocation!.isFuzzy) {
+        var clause = db.imageLocationNames.name.like(
+          _byLocation!.place.ofLocale(_byLocation!.locale),
+        );
+        if (_byLocation!.locale.scriptCode != null) {
+          clause =
+              clause &
+              db.imageLocationNames.lang.equals(
+                "${_byLocation!.locale.languageCode}-${_byLocation!.locale.scriptCode!.toLowerCase()}",
+              );
+        } else {
+          clause =
+              clause &
+              db.imageLocationNames.lang.equals(
+                _byLocation!.locale.languageCode,
+              );
+        }
+        final countryCode = localizedNameToAlpha2Code(_byLocation!.place);
+        if (countryCode != null) {
+          clause = clause | db.imageLocations.countryCode.equals(countryCode);
+        } else if (_byLocation!.place.en.length == 2 &&
+            alpha2CodeToNameOfLocale(
+                  _byLocation!.place.en,
+                  const Locale("en"),
+                ) !=
+                null) {
+          clause =
+              clause |
+              db.imageLocations.countryCode.equals(
+                _byLocation!.place.en.toUpperCase(),
+              );
+        }
+        subquery.where(clause);
+      } else {
+        if (_byLocation!.countryCode != null &&
+            alpha2CodeToNameOfLocale(
+                  _byLocation!.countryCode!,
+                  const Locale("en"),
+                ) ==
+                _byLocation!.place.en) {
+          // some places in the DB have the same name as the country, in such
+          // cases, we return all photos from the country
+        } else {
+          subquery.where(
+            db.imageLocationNames.name.equals(
+              _byLocation!.place.ofLocale(_byLocation!.locale),
+            ),
+          );
+        }
+      }
+      query.where(db.accountFiles.rowId.isInQuery(subquery));
     }
     return query;
   }
@@ -288,5 +351,5 @@ class FilesQueryBuilder {
   bool? _byArchived;
   int? _byDirRowId;
   int? _byServerRowId;
-  String? _byLocation;
+  DbFileQueryByLocation? _byLocation;
 }

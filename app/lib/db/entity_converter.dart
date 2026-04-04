@@ -180,17 +180,7 @@ abstract class DbFileConverter {
           src: s.src.index,
         ),
       ),
-      location: src.location?.let(
-        (s) => DbLocation(
-          version: s.version,
-          name: s.name,
-          latitude: s.latitude,
-          longitude: s.longitude,
-          countryCode: s.countryCode,
-          admin1: s.admin1,
-          admin2: s.admin2,
-        ),
-      ),
+      location: src.location?.toDb(),
       trashData:
           src.trashbinDeletionTime == null
               ? null
@@ -254,25 +244,37 @@ extension MetadataExtension on Metadata {
 abstract class DbImageLocationConverter {
   static ImageLocation fromDb(DbLocation src) {
     return ImageLocation(
-      version: src.version,
-      name: src.name,
+      dataRevision: src.dataRevision,
       latitude: src.latitude,
       longitude: src.longitude,
       countryCode: src.countryCode,
-      admin1: src.admin1,
-      admin2: src.admin2,
+      city: src.city?.let(
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin1: src.admin1?.let(
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin2: src.admin2?.let(
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
+      ),
     );
   }
 
   static DbLocation toDb(ImageLocation src) {
     return DbLocation(
-      version: src.version,
-      name: src.name,
+      dataRevision: src.dataRevision,
       latitude: src.latitude,
       longitude: src.longitude,
       countryCode: src.countryCode,
-      admin1: src.admin1,
-      admin2: src.admin2,
+      city: src.city?.let(
+        (e) => DbLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin1: src.admin1?.let(
+        (e) => DbLocationName(geonameId: e.geonameId, name: e.name),
+      ),
+      admin2: src.admin2?.let(
+        (e) => DbLocationName(geonameId: e.geonameId, name: e.name),
+      ),
     );
   }
 }
@@ -284,7 +286,7 @@ extension ImageLocationExtension on ImageLocation {
 abstract class DbLocationGroupConverter {
   static LocationGroup fromDb(DbLocationGroup src) {
     return LocationGroup(
-      src.place,
+      src.name,
       src.countryCode,
       src.count,
       src.latestFileId,

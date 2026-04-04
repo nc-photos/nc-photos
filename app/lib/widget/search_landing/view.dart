@@ -62,7 +62,7 @@ class _PlaceItemView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 8),
-          Expanded(child: _LabelView(label: item.name)),
+          Expanded(child: _LabelView(label: item.name.of(context))),
         ],
       ),
     );

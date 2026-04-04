@@ -1,6 +1,7 @@
 import 'package:drift/drift.dart';
 import 'package:np_codegen/np_codegen.dart';
 import 'package:np_db_sqlite/src/database.dart';
+import 'package:np_db_sqlite/src/database_extension.dart';
 
 part 'table.g.dart';
 
@@ -94,16 +95,30 @@ class Images extends Table {
 class ImageLocations extends Table {
   IntColumn get accountFile =>
       integer().references(AccountFiles, #rowId, onDelete: KeyAction.cascade)();
-  IntColumn get version => integer()();
-  TextColumn get name => text().nullable()();
+  IntColumn get dataRevision => integer()();
   RealColumn get latitude => real().nullable()();
   RealColumn get longitude => real().nullable()();
   TextColumn get countryCode => text().nullable()();
-  TextColumn get admin1 => text().nullable()();
-  TextColumn get admin2 => text().nullable()();
 
   @override
   Set<Column> get primaryKey => {accountFile};
+}
+
+class ImageLocationIds extends Table {
+  IntColumn get accountFile =>
+      integer().references(AccountFiles, #rowId, onDelete: KeyAction.cascade)();
+  IntColumn get geonameId => integer()();
+  IntColumn get type => integer().map(const ImageLocationTypeConverter())();
+}
+
+class ImageLocationNames extends Table {
+  IntColumn get dataRevision => integer()();
+  IntColumn get geonameId => integer()();
+  TextColumn get lang => text()();
+  TextColumn get name => text()();
+
+  @override
+  Set<Column> get primaryKey => {dataRevision, geonameId, lang};
 }
 
 /// A file inside trashbin
@@ -291,4 +306,19 @@ class SqliteDateTimeConverter extends TypeConverter<DateTime, DateTime> {
 
   @override
   DateTime toSql(DateTime value) => value.toUtc();
+}
+
+class ImageLocationTypeConverter extends TypeConverter<ImageLocationType, int> {
+  const ImageLocationTypeConverter();
+
+  @override
+  ImageLocationType fromSql(int fromDb) {
+    return ImageLocationType.values.firstWhere(
+      (e) => e.value == fromDb,
+      orElse: () => throw ArgumentError("Unknown value: $fromDb"),
+    );
+  }
+
+  @override
+  int toSql(ImageLocationType value) => value.value;
 }

@@ -6,9 +6,9 @@ import 'package:nc_photos/entity/collection/adapter/adapter_mixin.dart';
 import 'package:nc_photos/entity/collection/content_provider/location_group.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/basic_item.dart';
-import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
-import 'package:nc_photos/use_case/list_location_file.dart';
+import 'package:nc_photos/entity/pref.dart';
+import 'package:np_db/np_db.dart';
 
 class CollectionLocationGroupAdapter
     with
@@ -21,18 +21,20 @@ class CollectionLocationGroupAdapter
 
   @override
   Stream<List<CollectionItem>> listItem() async* {
-    final files = <File>[];
-    for (final r in account.roots) {
-      final dir = File(path: file_util.unstripPath(account, r));
-      files.addAll(
-        await ListLocationFile(_c)(
-          account,
-          dir,
-          _provider.location.place,
-          _provider.location.countryCode,
-        ),
-      );
-    }
+    final files = await _c.fileRepo2.getFileDescriptors(
+      account,
+      file_util.unstripPath(
+        account,
+        AccountPref.of(account).getShareFolderOr(),
+      ),
+      location: DbFileQueryByLocation(
+        place: _provider.location.name,
+        locale: _provider.locale,
+        countryCode: _provider.location.countryCode,
+        isFuzzy: false,
+      ),
+      isAscending: false,
+    );
     yield files
         .where((f) => file_util.isSupportedFormat(f))
         .map((f) => BasicCollectionFileItem(f))

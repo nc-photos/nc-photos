@@ -28,6 +28,7 @@ class FileRemoteDataSource implements FileDataSource2 {
   Future<List<FileDescriptor>> getFileDescriptors(
     Account account,
     String shareDirPath, {
+    DbFileQueryByLocation? location,
     TimeRange? timeRange,
     bool? isArchived,
     bool? isAscending,
@@ -123,6 +124,7 @@ class FileNpDbDataSource implements FileDataSource2 {
   Future<List<FileDescriptor>> getFileDescriptors(
     Account account,
     String shareDirPath, {
+    DbFileQueryByLocation? location,
     TimeRange? timeRange,
     bool? isArchived,
     bool? isAscending,
@@ -133,6 +135,7 @@ class FileNpDbDataSource implements FileDataSource2 {
     return _getFileDescriptors(
       account,
       shareDirPath,
+      location: location,
       timeRange: timeRange,
       isArchived: isArchived,
       isAscending: isAscending,
@@ -233,6 +236,7 @@ class FileNpDbDataSource implements FileDataSource2 {
   Future<List<FileDescriptor>> _getFileDescriptors(
     Account account,
     String shareDirPath, {
+    DbFileQueryByLocation? location,
     TimeRange? timeRange,
     bool? isArchived,
     bool? isAscending,
@@ -256,6 +260,7 @@ class FileNpDbDataSource implements FileDataSource2 {
               .toList(),
       includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
+      location: location,
       mimes: file_util.supportedFormatMimes,
       timeRange: timeRange,
       isArchived: isArchived,

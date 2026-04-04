@@ -1,5 +1,6 @@
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/type.dart';
 import 'package:np_string/np_string.dart';
 import 'package:to_string/to_string.dart';
@@ -118,23 +119,23 @@ class DbFaceRecognitionPerson with EquatableMixin {
 class DbFile with EquatableMixin {
   const DbFile({
     required this.fileId,
-    required this.contentLength,
-    required this.contentType,
-    required this.etag,
-    required this.lastModified,
-    required this.isCollection,
-    required this.usedBytes,
-    required this.hasPreview,
-    required this.ownerId,
-    required this.ownerDisplayName,
+    this.contentLength,
+    this.contentType,
+    this.etag,
+    this.lastModified,
+    this.isCollection,
+    this.usedBytes,
+    this.hasPreview,
+    this.ownerId,
+    this.ownerDisplayName,
     required this.relativePath,
-    required this.isFavorite,
-    required this.isArchived,
-    required this.overrideDateTime,
+    this.isFavorite,
+    this.isArchived,
+    this.overrideDateTime,
     required this.bestDateTime,
-    required this.imageData,
-    required this.location,
-    required this.trashData,
+    this.imageData,
+    this.location,
+    this.trashData,
   });
 
   @override
@@ -258,11 +259,11 @@ class DbImageData with EquatableMixin {
 @toString
 class DbLocation with EquatableMixin {
   const DbLocation({
-    required this.version,
-    required this.name,
+    required this.dataRevision,
     required this.latitude,
     required this.longitude,
     required this.countryCode,
+    required this.city,
     required this.admin1,
     required this.admin2,
   });
@@ -272,22 +273,37 @@ class DbLocation with EquatableMixin {
 
   @override
   List<Object?> get props => [
-    version,
-    name,
+    dataRevision,
     latitude,
     longitude,
     countryCode,
+    city,
     admin1,
     admin2,
   ];
 
-  final int version;
-  final String? name;
+  final int dataRevision;
   final double? latitude;
   final double? longitude;
   final String? countryCode;
-  final String? admin1;
-  final String? admin2;
+  final DbLocationName? city;
+  final DbLocationName? admin1;
+  final DbLocationName? admin2;
+}
+
+@genCopyWith
+@toString
+class DbLocationName with EquatableMixin {
+  const DbLocationName({required this.geonameId, required this.name});
+
+  @override
+  String toString() => _$toString();
+
+  @override
+  List<Object?> get props => [geonameId, name];
+
+  final int geonameId;
+  final LocalizedString name;
 }
 
 @genCopyWith

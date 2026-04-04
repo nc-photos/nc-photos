@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 import 'package:logging/logging.dart';
+import 'package:np_db_sqlite/src/database_extension.dart';
 import 'package:np_db_sqlite/src/table.dart';
 import 'package:np_db_sqlite/src/util.dart';
 import 'package:np_log/np_log.dart';
@@ -26,6 +27,8 @@ part 'database.g.dart';
     NcAlbumItems,
     RecognizeFaces,
     RecognizeFaceItems,
+    ImageLocationNames,
+    ImageLocationIds,
   ],
 )
 class SqliteDb extends _$SqliteDb {
@@ -36,7 +39,7 @@ class SqliteDb extends _$SqliteDb {
   static late final SqliteDb inst;
 
   @override
-  int get schemaVersion => 9;
+  int get schemaVersion => 10;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
@@ -103,7 +106,7 @@ class SqliteDb extends _$SqliteDb {
       );
 
       await _createIndexV2(m);
-      await _createIndexV3(m);
+      await _createIndexV10(m);
     },
     onUpgrade: (m, from, to) async {
       _log.info("[onUpgrade] $from -> $to");
@@ -115,8 +118,8 @@ class SqliteDb extends _$SqliteDb {
             await _createIndexV2(m);
           }
           if (from < 3) {
-            await m.createTable(imageLocations);
-            await _createIndexV3(m);
+            // obsolete by v10
+            // await m.createTable(imageLocations);
           }
           if (from < 4) {
             await m.addColumn(albums, albums.fileEtag);
@@ -146,6 +149,13 @@ class SqliteDb extends _$SqliteDb {
           }
           if (from < 9) {
             await m.addColumn(images, images.xmpRaw);
+          }
+          if (from < 10) {
+            await m.deleteTable("image_locations");
+            await m.createTable(imageLocations);
+            await m.createTable(imageLocationIds);
+            await m.createTable(imageLocationNames);
+            await _createIndexV10(m);
           }
         });
       } catch (e, stackTrace) {
@@ -178,29 +188,17 @@ class SqliteDb extends _$SqliteDb {
     );
   }
 
-  Future<void> _createIndexV3(Migrator m) async {
+  Future<void> _createIndexV10(Migrator m) async {
     await m.createIndex(
       Index(
-        "image_locations_name_index",
-        "CREATE INDEX image_locations_name_index ON image_locations(name);",
+        "image_location_names_data_revision_geoname_id_index",
+        "CREATE INDEX image_location_names_data_revision_geoname_id_index ON image_location_names(data_revision, geoname_id);",
       ),
     );
     await m.createIndex(
       Index(
-        "image_locations_country_code_index",
-        "CREATE INDEX image_locations_country_code_index ON image_locations(country_code);",
-      ),
-    );
-    await m.createIndex(
-      Index(
-        "image_locations_admin1_index",
-        "CREATE INDEX image_locations_admin1_index ON image_locations(admin1);",
-      ),
-    );
-    await m.createIndex(
-      Index(
-        "image_locations_admin2_index",
-        "CREATE INDEX image_locations_admin2_index ON image_locations(admin2);",
+        "image_location_names_name_index",
+        "CREATE INDEX image_location_names_name_index ON image_location_names(name);",
       ),
     );
   }

@@ -64,6 +64,7 @@ import 'package:nc_photos/widget/trusted_cert_manager/trusted_cert_manager.dart'
 import 'package:nc_photos/widget/upload_folder_picker.dart';
 import 'package:np_common/color.dart';
 import 'package:np_db/np_db.dart';
+import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
@@ -182,7 +183,10 @@ class _WrappedAppState extends State<_WrappedApp>
                 navigatorKey: _navigatorKey,
                 scaffoldMessengerKey: _scaffoldMessengerKey,
                 locale: state.language.locale,
-                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                localizationsDelegates: const [
+                  ...AppLocalizations.localizationsDelegates,
+                  CountryLocalizations.delegate,
+                ],
                 supportedLocales: AppLocalizations.supportedLocales,
                 builder: (context, child) {
                   MyApp._globalContext = context;

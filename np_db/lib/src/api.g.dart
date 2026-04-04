@@ -140,7 +140,7 @@ extension _$DbSyncIdResultToString on DbSyncIdResult {
 extension _$DbLocationGroupToString on DbLocationGroup {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbLocationGroup {place: $place, countryCode: $countryCode, count: $count, latestFileId: $latestFileId, latestDateTime: $latestDateTime, latestFileMime: $latestFileMime, latestFileRelativePath: $latestFileRelativePath}";
+    return "DbLocationGroup {name: $name, countryCode: $countryCode, count: $count, latestFileId: $latestFileId, latestDateTime: $latestDateTime, latestFileMime: $latestFileMime, latestFileRelativePath: $latestFileRelativePath}";
   }
 }
 
@@ -183,5 +183,12 @@ extension _$DbFileMissingMetadataResultToString on DbFileMissingMetadataResult {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "DbFileMissingMetadataResult {items: [length: ${items.length}]}";
+  }
+}
+
+extension _$DbFileQueryByLocationToString on DbFileQueryByLocation {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "DbFileQueryByLocation {place: $place, countryCode: $countryCode, isFuzzy: $isFuzzy}";
   }
 }

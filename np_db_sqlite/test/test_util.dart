@@ -31,28 +31,24 @@ class FilesBuilder {
     DbImageData? imageData,
     DbLocation? location,
   }) {
+    final fid = fileId++;
     files.add(
       DbFile(
-        fileId: fileId++,
+        fileId: fid,
         contentLength: contentLength,
         contentType: contentType,
         etag: etag,
-        lastModified:
-            lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
+        lastModified: lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + fid),
         isCollection: isCollection,
-        usedBytes: null,
         hasPreview: hasPreview,
         ownerId: ownerId.toCi(),
         ownerDisplayName: ownerDisplayName ?? ownerId.toString(),
         relativePath: relativePath,
         isFavorite: isFavorite,
-        isArchived: null,
-        overrideDateTime: null,
         bestDateTime: _getBestDateTime(
           overrideDateTime: null,
           dateTimeOriginal: imageData?.dateTime,
-          lastModified:
-              lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
+          lastModified: lastModified ?? DateTime.utc(2020, 1, 2, 3, 4, 5 + fid),
         ),
         imageData: imageData,
         location: location,
@@ -225,6 +221,22 @@ Future<void> insertFiles(
               accountFile: Value(sqlAccountFile.rowId),
             ),
           );
+    }
+    if (insert.imageLocationIds != null) {
+      for (final e in insert.imageLocationIds!) {
+        await db
+            .into(db.imageLocationIds)
+            .insert(e.copyWith(accountFile: Value(sqlAccountFile.rowId)));
+      }
+    }
+    if (insert.imageLocationNames != null) {
+      for (final e in insert.imageLocationNames!) {
+        await db
+            .into(db.imageLocationNames)
+            .insertOnConflictUpdate(
+              e.copyWith(dataRevision: insert.imageLocation!.dataRevision),
+            );
+      }
     }
     if (insert.trash != null) {
       await db

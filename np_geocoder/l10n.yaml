@@ -1,0 +1,6 @@
+arb-dir: lib/src/l10n
+template-arb-file: country_en.arb
+output-localization-file: country_localizations.dart
+output-class: CountryLocalizations
+preferred-supported-locales: [en]
+synthetic-package: false

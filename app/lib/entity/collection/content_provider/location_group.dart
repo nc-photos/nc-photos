@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/collection.dart';
@@ -15,13 +17,14 @@ class CollectionLocationGroupProvider
   const CollectionLocationGroupProvider({
     required this.account,
     required this.location,
+    required this.locale,
   });
 
   @override
   String get fourCc => "LOCG";
 
   @override
-  String get id => location.place;
+  String get id => location.name.en;
 
   @override
   int? get count => location.count;
@@ -81,4 +84,5 @@ class CollectionLocationGroupProvider
 
   final Account account;
   final LocationGroup location;
+  final Locale locale;
 }

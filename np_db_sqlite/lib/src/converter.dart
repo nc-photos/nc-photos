@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:collection/collection.dart';
 import 'package:drift/drift.dart';
 import 'package:np_async/np_async.dart';
+import 'package:np_collection/np_collection.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/type.dart';
 import 'package:np_db/np_db.dart';
@@ -119,7 +122,13 @@ abstract class FileConverter {
       overrideDateTime: f.accountFile.overrideDateTime,
       bestDateTime: f.accountFile.bestDateTime,
       imageData: f.image?.let(ImageConverter.fromSql),
-      location: f.imageLocation?.let(ImageLocationConverter.fromSql),
+      location: f.imageLocation?.let(
+        (e) => ImageLocationConverter.fromSql(
+          e,
+          f.imageLocationIds,
+          f.imageLocationNames,
+        ),
+      ),
       trashData: f.trash?.let(TrashConverter.fromSql),
     );
   }
@@ -157,16 +166,63 @@ abstract class FileConverter {
       ),
     );
     final sqlImageLocation = file.location?.let(
-      (l) => ImageLocationsCompanion.insert(
-        version: l.version,
-        name: Value(l.name),
+      (l) => ImageLocationsCompanion(
+        dataRevision: Value(l.dataRevision),
         latitude: Value(l.latitude),
         longitude: Value(l.longitude),
         countryCode: Value(l.countryCode),
-        admin1: Value(l.admin1),
-        admin2: Value(l.admin2),
       ),
     );
+    final sqlImageLocationIds =
+        [
+          file.location?.city?.let(
+            (e) => ImageLocationIdsCompanion(
+              geonameId: Value(e.geonameId),
+              type: const Value(ImageLocationType.city),
+            ),
+          ),
+          file.location?.admin1?.let(
+            (e) => ImageLocationIdsCompanion(
+              geonameId: Value(e.geonameId),
+              type: const Value(ImageLocationType.admin1),
+            ),
+          ),
+          file.location?.admin2?.let(
+            (e) => ImageLocationIdsCompanion(
+              geonameId: Value(e.geonameId),
+              type: const Value(ImageLocationType.admin2),
+            ),
+          ),
+        ].nonNulls.toList();
+    final sqlImageLocationNames = [
+      ...?file.location?.city?.let(
+        (e) => e.name.value.entries.map(
+          (n) => ImageLocationNamesCompanion(
+            geonameId: Value(e.geonameId),
+            lang: Value(n.key),
+            name: Value(n.value),
+          ),
+        ),
+      ),
+      ...?file.location?.admin1?.let(
+        (e) => e.name.value.entries.map(
+          (n) => ImageLocationNamesCompanion(
+            geonameId: Value(e.geonameId),
+            lang: Value(n.key),
+            name: Value(n.value),
+          ),
+        ),
+      ),
+      ...?file.location?.admin2?.let(
+        (e) => e.name.value.entries.map(
+          (n) => ImageLocationNamesCompanion(
+            geonameId: Value(e.geonameId),
+            lang: Value(n.key),
+            name: Value(n.value),
+          ),
+        ),
+      ),
+    ];
     final sqlTrash =
         file.trashData == null
             ? null
@@ -180,6 +236,8 @@ abstract class FileConverter {
       sqlAccountFile,
       sqlImage,
       sqlImageLocation,
+      sqlImageLocationIds.isNotEmpty ? sqlImageLocationIds : null,
+      sqlImageLocationNames.isNotEmpty ? sqlImageLocationNames : null,
       sqlTrash,
     );
   }
@@ -202,15 +260,65 @@ abstract class ImageConverter {
 }
 
 abstract class ImageLocationConverter {
-  static DbLocation fromSql(ImageLocation src) {
+  static DbLocation fromSql(
+    ImageLocation location,
+    List<ImageLocationId>? ids,
+    List<ImageLocationName>? names,
+  ) {
+    final cityId =
+        ids
+            ?.firstWhereOrNull((e) => e.type == ImageLocationType.city)
+            ?.geonameId;
+    final cityNames =
+        names
+            ?.where((e) => e.geonameId == cityId)
+            .map((e) => MapEntry(e.lang, e.name))
+            .toMap();
+    final admin1Id =
+        ids
+            ?.firstWhereOrNull((e) => e.type == ImageLocationType.admin1)
+            ?.geonameId;
+    final admin1Names =
+        names
+            ?.where((e) => e.geonameId == admin1Id)
+            .map((e) => MapEntry(e.lang, e.name))
+            .toMap();
+    final admin2Id =
+        ids
+            ?.firstWhereOrNull((e) => e.type == ImageLocationType.admin2)
+            ?.geonameId;
+    final admin2Names =
+        names
+            ?.where((e) => e.geonameId == admin2Id)
+            .map((e) => MapEntry(e.lang, e.name))
+            .toMap();
+
     return DbLocation(
-      version: src.version,
-      name: src.name,
-      latitude: src.latitude,
-      longitude: src.longitude,
-      countryCode: src.countryCode,
-      admin1: src.admin1,
-      admin2: src.admin2,
+      dataRevision: location.dataRevision,
+      latitude: location.latitude,
+      longitude: location.longitude,
+      countryCode: location.countryCode,
+      city:
+          cityNames?.isNotEmpty == true
+              ? DbLocationName(
+                geonameId: cityId!,
+                name: LocalizedString(cityNames!),
+              )
+              : null,
+      admin1:
+          admin1Names?.isNotEmpty == true
+              ? DbLocationName(
+                geonameId: admin1Id!,
+                name: LocalizedString(admin1Names!),
+              )
+              : null,
+      admin2:
+          admin2Names?.isNotEmpty == true
+              ? DbLocationName(
+                geonameId: admin2Id!,
+                name: LocalizedString(admin2Names!),
+              )
+              : null,
     );
   }
 }
@@ -218,7 +326,7 @@ abstract class ImageLocationConverter {
 abstract class ImageLocationGroupConverter {
   static DbLocationGroup fromSql(ImageLocationGroup src) {
     return DbLocationGroup(
-      place: src.place,
+      name: src.name,
       countryCode: src.countryCode,
       count: src.count,
       latestFileId: src.latestFileId,

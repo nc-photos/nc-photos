@@ -24,6 +24,7 @@ import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/collection_list_item.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
@@ -56,6 +57,7 @@ class PlacesBrowser extends StatelessWidget {
           (_) => _Bloc(
             account: accountController.account,
             placesController: accountController.placesController,
+            locale: Localizations.localeOf(context),
           ),
       child: const _WrappedPlacesBrowser(),
     );
@@ -146,7 +148,11 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
       context,
       CollectionBrowser.routeName,
       arguments: CollectionBrowserArguments(
-        CollectionBuilder.byLocationGroup(_bloc.account, item.place),
+        CollectionBuilder.byLocationGroup(
+          _bloc.account,
+          item.place,
+          Localizations.localeOf(context),
+        ),
       ),
     );
   }

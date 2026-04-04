@@ -6,6 +6,8 @@ class CompleteFile {
     this.accountFile,
     this.image,
     this.imageLocation,
+    this.imageLocationIds,
+    this.imageLocationNames,
     this.trash,
   );
 
@@ -13,6 +15,8 @@ class CompleteFile {
   final AccountFile accountFile;
   final Image? image;
   final ImageLocation? imageLocation;
+  final List<ImageLocationId>? imageLocationIds;
+  final List<ImageLocationName>? imageLocationNames;
   final Trash? trash;
 }
 
@@ -22,6 +26,8 @@ class CompleteFileCompanion {
     this.accountFile,
     this.image,
     this.imageLocation,
+    this.imageLocationIds,
+    this.imageLocationNames,
     this.trash,
   );
 
@@ -29,6 +35,8 @@ class CompleteFileCompanion {
   final AccountFilesCompanion accountFile;
   final ImagesCompanion? image;
   final ImageLocationsCompanion? imageLocation;
+  final List<ImageLocationIdsCompanion>? imageLocationIds;
+  final List<ImageLocationNamesCompanion>? imageLocationNames;
   final TrashesCompanion? trash;
 }
 
@@ -89,44 +97,8 @@ extension SqliteDbFileExtension on SqliteDb {
       q.byDirRowId(dirIds.fileRowId);
       return q.build();
     });
-    return _mapCompleteFile(query);
-  }
-
-  /// Return files located inside [dirRelativePath]
-  Future<List<CompleteFile>> queryFilesByLocation({
-    required ByAccount account,
-    required String dirRelativePath,
-    required String? place,
-    required String countryCode,
-  }) async {
-    _log.info(
-      "[queryFilesByLocation] dirRelativePath: $dirRelativePath, "
-      "place: $place, "
-      "countryCode: $countryCode",
-    );
-    final query = _queryFiles().let((q) {
-      q
-        ..setQueryMode(FilesQueryMode.completeFile)
-        ..setAccount(account);
-      if (dirRelativePath.isNotEmpty) {
-        q.byOrRelativePathPattern("$dirRelativePath/%");
-      }
-      return q.build();
-    });
-    if (place == null || alpha2CodeToName(countryCode) == place) {
-      // some places in the DB have the same name as the country, in such
-      // cases, we return all photos from the country
-      query.where(imageLocations.countryCode.equals(countryCode));
-    } else {
-      query
-        ..where(
-          imageLocations.name.equals(place) |
-              imageLocations.admin1.equals(place) |
-              imageLocations.admin2.equals(place),
-        )
-        ..where(imageLocations.countryCode.equals(countryCode));
-    }
-    return _mapCompleteFile(query);
+    final acf = await _mapAlmostCompleteFile(query);
+    return _populateCompleteFile(acf);
   }
 
   /// Query [CompleteFile]s by file id
@@ -139,7 +111,7 @@ extension SqliteDbFileExtension on SqliteDb {
     _log.info(
       "[queryFilesByFileIds] fileIds: (length: ${fileIds.length}) ${fileIds.toReadableString(truncate: 10)}",
     );
-    return fileIds.withPartition((sublist) {
+    return fileIds.withPartition((sublist) async {
       final query = _queryFiles().let((q) {
         q
           ..setQueryMode(FilesQueryMode.completeFile)
@@ -147,35 +119,9 @@ extension SqliteDbFileExtension on SqliteDb {
           ..byFileIds(sublist);
         return q.build();
       });
-      return _mapCompleteFile(query);
+      final acf = await _mapAlmostCompleteFile(query);
+      return _populateCompleteFile(acf);
     }, _maxByFileIdsSize);
-  }
-
-  Future<List<CompleteFile>> queryFilesByTimeRange({
-    required ByAccount account,
-    required List<String> dirRoots,
-    required TimeRange range,
-  }) {
-    _log.info("[queryFilesByTimeRange] range: $range");
-    final query = _queryFiles().let((q) {
-      q
-        ..setQueryMode(FilesQueryMode.completeFile)
-        ..setAccount(account);
-      for (final r in dirRoots) {
-        if (r.isNotEmpty) {
-          q.byOrRelativePathPattern("$r/%");
-        }
-      }
-      return q.build();
-    });
-    accountFiles.bestDateTime
-        .isBetweenTimeRange(range)
-        ?.let((e) => query.where(e));
-    query.orderBy([
-      OrderingTerm.desc(accountFiles.bestDateTime),
-      OrderingTerm.desc(files.fileId),
-    ]);
-    return _mapCompleteFile(query);
   }
 
   Future<List<QueryFileIdResult>> queryFileIds({
@@ -357,15 +303,77 @@ extension SqliteDbFileExtension on SqliteDb {
         await into(imageLocations).insertOnConflictUpdate(
           ImageLocationsCompanion.insert(
             accountFile: Value(rowId.accountFileRowId),
-            version: location.obj!.version,
-            name: Value(location.obj!.name),
+            dataRevision: location.obj!.dataRevision,
             latitude: Value(location.obj!.latitude),
             longitude: Value(location.obj!.longitude),
             countryCode: Value(location.obj!.countryCode),
-            admin1: Value(location.obj!.admin1),
-            admin2: Value(location.obj!.admin2),
           ),
         );
+        await (delete(imageLocationIds)
+          ..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
+        if (location.obj!.city != null) {
+          for (final e
+              in location.obj!.city?.name.value.entries ??
+                  <MapEntry<String, String>>[]) {
+            await into(imageLocationNames).insertOnConflictUpdate(
+              ImageLocationNamesCompanion.insert(
+                dataRevision: location.obj!.dataRevision,
+                geonameId: location.obj!.city!.geonameId,
+                lang: e.key,
+                name: e.value,
+              ),
+            );
+          }
+          await into(imageLocationIds).insert(
+            ImageLocationIdsCompanion.insert(
+              accountFile: rowId.accountFileRowId,
+              geonameId: location.obj!.city!.geonameId,
+              type: ImageLocationType.city,
+            ),
+          );
+        }
+        if (location.obj!.admin1 != null) {
+          for (final e
+              in location.obj!.admin1?.name.value.entries ??
+                  <MapEntry<String, String>>[]) {
+            await into(imageLocationNames).insertOnConflictUpdate(
+              ImageLocationNamesCompanion.insert(
+                dataRevision: location.obj!.dataRevision,
+                geonameId: location.obj!.admin1!.geonameId,
+                lang: e.key,
+                name: e.value,
+              ),
+            );
+          }
+          await into(imageLocationIds).insert(
+            ImageLocationIdsCompanion.insert(
+              accountFile: rowId.accountFileRowId,
+              geonameId: location.obj!.admin1!.geonameId,
+              type: ImageLocationType.admin1,
+            ),
+          );
+        }
+        if (location.obj!.admin2 != null) {
+          for (final e
+              in location.obj!.admin2?.name.value.entries ??
+                  <MapEntry<String, String>>[]) {
+            await into(imageLocationNames).insertOnConflictUpdate(
+              ImageLocationNamesCompanion.insert(
+                dataRevision: location.obj!.dataRevision,
+                geonameId: location.obj!.admin2!.geonameId,
+                lang: e.key,
+                name: e.value,
+              ),
+            );
+          }
+          await into(imageLocationIds).insert(
+            ImageLocationIdsCompanion.insert(
+              accountFile: rowId.accountFileRowId,
+              geonameId: location.obj!.admin2!.geonameId,
+              type: ImageLocationType.admin2,
+            ),
+          );
+        }
       }
     }
   }
@@ -478,10 +486,12 @@ extension SqliteDbFileExtension on SqliteDb {
     Expression<bool>? filter;
     if (isMissingMetadata != null) {
       if (isMissingMetadata) {
-        filter = images.lastUpdated.isNull() | imageLocations.version.isNull();
+        filter =
+            images.lastUpdated.isNull() | imageLocations.dataRevision.isNull();
       } else {
         filter =
-            images.lastUpdated.isNotNull() & imageLocations.version.isNotNull();
+            images.lastUpdated.isNotNull() &
+            imageLocations.dataRevision.isNotNull();
       }
     }
     final count = countAll(filter: filter);
@@ -597,11 +607,12 @@ extension SqliteDbFileExtension on SqliteDb {
     if (isMissingMetadata != null) {
       if (isMissingMetadata) {
         query.where(
-          images.lastUpdated.isNull() | imageLocations.version.isNull(),
+          images.lastUpdated.isNull() | imageLocations.dataRevision.isNull(),
         );
       } else {
         query.where(
-          images.lastUpdated.isNotNull() & imageLocations.version.isNotNull(),
+          images.lastUpdated.isNotNull() &
+              imageLocations.dataRevision.isNotNull(),
         );
       }
     }
@@ -627,7 +638,7 @@ extension SqliteDbFileExtension on SqliteDb {
     List<String>? includeRelativeDirs,
     List<String>? excludeRelativeRoots,
     List<String>? relativePathKeywords,
-    String? location,
+    DbFileQueryByLocation? location,
     bool? isFavorite,
     bool? isArchived,
     List<String>? mimes,
@@ -1182,6 +1193,18 @@ extension SqliteDbFileExtension on SqliteDb {
             f.imageLocation!.copyWith(accountFile: Value(sqlAccountFile.rowId)),
           );
         }
+        if (f.imageLocationIds != null) {
+          for (final e in f.imageLocationIds!) {
+            await into(
+              imageLocationIds,
+            ).insert(e.copyWith(accountFile: Value(sqlAccountFile.rowId)));
+          }
+        }
+        if (f.imageLocationNames != null) {
+          for (final e in f.imageLocationNames!) {
+            await into(imageLocationNames).insertOnConflictUpdate(e);
+          }
+        }
         if (f.trash != null) {
           await into(trashes).insert(f.trash!.copyWith(file: Value(rowId)));
         }
@@ -1278,6 +1301,80 @@ extension SqliteDbFileExtension on SqliteDb {
     }
   }
 
+  Future<List<CompleteFile>> _populateCompleteFile(
+    List<_AlmostCompleteFile> acf,
+  ) async {
+    if (acf.isEmpty) {
+      return const [];
+    }
+    final accountFileRowIds = acf.map((e) => e.accountFile.rowId).toList();
+    final locationNames = await accountFileRowIds.withPartition((sublist) {
+      final query = select(imageLocationIds).join([
+        innerJoin(
+          accountFiles,
+          accountFiles.rowId.equalsExp(imageLocationIds.accountFile),
+          useColumns: false,
+        ),
+        innerJoin(
+          imageLocationNames,
+          imageLocationNames.geonameId.equalsExp(imageLocationIds.geonameId),
+        ),
+      ]);
+      query
+        ..where(accountFiles.rowId.isIn(sublist))
+        ..orderBy([OrderingTerm.asc(accountFiles.rowId)]);
+      return query
+          .map(
+            (r) => (
+              accountFile: r.read(imageLocationIds.accountFile)!,
+              geonameId: r.read(imageLocationIds.geonameId)!,
+              type: r.readWithConverter(imageLocationIds.type)!,
+              lang: r.read(imageLocationNames.lang)!,
+              name: r.read(imageLocationNames.name)!,
+            ),
+          )
+          .get();
+    }, _maxByFileIdsSize);
+
+    final locationNamesMap = locationNames.groupBy(key: (e) => e.accountFile);
+    return acf.map((e) {
+      List<ImageLocationId>? locationIds;
+      List<ImageLocationName>? locationNames;
+      if (e.imageLocation != null) {
+        locationIds =
+            locationNamesMap[e.accountFile.rowId]
+                ?.map(
+                  (ee) => ImageLocationId(
+                    accountFile: e.accountFile.rowId,
+                    geonameId: ee.geonameId,
+                    type: ee.type,
+                  ),
+                )
+                .toList();
+        locationNames =
+            locationNamesMap[e.accountFile.rowId]
+                ?.map(
+                  (ee) => ImageLocationName(
+                    dataRevision: e.imageLocation!.dataRevision,
+                    geonameId: ee.geonameId,
+                    lang: ee.lang,
+                    name: ee.name,
+                  ),
+                )
+                .toList();
+      }
+      return CompleteFile(
+        e.file,
+        e.accountFile,
+        e.image,
+        e.imageLocation,
+        locationIds,
+        locationNames,
+        e.trash,
+      );
+    }).toList();
+  }
+
   /// Delete Files without a corresponding entry in AccountFiles
   @visibleForTesting
   Future<void> cleanUpDanglingFiles() async {
@@ -1300,10 +1397,12 @@ extension SqliteDbFileExtension on SqliteDb {
     }
   }
 
-  Future<List<CompleteFile>> _mapCompleteFile(JoinedSelectStatement query) {
+  Future<List<_AlmostCompleteFile>> _mapAlmostCompleteFile(
+    JoinedSelectStatement query,
+  ) {
     return query
         .map(
-          (r) => CompleteFile(
+          (r) => _AlmostCompleteFile(
             r.readTable(files),
             r.readTable(accountFiles),
             r.readTableOrNull(images),
@@ -1314,3 +1413,22 @@ extension SqliteDbFileExtension on SqliteDb {
         .get();
   }
 }
+
+class _AlmostCompleteFile {
+  const _AlmostCompleteFile(
+    this.file,
+    this.accountFile,
+    this.image,
+    this.imageLocation,
+    this.trash,
+  );
+
+  final File file;
+  final AccountFile accountFile;
+  final Image? image;
+  final ImageLocation? imageLocation;
+  final Trash? trash;
+}
+
+@visibleForTesting
+typedef AlmostCompleteFile = _AlmostCompleteFile;

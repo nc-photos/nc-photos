@@ -6,6 +6,7 @@ export 'src/app_bar_title_container.dart';
 export 'src/asset_icon.dart';
 export 'src/color_util.dart';
 export 'src/fancy_option_picker.dart';
+export 'src/localized_string_util.dart';
 export 'src/material3.dart';
 export 'src/pixel_image_provider.dart';
 export 'src/shimmer.dart';

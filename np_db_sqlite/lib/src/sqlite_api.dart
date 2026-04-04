@@ -215,24 +215,6 @@ class NpDbSqlite implements NpDb {
   }
 
   @override
-  Future<List<DbFile>> getFilesByDirKeyAndLocation({
-    required DbAccount account,
-    required String dirRelativePath,
-    required String? place,
-    required String countryCode,
-  }) async {
-    final sqlObjs = await _db.use((db) async {
-      return await db.queryFilesByLocation(
-        account: ByAccount.db(account),
-        dirRelativePath: dirRelativePath,
-        place: place,
-        countryCode: countryCode,
-      );
-    });
-    return sqlObjs.toDbFiles();
-  }
-
-  @override
   Future<List<DbFile>> getFilesByFileIds({
     required DbAccount account,
     required Iterable<int> fileIds,
@@ -241,22 +223,6 @@ class NpDbSqlite implements NpDb {
       return await db.queryFilesByFileIds(
         account: ByAccount.db(account),
         fileIds: fileIds,
-      );
-    });
-    return sqlObjs.toDbFiles();
-  }
-
-  @override
-  Future<List<DbFile>> getFilesByTimeRange({
-    required DbAccount account,
-    required List<String> dirRoots,
-    required TimeRange range,
-  }) async {
-    final sqlObjs = await _db.use((db) async {
-      return await db.queryFilesByTimeRange(
-        account: ByAccount.db(account),
-        dirRoots: dirRoots,
-        range: range,
       );
     });
     return sqlObjs.toDbFiles();
@@ -458,7 +424,7 @@ class NpDbSqlite implements NpDb {
     List<String>? includeRelativeDirs,
     List<String>? excludeRelativeRoots,
     List<String>? relativePathKeywords,
-    String? location,
+    DbFileQueryByLocation? location,
     bool? isFavorite,
     bool? isArchived,
     List<String>? mimes,
@@ -585,52 +551,30 @@ class NpDbSqlite implements NpDb {
     List<String>? includeRelativeRoots,
     List<String>? excludeRelativeRoots,
   }) async {
-    List<ImageLocationGroup>? nameResult, admin1Result, admin2Result, ccResult;
+    final results = <ImageLocationGroup>[];
     await _db.use((db) async {
       try {
-        nameResult = await db.groupImageLocationsByName(
-          account: ByAccount.db(account),
-          includeRelativeRoots: includeRelativeRoots,
-          excludeRelativeRoots: excludeRelativeRoots,
+        results.addAll(
+          await db.groupImageLocations(
+            account: ByAccount.db(account),
+            includeRelativeRoots: includeRelativeRoots,
+            excludeRelativeRoots: excludeRelativeRoots,
+          ),
         );
       } catch (e, stackTrace) {
         _log.shout(
-          "[groupLocation] Failed while groupImageLocationsByName",
+          "[groupLocation] Failed while groupImageLocations",
           e,
           stackTrace,
         );
       }
       try {
-        admin1Result = await db.groupImageLocationsByAdmin1(
-          account: ByAccount.db(account),
-          includeRelativeRoots: includeRelativeRoots,
-          excludeRelativeRoots: excludeRelativeRoots,
-        );
-      } catch (e, stackTrace) {
-        _log.shout(
-          "[groupLocation] Failed while groupImageLocationsByAdmin1",
-          e,
-          stackTrace,
-        );
-      }
-      try {
-        admin2Result = await db.groupImageLocationsByAdmin2(
-          account: ByAccount.db(account),
-          includeRelativeRoots: includeRelativeRoots,
-          excludeRelativeRoots: excludeRelativeRoots,
-        );
-      } catch (e, stackTrace) {
-        _log.shout(
-          "[groupLocation] Failed while groupImageLocationsByAdmin2",
-          e,
-          stackTrace,
-        );
-      }
-      try {
-        ccResult = await db.groupImageLocationsByCountryCode(
-          account: ByAccount.db(account),
-          includeRelativeRoots: includeRelativeRoots,
-          excludeRelativeRoots: excludeRelativeRoots,
+        results.addAll(
+          await db.groupImageLocationsByCountryCode(
+            account: ByAccount.db(account),
+            includeRelativeRoots: includeRelativeRoots,
+            excludeRelativeRoots: excludeRelativeRoots,
+          ),
         );
       } catch (e, stackTrace) {
         _log.shout(
@@ -641,25 +585,40 @@ class NpDbSqlite implements NpDb {
       }
     });
     return DbLocationGroupResult(
-      name: nameResult?.toDbLocationGroups() ?? [],
-      admin1: admin1Result?.toDbLocationGroups() ?? [],
-      admin2: admin2Result?.toDbLocationGroups() ?? [],
-      countryCode: ccResult?.toDbLocationGroups() ?? [],
+      name:
+          results
+              .where((e) => e.type == ImageLocationType.city)
+              .toList()
+              .toDbLocationGroups(),
+      admin1:
+          results
+              .where((e) => e.type == ImageLocationType.admin1)
+              .toList()
+              .toDbLocationGroups(),
+      admin2:
+          results
+              .where((e) => e.type == ImageLocationType.admin2)
+              .toList()
+              .toDbLocationGroups(),
+      countryCode:
+          results
+              .where((e) => e.type == ImageLocationType.country)
+              .toList()
+              .toDbLocationGroups(),
     );
   }
 
   @override
-  Future<DbLocation?> getFirstLocationOfFileIds({
+  Future<({double lat, double lng})?> getFirstLocationLatLngOfFileIds({
     required DbAccount account,
     required List<int> fileIds,
-  }) async {
-    final sqlObj = await _db.use((db) async {
-      return await db.queryFirstImageLocationByFileIds(
+  }) {
+    return _db.use((db) async {
+      return db.queryFirstLocationLatLngByFileIds(
         account: ByAccount.db(account),
         fileIds: fileIds,
       );
     });
-    return sqlObj?.let(ImageLocationConverter.fromSql);
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/entity/album.dart';
 import 'package:nc_photos/entity/collection.dart';
@@ -10,6 +11,7 @@ import 'package:nc_photos/entity/nc_album.dart';
 import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/entity/tag.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
+import 'package:np_ui/np_ui.dart';
 
 class CollectionBuilder {
   static Collection byAlbum(Account account, Album album) {
@@ -19,12 +21,17 @@ class CollectionBuilder {
     );
   }
 
-  static Collection byLocationGroup(Account account, LocationGroup location) {
+  static Collection byLocationGroup(
+    Account account,
+    LocationGroup location,
+    Locale locale,
+  ) {
     return Collection(
-      name: location.place,
+      name: location.name.ofLocale(locale),
       contentProvider: CollectionLocationGroupProvider(
         account: account,
         location: location,
+        locale: locale,
       ),
     );
   }

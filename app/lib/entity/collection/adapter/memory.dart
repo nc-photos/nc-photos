@@ -6,9 +6,9 @@ import 'package:nc_photos/entity/collection/adapter/adapter_mixin.dart';
 import 'package:nc_photos/entity/collection/content_provider/memory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/basic_item.dart';
-import 'package:nc_photos/entity/file/data_source.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/pref.dart';
+import 'package:np_datetime/np_datetime.dart';
 
 class CollectionMemoryAdapter
     with
@@ -25,10 +25,14 @@ class CollectionMemoryAdapter
     final dayRange = _c.pref.getMemoriesRangeOr();
     final from = date.subtract(Duration(days: dayRange));
     final to = date.add(Duration(days: dayRange + 1));
-    final files = await FileSqliteDbDataSource(_c).listByDate(
+    final files = await _c.fileRepo2.getFileDescriptors(
       account,
-      from.millisecondsSinceEpoch,
-      to.millisecondsSinceEpoch,
+      file_util.unstripPath(
+        account,
+        AccountPref.of(account).getShareFolderOr(),
+      ),
+      timeRange: TimeRange(from: from, to: to),
+      isAscending: false,
     );
     yield files
         .where((f) => file_util.isSupportedFormat(f))

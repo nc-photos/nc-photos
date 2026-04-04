@@ -1,8 +1,12 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
+import 'package:copy_with/copy_with.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kdtree/kdtree.dart';
 import 'package:logging/logging.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_geocoder/src/native/db_util.dart'
     if (dart.library.html) 'package:np_geocoder/src/web/db_util.dart';
 import 'package:np_log/np_log.dart';
@@ -15,10 +19,11 @@ part 'reverse_geocoder.g.dart';
 @toString
 class ReverseGeocoderLocation {
   const ReverseGeocoderLocation(
-    this.name,
+    this.dataRevision,
     this.latitude,
     this.longitude,
     this.countryCode,
+    this.city,
     this.admin1,
     this.admin2,
   );
@@ -26,19 +31,38 @@ class ReverseGeocoderLocation {
   @override
   String toString() => _$toString();
 
-  final String name;
+  final int dataRevision;
   final double latitude;
   final double longitude;
   final String countryCode;
-  final String? admin1;
-  final String? admin2;
+  final ReverseGeocoderLocationName? city;
+  final ReverseGeocoderLocationName? admin1;
+  final ReverseGeocoderLocationName? admin2;
+}
+
+@genCopyWith
+@toString
+class ReverseGeocoderLocationName {
+  const ReverseGeocoderLocationName({
+    required this.geonameId,
+    required this.name,
+  });
+
+  @override
+  String toString() => _$toString();
+
+  final int geonameId;
+  final LocalizedString name;
 }
 
 @npLog
 class ReverseGeocoder {
-  Future<void> init() async {
+  Future<void> init({
+    @visibleForTesting
+    FutureOr<CommonDatabase> Function() dbBuilder = _openDatabase,
+  }) async {
     final s = Stopwatch()..start();
-    _db = await _openDatabase();
+    _db = await dbBuilder();
     _searchTree = _buildSearchTree(_db);
     _log.info("[init] Elapsed time: ${s.elapsedMilliseconds}ms");
   }
@@ -93,61 +117,84 @@ class ReverseGeocoder {
       );
       return null;
     }
-    final result = ReverseGeocoderLocation(
-      data.name,
-      data.latitude / 10000,
-      data.longitude / 10000,
-      data.countryCode,
-      data.admin1,
-      data.admin2,
-    );
-    _log.info("[call] Found: $result");
-    return result;
+    _log.info("[call] Found: $data");
+    return data;
   }
 
-  _DatabaseRow? _queryPoint(int latitudeInt, int longitudeInt) {
-    final result = _db.select(
-      "SELECT * FROM cities WHERE latitude = ? AND longitude = ? LIMIT 1;",
-      [latitudeInt, longitudeInt],
-    );
-    if (result.isEmpty) {
+  ReverseGeocoderLocation? _queryPoint(int latitudeInt, int longitudeInt) {
+    const citySql = """
+      SELECT cities.latitude, cities.longitude, cities.countryCode, cities.cityId, cities.admin1Id, cities.admin2Id
+      FROM cities
+      WHERE latitude = ? AND longitude = ?;
+      """;
+    final cityResult =
+        _db.select(citySql, [latitudeInt, longitudeInt]).singleOrNull;
+    if (cityResult == null) {
       return null;
-    } else {
-      return _DatabaseRow(
-        result.first.columnAt(1),
-        result.first.columnAt(2),
-        result.first.columnAt(3),
-        result.first.columnAt(4),
-        result.first.columnAt(5),
-        result.first.columnAt(6),
-      );
     }
+    final ids = [
+      cityResult.columnAt(3),
+      cityResult.columnAt(4),
+      cityResult.columnAt(5),
+    ];
+    final nameSql = """
+      SELECT names.geonameId, names.lang, names.name
+      FROM names
+      WHERE geonameId IN (${ids.nonNulls.join(", ")});
+      """;
+    var nameMap = <int, Map<String, String>>{};
+    for (final r in _db.select(nameSql)) {
+      nameMap[r.columnAt(0)] ??= <String, String>{};
+      nameMap[r.columnAt(0)]![r.columnAt(1)] = r.columnAt(2);
+    }
+
+    // lang: names
+    final city = <String, String>{};
+    final admin1 = <String, String>{};
+    final admin2 = <String, String>{};
+    for (final r in _db.select(nameSql)) {
+      if (r.columnAt(0) == ids[0]) {
+        city[r.columnAt(1)] = r.columnAt(2);
+      } else if (ids[1] != null && r.columnAt(0) == ids[1]) {
+        admin1[r.columnAt(1)] = r.columnAt(2);
+      } else if (ids[2] != null && r.columnAt(0) == ids[2]) {
+        admin2[r.columnAt(1)] = r.columnAt(2);
+      }
+    }
+    return ReverseGeocoderLocation(
+      ReverseGeocoder.dataRevision,
+      cityResult.columnAt(0) / 10000,
+      cityResult.columnAt(1) / 10000,
+      cityResult.columnAt(2),
+      city.isNotEmpty
+          ? ReverseGeocoderLocationName(
+            geonameId: ids[0],
+            name: LocalizedString(city),
+          )
+          : null,
+      admin1.isNotEmpty
+          ? ReverseGeocoderLocationName(
+            geonameId: ids[1],
+            name: LocalizedString(admin1),
+          )
+          : null,
+      admin2.isNotEmpty
+          ? ReverseGeocoderLocationName(
+            geonameId: ids[2],
+            name: LocalizedString(admin2),
+          )
+          : null,
+    );
   }
+
+  static const dataRevision = 20260301;
 
   late final CommonDatabase _db;
   late final KDTree _searchTree;
 }
 
-class _DatabaseRow {
-  const _DatabaseRow(
-    this.name,
-    this.latitude,
-    this.longitude,
-    this.countryCode,
-    this.admin1,
-    this.admin2,
-  );
-
-  final String name;
-  final int latitude;
-  final int longitude;
-  final String countryCode;
-  final String? admin1;
-  final String? admin2;
-}
-
 Future<CommonDatabase> _openDatabase() async {
-  return openRawSqliteDbFromAsset("cities.sqlite", "cities.sqlite");
+  return openRawSqliteDbFromAsset();
 }
 
 KDTree _buildSearchTree(CommonDatabase db) {

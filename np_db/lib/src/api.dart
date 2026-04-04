@@ -1,8 +1,10 @@
 import 'dart:io' as io;
+import 'dart:ui';
 
 import 'package:copy_with/copy_with.dart';
 import 'package:equatable/equatable.dart';
 import 'package:logging/logging.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
 import 'package:np_datetime/np_datetime.dart';
@@ -81,7 +83,7 @@ class DbSyncIdResult {
 @toString
 class DbLocationGroup with EquatableMixin {
   const DbLocationGroup({
-    required this.place,
+    required this.name,
     required this.countryCode,
     required this.count,
     required this.latestFileId,
@@ -95,7 +97,7 @@ class DbLocationGroup with EquatableMixin {
 
   @override
   List<Object?> get props => [
-    place,
+    name,
     countryCode,
     count,
     latestFileId,
@@ -104,7 +106,7 @@ class DbLocationGroup with EquatableMixin {
     latestFileRelativePath,
   ];
 
-  final String place;
+  final LocalizedString name;
   final String countryCode;
   final int count;
   final int latestFileId;
@@ -204,6 +206,26 @@ class DbFileMissingMetadataResult {
   final List<({int fileId, String relativePath})> items;
 }
 
+@toString
+class DbFileQueryByLocation {
+  const DbFileQueryByLocation({
+    required this.place,
+    required this.locale,
+    this.countryCode,
+    required this.isFuzzy,
+  });
+
+  @override
+  String toString() => _$toString();
+
+  final LocalizedString place;
+  final Locale locale;
+
+  /// If set, only places inside this country will be matched
+  final String? countryCode;
+  final bool isFuzzy;
+}
+
 @npLog
 abstract class NpDb {
   factory NpDb() => NpDbSqlite();
@@ -278,13 +300,6 @@ abstract class NpDb {
     required DbFileKey dir,
   });
 
-  Future<List<DbFile>> getFilesByDirKeyAndLocation({
-    required DbAccount account,
-    required String dirRelativePath,
-    required String? place,
-    required String countryCode,
-  });
-
   /// Return [DbFile]s by their corresponding file ids
   ///
   /// No error will be thrown even if a file in [fileIds] is not found, it is
@@ -293,13 +308,6 @@ abstract class NpDb {
   Future<List<DbFile>> getFilesByFileIds({
     required DbAccount account,
     required Iterable<int> fileIds,
-  });
-
-  /// Return [DbFile]s by their date time value
-  Future<List<DbFile>> getFilesByTimeRange({
-    required DbAccount account,
-    required List<String> dirRoots,
-    required TimeRange range,
   });
 
   /// Update one or more file properties of a single file
@@ -397,7 +405,7 @@ abstract class NpDb {
     List<String>? includeRelativeDirs,
     List<String>? excludeRelativeRoots,
     List<String>? relativePathKeywords,
-    String? location,
+    DbFileQueryByLocation? location,
     bool? isFavorite,
     bool? isArchived,
     List<String>? mimes,
@@ -450,7 +458,7 @@ abstract class NpDb {
 
   /// Return the location data of the first file (sorted by date time in
   /// descending order) in a group of files
-  Future<DbLocation?> getFirstLocationOfFileIds({
+  Future<({double lat, double lng})?> getFirstLocationLatLngOfFileIds({
     required DbAccount account,
     required List<int> fileIds,
   });

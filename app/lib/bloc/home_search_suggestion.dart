@@ -1,5 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -16,8 +17,10 @@ import 'package:nc_photos/use_case/list_location_group.dart';
 import 'package:nc_photos/use_case/list_tag.dart';
 import 'package:nc_photos/use_case/person/list_person.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
+import 'package:np_ui/np_ui.dart';
 import 'package:to_string/to_string.dart';
 import 'package:woozy_search/woozy_search.dart';
 
@@ -130,8 +133,9 @@ class HomeSearchSuggestionBloc
     this.account,
     this.collectionsController,
     this.serverController,
-    this.accountPrefController,
-  ) : super(const HomeSearchSuggestionBlocInit()) {
+    this.accountPrefController, {
+    required this.locale,
+  }) : super(const HomeSearchSuggestionBlocInit()) {
     final c = KiwiContainer().resolve<DiContainer>();
     assert(require(c));
     assert(ListTag.require(c));
@@ -239,15 +243,15 @@ class HomeSearchSuggestionBloc
     try {
       final locations = await ListLocationGroup(_c)(account);
       // make sure no duplicates
-      final map = <String, LocationGroup>{};
+      final map = <LocalizedString, LocationGroup>{};
       for (final l
           in locations.name +
               locations.admin1 +
               locations.admin2 +
               locations.countryCode) {
-        map[l.place] = l;
+        map[l.name] = l;
       }
-      product.addAll(map.values.map((e) => _LocationSearcheable(e)));
+      product.addAll(map.values.map((e) => _LocationSearcheable(e, locale)));
       _log.info(
         "[_onEventPreloadData] Loaded ${locations.name.length + locations.countryCode.length} locations",
       );
@@ -272,6 +276,7 @@ class HomeSearchSuggestionBloc
   final ServerController serverController;
   final AccountPrefController accountPrefController;
   late final DiContainer _c;
+  final Locale locale;
 
   final _search = Woozy<_Searcheable>(limit: 10);
 }
@@ -318,13 +323,14 @@ class _PersonSearcheable implements _Searcheable {
 }
 
 class _LocationSearcheable implements _Searcheable {
-  const _LocationSearcheable(this.location);
+  const _LocationSearcheable(this.location, this.locale);
 
   @override
-  toKeywords() => [location.place.toCi()];
+  List<CiString> toKeywords() => [location.name.ofLocale(locale).toCi()];
 
   @override
   toResult() => HomeSearchLocationResult(location);
 
   final LocationGroup location;
+  final Locale locale;
 }

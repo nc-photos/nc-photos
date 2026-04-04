@@ -4,6 +4,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/remote_storage_util.dart' as remote_storage_util;
+import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
 
@@ -12,7 +13,7 @@ part 'list_location_group.g.dart';
 @toString
 class LocationGroup with EquatableMixin {
   const LocationGroup(
-    this.place,
+    this.name,
     this.countryCode,
     this.count,
     this.latestFileId,
@@ -26,7 +27,7 @@ class LocationGroup with EquatableMixin {
 
   @override
   List<Object?> get props => [
-    place,
+    name,
     countryCode,
     count,
     latestFileId,
@@ -35,7 +36,7 @@ class LocationGroup with EquatableMixin {
     latestFileRelativePath,
   ];
 
-  final String place;
+  final LocalizedString name;
   final String countryCode;
   final int count;
   final int latestFileId;
