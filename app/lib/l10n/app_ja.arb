@@ -1336,7 +1336,7 @@
 	"@showAllButtonLabel": {
 		"description": "A button to show all items of a certain item group (e.g., show all recognized faces)"
 	},
-	"gpsPlaceText": "{place} 付近",
+	"gpsPlaceText": "{place}付近",
 	"@gpsPlaceText": {
 		"description": "The estimated place where a photo was taken at. The place could be a town, a city, an administrative region, or a country.",
 		"placeholders": {
