@@ -41,6 +41,7 @@ part 'changelog_830.dart';
 part 'changelog_832.dart';
 part 'changelog_840.dart';
 part 'changelog_850.dart';
+part 'changelog_860.dart';
 
 class ChangelogArguments {
   const ChangelogArguments(this.fromVersion);
@@ -379,6 +380,7 @@ Widget _subBulletPoint(Widget child) => Row(
 );
 
 final _changelogs = <int, List<Widget> Function(BuildContext)>{
+  8600: (_) => const [_Changelog860()],
   8500: (_) => const [_Changelog850()],
   8400: (_) => const [_Changelog840()],
   8302: (_) => const [_Changelog832()],
