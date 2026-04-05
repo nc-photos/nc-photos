@@ -10,10 +10,10 @@ BTC: bc1q294nmsh06aw7jnpl4frdeytklcg36l8g295s4p
 ### Android
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Google Play" width="160" />](https://play.google.com/store/apps/details?id=com.nkming.nc_photos.paid&referrer=utm_source%3Drepo)  
 Or the [ad-supported version](https://play.google.com/store/apps/details?id=com.nkming.nc_photos&referrer=utm_source%3Drepo)  
-Or download pre-built binary [here](https://gitlab.com/nkming2/nc-photos/-/wikis/Release)
+Or download pre-built binary [here](https://github.com/nc-photos/nc-photos/releases)
 
 ### Compile yourself
-Please read [this guide](https://gitlab.com/nkming2/nc-photos/-/wikis/development/build)
+Please read [this guide](https://github.com/nc-photos/nc-photos/wiki/Build)
 
 ## Screenshots
 <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/6.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.jpg" width="180" /> <img src="https://gitlab.com/nkming2/nc-photos/-/raw/master/fastlane/metadata/android/en-US/images/phoneScreenshots/8.jpg" width="180" />
@@ -30,9 +30,9 @@ Screenshots contain photos by:
 - [More flexible albums](https://github.com/nc-photos/nc-photos/wiki/Differences-between-collections#client-side-album)
 - Reverse geocoding
 - [Enhance photos with machine learning models](https://gitlab.com/nkming2/nc-photos/-/wikis/help/enhance)
-- [Edit photos with built-in editor](https://gitlab.com/nkming2/nc-photos/-/wikis/help/edit-photos)
+- [Edit photos with built-in editor](https://github.com/nc-photos/nc-photos/wiki/Edit-photos)
 - Sign-in to multiple servers
-- [Create shared albums with users on the same server (experimental)](https://gitlab.com/nkming2/nc-photos/-/wikis/help/shared-album)
+- [Create shared albums with users on the same server (experimental)](https://github.com/nc-photos/nc-photos/wiki/Shared-Album)
 
 ## Supported formats
 - JPEG, PNG, WebP, HEIC, GIF, JPEG XL
@@ -40,7 +40,7 @@ Screenshots contain photos by:
 
 ## Supported Nextcloud apps
 - Face Recognition (require 0.8.5+)
-  - Please read [this guide](https://gitlab.com/nkming2/nc-photos/-/wikis/help/people)
+  - Please read [this guide](https://github.com/nc-photos/nc-photos/wiki/People)
 
 ## Translations (sorted by ISO name)
 - Catalan/català (contributed by Arnau Mora)
@@ -65,4 +65,4 @@ Screenshots contain photos by:
   - A localization management platform free of charge for open source projects, cheers to them!
 
 ## Contributions, troubleshooting and guides
-Please visit the [project wiki](https://gitlab.com/nkming2/nc-photos/-/wikis/home)
+Please visit the [project wiki](https://github.com/nc-photos/nc-photos/wiki)
