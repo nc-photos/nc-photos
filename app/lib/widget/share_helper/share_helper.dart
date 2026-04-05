@@ -192,8 +192,16 @@ class ShareBlocListener extends StatelessWidget {
     } on InterruptedException {
       // user canceled
     } finally {
-      if (dialogContext != null) {
-        Navigator.maybeOf(dialogContext!)?.pop();
+      // retry if dialog is not yet ready
+      for (var i = 0; i < 10; ++i) {
+        if (dialogContext != null) {
+          final n = Navigator.maybeOf(dialogContext!);
+          if (n != null) {
+            n.pop();
+            break;
+          }
+        }
+        await Future.delayed(const Duration(milliseconds: 50));
       }
       unawaited(controller.close());
       unawaited(cancelSignal.close());
