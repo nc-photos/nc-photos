@@ -3,3 +3,4 @@ template-arb-file: app_en.arb
 output-localization-file: app_localizations.dart
 untranslated-messages-file: lib/l10n/untranslated-messages.txt
 preferred-supported-locales: [en]
+synthetic-package: false
