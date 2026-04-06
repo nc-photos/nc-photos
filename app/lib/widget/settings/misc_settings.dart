@@ -68,7 +68,7 @@ class _WrappedMiscSettingsState extends State<_WrappedMiscSettings>
           slivers: [
             SliverAppBar(
               pinned: true,
-              title: Text(L10n.global().photosTabLabel),
+              title: Text(L10n.global().settingsMiscellaneousTitle),
             ),
             SliverList(
               delegate: SliverChildListDelegate([
