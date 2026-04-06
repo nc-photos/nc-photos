@@ -197,28 +197,31 @@ abstract class FileConverter {
     final sqlImageLocationNames = [
       ...?file.location?.city?.let(
         (e) => e.name.value.entries.map(
-          (n) => ImageLocationNamesCompanion(
-            geonameId: Value(e.geonameId),
-            lang: Value(n.key),
-            name: Value(n.value),
+          (n) => ImageLocationNamesCompanion.insert(
+            dataRevision: file.location!.dataRevision,
+            geonameId: e.geonameId,
+            lang: n.key,
+            name: n.value,
           ),
         ),
       ),
       ...?file.location?.admin1?.let(
         (e) => e.name.value.entries.map(
-          (n) => ImageLocationNamesCompanion(
-            geonameId: Value(e.geonameId),
-            lang: Value(n.key),
-            name: Value(n.value),
+          (n) => ImageLocationNamesCompanion.insert(
+            dataRevision: file.location!.dataRevision,
+            geonameId: e.geonameId,
+            lang: n.key,
+            name: n.value,
           ),
         ),
       ),
       ...?file.location?.admin2?.let(
         (e) => e.name.value.entries.map(
-          (n) => ImageLocationNamesCompanion(
-            geonameId: Value(e.geonameId),
-            lang: Value(n.key),
-            name: Value(n.value),
+          (n) => ImageLocationNamesCompanion.insert(
+            dataRevision: file.location!.dataRevision,
+            geonameId: e.geonameId,
+            lang: n.key,
+            name: n.value,
           ),
         ),
       ),

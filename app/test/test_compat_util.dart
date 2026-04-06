@@ -327,28 +327,31 @@ class _SqliteFileConverter {
     final dbImageLocationNames = [
       ...?file.location?.city?.let(
         (e) => e.name.value.entries.map(
-          (ee) => compat.ImageLocationNamesCompanion(
-            geonameId: sql.Value(e.geonameId),
-            lang: sql.Value(ee.key),
-            name: sql.Value(ee.value),
+          (ee) => compat.ImageLocationNamesCompanion.insert(
+            dataRevision: file.location!.dataRevision,
+            geonameId: e.geonameId,
+            lang: ee.key,
+            name: ee.value,
           ),
         ),
       ),
       ...?file.location?.admin1?.let(
         (e) => e.name.value.entries.map(
-          (ee) => compat.ImageLocationNamesCompanion(
-            geonameId: sql.Value(e.geonameId),
-            lang: sql.Value(ee.key),
-            name: sql.Value(ee.value),
+          (ee) => compat.ImageLocationNamesCompanion.insert(
+            dataRevision: file.location!.dataRevision,
+            geonameId: e.geonameId,
+            lang: ee.key,
+            name: ee.value,
           ),
         ),
       ),
       ...?file.location?.admin2?.let(
         (e) => e.name.value.entries.map(
-          (ee) => compat.ImageLocationNamesCompanion(
-            geonameId: sql.Value(e.geonameId),
-            lang: sql.Value(ee.key),
-            name: sql.Value(ee.value),
+          (ee) => compat.ImageLocationNamesCompanion.insert(
+            dataRevision: file.location!.dataRevision,
+            geonameId: e.geonameId,
+            lang: ee.key,
+            name: ee.value,
           ),
         ),
       ),
