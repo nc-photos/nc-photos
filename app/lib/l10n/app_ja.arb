@@ -273,16 +273,16 @@
 		"description": "Memory albums contain photos taken in a specific time range in the past"
 	},
 	"settingsAccountTitle": "アカウント",
-	"settingsAccountLabelTitle": "ラベル",
+	"settingsAccountLabelTitle": "あだ名",
 	"@settingsAccountLabelTitle": {
 		"description": "An account label is used to replace the server URL in the app bar, could be useful for privacy reason"
 	},
-	"settingsAccountLabelDescription": "サーバーURLの代わりに表示されるラベルを設定する",
+	"settingsAccountLabelDescription": "サーバーURLの代わりに表示されるあだ名を設定する",
 	"settingsIncludedFoldersTitle": "含まれるフォルダ",
 	"@settingsIncludedFoldersTitle": {
 		"description": "Change the included folders of an account"
 	},
-	"settingsShareFolderTitle": "フォルダを共有する",
+	"settingsShareFolderTitle": "共有フォルダのパス",
 	"@settingsShareFolderTitle": {
 		"description": "Set the share folder such that it matches the parameter in config.php"
 	},
@@ -298,7 +298,7 @@
 	"@settingsShareFolderPickerDescription": {
 		"description": "Set the share folder such that it matches the parameter in config.php"
 	},
-	"settingsServerAppSectionTitle": "サーバーアプリのサポート",
+	"settingsServerAppSectionTitle": "サーバーアプリとの連携",
 	"@settingsServerAppSectionTitle": {
 		"description": "Enable/disable various server apps"
 	},
@@ -333,7 +333,7 @@
 	"settingsScreenBrightnessDescription": "システムの明るさレベルを上書きする",
 	"settingsForceRotationTitle": "回転ロックを無視する",
 	"settingsForceRotationDescription": "自動回転が無効になっている場合でも画面を回転する",
-	"settingsMapProviderTitle": "地図プロバイダー",
+	"settingsMapProviderTitle": "地図の提供元",
 	"settingsShowDateInAlbumTitle": "日付別に写真をグループ化",
 	"settingsShowDateInAlbumDescription": "アルバムが時間順に並べ替えられている場合にのみ適用されます。",
 	"settingsImageEditTitle": "エディタ",
@@ -782,7 +782,7 @@
 	"@unmuteTooltip": {
 		"description": "Unmute the video player"
 	},
-	"collectionPeopleLabel": "人々",
+	"collectionPeopleLabel": "人物",
 	"@collectionPeopleLabel": {
 		"description": "Browse photos grouped by person"
 	},
@@ -1437,7 +1437,7 @@
 	"@settingsMetadataTitle": {
 		"description": "Metadata (e.g., date, resolution, GPS, etc)"
 	},
-	"settingsPersonProviderTitle": "顔検出プロバイダー",
+	"settingsPersonProviderTitle": "フェイスグループ機能の提供元",
 	"@settingsPersonProviderTitle": {
 		"description": "Select the server app for face recognition"
 	},
@@ -1449,7 +1449,7 @@
 	"@settingsSeedColorPickerSystemColorButtonLabel": {
 		"description": "Use color provided by the OS, i.e., Material You"
 	},
-	"searchLandingPeopleListEmptyText2": "設定を押してプロバイダーを切り替えるか、ヘルプを押して詳細を確認してください",
+	"searchLandingPeopleListEmptyText2": "設定を押してフェイスグループ機能の提供元を切り替えるか、ヘルプを押して詳細を確認してください",
 	"@searchLandingPeopleListEmptyText2": {
 		"description": "Shown in the search landing page under the People section when there are no people"
 	},
