@@ -276,15 +276,30 @@ class LocalFilesControllerImpl implements LocalFilesController {
     final original =
         _summaryStreamController.valueOrNull?.summary ??
         const LocalFilesSummary(items: {});
-    final results = await GetLocalFilesSummary(
-      localFileRepo: _c.localFileRepo,
-      prefController: prefController,
-    )(dirWhitelist: prefController.localDirsValue);
-    final diff = original.diff(results);
-    _summaryStreamController.add(
-      LocalFilesSummaryStreamEvent(summary: results),
-    );
-    return diff;
+    try {
+      final results = await GetLocalFilesSummary(
+        localFileRepo: _c.localFileRepo,
+        prefController: prefController,
+      )(dirWhitelist: prefController.localDirsValue);
+      // _log.info("[_reloadSummary] GetLocalFilesSummary: ${results.items}");
+      final diff = original.diff(results);
+      _summaryStreamController.add(
+        LocalFilesSummaryStreamEvent(summary: results),
+      );
+      return diff;
+    } catch (e, stackTrace) {
+      _log.severe(
+        "[_reloadSummary] Failed while GetLocalFilesSummary",
+        e,
+        stackTrace,
+      );
+      _summaryErrorStreamController.add(ExceptionEvent(e, stackTrace));
+      return const _LocalFilesSummaryDiff(
+        onlyInOther: {},
+        onlyInThis: {},
+        updated: {},
+      );
+    }
   }
 
   void _initObserver() {
