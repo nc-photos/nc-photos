@@ -33,12 +33,12 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   void _onSetScheme(_SetScheme ev, _Emitter emit) {
-    _log.info(ev);
+    // _log.info(ev);
     emit(state.copyWith(scheme: ev.value));
   }
 
   void _onSetServerUrl(_SetServerUrl ev, _Emitter emit) {
-    _log.info(ev);
+    // _log.info(ev);
     emit(state.copyWith(serverUrl: ev.value));
   }
 
@@ -85,12 +85,12 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }
 
   void _onSetUsername(_SetUsername ev, Emitter<_State> emit) {
-    _log.info(ev);
+    // _log.info(ev);
     emit(state.copyWith(username: ev.value));
   }
 
   void _onSetPassword(_SetPassword ev, Emitter<_State> emit) {
-    _log.info(ev);
+    // _log.info(ev);
     emit(state.copyWith(password: ev.value));
   }
 
