@@ -43,10 +43,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       isUseBlackInDarkTheme:
           isUseBlackInDarkTheme as bool? ?? that.isUseBlackInDarkTheme,
       seedColor: seedColor == copyWithNull ? that.seedColor : seedColor as int?,
-      secondarySeedColor:
-          secondarySeedColor == copyWithNull
-              ? that.secondarySeedColor
-              : secondarySeedColor as int?,
+      secondarySeedColor: secondarySeedColor == copyWithNull
+          ? that.secondarySeedColor
+          : secondarySeedColor as int?,
     );
   }
 

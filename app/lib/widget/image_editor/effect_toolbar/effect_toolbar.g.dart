@@ -110,10 +110,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   }) {
     return _State(
       filters: filters as Map<PixelToolType, PixelArguments>? ?? that.filters,
-      selectedFilter:
-          selectedFilter == copyWithNull
-              ? that.selectedFilter
-              : selectedFilter as PixelToolType?,
+      selectedFilter: selectedFilter == copyWithNull
+          ? that.selectedFilter
+          : selectedFilter as PixelToolType?,
       faceReshapeOptionType:
           faceReshapeOptionType as _FaceReshapeOptionType? ??
           that.faceReshapeOptionType,

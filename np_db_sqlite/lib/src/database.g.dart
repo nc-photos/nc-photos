@@ -70,16 +70,14 @@ class $ServersTable extends Servers with TableInfo<$ServersTable, Server> {
   Server map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Server(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      address:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}address'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      address: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}address'],
+      )!,
     );
   }
 
@@ -290,21 +288,18 @@ class $AccountsTable extends Accounts with TableInfo<$AccountsTable, Account> {
   Account map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Account(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      server:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}server'],
-          )!,
-      userId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}user_id'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      server: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}server'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
     );
   }
 
@@ -722,21 +717,18 @@ class $FilesTable extends Files with TableInfo<$FilesTable, File> {
   File map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return File(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      server:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}server'],
-          )!,
-      fileId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}file_id'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      server: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}server'],
+      )!,
+      fileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file_id'],
+      )!,
       contentLength: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}content_length'],
@@ -859,39 +851,31 @@ class File extends DataClass implements Insertable<File> {
       rowId: Value(rowId),
       server: Value(server),
       fileId: Value(fileId),
-      contentLength:
-          contentLength == null && nullToAbsent
-              ? const Value.absent()
-              : Value(contentLength),
-      contentType:
-          contentType == null && nullToAbsent
-              ? const Value.absent()
-              : Value(contentType),
+      contentLength: contentLength == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentLength),
+      contentType: contentType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentType),
       etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
-      lastModified:
-          lastModified == null && nullToAbsent
-              ? const Value.absent()
-              : Value(lastModified),
-      isCollection:
-          isCollection == null && nullToAbsent
-              ? const Value.absent()
-              : Value(isCollection),
-      usedBytes:
-          usedBytes == null && nullToAbsent
-              ? const Value.absent()
-              : Value(usedBytes),
-      hasPreview:
-          hasPreview == null && nullToAbsent
-              ? const Value.absent()
-              : Value(hasPreview),
-      ownerId:
-          ownerId == null && nullToAbsent
-              ? const Value.absent()
-              : Value(ownerId),
-      ownerDisplayName:
-          ownerDisplayName == null && nullToAbsent
-              ? const Value.absent()
-              : Value(ownerDisplayName),
+      lastModified: lastModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastModified),
+      isCollection: isCollection == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isCollection),
+      usedBytes: usedBytes == null && nullToAbsent
+          ? const Value.absent()
+          : Value(usedBytes),
+      hasPreview: hasPreview == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasPreview),
+      ownerId: ownerId == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerId),
+      ownerDisplayName: ownerDisplayName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(ownerDisplayName),
     );
   }
 
@@ -951,8 +935,9 @@ class File extends DataClass implements Insertable<File> {
     rowId: rowId ?? this.rowId,
     server: server ?? this.server,
     fileId: fileId ?? this.fileId,
-    contentLength:
-        contentLength.present ? contentLength.value : this.contentLength,
+    contentLength: contentLength.present
+        ? contentLength.value
+        : this.contentLength,
     contentType: contentType.present ? contentType.value : this.contentType,
     etag: etag.present ? etag.value : this.etag,
     lastModified: lastModified.present ? lastModified.value : this.lastModified,
@@ -960,39 +945,36 @@ class File extends DataClass implements Insertable<File> {
     usedBytes: usedBytes.present ? usedBytes.value : this.usedBytes,
     hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
     ownerId: ownerId.present ? ownerId.value : this.ownerId,
-    ownerDisplayName:
-        ownerDisplayName.present
-            ? ownerDisplayName.value
-            : this.ownerDisplayName,
+    ownerDisplayName: ownerDisplayName.present
+        ? ownerDisplayName.value
+        : this.ownerDisplayName,
   );
   File copyWithCompanion(FilesCompanion data) {
     return File(
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       server: data.server.present ? data.server.value : this.server,
       fileId: data.fileId.present ? data.fileId.value : this.fileId,
-      contentLength:
-          data.contentLength.present
-              ? data.contentLength.value
-              : this.contentLength,
-      contentType:
-          data.contentType.present ? data.contentType.value : this.contentType,
+      contentLength: data.contentLength.present
+          ? data.contentLength.value
+          : this.contentLength,
+      contentType: data.contentType.present
+          ? data.contentType.value
+          : this.contentType,
       etag: data.etag.present ? data.etag.value : this.etag,
-      lastModified:
-          data.lastModified.present
-              ? data.lastModified.value
-              : this.lastModified,
-      isCollection:
-          data.isCollection.present
-              ? data.isCollection.value
-              : this.isCollection,
+      lastModified: data.lastModified.present
+          ? data.lastModified.value
+          : this.lastModified,
+      isCollection: data.isCollection.present
+          ? data.isCollection.value
+          : this.isCollection,
       usedBytes: data.usedBytes.present ? data.usedBytes.value : this.usedBytes,
-      hasPreview:
-          data.hasPreview.present ? data.hasPreview.value : this.hasPreview,
+      hasPreview: data.hasPreview.present
+          ? data.hasPreview.value
+          : this.hasPreview,
       ownerId: data.ownerId.present ? data.ownerId.value : this.ownerId,
-      ownerDisplayName:
-          data.ownerDisplayName.present
-              ? data.ownerDisplayName.value
-              : this.ownerDisplayName,
+      ownerDisplayName: data.ownerDisplayName.present
+          ? data.ownerDisplayName.value
+          : this.ownerDisplayName,
     );
   }
 
@@ -1397,26 +1379,22 @@ class $AccountFilesTable extends AccountFiles
   AccountFile map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AccountFile(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      account:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account'],
-          )!,
-      file:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}file'],
-          )!,
-      relativePath:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}relative_path'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      account: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account'],
+      )!,
+      file: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file'],
+      )!,
+      relativePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}relative_path'],
+      )!,
       isFavorite: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}is_favorite'],
@@ -1504,18 +1482,15 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
       account: Value(account),
       file: Value(file),
       relativePath: Value(relativePath),
-      isFavorite:
-          isFavorite == null && nullToAbsent
-              ? const Value.absent()
-              : Value(isFavorite),
-      isArchived:
-          isArchived == null && nullToAbsent
-              ? const Value.absent()
-              : Value(isArchived),
-      overrideDateTime:
-          overrideDateTime == null && nullToAbsent
-              ? const Value.absent()
-              : Value(overrideDateTime),
+      isFavorite: isFavorite == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isFavorite),
+      isArchived: isArchived == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isArchived),
+      overrideDateTime: overrideDateTime == null && nullToAbsent
+          ? const Value.absent()
+          : Value(overrideDateTime),
       bestDateTime: Value(bestDateTime),
     );
   }
@@ -1569,10 +1544,9 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
     relativePath: relativePath ?? this.relativePath,
     isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
     isArchived: isArchived.present ? isArchived.value : this.isArchived,
-    overrideDateTime:
-        overrideDateTime.present
-            ? overrideDateTime.value
-            : this.overrideDateTime,
+    overrideDateTime: overrideDateTime.present
+        ? overrideDateTime.value
+        : this.overrideDateTime,
     bestDateTime: bestDateTime ?? this.bestDateTime,
   );
   AccountFile copyWithCompanion(AccountFilesCompanion data) {
@@ -1580,22 +1554,21 @@ class AccountFile extends DataClass implements Insertable<AccountFile> {
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       account: data.account.present ? data.account.value : this.account,
       file: data.file.present ? data.file.value : this.file,
-      relativePath:
-          data.relativePath.present
-              ? data.relativePath.value
-              : this.relativePath,
-      isFavorite:
-          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
-      isArchived:
-          data.isArchived.present ? data.isArchived.value : this.isArchived,
-      overrideDateTime:
-          data.overrideDateTime.present
-              ? data.overrideDateTime.value
-              : this.overrideDateTime,
-      bestDateTime:
-          data.bestDateTime.present
-              ? data.bestDateTime.value
-              : this.bestDateTime,
+      relativePath: data.relativePath.present
+          ? data.relativePath.value
+          : this.relativePath,
+      isFavorite: data.isFavorite.present
+          ? data.isFavorite.value
+          : this.isFavorite,
+      isArchived: data.isArchived.present
+          ? data.isArchived.value
+          : this.isArchived,
+      overrideDateTime: data.overrideDateTime.present
+          ? data.overrideDateTime.value
+          : this.overrideDateTime,
+      bestDateTime: data.bestDateTime.present
+          ? data.bestDateTime.value
+          : this.bestDateTime,
     );
   }
 
@@ -1940,11 +1913,10 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
   Image map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Image(
-      accountFile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account_file'],
-          )!,
+      accountFile: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account_file'],
+      )!,
       lastUpdated: $ImagesTable.$converterlastUpdated.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
@@ -2057,25 +2029,25 @@ class Image extends DataClass implements Insertable<Image> {
     return ImagesCompanion(
       accountFile: Value(accountFile),
       lastUpdated: Value(lastUpdated),
-      fileEtag:
-          fileEtag == null && nullToAbsent
-              ? const Value.absent()
-              : Value(fileEtag),
-      width:
-          width == null && nullToAbsent ? const Value.absent() : Value(width),
-      height:
-          height == null && nullToAbsent ? const Value.absent() : Value(height),
-      exifRaw:
-          exifRaw == null && nullToAbsent
-              ? const Value.absent()
-              : Value(exifRaw),
-      xmpRaw:
-          xmpRaw == null && nullToAbsent ? const Value.absent() : Value(xmpRaw),
+      fileEtag: fileEtag == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileEtag),
+      width: width == null && nullToAbsent
+          ? const Value.absent()
+          : Value(width),
+      height: height == null && nullToAbsent
+          ? const Value.absent()
+          : Value(height),
+      exifRaw: exifRaw == null && nullToAbsent
+          ? const Value.absent()
+          : Value(exifRaw),
+      xmpRaw: xmpRaw == null && nullToAbsent
+          ? const Value.absent()
+          : Value(xmpRaw),
       src: src == null && nullToAbsent ? const Value.absent() : Value(src),
-      dateTimeOriginal:
-          dateTimeOriginal == null && nullToAbsent
-              ? const Value.absent()
-              : Value(dateTimeOriginal),
+      dateTimeOriginal: dateTimeOriginal == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateTimeOriginal),
     );
   }
 
@@ -2133,27 +2105,27 @@ class Image extends DataClass implements Insertable<Image> {
     exifRaw: exifRaw.present ? exifRaw.value : this.exifRaw,
     xmpRaw: xmpRaw.present ? xmpRaw.value : this.xmpRaw,
     src: src.present ? src.value : this.src,
-    dateTimeOriginal:
-        dateTimeOriginal.present
-            ? dateTimeOriginal.value
-            : this.dateTimeOriginal,
+    dateTimeOriginal: dateTimeOriginal.present
+        ? dateTimeOriginal.value
+        : this.dateTimeOriginal,
   );
   Image copyWithCompanion(ImagesCompanion data) {
     return Image(
-      accountFile:
-          data.accountFile.present ? data.accountFile.value : this.accountFile,
-      lastUpdated:
-          data.lastUpdated.present ? data.lastUpdated.value : this.lastUpdated,
+      accountFile: data.accountFile.present
+          ? data.accountFile.value
+          : this.accountFile,
+      lastUpdated: data.lastUpdated.present
+          ? data.lastUpdated.value
+          : this.lastUpdated,
       fileEtag: data.fileEtag.present ? data.fileEtag.value : this.fileEtag,
       width: data.width.present ? data.width.value : this.width,
       height: data.height.present ? data.height.value : this.height,
       exifRaw: data.exifRaw.present ? data.exifRaw.value : this.exifRaw,
       xmpRaw: data.xmpRaw.present ? data.xmpRaw.value : this.xmpRaw,
       src: data.src.present ? data.src.value : this.src,
-      dateTimeOriginal:
-          data.dateTimeOriginal.present
-              ? data.dateTimeOriginal.value
-              : this.dateTimeOriginal,
+      dateTimeOriginal: data.dateTimeOriginal.present
+          ? data.dateTimeOriginal.value
+          : this.dateTimeOriginal,
     );
   }
 
@@ -2468,16 +2440,14 @@ class $ImageLocationsTable extends ImageLocations
   ImageLocation map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ImageLocation(
-      accountFile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account_file'],
-          )!,
-      dataRevision:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}data_revision'],
-          )!,
+      accountFile: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account_file'],
+      )!,
+      dataRevision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}data_revision'],
+      )!,
       latitude: attachedDatabase.typeMapping.read(
         DriftSqlType.double,
         data['${effectivePrefix}latitude'],
@@ -2533,18 +2503,15 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
     return ImageLocationsCompanion(
       accountFile: Value(accountFile),
       dataRevision: Value(dataRevision),
-      latitude:
-          latitude == null && nullToAbsent
-              ? const Value.absent()
-              : Value(latitude),
-      longitude:
-          longitude == null && nullToAbsent
-              ? const Value.absent()
-              : Value(longitude),
-      countryCode:
-          countryCode == null && nullToAbsent
-              ? const Value.absent()
-              : Value(countryCode),
+      latitude: latitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(latitude),
+      longitude: longitude == null && nullToAbsent
+          ? const Value.absent()
+          : Value(longitude),
+      countryCode: countryCode == null && nullToAbsent
+          ? const Value.absent()
+          : Value(countryCode),
     );
   }
 
@@ -2588,16 +2555,17 @@ class ImageLocation extends DataClass implements Insertable<ImageLocation> {
   );
   ImageLocation copyWithCompanion(ImageLocationsCompanion data) {
     return ImageLocation(
-      accountFile:
-          data.accountFile.present ? data.accountFile.value : this.accountFile,
-      dataRevision:
-          data.dataRevision.present
-              ? data.dataRevision.value
-              : this.dataRevision,
+      accountFile: data.accountFile.present
+          ? data.accountFile.value
+          : this.accountFile,
+      dataRevision: data.dataRevision.present
+          ? data.dataRevision.value
+          : this.dataRevision,
       latitude: data.latitude.present ? data.latitude.value : this.latitude,
       longitude: data.longitude.present ? data.longitude.value : this.longitude,
-      countryCode:
-          data.countryCode.present ? data.countryCode.value : this.countryCode,
+      countryCode: data.countryCode.present
+          ? data.countryCode.value
+          : this.countryCode,
     );
   }
 
@@ -2814,21 +2782,18 @@ class $TrashesTable extends Trashes with TableInfo<$TrashesTable, Trash> {
   Trash map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Trash(
-      file:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}file'],
-          )!,
-      filename:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}filename'],
-          )!,
-      originalLocation:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}original_location'],
-          )!,
+      file: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file'],
+      )!,
+      filename: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}filename'],
+      )!,
+      originalLocation: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}original_location'],
+      )!,
       deletionTime: $TrashesTable.$converterdeletionTime.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
@@ -2919,14 +2884,12 @@ class Trash extends DataClass implements Insertable<Trash> {
     return Trash(
       file: data.file.present ? data.file.value : this.file,
       filename: data.filename.present ? data.filename.value : this.filename,
-      originalLocation:
-          data.originalLocation.present
-              ? data.originalLocation.value
-              : this.originalLocation,
-      deletionTime:
-          data.deletionTime.present
-              ? data.deletionTime.value
-              : this.deletionTime,
+      originalLocation: data.originalLocation.present
+          ? data.originalLocation.value
+          : this.originalLocation,
+      deletionTime: data.deletionTime.present
+          ? data.deletionTime.value
+          : this.deletionTime,
     );
   }
 
@@ -3101,16 +3064,14 @@ class $DirFilesTable extends DirFiles with TableInfo<$DirFilesTable, DirFile> {
   DirFile map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return DirFile(
-      dir:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}dir'],
-          )!,
-      child:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}child'],
-          )!,
+      dir: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}dir'],
+      )!,
+      child: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}child'],
+      )!,
     );
   }
 
@@ -3521,66 +3482,56 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, Album> {
   Album map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Album(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      file:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}file'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      file: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file'],
+      )!,
       fileEtag: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}file_etag'],
       ),
-      version:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}version'],
-          )!,
+      version: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}version'],
+      )!,
       lastUpdated: $AlbumsTable.$converterlastUpdated.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.dateTime,
           data['${effectivePrefix}last_updated'],
         )!,
       ),
-      name:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}name'],
-          )!,
-      providerType:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}provider_type'],
-          )!,
-      providerContent:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}provider_content'],
-          )!,
-      coverProviderType:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}cover_provider_type'],
-          )!,
-      coverProviderContent:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}cover_provider_content'],
-          )!,
-      sortProviderType:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}sort_provider_type'],
-          )!,
-      sortProviderContent:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}sort_provider_content'],
-          )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      providerType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}provider_type'],
+      )!,
+      providerContent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}provider_content'],
+      )!,
+      coverProviderType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_provider_type'],
+      )!,
+      coverProviderContent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}cover_provider_content'],
+      )!,
+      sortProviderType: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sort_provider_type'],
+      )!,
+      sortProviderContent: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}sort_provider_content'],
+      )!,
     );
   }
 
@@ -3648,10 +3599,9 @@ class Album extends DataClass implements Insertable<Album> {
     return AlbumsCompanion(
       rowId: Value(rowId),
       file: Value(file),
-      fileEtag:
-          fileEtag == null && nullToAbsent
-              ? const Value.absent()
-              : Value(fileEtag),
+      fileEtag: fileEtag == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileEtag),
       version: Value(version),
       lastUpdated: Value(lastUpdated),
       name: Value(name),
@@ -3740,33 +3690,28 @@ class Album extends DataClass implements Insertable<Album> {
       file: data.file.present ? data.file.value : this.file,
       fileEtag: data.fileEtag.present ? data.fileEtag.value : this.fileEtag,
       version: data.version.present ? data.version.value : this.version,
-      lastUpdated:
-          data.lastUpdated.present ? data.lastUpdated.value : this.lastUpdated,
+      lastUpdated: data.lastUpdated.present
+          ? data.lastUpdated.value
+          : this.lastUpdated,
       name: data.name.present ? data.name.value : this.name,
-      providerType:
-          data.providerType.present
-              ? data.providerType.value
-              : this.providerType,
-      providerContent:
-          data.providerContent.present
-              ? data.providerContent.value
-              : this.providerContent,
-      coverProviderType:
-          data.coverProviderType.present
-              ? data.coverProviderType.value
-              : this.coverProviderType,
-      coverProviderContent:
-          data.coverProviderContent.present
-              ? data.coverProviderContent.value
-              : this.coverProviderContent,
-      sortProviderType:
-          data.sortProviderType.present
-              ? data.sortProviderType.value
-              : this.sortProviderType,
-      sortProviderContent:
-          data.sortProviderContent.present
-              ? data.sortProviderContent.value
-              : this.sortProviderContent,
+      providerType: data.providerType.present
+          ? data.providerType.value
+          : this.providerType,
+      providerContent: data.providerContent.present
+          ? data.providerContent.value
+          : this.providerContent,
+      coverProviderType: data.coverProviderType.present
+          ? data.coverProviderType.value
+          : this.coverProviderType,
+      coverProviderContent: data.coverProviderContent.present
+          ? data.coverProviderContent.value
+          : this.coverProviderContent,
+      sortProviderType: data.sortProviderType.present
+          ? data.sortProviderType.value
+          : this.sortProviderType,
+      sortProviderContent: data.sortProviderContent.present
+          ? data.sortProviderContent.value
+          : this.sortProviderContent,
     );
   }
 
@@ -4097,16 +4042,14 @@ class $AlbumSharesTable extends AlbumShares
   AlbumShare map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return AlbumShare(
-      album:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}album'],
-          )!,
-      userId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}user_id'],
-          )!,
+      album: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}album'],
+      )!,
+      userId: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}user_id'],
+      )!,
       displayName: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}display_name'],
@@ -4160,10 +4103,9 @@ class AlbumShare extends DataClass implements Insertable<AlbumShare> {
     return AlbumSharesCompanion(
       album: Value(album),
       userId: Value(userId),
-      displayName:
-          displayName == null && nullToAbsent
-              ? const Value.absent()
-              : Value(displayName),
+      displayName: displayName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(displayName),
       sharedAt: Value(sharedAt),
     );
   }
@@ -4206,8 +4148,9 @@ class AlbumShare extends DataClass implements Insertable<AlbumShare> {
     return AlbumShare(
       album: data.album.present ? data.album.value : this.album,
       userId: data.userId.present ? data.userId.value : this.userId,
-      displayName:
-          data.displayName.present ? data.displayName.value : this.displayName,
+      displayName: data.displayName.present
+          ? data.displayName.value
+          : this.displayName,
       sharedAt: data.sharedAt.present ? data.sharedAt.value : this.sharedAt,
     );
   }
@@ -4488,26 +4431,22 @@ class $TagsTable extends Tags with TableInfo<$TagsTable, Tag> {
   Tag map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return Tag(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      server:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}server'],
-          )!,
-      tagId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}tag_id'],
-          )!,
-      displayName:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}display_name'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      server: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}server'],
+      )!,
+      tagId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}tag_id'],
+      )!,
+      displayName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}display_name'],
+      )!,
       userVisible: attachedDatabase.typeMapping.read(
         DriftSqlType.bool,
         data['${effectivePrefix}user_visible'],
@@ -4562,14 +4501,12 @@ class Tag extends DataClass implements Insertable<Tag> {
       server: Value(server),
       tagId: Value(tagId),
       displayName: Value(displayName),
-      userVisible:
-          userVisible == null && nullToAbsent
-              ? const Value.absent()
-              : Value(userVisible),
-      userAssignable:
-          userAssignable == null && nullToAbsent
-              ? const Value.absent()
-              : Value(userAssignable),
+      userVisible: userVisible == null && nullToAbsent
+          ? const Value.absent()
+          : Value(userVisible),
+      userAssignable: userAssignable == null && nullToAbsent
+          ? const Value.absent()
+          : Value(userAssignable),
     );
   }
 
@@ -4613,22 +4550,24 @@ class Tag extends DataClass implements Insertable<Tag> {
     tagId: tagId ?? this.tagId,
     displayName: displayName ?? this.displayName,
     userVisible: userVisible.present ? userVisible.value : this.userVisible,
-    userAssignable:
-        userAssignable.present ? userAssignable.value : this.userAssignable,
+    userAssignable: userAssignable.present
+        ? userAssignable.value
+        : this.userAssignable,
   );
   Tag copyWithCompanion(TagsCompanion data) {
     return Tag(
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       server: data.server.present ? data.server.value : this.server,
       tagId: data.tagId.present ? data.tagId.value : this.tagId,
-      displayName:
-          data.displayName.present ? data.displayName.value : this.displayName,
-      userVisible:
-          data.userVisible.present ? data.userVisible.value : this.userVisible,
-      userAssignable:
-          data.userAssignable.present
-              ? data.userAssignable.value
-              : this.userAssignable,
+      displayName: data.displayName.present
+          ? data.displayName.value
+          : this.displayName,
+      userVisible: data.userVisible.present
+          ? data.userVisible.value
+          : this.userVisible,
+      userAssignable: data.userAssignable.present
+          ? data.userAssignable.value
+          : this.userAssignable,
     );
   }
 
@@ -4901,31 +4840,26 @@ class $FaceRecognitionPersonsTable extends FaceRecognitionPersons
   FaceRecognitionPerson map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return FaceRecognitionPerson(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      account:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account'],
-          )!,
-      name:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}name'],
-          )!,
-      thumbFaceId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}thumb_face_id'],
-          )!,
-      count:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}count'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      account: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
+      thumbFaceId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}thumb_face_id'],
+      )!,
+      count: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}count'],
+      )!,
     );
   }
 
@@ -5015,8 +4949,9 @@ class FaceRecognitionPerson extends DataClass
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       account: data.account.present ? data.account.value : this.account,
       name: data.name.present ? data.name.value : this.name,
-      thumbFaceId:
-          data.thumbFaceId.present ? data.thumbFaceId.value : this.thumbFaceId,
+      thumbFaceId: data.thumbFaceId.present
+          ? data.thumbFaceId.value
+          : this.thumbFaceId,
       count: data.count.present ? data.count.value : this.count,
     );
   }
@@ -5357,30 +5292,26 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
   NcAlbum map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NcAlbum(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      account:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account'],
-          )!,
-      relativePath:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}relative_path'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      account: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account'],
+      )!,
+      relativePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}relative_path'],
+      )!,
       lastPhoto: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}last_photo'],
       ),
-      nbItems:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}nb_items'],
-          )!,
+      nbItems: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}nb_items'],
+      )!,
       location: attachedDatabase.typeMapping.read(
         DriftSqlType.string,
         data['${effectivePrefix}location'],
@@ -5397,16 +5328,14 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
           data['${effectivePrefix}date_end'],
         ),
       ),
-      collaborators:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}collaborators'],
-          )!,
-      isOwned:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.bool,
-            data['${effectivePrefix}is_owned'],
-          )!,
+      collaborators: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}collaborators'],
+      )!,
+      isOwned: attachedDatabase.typeMapping.read(
+        DriftSqlType.bool,
+        data['${effectivePrefix}is_owned'],
+      )!,
     );
   }
 
@@ -5481,23 +5410,19 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
       rowId: Value(rowId),
       account: Value(account),
       relativePath: Value(relativePath),
-      lastPhoto:
-          lastPhoto == null && nullToAbsent
-              ? const Value.absent()
-              : Value(lastPhoto),
+      lastPhoto: lastPhoto == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastPhoto),
       nbItems: Value(nbItems),
-      location:
-          location == null && nullToAbsent
-              ? const Value.absent()
-              : Value(location),
-      dateStart:
-          dateStart == null && nullToAbsent
-              ? const Value.absent()
-              : Value(dateStart),
-      dateEnd:
-          dateEnd == null && nullToAbsent
-              ? const Value.absent()
-              : Value(dateEnd),
+      location: location == null && nullToAbsent
+          ? const Value.absent()
+          : Value(location),
+      dateStart: dateStart == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateStart),
+      dateEnd: dateEnd == null && nullToAbsent
+          ? const Value.absent()
+          : Value(dateEnd),
       collaborators: Value(collaborators),
       isOwned: Value(isOwned),
     );
@@ -5565,19 +5490,17 @@ class NcAlbum extends DataClass implements Insertable<NcAlbum> {
     return NcAlbum(
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       account: data.account.present ? data.account.value : this.account,
-      relativePath:
-          data.relativePath.present
-              ? data.relativePath.value
-              : this.relativePath,
+      relativePath: data.relativePath.present
+          ? data.relativePath.value
+          : this.relativePath,
       lastPhoto: data.lastPhoto.present ? data.lastPhoto.value : this.lastPhoto,
       nbItems: data.nbItems.present ? data.nbItems.value : this.nbItems,
       location: data.location.present ? data.location.value : this.location,
       dateStart: data.dateStart.present ? data.dateStart.value : this.dateStart,
       dateEnd: data.dateEnd.present ? data.dateEnd.value : this.dateEnd,
-      collaborators:
-          data.collaborators.present
-              ? data.collaborators.value
-              : this.collaborators,
+      collaborators: data.collaborators.present
+          ? data.collaborators.value
+          : this.collaborators,
       isOwned: data.isOwned.present ? data.isOwned.value : this.isOwned,
     );
   }
@@ -6044,26 +5967,22 @@ class $NcAlbumItemsTable extends NcAlbumItems
   NcAlbumItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return NcAlbumItem(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      parent:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}parent'],
-          )!,
-      relativePath:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}relative_path'],
-          )!,
-      fileId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}file_id'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      parent: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}parent'],
+      )!,
+      relativePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}relative_path'],
+      )!,
+      fileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file_id'],
+      )!,
       contentLength: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}content_length'],
@@ -6181,35 +6100,28 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
       parent: Value(parent),
       relativePath: Value(relativePath),
       fileId: Value(fileId),
-      contentLength:
-          contentLength == null && nullToAbsent
-              ? const Value.absent()
-              : Value(contentLength),
-      contentType:
-          contentType == null && nullToAbsent
-              ? const Value.absent()
-              : Value(contentType),
+      contentLength: contentLength == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentLength),
+      contentType: contentType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentType),
       etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
-      lastModified:
-          lastModified == null && nullToAbsent
-              ? const Value.absent()
-              : Value(lastModified),
-      hasPreview:
-          hasPreview == null && nullToAbsent
-              ? const Value.absent()
-              : Value(hasPreview),
-      isFavorite:
-          isFavorite == null && nullToAbsent
-              ? const Value.absent()
-              : Value(isFavorite),
-      fileMetadataWidth:
-          fileMetadataWidth == null && nullToAbsent
-              ? const Value.absent()
-              : Value(fileMetadataWidth),
-      fileMetadataHeight:
-          fileMetadataHeight == null && nullToAbsent
-              ? const Value.absent()
-              : Value(fileMetadataHeight),
+      lastModified: lastModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastModified),
+      hasPreview: hasPreview == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasPreview),
+      isFavorite: isFavorite == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isFavorite),
+      fileMetadataWidth: fileMetadataWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileMetadataWidth),
+      fileMetadataHeight: fileMetadataHeight == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileMetadataHeight),
     );
   }
 
@@ -6270,54 +6182,51 @@ class NcAlbumItem extends DataClass implements Insertable<NcAlbumItem> {
     parent: parent ?? this.parent,
     relativePath: relativePath ?? this.relativePath,
     fileId: fileId ?? this.fileId,
-    contentLength:
-        contentLength.present ? contentLength.value : this.contentLength,
+    contentLength: contentLength.present
+        ? contentLength.value
+        : this.contentLength,
     contentType: contentType.present ? contentType.value : this.contentType,
     etag: etag.present ? etag.value : this.etag,
     lastModified: lastModified.present ? lastModified.value : this.lastModified,
     hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
     isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
-    fileMetadataWidth:
-        fileMetadataWidth.present
-            ? fileMetadataWidth.value
-            : this.fileMetadataWidth,
-    fileMetadataHeight:
-        fileMetadataHeight.present
-            ? fileMetadataHeight.value
-            : this.fileMetadataHeight,
+    fileMetadataWidth: fileMetadataWidth.present
+        ? fileMetadataWidth.value
+        : this.fileMetadataWidth,
+    fileMetadataHeight: fileMetadataHeight.present
+        ? fileMetadataHeight.value
+        : this.fileMetadataHeight,
   );
   NcAlbumItem copyWithCompanion(NcAlbumItemsCompanion data) {
     return NcAlbumItem(
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       parent: data.parent.present ? data.parent.value : this.parent,
-      relativePath:
-          data.relativePath.present
-              ? data.relativePath.value
-              : this.relativePath,
+      relativePath: data.relativePath.present
+          ? data.relativePath.value
+          : this.relativePath,
       fileId: data.fileId.present ? data.fileId.value : this.fileId,
-      contentLength:
-          data.contentLength.present
-              ? data.contentLength.value
-              : this.contentLength,
-      contentType:
-          data.contentType.present ? data.contentType.value : this.contentType,
+      contentLength: data.contentLength.present
+          ? data.contentLength.value
+          : this.contentLength,
+      contentType: data.contentType.present
+          ? data.contentType.value
+          : this.contentType,
       etag: data.etag.present ? data.etag.value : this.etag,
-      lastModified:
-          data.lastModified.present
-              ? data.lastModified.value
-              : this.lastModified,
-      hasPreview:
-          data.hasPreview.present ? data.hasPreview.value : this.hasPreview,
-      isFavorite:
-          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
-      fileMetadataWidth:
-          data.fileMetadataWidth.present
-              ? data.fileMetadataWidth.value
-              : this.fileMetadataWidth,
-      fileMetadataHeight:
-          data.fileMetadataHeight.present
-              ? data.fileMetadataHeight.value
-              : this.fileMetadataHeight,
+      lastModified: data.lastModified.present
+          ? data.lastModified.value
+          : this.lastModified,
+      hasPreview: data.hasPreview.present
+          ? data.hasPreview.value
+          : this.hasPreview,
+      isFavorite: data.isFavorite.present
+          ? data.isFavorite.value
+          : this.isFavorite,
+      fileMetadataWidth: data.fileMetadataWidth.present
+          ? data.fileMetadataWidth.value
+          : this.fileMetadataWidth,
+      fileMetadataHeight: data.fileMetadataHeight.present
+          ? data.fileMetadataHeight.value
+          : this.fileMetadataHeight,
     );
   }
 
@@ -6632,21 +6541,18 @@ class $RecognizeFacesTable extends RecognizeFaces
   RecognizeFace map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return RecognizeFace(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      account:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account'],
-          )!,
-      label:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}label'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      account: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account'],
+      )!,
+      label: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}label'],
+      )!,
     );
   }
 
@@ -7109,26 +7015,22 @@ class $RecognizeFaceItemsTable extends RecognizeFaceItems
   RecognizeFaceItem map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return RecognizeFaceItem(
-      rowId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}row_id'],
-          )!,
-      parent:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}parent'],
-          )!,
-      relativePath:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}relative_path'],
-          )!,
-      fileId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}file_id'],
-          )!,
+      rowId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}row_id'],
+      )!,
+      parent: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}parent'],
+      )!,
+      relativePath: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}relative_path'],
+      )!,
+      fileId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}file_id'],
+      )!,
       contentLength: attachedDatabase.typeMapping.read(
         DriftSqlType.int,
         data['${effectivePrefix}content_length'],
@@ -7265,43 +7167,34 @@ class RecognizeFaceItem extends DataClass
       parent: Value(parent),
       relativePath: Value(relativePath),
       fileId: Value(fileId),
-      contentLength:
-          contentLength == null && nullToAbsent
-              ? const Value.absent()
-              : Value(contentLength),
-      contentType:
-          contentType == null && nullToAbsent
-              ? const Value.absent()
-              : Value(contentType),
+      contentLength: contentLength == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentLength),
+      contentType: contentType == null && nullToAbsent
+          ? const Value.absent()
+          : Value(contentType),
       etag: etag == null && nullToAbsent ? const Value.absent() : Value(etag),
-      lastModified:
-          lastModified == null && nullToAbsent
-              ? const Value.absent()
-              : Value(lastModified),
-      hasPreview:
-          hasPreview == null && nullToAbsent
-              ? const Value.absent()
-              : Value(hasPreview),
-      realPath:
-          realPath == null && nullToAbsent
-              ? const Value.absent()
-              : Value(realPath),
-      isFavorite:
-          isFavorite == null && nullToAbsent
-              ? const Value.absent()
-              : Value(isFavorite),
-      fileMetadataWidth:
-          fileMetadataWidth == null && nullToAbsent
-              ? const Value.absent()
-              : Value(fileMetadataWidth),
-      fileMetadataHeight:
-          fileMetadataHeight == null && nullToAbsent
-              ? const Value.absent()
-              : Value(fileMetadataHeight),
-      faceDetections:
-          faceDetections == null && nullToAbsent
-              ? const Value.absent()
-              : Value(faceDetections),
+      lastModified: lastModified == null && nullToAbsent
+          ? const Value.absent()
+          : Value(lastModified),
+      hasPreview: hasPreview == null && nullToAbsent
+          ? const Value.absent()
+          : Value(hasPreview),
+      realPath: realPath == null && nullToAbsent
+          ? const Value.absent()
+          : Value(realPath),
+      isFavorite: isFavorite == null && nullToAbsent
+          ? const Value.absent()
+          : Value(isFavorite),
+      fileMetadataWidth: fileMetadataWidth == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileMetadataWidth),
+      fileMetadataHeight: fileMetadataHeight == null && nullToAbsent
+          ? const Value.absent()
+          : Value(fileMetadataHeight),
+      faceDetections: faceDetections == null && nullToAbsent
+          ? const Value.absent()
+          : Value(faceDetections),
     );
   }
 
@@ -7368,62 +7261,59 @@ class RecognizeFaceItem extends DataClass
     parent: parent ?? this.parent,
     relativePath: relativePath ?? this.relativePath,
     fileId: fileId ?? this.fileId,
-    contentLength:
-        contentLength.present ? contentLength.value : this.contentLength,
+    contentLength: contentLength.present
+        ? contentLength.value
+        : this.contentLength,
     contentType: contentType.present ? contentType.value : this.contentType,
     etag: etag.present ? etag.value : this.etag,
     lastModified: lastModified.present ? lastModified.value : this.lastModified,
     hasPreview: hasPreview.present ? hasPreview.value : this.hasPreview,
     realPath: realPath.present ? realPath.value : this.realPath,
     isFavorite: isFavorite.present ? isFavorite.value : this.isFavorite,
-    fileMetadataWidth:
-        fileMetadataWidth.present
-            ? fileMetadataWidth.value
-            : this.fileMetadataWidth,
-    fileMetadataHeight:
-        fileMetadataHeight.present
-            ? fileMetadataHeight.value
-            : this.fileMetadataHeight,
-    faceDetections:
-        faceDetections.present ? faceDetections.value : this.faceDetections,
+    fileMetadataWidth: fileMetadataWidth.present
+        ? fileMetadataWidth.value
+        : this.fileMetadataWidth,
+    fileMetadataHeight: fileMetadataHeight.present
+        ? fileMetadataHeight.value
+        : this.fileMetadataHeight,
+    faceDetections: faceDetections.present
+        ? faceDetections.value
+        : this.faceDetections,
   );
   RecognizeFaceItem copyWithCompanion(RecognizeFaceItemsCompanion data) {
     return RecognizeFaceItem(
       rowId: data.rowId.present ? data.rowId.value : this.rowId,
       parent: data.parent.present ? data.parent.value : this.parent,
-      relativePath:
-          data.relativePath.present
-              ? data.relativePath.value
-              : this.relativePath,
+      relativePath: data.relativePath.present
+          ? data.relativePath.value
+          : this.relativePath,
       fileId: data.fileId.present ? data.fileId.value : this.fileId,
-      contentLength:
-          data.contentLength.present
-              ? data.contentLength.value
-              : this.contentLength,
-      contentType:
-          data.contentType.present ? data.contentType.value : this.contentType,
+      contentLength: data.contentLength.present
+          ? data.contentLength.value
+          : this.contentLength,
+      contentType: data.contentType.present
+          ? data.contentType.value
+          : this.contentType,
       etag: data.etag.present ? data.etag.value : this.etag,
-      lastModified:
-          data.lastModified.present
-              ? data.lastModified.value
-              : this.lastModified,
-      hasPreview:
-          data.hasPreview.present ? data.hasPreview.value : this.hasPreview,
+      lastModified: data.lastModified.present
+          ? data.lastModified.value
+          : this.lastModified,
+      hasPreview: data.hasPreview.present
+          ? data.hasPreview.value
+          : this.hasPreview,
       realPath: data.realPath.present ? data.realPath.value : this.realPath,
-      isFavorite:
-          data.isFavorite.present ? data.isFavorite.value : this.isFavorite,
-      fileMetadataWidth:
-          data.fileMetadataWidth.present
-              ? data.fileMetadataWidth.value
-              : this.fileMetadataWidth,
-      fileMetadataHeight:
-          data.fileMetadataHeight.present
-              ? data.fileMetadataHeight.value
-              : this.fileMetadataHeight,
-      faceDetections:
-          data.faceDetections.present
-              ? data.faceDetections.value
-              : this.faceDetections,
+      isFavorite: data.isFavorite.present
+          ? data.isFavorite.value
+          : this.isFavorite,
+      fileMetadataWidth: data.fileMetadataWidth.present
+          ? data.fileMetadataWidth.value
+          : this.fileMetadataWidth,
+      fileMetadataHeight: data.fileMetadataHeight.present
+          ? data.fileMetadataHeight.value
+          : this.fileMetadataHeight,
+      faceDetections: data.faceDetections.present
+          ? data.faceDetections.value
+          : this.faceDetections,
     );
   }
 
@@ -7781,26 +7671,22 @@ class $ImageLocationNamesTable extends ImageLocationNames
   ImageLocationName map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ImageLocationName(
-      dataRevision:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}data_revision'],
-          )!,
-      geonameId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}geoname_id'],
-          )!,
-      lang:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}lang'],
-          )!,
-      name:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.string,
-            data['${effectivePrefix}name'],
-          )!,
+      dataRevision: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}data_revision'],
+      )!,
+      geonameId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}geoname_id'],
+      )!,
+      lang: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}lang'],
+      )!,
+      name: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}name'],
+      )!,
     );
   }
 
@@ -7877,10 +7763,9 @@ class ImageLocationName extends DataClass
   );
   ImageLocationName copyWithCompanion(ImageLocationNamesCompanion data) {
     return ImageLocationName(
-      dataRevision:
-          data.dataRevision.present
-              ? data.dataRevision.value
-              : this.dataRevision,
+      dataRevision: data.dataRevision.present
+          ? data.dataRevision.value
+          : this.dataRevision,
       geonameId: data.geonameId.present ? data.geonameId.value : this.geonameId,
       lang: data.lang.present ? data.lang.value : this.lang,
       name: data.name.present ? data.name.value : this.name,
@@ -8081,16 +7966,14 @@ class $ImageLocationIdsTable extends ImageLocationIds
   ImageLocationId map(Map<String, dynamic> data, {String? tablePrefix}) {
     final effectivePrefix = tablePrefix != null ? '$tablePrefix.' : '';
     return ImageLocationId(
-      accountFile:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}account_file'],
-          )!,
-      geonameId:
-          attachedDatabase.typeMapping.read(
-            DriftSqlType.int,
-            data['${effectivePrefix}geoname_id'],
-          )!,
+      accountFile: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}account_file'],
+      )!,
+      geonameId: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}geoname_id'],
+      )!,
       type: $ImageLocationIdsTable.$convertertype.fromSql(
         attachedDatabase.typeMapping.read(
           DriftSqlType.int,
@@ -8171,8 +8054,9 @@ class ImageLocationId extends DataClass implements Insertable<ImageLocationId> {
   );
   ImageLocationId copyWithCompanion(ImageLocationIdsCompanion data) {
     return ImageLocationId(
-      accountFile:
-          data.accountFile.present ? data.accountFile.value : this.accountFile,
+      accountFile: data.accountFile.present
+          ? data.accountFile.value
+          : this.accountFile,
       geonameId: data.geonameId.present ? data.geonameId.value : this.geonameId,
       type: data.type.present ? data.type.value : this.type,
     );
@@ -8757,12 +8641,12 @@ class $$ServersTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ServersTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$ServersTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$ServersTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$ServersTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ServersTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ServersTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -8773,83 +8657,77 @@ class $$ServersTableTableManager
                 Value<int> rowId = const Value.absent(),
                 required String address,
               }) => ServersCompanion.insert(rowId: rowId, address: address),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$ServersTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
-          prefetchHooksCallback: ({
-            accountsRefs = false,
-            filesRefs = false,
-            tagsRefs = false,
-          }) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (accountsRefs) db.accounts,
-                if (filesRefs) db.files,
-                if (tagsRefs) db.tags,
-              ],
-              addJoins: null,
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (accountsRefs)
-                    await $_getPrefetchedData<Server, $ServersTable, Account>(
-                      currentTable: table,
-                      referencedTable: $$ServersTableReferences
-                          ._accountsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ServersTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({accountsRefs = false, filesRefs = false, tagsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (accountsRefs) db.accounts,
+                    if (filesRefs) db.files,
+                    if (tagsRefs) db.tags,
+                  ],
+                  addJoins: null,
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (accountsRefs)
+                        await $_getPrefetchedData<
+                          Server,
+                          $ServersTable,
+                          Account
+                        >(
+                          currentTable: table,
+                          referencedTable: $$ServersTableReferences
+                              ._accountsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$ServersTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).accountsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.server == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (filesRefs)
-                    await $_getPrefetchedData<Server, $ServersTable, File>(
-                      currentTable: table,
-                      referencedTable: $$ServersTableReferences._filesRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.server == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (filesRefs)
+                        await $_getPrefetchedData<Server, $ServersTable, File>(
+                          currentTable: table,
+                          referencedTable: $$ServersTableReferences
+                              ._filesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$ServersTableReferences(db, table, p0).filesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.server == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (tagsRefs)
-                    await $_getPrefetchedData<Server, $ServersTable, Tag>(
-                      currentTable: table,
-                      referencedTable: $$ServersTableReferences._tagsRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.server == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (tagsRefs)
+                        await $_getPrefetchedData<Server, $ServersTable, Tag>(
+                          currentTable: table,
+                          referencedTable: $$ServersTableReferences
+                              ._tagsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$ServersTableReferences(db, table, p0).tagsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.server == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.server == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -9343,12 +9221,12 @@ class $$AccountsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$AccountsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$AccountsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$AccountsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$AccountsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AccountsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AccountsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -9369,153 +9247,152 @@ class $$AccountsTableTableManager
                 server: server,
                 userId: userId,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$AccountsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
-          prefetchHooksCallback: ({
-            server = false,
-            accountFilesRefs = false,
-            faceRecognitionPersonsRefs = false,
-            ncAlbumsRefs = false,
-            recognizeFacesRefs = false,
-          }) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (accountFilesRefs) db.accountFiles,
-                if (faceRecognitionPersonsRefs) db.faceRecognitionPersons,
-                if (ncAlbumsRefs) db.ncAlbums,
-                if (recognizeFacesRefs) db.recognizeFaces,
-              ],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (server) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.server,
-                            referencedTable: $$AccountsTableReferences
-                                ._serverTable(db),
-                            referencedColumn:
-                                $$AccountsTableReferences
-                                    ._serverTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$AccountsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                server = false,
+                accountFilesRefs = false,
+                faceRecognitionPersonsRefs = false,
+                ncAlbumsRefs = false,
+                recognizeFacesRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (accountFilesRefs) db.accountFiles,
+                    if (faceRecognitionPersonsRefs) db.faceRecognitionPersons,
+                    if (ncAlbumsRefs) db.ncAlbums,
+                    if (recognizeFacesRefs) db.recognizeFaces,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (server) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.server,
+                                    referencedTable: $$AccountsTableReferences
+                                        ._serverTable(db),
+                                    referencedColumn: $$AccountsTableReferences
+                                        ._serverTable(db)
+                                        .rowId,
+                                  )
+                                  as T;
+                        }
 
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (accountFilesRefs)
-                    await $_getPrefetchedData<
-                      Account,
-                      $AccountsTable,
-                      AccountFile
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AccountsTableReferences
-                          ._accountFilesRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (accountFilesRefs)
+                        await $_getPrefetchedData<
+                          Account,
+                          $AccountsTable,
+                          AccountFile
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountsTableReferences
+                              ._accountFilesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountsTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).accountFilesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.account == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (faceRecognitionPersonsRefs)
-                    await $_getPrefetchedData<
-                      Account,
-                      $AccountsTable,
-                      FaceRecognitionPerson
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AccountsTableReferences
-                          ._faceRecognitionPersonsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.account == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (faceRecognitionPersonsRefs)
+                        await $_getPrefetchedData<
+                          Account,
+                          $AccountsTable,
+                          FaceRecognitionPerson
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountsTableReferences
+                              ._faceRecognitionPersonsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountsTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).faceRecognitionPersonsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.account == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (ncAlbumsRefs)
-                    await $_getPrefetchedData<Account, $AccountsTable, NcAlbum>(
-                      currentTable: table,
-                      referencedTable: $$AccountsTableReferences
-                          ._ncAlbumsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.account == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (ncAlbumsRefs)
+                        await $_getPrefetchedData<
+                          Account,
+                          $AccountsTable,
+                          NcAlbum
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountsTableReferences
+                              ._ncAlbumsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountsTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).ncAlbumsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.account == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (recognizeFacesRefs)
-                    await $_getPrefetchedData<
-                      Account,
-                      $AccountsTable,
-                      RecognizeFace
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AccountsTableReferences
-                          ._recognizeFacesRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.account == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (recognizeFacesRefs)
+                        await $_getPrefetchedData<
+                          Account,
+                          $AccountsTable,
+                          RecognizeFace
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountsTableReferences
+                              ._recognizeFacesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountsTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).recognizeFacesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.account == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.account == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -10218,12 +10095,12 @@ class $$FilesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$FilesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$FilesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$FilesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$FilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$FilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$FilesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -10280,146 +10157,146 @@ class $$FilesTableTableManager
                 ownerId: ownerId,
                 ownerDisplayName: ownerDisplayName,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$FilesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
-          prefetchHooksCallback: ({
-            server = false,
-            accountFilesRefs = false,
-            trashesRefs = false,
-            dirFilesRefs = false,
-            child = false,
-            albumsRefs = false,
-          }) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (accountFilesRefs) db.accountFiles,
-                if (trashesRefs) db.trashes,
-                if (dirFilesRefs) db.dirFiles,
-                if (child) db.dirFiles,
-                if (albumsRefs) db.albums,
-              ],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (server) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.server,
-                            referencedTable: $$FilesTableReferences
-                                ._serverTable(db),
-                            referencedColumn:
-                                $$FilesTableReferences._serverTable(db).rowId,
-                          )
-                          as T;
-                }
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) =>
+                    (e.readTable(table), $$FilesTableReferences(db, table, e)),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                server = false,
+                accountFilesRefs = false,
+                trashesRefs = false,
+                dirFilesRefs = false,
+                child = false,
+                albumsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (accountFilesRefs) db.accountFiles,
+                    if (trashesRefs) db.trashes,
+                    if (dirFilesRefs) db.dirFiles,
+                    if (child) db.dirFiles,
+                    if (albumsRefs) db.albums,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (server) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.server,
+                                    referencedTable: $$FilesTableReferences
+                                        ._serverTable(db),
+                                    referencedColumn: $$FilesTableReferences
+                                        ._serverTable(db)
+                                        .rowId,
+                                  )
+                                  as T;
+                        }
 
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (accountFilesRefs)
-                    await $_getPrefetchedData<File, $FilesTable, AccountFile>(
-                      currentTable: table,
-                      referencedTable: $$FilesTableReferences
-                          ._accountFilesRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (accountFilesRefs)
+                        await $_getPrefetchedData<
+                          File,
+                          $FilesTable,
+                          AccountFile
+                        >(
+                          currentTable: table,
+                          referencedTable: $$FilesTableReferences
+                              ._accountFilesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$FilesTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).accountFilesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.file == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (trashesRefs)
-                    await $_getPrefetchedData<File, $FilesTable, Trash>(
-                      currentTable: table,
-                      referencedTable: $$FilesTableReferences._trashesRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.file == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (trashesRefs)
+                        await $_getPrefetchedData<File, $FilesTable, Trash>(
+                          currentTable: table,
+                          referencedTable: $$FilesTableReferences
+                              ._trashesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$FilesTableReferences(db, table, p0).trashesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.file == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (dirFilesRefs)
-                    await $_getPrefetchedData<File, $FilesTable, DirFile>(
-                      currentTable: table,
-                      referencedTable: $$FilesTableReferences
-                          ._dirFilesRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.file == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (dirFilesRefs)
+                        await $_getPrefetchedData<File, $FilesTable, DirFile>(
+                          currentTable: table,
+                          referencedTable: $$FilesTableReferences
+                              ._dirFilesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$FilesTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).dirFilesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) =>
-                              referencedItems.where((e) => e.dir == item.rowId),
-                      typedResults: items,
-                    ),
-                  if (child)
-                    await $_getPrefetchedData<File, $FilesTable, DirFile>(
-                      currentTable: table,
-                      referencedTable: $$FilesTableReferences._childTable(db),
-                      managerFromTypedResult:
-                          (p0) => $$FilesTableReferences(db, table, p0).child,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.child == item.rowId,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.dir == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (child)
+                        await $_getPrefetchedData<File, $FilesTable, DirFile>(
+                          currentTable: table,
+                          referencedTable: $$FilesTableReferences._childTable(
+                            db,
                           ),
-                      typedResults: items,
-                    ),
-                  if (albumsRefs)
-                    await $_getPrefetchedData<File, $FilesTable, Album>(
-                      currentTable: table,
-                      referencedTable: $$FilesTableReferences._albumsRefsTable(
-                        db,
-                      ),
-                      managerFromTypedResult:
-                          (p0) =>
+                          managerFromTypedResult: (p0) =>
+                              $$FilesTableReferences(db, table, p0).child,
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.child == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (albumsRefs)
+                        await $_getPrefetchedData<File, $FilesTable, Album>(
+                          currentTable: table,
+                          referencedTable: $$FilesTableReferences
+                              ._albumsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$FilesTableReferences(db, table, p0).albumsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.file == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.file == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -10539,12 +10416,10 @@ final class $$AccountFilesTableReferences
   );
 
   $$ImageLocationsTableProcessedTableManager get imageLocationsRefs {
-    final manager = $$ImageLocationsTableTableManager(
-      $_db,
-      $_db.imageLocations,
-    ).filter(
-      (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
-    );
+    final manager = $$ImageLocationsTableTableManager($_db, $_db.imageLocations)
+        .filter(
+          (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
+        );
 
     final cache = $_typedResult.readTableOrNull(_imageLocationsRefsTable($_db));
     return ProcessedTableManager(
@@ -10562,12 +10437,10 @@ final class $$AccountFilesTableReferences
   );
 
   $$ImageLocationIdsTableProcessedTableManager get imageLocationIdsRefs {
-    final manager = $$ImageLocationIdsTableTableManager(
-      $_db,
-      $_db.imageLocationIds,
-    ).filter(
-      (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
-    );
+    final manager =
+        $$ImageLocationIdsTableTableManager($_db, $_db.imageLocationIds).filter(
+          (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
+        );
 
     final cache = $_typedResult.readTableOrNull(
       _imageLocationIdsRefsTable($_db),
@@ -11014,13 +10887,12 @@ class $$AccountFilesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$AccountFilesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$AccountFilesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$AccountFilesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$AccountFilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AccountFilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AccountFilesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -11061,148 +10933,147 @@ class $$AccountFilesTableTableManager
                 overrideDateTime: overrideDateTime,
                 bestDateTime: bestDateTime,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$AccountFilesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
-          prefetchHooksCallback: ({
-            account = false,
-            file = false,
-            imagesRefs = false,
-            imageLocationsRefs = false,
-            imageLocationIdsRefs = false,
-          }) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (imagesRefs) db.images,
-                if (imageLocationsRefs) db.imageLocations,
-                if (imageLocationIdsRefs) db.imageLocationIds,
-              ],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (account) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.account,
-                            referencedTable: $$AccountFilesTableReferences
-                                ._accountTable(db),
-                            referencedColumn:
-                                $$AccountFilesTableReferences
-                                    ._accountTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
-                if (file) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.file,
-                            referencedTable: $$AccountFilesTableReferences
-                                ._fileTable(db),
-                            referencedColumn:
-                                $$AccountFilesTableReferences
-                                    ._fileTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$AccountFilesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({
+                account = false,
+                file = false,
+                imagesRefs = false,
+                imageLocationsRefs = false,
+                imageLocationIdsRefs = false,
+              }) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (imagesRefs) db.images,
+                    if (imageLocationsRefs) db.imageLocations,
+                    if (imageLocationIdsRefs) db.imageLocationIds,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (account) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.account,
+                                    referencedTable:
+                                        $$AccountFilesTableReferences
+                                            ._accountTable(db),
+                                    referencedColumn:
+                                        $$AccountFilesTableReferences
+                                            ._accountTable(db)
+                                            .rowId,
+                                  )
+                                  as T;
+                        }
+                        if (file) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.file,
+                                    referencedTable:
+                                        $$AccountFilesTableReferences
+                                            ._fileTable(db),
+                                    referencedColumn:
+                                        $$AccountFilesTableReferences
+                                            ._fileTable(db)
+                                            .rowId,
+                                  )
+                                  as T;
+                        }
 
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (imagesRefs)
-                    await $_getPrefetchedData<
-                      AccountFile,
-                      $AccountFilesTable,
-                      Image
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AccountFilesTableReferences
-                          ._imagesRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (imagesRefs)
+                        await $_getPrefetchedData<
+                          AccountFile,
+                          $AccountFilesTable,
+                          Image
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountFilesTableReferences
+                              ._imagesRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountFilesTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).imagesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.accountFile == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (imageLocationsRefs)
-                    await $_getPrefetchedData<
-                      AccountFile,
-                      $AccountFilesTable,
-                      ImageLocation
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AccountFilesTableReferences
-                          ._imageLocationsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountFile == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (imageLocationsRefs)
+                        await $_getPrefetchedData<
+                          AccountFile,
+                          $AccountFilesTable,
+                          ImageLocation
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountFilesTableReferences
+                              ._imageLocationsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountFilesTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).imageLocationsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.accountFile == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                  if (imageLocationIdsRefs)
-                    await $_getPrefetchedData<
-                      AccountFile,
-                      $AccountFilesTable,
-                      ImageLocationId
-                    >(
-                      currentTable: table,
-                      referencedTable: $$AccountFilesTableReferences
-                          ._imageLocationIdsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountFile == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                      if (imageLocationIdsRefs)
+                        await $_getPrefetchedData<
+                          AccountFile,
+                          $AccountFilesTable,
+                          ImageLocationId
+                        >(
+                          currentTable: table,
+                          referencedTable: $$AccountFilesTableReferences
+                              ._imageLocationIdsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$AccountFilesTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).imageLocationIdsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.accountFile == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.accountFile == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -11505,12 +11376,12 @@ class $$ImagesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ImagesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$ImagesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$ImagesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$ImagesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImagesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImagesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> accountFile = const Value.absent(),
@@ -11555,52 +11426,48 @@ class $$ImagesTableTableManager
                 src: src,
                 dateTimeOriginal: dateTimeOriginal,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$ImagesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) =>
+                    (e.readTable(table), $$ImagesTableReferences(db, table, e)),
+              )
+              .toList(),
           prefetchHooksCallback: ({accountFile = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (accountFile) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.accountFile,
-                            referencedTable: $$ImagesTableReferences
-                                ._accountFileTable(db),
-                            referencedColumn:
-                                $$ImagesTableReferences
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (accountFile) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.accountFile,
+                                referencedTable: $$ImagesTableReferences
+                                    ._accountFileTable(db),
+                                referencedColumn: $$ImagesTableReferences
                                     ._accountFileTable(db)
                                     .rowId,
-                          )
-                          as T;
-                }
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -11847,16 +11714,12 @@ class $$ImageLocationsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ImageLocationsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$ImageLocationsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$ImageLocationsTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$ImageLocationsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImageLocationsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImageLocationsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> accountFile = const Value.absent(),
@@ -11885,52 +11748,51 @@ class $$ImageLocationsTableTableManager
                 longitude: longitude,
                 countryCode: countryCode,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$ImageLocationsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ImageLocationsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({accountFile = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (accountFile) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.accountFile,
-                            referencedTable: $$ImageLocationsTableReferences
-                                ._accountFileTable(db),
-                            referencedColumn:
-                                $$ImageLocationsTableReferences
-                                    ._accountFileTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (accountFile) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.accountFile,
+                                referencedTable: $$ImageLocationsTableReferences
+                                    ._accountFileTable(db),
+                                referencedColumn:
+                                    $$ImageLocationsTableReferences
+                                        ._accountFileTable(db)
+                                        .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -12155,12 +12017,12 @@ class $$TrashesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$TrashesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$TrashesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$TrashesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$TrashesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TrashesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TrashesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> file = const Value.absent(),
@@ -12185,50 +12047,50 @@ class $$TrashesTableTableManager
                 originalLocation: originalLocation,
                 deletionTime: deletionTime,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$TrashesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$TrashesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({file = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (file) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.file,
-                            referencedTable: $$TrashesTableReferences
-                                ._fileTable(db),
-                            referencedColumn:
-                                $$TrashesTableReferences._fileTable(db).rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (file) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.file,
+                                referencedTable: $$TrashesTableReferences
+                                    ._fileTable(db),
+                                referencedColumn: $$TrashesTableReferences
+                                    ._fileTable(db)
+                                    .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -12494,12 +12356,12 @@ class $$DirFilesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$DirFilesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$DirFilesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$DirFilesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$DirFilesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$DirFilesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$DirFilesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> dir = const Value.absent(),
@@ -12516,62 +12378,63 @@ class $$DirFilesTableTableManager
                 child: child,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$DirFilesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$DirFilesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({dir = false, child = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (dir) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.dir,
-                            referencedTable: $$DirFilesTableReferences
-                                ._dirTable(db),
-                            referencedColumn:
-                                $$DirFilesTableReferences._dirTable(db).rowId,
-                          )
-                          as T;
-                }
-                if (child) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.child,
-                            referencedTable: $$DirFilesTableReferences
-                                ._childTable(db),
-                            referencedColumn:
-                                $$DirFilesTableReferences._childTable(db).rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (dir) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.dir,
+                                referencedTable: $$DirFilesTableReferences
+                                    ._dirTable(db),
+                                referencedColumn: $$DirFilesTableReferences
+                                    ._dirTable(db)
+                                    .rowId,
+                              )
+                              as T;
+                    }
+                    if (child) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.child,
+                                referencedTable: $$DirFilesTableReferences
+                                    ._childTable(db),
+                                referencedColumn: $$DirFilesTableReferences
+                                    ._childTable(db)
+                                    .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -12993,12 +12856,12 @@ class $$AlbumsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$AlbumsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$AlbumsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$AlbumsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$AlbumsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AlbumsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AlbumsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -13055,51 +12918,48 @@ class $$AlbumsTableTableManager
                 sortProviderType: sortProviderType,
                 sortProviderContent: sortProviderContent,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$AlbumsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) =>
+                    (e.readTable(table), $$AlbumsTableReferences(db, table, e)),
+              )
+              .toList(),
           prefetchHooksCallback: ({file = false, albumSharesRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [if (albumSharesRefs) db.albumShares],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (file) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.file,
-                            referencedTable: $$AlbumsTableReferences._fileTable(
-                              db,
-                            ),
-                            referencedColumn:
-                                $$AlbumsTableReferences._fileTable(db).rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (file) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.file,
+                                referencedTable: $$AlbumsTableReferences
+                                    ._fileTable(db),
+                                referencedColumn: $$AlbumsTableReferences
+                                    ._fileTable(db)
+                                    .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (albumSharesRefs)
@@ -13107,17 +12967,13 @@ class $$AlbumsTableTableManager
                       currentTable: table,
                       referencedTable: $$AlbumsTableReferences
                           ._albumSharesRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
-                              $$AlbumsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).albumSharesRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.album == item.rowId,
-                          ),
+                      managerFromTypedResult: (p0) => $$AlbumsTableReferences(
+                        db,
+                        table,
+                        p0,
+                      ).albumSharesRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.album == item.rowId),
                       typedResults: items,
                     ),
                 ];
@@ -13343,13 +13199,12 @@ class $$AlbumSharesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$AlbumSharesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$AlbumSharesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$AlbumSharesTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$AlbumSharesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$AlbumSharesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$AlbumSharesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> album = const Value.absent(),
@@ -13378,52 +13233,50 @@ class $$AlbumSharesTableTableManager
                 sharedAt: sharedAt,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$AlbumSharesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$AlbumSharesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({album = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (album) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.album,
-                            referencedTable: $$AlbumSharesTableReferences
-                                ._albumTable(db),
-                            referencedColumn:
-                                $$AlbumSharesTableReferences
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (album) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.album,
+                                referencedTable: $$AlbumSharesTableReferences
+                                    ._albumTable(db),
+                                referencedColumn: $$AlbumSharesTableReferences
                                     ._albumTable(db)
                                     .rowId,
-                          )
-                          as T;
-                }
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -13676,12 +13529,12 @@ class $$TagsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$TagsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$TagsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$TagsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$TagsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$TagsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$TagsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -13714,51 +13567,48 @@ class $$TagsTableTableManager
                 userVisible: userVisible,
                 userAssignable: userAssignable,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$TagsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) =>
+                    (e.readTable(table), $$TagsTableReferences(db, table, e)),
+              )
+              .toList(),
           prefetchHooksCallback: ({server = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (server) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.server,
-                            referencedTable: $$TagsTableReferences._serverTable(
-                              db,
-                            ),
-                            referencedColumn:
-                                $$TagsTableReferences._serverTable(db).rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (server) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.server,
+                                referencedTable: $$TagsTableReferences
+                                    ._serverTable(db),
+                                referencedColumn: $$TagsTableReferences
+                                    ._serverTable(db)
+                                    .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -14006,18 +13856,18 @@ class $$FaceRecognitionPersonsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$FaceRecognitionPersonsTableFilterComposer(
+          createFilteringComposer: () =>
+              $$FaceRecognitionPersonsTableFilterComposer(
                 $db: db,
                 $table: table,
               ),
-          createOrderingComposer:
-              () => $$FaceRecognitionPersonsTableOrderingComposer(
+          createOrderingComposer: () =>
+              $$FaceRecognitionPersonsTableOrderingComposer(
                 $db: db,
                 $table: table,
               ),
-          createComputedFieldComposer:
-              () => $$FaceRecognitionPersonsTableAnnotationComposer(
+          createComputedFieldComposer: () =>
+              $$FaceRecognitionPersonsTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -14049,53 +13899,52 @@ class $$FaceRecognitionPersonsTableTableManager
                 thumbFaceId: thumbFaceId,
                 count: count,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$FaceRecognitionPersonsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$FaceRecognitionPersonsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({account = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (account) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.account,
-                            referencedTable:
-                                $$FaceRecognitionPersonsTableReferences
-                                    ._accountTable(db),
-                            referencedColumn:
-                                $$FaceRecognitionPersonsTableReferences
-                                    ._accountTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (account) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.account,
+                                referencedTable:
+                                    $$FaceRecognitionPersonsTableReferences
+                                        ._accountTable(db),
+                                referencedColumn:
+                                    $$FaceRecognitionPersonsTableReferences
+                                        ._accountTable(db)
+                                        .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -14479,12 +14328,12 @@ class $$NcAlbumsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$NcAlbumsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$NcAlbumsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$NcAlbumsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$NcAlbumsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NcAlbumsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NcAlbumsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -14533,52 +14382,50 @@ class $$NcAlbumsTableTableManager
                 collaborators: collaborators,
                 isOwned: isOwned,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$NcAlbumsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$NcAlbumsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({account = false, ncAlbumItemsRefs = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [if (ncAlbumItemsRefs) db.ncAlbumItems],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (account) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.account,
-                            referencedTable: $$NcAlbumsTableReferences
-                                ._accountTable(db),
-                            referencedColumn:
-                                $$NcAlbumsTableReferences
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (account) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.account,
+                                referencedTable: $$NcAlbumsTableReferences
+                                    ._accountTable(db),
+                                referencedColumn: $$NcAlbumsTableReferences
                                     ._accountTable(db)
                                     .rowId,
-                          )
-                          as T;
-                }
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (ncAlbumItemsRefs)
@@ -14590,17 +14437,13 @@ class $$NcAlbumsTableTableManager
                       currentTable: table,
                       referencedTable: $$NcAlbumsTableReferences
                           ._ncAlbumItemsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
-                              $$NcAlbumsTableReferences(
-                                db,
-                                table,
-                                p0,
-                              ).ncAlbumItemsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.parent == item.rowId,
-                          ),
+                      managerFromTypedResult: (p0) => $$NcAlbumsTableReferences(
+                        db,
+                        table,
+                        p0,
+                      ).ncAlbumItemsRefs,
+                      referencedItemsForCurrentItem: (item, referencedItems) =>
+                          referencedItems.where((e) => e.parent == item.rowId),
                       typedResults: items,
                     ),
                 ];
@@ -14959,13 +14802,12 @@ class $$NcAlbumItemsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$NcAlbumItemsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$NcAlbumItemsTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () =>
-                  $$NcAlbumItemsTableAnnotationComposer($db: db, $table: table),
+          createFilteringComposer: () =>
+              $$NcAlbumItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$NcAlbumItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$NcAlbumItemsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -15022,52 +14864,50 @@ class $$NcAlbumItemsTableTableManager
                 fileMetadataWidth: fileMetadataWidth,
                 fileMetadataHeight: fileMetadataHeight,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$NcAlbumItemsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$NcAlbumItemsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({parent = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (parent) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.parent,
-                            referencedTable: $$NcAlbumItemsTableReferences
-                                ._parentTable(db),
-                            referencedColumn:
-                                $$NcAlbumItemsTableReferences
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (parent) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.parent,
+                                referencedTable: $$NcAlbumItemsTableReferences
+                                    ._parentTable(db),
+                                referencedColumn: $$NcAlbumItemsTableReferences
                                     ._parentTable(db)
                                     .rowId,
-                          )
-                          as T;
-                }
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -15350,16 +15190,12 @@ class $$RecognizeFacesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$RecognizeFacesTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () =>
-                  $$RecognizeFacesTableOrderingComposer($db: db, $table: table),
-          createComputedFieldComposer:
-              () => $$RecognizeFacesTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$RecognizeFacesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RecognizeFacesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RecognizeFacesTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> rowId = const Value.absent(),
@@ -15380,85 +15216,82 @@ class $$RecognizeFacesTableTableManager
                 account: account,
                 label: label,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$RecognizeFacesTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
-          prefetchHooksCallback: ({
-            account = false,
-            recognizeFaceItemsRefs = false,
-          }) {
-            return PrefetchHooks(
-              db: db,
-              explicitlyWatchedTables: [
-                if (recognizeFaceItemsRefs) db.recognizeFaceItems,
-              ],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (account) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.account,
-                            referencedTable: $$RecognizeFacesTableReferences
-                                ._accountTable(db),
-                            referencedColumn:
-                                $$RecognizeFacesTableReferences
-                                    ._accountTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RecognizeFacesTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
+          prefetchHooksCallback:
+              ({account = false, recognizeFaceItemsRefs = false}) {
+                return PrefetchHooks(
+                  db: db,
+                  explicitlyWatchedTables: [
+                    if (recognizeFaceItemsRefs) db.recognizeFaceItems,
+                  ],
+                  addJoins:
+                      <
+                        T extends TableManagerState<
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic,
+                          dynamic
+                        >
+                      >(state) {
+                        if (account) {
+                          state =
+                              state.withJoin(
+                                    currentTable: table,
+                                    currentColumn: table.account,
+                                    referencedTable:
+                                        $$RecognizeFacesTableReferences
+                                            ._accountTable(db),
+                                    referencedColumn:
+                                        $$RecognizeFacesTableReferences
+                                            ._accountTable(db)
+                                            .rowId,
+                                  )
+                                  as T;
+                        }
 
-                return state;
-              },
-              getPrefetchedDataCallback: (items) async {
-                return [
-                  if (recognizeFaceItemsRefs)
-                    await $_getPrefetchedData<
-                      RecognizeFace,
-                      $RecognizeFacesTable,
-                      RecognizeFaceItem
-                    >(
-                      currentTable: table,
-                      referencedTable: $$RecognizeFacesTableReferences
-                          ._recognizeFaceItemsRefsTable(db),
-                      managerFromTypedResult:
-                          (p0) =>
+                        return state;
+                      },
+                  getPrefetchedDataCallback: (items) async {
+                    return [
+                      if (recognizeFaceItemsRefs)
+                        await $_getPrefetchedData<
+                          RecognizeFace,
+                          $RecognizeFacesTable,
+                          RecognizeFaceItem
+                        >(
+                          currentTable: table,
+                          referencedTable: $$RecognizeFacesTableReferences
+                              ._recognizeFaceItemsRefsTable(db),
+                          managerFromTypedResult: (p0) =>
                               $$RecognizeFacesTableReferences(
                                 db,
                                 table,
                                 p0,
                               ).recognizeFaceItemsRefs,
-                      referencedItemsForCurrentItem:
-                          (item, referencedItems) => referencedItems.where(
-                            (e) => e.parent == item.rowId,
-                          ),
-                      typedResults: items,
-                    ),
-                ];
+                          referencedItemsForCurrentItem:
+                              (item, referencedItems) => referencedItems.where(
+                                (e) => e.parent == item.rowId,
+                              ),
+                          typedResults: items,
+                        ),
+                    ];
+                  },
+                );
               },
-            );
-          },
         ),
       );
 }
@@ -15858,18 +15691,12 @@ class $$RecognizeFaceItemsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$RecognizeFaceItemsTableFilterComposer(
-                $db: db,
-                $table: table,
-              ),
-          createOrderingComposer:
-              () => $$RecognizeFaceItemsTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$RecognizeFaceItemsTableAnnotationComposer(
+          createFilteringComposer: () =>
+              $$RecognizeFaceItemsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$RecognizeFaceItemsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$RecognizeFaceItemsTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -15937,52 +15764,52 @@ class $$RecognizeFaceItemsTableTableManager
                 fileMetadataHeight: fileMetadataHeight,
                 faceDetections: faceDetections,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$RecognizeFaceItemsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$RecognizeFaceItemsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({parent = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (parent) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.parent,
-                            referencedTable: $$RecognizeFaceItemsTableReferences
-                                ._parentTable(db),
-                            referencedColumn:
-                                $$RecognizeFaceItemsTableReferences
-                                    ._parentTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (parent) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.parent,
+                                referencedTable:
+                                    $$RecognizeFaceItemsTableReferences
+                                        ._parentTable(db),
+                                referencedColumn:
+                                    $$RecognizeFaceItemsTableReferences
+                                        ._parentTable(db)
+                                        .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },
@@ -16136,18 +15963,12 @@ class $$ImageLocationNamesTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () => $$ImageLocationNamesTableFilterComposer(
-                $db: db,
-                $table: table,
-              ),
-          createOrderingComposer:
-              () => $$ImageLocationNamesTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$ImageLocationNamesTableAnnotationComposer(
+          createFilteringComposer: () =>
+              $$ImageLocationNamesTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImageLocationNamesTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImageLocationNamesTableAnnotationComposer(
                 $db: db,
                 $table: table,
               ),
@@ -16179,16 +16000,9 @@ class $$ImageLocationNamesTableTableManager
                 name: name,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          BaseReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
+              .toList(),
           prefetchHooksCallback: null,
         ),
       );
@@ -16406,19 +16220,12 @@ class $$ImageLocationIdsTableTableManager
         TableManagerState(
           db: db,
           table: table,
-          createFilteringComposer:
-              () =>
-                  $$ImageLocationIdsTableFilterComposer($db: db, $table: table),
-          createOrderingComposer:
-              () => $$ImageLocationIdsTableOrderingComposer(
-                $db: db,
-                $table: table,
-              ),
-          createComputedFieldComposer:
-              () => $$ImageLocationIdsTableAnnotationComposer(
-                $db: db,
-                $table: table,
-              ),
+          createFilteringComposer: () =>
+              $$ImageLocationIdsTableFilterComposer($db: db, $table: table),
+          createOrderingComposer: () =>
+              $$ImageLocationIdsTableOrderingComposer($db: db, $table: table),
+          createComputedFieldComposer: () =>
+              $$ImageLocationIdsTableAnnotationComposer($db: db, $table: table),
           updateCompanionCallback:
               ({
                 Value<int> accountFile = const Value.absent(),
@@ -16443,52 +16250,52 @@ class $$ImageLocationIdsTableTableManager
                 type: type,
                 rowid: rowid,
               ),
-          withReferenceMapper:
-              (p0) =>
-                  p0
-                      .map(
-                        (e) => (
-                          e.readTable(table),
-                          $$ImageLocationIdsTableReferences(db, table, e),
-                        ),
-                      )
-                      .toList(),
+          withReferenceMapper: (p0) => p0
+              .map(
+                (e) => (
+                  e.readTable(table),
+                  $$ImageLocationIdsTableReferences(db, table, e),
+                ),
+              )
+              .toList(),
           prefetchHooksCallback: ({accountFile = false}) {
             return PrefetchHooks(
               db: db,
               explicitlyWatchedTables: [],
-              addJoins: <
-                T extends TableManagerState<
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic,
-                  dynamic
-                >
-              >(state) {
-                if (accountFile) {
-                  state =
-                      state.withJoin(
-                            currentTable: table,
-                            currentColumn: table.accountFile,
-                            referencedTable: $$ImageLocationIdsTableReferences
-                                ._accountFileTable(db),
-                            referencedColumn:
-                                $$ImageLocationIdsTableReferences
-                                    ._accountFileTable(db)
-                                    .rowId,
-                          )
-                          as T;
-                }
+              addJoins:
+                  <
+                    T extends TableManagerState<
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic,
+                      dynamic
+                    >
+                  >(state) {
+                    if (accountFile) {
+                      state =
+                          state.withJoin(
+                                currentTable: table,
+                                currentColumn: table.accountFile,
+                                referencedTable:
+                                    $$ImageLocationIdsTableReferences
+                                        ._accountFileTable(db),
+                                referencedColumn:
+                                    $$ImageLocationIdsTableReferences
+                                        ._accountFileTable(db)
+                                        .rowId,
+                              )
+                              as T;
+                    }
 
-                return state;
-              },
+                    return state;
+                  },
               getPrefetchedDataCallback: (items) async {
                 return [];
               },

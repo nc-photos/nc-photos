@@ -23,10 +23,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   _State call({dynamic isAuthorized, dynamic setupResult = copyWithNull}) {
     return _State(
       isAuthorized: isAuthorized as Unique<bool?>? ?? that.isAuthorized,
-      setupResult:
-          setupResult == copyWithNull
-              ? that.setupResult
-              : setupResult as CiString?,
+      setupResult: setupResult == copyWithNull
+          ? that.setupResult
+          : setupResult as CiString?,
     );
   }
 

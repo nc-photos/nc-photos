@@ -62,15 +62,13 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       shouldAnimateNextPage:
           shouldAnimateNextPage as bool? ?? that.shouldAnimateNextPage,
       anyFiles: anyFiles as Map<String, AnyFile>? ?? that.anyFiles,
-      collectionItems:
-          collectionItems == copyWithNull
-              ? that.collectionItems
-              : collectionItems as Map<int, CollectionFileItem>?,
+      collectionItems: collectionItems == copyWithNull
+          ? that.collectionItems
+          : collectionItems as Map<int, CollectionFileItem>?,
       files: files as List<AnyFile?>? ?? that.files,
-      currentFile:
-          currentFile == copyWithNull
-              ? that.currentFile
-              : currentFile as AnyFile?,
+      currentFile: currentFile == copyWithNull
+          ? that.currentFile
+          : currentFile as AnyFile?,
       isShowUi: isShowUi as bool? ?? that.isShowUi,
       isPlay: isPlay as bool? ?? that.isPlay,
       isVideoCompleted: isVideoCompleted as bool? ?? that.isVideoCompleted,

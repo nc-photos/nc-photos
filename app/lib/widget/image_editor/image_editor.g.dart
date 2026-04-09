@@ -74,54 +74,48 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       transformFilters:
           transformFilters as List<TransformArguments>? ??
           that.transformFilters,
-      cropFilter:
-          cropFilter == copyWithNull
-              ? that.cropFilter
-              : cropFilter as TransformArguments?,
+      cropFilter: cropFilter == copyWithNull
+          ? that.cropFilter
+          : cropFilter as TransformArguments?,
       isApplyingFilters: isApplyingFilters as bool? ?? that.isApplyingFilters,
-      postTransformSrc:
-          postTransformSrc == copyWithNull
-              ? that.postTransformSrc
-              : postTransformSrc as Rgba8Image?,
-      faceLandmarks:
-          faceLandmarks == copyWithNull
-              ? that.faceLandmarks
-              : faceLandmarks as List<image_editor.FaceDetectorResult>?,
+      postTransformSrc: postTransformSrc == copyWithNull
+          ? that.postTransformSrc
+          : postTransformSrc as Rgba8Image?,
+      faceLandmarks: faceLandmarks == copyWithNull
+          ? that.faceLandmarks
+          : faceLandmarks as List<image_editor.FaceDetectorResult>?,
       selectedFaces:
           selectedFaces as List<image_editor.FaceDetectorResult>? ??
           that.selectedFaces,
-      hasSelectedFaceReset:
-          hasSelectedFaceReset == copyWithNull
-              ? that.hasSelectedFaceReset
-              : hasSelectedFaceReset as Unique<bool>?,
+      hasSelectedFaceReset: hasSelectedFaceReset == copyWithNull
+          ? that.hasSelectedFaceReset
+          : hasSelectedFaceReset as Unique<bool>?,
       shouldNotifySelectFace:
           shouldNotifySelectFace as bool? ?? that.shouldNotifySelectFace,
       activeTool: activeTool as _ToolType? ?? that.activeTool,
       isCropMode: isCropMode as bool? ?? that.isCropMode,
       isFaceSelectionMode:
           isFaceSelectionMode as bool? ?? that.isFaceSelectionMode,
-      faceSelectorImageSize:
-          faceSelectorImageSize == copyWithNull
-              ? that.faceSelectorImageSize
-              : faceSelectorImageSize as Size?,
-      quitRequest:
-          quitRequest == copyWithNull
-              ? that.quitRequest
-              : quitRequest as Unique<void>?,
-      saveState:
-          saveState == copyWithNull ? that.saveState : saveState as _SaveState?,
+      faceSelectorImageSize: faceSelectorImageSize == copyWithNull
+          ? that.faceSelectorImageSize
+          : faceSelectorImageSize as Size?,
+      quitRequest: quitRequest == copyWithNull
+          ? that.quitRequest
+          : quitRequest as Unique<void>?,
+      saveState: saveState == copyWithNull
+          ? that.saveState
+          : saveState as _SaveState?,
       downloadProgress: downloadProgress as double? ?? that.downloadProgress,
-      savedFile:
-          savedFile == copyWithNull ? that.savedFile : savedFile as io.File?,
+      savedFile: savedFile == copyWithNull
+          ? that.savedFile
+          : savedFile as io.File?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-      initError:
-          initError == copyWithNull
-              ? that.initError
-              : initError as ExceptionEvent?,
-      saveError:
-          saveError == copyWithNull
-              ? that.saveError
-              : saveError as ExceptionEvent?,
+      initError: initError == copyWithNull
+          ? that.initError
+          : initError as ExceptionEvent?,
+      saveError: saveError == copyWithNull
+          ? that.saveError
+          : saveError as ExceptionEvent?,
     );
   }
 

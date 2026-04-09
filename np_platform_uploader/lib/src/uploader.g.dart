@@ -29,8 +29,9 @@ class _$ConvertConfigCopyWithWorkerImpl
     return ConvertConfig(
       format: format as ConvertFormat? ?? that.format,
       quality: quality as int? ?? that.quality,
-      downsizeMp:
-          downsizeMp == copyWithNull ? that.downsizeMp : downsizeMp as double?,
+      downsizeMp: downsizeMp == copyWithNull
+          ? that.downsizeMp
+          : downsizeMp as double?,
     );
   }
 

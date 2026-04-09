@@ -30,13 +30,13 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic message = copyWithNull,
   }) {
     return _State(
-      lastSuccessful:
-          lastSuccessful == copyWithNull
-              ? that.lastSuccessful
-              : lastSuccessful as _Event?,
+      lastSuccessful: lastSuccessful == copyWithNull
+          ? that.lastSuccessful
+          : lastSuccessful as _Event?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-      message:
-          message == copyWithNull ? that.message : message as StateMessage?,
+      message: message == copyWithNull
+          ? that.message
+          : message as StateMessage?,
     );
   }
 

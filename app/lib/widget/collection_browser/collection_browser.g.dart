@@ -85,14 +85,14 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   }) {
     return _State(
       collection: collection as Collection? ?? that.collection,
-      cover:
-          cover == copyWithNull ? that.cover : cover as CollectionCoverResult?,
+      cover: cover == copyWithNull
+          ? that.cover
+          : cover as CollectionCoverResult?,
       items: items as List<CollectionItem>? ?? that.items,
       rawItems: rawItems as List<CollectionItem>? ?? that.rawItems,
-      itemsWhitelist:
-          itemsWhitelist == copyWithNull
-              ? that.itemsWhitelist
-              : itemsWhitelist as Set<int>?,
+      itemsWhitelist: itemsWhitelist == copyWithNull
+          ? that.itemsWhitelist
+          : itemsWhitelist as Set<int>?,
       isLoading: isLoading as bool? ?? that.isLoading,
       transformedItems:
           transformedItems as List<_Item>? ?? that.transformedItems,
@@ -108,23 +108,19 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       isEditMode: isEditMode as bool? ?? that.isEditMode,
       isEditBusy: isEditBusy as bool? ?? that.isEditBusy,
       editName: editName == copyWithNull ? that.editName : editName as String?,
-      editItems:
-          editItems == copyWithNull
-              ? that.editItems
-              : editItems as List<CollectionItem>?,
-      editTransformedItems:
-          editTransformedItems == copyWithNull
-              ? that.editTransformedItems
-              : editTransformedItems as List<_Item>?,
-      editSort:
-          editSort == copyWithNull
-              ? that.editSort
-              : editSort as CollectionItemSort?,
+      editItems: editItems == copyWithNull
+          ? that.editItems
+          : editItems as List<CollectionItem>?,
+      editTransformedItems: editTransformedItems == copyWithNull
+          ? that.editTransformedItems
+          : editTransformedItems as List<_Item>?,
+      editSort: editSort == copyWithNull
+          ? that.editSort
+          : editSort as CollectionItemSort?,
       isAddMapBusy: isAddMapBusy as bool? ?? that.isAddMapBusy,
-      editPickerMode:
-          editPickerMode == copyWithNull
-              ? that.editPickerMode
-              : editPickerMode as _EditPickerMode?,
+      editPickerMode: editPickerMode == copyWithNull
+          ? that.editPickerMode
+          : editPickerMode as _EditPickerMode?,
       newLabelRequest:
           newLabelRequest as Unique<_NewLabelRequest?>? ?? that.newLabelRequest,
       placePickerRequest:
@@ -138,10 +134,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       isDragging: isDragging as bool? ?? that.isDragging,
       zoom: zoom as int? ?? that.zoom,
       scale: scale == copyWithNull ? that.scale : scale as double?,
-      importResult:
-          importResult == copyWithNull
-              ? that.importResult
-              : importResult as Collection?,
+      importResult: importResult == copyWithNull
+          ? that.importResult
+          : importResult as Collection?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
       message: message == copyWithNull ? that.message : message as String?,
     );

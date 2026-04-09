@@ -114,10 +114,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           transformedItems as List<List<_Item>>? ?? that.transformedItems,
       selectedItems: selectedItems as Set<_Item>? ?? that.selectedItems,
       visibleDates: visibleDates as Set<_VisibleDate>? ?? that.visibleDates,
-      dateBarContent:
-          dateBarContent == copyWithNull
-              ? that.dateBarContent
-              : dateBarContent as Date?,
+      dateBarContent: dateBarContent == copyWithNull
+          ? that.dateBarContent
+          : dateBarContent as Date?,
       queriedDates: queriedDates as Set<Date>? ?? that.queriedDates,
       mergedCounts: mergedCounts as Map<Date, int>? ?? that.mergedCounts,
       hasRemoteData: hasRemoteData as bool? ?? that.hasRemoteData,
@@ -125,40 +124,39 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           isEnableMemoryCollection as bool? ?? that.isEnableMemoryCollection,
       memoryCollections:
           memoryCollections as List<Collection>? ?? that.memoryCollections,
-      syncProgress:
-          syncProgress == copyWithNull
-              ? that.syncProgress
-              : syncProgress as Progress?,
+      syncProgress: syncProgress == copyWithNull
+          ? that.syncProgress
+          : syncProgress as Progress?,
       zoom: zoom as int? ?? that.zoom,
       scale: scale == copyWithNull ? that.scale : scale as double?,
       finger: finger as int? ?? that.finger,
-      viewWidth:
-          viewWidth == copyWithNull ? that.viewWidth : viewWidth as double?,
-      viewHeight:
-          viewHeight == copyWithNull ? that.viewHeight : viewHeight as double?,
-      viewOverlayPadding:
-          viewOverlayPadding == copyWithNull
-              ? that.viewOverlayPadding
-              : viewOverlayPadding as double?,
-      itemPerRow:
-          itemPerRow == copyWithNull ? that.itemPerRow : itemPerRow as int?,
+      viewWidth: viewWidth == copyWithNull
+          ? that.viewWidth
+          : viewWidth as double?,
+      viewHeight: viewHeight == copyWithNull
+          ? that.viewHeight
+          : viewHeight as double?,
+      viewOverlayPadding: viewOverlayPadding == copyWithNull
+          ? that.viewOverlayPadding
+          : viewOverlayPadding as double?,
+      itemPerRow: itemPerRow == copyWithNull
+          ? that.itemPerRow
+          : itemPerRow as int?,
       itemSize: itemSize == copyWithNull ? that.itemSize : itemSize as double?,
       isScrolling: isScrolling as bool? ?? that.isScrolling,
-      minimapItems:
-          minimapItems == copyWithNull
-              ? that.minimapItems
-              : minimapItems as List<_MinimapItem>?,
+      minimapItems: minimapItems == copyWithNull
+          ? that.minimapItems
+          : minimapItems as List<_MinimapItem>?,
       minimapYRatio: minimapYRatio as double? ?? that.minimapYRatio,
-      scrollDate:
-          scrollDate == copyWithNull ? that.scrollDate : scrollDate as Date?,
-      appBarPosition:
-          appBarPosition == copyWithNull
-              ? that.appBarPosition
-              : appBarPosition as Offset?,
-      appBarPositionUpdateRequest:
-          appBarPositionUpdateRequest == copyWithNull
-              ? that.appBarPositionUpdateRequest
-              : appBarPositionUpdateRequest as Unique<bool>?,
+      scrollDate: scrollDate == copyWithNull
+          ? that.scrollDate
+          : scrollDate as Date?,
+      appBarPosition: appBarPosition == copyWithNull
+          ? that.appBarPosition
+          : appBarPosition as Offset?,
+      appBarPositionUpdateRequest: appBarPositionUpdateRequest == copyWithNull
+          ? that.appBarPositionUpdateRequest
+          : appBarPositionUpdateRequest as Unique<bool>?,
       isDragging: isDragging as bool? ?? that.isDragging,
       hasMissingVideoPreview:
           hasMissingVideoPreview as bool? ?? that.hasMissingVideoPreview,

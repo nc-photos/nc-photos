@@ -52,14 +52,12 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       password: password as String? ?? that.password,
       shouldObscurePassword:
           shouldObscurePassword as bool? ?? that.shouldObscurePassword,
-      connectArg:
-          connectArg == copyWithNull
-              ? that.connectArg
-              : connectArg as _ConnectArg?,
-      connectedAccount:
-          connectedAccount == copyWithNull
-              ? that.connectedAccount
-              : connectedAccount as Account?,
+      connectArg: connectArg == copyWithNull
+          ? that.connectArg
+          : connectArg as _ConnectArg?,
+      connectedAccount: connectedAccount == copyWithNull
+          ? that.connectedAccount
+          : connectedAccount as Account?,
       isConnecting: isConnecting as bool? ?? that.isConnecting,
       isCompleted: isCompleted as bool? ?? that.isCompleted,
       method: method as _SignInMethod? ?? that.method,

@@ -64,10 +64,9 @@ class _$AnyFilesSummaryStreamEventCopyWithWorkerImpl
   }) {
     return AnyFilesSummaryStreamEvent(
       summary: summary as AnyFilesSummary? ?? that.summary,
-      hasRemoteData:
-          hasRemoteData == copyWithNull
-              ? that.hasRemoteData
-              : hasRemoteData as bool?,
+      hasRemoteData: hasRemoteData == copyWithNull
+          ? that.hasRemoteData
+          : hasRemoteData as bool?,
     );
   }
 

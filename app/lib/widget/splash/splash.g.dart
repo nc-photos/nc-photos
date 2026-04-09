@@ -32,18 +32,15 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic isDone,
   }) {
     return _State(
-      changelogFromVersion:
-          changelogFromVersion == copyWithNull
-              ? that.changelogFromVersion
-              : changelogFromVersion as int?,
-      upgradeProgress:
-          upgradeProgress == copyWithNull
-              ? that.upgradeProgress
-              : upgradeProgress as double?,
-      upgradeText:
-          upgradeText == copyWithNull
-              ? that.upgradeText
-              : upgradeText as String?,
+      changelogFromVersion: changelogFromVersion == copyWithNull
+          ? that.changelogFromVersion
+          : changelogFromVersion as int?,
+      upgradeProgress: upgradeProgress == copyWithNull
+          ? that.upgradeProgress
+          : upgradeProgress as double?,
+      upgradeText: upgradeText == copyWithNull
+          ? that.upgradeText
+          : upgradeText as String?,
       isDone: isDone as bool? ?? that.isDone,
     );
   }

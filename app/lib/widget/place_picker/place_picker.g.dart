@@ -22,10 +22,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic position = copyWithNull, dynamic isDone}) {
     return _State(
-      position:
-          position == copyWithNull
-              ? that.position
-              : position as CameraPosition?,
+      position: position == copyWithNull
+          ? that.position
+          : position as CameraPosition?,
       isDone: isDone as bool? ?? that.isDone,
     );
   }

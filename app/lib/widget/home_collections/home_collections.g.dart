@@ -53,10 +53,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           navBarButtons as List<PrefHomeCollectionsNavButton>? ??
           that.navBarButtons,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
-      removeError:
-          removeError == copyWithNull
-              ? that.removeError
-              : removeError as ExceptionEvent?,
+      removeError: removeError == copyWithNull
+          ? that.removeError
+          : removeError as ExceptionEvent?,
     );
   }
 

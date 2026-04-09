@@ -34,10 +34,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     return _State(
       accounts: accounts as List<Account>? ?? that.accounts,
       isOpenDropdown: isOpenDropdown as bool? ?? that.isOpenDropdown,
-      newSelectAccount:
-          newSelectAccount == copyWithNull
-              ? that.newSelectAccount
-              : newSelectAccount as Account?,
+      newSelectAccount: newSelectAccount == copyWithNull
+          ? that.newSelectAccount
+          : newSelectAccount as Account?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }
