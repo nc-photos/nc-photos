@@ -86,9 +86,8 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
                           L10n.global().settingsScreenBrightnessDescription,
                         ),
                         value: state >= 0,
-                        onChanged:
-                            (value) =>
-                                _onScreenBrightnessChanged(context, value),
+                        onChanged: (value) =>
+                            _onScreenBrightnessChanged(context, value),
                       );
                     },
                   ),
@@ -171,24 +170,22 @@ class _WrappedViewerSettingsState extends State<_WrappedViewerSettings>
   Future<void> _onMapProviderTap(BuildContext context) async {
     final result = await showDialog<GpsMapProvider>(
       context: context,
-      builder:
-          (context) => FancyOptionPicker(
-            items:
-                GpsMapProvider.values
-                    .map(
-                      (provider) => FancyOptionPickerItem(
-                        label: provider.toUserString(),
-                        isSelected: provider == _bloc.state.gpsMapProvider,
-                        onSelect: () {
-                          _log.info(
-                            "[_onMapProviderTap] Set map provider: ${provider.toUserString()}",
-                          );
-                          Navigator.of(context).pop(provider);
-                        },
-                      ),
-                    )
-                    .toList(),
-          ),
+      builder: (context) => FancyOptionPicker(
+        items: GpsMapProvider.values
+            .map(
+              (provider) => FancyOptionPickerItem(
+                label: provider.toUserString(),
+                isSelected: provider == _bloc.state.gpsMapProvider,
+                onSelect: () {
+                  _log.info(
+                    "[_onMapProviderTap] Set map provider: ${provider.toUserString()}",
+                  );
+                  Navigator.of(context).pop(provider);
+                },
+              ),
+            )
+            .toList(),
+      ),
     );
     if (!context.mounted ||
         result == null ||

@@ -158,9 +158,8 @@ class PrefController {
 
   Future<bool> setSecondarySeedColor(ColorInt? value) => _setOrRemove<ColorInt>(
     controller: _secondarySeedColorController,
-    setter:
-        (pref, value) =>
-            pref.setSecondarySeedColor(value.withAlpha(0xFF).value),
+    setter: (pref, value) =>
+        pref.setSecondarySeedColor(value.withAlpha(0xFF).value),
     remover: (pref) => pref.setSecondarySeedColor(null),
     value: value,
     defaultValue: null,
@@ -175,10 +174,9 @@ class PrefController {
   Future<bool> setMapBrowserPrevPosition(MapCoord? value) =>
       _setOrRemove<MapCoord>(
         controller: _mapBrowserPrevPositionController,
-        setter:
-            (pref, value) => pref.setMapBrowserPrevPosition(
-              jsonEncode([value.latitude, value.longitude]),
-            ),
+        setter: (pref, value) => pref.setMapBrowserPrevPosition(
+          jsonEncode([value.latitude, value.longitude]),
+        ),
         remover: (pref) => pref.setMapBrowserPrevPosition(null),
         value: value,
         defaultValue: null,
@@ -264,10 +262,9 @@ class PrefController {
     List<PrefHomeCollectionsNavButton>? value,
   ) => _setOrRemove(
     controller: _homeCollectionsNavBarButtonsController,
-    setter:
-        (pref, value) => pref.setHomeCollectionsNavBarButtonsJson(
-          jsonEncode(value.map((e) => e.toJson()).toList()),
-        ),
+    setter: (pref, value) => pref.setHomeCollectionsNavBarButtonsJson(
+      jsonEncode(value.map((e) => e.toJson()).toList()),
+    ),
     remover: (pref) => pref.setHomeCollectionsNavBarButtonsJson(null),
     value: value,
     defaultValue: _homeCollectionsNavBarButtonsDefault,
@@ -517,11 +514,10 @@ class PrefController {
   @npSubjectAccessor
   late final _homeCollectionsNavBarButtonsController = BehaviorSubject.seeded(
     pref.getHomeCollectionsNavBarButtonsJson()?.let(
-          (s) =>
-              (jsonDecode(s) as List)
-                  .cast<JsonObj>()
-                  .map(PrefHomeCollectionsNavButton.fromJson)
-                  .toList(),
+          (s) => (jsonDecode(s) as List)
+              .cast<JsonObj>()
+              .map(PrefHomeCollectionsNavButton.fromJson)
+              .toList(),
         ) ??
         _homeCollectionsNavBarButtonsDefault,
   );
@@ -597,9 +593,8 @@ class SecurePrefController {
   Future<bool> setProtectedPageAuthPin(CiString? value) =>
       _setOrRemove<CiString>(
         controller: _protectedPageAuthPinController,
-        setter:
-            (pref, value) =>
-                pref.setProtectedPageAuthPin(value.toCaseInsensitiveString()),
+        setter: (pref, value) =>
+            pref.setProtectedPageAuthPin(value.toCaseInsensitiveString()),
         remover: (pref) => pref.setProtectedPageAuthPin(null),
         value: value,
         defaultValue: null,
@@ -608,10 +603,8 @@ class SecurePrefController {
   Future<bool> setProtectedPageAuthPassword(CiString? value) =>
       _setOrRemove<CiString>(
         controller: _protectedPageAuthPasswordController,
-        setter:
-            (pref, value) => pref.setProtectedPageAuthPassword(
-              value.toCaseInsensitiveString(),
-            ),
+        setter: (pref, value) =>
+            pref.setProtectedPageAuthPassword(value.toCaseInsensitiveString()),
         remover: (pref) => pref.setProtectedPageAuthPassword(null),
         value: value,
         defaultValue: null,

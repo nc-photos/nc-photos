@@ -152,8 +152,9 @@ class FileWebdavDataSource implements FileDataSource {
         "app:metadata": jsonEncode(metadata!.obj!.toJson()),
       if (isArchived?.obj != null) "app:is-archived": isArchived!.obj,
       if (overrideDateTime?.obj != null)
-        "app:override-date-time":
-            overrideDateTime!.obj!.toUtc().toIso8601String(),
+        "app:override-date-time": overrideDateTime!.obj!
+            .toUtc()
+            .toIso8601String(),
       if (favorite != null) "oc:favorite": favorite ? 1 : 0,
       if (location?.obj != null)
         "app:location": jsonEncode(location!.obj!.toJson()),
@@ -321,24 +322,23 @@ class FileWebdavDataSource implements FileDataSource {
     final apiFiles = await api.FileParser().parse(response.body);
     // _log.fine("[list] Parsed files: [$files]");
     bool hasNoMediaMarker = false;
-    final files =
-        apiFiles
-            .map(ApiFileConverter.fromApi)
-            .forEachLazy((f) {
-              if (file_util.isNoMediaMarker(f)) {
-                hasNoMediaMarker = true;
-              }
-            })
-            .where((f) => _validateFile(f))
-            .map((e) {
-              if (e.metadata == null || e.metadata!.fileEtag == e.etag) {
-                return e;
-              } else {
-                _log.info("[list] Ignore outdated metadata for ${e.path}");
-                return e.copyWith(metadata: const OrNull(null));
-              }
-            })
-            .toList();
+    final files = apiFiles
+        .map(ApiFileConverter.fromApi)
+        .forEachLazy((f) {
+          if (file_util.isNoMediaMarker(f)) {
+            hasNoMediaMarker = true;
+          }
+        })
+        .where((f) => _validateFile(f))
+        .map((e) {
+          if (e.metadata == null || e.metadata!.fileEtag == e.etag) {
+            return e;
+          } else {
+            _log.info("[list] Ignore outdated metadata for ${e.path}");
+            return e.copyWith(metadata: const OrNull(null));
+          }
+        })
+        .toList();
 
     await _compatUpgrade(account, files);
 
@@ -384,11 +384,10 @@ class FileSqliteDbDataSource implements FileDataSource {
     } on DbNotFoundException catch (_) {
       throw CacheNotFoundException("No entry: ${dir.path}");
     }
-    final results =
-        dbFiles
-            .map((f) => DbFileConverter.fromDb(account.userId.toString(), f))
-            .where((f) => _validateFile(f))
-            .toList();
+    final results = dbFiles
+        .map((f) => DbFileConverter.fromDb(account.userId.toString(), f))
+        .where((f) => _validateFile(f))
+        .toList();
     _log.fine("[list] Queried ${results.length} files");
     if (results.isEmpty) {
       // each dir will at least contain its own entry, so an empty list here
@@ -442,20 +441,17 @@ class FileSqliteDbDataSource implements FileDataSource {
       isFavorite: favorite?.let(OrNull.new),
       isArchived: isArchived,
       overrideDateTime: overrideDateTime,
-      bestDateTime:
-          overrideDateTime == null && metadata == null
-              ? null
-              : file_util.getBestDateTime(
-                overrideDateTime:
-                    overrideDateTime == null
-                        ? f.overrideDateTime
-                        : overrideDateTime.obj,
-                metadataDateTime:
-                    metadata == null
-                        ? f.metadata?.dateTime
-                        : metadata.obj?.dateTime,
-                lastModified: f.lastModified,
-              ),
+      bestDateTime: overrideDateTime == null && metadata == null
+          ? null
+          : file_util.getBestDateTime(
+              overrideDateTime: overrideDateTime == null
+                  ? f.overrideDateTime
+                  : overrideDateTime.obj,
+              metadataDateTime: metadata == null
+                  ? f.metadata?.dateTime
+                  : metadata.obj?.dateTime,
+              lastModified: f.lastModified,
+            ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),
       location: location?.let((e) => OrNull(e.obj?.toDb())),
     );

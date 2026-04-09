@@ -60,9 +60,8 @@ extension SqliteDbNcAlbumItemExtension on SqliteDb {
             parent: const Value.absent(),
             relativePath: const Value.absent(),
           ),
-          where:
-              ($NcAlbumItemsTable t) =>
-                  t.parent.equals(parentRowId) & t.fileId.equals(u.fileId),
+          where: ($NcAlbumItemsTable t) =>
+              t.parent.equals(parentRowId) & t.fileId.equals(u.fileId),
         );
       }
       for (final i in inserts) {

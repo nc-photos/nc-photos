@@ -24,18 +24,15 @@ class FindAnyFile {
   }) async {
     final (remote, local, merged) = await handleAnyFileIdByType(
       afIds,
-      nextcloudHandler:
-          (ids) => FindFileDescriptor(_c)(
-            account,
-            ids.map((e) => e.fileId).toList(),
-            onFileNotFound: (fileId) {
-              onFileNotFound?.call(
-                ids.firstWhere((e) => e.fileId == fileId).afId,
-              );
-            },
-          ),
-      localHandler:
-          (ids) => FindLocalFile(
+      nextcloudHandler: (ids) => FindFileDescriptor(_c)(
+        account,
+        ids.map((e) => e.fileId).toList(),
+        onFileNotFound: (fileId) {
+          onFileNotFound?.call(ids.firstWhere((e) => e.fileId == fileId).afId);
+        },
+      ),
+      localHandler: (ids) =>
+          FindLocalFile(
             localFileRepo: _c.localFileRepo,
             prefController: prefController,
           )(
@@ -47,18 +44,17 @@ class FindAnyFile {
             },
           ),
       mergedHandler: (ids) async {
-        final (remoteFiles, localFiles) =
-            await (
-              FindFileDescriptor(_c)(
-                account,
-                ids.map((e) => e.remoteFileId).toList(),
-                onFileNotFound: (fileId) {
-                  onFileNotFound?.call(
-                    ids.firstWhere((e) => e.remoteFileId == fileId).afId,
-                  );
-                },
-              ).map((e) => MapEntry(e.fdId, e)).toMap(),
-              FindLocalFile(
+        final (remoteFiles, localFiles) = await (
+          FindFileDescriptor(_c)(
+            account,
+            ids.map((e) => e.remoteFileId).toList(),
+            onFileNotFound: (fileId) {
+              onFileNotFound?.call(
+                ids.firstWhere((e) => e.remoteFileId == fileId).afId,
+              );
+            },
+          ).map((e) => MapEntry(e.fdId, e)).toMap(),
+          FindLocalFile(
                 localFileRepo: _c.localFileRepo,
                 prefController: prefController,
               )(
@@ -68,8 +64,10 @@ class FindAnyFile {
                     ids.firstWhere((e) => e.localFileId == fileId).afId,
                   );
                 },
-              ).map((e) => MapEntry(e.id, e)).toMap(),
-            ).wait;
+              )
+              .map((e) => MapEntry(e.id, e))
+              .toMap(),
+        ).wait;
         return ids
             .map((e) {
               try {

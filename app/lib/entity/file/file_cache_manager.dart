@@ -31,8 +31,9 @@ class FileCacheLoader {
     try {
       cache = await cacheSrc.list(account, dir);
       // compare the cached root
-      final cacheEtag =
-          cache.firstWhere((f) => f.compareServerIdentity(dir)).etag!;
+      final cacheEtag = cache
+          .firstWhere((f) => f.compareServerIdentity(dir))
+          .etag!;
       // compare the etag to see if the content has been updated
       var remoteEtag = dir.etag;
       if (remoteEtag == null) {

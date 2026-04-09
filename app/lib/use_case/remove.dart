@@ -68,25 +68,23 @@ class Remove {
     for (final a in albums.where((a) => a.provider is AlbumStaticProvider)) {
       try {
         final provider = AlbumStaticProvider.of(a);
-        final itemsToRemove =
-            provider.items
-                .whereType<AlbumFileItem>()
-                .where(
-                  (i) =>
-                      (i.ownerId == account.userId ||
-                          i.addedBy == account.userId) &&
-                      removes.any((r) => r.compareServerIdentity(i.file)),
-                )
-                .toList();
+        final itemsToRemove = provider.items
+            .whereType<AlbumFileItem>()
+            .where(
+              (i) =>
+                  (i.ownerId == account.userId ||
+                      i.addedBy == account.userId) &&
+                  removes.any((r) => r.compareServerIdentity(i.file)),
+            )
+            .toList();
         if (itemsToRemove.isEmpty) {
           continue;
         }
         for (final i in itemsToRemove) {
           final key = FileDescriptorServerIdentityComparator(i.file);
-          final value =
-              (a.shares?.map((s) => s.userId).toList() ?? [])
-                ..add(a.albumFile!.ownerId!)
-                ..remove(account.userId);
+          final value = (a.shares?.map((s) => s.userId).toList() ?? [])
+            ..add(a.albumFile!.ownerId!)
+            ..remove(account.userId);
           (unshares[key] ??= <CiString>{}).addAll(value);
         }
         _log.fine(

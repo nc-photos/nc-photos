@@ -28,10 +28,8 @@ class ShareAlbumWithUser {
     ErrorWithValueHandler<FileDescriptor>? onShareFileFailed,
   }) async {
     assert(album.provider is AlbumStaticProvider);
-    final newShares =
-        (album.shares ?? [])..add(
-          AlbumShare(userId: sharee.shareWith, displayName: sharee.label),
-        );
+    final newShares = (album.shares ?? [])
+      ..add(AlbumShare(userId: sharee.shareWith, displayName: sharee.label));
     // add the share to album file
     final newAlbum = album.copyWith(shares: OrNull(newShares.distinct()));
     await UpdateAlbum(albumRepo)(account, newAlbum);

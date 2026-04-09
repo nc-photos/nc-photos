@@ -234,9 +234,10 @@ class _EtBloc extends Bloc<_Event, _State> {
   ) {
     _log.info(ev);
     final next = Map.of(state.filters);
-    next[PixelToolType.faceReshape] = (next[PixelToolType.faceReshape]
-            as _FaceReshapeArguments)
-        .copyWith(jawline: ev.value);
+    next[PixelToolType.faceReshape] =
+        (next[PixelToolType.faceReshape] as _FaceReshapeArguments).copyWith(
+          jawline: ev.value,
+        );
     emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
     onFaceFilterValueChanged?.call();
@@ -248,9 +249,10 @@ class _EtBloc extends Bloc<_Event, _State> {
   ) {
     _log.info(ev);
     final next = Map.of(state.filters);
-    next[PixelToolType.faceReshape] = (next[PixelToolType.faceReshape]
-            as _FaceReshapeArguments)
-        .copyWith(eyeSize: ev.value);
+    next[PixelToolType.faceReshape] =
+        (next[PixelToolType.faceReshape] as _FaceReshapeArguments).copyWith(
+          eyeSize: ev.value,
+        );
     emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
     onFaceFilterValueChanged?.call();
@@ -280,9 +282,10 @@ class _EtBloc extends Bloc<_Event, _State> {
   void _onSetSketchOptionEdge(_SetSketchOptionEdge ev, _Emitter emit) {
     _log.info(ev);
     final next = Map.of(state.filters);
-    next[PixelToolType.sketch] = (next[PixelToolType.sketch]
-            as _SketchArguments)
-        .copyWith(edge: ev.value);
+    next[PixelToolType.sketch] =
+        (next[PixelToolType.sketch] as _SketchArguments).copyWith(
+          edge: ev.value,
+        );
     emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
   }
@@ -290,9 +293,10 @@ class _EtBloc extends Bloc<_Event, _State> {
   void _onSetSketchOptionHatching(_SetSketchOptionHatching ev, _Emitter emit) {
     _log.info(ev);
     final next = Map.of(state.filters);
-    next[PixelToolType.sketch] = (next[PixelToolType.sketch]
-            as _SketchArguments)
-        .copyWith(hatching: ev.value);
+    next[PixelToolType.sketch] =
+        (next[PixelToolType.sketch] as _SketchArguments).copyWith(
+          hatching: ev.value,
+        );
     emit(state.copyWith(filters: next));
     onActiveFiltersChanged(state.filters.values);
   }

@@ -74,16 +74,15 @@ Widget defaultHeroFlightShuttleBuilder(
     builder: (BuildContext context, Widget? child) {
       return MediaQuery(
         data: toMediaQueryData.copyWith(
-          padding:
-              (flightDirection == HeroFlightDirection.push)
-                  ? EdgeInsetsTween(
-                    begin: fromHeroPadding,
-                    end: toHeroPadding,
-                  ).evaluate(animation)
-                  : EdgeInsetsTween(
-                    begin: toHeroPadding,
-                    end: fromHeroPadding,
-                  ).evaluate(animation),
+          padding: (flightDirection == HeroFlightDirection.push)
+              ? EdgeInsetsTween(
+                  begin: fromHeroPadding,
+                  end: toHeroPadding,
+                ).evaluate(animation)
+              : EdgeInsetsTween(
+                  begin: toHeroPadding,
+                  end: fromHeroPadding,
+                ).evaluate(animation),
         ),
         child: toHero.child,
       );

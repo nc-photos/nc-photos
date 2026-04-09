@@ -23,11 +23,11 @@ abstract class AlbumConverter {
       providerType: src.album.providerType,
       providerContent: (jsonDecode(src.album.providerContent) as Map).cast(),
       coverProviderType: src.album.coverProviderType,
-      coverProviderContent:
-          (jsonDecode(src.album.coverProviderContent) as Map).cast(),
+      coverProviderContent: (jsonDecode(src.album.coverProviderContent) as Map)
+          .cast(),
       sortProviderType: src.album.sortProviderType,
-      sortProviderContent:
-          (jsonDecode(src.album.sortProviderContent) as Map).cast(),
+      sortProviderContent: (jsonDecode(src.album.sortProviderContent) as Map)
+          .cast(),
       shares: src.shares.map(AlbumShareConverter.fromSql).toList(),
     );
   }
@@ -45,16 +45,15 @@ abstract class AlbumConverter {
       sortProviderType: Value(src.sortProviderType),
       sortProviderContent: Value(jsonEncode(src.sortProviderContent)),
     );
-    final sqlShares =
-        src.shares
-            .map(
-              (e) => AlbumSharesCompanion(
-                userId: Value(e.userId),
-                displayName: Value(e.displayName),
-                sharedAt: Value(e.sharedAt),
-              ),
-            )
-            .toList();
+    final sqlShares = src.shares
+        .map(
+          (e) => AlbumSharesCompanion(
+            userId: Value(e.userId),
+            displayName: Value(e.displayName),
+            sharedAt: Value(e.sharedAt),
+          ),
+        )
+        .toList();
     return CompleteAlbumCompanion(sqlAlbum, src.fileId, sqlShares);
   }
 }
@@ -173,27 +172,26 @@ abstract class FileConverter {
         countryCode: Value(l.countryCode),
       ),
     );
-    final sqlImageLocationIds =
-        [
-          file.location?.city?.let(
-            (e) => ImageLocationIdsCompanion(
-              geonameId: Value(e.geonameId),
-              type: const Value(ImageLocationType.city),
-            ),
-          ),
-          file.location?.admin1?.let(
-            (e) => ImageLocationIdsCompanion(
-              geonameId: Value(e.geonameId),
-              type: const Value(ImageLocationType.admin1),
-            ),
-          ),
-          file.location?.admin2?.let(
-            (e) => ImageLocationIdsCompanion(
-              geonameId: Value(e.geonameId),
-              type: const Value(ImageLocationType.admin2),
-            ),
-          ),
-        ].nonNulls.toList();
+    final sqlImageLocationIds = [
+      file.location?.city?.let(
+        (e) => ImageLocationIdsCompanion(
+          geonameId: Value(e.geonameId),
+          type: const Value(ImageLocationType.city),
+        ),
+      ),
+      file.location?.admin1?.let(
+        (e) => ImageLocationIdsCompanion(
+          geonameId: Value(e.geonameId),
+          type: const Value(ImageLocationType.admin1),
+        ),
+      ),
+      file.location?.admin2?.let(
+        (e) => ImageLocationIdsCompanion(
+          geonameId: Value(e.geonameId),
+          type: const Value(ImageLocationType.admin2),
+        ),
+      ),
+    ].nonNulls.toList();
     final sqlImageLocationNames = [
       ...?file.location?.city?.let(
         (e) => e.name.value.entries.map(
@@ -226,14 +224,13 @@ abstract class FileConverter {
         ),
       ),
     ];
-    final sqlTrash =
-        file.trashData == null
-            ? null
-            : TrashesCompanion.insert(
-              filename: file.trashData!.filename,
-              originalLocation: file.trashData!.originalLocation,
-              deletionTime: file.trashData!.deletionTime,
-            );
+    final sqlTrash = file.trashData == null
+        ? null
+        : TrashesCompanion.insert(
+            filename: file.trashData!.filename,
+            originalLocation: file.trashData!.originalLocation,
+            deletionTime: file.trashData!.deletionTime,
+          );
     return CompleteFileCompanion(
       sqlFile,
       sqlAccountFile,
@@ -253,8 +250,9 @@ abstract class ImageConverter {
       fileEtag: src.fileEtag,
       width: src.width,
       height: src.height,
-      exif:
-          src.exifRaw?.let((e) => jsonDecode(e) as Map).cast<String, dynamic>(),
+      exif: src.exifRaw
+          ?.let((e) => jsonDecode(e) as Map)
+          .cast<String, dynamic>(),
       xmp: src.xmpRaw?.let((e) => jsonDecode(e) as Map).cast<String, dynamic>(),
       dateTime: src.dateTimeOriginal,
       src: src.src,
@@ -268,60 +266,51 @@ abstract class ImageLocationConverter {
     List<ImageLocationId>? ids,
     List<ImageLocationName>? names,
   ) {
-    final cityId =
-        ids
-            ?.firstWhereOrNull((e) => e.type == ImageLocationType.city)
-            ?.geonameId;
-    final cityNames =
-        names
-            ?.where((e) => e.geonameId == cityId)
-            .map((e) => MapEntry(e.lang, e.name))
-            .toMap();
-    final admin1Id =
-        ids
-            ?.firstWhereOrNull((e) => e.type == ImageLocationType.admin1)
-            ?.geonameId;
-    final admin1Names =
-        names
-            ?.where((e) => e.geonameId == admin1Id)
-            .map((e) => MapEntry(e.lang, e.name))
-            .toMap();
-    final admin2Id =
-        ids
-            ?.firstWhereOrNull((e) => e.type == ImageLocationType.admin2)
-            ?.geonameId;
-    final admin2Names =
-        names
-            ?.where((e) => e.geonameId == admin2Id)
-            .map((e) => MapEntry(e.lang, e.name))
-            .toMap();
+    final cityId = ids
+        ?.firstWhereOrNull((e) => e.type == ImageLocationType.city)
+        ?.geonameId;
+    final cityNames = names
+        ?.where((e) => e.geonameId == cityId)
+        .map((e) => MapEntry(e.lang, e.name))
+        .toMap();
+    final admin1Id = ids
+        ?.firstWhereOrNull((e) => e.type == ImageLocationType.admin1)
+        ?.geonameId;
+    final admin1Names = names
+        ?.where((e) => e.geonameId == admin1Id)
+        .map((e) => MapEntry(e.lang, e.name))
+        .toMap();
+    final admin2Id = ids
+        ?.firstWhereOrNull((e) => e.type == ImageLocationType.admin2)
+        ?.geonameId;
+    final admin2Names = names
+        ?.where((e) => e.geonameId == admin2Id)
+        .map((e) => MapEntry(e.lang, e.name))
+        .toMap();
 
     return DbLocation(
       dataRevision: location.dataRevision,
       latitude: location.latitude,
       longitude: location.longitude,
       countryCode: location.countryCode,
-      city:
-          cityNames?.isNotEmpty == true
-              ? DbLocationName(
-                geonameId: cityId!,
-                name: LocalizedString(cityNames!),
-              )
-              : null,
-      admin1:
-          admin1Names?.isNotEmpty == true
-              ? DbLocationName(
-                geonameId: admin1Id!,
-                name: LocalizedString(admin1Names!),
-              )
-              : null,
-      admin2:
-          admin2Names?.isNotEmpty == true
-              ? DbLocationName(
-                geonameId: admin2Id!,
-                name: LocalizedString(admin2Names!),
-              )
-              : null,
+      city: cityNames?.isNotEmpty == true
+          ? DbLocationName(
+              geonameId: cityId!,
+              name: LocalizedString(cityNames!),
+            )
+          : null,
+      admin1: admin1Names?.isNotEmpty == true
+          ? DbLocationName(
+              geonameId: admin1Id!,
+              name: LocalizedString(admin1Names!),
+            )
+          : null,
+      admin2: admin2Names?.isNotEmpty == true
+          ? DbLocationName(
+              geonameId: admin2Id!,
+              name: LocalizedString(admin2Names!),
+            )
+          : null,
     );
   }
 }

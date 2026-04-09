@@ -138,14 +138,13 @@ class _PhotoListItemBuilder {
     List<FileDescriptor> files,
   ) {
     final today = Date.today();
-    final memoryAlbumHelper =
-        smartAlbumConfig != null
-            ? MemoryCollectionHelper(
-              account,
-              today: today,
-              dayRange: smartAlbumConfig!.memoriesDayRange,
-            )
-            : null;
+    final memoryAlbumHelper = smartAlbumConfig != null
+        ? MemoryCollectionHelper(
+            account,
+            today: today,
+            dayRange: smartAlbumConfig!.memoriesDayRange,
+          )
+        : null;
     final listItems = <SelectableItem>[];
     for (int i = 0; i < files.length; ++i) {
       final f = files[i];

@@ -84,13 +84,12 @@ class ImageEditor extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (context) => _IeBloc(
-            account: accountController.account,
-            fileRepo: KiwiContainer().resolve<DiContainer>().fileRepo,
-            prefController: context.read(),
-            file: file,
-          ),
+      create: (context) => _IeBloc(
+        account: accountController.account,
+        fileRepo: KiwiContainer().resolve<DiContainer>().fileRepo,
+        prefController: context.read(),
+        file: file,
+      ),
       child: const _WrappedImageEditor(),
     );
   }
@@ -146,31 +145,26 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
               listener: (context, quitRequest) async {
                 final result = await showDialog<bool>(
                   context: context,
-                  builder:
-                      (context) => AlertDialog(
-                        title: Text(L10n.global().imageEditDiscardDialogTitle),
-                        content: Text(
-                          L10n.global().imageEditDiscardDialogContent,
+                  builder: (context) => AlertDialog(
+                    title: Text(L10n.global().imageEditDiscardDialogTitle),
+                    content: Text(L10n.global().imageEditDiscardDialogContent),
+                    actions: [
+                      TextButton(
+                        child: Text(
+                          MaterialLocalizations.of(context).cancelButtonLabel,
                         ),
-                        actions: [
-                          TextButton(
-                            child: Text(
-                              MaterialLocalizations.of(
-                                context,
-                              ).cancelButtonLabel,
-                            ),
-                            onPressed: () {
-                              Navigator.of(context).pop(false);
-                            },
-                          ),
-                          TextButton(
-                            child: Text(L10n.global().discardButtonLabel),
-                            onPressed: () {
-                              Navigator.of(context).pop(true);
-                            },
-                          ),
-                        ],
+                        onPressed: () {
+                          Navigator.of(context).pop(false);
+                        },
                       ),
+                      TextButton(
+                        child: Text(L10n.global().discardButtonLabel),
+                        onPressed: () {
+                          Navigator.of(context).pop(true);
+                        },
+                      ),
+                    ],
+                  ),
                 );
                 if (result == true) {
                   Navigator.of(context).pop();
@@ -265,34 +259,30 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
             ),
           ],
           child: _BlocBuilder(
-            buildWhen:
-                (previous, current) =>
-                    previous.isModified != current.isModified ||
-                    previous.saveState != current.saveState,
-            builder:
-                (context, state) => PopScope(
-                  canPop: !state.isModified && state.saveState == null,
-                  onPopInvokedWithResult: (didPop, result) {
-                    if (!didPop && state.saveState == null) {
-                      context.addEvent(const _RequestQuit());
-                    }
-                  },
-                  child: Scaffold(
-                    body: Stack(
-                      children: [
-                        const _Body(),
-                        _BlocSelector(
-                          selector: (state) => state.saveState,
-                          builder:
-                              (context, saveState) =>
-                                  saveState != null
-                                      ? const _SaveDialog()
-                                      : const SizedBox.shrink(),
-                        ),
-                      ],
+            buildWhen: (previous, current) =>
+                previous.isModified != current.isModified ||
+                previous.saveState != current.saveState,
+            builder: (context, state) => PopScope(
+              canPop: !state.isModified && state.saveState == null,
+              onPopInvokedWithResult: (didPop, result) {
+                if (!didPop && state.saveState == null) {
+                  context.addEvent(const _RequestQuit());
+                }
+              },
+              child: Scaffold(
+                body: Stack(
+                  children: [
+                    const _Body(),
+                    _BlocSelector(
+                      selector: (state) => state.saveState,
+                      builder: (context, saveState) => saveState != null
+                          ? const _SaveDialog()
+                          : const SizedBox.shrink(),
                     ),
-                  ),
+                  ],
                 ),
+              ),
+            ),
           ),
         ),
       ),
@@ -303,8 +293,8 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
     await showDialog(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) => const ImageEditorPersistOptionDialog(isFromEditor: true),
+      builder: (context) =>
+          const ImageEditorPersistOptionDialog(isFromEditor: true),
     );
   }
 }
@@ -321,13 +311,11 @@ class _Body extends StatelessWidget {
           const _AppBar(),
           Expanded(
             child: _BlocBuilder(
-              buildWhen:
-                  (previous, current) =>
-                      previous.src != current.src ||
-                      previous.dst != current.dst ||
-                      previous.isCropMode != current.isCropMode ||
-                      previous.isFaceSelectionMode !=
-                          current.isFaceSelectionMode,
+              buildWhen: (previous, current) =>
+                  previous.src != current.src ||
+                  previous.dst != current.dst ||
+                  previous.isCropMode != current.isCropMode ||
+                  previous.isFaceSelectionMode != current.isFaceSelectionMode,
               builder: (context, state) {
                 if (state.src == null) {
                   return const SizedBox.shrink();
@@ -358,41 +346,40 @@ class _Body extends StatelessWidget {
           const SizedBox(height: 8),
           _BlocSelector(
             selector: (state) => state.activeTool,
-            builder:
-                (context, activeTool) => switch (activeTool) {
-                  _ToolType.color => ColorToolbar(
-                    initialState: context.state.pixelFilters,
-                    onActiveFiltersChanged: (pixelFilters) {
-                      context.addEvent(_SetPixelFilters(pixelFilters.toList()));
-                    },
-                  ),
-                  _ToolType.effect => EffectToolbar(
-                    initialFilters: context.state.pixelFilters,
-                    onActiveFiltersChanged: (pixelFilters) {
-                      context.addEvent(_SetPixelFilters(pixelFilters.toList()));
-                    },
-                    isFaceSelectionModeChanged: (value) {
-                      context.addEvent(_SetFaceSelectionMode(value));
-                    },
-                    onFaceFilterValueChanged: () {
-                      context.addEvent(const _FaceFilterValueChanged());
-                    },
-                  ),
-                  _ToolType.transform => TransformToolbar(
-                    initialState: context.state.transformFilters,
-                    onActiveFiltersChanged: (transformFilters) {
-                      context.addEvent(
-                        _SetTransformFilters(transformFilters.toList()),
-                      );
-                    },
-                    isCropModeChanged: (value) {
-                      context.addEvent(_SetCropMode(value));
-                    },
-                    onCropToolDeactivated: () {
-                      context.addEvent(const _SetCropFilter(null));
-                    },
-                  ),
+            builder: (context, activeTool) => switch (activeTool) {
+              _ToolType.color => ColorToolbar(
+                initialState: context.state.pixelFilters,
+                onActiveFiltersChanged: (pixelFilters) {
+                  context.addEvent(_SetPixelFilters(pixelFilters.toList()));
                 },
+              ),
+              _ToolType.effect => EffectToolbar(
+                initialFilters: context.state.pixelFilters,
+                onActiveFiltersChanged: (pixelFilters) {
+                  context.addEvent(_SetPixelFilters(pixelFilters.toList()));
+                },
+                isFaceSelectionModeChanged: (value) {
+                  context.addEvent(_SetFaceSelectionMode(value));
+                },
+                onFaceFilterValueChanged: () {
+                  context.addEvent(const _FaceFilterValueChanged());
+                },
+              ),
+              _ToolType.transform => TransformToolbar(
+                initialState: context.state.transformFilters,
+                onActiveFiltersChanged: (transformFilters) {
+                  context.addEvent(
+                    _SetTransformFilters(transformFilters.toList()),
+                  );
+                },
+                isCropModeChanged: (value) {
+                  context.addEvent(_SetCropMode(value));
+                },
+                onCropToolDeactivated: () {
+                  context.addEvent(const _SetCropFilter(null));
+                },
+              ),
+            },
           ),
           const SizedBox(height: 4),
           const _ToolBar(),

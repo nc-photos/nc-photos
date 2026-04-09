@@ -28,13 +28,12 @@ class EffectToolbar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _EtBloc(
-            initialFilters: initialFilters,
-            onActiveFiltersChanged: onActiveFiltersChanged,
-            isFaceSelectionModeChanged: isFaceSelectionModeChanged,
-            onFaceFilterValueChanged: onFaceFilterValueChanged,
-          ),
+      create: (context) => _EtBloc(
+        initialFilters: initialFilters,
+        onActiveFiltersChanged: onActiveFiltersChanged,
+        isFaceSelectionModeChanged: isFaceSelectionModeChanged,
+        onFaceFilterValueChanged: onFaceFilterValueChanged,
+      ),
       child: const _WrappedEffectToolbar(),
     );
   }
@@ -61,28 +60,27 @@ class _EffectOption extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.selectedFilter,
-      builder:
-          (context, selectedFilter) => Container(
-            height: 80,
-            alignment: Alignment.bottomCenter,
-            child: switch (selectedFilter) {
-              PixelToolType.faceReshape => const _FaceReshapeOption(),
-              PixelToolType.halftone => null,
-              PixelToolType.pixelation => _PixelationOption(
-                (context.state.filters[PixelToolType.pixelation]
-                        as _PixelationArguments)
-                    .value,
-              ),
-              PixelToolType.posterization => _PosterizationOption(
-                (context.state.filters[PixelToolType.posterization]
-                        as _PosterizationArguments)
-                    .value,
-              ),
-              PixelToolType.sketch => const _SketchOption(),
-              PixelToolType.toon => const _ToonOption(),
-              null || _ => null,
-            },
+      builder: (context, selectedFilter) => Container(
+        height: 80,
+        alignment: Alignment.bottomCenter,
+        child: switch (selectedFilter) {
+          PixelToolType.faceReshape => const _FaceReshapeOption(),
+          PixelToolType.halftone => null,
+          PixelToolType.pixelation => _PixelationOption(
+            (context.state.filters[PixelToolType.pixelation]
+                    as _PixelationArguments)
+                .value,
           ),
+          PixelToolType.posterization => _PosterizationOption(
+            (context.state.filters[PixelToolType.posterization]
+                    as _PosterizationArguments)
+                .value,
+          ),
+          PixelToolType.sketch => const _SketchOption(),
+          PixelToolType.toon => const _ToonOption(),
+          null || _ => null,
+        },
+      ),
     );
   }
 }

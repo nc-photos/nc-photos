@@ -129,11 +129,10 @@ Future<void> _dbGetAllNa() async {
   });
 
   final src = AlbumSqliteDbDataSource(c);
-  final results =
-      await src.getAll(account, [
-        albums[0].albumFile!,
-        albums[2].albumFile!,
-      ]).toList();
+  final results = await src.getAll(account, [
+    albums[0].albumFile!,
+    albums[2].albumFile!,
+  ]).toList();
   expect(results.length, 2);
   expect(results[0], albums[0]);
   expect(

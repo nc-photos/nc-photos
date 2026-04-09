@@ -177,22 +177,16 @@ class AnyFilesController {
   Future<void> queryByAfId(Iterable<String> afIds) {
     return handleAnyFileIdByType(
       afIds,
-      nextcloudHandler:
-          (ids) =>
-              filesController.queryByFileId(ids.map((e) => e.fileId).toList()),
-      localHandler:
-          (ids) => localFilesController.queryByFileId(
-            ids.map((e) => e.fileId).toList(),
-          ),
-      mergedHandler:
-          (ids) => Future.wait([
-            filesController.queryByFileId(
-              ids.map((e) => e.remoteFileId).toList(),
-            ),
-            localFilesController.queryByFileId(
-              ids.map((e) => e.localFileId).toList(),
-            ),
-          ]),
+      nextcloudHandler: (ids) =>
+          filesController.queryByFileId(ids.map((e) => e.fileId).toList()),
+      localHandler: (ids) =>
+          localFilesController.queryByFileId(ids.map((e) => e.fileId).toList()),
+      mergedHandler: (ids) => Future.wait([
+        filesController.queryByFileId(ids.map((e) => e.remoteFileId).toList()),
+        localFilesController.queryByFileId(
+          ids.map((e) => e.localFileId).toList(),
+        ),
+      ]),
     );
   }
 
@@ -235,13 +229,12 @@ class AnyFilesController {
                 (e) => (e.provider as AnyFileMergedProvider).remote.file,
               ),
           ],
-          errorBuilder:
-              errorBuilder == null
-                  ? null
-                  : (files) {
-                    failures.addAll(files.map((e) => e.toAnyFile()));
-                    return null;
-                  },
+          errorBuilder: errorBuilder == null
+              ? null
+              : (files) {
+                  failures.addAll(files.map((e) => e.toAnyFile()));
+                  return null;
+                },
         ),
       if (groups[AnyFileProviderType.local]?.isNotEmpty == true ||
           (shouldRemoveLocalMerged &&
@@ -256,13 +249,12 @@ class AnyFilesController {
                 (e) => (e.provider as AnyFileMergedProvider).local.file,
               ),
           ],
-          errorBuilder:
-              errorBuilder == null
-                  ? null
-                  : (files) {
-                    failures.addAll(files.map((e) => e.toAnyFile()));
-                    return null;
-                  },
+          errorBuilder: errorBuilder == null
+              ? null
+              : (files) {
+                  failures.addAll(files.map((e) => e.toAnyFile()));
+                  return null;
+                },
         ),
     ]);
     if (failures.isNotEmpty) {
@@ -363,8 +355,9 @@ class AnyFilesController {
       if (isAnyFileMergeable(merged.last, e)) {
         // merge
         final replace = merged.removeLast();
-        final remote =
-            replace.provider is AnyFileNextcloudProvider ? replace : e;
+        final remote = replace.provider is AnyFileNextcloudProvider
+            ? replace
+            : e;
         final local = replace.provider is AnyFileLocalProvider ? replace : e;
         merged.add(
           AnyFile(

@@ -114,10 +114,9 @@ class Album with EquatableMixin {
       );
     }
     return Album(
-      lastUpdated:
-          result["lastUpdated"] == null
-              ? null
-              : DateTime.parse(result["lastUpdated"]),
+      lastUpdated: result["lastUpdated"] == null
+          ? null
+          : DateTime.parse(result["lastUpdated"]),
       name: result["name"],
       provider: AlbumProvider.fromJson(
         result["provider"].cast<String, dynamic>(),
@@ -128,14 +127,12 @@ class Album with EquatableMixin {
       sortProvider: AlbumSortProvider.fromJson(
         result["sortProvider"].cast<String, dynamic>(),
       ),
-      shares:
-          (result["shares"] as List?)
-              ?.map((e) => AlbumShare.fromJson(e.cast<String, dynamic>()))
-              .toList(),
-      albumFile:
-          result["albumFile"] == null
-              ? null
-              : File.fromJson(result["albumFile"].cast<String, dynamic>()),
+      shares: (result["shares"] as List?)
+          ?.map((e) => AlbumShare.fromJson(e.cast<String, dynamic>()))
+          .toList(),
+      albumFile: result["albumFile"] == null
+          ? null
+          : File.fromJson(result["albumFile"].cast<String, dynamic>()),
       savedVersion: result["version"],
     );
   }
@@ -168,14 +165,16 @@ class Album with EquatableMixin {
     OrNull<File>? albumFile,
   }) {
     return Album(
-      lastUpdated:
-          lastUpdated == null ? null : (lastUpdated.obj ?? this.lastUpdated),
+      lastUpdated: lastUpdated == null
+          ? null
+          : (lastUpdated.obj ?? this.lastUpdated),
       name: name ?? this.name,
       provider: provider ?? this.provider,
       coverProvider: coverProvider ?? this.coverProvider,
       sortProvider: sortProvider ?? this.sortProvider,
-      shares:
-          shares == null ? this.shares?.run((obj) => List.of(obj)) : shares.obj,
+      shares: shares == null
+          ? this.shares?.run((obj) => List.of(obj))
+          : shares.obj,
       albumFile: albumFile == null ? this.albumFile : albumFile.obj,
       savedVersion: savedVersion,
     );

@@ -62,8 +62,9 @@ class ListAlbum2 {
         File(path: remote_storage_util.getRemoteAlbumsDir(account)),
       );
     }
-    final List<File?> albumFiles =
-        ls.where((element) => element.isCollection != true).toList();
+    final List<File?> albumFiles = ls
+        .where((element) => element.isCollection != true)
+        .toList();
     // migrate files
     for (var i = 0; i < albumFiles.length; ++i) {
       final f = albumFiles[i]!;

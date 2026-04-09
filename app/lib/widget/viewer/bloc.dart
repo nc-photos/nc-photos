@@ -181,10 +181,8 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         filesController.errorStream,
-        onData:
-            (data) => state.copyWith(
-              error: ExceptionEvent(data.error, data.stackTrace),
-            ),
+        onData: (data) =>
+            state.copyWith(error: ExceptionEvent(data.error, data.stackTrace)),
       ),
     ]);
   }
@@ -228,10 +226,9 @@ class _Bloc extends Bloc<_Event, _State>
         state.copyWith(
           index: ev.index,
           currentFile: file,
-          fileStates:
-              state.fileStates[afId] == null
-                  ? state.fileStates.addedAll({afId: fileState})
-                  : null,
+          fileStates: state.fileStates[afId] == null
+              ? state.fileStates.addedAll({afId: fileState})
+              : null,
           currentFileState: fileState,
           isInitialLoad: false,
         ),
@@ -250,10 +247,9 @@ class _Bloc extends Bloc<_Event, _State>
     await contentController.fastJump(page: ev.index, afId: ev.afId);
     emit(
       state.copyWith(
-        pageAfIdMap:
-            state.pageAfIdMap.containsKey(ev.index)
-                ? null
-                : state.pageAfIdMap.addedAll({ev.index: ev.afId}),
+        pageAfIdMap: state.pageAfIdMap.containsKey(ev.index)
+            ? null
+            : state.pageAfIdMap.addedAll({ev.index: ev.afId}),
       ),
     );
     add(_SetIndex(ev.index));
@@ -271,13 +267,10 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
     _log.info(ev);
-    final itemMap =
-        ev.value
-            ?.whereType<CollectionFileItem>()
-            .map(
-              (e) => MapEntry(AnyFileNextcloudProvider.toAfId(e.file.fdId), e),
-            )
-            .toMap();
+    final itemMap = ev.value
+        ?.whereType<CollectionFileItem>()
+        .map((e) => MapEntry(AnyFileNextcloudProvider.toAfId(e.file.fdId), e))
+        .toMap();
     emit(state.copyWith(collectionItems: itemMap));
   }
 
@@ -307,10 +300,9 @@ class _Bloc extends Bloc<_Event, _State>
     if (state.currentFileState == null && fileId != null) {
       final fileState = state.fileStates[fileId] ?? _PageState.create();
       newState = newState.copyWith(
-        fileStates:
-            state.fileStates[fileId] == null
-                ? state.fileStates.addedAll({fileId: fileState})
-                : null,
+        fileStates: state.fileStates[fileId] == null
+            ? state.fileStates.addedAll({fileId: fileState})
+            : null,
         currentFileState: fileState,
       );
     }
@@ -704,10 +696,9 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onRemoveFile(_RemoveFile ev, _Emitter emit) {
     _log.info(ev);
-    final removePage =
-        state.pageAfIdMap.entries
-            .firstWhereOrNull((e) => e.value == ev.file.id)
-            ?.key;
+    final removePage = state.pageAfIdMap.entries
+        .firstWhereOrNull((e) => e.value == ev.file.id)
+        ?.key;
     if (removePage == null) {
       _log.warning("[_onRemoveFile] File id not found: ${ev.file.id}");
       return;
@@ -721,10 +712,9 @@ class _Bloc extends Bloc<_Event, _State>
         nextPageAfIdMap[e.key - 1] = e.value;
       }
     }
-    final currentPage =
-        state.pageAfIdMap.entries
-            .firstWhereOrNull((e) => e.value == state.currentFile?.id)
-            ?.key;
+    final currentPage = state.pageAfIdMap.entries
+        .firstWhereOrNull((e) => e.value == state.currentFile?.id)
+        ?.key;
     emit(
       state.copyWith(
         removedAfIds: state.removedAfIds.added(ev.file.id),

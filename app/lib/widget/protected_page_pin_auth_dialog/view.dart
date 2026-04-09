@@ -26,43 +26,40 @@ class _DialogBody extends StatelessWidget {
             defaultVerticalAlignment: TableCellVerticalAlignment.middle,
             children: [
               TableRow(
-                children:
-                    [1, 2, 3]
-                        .map(
-                          (e) => _DigitButton(
-                            child: Text(e.toString()),
-                            onTap: () {
-                              context.addEvent(_PushDigit(e));
-                            },
-                          ),
-                        )
-                        .toList(),
+                children: [1, 2, 3]
+                    .map(
+                      (e) => _DigitButton(
+                        child: Text(e.toString()),
+                        onTap: () {
+                          context.addEvent(_PushDigit(e));
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
               TableRow(
-                children:
-                    [4, 5, 6]
-                        .map(
-                          (e) => _DigitButton(
-                            child: Text(e.toString()),
-                            onTap: () {
-                              context.addEvent(_PushDigit(e));
-                            },
-                          ),
-                        )
-                        .toList(),
+                children: [4, 5, 6]
+                    .map(
+                      (e) => _DigitButton(
+                        child: Text(e.toString()),
+                        onTap: () {
+                          context.addEvent(_PushDigit(e));
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
               TableRow(
-                children:
-                    [7, 8, 9]
-                        .map(
-                          (e) => _DigitButton(
-                            child: Text(e.toString()),
-                            onTap: () {
-                              context.addEvent(_PushDigit(e));
-                            },
-                          ),
-                        )
-                        .toList(),
+                children: [7, 8, 9]
+                    .map(
+                      (e) => _DigitButton(
+                        child: Text(e.toString()),
+                        onTap: () {
+                          context.addEvent(_PushDigit(e));
+                        },
+                      ),
+                    )
+                    .toList(),
               ),
               TableRow(
                 children: [
@@ -124,13 +121,12 @@ class _ObsecuredInputViewState extends State<_ObsecuredInputView>
           physics: const NeverScrollableScrollPhysics(),
           shrinkWrap: true,
           initialItemCount: context.state.obsecuredInput.length,
-          itemBuilder:
-              (context, index, animation) => ScaleTransition(
-                scale: animation.drive(CurveTween(curve: Curves.elasticOut)),
-                child: _ObsecuredDigitDisplay(
-                  randomInt: context.state.obsecuredInput[index],
-                ),
-              ),
+          itemBuilder: (context, index, animation) => ScaleTransition(
+            scale: animation.drive(CurveTween(curve: Curves.elasticOut)),
+            child: _ObsecuredDigitDisplay(
+              randomInt: context.state.obsecuredInput[index],
+            ),
+          ),
         ),
       ),
     );
@@ -194,28 +190,27 @@ class _BackspaceButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.obsecuredInput.isEmpty,
-      builder:
-          (context, isEmpty) => Padding(
-            padding: const EdgeInsets.all(4),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  onTap: isEmpty ? null : onTap,
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(8),
-                    height: 56,
-                    child: Icon(
-                      Icons.backspace_outlined,
-                      color: isEmpty ? Theme.of(context).disabledColor : null,
-                    ),
-                  ),
+      builder: (context, isEmpty) => Padding(
+        padding: const EdgeInsets.all(4),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: isEmpty ? null : onTap,
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(8),
+                height: 56,
+                child: Icon(
+                  Icons.backspace_outlined,
+                  color: isEmpty ? Theme.of(context).disabledColor : null,
                 ),
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 
@@ -229,33 +224,31 @@ class _ConfirmButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.obsecuredInput.length >= 4,
-      builder:
-          (context, isInputValid) => Padding(
-            padding: const EdgeInsets.all(4),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Material(
-                type: MaterialType.transparency,
-                child: InkWell(
-                  onTap: isInputValid ? onTap : null,
-                  child: Container(
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(8),
-                    height: 56,
-                    child: Text(
-                      L10n.global().confirmButtonLabel,
-                      style: Theme.of(context).textTheme.labelMedium!.copyWith(
-                        color:
-                            !isInputValid
-                                ? Theme.of(context).disabledColor
-                                : null,
-                      ),
-                    ),
+      builder: (context, isInputValid) => Padding(
+        padding: const EdgeInsets.all(4),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              onTap: isInputValid ? onTap : null,
+              child: Container(
+                alignment: Alignment.center,
+                padding: const EdgeInsets.all(8),
+                height: 56,
+                child: Text(
+                  L10n.global().confirmButtonLabel,
+                  style: Theme.of(context).textTheme.labelMedium!.copyWith(
+                    color: !isInputValid
+                        ? Theme.of(context).disabledColor
+                        : null,
                   ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 

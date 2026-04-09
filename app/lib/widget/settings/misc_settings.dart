@@ -25,11 +25,10 @@ class MiscSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) => _Bloc(
-            prefController: context.read(),
-            securePrefController: context.read(),
-          ),
+      create: (_) => _Bloc(
+        prefController: context.read(),
+        securePrefController: context.read(),
+      ),
       child: const _WrappedMiscSettings(),
     );
   }
@@ -86,22 +85,19 @@ class _WrappedMiscSettingsState extends State<_WrappedMiscSettings>
                 ),
                 _BlocSelector<ProtectedPageAuthType?>(
                   selector: (state) => state.appLockType,
-                  builder:
-                      (context, appLockType) => ListTile(
-                        title: Text(L10n.global().settingsAppLock),
-                        subtitle:
-                            appLockType?.let(
-                              (e) => Text(e.toDisplayString()),
-                            ) ??
-                            Text(L10n.global().disabledText),
-                        onTap: () {
-                          Navigator.of(context).pushProtected(
-                            MaterialPageRoute(
-                              builder: (_) => const AppLockSettings(),
-                            ),
-                          );
-                        },
-                      ),
+                  builder: (context, appLockType) => ListTile(
+                    title: Text(L10n.global().settingsAppLock),
+                    subtitle:
+                        appLockType?.let((e) => Text(e.toDisplayString())) ??
+                        Text(L10n.global().disabledText),
+                    onTap: () {
+                      Navigator.of(context).pushProtected(
+                        MaterialPageRoute(
+                          builder: (_) => const AppLockSettings(),
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ]),
             ),

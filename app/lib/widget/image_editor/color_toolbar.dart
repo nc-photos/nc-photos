@@ -163,11 +163,10 @@ class _ColorToolbarState extends State<ColorToolbar> {
     max: 100,
     initialValue:
         (_filters[PixelToolType.brightness] as _BrightnessArguments).value,
-    onChangeEnd:
-        (value) => _onOptionValueChanged(
-          PixelToolType.brightness,
-          _BrightnessArguments(value),
-        ),
+    onChangeEnd: (value) => _onOptionValueChanged(
+      PixelToolType.brightness,
+      _BrightnessArguments(value),
+    ),
   );
 
   Widget _buildContrastOption(BuildContext context) => PixelToolSlider(
@@ -176,11 +175,10 @@ class _ColorToolbarState extends State<ColorToolbar> {
     max: 100,
     initialValue:
         (_filters[PixelToolType.contrast] as _ContrastArguments).value,
-    onChangeEnd:
-        (value) => _onOptionValueChanged(
-          PixelToolType.contrast,
-          _ContrastArguments(value),
-        ),
+    onChangeEnd: (value) => _onOptionValueChanged(
+      PixelToolType.contrast,
+      _ContrastArguments(value),
+    ),
   );
 
   Widget _buildWhitePointOption(BuildContext context) => PixelToolSlider(
@@ -189,11 +187,10 @@ class _ColorToolbarState extends State<ColorToolbar> {
     max: 100,
     initialValue:
         (_filters[PixelToolType.whitePoint] as _WhitePointArguments).value,
-    onChangeEnd:
-        (value) => _onOptionValueChanged(
-          PixelToolType.whitePoint,
-          _WhitePointArguments(value),
-        ),
+    onChangeEnd: (value) => _onOptionValueChanged(
+      PixelToolType.whitePoint,
+      _WhitePointArguments(value),
+    ),
   );
 
   Widget _buildBlackPointOption(BuildContext context) => PixelToolSlider(
@@ -202,11 +199,10 @@ class _ColorToolbarState extends State<ColorToolbar> {
     max: 100,
     initialValue:
         (_filters[PixelToolType.blackPoint] as _BlackPointArguments).value,
-    onChangeEnd:
-        (value) => _onOptionValueChanged(
-          PixelToolType.blackPoint,
-          _BlackPointArguments(value),
-        ),
+    onChangeEnd: (value) => _onOptionValueChanged(
+      PixelToolType.blackPoint,
+      _BlackPointArguments(value),
+    ),
   );
 
   Widget _buildSaturationOption(BuildContext context) => PixelToolSlider(
@@ -215,11 +211,10 @@ class _ColorToolbarState extends State<ColorToolbar> {
     max: 100,
     initialValue:
         (_filters[PixelToolType.saturation] as _SaturationArguments).value,
-    onChangeEnd:
-        (value) => _onOptionValueChanged(
-          PixelToolType.saturation,
-          _SaturationArguments(value),
-        ),
+    onChangeEnd: (value) => _onOptionValueChanged(
+      PixelToolType.saturation,
+      _SaturationArguments(value),
+    ),
   );
 
   Widget _buildWarmthOption(BuildContext context) => PixelToolSlider(
@@ -227,11 +222,8 @@ class _ColorToolbarState extends State<ColorToolbar> {
     min: -100,
     max: 100,
     initialValue: (_filters[PixelToolType.warmth] as _WarmthArguments).value,
-    onChangeEnd:
-        (value) => _onOptionValueChanged(
-          PixelToolType.warmth,
-          _WarmthArguments(value),
-        ),
+    onChangeEnd: (value) =>
+        _onOptionValueChanged(PixelToolType.warmth, _WarmthArguments(value)),
   );
 
   Widget _buildTintOption(BuildContext context) => PixelToolSlider(
@@ -239,9 +231,8 @@ class _ColorToolbarState extends State<ColorToolbar> {
     min: -100,
     max: 100,
     initialValue: (_filters[PixelToolType.tint] as _TintArguments).value,
-    onChangeEnd:
-        (value) =>
-            _onOptionValueChanged(PixelToolType.tint, _TintArguments(value)),
+    onChangeEnd: (value) =>
+        _onOptionValueChanged(PixelToolType.tint, _TintArguments(value)),
   );
 
   void _onFilterPressed(PixelToolType type, PixelArguments defArgs) {

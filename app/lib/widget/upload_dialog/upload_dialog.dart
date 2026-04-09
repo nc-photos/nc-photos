@@ -39,12 +39,11 @@ class UploadDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            account: accountController.account,
-            prefController: context.read(),
-            accountPrefController: accountController.accountPrefController,
-          ),
+      create: (context) => _Bloc(
+        account: accountController.account,
+        prefController: context.read(),
+        accountPrefController: accountController.accountPrefController,
+      ),
       child: const _WrappedUploadDialog(),
     );
   }
@@ -143,45 +142,39 @@ class _BatchConvertOption extends StatelessWidget {
       children: [
         _BlocSelector(
           selector: (state) => state.convertConfig,
-          builder:
-              (context, convertConfig) => CheckboxListTile(
-                title: Text(L10n.global().uploadDialogBatchConvert),
-                contentPadding: const EdgeInsets.all(0),
-                value: convertConfig != null,
-                onChanged: (value) {
-                  context.addEvent(_SetEnableConvert(value!));
-                  if (value) {
-                    if (context
-                        .bloc
-                        .prefController
-                        .isShowUploadConvertWarningValue) {
-                      showDialog(
-                        context: context,
-                        builder:
-                            (context) => const UploadConvertWarningDialog(),
-                      );
-                    }
-                  }
-                },
-              ),
+          builder: (context, convertConfig) => CheckboxListTile(
+            title: Text(L10n.global().uploadDialogBatchConvert),
+            contentPadding: const EdgeInsets.all(0),
+            value: convertConfig != null,
+            onChanged: (value) {
+              context.addEvent(_SetEnableConvert(value!));
+              if (value) {
+                if (context
+                    .bloc
+                    .prefController
+                    .isShowUploadConvertWarningValue) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const UploadConvertWarningDialog(),
+                  );
+                }
+              }
+            },
+          ),
         ),
         _BlocSelector(
           selector: (state) => state.convertConfig,
-          builder:
-              (context, convertConfig) =>
-                  convertConfig != null
-                      ? ListTile(
-                        title: Text(convertConfig.format.toDisplayString()),
-                        subtitle: Text(_getDescription(convertConfig)),
-                        trailing: const Icon(Icons.arrow_forward_ios),
-                        contentPadding: const EdgeInsets.all(0),
-                        onTap: () {
-                          Navigator.of(
-                            context,
-                          ).pushNamed(ConvertSettings.routeName);
-                        },
-                      )
-                      : const SizedBox.shrink(),
+          builder: (context, convertConfig) => convertConfig != null
+              ? ListTile(
+                  title: Text(convertConfig.format.toDisplayString()),
+                  subtitle: Text(_getDescription(convertConfig)),
+                  trailing: const Icon(Icons.arrow_forward_ios),
+                  contentPadding: const EdgeInsets.all(0),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(ConvertSettings.routeName);
+                  },
+                )
+              : const SizedBox.shrink(),
         ),
       ],
     );

@@ -100,16 +100,15 @@ class MyApp extends StatelessWidget {
           },
         ),
         RepositoryProvider(
-          create:
-              (context) => AccountController(
-                prefController: context.read(),
-                localFilesController: context.read(),
-              ),
+          create: (context) => AccountController(
+            prefController: context.read(),
+            localFilesController: context.read(),
+          ),
         ),
         RepositoryProvider<NpDb>(create: (_) => _c.npDb),
         RepositoryProvider<TrustedCertController>(
-          create:
-              (_) => TrustedCertController(manager: SelfSignedCertManager()),
+          create: (_) =>
+              TrustedCertController(manager: SelfSignedCertManager()),
         ),
       ],
       child: BlocProvider(
@@ -149,54 +148,51 @@ class _WrappedAppState extends State<_WrappedApp>
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.language != current.language ||
-              previous.isDarkTheme != current.isDarkTheme ||
-              previous.isFollowSystemTheme != current.isFollowSystemTheme ||
-              previous.isUseBlackInDarkTheme != current.isUseBlackInDarkTheme ||
-              previous.seedColor != current.seedColor ||
-              previous.secondarySeedColor != current.secondarySeedColor,
-      builder:
-          (context, state) => DynamicColorBuilder(
-            builder: (lightDynamic, darkDynamic) {
-              SessionStorage()
-                ..lightDynamicColorScheme = lightDynamic
-                ..darkDynamicColorScheme = darkDynamic
-                ..isSupportDynamicColor = lightDynamic != null;
-              final ThemeMode themeMode;
-              if (state.isFollowSystemTheme) {
-                themeMode = ThemeMode.system;
-              } else {
-                themeMode =
-                    state.isDarkTheme ? ThemeMode.dark : ThemeMode.light;
-              }
-              return MaterialApp(
-                onGenerateTitle:
-                    (context) => AppLocalizations.of(context)!.appTitle,
-                theme: buildLightTheme(context, lightDynamic),
-                darkTheme: buildDarkTheme(context, darkDynamic),
-                themeMode: themeMode,
-                initialRoute: Splash.routeName,
-                onGenerateRoute: _onGenerateRoute,
-                navigatorObservers: [MyApp.routeObserver, _NavigatorLogger()],
-                navigatorKey: _navigatorKey,
-                scaffoldMessengerKey: _scaffoldMessengerKey,
-                locale: state.language.locale,
-                localizationsDelegates: const [
-                  ...AppLocalizations.localizationsDelegates,
-                  CountryLocalizations.delegate,
-                ],
-                supportedLocales: AppLocalizations.supportedLocales,
-                builder: (context, child) {
-                  MyApp._globalContext = context;
-                  return _ThemedMyApp(child: child!);
-                },
-                debugShowCheckedModeBanner: false,
-                scrollBehavior: const _MyScrollBehavior(),
-              );
+      buildWhen: (previous, current) =>
+          previous.language != current.language ||
+          previous.isDarkTheme != current.isDarkTheme ||
+          previous.isFollowSystemTheme != current.isFollowSystemTheme ||
+          previous.isUseBlackInDarkTheme != current.isUseBlackInDarkTheme ||
+          previous.seedColor != current.seedColor ||
+          previous.secondarySeedColor != current.secondarySeedColor,
+      builder: (context, state) => DynamicColorBuilder(
+        builder: (lightDynamic, darkDynamic) {
+          SessionStorage()
+            ..lightDynamicColorScheme = lightDynamic
+            ..darkDynamicColorScheme = darkDynamic
+            ..isSupportDynamicColor = lightDynamic != null;
+          final ThemeMode themeMode;
+          if (state.isFollowSystemTheme) {
+            themeMode = ThemeMode.system;
+          } else {
+            themeMode = state.isDarkTheme ? ThemeMode.dark : ThemeMode.light;
+          }
+          return MaterialApp(
+            onGenerateTitle: (context) =>
+                AppLocalizations.of(context)!.appTitle,
+            theme: buildLightTheme(context, lightDynamic),
+            darkTheme: buildDarkTheme(context, darkDynamic),
+            themeMode: themeMode,
+            initialRoute: Splash.routeName,
+            onGenerateRoute: _onGenerateRoute,
+            navigatorObservers: [MyApp.routeObserver, _NavigatorLogger()],
+            navigatorKey: _navigatorKey,
+            scaffoldMessengerKey: _scaffoldMessengerKey,
+            locale: state.language.locale,
+            localizationsDelegates: const [
+              ...AppLocalizations.localizationsDelegates,
+              CountryLocalizations.delegate,
+            ],
+            supportedLocales: AppLocalizations.supportedLocales,
+            builder: (context, child) {
+              MyApp._globalContext = context;
+              return _ThemedMyApp(child: child!);
             },
-          ),
+            debugShowCheckedModeBanner: false,
+            scrollBehavior: const _MyScrollBehavior(),
+          );
+        },
+      ),
     );
   }
 

@@ -35,14 +35,12 @@ extension DateTimeColumnExtension on Column<DateTime> {
   Expression<bool>? isBetweenTimeRange(TimeRange range) {
     final epoch = unixepoch;
     // convert ranges to inclusive
-    final from =
-        range.fromBound == TimeRangeBound.inclusive
-            ? range.from?.millisecondsSinceEpoch.let((e) => e ~/ 1000)
-            : range.from?.millisecondsSinceEpoch.let((e) => e ~/ 1000 + 1);
-    final to =
-        range.toBound == TimeRangeBound.inclusive
-            ? range.to?.millisecondsSinceEpoch.let((e) => e ~/ 1000)
-            : range.to?.millisecondsSinceEpoch.let((e) => e ~/ 1000 - 1);
+    final from = range.fromBound == TimeRangeBound.inclusive
+        ? range.from?.millisecondsSinceEpoch.let((e) => e ~/ 1000)
+        : range.from?.millisecondsSinceEpoch.let((e) => e ~/ 1000 + 1);
+    final to = range.toBound == TimeRangeBound.inclusive
+        ? range.to?.millisecondsSinceEpoch.let((e) => e ~/ 1000)
+        : range.to?.millisecondsSinceEpoch.let((e) => e ~/ 1000 - 1);
     if (from != null && to != null) {
       return epoch.isBetweenValues(from, to);
     } else if (from != null) {

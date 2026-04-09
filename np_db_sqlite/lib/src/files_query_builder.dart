@@ -107,10 +107,9 @@ class FilesQueryBuilder {
     if (_sqlAccount == null && _dbAccount == null && !_isAccountless) {
       throw StateError("Invalid query: missing account");
     }
-    final dynamic select =
-        _queryMode == FilesQueryMode.expression
-            ? db.selectOnly(db.files)
-            : db.select(db.files);
+    final dynamic select = _queryMode == FilesQueryMode.expression
+        ? db.selectOnly(db.files)
+        : db.select(db.files);
     final query =
         select.join([
               innerJoin(

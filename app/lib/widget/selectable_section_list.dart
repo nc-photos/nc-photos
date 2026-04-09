@@ -292,8 +292,8 @@ class _SliverSectionGridView extends StatelessWidget {
               crossAxisSpacing: crossAxisSpacing,
             ),
             itemCount: itemCount(section),
-            itemBuilder:
-                (context, index) => itemBuilder(context, section, index),
+            itemBuilder: (context, index) =>
+                itemBuilder(context, section, index),
           );
         } else {
           // section title
@@ -332,23 +332,17 @@ class _SliverSectionGridView extends StatelessWidget {
             extentOptimizer!.itemPerRow,
           );
           return Row(
-            children:
-                List<Widget>.generate(
-                  extentOptimizer!.itemPerRow,
-                  (i) => Expanded(
-                    child: AspectRatio(
-                      aspectRatio: childAspectRatio,
-                      child:
-                          i < thisRowCount
-                              ? itemBuilder(
-                                context,
-                                section,
-                                firstItemIndex + i,
-                              )
-                              : const SizedBox.shrink(),
-                    ),
-                  ),
-                ).separated((_) => SizedBox(width: crossAxisSpacing)).toList(),
+            children: List<Widget>.generate(
+              extentOptimizer!.itemPerRow,
+              (i) => Expanded(
+                child: AspectRatio(
+                  aspectRatio: childAspectRatio,
+                  child: i < thisRowCount
+                      ? itemBuilder(context, section, firstItemIndex + i)
+                      : const SizedBox.shrink(),
+                ),
+              ),
+            ).separated((_) => SizedBox(width: crossAxisSpacing)).toList(),
           );
         }
       },

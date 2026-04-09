@@ -32,16 +32,21 @@ class AppDimension extends ThemeExtension<AppDimension> {
       return this;
     }
     return AppDimension(
-      homeBottomAppBarHeight:
-          lerpDouble(homeBottomAppBarHeight, other.homeBottomAppBarHeight, t)!,
-      timelineDateItemHeight:
-          lerpDouble(timelineDateItemHeight, other.timelineDateItemHeight, t)!,
-      timelineDraggableThumbSize:
-          lerpDouble(
-            timelineDraggableThumbSize,
-            other.timelineDraggableThumbSize,
-            t,
-          )!,
+      homeBottomAppBarHeight: lerpDouble(
+        homeBottomAppBarHeight,
+        other.homeBottomAppBarHeight,
+        t,
+      )!,
+      timelineDateItemHeight: lerpDouble(
+        timelineDateItemHeight,
+        other.timelineDateItemHeight,
+        t,
+      )!,
+      timelineDraggableThumbSize: lerpDouble(
+        timelineDraggableThumbSize,
+        other.timelineDraggableThumbSize,
+        t,
+      )!,
     );
   }
 

@@ -43,8 +43,9 @@ class Tag with EquatableMixin {
     id: id ?? this.id,
     displayName: displayName ?? this.displayName,
     userVisible: userVisible == null ? this.userVisible : userVisible.obj,
-    userAssignable:
-        userAssignable == null ? this.userAssignable : userAssignable.obj,
+    userAssignable: userAssignable == null
+        ? this.userAssignable
+        : userAssignable.obj,
   );
 
   @override

@@ -78,8 +78,9 @@ void _initialState() {
 /// Expect: emit the file with extra share (admin -> user1)
 void _testQueryUnsharedAlbumExtraShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album = (util.AlbumBuilder()..addFileItem(files[0])).build();
   final file1 = files[0];
   late final DiContainer c;
@@ -105,17 +106,16 @@ void _testQueryUnsharedAlbumExtraShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(file1, [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "0", file: file1, shareWith: "user1"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(file1, [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "0", file: file1, shareWith: "user1"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -146,17 +146,16 @@ void _testQueryUnsharedAlbumExtraJsonShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(albumFile, [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(albumFile, [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "0", file: albumFile, shareWith: "user1"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -165,8 +164,9 @@ void _testQueryUnsharedAlbumExtraJsonShare(String description) {
 /// Expect: emit the file with missing share (admin -> user1)
 void _testQuerySharedAlbumMissingShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0])
@@ -197,15 +197,14 @@ void _testQuerySharedAlbumMissingShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(file1, [
-              ListAlbumShareOutlierMissingShareItem("user1".toCi(), "user1"),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(file1, [
+          ListAlbumShareOutlierMissingShareItem("user1".toCi(), "user1"),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -215,9 +214,9 @@ void _testQuerySharedAlbumMissingShare(String description) {
 /// Expect: emit the file with missing share (admin -> user2)
 void _testQuerySharedAlbumMissingManagedShareOtherAdded(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
   final album =
       (util.AlbumBuilder()
             // added before album shared, thus managed by album owner
@@ -257,15 +256,14 @@ void _testQuerySharedAlbumMissingManagedShareOtherAdded(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(files[0], [
-              ListAlbumShareOutlierMissingShareItem("user2".toCi(), "user2"),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(files[0], [
+          ListAlbumShareOutlierMissingShareItem("user2".toCi(), "user2"),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -276,8 +274,9 @@ void _testQuerySharedAlbumMissingManagedShareOtherAdded(String description) {
 void _testQuerySharedAlbumMissingManagedShareOtherReshared(String description) {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final user1Files = [
     files[0].copyWith(path: "remote.php/dav/files/user1/dir/test1.jpg"),
   ];
@@ -322,11 +321,10 @@ void _testQuerySharedAlbumMissingManagedShareOtherReshared(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, []),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, []),
+    ],
   );
 }
 
@@ -336,9 +334,9 @@ void _testQuerySharedAlbumMissingManagedShareOtherReshared(String description) {
 /// Expect: emit empty list
 void _testQuerySharedAlbumMissingUnmanagedShareOtherAdded(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
   final album =
       (util.AlbumBuilder()
             // added after album shared, thus managed by adder
@@ -382,11 +380,10 @@ void _testQuerySharedAlbumMissingUnmanagedShareOtherAdded(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, []),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, []),
+    ],
   );
 }
 
@@ -414,15 +411,14 @@ void _testQuerySharedAlbumMissingJsonShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(albumFile, [
-              ListAlbumShareOutlierMissingShareItem("user1".toCi(), "user1"),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(albumFile, [
+          ListAlbumShareOutlierMissingShareItem("user1".toCi(), "user1"),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -432,8 +428,9 @@ void _testQuerySharedAlbumMissingJsonShare(String description) {
 /// Expect: emit the file with extra share (admin -> user2)
 void _testQuerySharedAlbumExtraShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0])
@@ -467,17 +464,16 @@ void _testQuerySharedAlbumExtraShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(file1, [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "2", file: files[0], shareWith: "user2"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(file1, [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "2", file: files[0], shareWith: "user2"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -488,9 +484,9 @@ void _testQuerySharedAlbumExtraShare(String description) {
 void _testQuerySharedAlbumExtraShareOtherAdded(String description) {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files =
-      (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
   final user1Files = [
     files[0].copyWith(path: "remote.php/dav/files/user1/dir/test1.jpg"),
   ];
@@ -534,17 +530,16 @@ void _testQuerySharedAlbumExtraShareOtherAdded(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(files[0], [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "2", file: files[0], shareWith: "user2"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(files[0], [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "2", file: files[0], shareWith: "user2"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -555,9 +550,9 @@ void _testQuerySharedAlbumExtraShareOtherAdded(String description) {
 void _testQuerySharedAlbumExtraUnmanagedShare(String description) {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files =
-      (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
   final user1Files = [
     files[0].copyWith(path: "remote.php/dav/files/user1/dir/test1.jpg"),
   ];
@@ -607,11 +602,10 @@ void _testQuerySharedAlbumExtraUnmanagedShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, []),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, []),
+    ],
   );
 }
 
@@ -644,17 +638,16 @@ void _testQuerySharedAlbumExtraJsonShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(albumFile, [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(albumFile, [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "1", file: albumFile, shareWith: "user2"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -664,8 +657,9 @@ void _testQuerySharedAlbumExtraJsonShare(String description) {
 /// Expect: emit the file with missing share (admin -> user1)
 void _testQuerySharedAlbumNotOwnedMissingShareToOwner(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             ..addFileItem(files[0])
@@ -700,15 +694,14 @@ void _testQuerySharedAlbumNotOwnedMissingShareToOwner(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(files[0], [
-              ListAlbumShareOutlierMissingShareItem("user1".toCi(), "user1"),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(files[0], [
+          ListAlbumShareOutlierMissingShareItem("user1".toCi(), "user1"),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -718,8 +711,9 @@ void _testQuerySharedAlbumNotOwnedMissingShareToOwner(String description) {
 /// Expect: emit the file with missing share (admin -> user2)
 void _testQuerySharedAlbumNotOwnedMissingManagedShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             // added after album shared, thus managed by adder
@@ -764,15 +758,14 @@ void _testQuerySharedAlbumNotOwnedMissingManagedShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(files[0], [
-              ListAlbumShareOutlierMissingShareItem("user2".toCi(), "user2"),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(files[0], [
+          ListAlbumShareOutlierMissingShareItem("user2".toCi(), "user2"),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -782,8 +775,9 @@ void _testQuerySharedAlbumNotOwnedMissingManagedShare(String description) {
 /// Expect: emit empty list
 void _testQuerySharedAlbumNotOwnedMissingUnmanagedShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             // added before album shared, thus managed by album owner
@@ -818,11 +812,10 @@ void _testQuerySharedAlbumNotOwnedMissingUnmanagedShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, []),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, []),
+    ],
   );
 }
 
@@ -863,11 +856,10 @@ void _testQuerySharedAlbumNotOwnedMissingJsonShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, []),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, []),
+    ],
   );
 }
 
@@ -877,8 +869,9 @@ void _testQuerySharedAlbumNotOwnedMissingJsonShare(String description) {
 /// Expect: emit the file with missing share (admin -> user2)
 void _testQuerySharedAlbumNotOwnedExtraManagedShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             // added after album shared, thus managed by adder
@@ -917,17 +910,16 @@ void _testQuerySharedAlbumNotOwnedExtraManagedShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(files[0], [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "2", file: files[0], shareWith: "user2"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(files[0], [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "2", file: files[0], shareWith: "user2"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -937,8 +929,9 @@ void _testQuerySharedAlbumNotOwnedExtraManagedShare(String description) {
 /// Expect: emit the file with missing share (admin -> user2)
 void _testQuerySharedAlbumNotOwnedExtraUnmanagedShare(String description) {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             // added before album shared, thus managed by album owner
@@ -977,17 +970,16 @@ void _testQuerySharedAlbumNotOwnedExtraUnmanagedShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, [
-            ListAlbumShareOutlierItem(files[0], [
-              ListAlbumShareOutlierExtraShareItem(
-                util.buildShare(id: "2", file: files[0], shareWith: "user2"),
-              ),
-            ]),
-          ]),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, [
+        ListAlbumShareOutlierItem(files[0], [
+          ListAlbumShareOutlierExtraShareItem(
+            util.buildShare(id: "2", file: files[0], shareWith: "user2"),
+          ),
+        ]),
+      ]),
+    ],
   );
 }
 
@@ -997,8 +989,9 @@ void _testQuerySharedAlbumNotOwnedExtraUnmanagedShare(String description) {
 /// Expect: emit empty list
 void _testQuerySharedAlbumNotOwnedExtraJsonShare(String description) {
   final account = util.buildAccount();
-  final album =
-      (util.AlbumBuilder(ownerId: "user1")..addShare("admin")).build();
+  final album = (util.AlbumBuilder(
+    ownerId: "user1",
+  )..addShare("admin")).build();
   final albumFile = album.albumFile!;
   late final DiContainer c;
 
@@ -1031,10 +1024,9 @@ void _testQuerySharedAlbumNotOwnedExtraJsonShare(String description) {
     build: () => ListAlbumShareOutlierBloc(c),
     act: (bloc) => bloc.add(ListAlbumShareOutlierBlocQuery(account, album)),
     wait: const Duration(milliseconds: 500),
-    expect:
-        () => [
-          ListAlbumShareOutlierBlocLoading(account, []),
-          ListAlbumShareOutlierBlocSuccess(account, []),
-        ],
+    expect: () => [
+      ListAlbumShareOutlierBlocLoading(account, []),
+      ListAlbumShareOutlierBlocSuccess(account, []),
+    ],
   );
 }

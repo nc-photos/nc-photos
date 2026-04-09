@@ -90,12 +90,11 @@ extension on compat.SqliteDb {
     FileDescriptor file, {
     compat.Account? sqlAccount,
     Account? appAccount,
-  }) =>
-      accountFileRowIdsOfOrNull(
-        file,
-        sqlAccount: sqlAccount,
-        appAccount: appAccount,
-      ).notNull();
+  }) => accountFileRowIdsOfOrNull(
+    file,
+    sqlAccount: sqlAccount,
+    appAccount: appAccount,
+  ).notNull();
 
   /// Query AccountFiles, Accounts and Files row ID by fileIds
   ///
@@ -158,18 +157,17 @@ class _SqliteAlbumConverter {
         "type": album.sortProviderType,
         "content": jsonDecode(album.sortProviderContent),
       }),
-      shares:
-          shares.isEmpty
-              ? null
-              : shares
-                  .map(
-                    (e) => AlbumShare(
-                      userId: e.userId.toCi(),
-                      displayName: e.displayName,
-                      sharedAt: e.sharedAt.toUtc(),
-                    ),
-                  )
-                  .toList(),
+      shares: shares.isEmpty
+          ? null
+          : shares
+                .map(
+                  (e) => AlbumShare(
+                    userId: e.userId.toCi(),
+                    displayName: e.displayName,
+                    sharedAt: e.sharedAt.toUtc(),
+                  ),
+                )
+                .toList(),
       // replace with the original etag when this album was cached
       albumFile: albumFile.copyWith(etag: OrNull(album.fileEtag)),
       savedVersion: album.version,
@@ -197,16 +195,15 @@ class _SqliteAlbumConverter {
       sortProviderType: sortProviderJson["type"],
       sortProviderContent: jsonEncode(sortProviderJson["content"]),
     );
-    final dbAlbumShares =
-        album.shares
-            ?.map(
-              (s) => compat.AlbumSharesCompanion(
-                userId: sql.Value(s.userId.toCaseInsensitiveString()),
-                displayName: sql.Value(s.displayName),
-                sharedAt: sql.Value(s.sharedAt),
-              ),
-            )
-            .toList();
+    final dbAlbumShares = album.shares
+        ?.map(
+          (s) => compat.AlbumSharesCompanion(
+            userId: sql.Value(s.userId.toCaseInsensitiveString()),
+            displayName: sql.Value(s.displayName),
+            sharedAt: sql.Value(s.sharedAt),
+          ),
+        )
+        .toList();
     return compat.CompleteAlbumCompanion(dbAlbum, 1, dbAlbumShares ?? []);
   }
 }
@@ -259,10 +256,9 @@ class _SqliteFileConverter {
     File file,
   ) {
     final dbFile = compat.FilesCompanion(
-      server:
-          account == null
-              ? const sql.Value.absent()
-              : sql.Value(account.server),
+      server: account == null
+          ? const sql.Value.absent()
+          : sql.Value(account.server),
       fileId: sql.Value(file.fileId!),
       contentLength: sql.Value(file.contentLength),
       contentType: sql.Value(file.contentType),
@@ -275,8 +271,9 @@ class _SqliteFileConverter {
       ownerDisplayName: sql.Value(file.ownerDisplayName),
     );
     final dbAccountFile = compat.AccountFilesCompanion(
-      account:
-          account == null ? const sql.Value.absent() : sql.Value(account.rowId),
+      account: account == null
+          ? const sql.Value.absent()
+          : sql.Value(account.rowId),
       relativePath: sql.Value(file.strippedPathWithEmpty),
       isFavorite: sql.Value(file.isFavorite),
       isArchived: sql.Value(file.isArchived),
@@ -303,27 +300,26 @@ class _SqliteFileConverter {
         countryCode: sql.Value(l.countryCode),
       ),
     );
-    final dbImageLocationIds =
-        [
-          file.location?.city?.let(
-            (e) => compat.ImageLocationIdsCompanion(
-              geonameId: sql.Value(e.geonameId),
-              type: const sql.Value(compat.ImageLocationType.city),
-            ),
-          ),
-          file.location?.admin1?.let(
-            (e) => compat.ImageLocationIdsCompanion(
-              geonameId: sql.Value(e.geonameId),
-              type: const sql.Value(compat.ImageLocationType.admin1),
-            ),
-          ),
-          file.location?.admin2?.let(
-            (e) => compat.ImageLocationIdsCompanion(
-              geonameId: sql.Value(e.geonameId),
-              type: const sql.Value(compat.ImageLocationType.admin2),
-            ),
-          ),
-        ].nonNulls.toList();
+    final dbImageLocationIds = [
+      file.location?.city?.let(
+        (e) => compat.ImageLocationIdsCompanion(
+          geonameId: sql.Value(e.geonameId),
+          type: const sql.Value(compat.ImageLocationType.city),
+        ),
+      ),
+      file.location?.admin1?.let(
+        (e) => compat.ImageLocationIdsCompanion(
+          geonameId: sql.Value(e.geonameId),
+          type: const sql.Value(compat.ImageLocationType.admin1),
+        ),
+      ),
+      file.location?.admin2?.let(
+        (e) => compat.ImageLocationIdsCompanion(
+          geonameId: sql.Value(e.geonameId),
+          type: const sql.Value(compat.ImageLocationType.admin2),
+        ),
+      ),
+    ].nonNulls.toList();
     final dbImageLocationNames = [
       ...?file.location?.city?.let(
         (e) => e.name.value.entries.map(
@@ -356,14 +352,13 @@ class _SqliteFileConverter {
         ),
       ),
     ];
-    final dbTrash =
-        file.trashbinDeletionTime == null
-            ? null
-            : compat.TrashesCompanion.insert(
-              filename: file.trashbinFilename!,
-              originalLocation: file.trashbinOriginalLocation!,
-              deletionTime: file.trashbinDeletionTime!,
-            );
+    final dbTrash = file.trashbinDeletionTime == null
+        ? null
+        : compat.TrashesCompanion.insert(
+            filename: file.trashbinFilename!,
+            originalLocation: file.trashbinOriginalLocation!,
+            deletionTime: file.trashbinDeletionTime!,
+          );
     return compat.CompleteFileCompanion(
       dbFile,
       dbAccountFile,
@@ -382,60 +377,51 @@ abstract class _ImageLocationConverter {
     List<compat.ImageLocationId>? ids,
     List<compat.ImageLocationName>? names,
   ) {
-    final cityId =
-        ids
-            ?.firstWhereOrNull((e) => e.type == compat.ImageLocationType.city)
-            ?.geonameId;
-    final cityNames =
-        names
-            ?.where((e) => e.geonameId == cityId)
-            .map((e) => MapEntry(e.lang, e.name))
-            .toMap();
-    final admin1Id =
-        ids
-            ?.firstWhereOrNull((e) => e.type == compat.ImageLocationType.admin1)
-            ?.geonameId;
-    final admin1Names =
-        names
-            ?.where((e) => e.geonameId == admin1Id)
-            .map((e) => MapEntry(e.lang, e.name))
-            .toMap();
-    final admin2Id =
-        ids
-            ?.firstWhereOrNull((e) => e.type == compat.ImageLocationType.admin2)
-            ?.geonameId;
-    final admin2Names =
-        names
-            ?.where((e) => e.geonameId == admin2Id)
-            .map((e) => MapEntry(e.lang, e.name))
-            .toMap();
+    final cityId = ids
+        ?.firstWhereOrNull((e) => e.type == compat.ImageLocationType.city)
+        ?.geonameId;
+    final cityNames = names
+        ?.where((e) => e.geonameId == cityId)
+        .map((e) => MapEntry(e.lang, e.name))
+        .toMap();
+    final admin1Id = ids
+        ?.firstWhereOrNull((e) => e.type == compat.ImageLocationType.admin1)
+        ?.geonameId;
+    final admin1Names = names
+        ?.where((e) => e.geonameId == admin1Id)
+        .map((e) => MapEntry(e.lang, e.name))
+        .toMap();
+    final admin2Id = ids
+        ?.firstWhereOrNull((e) => e.type == compat.ImageLocationType.admin2)
+        ?.geonameId;
+    final admin2Names = names
+        ?.where((e) => e.geonameId == admin2Id)
+        .map((e) => MapEntry(e.lang, e.name))
+        .toMap();
 
     return ImageLocation(
       dataRevision: location.dataRevision,
       latitude: location.latitude,
       longitude: location.longitude,
       countryCode: location.countryCode,
-      city:
-          cityNames?.isNotEmpty == true
-              ? ImageLocationName(
-                geonameId: cityId!,
-                name: LocalizedString(cityNames!),
-              )
-              : null,
-      admin1:
-          admin1Names?.isNotEmpty == true
-              ? ImageLocationName(
-                geonameId: admin1Id!,
-                name: LocalizedString(admin1Names!),
-              )
-              : null,
-      admin2:
-          admin2Names?.isNotEmpty == true
-              ? ImageLocationName(
-                geonameId: admin2Id!,
-                name: LocalizedString(admin2Names!),
-              )
-              : null,
+      city: cityNames?.isNotEmpty == true
+          ? ImageLocationName(
+              geonameId: cityId!,
+              name: LocalizedString(cityNames!),
+            )
+          : null,
+      admin1: admin1Names?.isNotEmpty == true
+          ? ImageLocationName(
+              geonameId: admin1Id!,
+              name: LocalizedString(admin1Names!),
+            )
+          : null,
+      admin2: admin2Names?.isNotEmpty == true
+          ? ImageLocationName(
+              geonameId: admin2Id!,
+              name: LocalizedString(admin2Names!),
+            )
+          : null,
     );
   }
 }

@@ -10,22 +10,13 @@ extension ReverseGeocoderExtension on ReverseGeocoderLocation {
       longitude: longitude,
       countryCode: countryCode,
       city: city?.let(
-        (e) => ImageLocationName(
-          geonameId: e.geonameId,
-          name: e.name,
-        ),
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
       ),
       admin1: admin1?.let(
-        (e) => ImageLocationName(
-          geonameId: e.geonameId,
-          name: e.name,
-        ),
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
       ),
       admin2: admin2?.let(
-        (e) => ImageLocationName(
-          geonameId: e.geonameId,
-          name: e.name,
-        ),
+        (e) => ImageLocationName(geonameId: e.geonameId, name: e.name),
       ),
     );
   }

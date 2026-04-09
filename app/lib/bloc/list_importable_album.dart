@@ -101,11 +101,9 @@ class ListImportableAlbumBloc
   ) async {
     emit(const ListImportableAlbumBlocLoading([]));
     try {
-      final albums =
-          (await ListAlbum(_c)(
-                ev.account,
-              ).where((event) => event is Album).toList())
-              .cast<Album>();
+      final albums = (await ListAlbum(_c)(
+        ev.account,
+      ).where((event) => event is Album).toList()).cast<Album>();
       final importedDirs = albums
           .map((a) {
             if (a.provider is! AlbumDirProvider) {

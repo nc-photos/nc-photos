@@ -26,10 +26,9 @@ class FindFile {
       account: account.toDb(),
       fileIds: fileIds,
     );
-    final files =
-        results
-            .map((e) => DbFileConverter.fromDb(account.userId.toString(), e))
-            .toList();
+    final files = results
+        .map((e) => DbFileConverter.fromDb(account.userId.toString(), e))
+        .toList();
     final fileMap = <int, File>{};
     for (final f in files) {
       fileMap[f.fileId!] = f;

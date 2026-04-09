@@ -175,15 +175,14 @@ Future<Map<String, Set<DbFaceRecognitionPerson>>> _listSqliteDbPersons(
       db.accounts.rowId.equalsExp(db.faceRecognitionPersons.account),
     ),
   ]);
-  final result =
-      await query
-          .map(
-            (r) => (
-              account: r.readTable(db.accounts),
-              faceRecognitionPerson: r.readTable(db.faceRecognitionPersons),
-            ),
-          )
-          .get();
+  final result = await query
+      .map(
+        (r) => (
+          account: r.readTable(db.accounts),
+          faceRecognitionPerson: r.readTable(db.faceRecognitionPersons),
+        ),
+      )
+      .get();
   final product = <String, Set<DbFaceRecognitionPerson>>{};
   for (final r in result) {
     (product[r.account.userId] ??= {}).add(

@@ -50,10 +50,11 @@ void main() {
 /// Expect: album emptied, cover unset
 Future<void> _removeLastFile() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
-  final album =
-      (util.AlbumBuilder()..addFileItem(files[0].toDescriptor())).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
+  final album = (util.AlbumBuilder()..addFileItem(files[0].toDescriptor()))
+      .build();
   final file1 = files[0];
   final fileItem1 = util.AlbumBuilder.fileItemsOf(album)[0];
   final albumFile = album.albumFile!;
@@ -299,8 +300,9 @@ Future<void> _removeManualCoverFile() async {
 /// Expect: share (admin -> user1) for the file deleted
 Future<void> _removeFromSharedAlbumOwned() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0].toDescriptor())
@@ -342,9 +344,9 @@ Future<void> _removeFromSharedAlbumOwned() async {
 Future<void> _removeFromSharedAlbumOwnedWithOtherShare() async {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files =
-      (util.FilesBuilder(initialFileId: 1)
-        ..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("user1/test1.jpg", ownerId: "user1")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0].toDescriptor(), addedBy: "user1")
@@ -412,8 +414,9 @@ Future<void> _removeFromSharedAlbumOwnedWithOtherShare() async {
 /// extra share (admin -> user2) unchanged
 Future<void> _removeFromSharedAlbumOwnedLeaveExtraShare() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0].toDescriptor())
@@ -456,8 +459,9 @@ Future<void> _removeFromSharedAlbumOwnedLeaveExtraShare() async {
 /// share (admin -> user1) for the file unchanged
 Future<void> _removeFromSharedAlbumOwnedFileInOtherAlbum() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 2)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 2,
+  )..addJpeg("admin/test1.jpg")).build();
   final album1 =
       (util.AlbumBuilder()
             ..addFileItem(files[0].toDescriptor())
@@ -506,8 +510,9 @@ Future<void> _removeFromSharedAlbumOwnedFileInOtherAlbum() async {
 /// Expect: shares (admin -> user1, user2) for the file deleted
 Future<void> _removeFromSharedAlbumNotOwned() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             ..addFileItem(files[0].toDescriptor())
@@ -572,8 +577,9 @@ Future<void> _removeFromSharedAlbumNotOwned() async {
 /// shares (user1 -> user2) for the file created by others unchanged
 Future<void> _removeFromSharedAlbumNotOwnedWithOwnerShare() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder(ownerId: "user1")
             ..addFileItem(files[0].toDescriptor())

@@ -34,11 +34,10 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         controller.stream,
-        onData:
-            (data) => state.copyWith(
-              collections: data.data.map((e) => e.collection).toList(),
-              isLoading: data.hasNext,
-            ),
+        onData: (data) => state.copyWith(
+          collections: data.data.map((e) => e.collection).toList(),
+          isLoading: data.hasNext,
+        ),
       ),
       forEach(
         emit,

@@ -131,13 +131,12 @@ class _LocalFileViewerState extends State<LocalFileViewer> {
                 ),
                 PopupMenuButton<_AppBarMenuOption>(
                   tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-                  itemBuilder:
-                      (context) => [
-                        PopupMenuItem(
-                          value: _AppBarMenuOption.delete,
-                          child: Text(L10n.global().deletePermanentlyTooltip),
-                        ),
-                      ],
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: _AppBarMenuOption.delete,
+                      child: Text(L10n.global().deletePermanentlyTooltip),
+                    ),
+                  ],
                   onSelected: (option) => _onMenuSelected(context, option),
                 ),
               ],

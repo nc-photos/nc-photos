@@ -382,8 +382,9 @@ class PhotoListDate extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pattern =
-        isMonthOnly ? DateFormat.YEAR_MONTH : DateFormat.YEAR_MONTH_DAY;
+    final pattern = isMonthOnly
+        ? DateFormat.YEAR_MONTH
+        : DateFormat.YEAR_MONTH_DAY;
     final subtitle = DateFormat(
       pattern,
       Localizations.localeOf(context).languageCode,
@@ -438,8 +439,9 @@ class PhotoListLocalImage extends StatelessWidget {
                         child: Icon(
                           Icons.image_not_supported,
                           size: 64,
-                          color:
-                              Theme.of(context).listPlaceholderForegroundColor,
+                          color: Theme.of(
+                            context,
+                          ).listPlaceholderForegroundColor,
                         ),
                       );
                     },
@@ -461,8 +463,8 @@ class PhotoListLocalImage extends StatelessWidget {
                   ),
                   child:
                       backupStatus == PhotoListLocalFileBackupStatus.uploading
-                          ? const Icon(Icons.file_upload_outlined, size: 20)
-                          : const Icon(Icons.cloud_done_outlined, size: 20),
+                      ? const Icon(Icons.file_upload_outlined, size: 20)
+                      : const Icon(Icons.cloud_done_outlined, size: 20),
                 ),
               ],
             ],
@@ -517,8 +519,9 @@ class PhotoListLocalVideo extends StatelessWidget {
                         child: Icon(
                           Icons.image_not_supported,
                           size: 64,
-                          color:
-                              Theme.of(context).listPlaceholderForegroundColor,
+                          color: Theme.of(
+                            context,
+                          ).listPlaceholderForegroundColor,
                         ),
                       );
                     },
@@ -540,8 +543,8 @@ class PhotoListLocalVideo extends StatelessWidget {
                   ),
                   child:
                       backupStatus == PhotoListLocalFileBackupStatus.uploading
-                          ? const Icon(Icons.file_upload_outlined, size: 20)
-                          : const Icon(Icons.cloud_done_outlined, size: 20),
+                      ? const Icon(Icons.file_upload_outlined, size: 20)
+                      : const Icon(Icons.cloud_done_outlined, size: 20),
                 ),
               ],
               Container(

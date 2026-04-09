@@ -90,47 +90,42 @@ class ShareAnyFile {
     void Function(AnyFile? file, Object error, StackTrace? stackTrace)? onError,
   }) async {
     var i = 0;
-    final uris =
-        (await files.asyncMap((f) async {
-          if (isCanceled) {
-            throw const InterruptedException();
-          }
-          onProgress?.call(
-            ShareAnyFileProgress(
-              max: files.length,
-              current: i++,
-              filename: f.name,
-            ),
+    final uris = (await files.asyncMap((f) async {
+      if (isCanceled) {
+        throw const InterruptedException();
+      }
+      onProgress?.call(
+        ShareAnyFileProgress(max: files.length, current: i++, filename: f.name),
+      );
+      try {
+        if (method == ShareAnyFileMethod.file) {
+          return (
+            f,
+            await AnyFileContentGetterFactory.localFileUri(
+              f,
+              isPublic: false,
+              account: account,
+            ).get(),
           );
-          try {
-            if (method == ShareAnyFileMethod.file) {
-              return (
-                f,
-                await AnyFileContentGetterFactory.localFileUri(
-                  f,
-                  isPublic: false,
-                  account: account,
-                ).get(),
-              );
-            } else {
-              return (
-                f,
-                await AnyFileContentGetterFactory.localPreviewUri(
-                  f,
-                  account: account,
-                ).get(),
-              );
-            }
-          } catch (e, stackTrace) {
-            _log.severe(
-              "[_shareActualFiles] Failed while getting local file uri: $f",
-              e,
-              stackTrace,
-            );
-            onError?.call(f, e, stackTrace);
-            return null;
-          }
-        })).nonNulls.toList();
+        } else {
+          return (
+            f,
+            await AnyFileContentGetterFactory.localPreviewUri(
+              f,
+              account: account,
+            ).get(),
+          );
+        }
+      } catch (e, stackTrace) {
+        _log.severe(
+          "[_shareActualFiles] Failed while getting local file uri: $f",
+          e,
+          stackTrace,
+        );
+        onError?.call(f, e, stackTrace);
+        return null;
+      }
+    })).nonNulls.toList();
     if (isCanceled) {
       throw const InterruptedException();
     }
@@ -158,30 +153,29 @@ class ShareAnyFile {
     void Function(ShareAnyFileProgress progress)? onProgress,
     void Function(AnyFile? file, Object error, StackTrace? stackTrace)? onError,
   }) async {
-    final files =
-        anyFiles
-            .map((af) {
-              final provider = af.provider;
-              FileDescriptor? f;
-              switch (provider) {
-                case AnyFileNextcloudProvider _:
-                  f = provider.file;
-                  break;
-                case AnyFileMergedProvider _:
-                  f = provider.remote.file;
-                  break;
-                default:
-                  onError?.call(
-                    af,
-                    ArgumentError("Unsupported provider type"),
-                    null,
-                  );
-                  break;
-              }
-              return f?.let((e) => (af, e));
-            })
-            .nonNulls
-            .toList();
+    final files = anyFiles
+        .map((af) {
+          final provider = af.provider;
+          FileDescriptor? f;
+          switch (provider) {
+            case AnyFileNextcloudProvider _:
+              f = provider.file;
+              break;
+            case AnyFileMergedProvider _:
+              f = provider.remote.file;
+              break;
+            default:
+              onError?.call(
+                af,
+                ArgumentError("Unsupported provider type"),
+                null,
+              );
+              break;
+          }
+          return f?.let((e) => (af, e));
+        })
+        .nonNulls
+        .toList();
     return await _shareRemoteFilesAsLink(
       files,
       account: account,

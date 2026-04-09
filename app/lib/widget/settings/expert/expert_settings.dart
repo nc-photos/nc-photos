@@ -27,10 +27,9 @@ class ExpertSettings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) =>
-              _Bloc(db: context.read(), prefController: context.read())
-                ..add(const _Init()),
+      create: (_) =>
+          _Bloc(db: context.read(), prefController: context.read())
+            ..add(const _Init()),
       child: const _WrappedExpertSettings(),
     );
   }
@@ -52,32 +51,28 @@ class _WrappedExpertSettingsState extends State<_WrappedExpertSettings>
       body: MultiBlocListener(
         listeners: [
           _BlocListener(
-            listenWhen:
-                (previous, current) =>
-                    !identical(previous.lastSuccessful, current.lastSuccessful),
+            listenWhen: (previous, current) =>
+                !identical(previous.lastSuccessful, current.lastSuccessful),
             listener: (context, state) {
               if (state.lastSuccessful is _ClearCacheDatabase) {
                 showDialog(
                   context: context,
-                  builder:
-                      (_) => AlertDialog(
-                        content: Text(
-                          L10n.global()
-                              .settingsClearCacheDatabaseSuccessNotification,
+                  builder: (_) => AlertDialog(
+                    content: Text(
+                      L10n.global()
+                          .settingsClearCacheDatabaseSuccessNotification,
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text(
+                          MaterialLocalizations.of(context).closeButtonLabel,
                         ),
-                        actions: [
-                          TextButton(
-                            onPressed: () {
-                              Navigator.of(context).pop();
-                            },
-                            child: Text(
-                              MaterialLocalizations.of(
-                                context,
-                              ).closeButtonLabel,
-                            ),
-                          ),
-                        ],
                       ),
+                    ],
+                  ),
                 );
               }
             },
@@ -87,20 +82,19 @@ class _WrappedExpertSettingsState extends State<_WrappedExpertSettings>
             listener: (context, isNewHttpEngine) {
               showDialog(
                 context: context,
-                builder:
-                    (context) => AlertDialog(
-                      content: Text(L10n.global().settingsRestartNeededDialog),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: Text(
-                            MaterialLocalizations.of(context).closeButtonLabel,
-                          ),
-                        ),
-                      ],
+                builder: (context) => AlertDialog(
+                  content: Text(L10n.global().settingsRestartNeededDialog),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Text(
+                        MaterialLocalizations.of(context).closeButtonLabel,
+                      ),
                     ),
+                  ],
+                ),
               );
             },
           ),
@@ -158,25 +152,23 @@ class _WrappedExpertSettingsState extends State<_WrappedExpertSettings>
                 ),
                 _BlocSelector<bool>(
                   selector: (state) => state.isNewHttpEngine,
-                  builder:
-                      (context, isNewHttpEngine) => CheckboxListTile(
-                        title: Text(L10n.global().settingsUseNewHttpEngine),
-                        value: isNewHttpEngine,
-                        onChanged: (value) async {
-                          if (value == true) {
-                            final result = await showDialog<bool>(
-                              context: context,
-                              builder:
-                                  (context) => const _NewHttpEngineDialog(),
-                            );
-                            if (context.mounted && result == true) {
-                              context.addEvent(const _SetNewHttpEngine(true));
-                            }
-                          } else {
-                            context.addEvent(const _SetNewHttpEngine(false));
-                          }
-                        },
-                      ),
+                  builder: (context, isNewHttpEngine) => CheckboxListTile(
+                    title: Text(L10n.global().settingsUseNewHttpEngine),
+                    value: isNewHttpEngine,
+                    onChanged: (value) async {
+                      if (value == true) {
+                        final result = await showDialog<bool>(
+                          context: context,
+                          builder: (context) => const _NewHttpEngineDialog(),
+                        );
+                        if (context.mounted && result == true) {
+                          context.addEvent(const _SetNewHttpEngine(true));
+                        }
+                      } else {
+                        context.addEvent(const _SetNewHttpEngine(false));
+                      }
+                    },
+                  ),
                 ),
                 _BlocSelector<bool>(
                   selector: (state) => state.isViewerUseOriginalImage,

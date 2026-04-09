@@ -58,10 +58,9 @@ class RemoveAlbum {
     if (albumShares.isEmpty) {
       return;
     }
-    final files =
-        AlbumStaticProvider.of(
-          album,
-        ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
+    final files = AlbumStaticProvider.of(
+      album,
+    ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
     if (files.isEmpty) {
       return;
     }

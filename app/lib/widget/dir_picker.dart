@@ -82,10 +82,9 @@ class DirPickerState extends State<DirPicker> {
       children: [
         Align(
           alignment: Alignment.center,
-          child:
-              state is LsDirBlocLoading
-                  ? Container()
-                  : _buildList(context, state),
+          child: state is LsDirBlocLoading
+              ? Container()
+              : _buildList(context, state),
         ),
         if (state is LsDirBlocLoading)
           const Align(
@@ -101,14 +100,13 @@ class DirPickerState extends State<DirPicker> {
     return AnimatedSwitcher(
       duration: k.animationDurationNormal,
       // see AnimatedSwitcher.defaultLayoutBuilder
-      layoutBuilder:
-          (currentChild, previousChildren) => Stack(
-            alignment: Alignment.topLeft,
-            children: <Widget>[
-              ...previousChildren,
-              if (currentChild != null) currentChild,
-            ],
-          ),
+      layoutBuilder: (currentChild, previousChildren) => Stack(
+        alignment: Alignment.topLeft,
+        children: <Widget>[
+          ...previousChildren,
+          if (currentChild != null) currentChild,
+        ],
+      ),
       // needed to prevent background color overflowing the parent bound, see:
       // https://github.com/flutter/flutter/issues/86584
       child: Material(
@@ -152,30 +150,27 @@ class DirPickerState extends State<DirPicker> {
     if (canPick) {
       switch (pickState) {
         case _PickState.picked:
-          iconData =
-              widget.isMultipleSelections
-                  ? Icons.check_box
-                  : Icons.radio_button_checked;
+          iconData = widget.isMultipleSelections
+              ? Icons.check_box
+              : Icons.radio_button_checked;
           iconColor = CheckboxTheme.of(
             context,
           ).fillColor!.resolve({WidgetState.selected});
           break;
 
         case _PickState.childPicked:
-          iconData =
-              widget.isMultipleSelections
-                  ? Icons.indeterminate_check_box
-                  : Icons.remove_circle_outline;
+          iconData = widget.isMultipleSelections
+              ? Icons.indeterminate_check_box
+              : Icons.remove_circle_outline;
           iconColor = CheckboxTheme.of(
             context,
           ).fillColor!.resolve({WidgetState.selected});
           break;
 
         case _PickState.notPicked:
-          iconData =
-              widget.isMultipleSelections
-                  ? Icons.check_box_outline_blank
-                  : Icons.radio_button_unchecked;
+          iconData = widget.isMultipleSelections
+              ? Icons.check_box_outline_blank
+              : Icons.radio_button_unchecked;
           iconColor = Theme.of(context).colorScheme.onSurface;
           break;
       }
@@ -187,49 +182,43 @@ class DirPickerState extends State<DirPicker> {
     return ListTile(
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       dense: true,
-      leading:
-          canPick
-              ? IconButton(
-                icon: AnimatedSwitcher(
-                  duration: k.animationDurationShort,
-                  transitionBuilder:
-                      (child, animation) =>
-                          ScaleTransition(scale: animation, child: child),
-                  child: Icon(
-                    iconData,
-                    key: ValueKey(pickState),
-                    color: iconColor,
-                  ),
+      leading: canPick
+          ? IconButton(
+              icon: AnimatedSwitcher(
+                duration: k.animationDurationShort,
+                transitionBuilder: (child, animation) =>
+                    ScaleTransition(scale: animation, child: child),
+                child: Icon(
+                  iconData,
+                  key: ValueKey(pickState),
+                  color: iconColor,
                 ),
-                onPressed: () {
-                  if (pickState == _PickState.picked) {
-                    _unpick(item);
-                  } else {
-                    _pick(item);
-                  }
-                },
-              )
-              : IconButton(
-                icon: Icon(iconData, color: iconColor),
-                onPressed: null,
               ),
-      title: Text(item.file.filename),
-      trailing:
-          item.children?.isNotEmpty == true
-              ? const Icon(Icons.arrow_forward_ios)
-              : null,
-      textColor:
-          item.isE2ee ? M3.of(context).checkbox.disabled.container : null,
-      onTap:
-          item.children?.isNotEmpty == true
-              ? () {
-                try {
-                  _navigateInto(item.file);
-                } catch (e) {
-                  SnackBarManager().showSnackBarForException(e);
+              onPressed: () {
+                if (pickState == _PickState.picked) {
+                  _unpick(item);
+                } else {
+                  _pick(item);
                 }
+              },
+            )
+          : IconButton(icon: Icon(iconData, color: iconColor), onPressed: null),
+      title: Text(item.file.filename),
+      trailing: item.children?.isNotEmpty == true
+          ? const Icon(Icons.arrow_forward_ios)
+          : null,
+      textColor: item.isE2ee
+          ? M3.of(context).checkbox.disabled.container
+          : null,
+      onTap: item.children?.isNotEmpty == true
+          ? () {
+              try {
+                _navigateInto(item.file);
+              } catch (e) {
+                SnackBarManager().showSnackBarForException(e);
               }
-              : null,
+            }
+          : null,
     );
   }
 
@@ -318,8 +307,9 @@ class DirPickerState extends State<DirPicker> {
     setState(() {
       if (_picks.any((element) => element.path == item.file.path)) {
         // ourself is being picked, simple
-        _picks =
-            _picks.where((element) => element.path != item.file.path).toList();
+        _picks = _picks
+            .where((element) => element.path != item.file.path)
+            .toList();
       } else {
         // Look for the closest picked dir
         final parents =

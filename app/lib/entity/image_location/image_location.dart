@@ -32,18 +32,15 @@ class ImageLocation with EquatableMixin {
       latitude: json["lat"] == null ? null : json["lat"] / 10000,
       longitude: json["lng"] == null ? null : json["lng"] / 10000,
       countryCode: json["cc"],
-      city:
-          json["city"] == null
-              ? null
-              : ImageLocationName.fromJson(json["city"]),
-      admin1:
-          json["admin1"] == null
-              ? null
-              : ImageLocationName.fromJson(json["admin1"]),
-      admin2:
-          json["admin2"] == null
-              ? null
-              : ImageLocationName.fromJson(json["admin2"]),
+      city: json["city"] == null
+          ? null
+          : ImageLocationName.fromJson(json["city"]),
+      admin1: json["admin1"] == null
+          ? null
+          : ImageLocationName.fromJson(json["admin1"]),
+      admin2: json["admin2"] == null
+          ? null
+          : ImageLocationName.fromJson(json["admin2"]),
     );
   }
 

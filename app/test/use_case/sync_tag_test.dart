@@ -162,12 +162,9 @@ Future<Map<String, Set<DbTag>>> _listSqliteDbTags(compat.SqliteDb db) async {
   final query = db.select(db.tags).join([
     sql.innerJoin(db.servers, db.servers.rowId.equalsExp(db.tags.server)),
   ]);
-  final result =
-      await query
-          .map(
-            (r) => (server: r.readTable(db.servers), tag: r.readTable(db.tags)),
-          )
-          .get();
+  final result = await query
+      .map((r) => (server: r.readTable(db.servers), tag: r.readTable(db.tags)))
+      .get();
   final product = <String, Set<DbTag>>{};
   for (final r in result) {
     (product[r.server.address] ??= {}).add(compat.TagConverter.fromSql(r.tag));

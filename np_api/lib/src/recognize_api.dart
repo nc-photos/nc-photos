@@ -52,14 +52,14 @@ class ApiRecognizeFace {
     try {
       final bool hasDavNs =
           (getcontentlength != null ||
-              getcontenttype != null ||
-              getetag != null ||
-              getlastmodified != null);
+          getcontenttype != null ||
+          getetag != null ||
+          getlastmodified != null);
       final bool hasNcNs =
           (faceDetections != null ||
-              fileMetadataSize != null ||
-              hasPreview != null ||
-              realpath != null);
+          fileMetadataSize != null ||
+          hasPreview != null ||
+          realpath != null);
       final bool hasOcNs = (favorite != null || fileid != null);
       if (!hasDavNs && !hasOcNs && !hasNcNs) {
         // no body

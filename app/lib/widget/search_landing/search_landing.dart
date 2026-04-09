@@ -55,13 +55,12 @@ class SearchLanding extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (_) => _Bloc(
-            account: accountController.account,
-            personsController: accountController.personsController,
-            placesController: accountController.placesController,
-            locale: Localizations.localeOf(context),
-          ),
+      create: (_) => _Bloc(
+        account: accountController.account,
+        personsController: accountController.personsController,
+        placesController: accountController.placesController,
+        locale: Localizations.localeOf(context),
+      ),
       child: _WrappedSearchLanding(
         onFavoritePressed: onFavoritePressed,
         onVideoPressed: onVideoPressed,
@@ -110,15 +109,15 @@ class _WrappedSearchLandingState extends State<_WrappedSearchLanding> {
       child: MultiBlocListener(
         listeners: [
           _BlocListener(
-            listenWhen:
-                (previous, current) => previous.persons != current.persons,
+            listenWhen: (previous, current) =>
+                previous.persons != current.persons,
             listener: (context, state) {
               _bloc.add(_TransformPersonItems(state.persons));
             },
           ),
           _BlocListener(
-            listenWhen:
-                (previous, current) => previous.places != current.places,
+            listenWhen: (previous, current) =>
+                previous.places != current.places,
             listener: (context, state) {
               _bloc.add(_TransformPlaceItems(state.places));
             },
@@ -142,11 +141,10 @@ class _WrappedSearchLandingState extends State<_WrappedSearchLanding> {
         child: Column(
           children: [
             ValueStreamBuilder<PersonProvider>(
-              stream:
-                  context
-                      .read<AccountController>()
-                      .accountPrefController
-                      .personProvider,
+              stream: context
+                  .read<AccountController>()
+                  .accountPrefController
+                  .personProvider,
               builder: (context, snapshot) {
                 if (snapshot.requireData == PersonProvider.none) {
                   return const SizedBox.shrink();
@@ -200,54 +198,46 @@ class _PeopleSection extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           title: Text(L10n.global().collectionPeopleLabel),
           trailing: _BlocBuilder(
-            buildWhen:
-                (previous, current) =>
-                    previous.transformedPersonItems !=
-                    current.transformedPersonItems,
-            builder:
-                (context, state) =>
-                    state.transformedPersonItems.isEmpty
-                        ? Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pushNamed(
-                                  AccountSettings.routeName,
-                                  arguments: const AccountSettingsArguments(
-                                    highlight:
-                                        AccountSettingsOption.personProvider,
-                                  ),
-                                );
-                              },
-                              tooltip: L10n.global().accountSettingsTooltip,
-                              icon: const Icon(Icons.settings_outlined),
+            buildWhen: (previous, current) =>
+                previous.transformedPersonItems !=
+                current.transformedPersonItems,
+            builder: (context, state) => state.transformedPersonItems.isEmpty
+                ? Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pushNamed(
+                            AccountSettings.routeName,
+                            arguments: const AccountSettingsArguments(
+                              highlight: AccountSettingsOption.personProvider,
                             ),
-                            IconButton(
-                              onPressed: () {
-                                launch(help_util.peopleUrl);
-                              },
-                              tooltip: L10n.global().helpTooltip,
-                              icon: const Icon(Icons.help_outline),
-                            ),
-                          ],
-                        )
-                        : TextButton(
-                          onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pushNamed(PeopleBrowser.routeName);
-                          },
-                          child: Text(L10n.global().showAllButtonLabel),
-                        ),
+                          );
+                        },
+                        tooltip: L10n.global().accountSettingsTooltip,
+                        icon: const Icon(Icons.settings_outlined),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          launch(help_util.peopleUrl);
+                        },
+                        tooltip: L10n.global().helpTooltip,
+                        icon: const Icon(Icons.help_outline),
+                      ),
+                    ],
+                  )
+                : TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PeopleBrowser.routeName);
+                    },
+                    child: Text(L10n.global().showAllButtonLabel),
+                  ),
           ),
         ),
         _BlocBuilder(
-          buildWhen:
-              (previous, current) =>
-                  previous.isPersonsLoading != current.isPersonsLoading ||
-                  previous.transformedPersonItems !=
-                      current.transformedPersonItems,
+          buildWhen: (previous, current) =>
+              previous.isPersonsLoading != current.isPersonsLoading ||
+              previous.transformedPersonItems != current.transformedPersonItems,
           builder: (context, state) {
             if (state.isPersonsLoading) {
               return const SizedBox(
@@ -317,30 +307,22 @@ class _PlaceSection extends StatelessWidget {
           contentPadding: const EdgeInsets.symmetric(horizontal: 16),
           title: Text(L10n.global().collectionPlacesLabel),
           trailing: _BlocBuilder(
-            buildWhen:
-                (previous, current) =>
-                    previous.transformedPlaceItems !=
-                    current.transformedPlaceItems,
-            builder:
-                (context, state) =>
-                    state.transformedPlaceItems.isEmpty
-                        ? const SizedBox.shrink()
-                        : TextButton(
-                          onPressed: () {
-                            Navigator.of(
-                              context,
-                            ).pushNamed(PlacesBrowser.routeName);
-                          },
-                          child: Text(L10n.global().showAllButtonLabel),
-                        ),
+            buildWhen: (previous, current) =>
+                previous.transformedPlaceItems != current.transformedPlaceItems,
+            builder: (context, state) => state.transformedPlaceItems.isEmpty
+                ? const SizedBox.shrink()
+                : TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed(PlacesBrowser.routeName);
+                    },
+                    child: Text(L10n.global().showAllButtonLabel),
+                  ),
           ),
         ),
         _BlocBuilder(
-          buildWhen:
-              (previous, current) =>
-                  previous.isPlacesLoading != current.isPlacesLoading ||
-                  previous.transformedPlaceItems !=
-                      current.transformedPlaceItems,
+          buildWhen: (previous, current) =>
+              previous.isPlacesLoading != current.isPlacesLoading ||
+              previous.transformedPlaceItems != current.transformedPlaceItems,
           builder: (context, state) {
             if (state.isPlacesLoading) {
               return const SizedBox(

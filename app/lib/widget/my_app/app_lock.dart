@@ -33,17 +33,16 @@ class _AppLockMyAppState extends State<_AppLockMyApp> {
           });
           late final OverlayEntry authOverlay;
           authOverlay = OverlayEntry(
-            builder:
-                (_) => _AppLockOverlay(
-                  onAuthSuccess: () {
-                    authOverlay.remove();
-                    if (mounted) {
-                      setState(() {
-                        _shouldLock = false;
-                      });
-                    }
-                  },
-                ),
+            builder: (_) => _AppLockOverlay(
+              onAuthSuccess: () {
+                authOverlay.remove();
+                if (mounted) {
+                  setState(() {
+                    _shouldLock = false;
+                  });
+                }
+              },
+            ),
           );
           _key.currentState?.insert(authOverlay);
         }
@@ -79,12 +78,10 @@ class _AppLockOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return HeroControllerScope.none(
       child: Navigator(
-        onGenerateRoute:
-            (_) => MaterialPageRoute(
-              builder:
-                  (context) =>
-                      _AppLockOverlayPage(onAuthSuccess: onAuthSuccess),
-            ),
+        onGenerateRoute: (_) => MaterialPageRoute(
+          builder: (context) =>
+              _AppLockOverlayPage(onAuthSuccess: onAuthSuccess),
+        ),
       ),
     );
   }

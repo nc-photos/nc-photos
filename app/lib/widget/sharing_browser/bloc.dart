@@ -28,8 +28,8 @@ class _Bloc extends Bloc<_Event, _State> with BlocForEachMixin<_Event, _State> {
       forEach(
         emit,
         sharingsController.stream,
-        onData:
-            (data) => state.copyWith(items: data.data, isLoading: data.hasNext),
+        onData: (data) =>
+            state.copyWith(items: data.data, isLoading: data.hasNext),
       ),
       forEach(
         emit,

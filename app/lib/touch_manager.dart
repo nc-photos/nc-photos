@@ -99,14 +99,13 @@ class TouchManager {
     // at least the app will update the cache in next run
     await setLocalEtag(account, dir, null);
     (_throttlers["${account.url}/${dir.path}"] ??= Throttler(
-          onTriggered: _triggerTouch,
-          logTag: "TouchManager._throttlers",
-        ))
-        .trigger(
-          maxResponceTime: const Duration(seconds: 20),
-          maxPendingCount: 20,
-          data: _ThrottlerData(account, dir),
-        );
+      onTriggered: _triggerTouch,
+      logTag: "TouchManager._throttlers",
+    )).trigger(
+      maxResponceTime: const Duration(seconds: 20),
+      maxPendingCount: 20,
+      data: _ThrottlerData(account, dir),
+    );
   }
 
   Future<void> flushRemote() async {

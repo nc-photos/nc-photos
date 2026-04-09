@@ -124,18 +124,16 @@ class FaceDetector {
   }
 
   List<Point<double>> _convertFace(Rgba8Image image, List<Point<int>> points) {
-    final results =
-        points
-            .map((e) => Point(e.x / image.width, e.y / image.height))
-            .toList();
+    final results = points
+        .map((e) => Point(e.x / image.width, e.y / image.height))
+        .toList();
     return results;
   }
 
   List<Point<double>> _convertEye(Rgba8Image image, List<Point<int>> points) {
-    final results =
-        points
-            .map((e) => Point(e.x / image.width, e.y / image.height))
-            .toList();
+    final results = points
+        .map((e) => Point(e.x / image.width, e.y / image.height))
+        .toList();
     results.add(
       Point(
         (results[4].x + results[12].x) / 2,

@@ -250,9 +250,9 @@ Future<void> _updaterNewFile() async {
             ..addDir("admin/test")
             ..addJpeg("admin/test/test2.jpg"))
           .build();
-  final newFile =
-      (util.FilesBuilder(initialFileId: files.length)
-        ..addJpeg("admin/test2.jpg")).build().first;
+  final newFile = (util.FilesBuilder(
+    initialFileId: files.length,
+  )..addJpeg("admin/test2.jpg")).build().first;
   final c = DiContainer(npDb: util.buildTestDb());
   addTearDown(() => c.sqliteDb.close());
   await c.sqliteDb.transaction(() async {
@@ -396,9 +396,9 @@ Future<void> _updaterNewSharedFile() async {
             ..addDir("admin/test")
             ..addJpeg("admin/test/test2.jpg"))
           .build();
-  final user1Files =
-      (util.FilesBuilder(initialFileId: files.length)
-        ..addDir("user1", ownerId: "user1")).build();
+  final user1Files = (util.FilesBuilder(
+    initialFileId: files.length,
+  )..addDir("user1", ownerId: "user1")).build();
   user1Files.add(
     files[1].copyWith(path: "remote.php/dav/files/user1/test1.jpg"),
   );
@@ -474,8 +474,9 @@ Future<void> _updaterDeleteSharedFile() async {
             ..addDir("admin/test")
             ..addJpeg("admin/test/test2.jpg"))
           .build();
-  final user1Files =
-      (util.FilesBuilder(initialFileId: files.length)..addDir("user1")).build();
+  final user1Files = (util.FilesBuilder(
+    initialFileId: files.length,
+  )..addDir("user1")).build();
   user1Files.add(
     files[1].copyWith(path: "remote.php/dav/files/user1/test1.jpg"),
   );
@@ -518,8 +519,9 @@ Future<void> _updaterDeleteSharedDir() async {
             ..addDir("admin/test")
             ..addJpeg("admin/test/test2.jpg"))
           .build();
-  final user1Files =
-      (util.FilesBuilder(initialFileId: files.length)..addDir("user1")).build();
+  final user1Files = (util.FilesBuilder(
+    initialFileId: files.length,
+  )..addDir("user1")).build();
   user1Files.add(files[2].copyWith(path: "remote.php/dav/files/user1/share"));
   user1Files.add(
     files[3].copyWith(path: "remote.php/dav/files/user1/share/test2.jpg"),

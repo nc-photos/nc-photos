@@ -16,13 +16,12 @@ class PixelImage extends ImageProvider<PixelImage> {
       OneFrameImageStreamCompleter(_createImageInfo());
 
   Future<ImageInfo> _createImageInfo() async {
-    final codec =
-        await ImageDescriptor.raw(
-          await ImmutableBuffer.fromUint8List(rgba),
-          width: width,
-          height: height,
-          pixelFormat: PixelFormat.rgba8888,
-        ).instantiateCodec();
+    final codec = await ImageDescriptor.raw(
+      await ImmutableBuffer.fromUint8List(rgba),
+      width: width,
+      height: height,
+      pixelFormat: PixelFormat.rgba8888,
+    ).instantiateCodec();
     final frame = await codec.getNextFrame();
     return ImageInfo(image: frame.image, scale: scale);
   }

@@ -79,26 +79,25 @@ class FaceReshapeEdit extends FaceEdit {
     "type": "faceReshape",
     "jawline": jawline,
     "eyeSize": eyeSize,
-    "landmarks":
-        landmarks
-            .where(
-              (l) =>
-                  l.face != null &&
-                  l.leftEye != null &&
-                  l.rightEye != null &&
-                  l.noseBridge != null &&
-                  l.noseBottom != null,
-            )
-            .map(
-              (l) => {
-                "face": l.face!.expand((e) => [e.x, e.y]).toList(),
-                "leftEye": l.leftEye!.expand((e) => [e.x, e.y]).toList(),
-                "rightEye": l.rightEye!.expand((e) => [e.x, e.y]).toList(),
-                "noseBridge": l.noseBridge!.expand((e) => [e.x, e.y]).toList(),
-                "noseBottom": l.noseBottom!.expand((e) => [e.x, e.y]).toList(),
-              },
-            )
-            .toList(),
+    "landmarks": landmarks
+        .where(
+          (l) =>
+              l.face != null &&
+              l.leftEye != null &&
+              l.rightEye != null &&
+              l.noseBridge != null &&
+              l.noseBottom != null,
+        )
+        .map(
+          (l) => {
+            "face": l.face!.expand((e) => [e.x, e.y]).toList(),
+            "leftEye": l.leftEye!.expand((e) => [e.x, e.y]).toList(),
+            "rightEye": l.rightEye!.expand((e) => [e.x, e.y]).toList(),
+            "noseBridge": l.noseBridge!.expand((e) => [e.x, e.y]).toList(),
+            "noseBottom": l.noseBottom!.expand((e) => [e.x, e.y]).toList(),
+          },
+        )
+        .toList(),
   };
 
   // [-1, 1]

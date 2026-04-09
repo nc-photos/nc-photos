@@ -50,19 +50,17 @@ class NewCollectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            account: account,
-            supportedProviders: {
-              _ProviderOption.appAlbum,
-              if (context
-                  .read<AccountController>()
-                  .serverController
-                  .isSupported(ServerFeature.ncAlbum))
-                _ProviderOption.ncAlbum,
-              if (isAllowDynamic) ...{_ProviderOption.dir, _ProviderOption.tag},
-            },
-          ),
+      create: (context) => _Bloc(
+        account: account,
+        supportedProviders: {
+          _ProviderOption.appAlbum,
+          if (context.read<AccountController>().serverController.isSupported(
+            ServerFeature.ncAlbum,
+          ))
+            _ProviderOption.ncAlbum,
+          if (isAllowDynamic) ...{_ProviderOption.dir, _ProviderOption.tag},
+        },
+      ),
       child: const _WrappedNewCollectionDialog(),
     );
   }
@@ -86,9 +84,8 @@ class _WrappedNewCollectionDialogState
     return MultiBlocListener(
       listeners: [
         BlocListener<_Bloc, _State>(
-          listenWhen:
-              (previous, current) =>
-                  previous.result != current.result && current.result != null,
+          listenWhen: (previous, current) =>
+              previous.result != current.result && current.result != null,
           listener: _onResult,
         ),
         BlocListener<_Bloc, _State>(
@@ -105,47 +102,43 @@ class _WrappedNewCollectionDialogState
         ),
       ],
       child: BlocBuilder<_Bloc, _State>(
-        buildWhen:
-            (previous, current) =>
-                previous.result != current.result ||
-                previous.showDialog != current.showDialog,
-        builder:
-            (context, state) => Visibility(
-              visible: state.result == null && state.showDialog,
-              child: AlertDialog(
-                title: Text(L10n.global().createCollectionTooltip),
-                content: Form(
-                  key: _formKey,
-                  child: Container(
-                    constraints: const BoxConstraints.tightFor(width: 280),
-                    child: const Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _NameTextField(),
-                        _ProviderDropdown(),
-                        SizedBox(height: 8),
-                        _ProviderDescription(),
-                      ],
-                    ),
-                  ),
+        buildWhen: (previous, current) =>
+            previous.result != current.result ||
+            previous.showDialog != current.showDialog,
+        builder: (context, state) => Visibility(
+          visible: state.result == null && state.showDialog,
+          child: AlertDialog(
+            title: Text(L10n.global().createCollectionTooltip),
+            content: Form(
+              key: _formKey,
+              child: Container(
+                constraints: const BoxConstraints.tightFor(width: 280),
+                child: const Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _NameTextField(),
+                    _ProviderDropdown(),
+                    SizedBox(height: 8),
+                    _ProviderDescription(),
+                  ],
                 ),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      launch(help_util.collectionTypesUrl);
-                    },
-                    child: Text(L10n.global().learnMoreButtonLabel),
-                  ),
-                  TextButton(
-                    onPressed: () => _onOkPressed(context),
-                    child: Text(
-                      MaterialLocalizations.of(context).okButtonLabel,
-                    ),
-                  ),
-                ],
               ),
             ),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  launch(help_util.collectionTypesUrl);
+                },
+                child: Text(L10n.global().learnMoreButtonLabel),
+              ),
+              TextButton(
+                onPressed: () => _onOkPressed(context),
+                child: Text(MaterialLocalizations.of(context).okButtonLabel),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -189,10 +182,9 @@ class _WrappedNewCollectionDialogState
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder:
-            (_) => ProcessingDialog(
-              text: L10n.global().genericProcessingDialogContent,
-            ),
+        builder: (_) => ProcessingDialog(
+          text: L10n.global().genericProcessingDialogContent,
+        ),
       ),
     );
     try {
@@ -249,27 +241,24 @@ class _ProviderDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_Bloc, _State>(
-      buildWhen:
-          (previous, current) =>
-              previous.formValue.provider != current.formValue.provider,
-      builder:
-          (context, state) => DropdownButtonHideUnderline(
-            child: DropdownButtonFormField<_ProviderOption>(
-              initialValue: state.formValue.provider,
-              items:
-                  state.supportedProviders
-                      .map(
-                        (e) => DropdownMenuItem<_ProviderOption>(
-                          value: e,
-                          child: Text(e.toValueString(context)),
-                        ),
-                      )
-                      .toList(),
-              onChanged: (value) {
-                context.read<_Bloc>().add(_SubmitProvider(value!));
-              },
-            ),
-          ),
+      buildWhen: (previous, current) =>
+          previous.formValue.provider != current.formValue.provider,
+      builder: (context, state) => DropdownButtonHideUnderline(
+        child: DropdownButtonFormField<_ProviderOption>(
+          initialValue: state.formValue.provider,
+          items: state.supportedProviders
+              .map(
+                (e) => DropdownMenuItem<_ProviderOption>(
+                  value: e,
+                  child: Text(e.toValueString(context)),
+                ),
+              )
+              .toList(),
+          onChanged: (value) {
+            context.read<_Bloc>().add(_SubmitProvider(value!));
+          },
+        ),
+      ),
     );
   }
 }
@@ -280,14 +269,12 @@ class _ProviderDescription extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<_Bloc, _State>(
-      buildWhen:
-          (previous, current) =>
-              previous.formValue.provider != current.formValue.provider,
-      builder:
-          (context, state) => Text(
-            state.formValue.provider.toDescription(context),
-            style: Theme.of(context).textTheme.bodyMedium,
-          ),
+      buildWhen: (previous, current) =>
+          previous.formValue.provider != current.formValue.provider,
+      builder: (context, state) => Text(
+        state.formValue.provider.toDescription(context),
+        style: Theme.of(context).textTheme.bodyMedium,
+      ),
     );
   }
 }

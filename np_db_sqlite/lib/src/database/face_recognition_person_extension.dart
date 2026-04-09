@@ -40,15 +40,14 @@ extension SqliteDbFaceRecognitionPersonExtension on SqliteDb {
   }) async {
     _log.info("[searchFaceRecognitionPersonByName] name: $name");
     if (account.sqlAccount != null) {
-      final query =
-          select(faceRecognitionPersons)
-            ..where((t) => t.account.equals(account.sqlAccount!.rowId))
-            ..where(
-              (t) =>
-                  t.name.like(name) |
-                  t.name.like("% $name") |
-                  t.name.like("$name %"),
-            );
+      final query = select(faceRecognitionPersons)
+        ..where((t) => t.account.equals(account.sqlAccount!.rowId))
+        ..where(
+          (t) =>
+              t.name.like(name) |
+              t.name.like("% $name") |
+              t.name.like("$name %"),
+        );
       return query.get();
     } else {
       final query =
@@ -102,9 +101,8 @@ extension SqliteDbFaceRecognitionPersonExtension on SqliteDb {
             sqlAccount,
             u,
           ).copyWith(account: const Value.absent(), name: const Value.absent()),
-          where:
-              ($FaceRecognitionPersonsTable t) =>
-                  t.account.equals(sqlAccount.rowId) & t.name.equals(u.name),
+          where: ($FaceRecognitionPersonsTable t) =>
+              t.account.equals(sqlAccount.rowId) & t.name.equals(u.name),
         );
       }
       for (final i in inserts) {

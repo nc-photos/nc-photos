@@ -124,8 +124,9 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         // modifying transformation filters resets face detection
         faceLandmarks: null,
         selectedFaces: const [],
-        hasSelectedFaceReset:
-            state.selectedFaces.isNotEmpty ? Unique(true) : null,
+        hasSelectedFaceReset: state.selectedFaces.isNotEmpty
+            ? Unique(true)
+            : null,
       ),
     );
     _updatePreview();
@@ -139,8 +140,9 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         // modifying transformation filters resets face detection
         faceLandmarks: null,
         selectedFaces: const [],
-        hasSelectedFaceReset:
-            state.selectedFaces.isNotEmpty ? Unique(true) : null,
+        hasSelectedFaceReset: state.selectedFaces.isNotEmpty
+            ? Unique(true)
+            : null,
       ),
     );
     _updatePreview();
@@ -317,12 +319,11 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     bool useIsolate = true,
   }) async {
     Future<Rgba8Image> _do() async {
-      final edits =
-          [
-            cropFilter?.toEdit(),
-            ...transformFilters.map((f) => f.toEdit()),
-            ...pixelFilters,
-          ].nonNulls.toList();
+      final edits = [
+        cropFilter?.toEdit(),
+        ...transformFilters.map((f) => f.toEdit()),
+        ...pixelFilters,
+      ].nonNulls.toList();
       if (edits.isNotEmpty) {
         return await image_editor.edit(src, edits);
       } else {

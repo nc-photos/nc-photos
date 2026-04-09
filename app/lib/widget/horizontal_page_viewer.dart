@@ -94,10 +94,9 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
           controller: widget.controller._pageController,
           itemCount: widget.pageCount,
           itemBuilder: widget.pageBuilder,
-          physics:
-              getRawPlatform() != NpPlatform.web && widget.canSwitchPage
-                  ? null
-                  : const NeverScrollableScrollPhysics(),
+          physics: getRawPlatform() != NpPlatform.web && widget.canSwitchPage
+              ? null
+              : const NeverScrollableScrollPhysics(),
         ),
         if (getRawPlatform() == NpPlatform.web)
           ..._buildNavigationButtons(context),
@@ -243,8 +242,9 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
     }
     final hasNext = widget.pageCount == null || page < widget.pageCount! - 1;
     final hasPrev = page > 0;
-    final hasLeft =
-        Directionality.of(context) == TextDirection.ltr ? hasPrev : hasNext;
+    final hasLeft = Directionality.of(context) == TextDirection.ltr
+        ? hasPrev
+        : hasNext;
     if (_canSwitchLeft != hasLeft) {
       setState(() {
         _canSwitchLeft = hasLeft;
@@ -253,8 +253,9 @@ class _HorizontalPageViewerState extends State<HorizontalPageViewer> {
         }
       });
     }
-    final hasRight =
-        Directionality.of(context) == TextDirection.ltr ? hasNext : hasPrev;
+    final hasRight = Directionality.of(context) == TextDirection.ltr
+        ? hasNext
+        : hasPrev;
     if (_canSwitchRight != hasRight) {
       setState(() {
         _canSwitchRight = hasRight;
@@ -295,10 +296,9 @@ class HorizontalPageViewerController {
     _pageController.jumpToPage(page);
   }
 
-  int get currentPage =>
-      _pageController.hasClients
-          ? _pageController.page!.round()
-          : _pageController.initialPage;
+  int get currentPage => _pageController.hasClients
+      ? _pageController.page!.round()
+      : _pageController.initialPage;
 
   late PageController _pageController;
 }

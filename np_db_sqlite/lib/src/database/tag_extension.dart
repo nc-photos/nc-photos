@@ -25,11 +25,10 @@ extension SqliteDbTagExtension on SqliteDb {
   }) {
     _log.info("[queryTagByDisplayName] displayName: $displayName");
     if (account.sqlAccount != null) {
-      final query =
-          select(tags)
-            ..where((t) => t.server.equals(account.sqlAccount!.server))
-            ..where((t) => t.displayName.like(displayName))
-            ..limit(1);
+      final query = select(tags)
+        ..where((t) => t.server.equals(account.sqlAccount!.server))
+        ..where((t) => t.displayName.like(displayName))
+        ..limit(1);
       return query.getSingleOrNull();
     } else {
       final query =
@@ -70,9 +69,8 @@ extension SqliteDbTagExtension on SqliteDb {
             sqlAccount,
             u,
           ).copyWith(server: const Value.absent(), tagId: const Value.absent()),
-          where:
-              ($TagsTable t) =>
-                  t.server.equals(sqlAccount.server) & t.tagId.equals(u.id),
+          where: ($TagsTable t) =>
+              t.server.equals(sqlAccount.server) & t.tagId.equals(u.id),
         );
       }
       for (final i in inserts) {

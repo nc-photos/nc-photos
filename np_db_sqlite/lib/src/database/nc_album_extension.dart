@@ -7,10 +7,9 @@ extension SqliteDbNcAlbumExtension on SqliteDb {
   }) {
     _log.info("[queryNcAlbumByRelativePath] relativePath: $relativePath");
     if (account.sqlAccount != null) {
-      final query =
-          select(ncAlbums)
-            ..where((t) => t.account.equals(account.sqlAccount!.rowId))
-            ..where((t) => t.relativePath.equals(relativePath));
+      final query = select(ncAlbums)
+        ..where((t) => t.account.equals(account.sqlAccount!.rowId))
+        ..where((t) => t.relativePath.equals(relativePath));
       return query.getSingleOrNull();
     } else {
       final query =
@@ -144,10 +143,9 @@ extension SqliteDbNcAlbumExtension on SqliteDb {
             account: const Value.absent(),
             relativePath: const Value.absent(),
           ),
-          where:
-              ($NcAlbumsTable t) =>
-                  t.account.equals(sqlAccount.rowId) &
-                  t.relativePath.equals(u.relativePath),
+          where: ($NcAlbumsTable t) =>
+              t.account.equals(sqlAccount.rowId) &
+              t.relativePath.equals(u.relativePath),
         );
       }
       for (final i in inserts) {

@@ -28,15 +28,11 @@ class FindFileDescriptor {
       account: account.toDb(),
       fileIds: fileIds,
     );
-    final files =
-        dbResults
-            .map(
-              (e) => DbFileDescriptorConverter.fromDb(
-                account.userId.toString(),
-                e,
-              ),
-            )
-            .toList();
+    final files = dbResults
+        .map(
+          (e) => DbFileDescriptorConverter.fromDb(account.userId.toString(), e),
+        )
+        .toList();
     final fileMap = <int, FileDescriptor>{};
     for (final f in files) {
       fileMap[f.fdId] = f;

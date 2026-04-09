@@ -24,10 +24,9 @@ class _AppBarLivePhotoButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.currentFile != current.currentFile ||
-              previous.currentFileState != current.currentFileState,
+      buildWhen: (previous, current) =>
+          previous.currentFile != current.currentFile ||
+          previous.currentFileState != current.currentFileState,
       builder: (context, state) {
         if (state.currentFile?.let(getLivePhotoTypeFromFile) != null) {
           if (state.currentFileState?.shouldPlayLivePhoto ?? false) {
@@ -64,27 +63,26 @@ class _AppBarFavoriteButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.currentFile,
-      builder:
-          (context, currentFile) =>
-              (currentFile?.provider as FavoritableAnyFile?)?.isFavorite == true
-                  ? IconButton(
-                    icon: const Icon(Icons.star),
-                    tooltip: L10n.global().unfavoriteTooltip,
-                    onPressed: () {
-                      context.state.currentFile?.id.let(
-                        (id) => context.addEvent(_Unfavorite(id)),
-                      );
-                    },
-                  )
-                  : IconButton(
-                    icon: const Icon(Icons.star_border),
-                    tooltip: L10n.global().favoriteTooltip,
-                    onPressed: () {
-                      context.state.currentFile?.id.let(
-                        (id) => context.addEvent(_Favorite(id)),
-                      );
-                    },
-                  ),
+      builder: (context, currentFile) =>
+          (currentFile?.provider as FavoritableAnyFile?)?.isFavorite == true
+          ? IconButton(
+              icon: const Icon(Icons.star),
+              tooltip: L10n.global().unfavoriteTooltip,
+              onPressed: () {
+                context.state.currentFile?.id.let(
+                  (id) => context.addEvent(_Unfavorite(id)),
+                );
+              },
+            )
+          : IconButton(
+              icon: const Icon(Icons.star_border),
+              tooltip: L10n.global().favoriteTooltip,
+              onPressed: () {
+                context.state.currentFile?.id.let(
+                  (id) => context.addEvent(_Favorite(id)),
+                );
+              },
+            ),
     );
   }
 }

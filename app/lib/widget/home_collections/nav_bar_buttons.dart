@@ -84,15 +84,14 @@ class _NavBarButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.selectedItems.isEmpty,
-      builder:
-          (context, isEnabled) => HomeCollectionsNavBarButton(
-            icon: icon,
-            label: label,
-            isMinimized: isMinimized,
-            isShowIndicator: isShowIndicator,
-            isEnabled: isEnabled,
-            onPressed: onPressed,
-          ),
+      builder: (context, isEnabled) => HomeCollectionsNavBarButton(
+        icon: icon,
+        label: label,
+        isMinimized: isMinimized,
+        isShowIndicator: isShowIndicator,
+        isEnabled: isEnabled,
+        onPressed: onPressed,
+      ),
     );
   }
 
@@ -155,11 +154,10 @@ class _NavBarSharingButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueStreamBuilderEx<bool>(
-      stream:
-          context
-              .read<AccountController>()
-              .accountPrefController
-              .hasNewSharedAlbum,
+      stream: context
+          .read<AccountController>()
+          .accountPrefController
+          .hasNewSharedAlbum,
       builder: StreamWidgetBuilder.value(
         (context, hasNewSharedAlbum) => _NavBarButton(
           icon: const Icon(Icons.share_outlined),

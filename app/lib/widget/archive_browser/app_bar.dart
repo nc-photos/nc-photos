@@ -19,25 +19,23 @@ class _SelectionAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.selectedItems != current.selectedItems,
-      builder:
-          (context, state) => SelectionAppBar(
-            count: state.selectedItems.length,
-            onClosePressed: () {
-              context.addEvent(const _SetSelectedItems(items: {}));
+      buildWhen: (previous, current) =>
+          previous.selectedItems != current.selectedItems,
+      builder: (context, state) => SelectionAppBar(
+        count: state.selectedItems.length,
+        onClosePressed: () {
+          context.addEvent(const _SetSelectedItems(items: {}));
+        },
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.unarchive_outlined),
+            tooltip: L10n.global().unarchiveTooltip,
+            onPressed: () {
+              context.addEvent(const _UnarchiveSelectedItems());
             },
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.unarchive_outlined),
-                tooltip: L10n.global().unarchiveTooltip,
-                onPressed: () {
-                  context.addEvent(const _UnarchiveSelectedItems());
-                },
-              ),
-            ],
           ),
+        ],
+      ),
     );
   }
 }

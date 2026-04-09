@@ -197,21 +197,20 @@ extension SqliteDbImageLocationExtension on SqliteDb {
         query.where(accountFiles.relativePath.like("$r/%").not());
       }
     }
-    final idResults =
-        await query
-            .map(
-              (r) => (
-                geonameId: r.read(imageLocationIds.geonameId)!,
-                type: r.readWithConverter(imageLocationIds.type)!,
-                countryCode: r.read(imageLocations.countryCode)!,
-                count: r.read(count)!,
-                latestFileId: r.read(files.fileId)!,
-                latestDateTime: r.read(latest)!.toUtc(),
-                latestFileMime: r.read(files.contentType),
-                latestFileRelativePath: r.read(accountFiles.relativePath)!,
-              ),
-            )
-            .get();
+    final idResults = await query
+        .map(
+          (r) => (
+            geonameId: r.read(imageLocationIds.geonameId)!,
+            type: r.readWithConverter(imageLocationIds.type)!,
+            countryCode: r.read(imageLocations.countryCode)!,
+            count: r.read(count)!,
+            latestFileId: r.read(files.fileId)!,
+            latestDateTime: r.read(latest)!.toUtc(),
+            latestFileMime: r.read(files.contentType),
+            latestFileRelativePath: r.read(accountFiles.relativePath)!,
+          ),
+        )
+        .get();
 
     final nameQuery = select(imageLocationNames)
       ..where((t) => t.geonameId.isIn(idResults.map((e) => e.geonameId)));
@@ -385,8 +384,10 @@ extension SqliteDbImageLocationExtension on SqliteDb {
             .getSingleOrNull(),
       ];
     }, _maxByFileIdsSize);
-    final winner =
-        candidates.nonNulls.sortedBy((e) => e.dateTime).reversed.firstOrNull;
+    final winner = candidates.nonNulls
+        .sortedBy((e) => e.dateTime)
+        .reversed
+        .firstOrNull;
     if (winner == null) {
       return null;
     }

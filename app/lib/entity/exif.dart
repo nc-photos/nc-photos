@@ -79,14 +79,13 @@ class Exif with EquatableMixin {
               (e.value as Map).cast<String, dynamic>(),
             );
           } else if (e.value is List) {
-            exifValue =
-                (e.value as List).map((e) {
-                  if (e is Map) {
-                    return _objectFromJson(e.cast<String, dynamic>());
-                  } else {
-                    return e;
-                  }
-                }).toList();
+            exifValue = (e.value as List).map((e) {
+              if (e is Map) {
+                return _objectFromJson(e.cast<String, dynamic>());
+              } else {
+                return e;
+              }
+            }).toList();
           } else {
             exifValue = e.value;
           }
@@ -157,15 +156,15 @@ class Exif with EquatableMixin {
   Duration? get offsetTimeOriginal {
     var offsetStr =
         data.containsKey("OffsetTimeOriginal") &&
-                (data["OffsetTimeOriginal"] as String).isNotEmpty
-            ? data["OffsetTimeOriginal"] as String
-            : null;
+            (data["OffsetTimeOriginal"] as String).isNotEmpty
+        ? data["OffsetTimeOriginal"] as String
+        : null;
     // try the server hack
     offsetStr ??=
         data.containsKey("_OffsetTimeOriginal") &&
-                (data["_OffsetTimeOriginal"] as String).isNotEmpty
-            ? data["_OffsetTimeOriginal"] as String
-            : null;
+            (data["_OffsetTimeOriginal"] as String).isNotEmpty
+        ? data["_OffsetTimeOriginal"] as String
+        : null;
     if (offsetStr == null) {
       // no tz data
       return null;

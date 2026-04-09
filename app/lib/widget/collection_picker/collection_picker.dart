@@ -47,11 +47,10 @@ class CollectionPicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            account: context.read<AccountController>().account,
-            controller: context.read<AccountController>().collectionsController,
-          ),
+      create: (context) => _Bloc(
+        account: context.read<AccountController>().account,
+        controller: context.read<AccountController>().collectionsController,
+      ),
       child: const _WrappedCollectionPicker(),
     );
   }
@@ -78,16 +77,15 @@ class _WrappedCollectionPickerState extends State<_WrappedCollectionPicker> {
       body: MultiBlocListener(
         listeners: [
           BlocListener<_Bloc, _State>(
-            listenWhen:
-                (previous, current) =>
-                    previous.collections != current.collections,
+            listenWhen: (previous, current) =>
+                previous.collections != current.collections,
             listener: (context, state) {
               _bloc.add(_TransformItems(state.collections));
             },
           ),
           BlocListener<_Bloc, _State>(
-            listenWhen:
-                (previous, current) => previous.result != current.result,
+            listenWhen: (previous, current) =>
+                previous.result != current.result,
             listener: (context, state) {
               if (state.result != null) {
                 Navigator.of(context).pop(state.result!);
@@ -107,27 +105,24 @@ class _WrappedCollectionPickerState extends State<_WrappedCollectionPicker> {
           slivers: [
             const _AppBar(),
             _BlocBuilder(
-              buildWhen:
-                  (previous, current) =>
-                      previous.transformedItems != current.transformedItems,
-              builder:
-                  (context, state) => SliverPadding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    sliver: SliverStaggeredGrid.extentBuilder(
-                      maxCrossAxisExtent: 256,
-                      staggeredTileBuilder:
-                          (_) => const StaggeredTile.count(1, 1),
-                      itemCount: state.transformedItems.length + 1,
-                      itemBuilder: (_, index) {
-                        if (index == 0) {
-                          return _NewAlbumView();
-                        } else {
-                          final item = state.transformedItems[index - 1];
-                          return _ItemView(account: _bloc.account, item: item);
-                        }
-                      },
-                    ),
-                  ),
+              buildWhen: (previous, current) =>
+                  previous.transformedItems != current.transformedItems,
+              builder: (context, state) => SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                sliver: SliverStaggeredGrid.extentBuilder(
+                  maxCrossAxisExtent: 256,
+                  staggeredTileBuilder: (_) => const StaggeredTile.count(1, 1),
+                  itemCount: state.transformedItems.length + 1,
+                  itemBuilder: (_, index) {
+                    if (index == 0) {
+                      return _NewAlbumView();
+                    } else {
+                      final item = state.transformedItems[index - 1];
+                      return _ItemView(account: _bloc.account, item: item);
+                    }
+                  },
+                ),
+              ),
             ),
             const SliverSafeBottom(),
           ],
@@ -146,12 +141,11 @@ class _AppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocBuilder(
       buildWhen: (previous, current) => previous.isLoading != current.isLoading,
-      builder:
-          (context, state) => SliverAppBar(
-            title: Text(L10n.global().addItemToCollectionTooltip),
-            floating: true,
-            leading: state.isLoading ? const AppBarProgressIndicator() : null,
-          ),
+      builder: (context, state) => SliverAppBar(
+        title: Text(L10n.global().addItemToCollectionTooltip),
+        floating: true,
+        leading: state.isLoading ? const AppBarProgressIndicator() : null,
+      ),
     );
   }
 }
@@ -203,28 +197,26 @@ class _CollectionCover extends StatelessWidget {
       child: Container(
         color: Theme.of(context).listPlaceholderBackgroundColor,
         constraints: const BoxConstraints.expand(),
-        child:
-            url != null
-                ? FittedBox(
-                  clipBehavior: Clip.hardEdge,
-                  fit: BoxFit.cover,
-                  child:
-                      CachedNetworkImageBuilder(
-                        type: CachedNetworkImageType.cover,
-                        imageUrl: url!,
-                        mime: mime,
-                        account: account,
-                        errorWidget: (context, url, error) {
-                          // just leave it empty
-                          return Container();
-                        },
-                      ).build(),
-                )
-                : Icon(
-                  Icons.panorama,
-                  color: Theme.of(context).listPlaceholderForegroundColor,
-                  size: 88,
-                ),
+        child: url != null
+            ? FittedBox(
+                clipBehavior: Clip.hardEdge,
+                fit: BoxFit.cover,
+                child: CachedNetworkImageBuilder(
+                  type: CachedNetworkImageType.cover,
+                  imageUrl: url!,
+                  mime: mime,
+                  account: account,
+                  errorWidget: (context, url, error) {
+                    // just leave it empty
+                    return Container();
+                  },
+                ).build(),
+              )
+            : Icon(
+                Icons.panorama,
+                color: Theme.of(context).listPlaceholderForegroundColor,
+                size: 88,
+              ),
       ),
     );
   }
@@ -269,11 +261,10 @@ class _NewAlbumView extends StatelessWidget {
     try {
       final collection = await showDialog<Collection>(
         context: context,
-        builder:
-            (_) => NewCollectionDialog(
-              account: context.read<_Bloc>().account,
-              isAllowDynamic: false,
-            ),
+        builder: (_) => NewCollectionDialog(
+          account: context.read<_Bloc>().account,
+          isAllowDynamic: false,
+        ),
       );
       if (collection == null) {
         // user canceled

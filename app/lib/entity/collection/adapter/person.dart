@@ -21,10 +21,9 @@ class CollectionPersonAdapter
 
   @override
   Stream<List<CollectionItem>> listItem() {
-    final rootDirs =
-        account.roots
-            .map((e) => File(path: file_util.unstripPath(account, e)))
-            .toList();
+    final rootDirs = account.roots
+        .map((e) => File(path: file_util.unstripPath(account, e)))
+        .toList();
     return ListPersonFace(_c)(account, _provider.person).map((faces) {
       return faces
           .map((e) => e.file)

@@ -34,10 +34,9 @@ class LocalMediaImage extends ImageProvider<LocalMediaImage>
       codec: _loadAsync(key, decode),
       scale: key.scale,
       debugLabel: key.platformIdentifier,
-      informationCollector:
-          () => <DiagnosticsNode>[
-            ErrorDescription("Platform identifier: $platformIdentifier"),
-          ],
+      informationCollector: () => <DiagnosticsNode>[
+        ErrorDescription("Platform identifier: $platformIdentifier"),
+      ],
     );
   }
 

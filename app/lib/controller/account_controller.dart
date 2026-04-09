@@ -87,11 +87,8 @@ class AccountController {
   SessionController get sessionController =>
       _sessionController ??= SessionController();
 
-  SharingsController get sharingsController =>
-      _sharingsController ??= SharingsController(
-        KiwiContainer().resolve(),
-        account: _account!,
-      );
+  SharingsController get sharingsController => _sharingsController ??=
+      SharingsController(KiwiContainer().resolve(), account: _account!);
 
   PlacesController get placesController =>
       _placesController ??= PlacesController(
@@ -99,12 +96,11 @@ class AccountController {
         account: _account!,
       );
 
-  FilesController get filesController =>
-      _filesController ??= FilesController(
-        KiwiContainer().resolve<DiContainer>(),
-        account: _account!,
-        accountPrefController: accountPrefController,
-      );
+  FilesController get filesController => _filesController ??= FilesController(
+    KiwiContainer().resolve<DiContainer>(),
+    account: _account!,
+    accountPrefController: accountPrefController,
+  );
 
   AnyFilesController get anyFilesController =>
       _anyFilesController ??= AnyFilesController(

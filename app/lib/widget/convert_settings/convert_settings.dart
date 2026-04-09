@@ -64,24 +64,22 @@ class _WrappedConvertSettings extends StatelessWidget {
                       ),
                       _BlocSelector(
                         selector: (state) => state.format,
-                        builder:
-                            (context, format) =>
-                                DropdownButtonFormField<ConvertFormat>(
-                                  items:
-                                      ConvertFormat.values
-                                          .map(
-                                            (e) => DropdownMenuItem(
-                                              value: e,
-                                              child: Text(e.toDisplayString()),
-                                            ),
-                                          )
-                                          .toList(),
-                                  initialValue: format,
-                                  isExpanded: true,
-                                  onChanged: (value) {
-                                    context.addEvent(_SetFormat(value!));
-                                  },
-                                ),
+                        builder: (context, format) =>
+                            DropdownButtonFormField<ConvertFormat>(
+                              items: ConvertFormat.values
+                                  .map(
+                                    (e) => DropdownMenuItem(
+                                      value: e,
+                                      child: Text(e.toDisplayString()),
+                                    ),
+                                  )
+                                  .toList(),
+                              initialValue: format,
+                              isExpanded: true,
+                              onChanged: (value) {
+                                context.addEvent(_SetFormat(value!));
+                              },
+                            ),
                       ),
                     ],
                   ),
@@ -100,14 +98,13 @@ class _WrappedConvertSettings extends StatelessWidget {
                           ),
                           _BlocSelector(
                             selector: (state) => state.quality,
-                            builder:
-                                (context, quality) => Text(
-                                  quality.toString(),
-                                  style: Theme.of(context).textStyleColored(
-                                    (textTheme) => textTheme.bodyMedium,
-                                    (colorScheme) => colorScheme.onSurfaceLow,
-                                  ),
-                                ),
+                            builder: (context, quality) => Text(
+                              quality.toString(),
+                              style: Theme.of(context).textStyleColored(
+                                (textTheme) => textTheme.bodyMedium,
+                                (colorScheme) => colorScheme.onSurfaceLow,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -115,17 +112,16 @@ class _WrappedConvertSettings extends StatelessWidget {
                       Expanded(
                         child: _BlocSelector(
                           selector: (state) => state.quality,
-                          builder:
-                              (context, quality) => Slider(
-                                min: 0,
-                                max: 100,
-                                divisions: 100,
-                                value: quality.toDouble(),
-                                padding: const EdgeInsets.all(8),
-                                onChanged: (value) {
-                                  context.addEvent(_SetQuality(value.toInt()));
-                                },
-                              ),
+                          builder: (context, quality) => Slider(
+                            min: 0,
+                            max: 100,
+                            divisions: 100,
+                            value: quality.toDouble(),
+                            padding: const EdgeInsets.all(8),
+                            onChanged: (value) {
+                              context.addEvent(_SetQuality(value.toInt()));
+                            },
+                          ),
                         ),
                       ),
                     ],
@@ -139,47 +135,43 @@ class _WrappedConvertSettings extends StatelessWidget {
                     children: [
                       _BlocSelector(
                         selector: (state) => state.downsizeMp,
-                        builder:
-                            (context, downsizeMp) => CheckboxListTile(
-                              title: Text(
-                                L10n.global()
-                                    .uploadBatchConvertSettingsDownscaling,
+                        builder: (context, downsizeMp) => CheckboxListTile(
+                          title: Text(
+                            L10n.global().uploadBatchConvertSettingsDownscaling,
+                          ),
+                          subtitle: downsizeMp?.let(
+                            (e) => Text(
+                              L10n.global().megapixelCount(
+                                e.toStringAsFixed(1),
                               ),
-                              subtitle: downsizeMp?.let(
-                                (e) => Text(
-                                  L10n.global().megapixelCount(
-                                    e.toStringAsFixed(1),
-                                  ),
-                                  style: Theme.of(context).textStyleColored(
-                                    (textTheme) => textTheme.bodyMedium,
-                                    (colorScheme) => colorScheme.onSurfaceLow,
-                                  ),
-                                ),
+                              style: Theme.of(context).textStyleColored(
+                                (textTheme) => textTheme.bodyMedium,
+                                (colorScheme) => colorScheme.onSurfaceLow,
                               ),
-                              value: downsizeMp != null,
-                              contentPadding: const EdgeInsets.all(0),
-                              onChanged: (value) {
-                                context.addEvent(
-                                  _SetDownsizeMp(value! ? 16 : null),
-                                );
-                              },
                             ),
+                          ),
+                          value: downsizeMp != null,
+                          contentPadding: const EdgeInsets.all(0),
+                          onChanged: (value) {
+                            context.addEvent(
+                              _SetDownsizeMp(value! ? 16 : null),
+                            );
+                          },
+                        ),
                       ),
                       _BlocSelector(
                         selector: (state) => state.downsizeMp,
-                        builder:
-                            (context, downsizeMp) =>
-                                downsizeMp == null
-                                    ? const SizedBox.shrink()
-                                    : Slider(
-                                      min: 0.1,
-                                      max: 50,
-                                      value: downsizeMp,
-                                      padding: const EdgeInsets.all(8),
-                                      onChanged: (value) {
-                                        context.addEvent(_SetDownsizeMp(value));
-                                      },
-                                    ),
+                        builder: (context, downsizeMp) => downsizeMp == null
+                            ? const SizedBox.shrink()
+                            : Slider(
+                                min: 0.1,
+                                max: 50,
+                                value: downsizeMp,
+                                padding: const EdgeInsets.all(8),
+                                onChanged: (value) {
+                                  context.addEvent(_SetDownsizeMp(value));
+                                },
+                              ),
                       ),
                     ],
                   ),

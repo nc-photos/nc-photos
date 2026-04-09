@@ -55,18 +55,17 @@ abstract class DbAlbumConverter {
         "type": src.sortProviderType,
         "content": src.sortProviderContent,
       }),
-      shares:
-          src.shares.isEmpty
-              ? null
-              : src.shares
-                  .map(
-                    (e) => AlbumShare(
-                      userId: e.userId.toCi(),
-                      displayName: e.displayName,
-                      sharedAt: e.sharedAt.toUtc(),
-                    ),
-                  )
-                  .toList(),
+      shares: src.shares.isEmpty
+          ? null
+          : src.shares
+                .map(
+                  (e) => AlbumShare(
+                    userId: e.userId.toCi(),
+                    displayName: e.displayName,
+                    sharedAt: e.sharedAt.toUtc(),
+                  ),
+                )
+                .toList(),
       // replace with the original etag when this album was cached
       albumFile: albumFile.copyWith(etag: OrNull(src.fileEtag)),
       savedVersion: src.version,
@@ -181,14 +180,13 @@ abstract class DbFileConverter {
         ),
       ),
       location: src.location?.toDb(),
-      trashData:
-          src.trashbinDeletionTime == null
-              ? null
-              : DbTrashData(
-                filename: src.trashbinFilename!,
-                originalLocation: src.trashbinOriginalLocation!,
-                deletionTime: src.trashbinDeletionTime!,
-              ),
+      trashData: src.trashbinDeletionTime == null
+          ? null
+          : DbTrashData(
+              filename: src.trashbinFilename!,
+              originalLocation: src.trashbinOriginalLocation!,
+              deletionTime: src.trashbinDeletionTime!,
+            ),
     );
   }
 }
@@ -331,8 +329,9 @@ abstract class DbNcAlbumConverter {
       location: src.location,
       dateStart: src.dateStart,
       dateEnd: src.dateEnd,
-      collaborators:
-          src.collaborators.map(NcAlbumCollaborator.fromJson).toList(),
+      collaborators: src.collaborators
+          .map(NcAlbumCollaborator.fromJson)
+          .toList(),
     );
   }
 

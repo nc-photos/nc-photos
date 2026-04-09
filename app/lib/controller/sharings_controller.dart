@@ -132,14 +132,13 @@ class SharingsController {
     }
     _sharingStreamContorller.addWithValue(
       (value) => value.copyWith(
-        data:
-            value.data.where((e) {
-              if (e is SharingStreamShareData) {
-                return e.share.id != ev.share.id;
-              } else {
-                return true;
-              }
-            }).toList(),
+        data: value.data.where((e) {
+          if (e is SharingStreamShareData) {
+            return e.share.id != ev.share.id;
+          } else {
+            return true;
+          }
+        }).toList(),
       ),
     );
   }

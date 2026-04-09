@@ -77,10 +77,9 @@ class UnshareAlbumWithUser {
     }
 
     // then remove shares from all files in this album
-    final files =
-        AlbumStaticProvider.of(
-          album,
-        ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
+    final files = AlbumStaticProvider.of(
+      album,
+    ).items.whereType<AlbumFileItem>().map((e) => e.file).toList();
     await UnshareFileFromAlbum(_c)(account, album, files, [
       shareWith,
     ], onUnshareFileFailed: onUnshareFileFailed);

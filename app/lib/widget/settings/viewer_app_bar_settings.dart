@@ -71,10 +71,9 @@ class _WrappedViewerAppBarSettingsState
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
         final prefController = context.bloc.prefController;
-        final from =
-            widget.isBottom
-                ? prefController.viewerBottomAppBarButtonsValue
-                : prefController.viewerAppBarButtonsValue;
+        final from = widget.isBottom
+            ? prefController.viewerBottomAppBarButtonsValue
+            : prefController.viewerAppBarButtonsValue;
         final to = context.state.buttons;
         if (!listEquals(from, to)) {
           _log.info("[build] Updated: ${to.toReadableString()}");
@@ -104,8 +103,8 @@ class _WrappedViewerAppBarSettingsState
         body: MultiBlocListener(
           listeners: [
             _BlocListener(
-              listenWhen:
-                  (previous, current) => previous.error != current.error,
+              listenWhen: (previous, current) =>
+                  previous.error != current.error,
               listener: (context, state) {
                 if (state.error != null && isPageVisible()) {
                   SnackBarManager().showSnackBarForException(

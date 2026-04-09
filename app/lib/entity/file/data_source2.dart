@@ -70,8 +70,9 @@ class FileRemoteDataSource implements FileDataSource2 {
         "app:metadata": jsonEncode(metadata!.obj!.toJson()),
       if (isArchived?.obj != null) "app:is-archived": isArchived!.obj,
       if (overrideDateTime?.obj != null)
-        "app:override-date-time":
-            overrideDateTime!.obj!.toUtc().toIso8601String(),
+        "app:override-date-time": overrideDateTime!.obj!
+            .toUtc()
+            .toIso8601String(),
       if (favorite != null) "oc:favorite": favorite ? 1 : 0,
       if (location?.obj != null)
         "app:location": jsonEncode(location!.obj!.toJson()),
@@ -154,15 +155,13 @@ class FileNpDbDataSource implements FileDataSource2 {
     final dbObj = await db.getFileIdWithTimestamps(
       account: account.toDb(),
       // need this because this arg expect empty string for root instead of "."
-      includeRelativeRoots:
-          account.roots
-              .map(
-                (e) =>
-                    File(
-                      path: file_util.unstripPath(account, e),
-                    ).strippedPathWithEmpty,
-              )
-              .toList(),
+      includeRelativeRoots: account.roots
+          .map(
+            (e) => File(
+              path: file_util.unstripPath(account, e),
+            ).strippedPathWithEmpty,
+          )
+          .toList(),
       includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
@@ -204,20 +203,17 @@ class FileNpDbDataSource implements FileDataSource2 {
       isFavorite: favorite?.let(OrNull.new),
       isArchived: isArchived,
       overrideDateTime: overrideDateTime,
-      bestDateTime:
-          overrideDateTime == null && metadata == null
-              ? null
-              : file_util.getBestDateTime(
-                overrideDateTime:
-                    overrideDateTime == null
-                        ? (f as File).overrideDateTime
-                        : overrideDateTime.obj,
-                metadataDateTime:
-                    metadata == null
-                        ? (f as File).metadata?.dateTime
-                        : metadata.obj?.dateTime,
-                lastModified: (f as File).lastModified,
-              ),
+      bestDateTime: overrideDateTime == null && metadata == null
+          ? null
+          : file_util.getBestDateTime(
+              overrideDateTime: overrideDateTime == null
+                  ? (f as File).overrideDateTime
+                  : overrideDateTime.obj,
+              metadataDateTime: metadata == null
+                  ? (f as File).metadata?.dateTime
+                  : metadata.obj?.dateTime,
+              lastModified: (f as File).lastModified,
+            ),
       imageData: metadata?.let((e) => OrNull(e.obj?.toDb())),
       location: location?.let((e) => OrNull(e.obj?.toDb())),
     );
@@ -249,15 +245,13 @@ class FileNpDbDataSource implements FileDataSource2 {
     final results = await db.getFileDescriptors(
       account: account.toDb(),
       // need this because this arg expect empty string for root instead of "."
-      includeRelativeRoots:
-          account.roots
-              .map(
-                (e) =>
-                    File(
-                      path: file_util.unstripPath(account, e),
-                    ).strippedPathWithEmpty,
-              )
-              .toList(),
+      includeRelativeRoots: account.roots
+          .map(
+            (e) => File(
+              path: file_util.unstripPath(account, e),
+            ).strippedPathWithEmpty,
+          )
+          .toList(),
       includeRelativeDirs: [File(path: shareDirPath).strippedPathWithEmpty],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       location: location,

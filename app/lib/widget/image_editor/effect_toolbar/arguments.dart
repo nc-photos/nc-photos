@@ -5,10 +5,8 @@ class _FaceReshapeArguments implements PixelFaceArguments {
   const _FaceReshapeArguments({required this.jawline, required this.eyeSize});
 
   @override
-  image_editor.FaceEdit toEdit() => image_editor.FaceReshapeEdit(
-    jawline: jawline,
-    eyeSize: eyeSize,
-  );
+  image_editor.FaceEdit toEdit() =>
+      image_editor.FaceReshapeEdit(jawline: jawline, eyeSize: eyeSize);
 
   @override
   PixelToolType getToolType() => PixelToolType.faceReshape;

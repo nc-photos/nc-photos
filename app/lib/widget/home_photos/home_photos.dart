@@ -98,31 +98,30 @@ class HomePhotos2 extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create:
-              (_) => _Bloc(
-                KiwiContainer().resolve(),
-                account: accountController.account,
-                anyFilesController: accountController.anyFilesController,
-                filesController: accountController.filesController,
-                prefController: context.read(),
-                accountPrefController: accountController.accountPrefController,
-                collectionsController: accountController.collectionsController,
-                syncController: accountController.syncController,
-                personsController: accountController.personsController,
-                metadataController: accountController.metadataController,
-                serverController: accountController.serverController,
-                bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
-                draggableThumbSize:
-                    AppDimension.of(context).timelineDraggableThumbSize,
-                dateHeight: AppDimension.of(context).timelineDateItemHeight,
-              ),
+          create: (_) => _Bloc(
+            KiwiContainer().resolve(),
+            account: accountController.account,
+            anyFilesController: accountController.anyFilesController,
+            filesController: accountController.filesController,
+            prefController: context.read(),
+            accountPrefController: accountController.accountPrefController,
+            collectionsController: accountController.collectionsController,
+            syncController: accountController.syncController,
+            personsController: accountController.personsController,
+            metadataController: accountController.metadataController,
+            serverController: accountController.serverController,
+            bottomAppBarHeight: MediaQuery.paddingOf(context).bottom,
+            draggableThumbSize: AppDimension.of(
+              context,
+            ).timelineDraggableThumbSize,
+            dateHeight: AppDimension.of(context).timelineDateItemHeight,
+          ),
         ),
         BlocProvider(
-          create:
-              (_) => ShareBloc(
-                KiwiContainer().resolve(),
-                account: accountController.account,
-              ),
+          create: (_) => ShareBloc(
+            KiwiContainer().resolve(),
+            account: accountController.account,
+          ),
         ),
       ],
       child: const _WrappedHomePhotos(),
@@ -252,21 +251,15 @@ class _WrappedHomePhotosState extends State<_WrappedHomePhotos> {
         child: ShareBlocListener(
           child: _BlocSelector(
             selector: (state) => state.selectedItems.isEmpty,
-            builder:
-                (context, isSelectedEmpty) =>
-                    isSelectedEmpty
-                        ? DoubleTapExitContainer(
-                          child: _BodyView(key: _bodyKey),
-                        )
-                        : PopScope(
-                          canPop: false,
-                          onPopInvokedWithResult: (didPop, result) {
-                            context.addEvent(
-                              const _SetSelectedItems(items: {}),
-                            );
-                          },
-                          child: _BodyView(key: _bodyKey),
-                        ),
+            builder: (context, isSelectedEmpty) => isSelectedEmpty
+                ? DoubleTapExitContainer(child: _BodyView(key: _bodyKey))
+                : PopScope(
+                    canPop: false,
+                    onPopInvokedWithResult: (didPop, result) {
+                      context.addEvent(const _SetSelectedItems(items: {}));
+                    },
+                    child: _BodyView(key: _bodyKey),
+                  ),
           ),
         ),
       ),
@@ -378,10 +371,9 @@ class _InitialSyncBody extends StatelessWidget {
                         ),
                         const SizedBox(height: 8),
                         LinearProgressIndicator(
-                          value:
-                              (syncProgress?.progress ?? 0) == 0
-                                  ? null
-                                  : syncProgress!.progress,
+                          value: (syncProgress?.progress ?? 0) == 0
+                              ? null
+                              : syncProgress!.progress,
                         ),
                         const SizedBox(height: 8),
                         Text(
@@ -452,14 +444,13 @@ class _BodyState extends State<_Body> {
               );
             }
             return _BlocBuilder(
-              buildWhen:
-                  (previous, current) =>
-                      previous.minimapItems != current.minimapItems ||
-                      previous.viewHeight != current.viewHeight ||
-                      (previous.isEnableMemoryCollection &&
-                              previous.memoryCollections.isNotEmpty) !=
-                          (current.isEnableMemoryCollection &&
-                              current.memoryCollections.isNotEmpty),
+              buildWhen: (previous, current) =>
+                  previous.minimapItems != current.minimapItems ||
+                  previous.viewHeight != current.viewHeight ||
+                  (previous.isEnableMemoryCollection &&
+                          previous.memoryCollections.isNotEmpty) !=
+                      (current.isEnableMemoryCollection &&
+                          current.memoryCollections.isNotEmpty),
               builder: (context, state) {
                 final scrollExtent = _getScrollViewExtent(
                   context: context,
@@ -482,12 +473,15 @@ class _BodyState extends State<_Body> {
                         context.addEvent(const _SetIsDragging(false));
                       },
                       labelPadding: const EdgeInsets.symmetric(horizontal: 40),
-                      backgroundColor:
-                          Theme.of(context).colorScheme.secondaryContainer,
-                      foregroundColor:
-                          Theme.of(context).colorScheme.onSecondaryContainer,
-                      heightScrollThumb:
-                          AppDimension.of(context).timelineDraggableThumbSize,
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.secondaryContainer,
+                      foregroundColor: Theme.of(
+                        context,
+                      ).colorScheme.onSecondaryContainer,
+                      heightScrollThumb: AppDimension.of(
+                        context,
+                      ).timelineDraggableThumbSize,
                       onScrollBegin: () {
                         context.bloc.add(const _StartScrolling());
                       },
@@ -500,8 +494,9 @@ class _BodyState extends State<_Body> {
                         ).copyWith(scrollbars: false),
                         child: RefreshIndicator(
                           color: Theme.of(context).colorScheme.secondary,
-                          backgroundColor:
-                              Theme.of(context).colorScheme.secondaryContainer,
+                          backgroundColor: Theme.of(
+                            context,
+                          ).colorScheme.secondaryContainer,
                           onRefresh: () async {
                             context.bloc.add(const _RequestRefresh());
                             var hasNotNull = false;
@@ -516,73 +511,62 @@ class _BodyState extends State<_Body> {
                             children: [
                               _BlocSelector<bool>(
                                 selector: (state) => state.finger >= 2,
-                                builder:
-                                    (context, isScaleMode) => CustomScrollView(
-                                      controller: _scrollController,
-                                      physics:
-                                          isScaleMode
-                                              ? const NeverScrollableScrollPhysics()
-                                              : null,
-                                      slivers: [
-                                        _BlocSelector<bool>(
-                                          selector:
-                                              (state) =>
-                                                  state.selectedItems.isEmpty,
-                                          builder:
-                                              (context, isEmpty) =>
-                                                  isEmpty
-                                                      ? const _AppBar()
-                                                      : const _SelectionAppBar(),
-                                        ),
-                                        const SliverPersistentHeader(
-                                          delegate: _AppBarAnchorDelegate(),
-                                          pinned: true,
-                                        ),
-                                        _BlocBuilder(
-                                          buildWhen:
-                                              (previous, current) =>
-                                                  (previous
-                                                          .isEnableMemoryCollection &&
-                                                      previous
-                                                          .memoryCollections
-                                                          .isNotEmpty) !=
-                                                  (current.isEnableMemoryCollection &&
-                                                      current
-                                                          .memoryCollections
-                                                          .isNotEmpty),
-                                          builder: (context, state) {
-                                            if (state
-                                                    .isEnableMemoryCollection &&
-                                                state
-                                                    .memoryCollections
-                                                    .isNotEmpty) {
-                                              return const _MemoryCollectionList();
-                                            } else {
-                                              return const SliverToBoxAdapter();
-                                            }
-                                          },
-                                        ),
-                                        _BlocSelector<double?>(
-                                          selector: (state) => state.scale,
-                                          builder:
-                                              (context, scale) =>
-                                                  SliverTransitionedScale(
-                                                    scale: scale,
-                                                    baseSliver:
-                                                        const _ContentList(),
-                                                    overlaySliver:
-                                                        const _ScalingList(),
-                                                  ),
-                                        ),
-                                        const SliverSafeBottom(),
-                                      ],
+                                builder: (context, isScaleMode) => CustomScrollView(
+                                  controller: _scrollController,
+                                  physics: isScaleMode
+                                      ? const NeverScrollableScrollPhysics()
+                                      : null,
+                                  slivers: [
+                                    _BlocSelector<bool>(
+                                      selector: (state) =>
+                                          state.selectedItems.isEmpty,
+                                      builder: (context, isEmpty) => isEmpty
+                                          ? const _AppBar()
+                                          : const _SelectionAppBar(),
                                     ),
+                                    const SliverPersistentHeader(
+                                      delegate: _AppBarAnchorDelegate(),
+                                      pinned: true,
+                                    ),
+                                    _BlocBuilder(
+                                      buildWhen: (previous, current) =>
+                                          (previous.isEnableMemoryCollection &&
+                                              previous
+                                                  .memoryCollections
+                                                  .isNotEmpty) !=
+                                          (current.isEnableMemoryCollection &&
+                                              current
+                                                  .memoryCollections
+                                                  .isNotEmpty),
+                                      builder: (context, state) {
+                                        if (state.isEnableMemoryCollection &&
+                                            state
+                                                .memoryCollections
+                                                .isNotEmpty) {
+                                          return const _MemoryCollectionList();
+                                        } else {
+                                          return const SliverToBoxAdapter();
+                                        }
+                                      },
+                                    ),
+                                    _BlocSelector<double?>(
+                                      selector: (state) => state.scale,
+                                      builder: (context, scale) =>
+                                          SliverTransitionedScale(
+                                            scale: scale,
+                                            baseSliver: const _ContentList(),
+                                            overlaySliver: const _ScalingList(),
+                                          ),
+                                    ),
+                                    const SliverSafeBottom(),
+                                  ],
+                                ),
                               ),
                               const _DateBar(),
                               _BlocSelector<bool>(
                                 selector: (state) => state.isScrolling,
-                                builder:
-                                    (context, isScrolling) => AnimatedOpacity(
+                                builder: (context, isScrolling) =>
+                                    AnimatedOpacity(
                                       opacity: isScrolling ? 1 : 0,
                                       duration: k.animationDurationNormal,
                                       curve: Curves.fastOutSlowIn,
@@ -596,13 +580,12 @@ class _BodyState extends State<_Body> {
                     ),
                     _BlocSelector<bool>(
                       selector: (state) => state.isScrolling,
-                      builder:
-                          (context, isScrolling) => AnimatedOpacity(
-                            opacity: isScrolling ? 1 : 0,
-                            duration: k.animationDurationNormal,
-                            curve: Curves.fastOutSlowIn,
-                            child: const _MinimapPadding(child: _MinimapView()),
-                          ),
+                      builder: (context, isScrolling) => AnimatedOpacity(
+                        opacity: isScrolling ? 1 : 0,
+                        duration: k.animationDurationNormal,
+                        curve: Curves.fastOutSlowIn,
+                        child: const _MinimapPadding(child: _MinimapView()),
+                      ),
                     ),
                     Align(
                       alignment: Alignment.bottomCenter,
@@ -638,8 +621,9 @@ class _BodyState extends State<_Body> {
       final appBarExtent = _getAppBarExtent(context);
       final bottomAppBarExtent = MediaQuery.paddingOf(context).bottom;
       // final metadataTaskHeaderExtent = _web?.getHeaderHeight() ?? 0;
-      final smartAlbumListHeight =
-          hasMemoryCollection ? _MemoryCollectionItemView.height : 0;
+      final smartAlbumListHeight = hasMemoryCollection
+          ? _MemoryCollectionItemView.height
+          : 0;
       // scroll extent = list height - widget viewport height
       // + sliver app bar height + bottom app bar height
       // + metadata task header height + smart album list height

@@ -73,29 +73,28 @@ class _SetupState extends State<Setup> {
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
-                children:
-                    isLastPage
-                        ? [
-                          ElevatedButton(
-                            onPressed: () {
-                              _onDonePressed(pages.last.getPageId());
-                            },
-                            child: Text(L10n.global().doneButtonLabel),
-                          ),
-                        ]
-                        : [
-                          ElevatedButton(
-                            onPressed: () {
-                              if (_pageController.hasClients) {
-                                _onNextPressed(
-                                  pages[_pageController.page!.round()]
-                                      .getPageId(),
-                                );
-                              }
-                            },
-                            child: Text(L10n.global().nextButtonLabel),
-                          ),
-                        ],
+                children: isLastPage
+                    ? [
+                        ElevatedButton(
+                          onPressed: () {
+                            _onDonePressed(pages.last.getPageId());
+                          },
+                          child: Text(L10n.global().doneButtonLabel),
+                        ),
+                      ]
+                    : [
+                        ElevatedButton(
+                          onPressed: () {
+                            if (_pageController.hasClients) {
+                              _onNextPressed(
+                                pages[_pageController.page!.round()]
+                                    .getPageId(),
+                              );
+                            }
+                          },
+                          child: Text(L10n.global().nextButtonLabel),
+                        ),
+                      ],
               ),
               CirclePageIndicator(
                 itemCount: pages.length,
@@ -276,9 +275,9 @@ class _LocalFilesState extends State<_LocalFiles> {
   Widget build(BuildContext context) {
     return _isReady
         ? LocalRootPicker(
-          key: _key,
-          switchTitle: L10n.global().settingsDeviceMediaTitle,
-        )
+            key: _key,
+            switchTitle: L10n.global().settingsDeviceMediaTitle,
+          )
         : const Center(child: CircularProgressIndicator());
   }
 

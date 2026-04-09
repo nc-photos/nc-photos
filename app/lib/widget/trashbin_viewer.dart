@@ -138,13 +138,12 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
                 ),
                 PopupMenuButton<_AppBarMenuOption>(
                   tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-                  itemBuilder:
-                      (context) => [
-                        PopupMenuItem(
-                          value: _AppBarMenuOption.delete,
-                          child: Text(L10n.global().deletePermanentlyTooltip),
-                        ),
-                      ],
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: _AppBarMenuOption.delete,
+                      child: Text(L10n.global().deletePermanentlyTooltip),
+                    ),
+                  ],
                   onSelected: (option) {
                     switch (option) {
                       case _AppBarMenuOption.delete:
@@ -209,24 +208,21 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
     unawaited(
       showDialog(
         context: context,
-        builder:
-            (_) => AlertDialog(
-              title: Text(
-                L10n.global().deletePermanentlyConfirmationDialogTitle,
-              ),
-              content: Text(
-                L10n.global().deletePermanentlyConfirmationDialogContent,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _delete(context);
-                  },
-                  child: Text(L10n.global().confirmButtonLabel),
-                ),
-              ],
+        builder: (_) => AlertDialog(
+          title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
+          content: Text(
+            L10n.global().deletePermanentlyConfirmationDialogContent,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _delete(context);
+              },
+              child: Text(L10n.global().confirmButtonLabel),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -351,14 +347,15 @@ class _TrashbinViewerState extends State<TrashbinViewer> {
   Future<void> _delete(BuildContext context) async {
     final file = widget.streamFiles[_viewerController.currentPage];
     _log.info("[_delete] Removing file: ${file.path}");
-    final count = await RemoveSelectionHandler(
-      filesController: context.read<AccountController>().filesController,
-    )(
-      account: widget.account,
-      selection: [file],
-      shouldCleanupAlbum: false,
-      isRemoveOpened: true,
-    );
+    final count =
+        await RemoveSelectionHandler(
+          filesController: context.read<AccountController>().filesController,
+        )(
+          account: widget.account,
+          selection: [file],
+          shouldCleanupAlbum: false,
+          isRemoveOpened: true,
+        );
     if (count > 0 && mounted) {
       Navigator.of(context).pop();
     }

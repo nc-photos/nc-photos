@@ -44,12 +44,11 @@ class UpdateAlbumTime {
 
     DateTime? latestItemTime;
     try {
-      final latestFile =
-          sortedItems
-              .whereType<AlbumFileItem>()
-              .map((e) => e.file)
-              .where((element) => file_util.isSupportedFormat(element))
-              .first;
+      final latestFile = sortedItems
+          .whereType<AlbumFileItem>()
+          .map((e) => e.file)
+          .where((element) => file_util.isSupportedFormat(element))
+          .first;
       latestItemTime = latestFile.fdDateTime;
     } catch (_) {
       latestItemTime = null;

@@ -24,11 +24,10 @@ class LoadMetadata {
   Future<Metadata> loadAnyfile(AnyFile file, Uint8List binary) {
     return _loadMetadata(
       mime: file.mime ?? "",
-      reader:
-          () => exiv2.readBuffer(
-            binary,
-            isReadXmp: file_util.isSupportedVideoMime(file.mime ?? ""),
-          ),
+      reader: () => exiv2.readBuffer(
+        binary,
+        isReadXmp: file_util.isSupportedVideoMime(file.mime ?? ""),
+      ),
       logTag: file.displayPath,
     );
   }
@@ -36,14 +35,13 @@ class LoadMetadata {
   Future<Metadata> loadRemotefile(Account account, FileDescriptor file) {
     return _loadMetadata(
       mime: file.fdMime ?? "",
-      reader:
-          () => exiv2.readHttp(
-            api_util.getFileUri(account, file),
-            httpHeaders: {
-              "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
-            },
-            isReadXmp: file_util.isSupportedVideoMime(file.fdMime ?? ""),
-          ),
+      reader: () => exiv2.readHttp(
+        api_util.getFileUri(account, file),
+        httpHeaders: {
+          "Authorization": AuthUtil.fromAccount(account).toHeaderValue(),
+        },
+        isReadXmp: file_util.isSupportedVideoMime(file.fdMime ?? ""),
+      ),
       logTag: file.strippedPath,
     );
   }
@@ -97,20 +95,19 @@ class LoadMetadata {
     exifData.removeWhere((key, value) => key.startsWith("0x"));
     final exif = exifData.isNotEmpty ? Exif(exifData) : null;
 
-    final xmpData =
-        result.xmpData
-            .map((e) {
-              try {
-                return MapEntry(e.tagKey, e.value.asTyped());
-              } catch (_) {
-                _log.shout(
-                  "[_loadMetadata] Unable to convert XMP tag: ${e.tagKey}, ${e.value.toDebugString()}",
-                );
-                return null;
-              }
-            })
-            .nonNulls
-            .toMap();
+    final xmpData = result.xmpData
+        .map((e) {
+          try {
+            return MapEntry(e.tagKey, e.value.asTyped());
+          } catch (_) {
+            _log.shout(
+              "[_loadMetadata] Unable to convert XMP tag: ${e.tagKey}, ${e.value.toDebugString()}",
+            );
+            return null;
+          }
+        })
+        .nonNulls
+        .toMap();
     final xmp = xmpData.isNotEmpty ? Xmp(xmpData) : null;
 
     int? imageWidth = 0, imageHeight = 0;

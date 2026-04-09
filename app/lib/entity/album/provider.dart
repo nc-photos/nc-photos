@@ -94,14 +94,12 @@ class AlbumStaticProvider extends AlbumProviderBase {
 
   factory AlbumStaticProvider.fromJson(JsonObj json) {
     return AlbumStaticProvider(
-      latestItemTime:
-          json["latestItemTime"] == null
-              ? null
-              : DateTime.parse(json["latestItemTime"]),
-      items:
-          (json["items"] as List)
-              .map((e) => AlbumItem.fromJson(e.cast<String, dynamic>()))
-              .toList(),
+      latestItemTime: json["latestItemTime"] == null
+          ? null
+          : DateTime.parse(json["latestItemTime"]),
+      items: (json["items"] as List)
+          .map((e) => AlbumItem.fromJson(e.cast<String, dynamic>()))
+          .toList(),
     );
   }
 
@@ -125,8 +123,9 @@ class AlbumStaticProvider extends AlbumProviderBase {
     List<AlbumItem>? items,
   }) {
     return AlbumStaticProvider(
-      latestItemTime:
-          latestItemTime == null ? this.latestItemTime : latestItemTime.obj,
+      latestItemTime: latestItemTime == null
+          ? this.latestItemTime
+          : latestItemTime.obj,
       items: items ?? List.of(this.items),
     );
   }
@@ -151,14 +150,12 @@ class AlbumDirProvider extends AlbumDynamicProvider {
 
   factory AlbumDirProvider.fromJson(JsonObj json) {
     return AlbumDirProvider(
-      latestItemTime:
-          json["latestItemTime"] == null
-              ? null
-              : DateTime.parse(json["latestItemTime"]),
-      dirs:
-          (json["dirs"] as List)
-              .map((e) => File.fromJson(e.cast<String, dynamic>()))
-              .toList(),
+      latestItemTime: json["latestItemTime"] == null
+          ? null
+          : DateTime.parse(json["latestItemTime"]),
+      dirs: (json["dirs"] as List)
+          .map((e) => File.fromJson(e.cast<String, dynamic>()))
+          .toList(),
     );
   }
 
@@ -179,8 +176,9 @@ class AlbumDirProvider extends AlbumDynamicProvider {
     List<File>? dirs,
   }) {
     return AlbumDirProvider(
-      latestItemTime:
-          latestItemTime == null ? this.latestItemTime : latestItemTime.obj,
+      latestItemTime: latestItemTime == null
+          ? this.latestItemTime
+          : latestItemTime.obj,
       dirs: dirs ?? List.of(this.dirs),
     );
   }
@@ -199,14 +197,12 @@ class AlbumTagProvider extends AlbumDynamicProvider {
   AlbumTagProvider({required this.tags, super.latestItemTime});
 
   factory AlbumTagProvider.fromJson(JsonObj json) => AlbumTagProvider(
-    latestItemTime:
-        json["latestItemTime"] == null
-            ? null
-            : DateTime.parse(json["latestItemTime"]),
-    tags:
-        (json["tags"] as List)
-            .map((e) => Tag.fromJson(e.cast<String, dynamic>()))
-            .toList(),
+    latestItemTime: json["latestItemTime"] == null
+        ? null
+        : DateTime.parse(json["latestItemTime"]),
+    tags: (json["tags"] as List)
+        .map((e) => Tag.fromJson(e.cast<String, dynamic>()))
+        .toList(),
   );
 
   @override
@@ -223,8 +219,9 @@ class AlbumTagProvider extends AlbumDynamicProvider {
     OrNull<DateTime>? latestItemTime,
     List<Tag>? tags,
   }) => AlbumTagProvider(
-    latestItemTime:
-        latestItemTime == null ? this.latestItemTime : latestItemTime.obj,
+    latestItemTime: latestItemTime == null
+        ? this.latestItemTime
+        : latestItemTime.obj,
     tags: tags ?? List.of(this.tags),
   );
 

@@ -209,13 +209,12 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
         ),
         PopupMenuButton<_SelectionMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: _SelectionMenuOption.delete,
-                  child: Text(L10n.global().deletePermanentlyTooltip),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: _SelectionMenuOption.delete,
+              child: Text(L10n.global().deletePermanentlyTooltip),
+            ),
+          ],
           onSelected: (option) => _onSelectionMenuSelected(context, option),
         ),
       ],
@@ -246,11 +245,10 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
 
   Future<void> _onSelectionSharePressed(BuildContext context) async {
     final c = KiwiContainer().resolve<DiContainer>();
-    final selected =
-        selectedListItems
-            .whereType<PhotoListLocalFileItem>()
-            .map((e) => e.file)
-            .toList();
+    final selected = selectedListItems
+        .whereType<PhotoListLocalFileItem>()
+        .map((e) => e.file)
+        .toList();
     await ShareHandler(
       c,
       context: context,
@@ -276,31 +274,29 @@ class _EnhancedPhotoBrowserState extends State<EnhancedPhotoBrowser>
   Future<void> _onSelectionDeletePressed(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
-            content: Text(
-              L10n.global().deletePermanentlyLocalConfirmationDialogContent,
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(L10n.global().confirmButtonLabel),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
+        content: Text(
+          L10n.global().deletePermanentlyLocalConfirmationDialogContent,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(L10n.global().confirmButtonLabel),
           ),
+        ],
+      ),
     );
     if (result != true) {
       return;
     }
 
-    final selectedFiles =
-        selectedListItems
-            .whereType<PhotoListLocalFileItem>()
-            .map((e) => e.file)
-            .toList();
+    final selectedFiles = selectedListItems
+        .whereType<PhotoListLocalFileItem>()
+        .map((e) => e.file)
+        .toList();
     setState(() {
       clearSelectedItems();
     });

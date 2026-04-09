@@ -43,41 +43,40 @@ class CollectionExporter {
     final newAlbum = Album(
       name: exportName,
       provider: AlbumStaticProvider(
-        items:
-            items
-                .map((e) {
-                  if (e is CollectionFileItem) {
-                    final f = files.firstWhereOrNull(
-                      (f) => f.compareServerIdentity(e.file),
-                    );
-                    if (f == null) {
-                      return null;
-                    } else {
-                      return AlbumFileItem(
-                        addedBy: account.userId,
-                        addedAt: clock.now().toUtc(),
-                        file: f,
-                        ownerId: f.ownerId ?? account.userId,
-                      );
-                    }
-                  } else if (e is CollectionLabelItem) {
-                    return AlbumLabelItem(
-                      addedBy: account.userId,
-                      addedAt: clock.now().toUtc(),
-                      text: e.text,
-                    );
-                  } else if (e is CollectionMapItem) {
-                    return AlbumMapItem(
-                      addedBy: account.userId,
-                      addedAt: clock.now().toUtc(),
-                      location: e.location,
-                    );
-                  } else {
-                    return null;
-                  }
-                })
-                .nonNulls
-                .toList(),
+        items: items
+            .map((e) {
+              if (e is CollectionFileItem) {
+                final f = files.firstWhereOrNull(
+                  (f) => f.compareServerIdentity(e.file),
+                );
+                if (f == null) {
+                  return null;
+                } else {
+                  return AlbumFileItem(
+                    addedBy: account.userId,
+                    addedAt: clock.now().toUtc(),
+                    file: f,
+                    ownerId: f.ownerId ?? account.userId,
+                  );
+                }
+              } else if (e is CollectionLabelItem) {
+                return AlbumLabelItem(
+                  addedBy: account.userId,
+                  addedAt: clock.now().toUtc(),
+                  text: e.text,
+                );
+              } else if (e is CollectionMapItem) {
+                return AlbumMapItem(
+                  addedBy: account.userId,
+                  addedAt: clock.now().toUtc(),
+                  location: e.location,
+                );
+              } else {
+                return null;
+              }
+            })
+            .nonNulls
+            .toList(),
         latestItemTime: collection.lastModified,
       ),
       coverProvider: const AlbumAutoCoverProvider(),
@@ -104,8 +103,10 @@ class CollectionExporter {
     );
     newCollection = await collectionsController.createNew(newCollection);
     // only files are supported in NcAlbum
-    final newFiles =
-        items.whereType<CollectionFileItem>().map((e) => e.file).toList();
+    final newFiles = items
+        .whereType<CollectionFileItem>()
+        .map((e) => e.file)
+        .toList();
     final data = collectionsController.peekStream().data.firstWhere(
       (e) => e.collection.compareIdentity(newCollection),
     );

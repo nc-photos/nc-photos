@@ -91,8 +91,11 @@ class M3FilterChipDisabled {
       return this;
     }
     return M3FilterChipDisabled(
-      containerSelected:
-          Color.lerp(containerSelected, other.containerSelected, t)!,
+      containerSelected: Color.lerp(
+        containerSelected,
+        other.containerSelected,
+        t,
+      )!,
       labelText: Color.lerp(labelText, other.labelText, t)!,
     );
   }

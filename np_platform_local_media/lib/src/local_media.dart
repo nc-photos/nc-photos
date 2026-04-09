@@ -173,8 +173,9 @@ extension on api.QueryResult {
       dateTaken: dateTaken?.let(
         (e) => DateTime.fromMillisecondsSinceEpoch(e, isUtc: true),
       ),
-      resolution:
-          width != null && height != null ? SizeInt(width!, height!) : null,
+      resolution: width != null && height != null
+          ? SizeInt(width!, height!)
+          : null,
       size: size,
       androidUri: androidUri,
       androidPath: androidPath,

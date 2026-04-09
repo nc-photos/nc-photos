@@ -95,8 +95,10 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
     final List<AnyFile> remote;
     final List<AnyFile> local;
     try {
-      (remote, local) =
-          await (_getRemoteFiles(at, count), _getLocalFiles(at, count)).wait;
+      (remote, local) = await (
+        _getRemoteFiles(at, count),
+        _getLocalFiles(at, count),
+      ).wait;
     } on ParallelWaitError catch (pe) {
       _log.severe(
         "[getFiles] Exceptions, 1: ${pe.errors.$1}, 2: ${pe.errors.$2}",
@@ -138,16 +140,17 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
 
   @override
   Future<List<String>> listAfIds() async {
-    final results = await ListAnyFileIdWithTimestamp(
-      fileRepo: c.fileRepo2,
-      localFileRepo: c.localFileRepo,
-      prefController: prefController,
-    )(
-      account,
-      shareDirPath,
-      localDirWhitelist: prefController.localDirsValue,
-      isArchived: false,
-    );
+    final results =
+        await ListAnyFileIdWithTimestamp(
+          fileRepo: c.fileRepo2,
+          localFileRepo: c.localFileRepo,
+          prefController: prefController,
+        )(
+          account,
+          shareDirPath,
+          localDirWhitelist: prefController.localDirsValue,
+          isArchived: false,
+        );
     return results.map((e) => e.afId).toList();
   }
 
@@ -164,13 +167,12 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
       account,
       shareDirPath,
       isArchived: false,
-      timeRange:
-          count < 0
-              ? TimeRange(from: originalFile.dateTime)
-              : TimeRange(
-                to: originalFile.dateTime,
-                toBound: TimeRangeBound.inclusive,
-              ),
+      timeRange: count < 0
+          ? TimeRange(from: originalFile.dateTime)
+          : TimeRange(
+              to: originalFile.dateTime,
+              toBound: TimeRangeBound.inclusive,
+            ),
       isAscending: count < 0,
       limit: count.abs(),
     );
@@ -184,21 +186,21 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
         at.originalFile.provider.as<AnyFileMergedProvider>()?.asLocalFile() ??
         at.originalFile;
     try {
-      final raw = await ListLocalFile(
-        localFileRepo: c.localFileRepo,
-        prefController: prefController,
-      )(
-        timeRange:
-            count < 0
+      final raw =
+          await ListLocalFile(
+            localFileRepo: c.localFileRepo,
+            prefController: prefController,
+          )(
+            timeRange: count < 0
                 ? TimeRange(from: originalFile.dateTime)
                 : TimeRange(
-                  to: originalFile.dateTime,
-                  toBound: TimeRangeBound.inclusive,
-                ),
-        dirWhitelist: prefController.localDirsValue,
-        isAscending: count < 0,
-        limit: count.abs(),
-      );
+                    to: originalFile.dateTime,
+                    toBound: TimeRangeBound.inclusive,
+                  ),
+            dirWhitelist: prefController.localDirsValue,
+            isAscending: count < 0,
+            limit: count.abs(),
+          );
       return raw.map((e) => e.toAnyFile()).toList();
     } on PermissionException {
       // ignore permission not granted
@@ -221,8 +223,9 @@ class _TimelineViewerContentProvider implements ViewerContentProvider {
       if (isAnyFileMergeable(merged.last, e)) {
         // merge
         final replace = merged.removeLast();
-        final remote =
-            replace.provider is AnyFileNextcloudProvider ? replace : e;
+        final remote = replace.provider is AnyFileNextcloudProvider
+            ? replace
+            : e;
         final local = replace.provider is AnyFileLocalProvider ? replace : e;
         merged.add(
           AnyFile(

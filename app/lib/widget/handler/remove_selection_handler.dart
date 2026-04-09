@@ -31,8 +31,8 @@ class RemoveSelectionHandler {
       failureText = (_) => L10n.global().deleteFailureNotification;
     } else {
       successText = L10n.global().deleteSelectedSuccessNotification;
-      failureText =
-          (count) => L10n.global().deleteSelectedFailureNotification(count);
+      failureText = (count) =>
+          L10n.global().deleteSelectedFailureNotification(count);
     }
 
     var failureCount = 0;
@@ -43,18 +43,17 @@ class RemoveSelectionHandler {
         return RemoveFailureError(fileIds);
       },
     );
-    final trashAction =
-        isMoveToTrash
-            ? SnackBarAction(
-              label: L10n.global().albumTrashLabel,
-              onPressed: () {
-                NavigationManager().getNavigator()?.pushNamed(
-                  TrashbinBrowser.routeName,
-                  arguments: TrashbinBrowserArguments(account),
-                );
-              },
-            )
-            : null;
+    final trashAction = isMoveToTrash
+        ? SnackBarAction(
+            label: L10n.global().albumTrashLabel,
+            onPressed: () {
+              NavigationManager().getNavigator()?.pushNamed(
+                TrashbinBrowser.routeName,
+                arguments: TrashbinBrowserArguments(account),
+              );
+            },
+          )
+        : null;
     if (failureCount == 0) {
       SnackBarManager().showSnackBar(
         SnackBar(

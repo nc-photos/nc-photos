@@ -110,8 +110,8 @@ class _SelectableItemListState<T extends SelectableItemMetadata>
         maxCrossAxisExtent: widget.maxCrossAxisExtent,
         itemCount: widget.items.length,
         itemBuilder: _buildItem,
-        staggeredTileBuilder:
-            (i) => widget.staggeredTileBuilder(i, widget.items[i]),
+        staggeredTileBuilder: (i) =>
+            widget.staggeredTileBuilder(i, widget.items[i]),
         onMaxExtentChanged: widget.onMaxExtentChange,
       );
     } else {
@@ -120,8 +120,8 @@ class _SelectableItemListState<T extends SelectableItemMetadata>
         maxCrossAxisExtent: widget.maxCrossAxisExtent,
         itemCount: widget.items.length,
         itemBuilder: _buildItem,
-        staggeredTileBuilder:
-            (i) => widget.staggeredTileBuilder(i, widget.items[i]),
+        staggeredTileBuilder: (i) =>
+            widget.staggeredTileBuilder(i, widget.items[i]),
       );
     }
   }
@@ -135,10 +135,9 @@ class _SelectableItemListState<T extends SelectableItemMetadata>
         childBorderRadius:
             widget.childBorderRadius ?? BorderRadius.circular(24),
         indicatorAlignment: widget.indicatorAlignment,
-        onTap:
-            _isSelecting
-                ? () => _onItemSelect(context, index, meta)
-                : () => _onItemTap(context, index, meta),
+        onTap: _isSelecting
+            ? () => _onItemSelect(context, index, meta)
+            : () => _onItemTap(context, index, meta),
         onLongPress: () => _onItemLongPress(index, meta),
         child: widget.itemBuilder(context, index, meta),
       );
@@ -238,11 +237,10 @@ class _SelectableItemListState<T extends SelectableItemMetadata>
     _log.info(
       "[_remapSelected] Mapping ${widget.selectedItems.length} items to new list",
     );
-    final newSelected =
-        widget.selectedItems
-            .map((from) => widget.items.firstWhereOrNull((to) => from == to))
-            .nonNulls
-            .toSet();
+    final newSelected = widget.selectedItems
+        .map((from) => widget.items.firstWhereOrNull((to) => from == to))
+        .nonNulls
+        .toSet();
     if (newSelected.length != widget.selectedItems.length) {
       _log.warning(
         "[_remapSelected] ${widget.selectedItems.length - newSelected.length} items not found in the new list",
@@ -253,9 +251,8 @@ class _SelectableItemListState<T extends SelectableItemMetadata>
 
     _log.info("[_remapSelected] updateListHeight: list item changed");
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) =>
-          (_listKey.currentState as MeasurableItemListState?)
-              ?.updateListHeight(),
+      (_) => (_listKey.currentState as MeasurableItemListState?)
+          ?.updateListHeight(),
     );
   }
 

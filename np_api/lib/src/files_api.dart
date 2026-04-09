@@ -76,32 +76,32 @@ class ApiFiles {
     try {
       final bool hasDavNs =
           (getlastmodified != null ||
-              getetag != null ||
-              getcontenttype != null ||
-              resourcetype != null ||
-              getcontentlength != null);
+          getetag != null ||
+          getcontenttype != null ||
+          resourcetype != null ||
+          getcontentlength != null);
       final bool hasOcNs =
           (id != null ||
-              fileid != null ||
-              favorite != null ||
-              commentsHref != null ||
-              commentsCount != null ||
-              commentsUnread != null ||
-              ownerId != null ||
-              ownerDisplayName != null ||
-              shareTypes != null ||
-              checksums != null ||
-              size != null);
+          fileid != null ||
+          favorite != null ||
+          commentsHref != null ||
+          commentsCount != null ||
+          commentsUnread != null ||
+          ownerId != null ||
+          ownerDisplayName != null ||
+          shareTypes != null ||
+          checksums != null ||
+          size != null);
       final bool hasNcNs =
           (hasPreview != null ||
-              richWorkspace != null ||
-              trashbinFilename != null ||
-              trashbinOriginalLocation != null ||
-              trashbinDeletionTime != null ||
-              metadataPhotosIfd0 != null ||
-              metadataPhotosExif != null ||
-              metadataPhotosGps != null ||
-              metadataPhotosSize != null);
+          richWorkspace != null ||
+          trashbinFilename != null ||
+          trashbinOriginalLocation != null ||
+          trashbinDeletionTime != null ||
+          metadataPhotosIfd0 != null ||
+          metadataPhotosExif != null ||
+          metadataPhotosGps != null ||
+          metadataPhotosSize != null);
       if (!hasDavNs && !hasOcNs && !hasNcNs) {
         // no body
         return await _api.request("PROPFIND", path);

@@ -7,10 +7,9 @@ class _AppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = KiwiContainer().resolve<DiContainer>();
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.items != current.items ||
-              previous.collection != current.collection,
+      buildWhen: (previous, current) =>
+          previous.items != current.items ||
+          previous.collection != current.collection,
       builder: (context, state) {
         final adapter = CollectionAdapter.of(
           c,
@@ -27,87 +26,85 @@ class _AppBar extends StatelessWidget {
             height: kToolbarHeight,
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: Row(
-              children:
-                  [
-                    BackButton(
-                      style: IconButton.styleFrom(
-                        backgroundColor:
-                            Theme.of(context).colorScheme.surfaceContainer,
-                      ),
+              children: [
+                BackButton(
+                  style: IconButton.styleFrom(
+                    backgroundColor: Theme.of(
+                      context,
+                    ).colorScheme.surfaceContainer,
+                  ),
+                ),
+                const Spacer(),
+                if (canShare)
+                  IconButton(
+                    onPressed: () => _onSharePressed(context),
+                    icon: const Icon(Icons.share_outlined),
+                    tooltip: L10n.global().shareTooltip,
+                    style: IconButton.styleFrom(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainer,
                     ),
-                    const Spacer(),
-                    if (canShare)
-                      IconButton(
-                        onPressed: () => _onSharePressed(context),
-                        icon: const Icon(Icons.share_outlined),
-                        tooltip: L10n.global().shareTooltip,
-                        style: IconButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surfaceContainer,
+                  ),
+                if (state.collection.isPendingSharedAlbum)
+                  IconButton(
+                    onPressed: () => _onAddToCollectionsViewPressed(context),
+                    icon: const AssetIcon(asset.icAddCollectionsOutlined24),
+                    tooltip: L10n.global().addToCollectionsViewTooltip,
+                    style: IconButton.styleFrom(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainer,
+                    ),
+                  ),
+                if (state.items.isNotEmpty || canRename)
+                  PopupMenuButton<_MenuOption>(
+                    tooltip: MaterialLocalizations.of(
+                      context,
+                    ).moreButtonTooltip,
+                    itemBuilder: (_) => [
+                      if (canRename)
+                        PopupMenuItem(
+                          value: _MenuOption.edit,
+                          child: Text(L10n.global().editTooltip),
                         ),
-                      ),
-                    if (state.collection.isPendingSharedAlbum)
-                      IconButton(
-                        onPressed:
-                            () => _onAddToCollectionsViewPressed(context),
-                        icon: const AssetIcon(asset.icAddCollectionsOutlined24),
-                        tooltip: L10n.global().addToCollectionsViewTooltip,
-                        style: IconButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surfaceContainer,
+                      if (canManualCover && adapter.isManualCover())
+                        PopupMenuItem(
+                          value: _MenuOption.unsetCover,
+                          child: Text(L10n.global().unsetAlbumCoverTooltip),
                         ),
-                      ),
-                    if (state.items.isNotEmpty || canRename)
-                      PopupMenuButton<_MenuOption>(
-                        tooltip:
-                            MaterialLocalizations.of(context).moreButtonTooltip,
-                        itemBuilder:
-                            (_) => [
-                              if (canRename)
-                                PopupMenuItem(
-                                  value: _MenuOption.edit,
-                                  child: Text(L10n.global().editTooltip),
-                                ),
-                              if (canManualCover && adapter.isManualCover())
-                                PopupMenuItem(
-                                  value: _MenuOption.unsetCover,
-                                  child: Text(
-                                    L10n.global().unsetAlbumCoverTooltip,
-                                  ),
-                                ),
-                              if (state.items.isNotEmpty) ...[
-                                PopupMenuItem(
-                                  value: _MenuOption.download,
-                                  child: Text(L10n.global().downloadTooltip),
-                                ),
-                                PopupMenuItem(
-                                  value: _MenuOption.export,
-                                  child: Text(
-                                    L10n.global().exportCollectionTooltip,
-                                  ),
-                                ),
-                              ],
-                              if (state.collection.contentProvider
-                                      is CollectionAlbumProvider &&
-                                  CollectionAdapter.of(
-                                    c,
-                                    context.bloc.account,
-                                    state.collection,
-                                  ).isPermitted(CollectionCapability.share))
-                                PopupMenuItem(
-                                  value: _MenuOption.albumFixShare,
-                                  child: Text(L10n.global().fixSharesTooltip),
-                                ),
-                            ],
-                        onSelected: (option) {
-                          _onMenuSelected(context, option);
-                        },
-                        style: IconButton.styleFrom(
-                          backgroundColor:
-                              Theme.of(context).colorScheme.surfaceContainer,
+                      if (state.items.isNotEmpty) ...[
+                        PopupMenuItem(
+                          value: _MenuOption.download,
+                          child: Text(L10n.global().downloadTooltip),
                         ),
-                      ),
-                  ].separated((_) => const SizedBox(width: 4)).toList(),
+                        PopupMenuItem(
+                          value: _MenuOption.export,
+                          child: Text(L10n.global().exportCollectionTooltip),
+                        ),
+                      ],
+                      if (state.collection.contentProvider
+                              is CollectionAlbumProvider &&
+                          CollectionAdapter.of(
+                            c,
+                            context.bloc.account,
+                            state.collection,
+                          ).isPermitted(CollectionCapability.share))
+                        PopupMenuItem(
+                          value: _MenuOption.albumFixShare,
+                          child: Text(L10n.global().fixSharesTooltip),
+                        ),
+                    ],
+                    onSelected: (option) {
+                      _onMenuSelected(context, option);
+                    },
+                    style: IconButton.styleFrom(
+                      backgroundColor: Theme.of(
+                        context,
+                      ).colorScheme.surfaceContainer,
+                    ),
+                  ),
+              ].separated((_) => const SizedBox(width: 4)).toList(),
             ),
           ),
         );
@@ -139,12 +136,11 @@ class _AppBar extends StatelessWidget {
     final bloc = context.read<_Bloc>();
     final result = await showDialog<Collection>(
       context: context,
-      builder:
-          (_) => ExportCollectionDialog(
-            account: bloc.account,
-            collection: bloc.state.collection,
-            items: bloc.state.items,
-          ),
+      builder: (_) => ExportCollectionDialog(
+        account: bloc.account,
+        collection: bloc.state.collection,
+        items: bloc.state.items,
+      ),
     );
     if (result != null) {
       Navigator.of(context).pop();
@@ -165,11 +161,10 @@ class _AppBar extends StatelessWidget {
     final bloc = context.read<_Bloc>();
     await showDialog(
       context: context,
-      builder:
-          (_) => ShareCollectionDialog(
-            account: bloc.account,
-            collection: bloc.state.collection,
-          ),
+      builder: (_) => ShareCollectionDialog(
+        account: bloc.account,
+        collection: bloc.state.collection,
+      ),
     );
   }
 
@@ -184,10 +179,9 @@ class _CoverView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.cover != current.cover ||
-              previous.collection != current.collection,
+      buildWhen: (previous, current) =>
+          previous.cover != current.cover ||
+          previous.collection != current.collection,
       builder: (context, state) {
         if (state.cover?.url != null) {
           return SizedBox(
@@ -200,17 +194,16 @@ class _CoverView extends StatelessWidget {
                   child: FittedBox(
                     clipBehavior: Clip.hardEdge,
                     fit: BoxFit.cover,
-                    child:
-                        CachedNetworkImageBuilder(
-                          type: CachedNetworkImageType.cover,
-                          imageUrl: state.cover!.url,
-                          mime: state.cover!.mime,
-                          account: context.bloc.account,
-                          errorWidget: (context, url, error) {
-                            // just leave it empty
-                            return Container();
-                          },
-                        ).build(),
+                    child: CachedNetworkImageBuilder(
+                      type: CachedNetworkImageType.cover,
+                      imageUrl: state.cover!.url,
+                      mime: state.cover!.mime,
+                      account: context.bloc.account,
+                      errorWidget: (context, url, error) {
+                        // just leave it empty
+                        return Container();
+                      },
+                    ).build(),
                   ),
                 ),
                 const DecoratedBox(
@@ -257,69 +250,64 @@ class _SelectionAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.selectedItems != current.selectedItems,
-      builder:
-          (context, state) => BoxSelectionAppBar(
-            count: state.selectedItems.length,
-            onClosePressed: () {
-              context.read<_Bloc>().add(const _SetSelectedItems(items: {}));
+      buildWhen: (previous, current) =>
+          previous.selectedItems != current.selectedItems,
+      builder: (context, state) => BoxSelectionAppBar(
+        count: state.selectedItems.length,
+        onClosePressed: () {
+          context.read<_Bloc>().add(const _SetSelectedItems(items: {}));
+        },
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share_outlined),
+            tooltip: L10n.global().shareTooltip,
+            onPressed: () {
+              _onSelectionSharePressed(context);
             },
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.share_outlined),
-                tooltip: L10n.global().shareTooltip,
-                onPressed: () {
-                  _onSelectionSharePressed(context);
-                },
-              ),
-              IconButton(
-                icon: const Icon(Icons.add_outlined),
-                tooltip: L10n.global().addItemToCollectionTooltip,
-                onPressed: () {
-                  _onSelectionAddPressed(context);
-                },
-              ),
-              PopupMenuButton<_SelectionMenuOption>(
-                tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-                itemBuilder:
-                    (context) => [
-                      if (context.read<_Bloc>().isCollectionCapabilityPermitted(
-                            CollectionCapability.manualItem,
-                          ) &&
-                          state.isSelectionRemovable)
-                        PopupMenuItem(
-                          value: _SelectionMenuOption.removeFromAlbum,
-                          child: Text(L10n.global().removeFromAlbumTooltip),
-                        ),
-                      PopupMenuItem(
-                        value: _SelectionMenuOption.download,
-                        child: Text(L10n.global().downloadTooltip),
-                      ),
-                      if (state.isSelectionManageableFile) ...[
-                        PopupMenuItem(
-                          value: _SelectionMenuOption.archive,
-                          child: Text(L10n.global().archiveTooltip),
-                        ),
-                        if (context
-                                .read<_Bloc>()
-                                .isCollectionCapabilityPermitted(
-                                  CollectionCapability.deleteItem,
-                                ) &&
-                            state.isSelectionDeletable)
-                          PopupMenuItem(
-                            value: _SelectionMenuOption.delete,
-                            child: Text(L10n.global().deleteTooltip),
-                          ),
-                      ],
-                    ],
-                onSelected: (option) {
-                  _onSelectionMenuSelected(context, option);
-                },
-              ),
-            ],
           ),
+          IconButton(
+            icon: const Icon(Icons.add_outlined),
+            tooltip: L10n.global().addItemToCollectionTooltip,
+            onPressed: () {
+              _onSelectionAddPressed(context);
+            },
+          ),
+          PopupMenuButton<_SelectionMenuOption>(
+            tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
+            itemBuilder: (context) => [
+              if (context.read<_Bloc>().isCollectionCapabilityPermitted(
+                    CollectionCapability.manualItem,
+                  ) &&
+                  state.isSelectionRemovable)
+                PopupMenuItem(
+                  value: _SelectionMenuOption.removeFromAlbum,
+                  child: Text(L10n.global().removeFromAlbumTooltip),
+                ),
+              PopupMenuItem(
+                value: _SelectionMenuOption.download,
+                child: Text(L10n.global().downloadTooltip),
+              ),
+              if (state.isSelectionManageableFile) ...[
+                PopupMenuItem(
+                  value: _SelectionMenuOption.archive,
+                  child: Text(L10n.global().archiveTooltip),
+                ),
+                if (context.read<_Bloc>().isCollectionCapabilityPermitted(
+                      CollectionCapability.deleteItem,
+                    ) &&
+                    state.isSelectionDeletable)
+                  PopupMenuItem(
+                    value: _SelectionMenuOption.delete,
+                    child: Text(L10n.global().deleteTooltip),
+                  ),
+              ],
+            ],
+            onSelected: (option) {
+              _onSelectionMenuSelected(context, option);
+            },
+          ),
+        ],
+      ),
     );
   }
 
@@ -424,20 +412,18 @@ class _EditAppBar extends StatelessWidget {
         if (capabilitiesAdapter.isPermitted(CollectionCapability.mapItem))
           _BlocSelector(
             selector: (state) => state.isAddMapBusy,
-            builder:
-                (context, isAddMapBusy) =>
-                    isAddMapBusy
-                        ? const IconButton(
-                          icon: AppBarProgressIndicator(),
-                          onPressed: null,
-                        )
-                        : IconButton(
-                          icon: const Icon(Icons.map_outlined),
-                          tooltip: L10n.global().albumAddMapTooltip,
-                          onPressed: () {
-                            context.addEvent(const _RequestAddMap());
-                          },
-                        ),
+            builder: (context, isAddMapBusy) => isAddMapBusy
+                ? const IconButton(
+                    icon: AppBarProgressIndicator(),
+                    onPressed: null,
+                  )
+                : IconButton(
+                    icon: const Icon(Icons.map_outlined),
+                    tooltip: L10n.global().albumAddMapTooltip,
+                    onPressed: () {
+                      context.addEvent(const _RequestAddMap());
+                    },
+                  ),
           ),
         if (capabilitiesAdapter.isPermitted(CollectionCapability.sort))
           IconButton(
@@ -455,44 +441,43 @@ class _EditAppBar extends StatelessWidget {
     );
     final result = await showDialog<CollectionItemSort>(
       context: context,
-      builder:
-          (context) => FancyOptionPicker(
-            title: Text(L10n.global().sortOptionDialogTitle),
-            items:
-                [
-                      _SortDialogParams(
-                        L10n.global().sortOptionTimeDescendingLabel,
-                        CollectionItemSort.dateDescending,
-                      ),
-                      _SortDialogParams(
-                        L10n.global().sortOptionTimeAscendingLabel,
-                        CollectionItemSort.dateAscending,
-                      ),
-                      _SortDialogParams(
-                        L10n.global().sortOptionFilenameAscendingLabel,
-                        CollectionItemSort.nameAscending,
-                      ),
-                      _SortDialogParams(
-                        L10n.global().sortOptionFilenameDescendingLabel,
-                        CollectionItemSort.nameDescending,
-                      ),
-                      if (current == CollectionItemSort.manual)
-                        _SortDialogParams(
-                          L10n.global().sortOptionManualLabel,
-                          CollectionItemSort.manual,
-                        ),
-                    ]
-                    .map(
-                      (e) => FancyOptionPickerItem(
-                        label: e.label,
-                        isSelected: current == e.value,
-                        onSelect: () {
-                          Navigator.of(context).pop(e.value);
-                        },
-                      ),
-                    )
-                    .toList(),
-          ),
+      builder: (context) => FancyOptionPicker(
+        title: Text(L10n.global().sortOptionDialogTitle),
+        items:
+            [
+                  _SortDialogParams(
+                    L10n.global().sortOptionTimeDescendingLabel,
+                    CollectionItemSort.dateDescending,
+                  ),
+                  _SortDialogParams(
+                    L10n.global().sortOptionTimeAscendingLabel,
+                    CollectionItemSort.dateAscending,
+                  ),
+                  _SortDialogParams(
+                    L10n.global().sortOptionFilenameAscendingLabel,
+                    CollectionItemSort.nameAscending,
+                  ),
+                  _SortDialogParams(
+                    L10n.global().sortOptionFilenameDescendingLabel,
+                    CollectionItemSort.nameDescending,
+                  ),
+                  if (current == CollectionItemSort.manual)
+                    _SortDialogParams(
+                      L10n.global().sortOptionManualLabel,
+                      CollectionItemSort.manual,
+                    ),
+                ]
+                .map(
+                  (e) => FancyOptionPickerItem(
+                    label: e.label,
+                    isSelected: current == e.value,
+                    onSelect: () {
+                      Navigator.of(context).pop(e.value);
+                    },
+                  ),
+                )
+                .toList(),
+      ),
     );
     if (result == null) {
       return;

@@ -95,23 +95,18 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
         if (widget.dataPoints != null)
           MarkerClusterLayerWidget(
             options: MarkerClusterLayerOptions(
-              markers:
-                  widget.dataPoints!
-                      .map(
-                        (e) => _OsmDataPoint(
-                          original: e,
-                          child: _buildMarker(context, [e]),
-                        ),
-                      )
-                      .toList(),
-              builder:
-                  (context, markers) => _buildMarker(
-                    context,
-                    markers
-                        .cast<_OsmDataPoint>()
-                        .map((e) => e.original)
-                        .toList(),
-                  ),
+              markers: widget.dataPoints!
+                  .map(
+                    (e) => _OsmDataPoint(
+                      original: e,
+                      child: _buildMarker(context, [e]),
+                    ),
+                  )
+                  .toList(),
+              builder: (context, markers) => _buildMarker(
+                context,
+                markers.cast<_OsmDataPoint>().map((e) => e.original).toList(),
+              ),
               // need to be large enough to contain markers of all size
               size: const Size.square(_markerBoundingBoxSize),
               // disable all tap handlers from package
@@ -155,15 +150,17 @@ class _OsmInteractiveMapState extends State<OsmInteractiveMap> {
       return const SizedBox.shrink();
     } else {
       return GestureDetector(
-        onTap: widget.onClusterTap?.let((l) => () => l(dataPoints)),
+        onTap: widget.onClusterTap?.let(
+          (l) =>
+              () => l(dataPoints),
+        ),
         child: StreamBuilder(
           stream: _mapRotationRadSubject.stream,
           initialData: _mapRotationRadSubject.value,
-          builder:
-              (context, snapshot) => Transform.rotate(
-                angle: -snapshot.requireData,
-                child: widget.clusterBuilder!(context, dataPoints),
-              ),
+          builder: (context, snapshot) => Transform.rotate(
+            angle: -snapshot.requireData,
+            child: widget.clusterBuilder!(context, dataPoints),
+          ),
         ),
       );
     }
@@ -183,28 +180,26 @@ class _CompassIcon extends StatelessWidget {
     return StreamBuilder(
       stream: mapRotationRadSubject.stream,
       initialData: mapRotationRadSubject.value,
-      builder:
-          (context, snapshot) => Transform.rotate(
-            angle: snapshot.requireData,
-            child: GestureDetector(
-              onTap: () {
-                onTap?.call();
-              },
-              child: Opacity(
-                opacity: .8,
-                child: Image(
-                  image:
-                      Theme.of(context).brightness == Brightness.light
-                          ? const AssetImage(
-                            "packages/np_gps_map/assets/map_compass.png",
-                          )
-                          : const AssetImage(
-                            "packages/np_gps_map/assets/map_compass_dark.png",
-                          ),
-                ),
-              ),
+      builder: (context, snapshot) => Transform.rotate(
+        angle: snapshot.requireData,
+        child: GestureDetector(
+          onTap: () {
+            onTap?.call();
+          },
+          child: Opacity(
+            opacity: .8,
+            child: Image(
+              image: Theme.of(context).brightness == Brightness.light
+                  ? const AssetImage(
+                      "packages/np_gps_map/assets/map_compass.png",
+                    )
+                  : const AssetImage(
+                      "packages/np_gps_map/assets/map_compass_dark.png",
+                    ),
             ),
           ),
+        ),
+      ),
     );
   }
 

@@ -8,8 +8,9 @@ import 'package:source_gen/source_gen.dart';
 // Taken from source_gen_test, unclear why this is needed...
 Future<void> resolveCompilationUnit(String filePath) async {
   final assetId = AssetId.parse('a|lib/${p.basename(filePath)}');
-  final files =
-      Directory(p.dirname(filePath)).listSync().whereType<File>().toList();
+  final files = Directory(
+    p.dirname(filePath),
+  ).listSync().whereType<File>().toList();
 
   final fileMap = Map<String, String>.fromEntries(
     files.map(

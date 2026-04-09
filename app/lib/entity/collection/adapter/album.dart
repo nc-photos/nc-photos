@@ -95,31 +95,30 @@ class CollectionAlbumAdapter implements CollectionAdapter {
   }) async {
     assert(name != null || items != null || itemSort != null || cover != null);
     final newItems = items?.run(
-      (items) =>
-          items
-              .map((e) {
-                if (e is AlbumAdaptedCollectionItem) {
-                  return e.albumItem;
-                } else if (e is NewCollectionLabelItem) {
-                  // new labels
-                  return AlbumLabelItem(
-                    addedBy: account.userId,
-                    addedAt: e.createdAt,
-                    text: e.text,
-                  );
-                } else if (e is NewCollectionMapItem) {
-                  return AlbumMapItem(
-                    addedBy: account.userId,
-                    addedAt: e.createdAt,
-                    location: e.location,
-                  );
-                } else {
-                  _log.severe("[edit] Unsupported type: ${e.runtimeType}");
-                  return null;
-                }
-              })
-              .nonNulls
-              .toList(),
+      (items) => items
+          .map((e) {
+            if (e is AlbumAdaptedCollectionItem) {
+              return e.albumItem;
+            } else if (e is NewCollectionLabelItem) {
+              // new labels
+              return AlbumLabelItem(
+                addedBy: account.userId,
+                addedAt: e.createdAt,
+                text: e.text,
+              );
+            } else if (e is NewCollectionMapItem) {
+              return AlbumMapItem(
+                addedBy: account.userId,
+                addedAt: e.createdAt,
+                location: e.location,
+              );
+            } else {
+              _log.severe("[edit] Unsupported type: ${e.runtimeType}");
+              return null;
+            }
+          })
+          .nonNulls
+          .toList(),
     );
     final newAlbum = await EditAlbum(_c)(
       account,
@@ -128,11 +127,10 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       items: newItems,
       itemSort: itemSort,
       cover: cover,
-      knownItems:
-          knownItems
-              ?.whereType<AlbumAdaptedCollectionItem>()
-              .map((e) => e.albumItem)
-              .toList(),
+      knownItems: knownItems
+          ?.whereType<AlbumAdaptedCollectionItem>()
+          .map((e) => e.albumItem)
+          .toList(),
     );
     return collection.copyWith(
       name: name,

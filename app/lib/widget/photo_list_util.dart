@@ -130,11 +130,10 @@ class _MemoryCollectionHelperItem {
   _MemoryCollectionHelperItem(this.date, this.coverFile)
     : coverDiff = getCoverDiff(date, coverFile);
 
-  static Duration getCoverDiff(Date date, FileDescriptor f) =>
-      f.fdDateTime
-          .add(_tzOffset)
-          .difference(date.toLocalDateTime().copyWith(hour: 12))
-          .abs();
+  static Duration getCoverDiff(Date date, FileDescriptor f) => f.fdDateTime
+      .add(_tzOffset)
+      .difference(date.toLocalDateTime().copyWith(hour: 12))
+      .abs();
 
   final Date date;
   FileDescriptor coverFile;

@@ -44,13 +44,12 @@ class DownloadFile {
     required bool isPublic,
     bool? shouldNotify,
     void Function(double progress)? onProgress,
-  }) =>
-      build(
-        account,
-        file,
-        parentDir: parentDir,
-        isPublic: isPublic,
-        shouldNotify: shouldNotify,
-        onProgress: onProgress,
-      )();
+  }) => build(
+    account,
+    file,
+    parentDir: parentDir,
+    isPublic: isPublic,
+    shouldNotify: shouldNotify,
+    onProgress: onProgress,
+  )();
 }

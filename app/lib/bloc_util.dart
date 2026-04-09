@@ -22,8 +22,8 @@ class BlocListenerT<B extends StateStreamable<S>, S, T>
   @override
   Widget buildWithChild(BuildContext context, Widget? child) {
     return BlocListener<B, S>(
-      listenWhen:
-          (previous, current) => selector(previous) != selector(current),
+      listenWhen: (previous, current) =>
+          selector(previous) != selector(current),
       listener: (context, state) => listener(context, selector(state)),
       child: child,
     );

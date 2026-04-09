@@ -83,10 +83,9 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
   ) async {
     String? typeStr;
     if (const TypeChecker.typeNamed(NpSubjectAccessor).hasAnnotationOf(field)) {
-      final annotation =
-          const TypeChecker.typeNamed(
-            NpSubjectAccessor,
-          ).annotationsOf(field).first;
+      final annotation = const TypeChecker.typeNamed(
+        NpSubjectAccessor,
+      ).annotationsOf(field).first;
       final type = annotation.getField("type")?.toStringValue();
       typeStr = type;
     }
@@ -96,9 +95,8 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
         field.firstFragment,
         resolve: true,
       );
-      typeStr =
-          (astNode! as VariableDeclaration).initializer!.staticType!
-              .getDisplayString();
+      typeStr = (astNode! as VariableDeclaration).initializer!.staticType!
+          .getDisplayString();
       if (typeStr.startsWith("BehaviorSubject<")) {
         typeStr = typeStr.substring(16, typeStr.length - 1);
       }

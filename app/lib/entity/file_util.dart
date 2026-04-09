@@ -138,8 +138,10 @@ final supportedMetadataFormatMimes = [
   "video/quicktime",
 ];
 
-final supportedImageFormatMimes =
-    supportedFormatMimes.where((f) => f.startsWith("image/")).toList();
+final supportedImageFormatMimes = supportedFormatMimes
+    .where((f) => f.startsWith("image/"))
+    .toList();
 
-final supportedVideoFormatMimes =
-    supportedFormatMimes.where((f) => f.startsWith("video/")).toList();
+final supportedVideoFormatMimes = supportedFormatMimes
+    .where((f) => f.startsWith("video/"))
+    .toList();

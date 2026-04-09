@@ -115,11 +115,10 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
               controller: _pageController,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: _options.length,
-              itemBuilder:
-                  (context, i) => Padding(
-                    padding: const EdgeInsets.all(48),
-                    child: _options[i].showcaseBuilder(context),
-                  ),
+              itemBuilder: (context, i) => Padding(
+                padding: const EdgeInsets.all(48),
+                child: _options[i].showcaseBuilder(context),
+              ),
             ),
           ),
           SizedBox(
@@ -204,8 +203,9 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
           _c.pref.getEnhanceMaxHeightOr(),
           args["iteration"] ?? 8,
           headers: {
-            "Authorization":
-                AuthUtil.fromAccount(widget.account).toHeaderValue(),
+            "Authorization": AuthUtil.fromAccount(
+              widget.account,
+            ).toHeaderValue(),
           },
           isSaveToServer: widget.isSaveToServer,
         );
@@ -219,8 +219,9 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
           _c.pref.getEnhanceMaxHeightOr(),
           args["radius"] ?? 16,
           headers: {
-            "Authorization":
-                AuthUtil.fromAccount(widget.account).toHeaderValue(),
+            "Authorization": AuthUtil.fromAccount(
+              widget.account,
+            ).toHeaderValue(),
           },
           isSaveToServer: widget.isSaveToServer,
         );
@@ -233,8 +234,9 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           headers: {
-            "Authorization":
-                AuthUtil.fromAccount(widget.account).toHeaderValue(),
+            "Authorization": AuthUtil.fromAccount(
+              widget.account,
+            ).toHeaderValue(),
           },
           isSaveToServer: widget.isSaveToServer,
         );
@@ -255,8 +257,9 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
           args["styleUri"],
           args["weight"],
           headers: {
-            "Authorization":
-                AuthUtil.fromAccount(widget.account).toHeaderValue(),
+            "Authorization": AuthUtil.fromAccount(
+              widget.account,
+            ).toHeaderValue(),
           },
           isSaveToServer: widget.isSaveToServer,
         );
@@ -270,8 +273,9 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
           _c.pref.getEnhanceMaxHeightOr(),
           args["weight"],
           headers: {
-            "Authorization":
-                AuthUtil.fromAccount(widget.account).toHeaderValue(),
+            "Authorization": AuthUtil.fromAccount(
+              widget.account,
+            ).toHeaderValue(),
           },
           isSaveToServer: widget.isSaveToServer,
         );
@@ -284,8 +288,9 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
           _c.pref.getEnhanceMaxWidthOr(),
           _c.pref.getEnhanceMaxHeightOr(),
           headers: {
-            "Authorization":
-                AuthUtil.fromAccount(widget.account).toHeaderValue(),
+            "Authorization": AuthUtil.fromAccount(
+              widget.account,
+            ).toHeaderValue(),
           },
           isSaveToServer: widget.isSaveToServer,
         );
@@ -324,33 +329,30 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
   Future<void> _showInfo(BuildContext context) async {
     await showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().enhanceIntroDialogTitle),
-            content: Text(L10n.global().enhanceIntroDialogDescription),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  launch(enhanceUrl);
-                },
-                child: Text(L10n.global().learnMoreButtonLabel),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(
-                    context,
-                  ).pushNamed(EnhancementSettings.routeName);
-                },
-                child: Text(L10n.global().configButtonLabel),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(MaterialLocalizations.of(context).closeButtonLabel),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().enhanceIntroDialogTitle),
+        content: Text(L10n.global().enhanceIntroDialogDescription),
+        actions: [
+          TextButton(
+            onPressed: () {
+              launch(enhanceUrl);
+            },
+            child: Text(L10n.global().learnMoreButtonLabel),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pushNamed(EnhancementSettings.routeName);
+            },
+            child: Text(L10n.global().configButtonLabel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
+          ),
+        ],
+      ),
     );
     unawaited(_c.pref.setHasShownEnhanceInfo(true));
   }
@@ -359,9 +361,8 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     await showDialog(
       context: context,
       barrierDismissible: false,
-      builder:
-          (context) =>
-              const ImageEditorPersistOptionDialog(isFromEditor: false),
+      builder: (context) =>
+          const ImageEditorPersistOptionDialog(isFromEditor: false),
     );
   }
 
@@ -394,41 +395,40 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     var current = .8;
     final iteration = await showDialog<int>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().enhanceLowLightParamBrightnessLabel),
-            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().enhanceLowLightParamBrightnessLabel),
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Icon(Icons.brightness_low),
-                    Expanded(
-                      child: StatefulSlider(
-                        initialValue: current,
-                        onChangeEnd: (value) {
-                          current = value;
-                        },
-                      ),
-                    ),
-                    const Icon(Icons.brightness_high),
-                  ],
+                const Icon(Icons.brightness_low),
+                Expanded(
+                  child: StatefulSlider(
+                    initialValue: current,
+                    onChangeEnd: (value) {
+                      current = value;
+                    },
+                  ),
                 ),
+                const Icon(Icons.brightness_high),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  final iteration = (current * 10).round().clamp(1, 10);
-                  Navigator.of(context).pop(iteration);
-                },
-                child: Text(L10n.global().enhanceButtonLabel),
-              ),
-            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              final iteration = (current * 10).round().clamp(1, 10);
+              Navigator.of(context).pop(iteration);
+            },
+            child: Text(L10n.global().enhanceButtonLabel),
           ),
+        ],
+      ),
     );
     _log.info("[_getZeroDceArgs] iteration: $iteration");
     return iteration?.run((it) => {"iteration": it});
@@ -440,41 +440,40 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     var current = .5;
     final radius = await showDialog<int>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().enhancePortraitBlurParamBlurLabel),
-            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().enhancePortraitBlurParamBlurLabel),
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Icon(Icons.circle, size: 20),
-                    Expanded(
-                      child: StatefulSlider(
-                        initialValue: current,
-                        onChangeEnd: (value) {
-                          current = value;
-                        },
-                      ),
-                    ),
-                    const Icon(Icons.blur_on),
-                  ],
+                const Icon(Icons.circle, size: 20),
+                Expanded(
+                  child: StatefulSlider(
+                    initialValue: current,
+                    onChangeEnd: (value) {
+                      current = value;
+                    },
+                  ),
                 ),
+                const Icon(Icons.blur_on),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  final radius = (current * 25).round().clamp(1, 25);
-                  Navigator.of(context).pop(radius);
-                },
-                child: Text(L10n.global().enhanceButtonLabel),
-              ),
-            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              final radius = (current * 25).round().clamp(1, 25);
+              Navigator.of(context).pop(radius);
+            },
+            child: Text(L10n.global().enhanceButtonLabel),
           ),
+        ],
+      ),
     );
     _log.info("[_getDeepLab3PortraitArgs] radius: $radius");
     return radius?.run((it) => {"radius": it});
@@ -501,40 +500,39 @@ class _ImageEnhancerState extends State<ImageEnhancer> {
     var current = 1.0;
     final weight = await showDialog<double>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().enhanceGenericParamWeightLabel),
-            contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().enhanceGenericParamWeightLabel),
+        contentPadding: const EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 0),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              mainAxisSize: MainAxisSize.max,
               children: [
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    const Icon(Icons.water_drop, size: 20),
-                    Expanded(
-                      child: StatefulSlider(
-                        initialValue: current,
-                        onChangeEnd: (value) {
-                          current = value;
-                        },
-                      ),
-                    ),
-                    const Icon(Icons.water_drop_outlined),
-                  ],
+                const Icon(Icons.water_drop, size: 20),
+                Expanded(
+                  child: StatefulSlider(
+                    initialValue: current,
+                    onChangeEnd: (value) {
+                      current = value;
+                    },
+                  ),
                 ),
+                const Icon(Icons.water_drop_outlined),
               ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(current);
-                },
-                child: Text(L10n.global().enhanceButtonLabel),
-              ),
-            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(current);
+            },
+            child: Text(L10n.global().enhanceButtonLabel),
           ),
+        ],
+      ),
     );
     _log.info("[_getDeepLab3ColorPopArgs] weight: $weight");
     return weight?.run((it) => {"weight": it});
@@ -643,19 +641,17 @@ class _ListChild extends StatelessWidget {
         child: InkWell(
           onTap: onTap,
           child: Container(
-            color:
-                isSelected
-                    ? Theme.of(context).colorScheme.secondaryContainer
-                    : null,
+            color: isSelected
+                ? Theme.of(context).colorScheme.secondaryContainer
+                : null,
             alignment: Alignment.center,
             padding: const EdgeInsets.symmetric(horizontal: 32),
             child: Text(
               title,
               style: TextStyle(
-                color:
-                    isSelected
-                        ? Theme.of(context).colorScheme.onSecondaryContainer
-                        : Theme.of(context).colorScheme.onSurface,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.onSecondaryContainer
+                    : Theme.of(context).colorScheme.onSurface,
               ),
             ),
           ),

@@ -20,8 +20,9 @@ class SyncFaceRecognitionPerson {
     _log.info("[call] Sync people with remote");
     final List<FaceRecognitionPerson> remote;
     try {
-      remote =
-          await ListFaceRecognitionPerson(_c.withRemoteRepo())(account).last;
+      remote = await ListFaceRecognitionPerson(_c.withRemoteRepo())(
+        account,
+      ).last;
     } catch (e) {
       if (e is ApiException && e.response.statusCode == 404) {
         // face recognition app probably not installed, ignore

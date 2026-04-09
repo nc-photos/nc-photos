@@ -137,10 +137,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     } finally {
       emit(
         state.copyWith(
-          processingShares:
-              state.processingShares
-                  .where((s) => s.userId != ev.sharee.shareWith)
-                  .toList(),
+          processingShares: state.processingShares
+              .where((s) => s.userId != ev.sharee.shareWith)
+              .toList(),
         ),
       );
     }
@@ -156,10 +155,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     } finally {
       emit(
         state.copyWith(
-          processingShares:
-              state.processingShares
-                  .where((s) => s.userId != ev.share.userId)
-                  .toList(),
+          processingShares: state.processingShares
+              .where((s) => s.userId != ev.share.userId)
+              .toList(),
         ),
       );
     }

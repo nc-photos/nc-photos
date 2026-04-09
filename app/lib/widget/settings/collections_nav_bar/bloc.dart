@@ -46,8 +46,9 @@ class _Bloc extends Bloc<_Event, _State>
     final insert =
         found ??
         PrefHomeCollectionsNavButton(type: ev.which, isMinimized: false);
-    var result =
-        pos >= 0 ? state.buttons.removedAt(pos) : List.of(state.buttons);
+    var result = pos >= 0
+        ? state.buttons.removedAt(pos)
+        : List.of(state.buttons);
     if (ev.before == null && ev.after == null) {
       // add at the beginning
       emit(state.copyWith(buttons: result..insert(0, insert)));

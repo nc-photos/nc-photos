@@ -339,8 +339,9 @@ class CollectionsController {
       keys.add(k);
     }
 
-    final remove =
-        _itemControllers.keys.where((k) => !keys.contains(k)).toList();
+    final remove = _itemControllers.keys
+        .where((k) => !keys.contains(k))
+        .toList();
     for (final k in remove) {
       _itemControllers[k]?.dispose();
       _itemControllers.remove(k);
@@ -353,17 +354,16 @@ class CollectionsController {
     _log.info("[_updateCollection] Updating collection: $collection");
     _dataStreamController.addWithValue(
       (v) => v.copyWith(
-        data:
-            v.data.map((d) {
-              if (d.collection.compareIdentity(collection)) {
-                if (items != null) {
-                  d.controller.forceReplaceItems(items);
-                }
-                return d.copyWith(collection: collection);
-              } else {
-                return d;
-              }
-            }).toList(),
+        data: v.data.map((d) {
+          if (d.collection.compareIdentity(collection)) {
+            if (items != null) {
+              d.controller.forceReplaceItems(items);
+            }
+            return d.copyWith(collection: collection);
+          } else {
+            return d;
+          }
+        }).toList(),
       ),
     );
   }

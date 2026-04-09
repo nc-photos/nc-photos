@@ -51,16 +51,14 @@ class _TimelineState extends State<_Timeline> {
               scrollDirection: Axis.vertical,
               controller: _controller,
               itemCount: context.bloc.pageCount,
-              itemBuilder:
-                  (context, i) => _BlocSelector<int>(
-                    selector: (state) => state.page,
-                    builder:
-                        (context, page) => _TimelineItem(
-                          index: i,
-                          file: context.bloc.getFileByPageIndex(i),
-                          isSelected: i == page,
-                        ),
-                  ),
+              itemBuilder: (context, i) => _BlocSelector<int>(
+                selector: (state) => state.page,
+                builder: (context, page) => _TimelineItem(
+                  index: i,
+                  file: context.bloc.getFileByPageIndex(i),
+                  isSelected: i == page,
+                ),
+              ),
             ),
           ),
         ),
@@ -85,28 +83,26 @@ class _TimelineItem extends StatelessWidget {
       children: [
         Container(
           padding: const EdgeInsets.all(8),
-          color:
-              isSelected
-                  ? Theme.of(context).colorScheme.secondaryContainer
-                  : Colors.transparent,
-          child:
-              file != null
-                  ? AnyFilePresenterFactory.photoListImage(
-                    file!,
-                    account: context.bloc.account,
-                  ).buildWidget()
-                  : AspectRatio(
-                    aspectRatio: 1,
-                    child: Container(
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.all(4),
-                      child: Text(
-                        L10n.global().fileNotFound,
-                        style: Theme.of(context).textTheme.bodySmall,
-                        textAlign: TextAlign.center,
-                      ),
+          color: isSelected
+              ? Theme.of(context).colorScheme.secondaryContainer
+              : Colors.transparent,
+          child: file != null
+              ? AnyFilePresenterFactory.photoListImage(
+                  file!,
+                  account: context.bloc.account,
+                ).buildWidget()
+              : AspectRatio(
+                  aspectRatio: 1,
+                  child: Container(
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.all(4),
+                    child: Text(
+                      L10n.global().fileNotFound,
+                      style: Theme.of(context).textTheme.bodySmall,
+                      textAlign: TextAlign.center,
                     ),
                   ),
+                ),
         ),
         if (!isSelected)
           Positioned.fill(

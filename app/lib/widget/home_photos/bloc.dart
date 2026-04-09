@@ -398,28 +398,30 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).where((f) {
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .where((f) {
           final capability = AnyFileWorkerFactory.capability(f);
           return capability.isPermitted(AnyFileCapability.collection);
-        }).toList();
+        })
+        .toList();
     if (selectedFiles.length != selected.length) {
       add(const _ShowRemoteOnlyWarning());
     }
     if (selectedFiles.isNotEmpty) {
       // TODO move this away
-      final remoteFiles =
-          selectedFiles
-              .map((e) {
-                final provider = e.provider;
-                return switch (provider) {
-                  AnyFileNextcloudProvider _ => provider.file,
-                  AnyFileMergedProvider _ => provider.remote.file,
-                  AnyFileLocalProvider _ => null,
-                };
-              })
-              .nonNulls
-              .toList();
+      final remoteFiles = selectedFiles
+          .map((e) {
+            final provider = e.provider;
+            return switch (provider) {
+              AnyFileNextcloudProvider _ => provider.file,
+              AnyFileMergedProvider _ => provider.remote.file,
+              AnyFileLocalProvider _ => null,
+            };
+          })
+          .nonNulls
+          .toList();
       final targetController = collectionsController.stream.value
           .itemsControllerByCollection(ev.collection);
       targetController.addFiles(remoteFiles).onError((e, stackTrace) {
@@ -434,11 +436,14 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).where((f) {
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .where((f) {
           final capability = AnyFileWorkerFactory.capability(f);
           return capability.isPermitted(AnyFileCapability.archive);
-        }).toList();
+        })
+        .toList();
     if (selectedFiles.length != selected.length) {
       add(const _ShowRemoteOnlyWarning());
     }
@@ -449,8 +454,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       if (selectedFiles.any((e) => e.provider is AnyFileMergedProvider)) {
         final req = _DeleteRequest(files: selectedFiles);
@@ -480,11 +487,14 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).where((f) {
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .where((f) {
           final capability = AnyFileWorkerFactory.capability(f);
           return capability.isPermitted(AnyFileCapability.download);
-        }).toList();
+        })
+        .toList();
     if (selectedFiles.length != selected.length) {
       add(const _ShowRemoteOnlyWarning());
     }
@@ -497,8 +507,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       emit(
         state.copyWith(
@@ -512,11 +524,14 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).where((f) {
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .where((f) {
           final capability = AnyFileWorkerFactory.capability(f);
           return capability.isPermitted(AnyFileCapability.upload);
-        }).toList();
+        })
+        .toList();
     if (selectedFiles.length != selected.length) {
       add(const _ShowLocalOnlyWarning());
     }
@@ -656,10 +671,9 @@ class _Bloc extends Bloc<_Event, _State>
     }
     // valid content height, this is also the minimap height
     final contentHeight = state.viewHeight! - state.viewOverlayPadding!;
-    final maker =
-        prefController.homePhotosZoomLevelValue >= 0
-            ? _makeMinimapItems
-            : _makeMonthGroupMinimapItems;
+    final maker = prefController.homePhotosZoomLevelValue >= 0
+        ? _makeMinimapItems
+        : _makeMonthGroupMinimapItems;
     final summary = SplayTreeMap<Date, int>((a, b) => b.compareTo(a));
     for (final e in state.anyFilesSummary.items.entries) {
       summary[e.key] = e.value;
@@ -830,59 +844,52 @@ class _Bloc extends Bloc<_Event, _State>
       account: account.toDb(),
       at: localToday,
       radius: prefController.memoriesRangeValue,
-      includeRelativeRoots:
-          account.roots
-              .map(
-                (e) =>
-                    File(
-                      path: file_util.unstripPath(account, e),
-                    ).strippedPathWithEmpty,
-              )
-              .toList(),
+      includeRelativeRoots: account.roots
+          .map(
+            (e) => File(
+              path: file_util.unstripPath(account, e),
+            ).strippedPathWithEmpty,
+          )
+          .toList(),
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
     );
     emit(
       state.copyWith(
-        memoryCollections:
-            dbMemories.memories.entries
-                .sorted((a, b) => a.key.compareTo(b.key))
-                .reversed
-                .map((e) {
-                  final center = localToday
-                      .copyWith(year: e.key)
-                      .toLocalDateTime()
-                      .copyWith(hour: 12);
-                  return Collection(
-                    name: L10n.global().memoryAlbumName(
-                      localToday.year - e.key,
-                    ),
-                    contentProvider: CollectionMemoryProvider(
-                      account: account,
-                      year: e.key,
-                      month: localToday.month,
-                      day: localToday.day,
-                      cover: e.value
-                          .map(
-                            (e) => (
-                              comparable: e.bestDateTime.difference(center),
-                              item: e,
-                            ),
-                          )
-                          .sorted(
-                            (a, b) => a.comparable.compareTo(b.comparable),
-                          )
-                          .firstOrNull
-                          ?.let(
-                            (e) => DbFileDescriptorConverter.fromDb(
-                              account.userId.toString(),
-                              e.item,
-                            ),
-                          ),
-                    ),
-                  );
-                })
-                .toList(),
+        memoryCollections: dbMemories.memories.entries
+            .sorted((a, b) => a.key.compareTo(b.key))
+            .reversed
+            .map((e) {
+              final center = localToday
+                  .copyWith(year: e.key)
+                  .toLocalDateTime()
+                  .copyWith(hour: 12);
+              return Collection(
+                name: L10n.global().memoryAlbumName(localToday.year - e.key),
+                contentProvider: CollectionMemoryProvider(
+                  account: account,
+                  year: e.key,
+                  month: localToday.month,
+                  day: localToday.day,
+                  cover: e.value
+                      .map(
+                        (e) => (
+                          comparable: e.bestDateTime.difference(center),
+                          item: e,
+                        ),
+                      )
+                      .sorted((a, b) => a.comparable.compareTo(b.comparable))
+                      .firstOrNull
+                      ?.let(
+                        (e) => DbFileDescriptorConverter.fromDb(
+                          account.userId.toString(),
+                          e.item,
+                        ),
+                      ),
+                ),
+              );
+            })
+            .toList(),
       ),
     );
   }
@@ -977,12 +984,11 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _requestMoreFiles() {
     final queriedDates = state.queriedDates;
-    final missingDates =
-        state.visibleDates
-            .map((e) => e.date)
-            .whereNot((d) => queriedDates.contains(d))
-            .where(state.anyFilesSummary.items.containsKey)
-            .toSet();
+    final missingDates = state.visibleDates
+        .map((e) => e.date)
+        .whereNot((d) => queriedDates.contains(d))
+        .where(state.anyFilesSummary.items.containsKey)
+        .toSet();
     // remove dates no longer missing
     _queryCount.removeWhere((k, v) => !missingDates.contains(k));
     if (missingDates.isNotEmpty && !_isQueryingFiles) {

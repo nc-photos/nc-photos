@@ -43,33 +43,31 @@ class NetworkRectThumbnailState extends State<NetworkRectThumbnail> {
     final child = FittedBox(
       clipBehavior: Clip.hardEdge,
       fit: BoxFit.cover,
-      child:
-          CachedNetworkImageBuilder(
-            type: widget.cacheType,
-            imageUrl: widget.imageUrl,
-            mime: widget.mime,
-            account: widget.account,
-            imageBuilder: (_, child, imageProvider) {
-              if (widget.onDominantColor != null) {
-                final currentTheme = Theme.of(context);
-                if (!identical(_theme, currentTheme)) {
-                  _theme = Theme.of(context);
-                  ColorScheme.fromImageProvider(
-                    provider: imageProvider,
-                    brightness: _theme!.brightness,
-                  ).then((cs) {
-                    widget.onDominantColor?.call(cs);
-                  });
-                }
-              }
-              return _SizeObserver(onSize: widget.onSize, child: child);
-            },
-            errorWidget:
-                (context, __, ___) => SizedBox.square(
-                  dimension: widget.dimension,
-                  child: widget.errorBuilder(context),
-                ),
-          ).build(),
+      child: CachedNetworkImageBuilder(
+        type: widget.cacheType,
+        imageUrl: widget.imageUrl,
+        mime: widget.mime,
+        account: widget.account,
+        imageBuilder: (_, child, imageProvider) {
+          if (widget.onDominantColor != null) {
+            final currentTheme = Theme.of(context);
+            if (!identical(_theme, currentTheme)) {
+              _theme = Theme.of(context);
+              ColorScheme.fromImageProvider(
+                provider: imageProvider,
+                brightness: _theme!.brightness,
+              ).then((cs) {
+                widget.onDominantColor?.call(cs);
+              });
+            }
+          }
+          return _SizeObserver(onSize: widget.onSize, child: child);
+        },
+        errorWidget: (context, __, ___) => SizedBox.square(
+          dimension: widget.dimension,
+          child: widget.errorBuilder(context),
+        ),
+      ).build(),
     );
     if (widget.dimension != null) {
       return SizedBox.square(dimension: widget.dimension, child: child);

@@ -21,10 +21,9 @@ class FaceRecognitionPersonRemoteDataSource
   @override
   Future<List<FaceRecognitionPerson>> getPersons(Account account) async {
     _log.info("[getPersons] $account");
-    final response =
-        await ApiUtil.fromAccount(
-          account,
-        ).ocs().facerecognition().persons().get();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).ocs().facerecognition().persons().get();
     if (!response.isGood) {
       _log.severe("[getPersons] Failed requesting server: $response");
       throw ApiException(
@@ -45,10 +44,9 @@ class FaceRecognitionPersonRemoteDataSource
     FaceRecognitionPerson person,
   ) async {
     _log.info("[getFaces] $person");
-    final response =
-        await ApiUtil.fromAccount(
-          account,
-        ).ocs().facerecognition().person(person.name).faces().get();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).ocs().facerecognition().person(person.name).faces().get();
     if (!response.isGood) {
       _log.severe("[getFaces] Failed requesting server: $response");
       throw ApiException(

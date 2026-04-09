@@ -85,17 +85,16 @@ class SlideshowViewer extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            account: accountController.account,
-            anyFilesController: accountController.anyFilesController,
-            collectionsController: accountController.collectionsController,
-            prefController: context.read(),
-            afIds: afIds,
-            startIndex: startIndex,
-            collectionId: collectionId,
-            config: config,
-          )..add(const _Init()),
+      create: (context) => _Bloc(
+        account: accountController.account,
+        anyFilesController: accountController.anyFilesController,
+        collectionsController: accountController.collectionsController,
+        prefController: context.read(),
+        afIds: afIds,
+        startIndex: startIndex,
+        collectionId: collectionId,
+        config: config,
+      )..add(const _Init()),
       child: const _WrappedSlideshowViewer(),
     );
   }
@@ -158,9 +157,8 @@ class _WrappedSlideshowViewerState extends State<_WrappedSlideshowViewer>
               },
               child: _BlocSelector<bool>(
                 selector: (state) => state.hasInit,
-                builder:
-                    (context, hasInit) =>
-                        hasInit ? const _Body() : const _InitBody(),
+                builder: (context, hasInit) =>
+                    hasInit ? const _Body() : const _InitBody(),
               ),
             ),
           ),

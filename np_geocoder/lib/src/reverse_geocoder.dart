@@ -77,11 +77,10 @@ class ReverseGeocoder {
     );
     final latitudeInt = (latitude * 10000).round();
     final longitudeInt = (longitude * 10000).round();
-    final nearest =
-        _searchTree.nearest({
-          "t": latitudeInt,
-          "g": longitudeInt,
-        }, 1).firstOrNull;
+    final nearest = _searchTree.nearest({
+      "t": latitudeInt,
+      "g": longitudeInt,
+    }, 1).firstOrNull;
     if (nearest == null) {
       _log.info("[call] Nearest point not found");
       return null;
@@ -127,8 +126,10 @@ class ReverseGeocoder {
       FROM cities
       WHERE latitude = ? AND longitude = ?;
       """;
-    final cityResult =
-        _db.select(citySql, [latitudeInt, longitudeInt]).singleOrNull;
+    final cityResult = _db.select(citySql, [
+      latitudeInt,
+      longitudeInt,
+    ]).singleOrNull;
     if (cityResult == null) {
       return null;
     }
@@ -137,7 +138,8 @@ class ReverseGeocoder {
       cityResult.columnAt(4),
       cityResult.columnAt(5),
     ];
-    final nameSql = """
+    final nameSql =
+        """
       SELECT names.geonameId, names.lang, names.name
       FROM names
       WHERE geonameId IN (${ids.nonNulls.join(", ")});
@@ -168,21 +170,21 @@ class ReverseGeocoder {
       cityResult.columnAt(2),
       city.isNotEmpty
           ? ReverseGeocoderLocationName(
-            geonameId: ids[0],
-            name: LocalizedString(city),
-          )
+              geonameId: ids[0],
+              name: LocalizedString(city),
+            )
           : null,
       admin1.isNotEmpty
           ? ReverseGeocoderLocationName(
-            geonameId: ids[1],
-            name: LocalizedString(admin1),
-          )
+              geonameId: ids[1],
+              name: LocalizedString(admin1),
+            )
           : null,
       admin2.isNotEmpty
           ? ReverseGeocoderLocationName(
-            geonameId: ids[2],
-            name: LocalizedString(admin2),
-          )
+              geonameId: ids[2],
+              name: LocalizedString(admin2),
+            )
           : null,
     );
   }

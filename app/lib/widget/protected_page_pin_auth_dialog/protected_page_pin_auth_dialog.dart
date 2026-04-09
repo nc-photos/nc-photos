@@ -26,13 +26,11 @@ class ProtectedPagePinAuthDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            pin: pin,
-            removeItemBuilder:
-                (_, animation, value) =>
-                    _RemoveItem(animation: animation, value: value),
-          ),
+      create: (context) => _Bloc(
+        pin: pin,
+        removeItemBuilder: (_, animation, value) =>
+            _RemoveItem(animation: animation, value: value),
+      ),
       child: _WrappedProtectedPagePinAuthDialog(),
     );
   }
@@ -69,13 +67,11 @@ class ProtectedPagePinSetupDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            pin: null,
-            removeItemBuilder:
-                (_, animation, value) =>
-                    _RemoveItem(animation: animation, value: value),
-          ),
+      create: (context) => _Bloc(
+        pin: null,
+        removeItemBuilder: (_, animation, value) =>
+            _RemoveItem(animation: animation, value: value),
+      ),
       child: _WrappedProtectedPagePinSetupDialog(),
     );
   }
@@ -110,13 +106,11 @@ class ProtectedPagePinConfirmDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            pin: pin,
-            removeItemBuilder:
-                (_, animation, value) =>
-                    _RemoveItem(animation: animation, value: value),
-          ),
+      create: (context) => _Bloc(
+        pin: pin,
+        removeItemBuilder: (_, animation, value) =>
+            _RemoveItem(animation: animation, value: value),
+      ),
       child: _WrappedProtectedPagePinConfirmDialog(),
     );
   }

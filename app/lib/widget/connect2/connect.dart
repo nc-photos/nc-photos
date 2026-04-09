@@ -169,25 +169,24 @@ class _WrappedConnect extends StatelessWidget {
   Future<void> _onSelfSignedCert(BuildContext context) async {
     final result = await showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().serverCertErrorDialogTitle),
-            content: Text(L10n.global().serverCertErrorDialogContent),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(MaterialLocalizations.of(context).closeButtonLabel),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(L10n.global().advancedButtonLabel),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().serverCertErrorDialogTitle),
+        content: Text(L10n.global().serverCertErrorDialogContent),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(MaterialLocalizations.of(context).closeButtonLabel),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(L10n.global().advancedButtonLabel),
+          ),
+        ],
+      ),
     );
     if (context.mounted && result != true) {
       Navigator.of(context).pop(null);
@@ -195,32 +194,29 @@ class _WrappedConnect extends StatelessWidget {
     }
     final advancedResult = await showDialog<bool>(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            title: Text(L10n.global().whitelistCertDialogTitle),
-            content: Text(
-              L10n.global().whitelistCertDialogContent(
-                SelfSignedCertManager().getLastBadCertHost(),
-                SelfSignedCertManager().getLastBadCertFingerprint(),
-              ),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  MaterialLocalizations.of(context).cancelButtonLabel,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(L10n.global().whitelistCertButtonLabel),
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(L10n.global().whitelistCertDialogTitle),
+        content: Text(
+          L10n.global().whitelistCertDialogContent(
+            SelfSignedCertManager().getLastBadCertHost(),
+            SelfSignedCertManager().getLastBadCertFingerprint(),
           ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(L10n.global().whitelistCertButtonLabel),
+          ),
+        ],
+      ),
     );
     if (context.mounted && advancedResult != true) {
       Navigator.of(context).pop(null);

@@ -63,12 +63,9 @@ class AlbumAutoCoverProvider extends AlbumCoverProvider {
 
   factory AlbumAutoCoverProvider.fromJson(JsonObj json) {
     return AlbumAutoCoverProvider(
-      coverFile:
-          json["coverFile"] == null
-              ? null
-              : FileDescriptor.fromJson(
-                json["coverFile"].cast<String, dynamic>(),
-              ),
+      coverFile: json["coverFile"] == null
+          ? null
+          : FileDescriptor.fromJson(json["coverFile"].cast<String, dynamic>()),
     );
   }
 

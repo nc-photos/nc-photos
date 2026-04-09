@@ -61,8 +61,9 @@ Future<void> _unshareWithoutFile() async {
 /// shares (admin -> user1) for the album files deleted
 Future<void> _unshareWithFile() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0])

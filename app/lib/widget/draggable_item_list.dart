@@ -85,8 +85,8 @@ class _DraggableItemListState<T extends DraggableItemMetadata>
           return widget.itemBuilder(context, i, meta);
         }
       },
-      staggeredTileBuilder:
-          (i) => widget.staggeredTileBuilder(i, widget.items[i]),
+      staggeredTileBuilder: (i) =>
+          widget.staggeredTileBuilder(i, widget.items[i]),
     );
   }
 

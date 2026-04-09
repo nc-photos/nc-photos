@@ -55,12 +55,11 @@ class ArchiveBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (_) => _Bloc(
-            account: accountController.account,
-            filesController: accountController.filesController,
-            prefController: context.read(),
-          ),
+      create: (_) => _Bloc(
+        account: accountController.account,
+        filesController: accountController.filesController,
+        prefController: context.read(),
+      ),
       child: const _WrappedArchiveBrowser(),
     );
   }
@@ -132,50 +131,45 @@ class _WrappedArchiveBrowserState extends State<_WrappedArchiveBrowser>
               _bloc.add(const _EndScaling());
             },
             child: CustomScrollView(
-              physics:
-                  _finger >= 2 ? const NeverScrollableScrollPhysics() : null,
+              physics: _finger >= 2
+                  ? const NeverScrollableScrollPhysics()
+                  : null,
               slivers: [
                 _BlocSelector<bool>(
                   selector: (state) => state.selectedItems.isEmpty,
-                  builder:
-                      (context, isEmpty) =>
-                          isEmpty ? const _AppBar() : const _SelectionAppBar(),
+                  builder: (context, isEmpty) =>
+                      isEmpty ? const _AppBar() : const _SelectionAppBar(),
                 ),
                 SliverToBoxAdapter(
                   child: _BlocSelector<bool>(
                     selector: (state) => state.isLoading,
-                    builder:
-                        (context, isLoading) =>
-                            isLoading
-                                ? const LinearProgressIndicator()
-                                : const SizedBox(height: 4),
+                    builder: (context, isLoading) => isLoading
+                        ? const LinearProgressIndicator()
+                        : const SizedBox(height: 4),
                   ),
                 ),
                 _BlocBuilder(
-                  buildWhen:
-                      (previous, current) =>
-                          previous.transformedItems.isEmpty !=
-                              current.transformedItems.isEmpty ||
-                          previous.isLoading != current.isLoading,
-                  builder:
-                      (context, state) =>
-                          state.transformedItems.isEmpty && !state.isLoading
-                              ? SliverFillRemaining(
-                                hasScrollBody: false,
-                                child: EmptyListIndicator(
-                                  icon: Icons.archive_outlined,
-                                  text: L10n.global().listEmptyText,
-                                ),
-                              )
-                              : _BlocSelector<double?>(
-                                selector: (state) => state.scale,
-                                builder:
-                                    (context, scale) => SliverTransitionedScale(
-                                      scale: scale,
-                                      baseSliver: const _ContentList(),
-                                      overlaySliver: const _ScalingList(),
-                                    ),
-                              ),
+                  buildWhen: (previous, current) =>
+                      previous.transformedItems.isEmpty !=
+                          current.transformedItems.isEmpty ||
+                      previous.isLoading != current.isLoading,
+                  builder: (context, state) =>
+                      state.transformedItems.isEmpty && !state.isLoading
+                      ? SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: EmptyListIndicator(
+                            icon: Icons.archive_outlined,
+                            text: L10n.global().listEmptyText,
+                          ),
+                        )
+                      : _BlocSelector<double?>(
+                          selector: (state) => state.scale,
+                          builder: (context, scale) => SliverTransitionedScale(
+                            scale: scale,
+                            baseSliver: const _ContentList(),
+                            overlaySliver: const _ScalingList(),
+                          ),
+                        ),
                 ),
                 const SliverSafeBottom(),
               ],

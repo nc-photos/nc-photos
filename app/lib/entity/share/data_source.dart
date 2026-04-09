@@ -44,8 +44,9 @@ class ShareRemoteDataSource implements ShareDataSource {
   @override
   listAll(Account account) async {
     _log.info("[listAll] $account");
-    final response =
-        await ApiUtil.fromAccount(account).ocs().filesSharing().shares().get();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).ocs().filesSharing().shares().get();
     return _onListResult(response);
   }
 
@@ -76,13 +77,15 @@ class ShareRemoteDataSource implements ShareDataSource {
     String shareWith,
   ) async {
     _log.info("[create] Share '${file.fdPath}' with '$shareWith'");
-    final response = await ApiUtil.fromAccount(
-      account,
-    ).ocs().filesSharing().shares().post(
-      path: file.strippedPath,
-      shareType: ShareType.user.toValue(),
-      shareWith: shareWith,
-    );
+    final response = await ApiUtil.fromAccount(account)
+        .ocs()
+        .filesSharing()
+        .shares()
+        .post(
+          path: file.strippedPath,
+          shareType: ShareType.user.toValue(),
+          shareWith: shareWith,
+        );
     if (!response.isGood) {
       _log.severe("[create] Failed requesting server: $response");
       throw ApiException(
@@ -103,13 +106,15 @@ class ShareRemoteDataSource implements ShareDataSource {
     String? password,
   }) async {
     _log.info("[createLink] Share '$relativePath' with a share link");
-    final response = await ApiUtil.fromAccount(
-      account,
-    ).ocs().filesSharing().shares().post(
-      path: relativePath,
-      shareType: ShareType.publicLink.toValue(),
-      password: password,
-    );
+    final response = await ApiUtil.fromAccount(account)
+        .ocs()
+        .filesSharing()
+        .shares()
+        .post(
+          path: relativePath,
+          shareType: ShareType.publicLink.toValue(),
+          password: password,
+        );
     if (!response.isGood) {
       _log.severe("[create] Failed requesting server: $response");
       throw ApiException(
@@ -126,10 +131,9 @@ class ShareRemoteDataSource implements ShareDataSource {
   @override
   delete(Account account, Share share) async {
     _log.info("[delete] $share");
-    final response =
-        await ApiUtil.fromAccount(
-          account,
-        ).ocs().filesSharing().share(share.id).delete();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).ocs().filesSharing().share(share.id).delete();
     if (!response.isGood) {
       _log.severe("[delete] Failed requesting server: $response");
       throw ApiException(
@@ -183,10 +187,9 @@ class _ShareParser {
       itemSource: json["item_source"],
       // when shared with a password protected link, shareWith somehow contains
       // the password, which doesn't make sense. We set it to null instead
-      shareWith:
-          shareType == ShareType.publicLink
-              ? null
-              : (json["share_with"] as String?)?.toCi(),
+      shareWith: shareType == ShareType.publicLink
+          ? null
+          : (json["share_with"] as String?)?.toCi(),
       shareWithDisplayName: json["share_with_displayname"],
       url: json["url"],
     );

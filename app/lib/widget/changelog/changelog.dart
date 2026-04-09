@@ -103,8 +103,9 @@ class Changelog extends StatelessWidget {
       return ExpansionTile(
         key: PageStorageKey(i),
         title: Text(title),
-        initiallyExpanded:
-            fromVersion == null ? (i == 0) : (version > fromVersion!),
+        initiallyExpanded: fromVersion == null
+            ? (i == 0)
+            : (version > fromVersion!),
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         expandedAlignment: Alignment.topLeft,
         childrenPadding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
@@ -320,7 +321,10 @@ class _ChangelogBanner extends StatelessWidget {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
-            children: [Expanded(child: title), if (action != null) action!],
+            children: [
+              Expanded(child: title),
+              if (action != null) action!,
+            ],
           ),
         ),
       ),

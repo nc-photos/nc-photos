@@ -236,23 +236,21 @@ class DiContainer {
       shareeRepo: shareeRepo == null ? _shareeRepo : shareeRepo.obj,
       favoriteRepo: favoriteRepo == null ? _favoriteRepo : favoriteRepo.obj,
       tagRepo: tagRepo == null ? _tagRepo : tagRepo.obj,
-      taggedFileRepo:
-          taggedFileRepo == null ? _taggedFileRepo : taggedFileRepo.obj,
+      taggedFileRepo: taggedFileRepo == null
+          ? _taggedFileRepo
+          : taggedFileRepo.obj,
       localFileRepo: localFileRepo == null ? _localFileRepo : localFileRepo.obj,
       searchRepo: searchRepo == null ? _searchRepo : searchRepo.obj,
       ncAlbumRepo: ncAlbumRepo == null ? _ncAlbumRepo : ncAlbumRepo.obj,
-      faceRecognitionPersonRepo:
-          faceRecognitionPersonRepo == null
-              ? _faceRecognitionPersonRepo
-              : faceRecognitionPersonRepo.obj,
-      recognizeFaceRepo:
-          recognizeFaceRepo == null
-              ? _recognizeFaceRepo
-              : recognizeFaceRepo.obj,
-      imageLocationRepo:
-          imageLocationRepo == null
-              ? _imageLocationRepo
-              : imageLocationRepo.obj,
+      faceRecognitionPersonRepo: faceRecognitionPersonRepo == null
+          ? _faceRecognitionPersonRepo
+          : faceRecognitionPersonRepo.obj,
+      recognizeFaceRepo: recognizeFaceRepo == null
+          ? _recognizeFaceRepo
+          : recognizeFaceRepo.obj,
+      imageLocationRepo: imageLocationRepo == null
+          ? _imageLocationRepo
+          : imageLocationRepo.obj,
       pref: pref == null ? _pref : pref.obj,
       touchManager: touchManager == null ? _touchManager : touchManager.obj,
       npDb: npDb == null ? _npDb : npDb.obj,

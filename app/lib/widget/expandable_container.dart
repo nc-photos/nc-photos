@@ -58,10 +58,9 @@ class ExpandableContainerState extends State<ExpandableContainer>
         ..translateByDouble(0, -(_size.height / 2) * (1 - animationValue), 0, 1)
         ..scaleByDouble(1, animationValue, 1, 1),
       child: MeasureSize(
-        onChange:
-            (size) => setState(() {
-              _size = size;
-            }),
+        onChange: (size) => setState(() {
+          _size = size;
+        }),
         child: widget.child,
       ),
     );

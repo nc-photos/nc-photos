@@ -60,40 +60,35 @@ class _WrappedLocalResultViewer extends StatelessWidget {
     return Theme(
       data: buildDarkTheme(context),
       child: _BlocBuilder(
-        buildWhen:
-            (previous, current) =>
-                previous.isShowAppBar != current.isShowAppBar,
-        builder:
-            (context, state) => Scaffold(
-              extendBodyBehindAppBar: true,
-              extendBody: true,
-              appBar:
-                  state.isShowAppBar
-                      ? const PreferredSize(
-                        preferredSize: Size.fromHeight(kToolbarHeight),
-                        child: _AppBar(),
-                      )
-                      : null,
-              body: AnnotatedRegion<SystemUiOverlayStyle>(
-                value: const SystemUiOverlayStyle(
-                  systemNavigationBarColor: Colors.black,
-                  systemNavigationBarIconBrightness: Brightness.dark,
-                ),
-                child: GestureDetector(
-                  onTap: () {
-                    context.addEvent(const _ToggleAppBar());
-                  },
-                  child: Stack(
-                    children: [
-                      const Positioned.fill(
-                        child: ColoredBox(color: Colors.black),
-                      ),
-                      IoFileImageViewer(file: context.bloc.file, canZoom: true),
-                    ],
-                  ),
-                ),
+        buildWhen: (previous, current) =>
+            previous.isShowAppBar != current.isShowAppBar,
+        builder: (context, state) => Scaffold(
+          extendBodyBehindAppBar: true,
+          extendBody: true,
+          appBar: state.isShowAppBar
+              ? const PreferredSize(
+                  preferredSize: Size.fromHeight(kToolbarHeight),
+                  child: _AppBar(),
+                )
+              : null,
+          body: AnnotatedRegion<SystemUiOverlayStyle>(
+            value: const SystemUiOverlayStyle(
+              systemNavigationBarColor: Colors.black,
+              systemNavigationBarIconBrightness: Brightness.dark,
+            ),
+            child: GestureDetector(
+              onTap: () {
+                context.addEvent(const _ToggleAppBar());
+              },
+              child: Stack(
+                children: [
+                  const Positioned.fill(child: ColoredBox(color: Colors.black)),
+                  IoFileImageViewer(file: context.bloc.file, canZoom: true),
+                ],
               ),
             ),
+          ),
+        ),
       ),
     );
   }

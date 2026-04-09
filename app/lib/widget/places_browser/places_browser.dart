@@ -53,12 +53,11 @@ class PlacesBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (_) => _Bloc(
-            account: accountController.account,
-            placesController: accountController.placesController,
-            locale: Localizations.localeOf(context),
-          ),
+      create: (_) => _Bloc(
+        account: accountController.account,
+        placesController: accountController.placesController,
+        locale: Localizations.localeOf(context),
+      ),
       child: const _WrappedPlacesBrowser(),
     );
   }
@@ -112,14 +111,11 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
                   const _AppBar(),
                   SliverToBoxAdapter(
                     child: _BlocBuilder(
-                      buildWhen:
-                          (previous, current) =>
-                              previous.isLoading != current.isLoading,
-                      builder:
-                          (context, state) =>
-                              state.isLoading
-                                  ? const LinearProgressIndicator()
-                                  : const SizedBox(height: 4),
+                      buildWhen: (previous, current) =>
+                          previous.isLoading != current.isLoading,
+                      builder: (context, state) => state.isLoading
+                          ? const LinearProgressIndicator()
+                          : const SizedBox(height: 4),
                     ),
                   ),
                   _CountryList(

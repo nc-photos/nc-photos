@@ -58,56 +58,46 @@ class _ButtonBarState extends State<_ButtonBar> {
             children: [
               _BlocSelector(
                 selector: (state) => state.canRemoveFromAlbum,
-                builder:
-                    (context, canRemoveFromAlbum) =>
-                        canRemoveFromAlbum
-                            ? _DetailPaneButton(
-                              icon: Icons.remove_outlined,
-                              label: L10n.global().removeFromAlbumTooltip,
-                              onPressed:
-                                  () => widget.onRemoveFromCollectionPressed(
-                                    context,
-                                  ),
-                            )
-                            : const SizedBox.shrink(),
+                builder: (context, canRemoveFromAlbum) => canRemoveFromAlbum
+                    ? _DetailPaneButton(
+                        icon: Icons.remove_outlined,
+                        label: L10n.global().removeFromAlbumTooltip,
+                        onPressed: () =>
+                            widget.onRemoveFromCollectionPressed(context),
+                      )
+                    : const SizedBox.shrink(),
               ),
               _BlocSelector(
                 selector: (state) => state.canSetCover,
-                builder:
-                    (context, canSetCover) =>
-                        canSetCover
-                            ? _DetailPaneButton(
-                              icon: Icons.photo_album_outlined,
-                              label: L10n.global().useAsAlbumCoverTooltip,
-                              onPressed: () {
-                                context.addEvent(const _SetAlbumCover());
-                              },
-                            )
-                            : const SizedBox.shrink(),
+                builder: (context, canSetCover) => canSetCover
+                    ? _DetailPaneButton(
+                        icon: Icons.photo_album_outlined,
+                        label: L10n.global().useAsAlbumCoverTooltip,
+                        onPressed: () {
+                          context.addEvent(const _SetAlbumCover());
+                        },
+                      )
+                    : const SizedBox.shrink(),
               ),
               _BlocSelector(
                 selector: (state) => state.canAddToCollection,
-                builder:
-                    (context, canAddToCollection) =>
-                        canAddToCollection
-                            ? _DetailPaneButton(
-                              icon: Icons.add,
-                              label: L10n.global().addItemToCollectionTooltip,
-                              onPressed: () => _onAddToAlbumPressed(context),
-                            )
-                            : const SizedBox.shrink(),
+                builder: (context, canAddToCollection) => canAddToCollection
+                    ? _DetailPaneButton(
+                        icon: Icons.add,
+                        label: L10n.global().addItemToCollectionTooltip,
+                        onPressed: () => _onAddToAlbumPressed(context),
+                      )
+                    : const SizedBox.shrink(),
               ),
               _BlocSelector(
                 selector: (state) => state.canSetAs,
-                builder:
-                    (context, canSetAs) =>
-                        canSetAs
-                            ? _DetailPaneButton(
-                              icon: Icons.launch,
-                              label: L10n.global().setAsTooltip,
-                              onPressed: () => _onSetAsPressed(context),
-                            )
-                            : const SizedBox.shrink(),
+                builder: (context, canSetAs) => canSetAs
+                    ? _DetailPaneButton(
+                        icon: Icons.launch,
+                        label: L10n.global().setAsTooltip,
+                        onPressed: () => _onSetAsPressed(context),
+                      )
+                    : const SizedBox.shrink(),
               ),
               _BlocSelector(
                 selector: (state) => state.canArchive,
@@ -134,15 +124,13 @@ class _ButtonBarState extends State<_ButtonBar> {
               ),
               _BlocSelector(
                 selector: (state) => state.canDelete,
-                builder:
-                    (context, canDelete) =>
-                        canDelete
-                            ? _DetailPaneButton(
-                              icon: Icons.delete_outlined,
-                              label: L10n.global().deleteTooltip,
-                              onPressed: () => widget.onDeletePressed(context),
-                            )
-                            : const SizedBox.shrink(),
+                builder: (context, canDelete) => canDelete
+                    ? _DetailPaneButton(
+                        icon: Icons.delete_outlined,
+                        label: L10n.global().deleteTooltip,
+                        onPressed: () => widget.onDeletePressed(context),
+                      )
+                    : const SizedBox.shrink(),
               ),
               _DetailPaneButton(
                 icon: Icons.slideshow_outlined,
@@ -292,31 +280,25 @@ class _NameItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.size != current.size ||
-              previous.duration != current.duration,
-      builder:
-          (context, state) => ListTile(
-            leading: ListTileCenterLeading(
-              child:
-                  file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
-                      ? const Icon(Icons.video_file_outlined)
-                      : const Icon(Icons.image_outlined),
-            ),
-            title: Text(
-              path_lib.basenameWithoutExtension(context.bloc.file.name),
-            ),
-            subtitle: (file_util.isSupportedVideoMime(
-                      context.bloc.file.mime ?? "",
-                    )
+      buildWhen: (previous, current) =>
+          previous.size != current.size ||
+          previous.duration != current.duration,
+      builder: (context, state) => ListTile(
+        leading: ListTileCenterLeading(
+          child: file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
+              ? const Icon(Icons.video_file_outlined)
+              : const Icon(Icons.image_outlined),
+        ),
+        title: Text(path_lib.basenameWithoutExtension(context.bloc.file.name)),
+        subtitle:
+            (file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
                     ? _buildVideoSubtitle(
-                      size: state.size,
-                      duration: state.duration,
-                    )
+                        size: state.size,
+                        duration: state.duration,
+                      )
                     : _buildSizeSubtitle(state.size))
                 ?.let(Text.new),
-          ),
+      ),
     );
   }
 
@@ -370,10 +352,9 @@ class _OwnerItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.isOwned != current.isOwned ||
-              previous.owner != current.owner,
+      buildWhen: (previous, current) =>
+          previous.isOwned != current.isOwned ||
+          previous.owner != current.owner,
       builder: (context, state) {
         if (state.isOwned == false && state.owner != null) {
           return ListTile(
@@ -398,32 +379,29 @@ class _TagItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.tags,
-      builder:
-          (context, tags) =>
-              tags != null && tags.isNotEmpty
-                  ? ListTile(
-                    leading: const Icon(Icons.local_offer_outlined),
-                    title: SizedBox(
-                      height: 40,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: tags.length,
-                        itemBuilder:
-                            (context, index) => FilterChip(
-                              elevation: 1,
-                              pressElevation: 1,
-                              showCheckmark: false,
-                              visualDensity: VisualDensity.compact,
-                              selected: true,
-                              label: Text(tags[index].name),
-                              onSelected: (_) {},
-                            ),
-                        separatorBuilder:
-                            (context, index) => const SizedBox(width: 8),
-                      ),
-                    ),
-                  )
-                  : const SizedBox.shrink(),
+      builder: (context, tags) => tags != null && tags.isNotEmpty
+          ? ListTile(
+              leading: const Icon(Icons.local_offer_outlined),
+              title: SizedBox(
+                height: 40,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: tags.length,
+                  itemBuilder: (context, index) => FilterChip(
+                    elevation: 1,
+                    pressElevation: 1,
+                    showCheckmark: false,
+                    visualDensity: VisualDensity.compact,
+                    selected: true,
+                    label: Text(tags[index].name),
+                    onSelected: (_) {},
+                  ),
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(width: 8),
+                ),
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }
@@ -510,35 +488,31 @@ class _ModelItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.model != current.model ||
-              previous.fNumber != current.fNumber ||
-              previous.exposureTime != current.exposureTime ||
-              previous.focalLength != current.focalLength ||
-              previous.isoSpeedRatings != current.isoSpeedRatings ||
-              previous.fps != current.fps,
-      builder:
-          (context, state) =>
-              state.model != null
-                  ? ListTile(
-                    leading: const ListTileCenterLeading(
-                      child: Icon(Icons.camera_outlined),
-                    ),
-                    title: Text(state.model!),
-                    subtitle: (file_util.isSupportedVideoMime(
-                              context.bloc.file.mime ?? "",
-                            )
-                            ? _buildVideoSubtitle(fps: state.fps)
-                            : _buildCameraSubtitle(
+      buildWhen: (previous, current) =>
+          previous.model != current.model ||
+          previous.fNumber != current.fNumber ||
+          previous.exposureTime != current.exposureTime ||
+          previous.focalLength != current.focalLength ||
+          previous.isoSpeedRatings != current.isoSpeedRatings ||
+          previous.fps != current.fps,
+      builder: (context, state) => state.model != null
+          ? ListTile(
+              leading: const ListTileCenterLeading(
+                child: Icon(Icons.camera_outlined),
+              ),
+              title: Text(state.model!),
+              subtitle:
+                  (file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
+                          ? _buildVideoSubtitle(fps: state.fps)
+                          : _buildCameraSubtitle(
                               fNumber: state.fNumber,
                               exposureTime: state.exposureTime,
                               focalLength: state.focalLength,
                               isoSpeedRatings: state.isoSpeedRatings,
                             ))
-                        ?.let(Text.new),
-                  )
-                  : const SizedBox.shrink(),
+                      ?.let(Text.new),
+            )
+          : const SizedBox.shrink(),
     );
   }
 
@@ -588,28 +562,26 @@ class _LocationItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.location,
-      builder:
-          (context, location) =>
-              location?.countryCode != null
-                  ? ListTile(
-                    leading: const ListTileCenterLeading(
-                      child: Icon(Icons.location_on_outlined),
-                    ),
-                    title: Text(
-                      L10n.global().gpsPlaceText(
-                        location!.localizedNameOf(context) ?? "",
-                      ),
-                    ),
-                    subtitle: _toSubtitle(context, location)?.let(Text.new),
-                    trailing: const Icon(Icons.info_outline),
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (_) => const AboutGeocodingDialog(),
-                      );
-                    },
-                  )
-                  : const SizedBox.shrink(),
+      builder: (context, location) => location?.countryCode != null
+          ? ListTile(
+              leading: const ListTileCenterLeading(
+                child: Icon(Icons.location_on_outlined),
+              ),
+              title: Text(
+                L10n.global().gpsPlaceText(
+                  location!.localizedNameOf(context) ?? "",
+                ),
+              ),
+              subtitle: _toSubtitle(context, location)?.let(Text.new),
+              trailing: const Icon(Icons.info_outline),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => const AboutGeocodingDialog(),
+                );
+              },
+            )
+          : const SizedBox.shrink(),
     );
   }
 
@@ -656,30 +628,26 @@ class _GpsItemState extends State<_GpsItem> {
       },
       child: _BlocSelector(
         selector: (state) => state.gps,
-        builder:
-            (context, gps) =>
-                features.isSupportMapView && gps != null
-                    ? AnimatedVisibility(
-                      opacity: _shouldBlockGpsMap ? 0 : 1,
-                      curve: Curves.easeInOut,
-                      duration: k.animationDurationNormal,
-                      child: SizedBox(
-                        height: 256,
-                        child: ValueStreamBuilder<GpsMapProvider>(
-                          stream: context.read<PrefController>().gpsMapProvider,
-                          builder:
-                              (context, gpsMapProvider) => StaticMap(
-                                providerHint: gpsMapProvider.requireData,
-                                location: CameraPosition(center: gps, zoom: 16),
-                                onTap:
-                                    () => launchExternalMap(
-                                      CameraPosition(center: gps, zoom: 16),
-                                    ),
-                              ),
-                        ),
+        builder: (context, gps) => features.isSupportMapView && gps != null
+            ? AnimatedVisibility(
+                opacity: _shouldBlockGpsMap ? 0 : 1,
+                curve: Curves.easeInOut,
+                duration: k.animationDurationNormal,
+                child: SizedBox(
+                  height: 256,
+                  child: ValueStreamBuilder<GpsMapProvider>(
+                    stream: context.read<PrefController>().gpsMapProvider,
+                    builder: (context, gpsMapProvider) => StaticMap(
+                      providerHint: gpsMapProvider.requireData,
+                      location: CameraPosition(center: gps, zoom: 16),
+                      onTap: () => launchExternalMap(
+                        CameraPosition(center: gps, zoom: 16),
                       ),
-                    )
-                    : const SizedBox.shrink(),
+                    ),
+                  ),
+                ),
+              )
+            : const SizedBox.shrink(),
       ),
     );
   }
