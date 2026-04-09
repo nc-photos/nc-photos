@@ -11,9 +11,7 @@ import 'package:zstandard/zstandard.dart';
 
 part 'db_util.g.dart';
 
-Future<CommonDatabase> openRawSqliteDbFromAsset({
-  bool isReadOnly = false,
-}) async {
+Future<CommonDatabase> openRawSqliteDbFromAsset() async {
   final dir = await _openDir();
   final file = io.File(path_lib.join(dir.path, "cities_2.sqlite"));
   if (!await file.exists()) {
@@ -32,10 +30,7 @@ Future<CommonDatabase> openRawSqliteDbFromAsset({
     await tempFile.writeAsBytes(decompressed!, flush: true);
     await tempFile.rename(file.path);
   }
-  return sqlite3.open(
-    file.path,
-    mode: isReadOnly ? OpenMode.readOnly : OpenMode.readWriteCreate,
-  );
+  return sqlite3.open(file.path, mode: OpenMode.readOnly);
 }
 
 Future<io.Directory> _openDir() async {
