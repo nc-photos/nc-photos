@@ -48,7 +48,8 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get deleteSelectedSuccessNotification => 'Všetky položky boli úspešne odstránené';
+  String get deleteSelectedSuccessNotification =>
+      'Všetky položky boli úspešne odstránené';
 
   @override
   String deleteSelectedFailureNotification(num count) {
@@ -65,7 +66,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get archiveTooltip => 'Archivovať';
 
   @override
-  String get archiveSelectedSuccessNotification => 'Všetky položky boli úspešne archivované';
+  String get archiveSelectedSuccessNotification =>
+      'Všetky položky boli úspešne archivované';
 
   @override
   String archiveSelectedFailureNotification(num count) {
@@ -82,7 +84,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get unarchiveTooltip => 'Dearchivovať';
 
   @override
-  String get unarchiveSelectedSuccessNotification => 'Všetky položky boli úspešne dearchivované';
+  String get unarchiveSelectedSuccessNotification =>
+      'Všetky položky boli úspešne dearchivované';
 
   @override
   String unarchiveSelectedFailureNotification(num count) {
@@ -105,7 +108,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get deleteFailureNotification => 'Nepodarilo sa vymazať položku';
 
   @override
-  String get removeSelectedFromAlbumFailureNotification => 'Nepodarilo sa odstrániť položky z albumu';
+  String get removeSelectedFromAlbumFailureNotification =>
+      'Nepodarilo sa odstrániť položky z albumu';
 
   @override
   String get addServerTooltip => 'Pridať server';
@@ -142,7 +146,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get connectingToServer2 => 'Čakám na autorizáciu zo strany servera';
 
   @override
-  String get connectingToServerInstruction => 'Prihláste sa cez otvorený prehliadač';
+  String get connectingToServerInstruction =>
+      'Prihláste sa cez otvorený prehliadač';
 
   @override
   String get nameInputHint => 'Názov';
@@ -160,7 +165,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get signInHeaderText => 'Prihláste sa na Nextcloud server';
 
   @override
-  String get signIn2faHintText => 'Použite heslo aplikácie, ak máte na serveri povolené dvojfaktorové overenie';
+  String get signIn2faHintText =>
+      'Použite heslo aplikácie, ak máte na serveri povolené dvojfaktorové overenie';
 
   @override
   String get signInHeaderText2 => 'Nextcloud\nPrihlásiť sa';
@@ -187,25 +193,30 @@ class AppLocalizationsSk extends AppLocalizations {
   String get rootPickerHeaderText => 'Vyberte priečinky, ktoré sa majú zahrnúť';
 
   @override
-  String get rootPickerSubHeaderText => 'Zobrazia sa len fotografie vo vnútri vybraných priečinkov. Stlačte Preskočiť pre zahrnutie všetkých';
+  String get rootPickerSubHeaderText =>
+      'Zobrazia sa len fotografie vo vnútri vybraných priečinkov. Stlačte Preskočiť pre zahrnutie všetkých';
 
   @override
   String get rootPickerNavigateUpItemText => '(ísť späť)';
 
   @override
-  String get rootPickerUnpickFailureNotification => 'Nepodarilo sa zrušiť výber položky';
+  String get rootPickerUnpickFailureNotification =>
+      'Nepodarilo sa zrušiť výber položky';
 
   @override
-  String get rootPickerListEmptyNotification => 'Vyberte aspoň jeden priečinok alebo stlačte preskočiť pre zahrnutie všetkých';
+  String get rootPickerListEmptyNotification =>
+      'Vyberte aspoň jeden priečinok alebo stlačte preskočiť pre zahrnutie všetkých';
 
   @override
   String get setupWidgetTitle => 'Začíname';
 
   @override
-  String get setupSettingsModifyLaterHint => 'Môžete to neskôr zmeniť v Nastaveniach';
+  String get setupSettingsModifyLaterHint =>
+      'Môžete to neskôr zmeniť v Nastaveniach';
 
   @override
-  String get setupHiddenPrefDirNoticeDetail => 'Táto aplikácia vytvára priečinok na Nextcloud serveri pre uloženie súborov s preferenciami. Prosím neupravujte ani neodstraňujte ho, pokiaľ neplánujete odstrániť túto aplikáciu';
+  String get setupHiddenPrefDirNoticeDetail =>
+      'Táto aplikácia vytvára priečinok na Nextcloud serveri pre uloženie súborov s preferenciami. Prosím neupravujte ani neodstraňujte ho, pokiaľ neplánujete odstrániť túto aplikáciu';
 
   @override
   String get settingsWidgetTitle => 'Nastavenia';
@@ -223,28 +234,35 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsExifSupportTitle2 => 'Klientská podpora EXIF';
 
   @override
-  String get settingsExifSupportTrueSubtitle => 'Vyžaduje dodatočný sieťový prenos';
+  String get settingsExifSupportTrueSubtitle =>
+      'Vyžaduje dodatočný sieťový prenos';
 
   @override
-  String get settingsFallbackClientExifTitle => 'Fall back to client-side parser';
+  String get settingsFallbackClientExifTitle =>
+      'Fall back to client-side parser';
 
   @override
-  String get settingsFallbackClientExifTrueText => 'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
+  String get settingsFallbackClientExifTrueText =>
+      'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
 
   @override
-  String get settingsFallbackClientExifFalseText => 'If Nextcloud failed to extract the file metadata, leave it as is';
+  String get settingsFallbackClientExifFalseText =>
+      'If Nextcloud failed to extract the file metadata, leave it as is';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogTitle => 'Enable client-side fallback?';
+  String get settingsFallbackClientExifConfirmDialogTitle =>
+      'Enable client-side fallback?';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogText => 'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
+  String get settingsFallbackClientExifConfirmDialogText =>
+      'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
 
   @override
   String get settingsMemoriesTitle => 'Spomienky';
 
   @override
-  String get settingsMemoriesSubtitle => 'Zobraziť fotografie nasnímané v minulosti';
+  String get settingsMemoriesSubtitle =>
+      'Zobraziť fotografie nasnímané v minulosti';
 
   @override
   String get settingsAccountTitle => 'Účet';
@@ -253,7 +271,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsAccountLabelTitle => 'Označenie';
 
   @override
-  String get settingsAccountLabelDescription => 'Nastavte označenie, ktoré sa zobrazí namiesto URL servera';
+  String get settingsAccountLabelDescription =>
+      'Nastavte označenie, ktoré sa zobrazí namiesto URL servera';
 
   @override
   String get settingsIncludedFoldersTitle => 'Zahrnuté priečinky';
@@ -265,10 +284,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsShareFolderDialogTitle => 'Nájsť priečinok na zdieľanie';
 
   @override
-  String get settingsShareFolderDialogDescription => 'Toto nastavenie zodpovedá parametru share_folder v config.php. Obe hodnoty MUSIA byť identické.\n\nNájdite ten istý priečinok, aký je nastavený v config.php.';
+  String get settingsShareFolderDialogDescription =>
+      'Toto nastavenie zodpovedá parametru share_folder v config.php. Obe hodnoty MUSIA byť identické.\n\nNájdite ten istý priečinok, aký je nastavený v config.php.';
 
   @override
-  String get settingsShareFolderPickerDescription => 'Nájdite ten istý priečinok, aký je nastavený v config.php. Stlačte predvolené, ak ste parameter nenastavili.';
+  String get settingsShareFolderPickerDescription =>
+      'Nájdite ten istý priečinok, aký je nastavený v config.php. Stlačte predvolené, ak ste parameter nenastavili.';
 
   @override
   String get settingsPersonProviderTitle => 'Poskytovateľ osôb';
@@ -277,7 +298,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsServerAppSectionTitle => 'Podpora serverovej aplikácie';
 
   @override
-  String get settingsPhotosDescription => 'Prispôsobiť obsah zobrazený na karte Fotky';
+  String get settingsPhotosDescription =>
+      'Prispôsobiť obsah zobrazený na karte Fotky';
 
   @override
   String get settingsMemoriesRangeTitle => 'Rozsah spomienok';
@@ -297,64 +319,78 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsDeviceMediaTitle => 'Show device media';
 
   @override
-  String get settingsDeviceMediaDescription => 'Selected folders will be displayed';
+  String get settingsDeviceMediaDescription =>
+      'Selected folders will be displayed';
 
   @override
   String get settingsViewerTitle => 'Prehliadač';
 
   @override
-  String get settingsViewerDescription => 'Prispôsobiť prehliadač obrázkov/videí';
+  String get settingsViewerDescription =>
+      'Prispôsobiť prehliadač obrázkov/videí';
 
   @override
   String get settingsScreenBrightnessTitle => 'Jas obrazovky';
 
   @override
-  String get settingsScreenBrightnessDescription => 'Prepísať systémovú úroveň jasu';
+  String get settingsScreenBrightnessDescription =>
+      'Prepísať systémovú úroveň jasu';
 
   @override
   String get settingsForceRotationTitle => 'Ignorovať uzamknutie rotácie';
 
   @override
-  String get settingsForceRotationDescription => 'Otočte obrazovku aj keď je automatické otáčanie zakázané';
+  String get settingsForceRotationDescription =>
+      'Otočte obrazovku aj keď je automatické otáčanie zakázané';
 
   @override
   String get settingsMapProviderTitle => 'Poskytovateľ máp';
 
   @override
-  String get settingsViewerCustomizeAppBarTitle => 'Prispôsobiť hornú lištu aplikácie';
+  String get settingsViewerCustomizeAppBarTitle =>
+      'Prispôsobiť hornú lištu aplikácie';
 
   @override
-  String get settingsViewerCustomizeBottomAppBarTitle => 'Prispôsobiť spodnú lištu aplikácie';
+  String get settingsViewerCustomizeBottomAppBarTitle =>
+      'Prispôsobiť spodnú lištu aplikácie';
 
   @override
   String get settingsShowDateInAlbumTitle => 'Zoskupiť fotografie podľa dátumu';
 
   @override
-  String get settingsShowDateInAlbumDescription => 'Použiť len keď je album triedený podľa času';
+  String get settingsShowDateInAlbumDescription =>
+      'Použiť len keď je album triedený podľa času';
 
   @override
-  String get settingsCollectionsCustomizeNavigationBarTitle => 'Prispôsobiť navigačný panel';
+  String get settingsCollectionsCustomizeNavigationBarTitle =>
+      'Prispôsobiť navigačný panel';
 
   @override
   String get settingsImageEditTitle => 'Editor';
 
   @override
-  String get settingsImageEditDescription => 'Prispôsobiť vylepšenia obrázkov a editor obrázkov';
+  String get settingsImageEditDescription =>
+      'Prispôsobiť vylepšenia obrázkov a editor obrázkov';
 
   @override
-  String get settingsEnhanceMaxResolutionTitle2 => 'Rozlíšenie obrázkov pre vylepšenia';
+  String get settingsEnhanceMaxResolutionTitle2 =>
+      'Rozlíšenie obrázkov pre vylepšenia';
 
   @override
-  String get settingsEnhanceMaxResolutionDescription => 'Fotografie väčšie než zvolené rozlíšenie budú zmenšené.\n\nVeľmi vysoké rozlíšenie vyžaduje podstatne viac pamäte a času na spracovanie. Ak aplikácia padá pri vylepšovaní fotiek, znížte túto hodnotu.';
+  String get settingsEnhanceMaxResolutionDescription =>
+      'Fotografie väčšie než zvolené rozlíšenie budú zmenšené.\n\nVeľmi vysoké rozlíšenie vyžaduje podstatne viac pamäte a času na spracovanie. Ak aplikácia padá pri vylepšovaní fotiek, znížte túto hodnotu.';
 
   @override
-  String get settingsImageEditSaveResultsToServerTitle => 'Ukladať výsledky na server';
+  String get settingsImageEditSaveResultsToServerTitle =>
+      'Ukladať výsledky na server';
 
   @override
-  String get settingsImageEditSaveResultsToServerTrueDescription => 'Výsledky sa ukladajú na server, ak sa nepodarí nahrať, uložia sa do zariadenia';
+  String get settingsImageEditSaveResultsToServerTrueDescription =>
+      'Výsledky sa ukladajú na server, ak sa nepodarí nahrať, uložia sa do zariadenia';
 
   @override
-  String get settingsImageEditSaveResultsToServerFalseDescription => 'Výsledky sa ukladajú do tohto zariadenia';
+  String get settingsImageEditSaveResultsToServerFalseDescription =>
+      'Výsledky sa ukladajú do tohto zariadenia';
 
   @override
   String get settingsThemeTitle => 'Téma';
@@ -369,10 +405,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsSeedColorTitle => 'Farba témy';
 
   @override
-  String get settingsSeedColorDescription => 'Používa sa na odvodenie všetkých farieb v aplikácii';
+  String get settingsSeedColorDescription =>
+      'Používa sa na odvodenie všetkých farieb v aplikácii';
 
   @override
-  String get settingsSeedColorSystemColorDescription => 'Použiť systémovú farbu';
+  String get settingsSeedColorSystemColorDescription =>
+      'Použiť systémovú farbu';
 
   @override
   String get settingsSeedColorPickerTitle => 'Vyberte farbu';
@@ -387,16 +425,19 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsThemePresets => 'Predvoľby';
 
   @override
-  String get settingsSeedColorPickerSystemColorButtonLabel => 'POUŽIŤ SYSTÉMOVÚ FARBU';
+  String get settingsSeedColorPickerSystemColorButtonLabel =>
+      'POUŽIŤ SYSTÉMOVÚ FARBU';
 
   @override
   String get settingsUseBlackInDarkThemeTitle => 'Tmavšia téma';
 
   @override
-  String get settingsUseBlackInDarkThemeTrueDescription => 'Použiť čiernu v tmavej téme';
+  String get settingsUseBlackInDarkThemeTrueDescription =>
+      'Použiť čiernu v tmavej téme';
 
   @override
-  String get settingsUseBlackInDarkThemeFalseDescription => 'Použiť tmavosivú v tmavej téme';
+  String get settingsUseBlackInDarkThemeFalseDescription =>
+      'Použiť tmavosivú v tmavej téme';
 
   @override
   String get settingsMiscellaneousTitle => 'Rôzne';
@@ -405,7 +446,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsDoubleTapExitTitle => 'Dvojité ťuknutie pre ukončenie';
 
   @override
-  String get settingsPhotosTabSortByNameTitle => 'Triediť podľa názvu súboru v Fotkách';
+  String get settingsPhotosTabSortByNameTitle =>
+      'Triediť podľa názvu súboru v Fotkách';
 
   @override
   String get settingsAppLock => 'Zámok aplikácie';
@@ -420,55 +462,68 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsAppLockTypePassword => 'Heslo';
 
   @override
-  String get settingsAppLockDescription => 'Ak je povolené, pri otvorení aplikácie budete požiadaní o autentifikáciu. Táto funkcia VÁS NECHRÁNI pred reálnymi fyzickými útokmi.';
+  String get settingsAppLockDescription =>
+      'Ak je povolené, pri otvorení aplikácie budete požiadaní o autentifikáciu. Táto funkcia VÁS NECHRÁNI pred reálnymi fyzickými útokmi.';
 
   @override
-  String get settingsAppLockSetupBiometricFallbackDialogTitle => 'Vyberte alternatívu, keď nie je k dispozícii biometria';
+  String get settingsAppLockSetupBiometricFallbackDialogTitle =>
+      'Vyberte alternatívu, keď nie je k dispozícii biometria';
 
   @override
-  String get settingsAppLockSetupPinDialogTitle => 'Nastavte PIN na odomknutie aplikácie';
+  String get settingsAppLockSetupPinDialogTitle =>
+      'Nastavte PIN na odomknutie aplikácie';
 
   @override
-  String get settingsAppLockConfirmPinDialogTitle => 'Zadajte rovnaký PIN znova';
+  String get settingsAppLockConfirmPinDialogTitle =>
+      'Zadajte rovnaký PIN znova';
 
   @override
-  String get settingsAppLockSetupPasswordDialogTitle => 'Nastavte heslo na odomknutie aplikácie';
+  String get settingsAppLockSetupPasswordDialogTitle =>
+      'Nastavte heslo na odomknutie aplikácie';
 
   @override
-  String get settingsAppLockConfirmPasswordDialogTitle => 'Zadajte rovnaké heslo znova';
+  String get settingsAppLockConfirmPasswordDialogTitle =>
+      'Zadajte rovnaké heslo znova';
 
   @override
-  String get settingsViewerUseOriginalImageTitle => 'Show original image instead of high quality preview in viewer';
+  String get settingsViewerUseOriginalImageTitle =>
+      'Show original image instead of high quality preview in viewer';
 
   @override
   String get settingsExperimentalTitle => 'Experimentálne';
 
   @override
-  String get settingsExperimentalDescription => 'Funkcie, ktoré nie sú pripravené na každodenné použitie';
+  String get settingsExperimentalDescription =>
+      'Funkcie, ktoré nie sú pripravené na každodenné použitie';
 
   @override
   String get settingsExpertTitle => 'Pokročilé';
 
   @override
-  String get settingsExpertWarningText => 'Uistite sa, že plne rozumiete účelu každej možnosti pred pokračovaním';
+  String get settingsExpertWarningText =>
+      'Uistite sa, že plne rozumiete účelu každej možnosti pred pokračovaním';
 
   @override
   String get settingsClearCacheDatabaseTitle => 'Vymazať databázu súborov';
 
   @override
-  String get settingsClearCacheDatabaseDescription => 'Vymažte info o súboroch z cache a spustite úplnú resynchronizáciu so serverom';
+  String get settingsClearCacheDatabaseDescription =>
+      'Vymažte info o súboroch z cache a spustite úplnú resynchronizáciu so serverom';
 
   @override
-  String get settingsClearCacheDatabaseSuccessNotification => 'Databáza úspešne vymazaná. Odporúča sa reštartovať aplikáciu';
+  String get settingsClearCacheDatabaseSuccessNotification =>
+      'Databáza úspešne vymazaná. Odporúča sa reštartovať aplikáciu';
 
   @override
-  String get settingsManageTrustedCertificateTitle => 'Spravovať dôveryhodné certifikáty';
+  String get settingsManageTrustedCertificateTitle =>
+      'Spravovať dôveryhodné certifikáty';
 
   @override
   String get settingsUseNewHttpEngine => 'Použiť nový HTTP engine';
 
   @override
-  String get settingsUseNewHttpEngineDescription => 'Nový HTTP engine založený na Chromium, podporuje nové štandardy ako HTTP/2* a HTTP/3 QUIC*.\n\nObmedzenia:\nVlastnoručne podpísané certifikáty nemožno nami spravovať. Musíte importovať vaše CA certifikáty do systémového úložiska dôveryhodných certifikátov.\n\n* HTTPS je požadované pre HTTP/2 a HTTP/3';
+  String get settingsUseNewHttpEngineDescription =>
+      'Nový HTTP engine založený na Chromium, podporuje nové štandardy ako HTTP/2* a HTTP/3 QUIC*.\n\nObmedzenia:\nVlastnoručne podpísané certifikáty nemožno nami spravovať. Musíte importovať vaše CA certifikáty do systémového úložiska dôveryhodných certifikátov.\n\n* HTTPS je požadované pre HTTP/2 a HTTP/3';
 
   @override
   String get settingsAboutSectionTitle => 'O aplikácii';
@@ -489,16 +544,19 @@ class AppLocalizationsSk extends AppLocalizations {
   String get settingsCaptureLogsTitle => 'Zachytiť protokoly';
 
   @override
-  String get settingsCaptureLogsDescription => 'Pomôžte vývojárovi diagnostikovať chyby';
+  String get settingsCaptureLogsDescription =>
+      'Pomôžte vývojárovi diagnostikovať chyby';
 
   @override
   String get settingsTranslatorTitle => 'Prekladateľ';
 
   @override
-  String get settingsRestartNeededDialog => 'Reštartujte aplikáciu pre použitie zmien';
+  String get settingsRestartNeededDialog =>
+      'Reštartujte aplikáciu pre použitie zmien';
 
   @override
-  String get writePreferenceFailureNotification => 'Nepodarilo sa nastaviť preferenciu';
+  String get writePreferenceFailureNotification =>
+      'Nepodarilo sa nastaviť preferenciu';
 
   @override
   String get enableButtonLabel => 'POVOLIŤ';
@@ -507,13 +565,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get enableButtonLabel2 => 'Enable';
 
   @override
-  String get exifSupportNextcloud28Notes => 'Klientska podpora dopĺňa váš server. Aplikácia spracuje súbory a atribúty nepodporované Nextcloudom';
+  String get exifSupportNextcloud28Notes =>
+      'Klientska podpora dopĺňa váš server. Aplikácia spracuje súbory a atribúty nepodporované Nextcloudom';
 
   @override
-  String get exifSupportConfirmationDialogTitle2 => 'Povoliť klientsku podporu EXIF?';
+  String get exifSupportConfirmationDialogTitle2 =>
+      'Povoliť klientsku podporu EXIF?';
 
   @override
-  String get captureLogDetails => 'Ak chcete vytvoriť protokoly pre nahlásenie chyby:\n\n1. Povoľte toto nastavenie\n2. Reprodukujte problém\n3. Zakážte toto nastavenie\n4. Nájdite súbor nc-photos.log v priečinku na stiahnutie\n\n*Ak problém spôsobí pád aplikácie, protokoly nebude možné zachytiť. V takom prípade prosím kontaktujte vývojára pre ďalšie inštrukcie';
+  String get captureLogDetails =>
+      'Ak chcete vytvoriť protokoly pre nahlásenie chyby:\n\n1. Povoľte toto nastavenie\n2. Reprodukujte problém\n3. Zakážte toto nastavenie\n4. Nájdite súbor nc-photos.log v priečinku na stiahnutie\n\n*Ak problém spôsobí pád aplikácie, protokoly nebude možné zachytiť. V takom prípade prosím kontaktujte vývojára pre ďalšie inštrukcie';
 
   @override
   String get captureLogSuccessNotification => 'Protokoly úspešne upravené';
@@ -528,7 +589,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get connectButtonLabel => 'PRIPOJIŤ';
 
   @override
-  String get rootPickerSkipConfirmationDialogContent2 => 'Všetky vaše súbory budú zahrnuté. Môže to zvýšiť spotrebu pamäte a zhoršiť výkon';
+  String get rootPickerSkipConfirmationDialogContent2 =>
+      'Všetky vaše súbory budú zahrnuté. Môže to zvýšiť spotrebu pamäte a zhoršiť výkon';
 
   @override
   String megapixelCount(Object count) {
@@ -567,10 +629,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get previousTooltip => 'Predchádzajúce';
 
   @override
-  String get webSelectRangeNotification => 'Podržte shift + kliknite pre výber všetkých medzi nimi';
+  String get webSelectRangeNotification =>
+      'Podržte shift + kliknite pre výber všetkých medzi nimi';
 
   @override
-  String get mobileSelectRangeNotification => 'Dlhým stlačením inej položky vyberiete všetko medzi nimi';
+  String get mobileSelectRangeNotification =>
+      'Dlhým stlačením inej položky vyberiete všetko medzi nimi';
 
   @override
   String get updateDateTimeDialogTitle => 'Upraviť dátum & čas';
@@ -603,16 +667,20 @@ class AppLocalizationsSk extends AppLocalizations {
   String get dateTimeInputInvalid => 'Neplatná hodnota';
 
   @override
-  String get updateDateTimeFailureNotification => 'Nepodarilo sa upraviť dátum & čas';
+  String get updateDateTimeFailureNotification =>
+      'Nepodarilo sa upraviť dátum & čas';
 
   @override
-  String get albumDirPickerHeaderText => 'Vyberte zložky, ktoré majú byť pridružené';
+  String get albumDirPickerHeaderText =>
+      'Vyberte zložky, ktoré majú byť pridružené';
 
   @override
-  String get albumDirPickerSubHeaderText => 'Len fotografie v pridružených zložkách budú zahrnuté do tohto albumu';
+  String get albumDirPickerSubHeaderText =>
+      'Len fotografie v pridružených zložkách budú zahrnuté do tohto albumu';
 
   @override
-  String get albumDirPickerListEmptyNotification => 'Vyberte aspoň jednu zložku';
+  String get albumDirPickerListEmptyNotification =>
+      'Vyberte aspoň jednu zložku';
 
   @override
   String get importFoldersTooltip => 'Importovať priečinky';
@@ -621,7 +689,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get albumImporterHeaderText => 'Importovať zložky ako albumy';
 
   @override
-  String get albumImporterSubHeaderText => 'Navrhované zložky sú uvedené nižšie. V závislosti od počte súborov na vašom serveri môže import chvíľu trvať';
+  String get albumImporterSubHeaderText =>
+      'Navrhované zložky sú uvedené nižšie. V závislosti od počte súborov na vašom serveri môže import chvíľu trvať';
 
   @override
   String get importButtonLabel => 'IMPORTOVAŤ';
@@ -636,7 +705,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get editTooltip => 'Upraviť';
 
   @override
-  String get editAccountConflictFailureNotification => 'Účet s rovnakým nastavením už existuje';
+  String get editAccountConflictFailureNotification =>
+      'Účet s rovnakým nastavením už existuje';
 
   @override
   String get genericProcessingDialogContent => 'Prosím počkajte';
@@ -669,7 +739,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get sortOptionManualLabel => 'Manuálne';
 
   @override
-  String get albumEditDragRearrangeNotification => 'Dlhým stlačením a potiahnutím položky ju presuňte ručne';
+  String get albumEditDragRearrangeNotification =>
+      'Dlhým stlačením a potiahnutím položky ju presuňte ručne';
 
   @override
   String get albumAddTextTooltip => 'Pridať text';
@@ -678,7 +749,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get shareTooltip => 'Zdieľať';
 
   @override
-  String get shareSelectedEmptyNotification => 'Vyberte niektoré fotografie na zdieľanie';
+  String get shareSelectedEmptyNotification =>
+      'Vyberte niektoré fotografie na zdieľanie';
 
   @override
   String get shareDownloadingDialogContent => 'Sťahujem';
@@ -713,7 +785,8 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get restoreSelectedSuccessNotification => 'Všetky položky boli úspešne obnovené';
+  String get restoreSelectedSuccessNotification =>
+      'Všetky položky boli úspešne obnovené';
 
   @override
   String restoreSelectedFailureNotification(num count) {
@@ -742,13 +815,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get deletePermanentlyConfirmationDialogTitle => 'Odstrániť natrvalo';
 
   @override
-  String get deletePermanentlyConfirmationDialogContent => 'Vybrané položky budú natrvalo odstránené zo servera.\n\nTáto akcia je nevratná';
+  String get deletePermanentlyConfirmationDialogContent =>
+      'Vybrané položky budú natrvalo odstránené zo servera.\n\nTáto akcia je nevratná';
 
   @override
   String get albumSharedLabel => 'Zdieľané';
 
   @override
-  String get metadataTaskProcessingNotification => 'Spracovávanie metadát obrázkov na pozadí';
+  String get metadataTaskProcessingNotification =>
+      'Spracovávanie metadát obrázkov na pozadí';
 
   @override
   String get configButtonLabel => 'KONFIGURÁCIA';
@@ -769,16 +844,19 @@ class AppLocalizationsSk extends AppLocalizations {
   String get changelogTitle => 'Zoznam zmien';
 
   @override
-  String get serverCertErrorDialogTitle => 'Certifikátu servera nemožno dôverovať';
+  String get serverCertErrorDialogTitle =>
+      'Certifikátu servera nemožno dôverovať';
 
   @override
-  String get serverCertErrorDialogContent => 'Server môže byť napadnutý alebo sa niekto pokúša ukradnúť vaše informácie';
+  String get serverCertErrorDialogContent =>
+      'Server môže byť napadnutý alebo sa niekto pokúša ukradnúť vaše informácie';
 
   @override
   String get advancedButtonLabel => 'POKROČILÉ';
 
   @override
-  String get whitelistCertDialogTitle => 'Pridať neznámy certifikát do dôveryhodných?';
+  String get whitelistCertDialogTitle =>
+      'Pridať neznámy certifikát do dôveryhodných?';
 
   @override
   String whitelistCertDialogContent(Object host, Object fingerprint) {
@@ -798,7 +876,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get emptyTrashbinConfirmationDialogTitle => 'Vyprázdniť kôš';
 
   @override
-  String get emptyTrashbinConfirmationDialogContent => 'Všetky položky budú natrvalo odstránené zo servera.\n\nTáto akcia je nevratná';
+  String get emptyTrashbinConfirmationDialogContent =>
+      'Všetky položky budú natrvalo odstránené zo servera.\n\nTáto akcia je nevratná';
 
   @override
   String get unsetAlbumCoverTooltip => 'Zrušiť obal';
@@ -819,7 +898,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get slideshowSetupDialogTitle => 'Nastaviť prezentáciu';
 
   @override
-  String get slideshowSetupDialogDurationTitle => 'Dĺžka zobrazenia obrázka (MM:SS)';
+  String get slideshowSetupDialogDurationTitle =>
+      'Dĺžka zobrazenia obrázka (MM:SS)';
 
   @override
   String get slideshowSetupDialogShuffleTitle => 'Zamiešať';
@@ -840,25 +920,29 @@ class AppLocalizationsSk extends AppLocalizations {
   String get shareMethodPreviewTitle => 'Náhľad';
 
   @override
-  String get shareMethodPreviewDescription => 'Zdieľať zníženú kvalitu náhľadu do iných aplikácií (len obrázky)';
+  String get shareMethodPreviewDescription =>
+      'Zdieľať zníženú kvalitu náhľadu do iných aplikácií (len obrázky)';
 
   @override
   String get shareMethodOriginalFileTitle => 'Pôvodný súbor';
 
   @override
-  String get shareMethodOriginalFileDescription => 'Stiahnuť pôvodný súbor a zdieľať ho s inými aplikáciami';
+  String get shareMethodOriginalFileDescription =>
+      'Stiahnuť pôvodný súbor a zdieľať ho s inými aplikáciami';
 
   @override
   String get shareMethodPublicLinkTitle => 'Verejný odkaz';
 
   @override
-  String get shareMethodPublicLinkDescription => 'Vytvoriť na serveri nový verejný odkaz. Ktokoľvek s odkazom môže súbor získať';
+  String get shareMethodPublicLinkDescription =>
+      'Vytvoriť na serveri nový verejný odkaz. Ktokoľvek s odkazom môže súbor získať';
 
   @override
   String get shareMethodPasswordLinkTitle => 'Odkaz chránený heslom';
 
   @override
-  String get shareMethodPasswordLinkDescription => 'Vytvoriť na serveri nový odkaz chránený heslom';
+  String get shareMethodPasswordLinkDescription =>
+      'Vytvoriť na serveri nový odkaz chránený heslom';
 
   @override
   String get collectionSharingLabel => 'Zdieľanie';
@@ -885,13 +969,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get unshareTooltip => 'Zrušiť zdieľanie';
 
   @override
-  String get unshareSuccessNotification => 'Odstránenie zdieľania prebehlo úspešne';
+  String get unshareSuccessNotification =>
+      'Odstránenie zdieľania prebehlo úspešne';
 
   @override
   String get locationLabel => 'Poloha';
 
   @override
-  String get multipleFilesLinkShareDialogContent => 'Nextcloud nepodporuje zdieľanie odkazu pre viaceré súbory. Aplikácia namiesto toho SKOPÍRUJE súbory do nového priečinka a ten zdieľa.';
+  String get multipleFilesLinkShareDialogContent =>
+      'Nextcloud nepodporuje zdieľanie odkazu pre viaceré súbory. Aplikácia namiesto toho SKOPÍRUJE súbory do nového priečinka a ten zdieľa.';
 
   @override
   String get folderNameInputHint => 'Názov priečinka';
@@ -920,7 +1006,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get unshareLinkShareDirDialogTitle => 'Vymazať priečinok?';
 
   @override
-  String get unshareLinkShareDirDialogContent => 'Tento priečinok bol vytvorený aplikáciou na zdieľanie viacerých súborov ako odkaz. Teraz už nie je s nikým zdieľaný, chcete tento priečinok vymazať?';
+  String get unshareLinkShareDirDialogContent =>
+      'Tento priečinok bol vytvorený aplikáciou na zdieľanie viacerých súborov ako odkaz. Teraz už nie je s nikým zdieľaný, chcete tento priečinok vymazať?';
 
   @override
   String get addToCollectionsViewTooltip => 'Pridať do zbierky';
@@ -967,7 +1054,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get sharedAlbumInfoDialogTitle => 'Predstavujeme zdieľaný album';
 
   @override
-  String get sharedAlbumInfoDialogContent => 'Zdieľaný album umožňuje viacerým používateľom na rovnakom serveri pristupovať k rovnakému albumu. Pred pokračovaním si pozorne prečítajte obmedzenia.';
+  String get sharedAlbumInfoDialogContent =>
+      'Zdieľaný album umožňuje viacerým používateľom na rovnakom serveri pristupovať k rovnakému albumu. Pred pokračovaním si pozorne prečítajte obmedzenia.';
 
   @override
   String get learnMoreButtonLabel => 'DOZVEDIEŤ SA VIAC';
@@ -976,7 +1064,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get migrateDatabaseProcessingNotification => 'Aktualizácia databázy';
 
   @override
-  String get migrateDatabaseFailureNotification => 'Nepodarilo sa migrovať databázu';
+  String get migrateDatabaseFailureNotification =>
+      'Nepodarilo sa migrovať databázu';
 
   @override
   String memoryAlbumName(num count) {
@@ -990,13 +1079,16 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get homeFolderNotFoundDialogTitle => 'Domovský priečinok nebol nájdený';
+  String get homeFolderNotFoundDialogTitle =>
+      'Domovský priečinok nebol nájdený';
 
   @override
-  String get homeFolderNotFoundDialogContent => 'Prosím opravte URL WebDAV uvedenú nižšie. URL môžete nájsť vo webovom rozhraní Nextcloud.';
+  String get homeFolderNotFoundDialogContent =>
+      'Prosím opravte URL WebDAV uvedenú nižšie. URL môžete nájsť vo webovom rozhraní Nextcloud.';
 
   @override
-  String get homeFolderInputInvalidEmpty => 'Zadajte názov vášho domovského priečinka';
+  String get homeFolderInputInvalidEmpty =>
+      'Zadajte názov vášho domovského priečinka';
 
   @override
   String get createCollectionTooltip => 'Nová zbierka';
@@ -1005,13 +1097,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get createCollectionDialogAlbumLabel2 => 'Klientsky album';
 
   @override
-  String get createCollectionDialogAlbumDescription2 => 'Album s dodatočnými funkciami, prístupný len v tejto aplikácii';
+  String get createCollectionDialogAlbumDescription2 =>
+      'Album s dodatočnými funkciami, prístupný len v tejto aplikácii';
 
   @override
   String get createCollectionDialogFolderLabel => 'Priečinok';
 
   @override
-  String get createCollectionDialogFolderDescription => 'Zobraziť fotografie vo vnútri priečinka';
+  String get createCollectionDialogFolderDescription =>
+      'Zobraziť fotografie vo vnútri priečinka';
 
   @override
   String get collectionFavoritesLabel => 'Obľúbené';
@@ -1023,7 +1117,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get favoriteSuccessNotification => 'Pridané do obľúbených';
 
   @override
-  String get favoriteFailureNotification => 'Nepodarilo sa pridať do obľúbených';
+  String get favoriteFailureNotification =>
+      'Nepodarilo sa pridať do obľúbených';
 
   @override
   String get unfavoriteTooltip => 'Odobrať z obľúbených';
@@ -1032,19 +1127,22 @@ class AppLocalizationsSk extends AppLocalizations {
   String get unfavoriteSuccessNotification => 'Odstránené z obľúbených';
 
   @override
-  String get unfavoriteFailureNotification => 'Nepodarilo sa odstrániť z obľúbených';
+  String get unfavoriteFailureNotification =>
+      'Nepodarilo sa odstrániť z obľúbených';
 
   @override
   String get createCollectionDialogTagLabel => 'Štítok';
 
   @override
-  String get createCollectionDialogTagDescription => 'Zobraziť fotografie so špecifickými štítkami';
+  String get createCollectionDialogTagDescription =>
+      'Zobraziť fotografie so špecifickými štítkami';
 
   @override
   String get addTagInputHint => 'Pridať štítok';
 
   @override
-  String get tagPickerNoTagSelectedNotification => 'Prosím pridajte aspoň 1 štítok';
+  String get tagPickerNoTagSelectedNotification =>
+      'Prosím pridajte aspoň 1 štítok';
 
   @override
   String get backgroundServiceStopping => 'Zastavovanie služby';
@@ -1062,13 +1160,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get enhanceIntroDialogTitle => 'Vylepšite svoje fotografie';
 
   @override
-  String get enhanceIntroDialogDescription => 'Vaše fotografie sa spracovávajú lokálne na vašom zariadení. Predvolene sa zmenšia na 2048x1536. Výstupné rozlíšenie môžete upraviť v Nastaveniach';
+  String get enhanceIntroDialogDescription =>
+      'Vaše fotografie sa spracovávajú lokálne na vašom zariadení. Predvolene sa zmenšia na 2048x1536. Výstupné rozlíšenie môžete upraviť v Nastaveniach';
 
   @override
   String get enhanceLowLightTitle => 'Vylepšenie pri slabom svetle';
 
   @override
-  String get enhanceLowLightDescription => 'Zosvetlite fotografie urobené v slabom osvetlení';
+  String get enhanceLowLightDescription =>
+      'Zosvetlite fotografie urobené v slabom osvetlení';
 
   @override
   String get enhanceLowLightParamBrightnessLabel => 'Jas';
@@ -1077,13 +1177,15 @@ class AppLocalizationsSk extends AppLocalizations {
   String get collectionEditedPhotosLabel => 'Upravené (lokálne)';
 
   @override
-  String get deletePermanentlyLocalConfirmationDialogContent => 'Vybrané položky budú natrvalo odstránené z tohto zariadenia.\n\nTáto akcia je nevratná';
+  String get deletePermanentlyLocalConfirmationDialogContent =>
+      'Vybrané položky budú natrvalo odstránené z tohto zariadenia.\n\nTáto akcia je nevratná';
 
   @override
   String get enhancePortraitBlurTitle => 'Portrétový efekt rozmazania';
 
   @override
-  String get enhancePortraitBlurDescription => 'Rozmažte pozadie vašich fotografií, najlepšie funguje pri portrétoch';
+  String get enhancePortraitBlurDescription =>
+      'Rozmažte pozadie vašich fotografií, najlepšie funguje pri portrétoch';
 
   @override
   String get enhancePortraitBlurParamBlurLabel => 'Rozmazanie';
@@ -1092,7 +1194,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get enhanceSuperResolution4xTitle => 'Super-rozlíšenie (4x)';
 
   @override
-  String get enhanceSuperResolution4xDescription => 'Zväčšite vaše fotografie na 4x pôvodného rozlíšenia (pozrite nápovedu pre detaily)';
+  String get enhanceSuperResolution4xDescription =>
+      'Zväčšite vaše fotografie na 4x pôvodného rozlíšenia (pozrite nápovedu pre detaily)';
 
   @override
   String get enhanceStyleTransferTitle => 'Prenos štýlu';
@@ -1101,16 +1204,19 @@ class AppLocalizationsSk extends AppLocalizations {
   String get enhanceStyleTransferStyleDialogTitle => 'Vyberte štýl';
 
   @override
-  String get enhanceStyleTransferStyleDialogDescription => 'Preneste vzhľad z referenčného obrázka do vašich fotografií';
+  String get enhanceStyleTransferStyleDialogDescription =>
+      'Preneste vzhľad z referenčného obrázka do vašich fotografií';
 
   @override
-  String get enhanceStyleTransferNoStyleSelectedNotification => 'Prosím vyberte štýl';
+  String get enhanceStyleTransferNoStyleSelectedNotification =>
+      'Prosím vyberte štýl';
 
   @override
   String get enhanceColorPopTitle => 'Farebný efekt';
 
   @override
-  String get enhanceColorPopDescription => 'Odstráňte farebnosť pozadia vašich fotografií, najlepšie funguje pri portrétoch';
+  String get enhanceColorPopDescription =>
+      'Odstráňte farebnosť pozadia vašich fotografií, najlepšie funguje pri portrétoch';
 
   @override
   String get enhanceGenericParamWeightLabel => 'Váha';
@@ -1119,7 +1225,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get enhanceRetouchTitle => 'Automatické retušovanie';
 
   @override
-  String get enhanceRetouchDescription => 'Automaticky upravte vaše fotografie, zlepšite celkové farby a živost';
+  String get enhanceRetouchDescription =>
+      'Automaticky upravte vaše fotografie, zlepšite celkové farby a živost';
 
   @override
   String get doubleTapExitNotification => 'Ťuknite znova pre ukončenie';
@@ -1182,7 +1289,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imageEditTransformOrientationClockwise => 'po smere hodín';
 
   @override
-  String get imageEditTransformOrientationCounterclockwise => 'proti smeru hodín';
+  String get imageEditTransformOrientationCounterclockwise =>
+      'proti smeru hodín';
 
   @override
   String get imageEditTransformCrop => 'Orezať';
@@ -1230,10 +1338,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imageEditNoFaceDetected => 'No faces detected';
 
   @override
-  String get imageEditFaceNotSelected => 'Select one or more faces on your photos to apply the effects';
+  String get imageEditFaceNotSelected =>
+      'Select one or more faces on your photos to apply the effects';
 
   @override
-  String get imageEditResetSelectedFaceMessage => 'Selected faces are cleared after adjusting image transformation settings';
+  String get imageEditResetSelectedFaceMessage =>
+      'Selected faces are cleared after adjusting image transformation settings';
 
   @override
   String get imageEditOpenErrorMessage => 'Unable to open file';
@@ -1245,7 +1355,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get categoriesLabel => 'Kategórie';
 
   @override
-  String get searchLandingPeopleListEmptyText2 => 'Stlačte nastavenia pre zmenu poskytovateľa alebo pomoc pre viac informácií';
+  String get searchLandingPeopleListEmptyText2 =>
+      'Stlačte nastavenia pre zmenu poskytovateľa alebo pomoc pre viac informácií';
 
   @override
   String get searchLandingCategoryVideosLabel => 'Videá';
@@ -1304,7 +1415,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get gpsPlaceAboutDialogTitle => 'O mieste';
 
   @override
-  String get gpsPlaceAboutDialogContent => 'Tu zobrazené miesto je len približný odhad a nie je zaručená jeho presnosť. Nevyjadruje naše názory na žiadne sporné územia.';
+  String get gpsPlaceAboutDialogContent =>
+      'Tu zobrazené miesto je len približný odhad a nie je zaručená jeho presnosť. Nevyjadruje naše názory na žiadne sporné územia.';
 
   @override
   String get collectionPlacesLabel => 'Miesta';
@@ -1313,7 +1425,8 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imageSaveOptionDialogTitle => 'Ukladanie výsledku';
 
   @override
-  String get imageSaveOptionDialogContent => 'Vyberte, kam uložiť tento a budúce spracované obrázky. Ak zvolíte server, ale aplikácia ho nedokáže nahrať, bude uložený do vášho zariadenia.';
+  String get imageSaveOptionDialogContent =>
+      'Vyberte, kam uložiť tento a budúce spracované obrázky. Ak zvolíte server, ale aplikácia ho nedokáže nahrať, bude uložený do vášho zariadenia.';
 
   @override
   String get imageSaveOptionDialogDeviceButtonLabel => 'ZARIADENIE';
@@ -1322,22 +1435,26 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imageSaveOptionDialogServerButtonLabel => 'SERVER';
 
   @override
-  String get initialSyncMessage => 'Synchronizácia so serverom prebieha prvýkrát';
+  String get initialSyncMessage =>
+      'Synchronizácia so serverom prebieha prvýkrát';
 
   @override
   String get loopTooltip => 'Opakovať';
 
   @override
-  String get createCollectionFailureNotification => 'Nepodarilo sa vytvoriť zbierku';
+  String get createCollectionFailureNotification =>
+      'Nepodarilo sa vytvoriť zbierku';
 
   @override
   String get addItemToCollectionTooltip => 'Pridať do zbierky';
 
   @override
-  String get addItemToCollectionFailureNotification => 'Nepodarilo sa pridať do zbierky';
+  String get addItemToCollectionFailureNotification =>
+      'Nepodarilo sa pridať do zbierky';
 
   @override
-  String get setCollectionCoverFailureNotification => 'Nepodarilo sa nastaviť obal zbierky';
+  String get setCollectionCoverFailureNotification =>
+      'Nepodarilo sa nastaviť obal zbierky';
 
   @override
   String get exportCollectionTooltip => 'Exportovať';
@@ -1349,10 +1466,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get createCollectionDialogNextcloudAlbumLabel2 => 'Serverový album';
 
   @override
-  String get createCollectionDialogNextcloudAlbumDescription2 => 'Vytvorte album na vašom serveri, prístupné z akejkoľvek aplikácie';
+  String get createCollectionDialogNextcloudAlbumDescription2 =>
+      'Vytvorte album na vašom serveri, prístupné z akejkoľvek aplikácie';
 
   @override
-  String get removeCollectionsFailedNotification => 'Nepodarilo sa odstrániť niektoré zbierky';
+  String get removeCollectionsFailedNotification =>
+      'Nepodarilo sa odstrániť niektoré zbierky';
 
   @override
   String get accountSettingsTooltip => 'Nastavenie účtu';
@@ -1390,13 +1509,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get trustedCertManagerSelectServer => 'Vyberte HTTPS server';
 
   @override
-  String get trustedCertManagerNoHttpsServerError => 'Žiadny dostupný HTTPS server';
+  String get trustedCertManagerNoHttpsServerError =>
+      'Žiadny dostupný HTTPS server';
 
   @override
-  String get trustedCertManagerFailedToRemoveCertError => 'Nepodarilo sa odstrániť certifikát';
+  String get trustedCertManagerFailedToRemoveCertError =>
+      'Nepodarilo sa odstrániť certifikát';
 
   @override
-  String get missingVideoThumbnailHelpDialogTitle => 'Máte problémy s miniatúrami videí?';
+  String get missingVideoThumbnailHelpDialogTitle =>
+      'Máte problémy s miniatúrami videí?';
 
   @override
   String get dontShowAgain => 'Už viac nezobrazovať';
@@ -1429,13 +1551,16 @@ class AppLocalizationsSk extends AppLocalizations {
   String get livePhotoTooltip => 'Live fotka';
 
   @override
-  String get dragAndDropRearrangeButtons => 'Presúvaním a ťahaním zoraďte tlačidlá';
+  String get dragAndDropRearrangeButtons =>
+      'Presúvaním a ťahaním zoraďte tlačidlá';
 
   @override
-  String get customizeCollectionsNavBarDescription => 'Presúvajte tlačidlá potiahnutím a ťahom, ťuknutím na tlačidlá hore ich minimalizujete';
+  String get customizeCollectionsNavBarDescription =>
+      'Presúvajte tlačidlá potiahnutím a ťahom, ťuknutím na tlačidlá hore ich minimalizujete';
 
   @override
-  String get customizeButtonsUnsupportedWarning => 'Toto tlačidlo nie je možné prispôsobiť';
+  String get customizeButtonsUnsupportedWarning =>
+      'Toto tlačidlo nie je možné prispôsobiť';
 
   @override
   String get placePickerTitle => 'Vyberte miesto';
@@ -1465,10 +1590,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get uploadFolderPickerTitle => 'Upload to';
 
   @override
-  String get opOnlySupportRemoteFiles => 'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
+  String get opOnlySupportRemoteFiles =>
+      'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
 
   @override
-  String get opOnlySupportLocalFiles => 'This feature only supports local files on your device. Any selected remote files are ignored';
+  String get opOnlySupportLocalFiles =>
+      'This feature only supports local files on your device. Any selected remote files are ignored';
 
   @override
   String get uploadDialogPath => 'Path';
@@ -1477,16 +1604,20 @@ class AppLocalizationsSk extends AppLocalizations {
   String get uploadDialogBatchConvert => 'Batch convert';
 
   @override
-  String get uploadBatchConvertWarningText1 => 'Your photos will be compressed before uploading to your server.';
+  String get uploadBatchConvertWarningText1 =>
+      'Your photos will be compressed before uploading to your server.';
 
   @override
-  String get uploadBatchConvertWarningText2 => 'Motion photos are NOT supported and they will be uploaded as a still image.';
+  String get uploadBatchConvertWarningText2 =>
+      'Motion photos are NOT supported and they will be uploaded as a still image.';
 
   @override
-  String get uploadBatchConvertWarningText3 => 'Some metadata may be altered or dropped.';
+  String get uploadBatchConvertWarningText3 =>
+      'Some metadata may be altered or dropped.';
 
   @override
-  String get uploadBatchConvertWarningText4 => 'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
+  String get uploadBatchConvertWarningText4 =>
+      'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
 
   @override
   String get uploadBatchConvertSettings => 'Conversion settings';
@@ -1513,10 +1644,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get deleteMergedFileDialogBothButton => 'Both';
 
   @override
-  String get deleteMergedFileDialogContent => 'Some of the files exist both on your server and your device. Where should we delete these files from?';
+  String get deleteMergedFileDialogContent =>
+      'Some of the files exist both on your server and your device. Where should we delete these files from?';
 
   @override
-  String get deleteSingleMergedFileDialogContent => 'File exists both on your server and your device. Where should we delete this file from?';
+  String get deleteSingleMergedFileDialogContent =>
+      'File exists both on your server and your device. Where should we delete this file from?';
 
   @override
   String get collectionAddItemTitle => 'Where to insert item?';
@@ -1537,29 +1670,37 @@ class AppLocalizationsSk extends AppLocalizations {
   }
 
   @override
-  String get errorUnauthenticated => 'Neautentifikovaný prístup. Prihláste sa znova, ak problém pretrváva';
+  String get errorUnauthenticated =>
+      'Neautentifikovaný prístup. Prihláste sa znova, ak problém pretrváva';
 
   @override
-  String get errorDisconnected => 'Nie je možné sa pripojiť. Server môže byť offline alebo vaše zariadenie odpojené';
+  String get errorDisconnected =>
+      'Nie je možné sa pripojiť. Server môže byť offline alebo vaše zariadenie odpojené';
 
   @override
   String get errorLocked => 'Súbor je uzamknutý na serveri. Skúste to neskôr';
 
   @override
-  String get errorInvalidBaseUrl => 'Nie je možné komunikovať. Uistite sa, že adresa je základná URL vašej inštancie Nextcloud';
+  String get errorInvalidBaseUrl =>
+      'Nie je možné komunikovať. Uistite sa, že adresa je základná URL vašej inštancie Nextcloud';
 
   @override
-  String get errorWrongPassword => 'Nie je možné sa autentifikovať. Skontrolujte používateľské meno a heslo';
+  String get errorWrongPassword =>
+      'Nie je možné sa autentifikovať. Skontrolujte používateľské meno a heslo';
 
   @override
-  String get errorServerError => 'Chyba servera. Uistite sa, že server je správne nastavený';
+  String get errorServerError =>
+      'Chyba servera. Uistite sa, že server je správne nastavený';
 
   @override
-  String get errorAlbumDowngrade => 'Tento album nie je možné upraviť, pretože bol vytvorený novšou verziou tejto aplikácie. Aktualizujte aplikáciu a skúste znova';
+  String get errorAlbumDowngrade =>
+      'Tento album nie je možné upraviť, pretože bol vytvorený novšou verziou tejto aplikácie. Aktualizujte aplikáciu a skúste znova';
 
   @override
-  String get errorNoStoragePermission => 'Požadované povolenie na prístup k úložisku';
+  String get errorNoStoragePermission =>
+      'Požadované povolenie na prístup k úložisku';
 
   @override
-  String get errorServerNoCert => 'Server certificate not found. Try HTTP instead?';
+  String get errorServerNoCert =>
+      'Server certificate not found. Try HTTP instead?';
 }

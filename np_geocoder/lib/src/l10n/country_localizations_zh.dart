@@ -758,7 +758,7 @@ class CountryLocalizationsZh extends CountryLocalizations {
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
 class CountryLocalizationsZhHant extends CountryLocalizationsZh {
-  CountryLocalizationsZhHant(): super('zh_Hant');
+  CountryLocalizationsZhHant() : super('zh_Hant');
 
   @override
   String get ccAd => '安道爾';

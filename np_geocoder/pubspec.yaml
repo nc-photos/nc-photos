@@ -66,5 +66,6 @@ dev_dependencies:
       path: to_string_build
 
 flutter:
+  generate: true
   assets:
     - assets/

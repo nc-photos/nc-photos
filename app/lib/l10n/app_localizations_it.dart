@@ -49,7 +49,8 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get deleteSelectedSuccessNotification => 'Tutti gli elementi sono stati eliminati correttamente';
+  String get deleteSelectedSuccessNotification =>
+      'Tutti gli elementi sono stati eliminati correttamente';
 
   @override
   String deleteSelectedFailureNotification(num count) {
@@ -66,7 +67,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get archiveTooltip => 'Archivio';
 
   @override
-  String get archiveSelectedSuccessNotification => 'Tutti gli elementi sono stati archiviati con successo';
+  String get archiveSelectedSuccessNotification =>
+      'Tutti gli elementi sono stati archiviati con successo';
 
   @override
   String archiveSelectedFailureNotification(num count) {
@@ -83,7 +85,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unarchiveTooltip => 'Rimuovi dall\'archivio';
 
   @override
-  String get unarchiveSelectedSuccessNotification => 'Tutti gli elementi sono stati rimossi dall\'archivio con successo';
+  String get unarchiveSelectedSuccessNotification =>
+      'Tutti gli elementi sono stati rimossi dall\'archivio con successo';
 
   @override
   String unarchiveSelectedFailureNotification(num count) {
@@ -106,7 +109,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deleteFailureNotification => 'Fallita cancellazione elemento';
 
   @override
-  String get removeSelectedFromAlbumFailureNotification => 'Fallita rimozione di elementi dall\'album';
+  String get removeSelectedFromAlbumFailureNotification =>
+      'Fallita rimozione di elementi dall\'album';
 
   @override
   String get addServerTooltip => 'Aggiungi server';
@@ -143,7 +147,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get connectingToServer2 => 'In attesa di autorizzazione dal server';
 
   @override
-  String get connectingToServerInstruction => 'Per favore accedi attraverso il browser aperto';
+  String get connectingToServerInstruction =>
+      'Per favore accedi attraverso il browser aperto';
 
   @override
   String get nameInputHint => 'Nome';
@@ -161,7 +166,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get signInHeaderText => 'Accedi al server Nextcloud';
 
   @override
-  String get signIn2faHintText => 'Usa la password per app se hai attivato l\'autenticazione a due fattori nel server';
+  String get signIn2faHintText =>
+      'Usa la password per app se hai attivato l\'autenticazione a due fattori nel server';
 
   @override
   String get signInHeaderText2 => 'Nextcloud\nAccedi';
@@ -170,43 +176,51 @@ class AppLocalizationsIt extends AppLocalizations {
   String get serverAddressInputHint => 'Indirizzo del server';
 
   @override
-  String get serverAddressInputInvalidEmpty => 'Per favore inserisci l\'indirizzo del server';
+  String get serverAddressInputInvalidEmpty =>
+      'Per favore inserisci l\'indirizzo del server';
 
   @override
   String get usernameInputHint => 'Nome utente';
 
   @override
-  String get usernameInputInvalidEmpty => 'Per favore scrivi il tuo nome utente';
+  String get usernameInputInvalidEmpty =>
+      'Per favore scrivi il tuo nome utente';
 
   @override
   String get passwordInputHint => 'Password';
 
   @override
-  String get passwordInputInvalidEmpty => 'Per favore inserisci la tua password';
+  String get passwordInputInvalidEmpty =>
+      'Per favore inserisci la tua password';
 
   @override
   String get rootPickerHeaderText => 'Scegli le cartelle da includere';
 
   @override
-  String get rootPickerSubHeaderText => 'Verranno mostrate solo le foto all\'interno delle cartelle. Premi Salta per includerle tutte';
+  String get rootPickerSubHeaderText =>
+      'Verranno mostrate solo le foto all\'interno delle cartelle. Premi Salta per includerle tutte';
 
   @override
   String get rootPickerNavigateUpItemText => '(indietro)';
 
   @override
-  String get rootPickerUnpickFailureNotification => 'Fallita deselezione elemento';
+  String get rootPickerUnpickFailureNotification =>
+      'Fallita deselezione elemento';
 
   @override
-  String get rootPickerListEmptyNotification => 'Per favore seleziona almeno una cartella o premi salta per includerle tutte';
+  String get rootPickerListEmptyNotification =>
+      'Per favore seleziona almeno una cartella o premi salta per includerle tutte';
 
   @override
   String get setupWidgetTitle => 'Cominciamo';
 
   @override
-  String get setupSettingsModifyLaterHint => 'Puoi cambiare scelta più tardi nelle Impostazioni';
+  String get setupSettingsModifyLaterHint =>
+      'Puoi cambiare scelta più tardi nelle Impostazioni';
 
   @override
-  String get setupHiddenPrefDirNoticeDetail => 'Questa app crea una cartella nel server Nextcloud per salvare i file relativo alle tue preferenze. Per favore non modificarla o rimuoverla a meno che tu non stia pianificando di rimuovere questa app';
+  String get setupHiddenPrefDirNoticeDetail =>
+      'Questa app crea una cartella nel server Nextcloud per salvare i file relativo alle tue preferenze. Per favore non modificarla o rimuoverla a meno che tu non stia pianificando di rimuovere questa app';
 
   @override
   String get settingsWidgetTitle => 'Impostazioni';
@@ -215,7 +229,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsLanguageTitle => 'Lingua';
 
   @override
-  String get settingsLanguageOptionSystemDefaultLabel => 'Impostazione di sistema';
+  String get settingsLanguageOptionSystemDefaultLabel =>
+      'Impostazione di sistema';
 
   @override
   String get settingsMetadataTitle => 'Metadati del file';
@@ -227,19 +242,24 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsExifSupportTrueSubtitle => 'Richiede un uso extra di dati';
 
   @override
-  String get settingsFallbackClientExifTitle => 'Fall back to client-side parser';
+  String get settingsFallbackClientExifTitle =>
+      'Fall back to client-side parser';
 
   @override
-  String get settingsFallbackClientExifTrueText => 'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
+  String get settingsFallbackClientExifTrueText =>
+      'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
 
   @override
-  String get settingsFallbackClientExifFalseText => 'If Nextcloud failed to extract the file metadata, leave it as is';
+  String get settingsFallbackClientExifFalseText =>
+      'If Nextcloud failed to extract the file metadata, leave it as is';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogTitle => 'Enable client-side fallback?';
+  String get settingsFallbackClientExifConfirmDialogTitle =>
+      'Enable client-side fallback?';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogText => 'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
+  String get settingsFallbackClientExifConfirmDialogText =>
+      'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
 
   @override
   String get settingsMemoriesTitle => 'Ricordi';
@@ -254,7 +274,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsAccountLabelTitle => 'Etichetta';
 
   @override
-  String get settingsAccountLabelDescription => 'Imposta una etichetta da mostrare al posto del URL del server';
+  String get settingsAccountLabelDescription =>
+      'Imposta una etichetta da mostrare al posto del URL del server';
 
   @override
   String get settingsIncludedFoldersTitle => 'Cartelle incluse';
@@ -263,13 +284,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsShareFolderTitle => 'Cartella condivisa';
 
   @override
-  String get settingsShareFolderDialogTitle => 'Localizza la cartella condivisa';
+  String get settingsShareFolderDialogTitle =>
+      'Localizza la cartella condivisa';
 
   @override
-  String get settingsShareFolderDialogDescription => 'Questo parametro corrisponde a share_folder in config.PHP. I due valori DEVONO essere identici.\n\nPer favore definisci il percorso della cartella come in config.php.';
+  String get settingsShareFolderDialogDescription =>
+      'Questo parametro corrisponde a share_folder in config.PHP. I due valori DEVONO essere identici.\n\nPer favore definisci il percorso della cartella come in config.php.';
 
   @override
-  String get settingsShareFolderPickerDescription => 'Per favore definisci il percorso della cartella come in config.php. Seleziona default de non hai impostato il parametro.';
+  String get settingsShareFolderPickerDescription =>
+      'Per favore definisci il percorso della cartella come in config.php. Seleziona default de non hai impostato il parametro.';
 
   @override
   String get settingsPersonProviderTitle => 'Person provider';
@@ -278,7 +302,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsServerAppSectionTitle => 'Supporto all\'app lato server';
 
   @override
-  String get settingsPhotosDescription => 'Personalizza i contenuti mostrati nella tab Foto';
+  String get settingsPhotosDescription =>
+      'Personalizza i contenuti mostrati nella tab Foto';
 
   @override
   String get settingsMemoriesRangeTitle => 'Intervallo dei ricordi';
@@ -298,25 +323,29 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsDeviceMediaTitle => 'Show device media';
 
   @override
-  String get settingsDeviceMediaDescription => 'Selected folders will be displayed';
+  String get settingsDeviceMediaDescription =>
+      'Selected folders will be displayed';
 
   @override
   String get settingsViewerTitle => 'Vista';
 
   @override
-  String get settingsViewerDescription => 'Personalizza la vista di immagini/video';
+  String get settingsViewerDescription =>
+      'Personalizza la vista di immagini/video';
 
   @override
   String get settingsScreenBrightnessTitle => 'Luminosità dello schermo';
 
   @override
-  String get settingsScreenBrightnessDescription => 'Sovrascrivi il livello di luminosità di sistema';
+  String get settingsScreenBrightnessDescription =>
+      'Sovrascrivi il livello di luminosità di sistema';
 
   @override
   String get settingsForceRotationTitle => 'Ignora il blocco della rotazione';
 
   @override
-  String get settingsForceRotationDescription => 'Ruota lo schermo anche quando la rotazione automatica è disabilitata';
+  String get settingsForceRotationDescription =>
+      'Ruota lo schermo anche quando la rotazione automatica è disabilitata';
 
   @override
   String get settingsMapProviderTitle => 'Fornitore di mappe';
@@ -325,37 +354,46 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsViewerCustomizeAppBarTitle => 'Customize app bar';
 
   @override
-  String get settingsViewerCustomizeBottomAppBarTitle => 'Customize bottom app bar';
+  String get settingsViewerCustomizeBottomAppBarTitle =>
+      'Customize bottom app bar';
 
   @override
   String get settingsShowDateInAlbumTitle => 'Raggruppa le foto per data';
 
   @override
-  String get settingsShowDateInAlbumDescription => 'Si applica solo quando l\'album viene ordinato per data';
+  String get settingsShowDateInAlbumDescription =>
+      'Si applica solo quando l\'album viene ordinato per data';
 
   @override
-  String get settingsCollectionsCustomizeNavigationBarTitle => 'Customize navigation bar';
+  String get settingsCollectionsCustomizeNavigationBarTitle =>
+      'Customize navigation bar';
 
   @override
   String get settingsImageEditTitle => 'Editor';
 
   @override
-  String get settingsImageEditDescription => 'Personalizza i miglioramenti e l\'editor dell\'immagine';
+  String get settingsImageEditDescription =>
+      'Personalizza i miglioramenti e l\'editor dell\'immagine';
 
   @override
-  String get settingsEnhanceMaxResolutionTitle2 => 'Risoluzione dell\'immagine per i miglioramenti';
+  String get settingsEnhanceMaxResolutionTitle2 =>
+      'Risoluzione dell\'immagine per i miglioramenti';
 
   @override
-  String get settingsEnhanceMaxResolutionDescription => 'Le immagini più grandi della risoluzione selezionata verranno scalate.\n\nLe immagini ad alta risoluzione richiedono memoria e tempo di processo significativamente più lunghi. Per favore riduci gquesto parametro se l\'app va in crash durante il miglioramento delle tue foto.';
+  String get settingsEnhanceMaxResolutionDescription =>
+      'Le immagini più grandi della risoluzione selezionata verranno scalate.\n\nLe immagini ad alta risoluzione richiedono memoria e tempo di processo significativamente più lunghi. Per favore riduci gquesto parametro se l\'app va in crash durante il miglioramento delle tue foto.';
 
   @override
-  String get settingsImageEditSaveResultsToServerTitle => 'Salva i risultati sul server';
+  String get settingsImageEditSaveResultsToServerTitle =>
+      'Salva i risultati sul server';
 
   @override
-  String get settingsImageEditSaveResultsToServerTrueDescription => 'I risultati sono salvati sul server, il salvataggio locale è fallito';
+  String get settingsImageEditSaveResultsToServerTrueDescription =>
+      'I risultati sono salvati sul server, il salvataggio locale è fallito';
 
   @override
-  String get settingsImageEditSaveResultsToServerFalseDescription => 'I risultati sono salvati su questo dispositivo';
+  String get settingsImageEditSaveResultsToServerFalseDescription =>
+      'I risultati sono salvati su questo dispositivo';
 
   @override
   String get settingsThemeTitle => 'Tema';
@@ -370,10 +408,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsSeedColorTitle => 'Colore del tema';
 
   @override
-  String get settingsSeedColorDescription => 'Usato per derivare tutti i colori dell\'app';
+  String get settingsSeedColorDescription =>
+      'Usato per derivare tutti i colori dell\'app';
 
   @override
-  String get settingsSeedColorSystemColorDescription => 'Usa in colori di sistema';
+  String get settingsSeedColorSystemColorDescription =>
+      'Usa in colori di sistema';
 
   @override
   String get settingsSeedColorPickerTitle => 'Seleziona un colore';
@@ -388,16 +428,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsThemePresets => 'Presets';
 
   @override
-  String get settingsSeedColorPickerSystemColorButtonLabel => 'USA I COLORI DI SISTEMA';
+  String get settingsSeedColorPickerSystemColorButtonLabel =>
+      'USA I COLORI DI SISTEMA';
 
   @override
   String get settingsUseBlackInDarkThemeTitle => 'Tema più scuro';
 
   @override
-  String get settingsUseBlackInDarkThemeTrueDescription => 'Usa il nero nel tema scuro';
+  String get settingsUseBlackInDarkThemeTrueDescription =>
+      'Usa il nero nel tema scuro';
 
   @override
-  String get settingsUseBlackInDarkThemeFalseDescription => 'Usa grigio scuro nel tema scuro';
+  String get settingsUseBlackInDarkThemeFalseDescription =>
+      'Usa grigio scuro nel tema scuro';
 
   @override
   String get settingsMiscellaneousTitle => 'Varie';
@@ -406,7 +449,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsDoubleTapExitTitle => 'Doppio tap per uscire';
 
   @override
-  String get settingsPhotosTabSortByNameTitle => 'Ordina per nome del file in Photos';
+  String get settingsPhotosTabSortByNameTitle =>
+      'Ordina per nome del file in Photos';
 
   @override
   String get settingsAppLock => 'App lock';
@@ -421,10 +465,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsAppLockTypePassword => 'Password';
 
   @override
-  String get settingsAppLockDescription => 'If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.';
+  String get settingsAppLockDescription =>
+      'If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.';
 
   @override
-  String get settingsAppLockSetupBiometricFallbackDialogTitle => 'Pick the fallback when biometric is not available';
+  String get settingsAppLockSetupBiometricFallbackDialogTitle =>
+      'Pick the fallback when biometric is not available';
 
   @override
   String get settingsAppLockSetupPinDialogTitle => 'Set the PIN to unlock app';
@@ -433,43 +479,52 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsAppLockConfirmPinDialogTitle => 'Enter the same PIN again';
 
   @override
-  String get settingsAppLockSetupPasswordDialogTitle => 'Set the password to unlock app';
+  String get settingsAppLockSetupPasswordDialogTitle =>
+      'Set the password to unlock app';
 
   @override
-  String get settingsAppLockConfirmPasswordDialogTitle => 'Enter the same password again';
+  String get settingsAppLockConfirmPasswordDialogTitle =>
+      'Enter the same password again';
 
   @override
-  String get settingsViewerUseOriginalImageTitle => 'Show original image instead of high quality preview in viewer';
+  String get settingsViewerUseOriginalImageTitle =>
+      'Show original image instead of high quality preview in viewer';
 
   @override
   String get settingsExperimentalTitle => 'Sperimentale';
 
   @override
-  String get settingsExperimentalDescription => 'Feature non ancora pronte per l\'uso quotidiano';
+  String get settingsExperimentalDescription =>
+      'Feature non ancora pronte per l\'uso quotidiano';
 
   @override
   String get settingsExpertTitle => 'Avanzate';
 
   @override
-  String get settingsExpertWarningText => 'Per favore assicurati di capire a fondo cosa fa ciascuna opzione prima di procedere';
+  String get settingsExpertWarningText =>
+      'Per favore assicurati di capire a fondo cosa fa ciascuna opzione prima di procedere';
 
   @override
   String get settingsClearCacheDatabaseTitle => 'Pulisci il database';
 
   @override
-  String get settingsClearCacheDatabaseDescription => 'Pulisci la cache e ripeti la sincronizzazione completa con il server';
+  String get settingsClearCacheDatabaseDescription =>
+      'Pulisci la cache e ripeti la sincronizzazione completa con il server';
 
   @override
-  String get settingsClearCacheDatabaseSuccessNotification => 'Il database è stato pulito con successo. È raccomandato il riavvio dell\'app.';
+  String get settingsClearCacheDatabaseSuccessNotification =>
+      'Il database è stato pulito con successo. È raccomandato il riavvio dell\'app.';
 
   @override
-  String get settingsManageTrustedCertificateTitle => 'Manage trusted certificates';
+  String get settingsManageTrustedCertificateTitle =>
+      'Manage trusted certificates';
 
   @override
   String get settingsUseNewHttpEngine => 'Use new HTTP engine';
 
   @override
-  String get settingsUseNewHttpEngineDescription => 'New HTTP engine based on Chromium, supporting new standards like HTTP/2* and HTTP/3 QUIC*.\n\nLimitations:\nSelf-signed certs can no longer be managed by us. You must import your CA certs to the system trust store for them to work.\n\n* HTTPS is required for HTTP/2 and HTTP/3';
+  String get settingsUseNewHttpEngineDescription =>
+      'New HTTP engine based on Chromium, supporting new standards like HTTP/2* and HTTP/3 QUIC*.\n\nLimitations:\nSelf-signed certs can no longer be managed by us. You must import your CA certs to the system trust store for them to work.\n\n* HTTPS is required for HTTP/2 and HTTP/3';
 
   @override
   String get settingsAboutSectionTitle => 'Altro';
@@ -490,16 +545,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get settingsCaptureLogsTitle => 'Cattura i log';
 
   @override
-  String get settingsCaptureLogsDescription => 'Aiuta gli sviluppatori a identificare bug';
+  String get settingsCaptureLogsDescription =>
+      'Aiuta gli sviluppatori a identificare bug';
 
   @override
   String get settingsTranslatorTitle => 'Traduttore';
 
   @override
-  String get settingsRestartNeededDialog => 'Please restart the app to apply changes';
+  String get settingsRestartNeededDialog =>
+      'Please restart the app to apply changes';
 
   @override
-  String get writePreferenceFailureNotification => 'Fallita impostazione preferenza';
+  String get writePreferenceFailureNotification =>
+      'Fallita impostazione preferenza';
 
   @override
   String get enableButtonLabel => 'ABILITA';
@@ -508,13 +566,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enableButtonLabel2 => 'Enable';
 
   @override
-  String get exifSupportNextcloud28Notes => 'Client-side support complements your server. The app will process files and attributes not supported by Nextcloud';
+  String get exifSupportNextcloud28Notes =>
+      'Client-side support complements your server. The app will process files and attributes not supported by Nextcloud';
 
   @override
-  String get exifSupportConfirmationDialogTitle2 => 'Enable client-side EXIF support?';
+  String get exifSupportConfirmationDialogTitle2 =>
+      'Enable client-side EXIF support?';
 
   @override
-  String get captureLogDetails => 'Per registrare un log per riportare un bug:\n\n1. Abilita questa opzione\n2. Riproduci il problema\n3. Disabilita questa opzione\n4. Cerca il file nc-photos.log nella cartella Download\n\n* Non sarà generaro alcun log se il problema causa il crash dell\'app. In questo caso contatta gli sviluppatori per avere ulteriori istruzioni';
+  String get captureLogDetails =>
+      'Per registrare un log per riportare un bug:\n\n1. Abilita questa opzione\n2. Riproduci il problema\n3. Disabilita questa opzione\n4. Cerca il file nc-photos.log nella cartella Download\n\n* Non sarà generaro alcun log se il problema causa il crash dell\'app. In questo caso contatta gli sviluppatori per avere ulteriori istruzioni';
 
   @override
   String get captureLogSuccessNotification => 'Log salvato con successo';
@@ -529,7 +590,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get connectButtonLabel => 'CONNETTI';
 
   @override
-  String get rootPickerSkipConfirmationDialogContent2 => 'Tutti i tuoi file saranno inclusi\n Questo aumenterà l\'utilizzo di memoria e degraderà le prestazioni';
+  String get rootPickerSkipConfirmationDialogContent2 =>
+      'Tutti i tuoi file saranno inclusi\n Questo aumenterà l\'utilizzo di memoria e degraderà le prestazioni';
 
   @override
   String megapixelCount(Object count) {
@@ -568,10 +630,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get previousTooltip => 'Precedente';
 
   @override
-  String get webSelectRangeNotification => 'Tieni premuto e clicca per selezionare tutto nell\'intervallo';
+  String get webSelectRangeNotification =>
+      'Tieni premuto e clicca per selezionare tutto nell\'intervallo';
 
   @override
-  String get mobileSelectRangeNotification => 'Tieni premuto un altro elemento per selezionare tutto nell\'intervallo';
+  String get mobileSelectRangeNotification =>
+      'Tieni premuto un altro elemento per selezionare tutto nell\'intervallo';
 
   @override
   String get updateDateTimeDialogTitle => 'Modifica la data e l\'ora';
@@ -604,16 +668,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get dateTimeInputInvalid => 'Valore non valido';
 
   @override
-  String get updateDateTimeFailureNotification => 'Modifica di ora e data fallita';
+  String get updateDateTimeFailureNotification =>
+      'Modifica di ora e data fallita';
 
   @override
   String get albumDirPickerHeaderText => 'Seleziona le cartelle da associare';
 
   @override
-  String get albumDirPickerSubHeaderText => 'Solo le foto nelle cartelle da associare saranno incluse in questo album';
+  String get albumDirPickerSubHeaderText =>
+      'Solo le foto nelle cartelle da associare saranno incluse in questo album';
 
   @override
-  String get albumDirPickerListEmptyNotification => 'Per favore seleziona almeno una cartella';
+  String get albumDirPickerListEmptyNotification =>
+      'Per favore seleziona almeno una cartella';
 
   @override
   String get importFoldersTooltip => 'Importa cartelle';
@@ -622,13 +689,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get albumImporterHeaderText => 'Importa le cartelle come album';
 
   @override
-  String get albumImporterSubHeaderText => 'Le cartelle suggerite sono elencate in basso. A seconda del numero di file nel tuo server ci può mettere un po\'';
+  String get albumImporterSubHeaderText =>
+      'Le cartelle suggerite sono elencate in basso. A seconda del numero di file nel tuo server ci può mettere un po\'';
 
   @override
   String get importButtonLabel => 'IMPORTA';
 
   @override
-  String get albumImporterProgressText => 'importazione delle cartelle in corso';
+  String get albumImporterProgressText =>
+      'importazione delle cartelle in corso';
 
   @override
   String get doneButtonTooltip => 'Fatto';
@@ -637,7 +706,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get editTooltip => 'Modifica';
 
   @override
-  String get editAccountConflictFailureNotification => 'Esiste già un account con le stesse impostazioni';
+  String get editAccountConflictFailureNotification =>
+      'Esiste già un account con le stesse impostazioni';
 
   @override
   String get genericProcessingDialogContent => 'Attendi per favore';
@@ -664,13 +734,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get sortOptionAlbumNameLabel => 'Nome dell\'album';
 
   @override
-  String get sortOptionAlbumNameDescendingLabel => 'Nome dell\'album (decrescente)';
+  String get sortOptionAlbumNameDescendingLabel =>
+      'Nome dell\'album (decrescente)';
 
   @override
   String get sortOptionManualLabel => 'Manuale';
 
   @override
-  String get albumEditDragRearrangeNotification => 'Tieni premuto e sposta un elemento per riposizionarlo manualmente';
+  String get albumEditDragRearrangeNotification =>
+      'Tieni premuto e sposta un elemento per riposizionarlo manualmente';
 
   @override
   String get albumAddTextTooltip => 'Aggiungi testo';
@@ -679,7 +751,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get shareTooltip => 'Condividi';
 
   @override
-  String get shareSelectedEmptyNotification => 'Seleziona alcune foto da condividere';
+  String get shareSelectedEmptyNotification =>
+      'Seleziona alcune foto da condividere';
 
   @override
   String get shareDownloadingDialogContent => 'Scaricamento in corso';
@@ -714,7 +787,8 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get restoreSelectedSuccessNotification => 'Tutto gli elementi sono stati ripristinati';
+  String get restoreSelectedSuccessNotification =>
+      'Tutto gli elementi sono stati ripristinati';
 
   @override
   String restoreSelectedFailureNotification(num count) {
@@ -731,7 +805,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get restoreProcessingNotification => 'Ripristino in corso';
 
   @override
-  String get restoreSuccessNotification => 'Elementi ripristinati correttamente';
+  String get restoreSuccessNotification =>
+      'Elementi ripristinati correttamente';
 
   @override
   String get restoreFailureNotification => 'Ripristino fallito';
@@ -740,16 +815,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deletePermanentlyTooltip => 'Elimina definitivamente';
 
   @override
-  String get deletePermanentlyConfirmationDialogTitle => 'Eliminato definitivamente';
+  String get deletePermanentlyConfirmationDialogTitle =>
+      'Eliminato definitivamente';
 
   @override
-  String get deletePermanentlyConfirmationDialogContent => 'Gli elementi elezionati verranno cancellati definitivamente dal server';
+  String get deletePermanentlyConfirmationDialogContent =>
+      'Gli elementi elezionati verranno cancellati definitivamente dal server';
 
   @override
   String get albumSharedLabel => 'Condiviso';
 
   @override
-  String get metadataTaskProcessingNotification => 'Processando i metadati delle immagini in background';
+  String get metadataTaskProcessingNotification =>
+      'Processando i metadati delle immagini in background';
 
   @override
   String get configButtonLabel => 'CONFIGURAZIONE';
@@ -770,16 +848,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get changelogTitle => 'Registro delle modifiche';
 
   @override
-  String get serverCertErrorDialogTitle => 'Il certificato del server non è sicuro';
+  String get serverCertErrorDialogTitle =>
+      'Il certificato del server non è sicuro';
 
   @override
-  String get serverCertErrorDialogContent => 'Il server può essere stato compromesso oppure qualcuno sta cercando di rubare le tue informazioni';
+  String get serverCertErrorDialogContent =>
+      'Il server può essere stato compromesso oppure qualcuno sta cercando di rubare le tue informazioni';
 
   @override
   String get advancedButtonLabel => 'AVANZATE';
 
   @override
-  String get whitelistCertDialogTitle => 'Vuoi accettare un certificato sconosciuto?';
+  String get whitelistCertDialogTitle =>
+      'Vuoi accettare un certificato sconosciuto?';
 
   @override
   String whitelistCertDialogContent(Object host, Object fingerprint) {
@@ -787,7 +868,8 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get whitelistCertButtonLabel => 'ACCETTA IL RISCHIO E METTI IN LISTA BIANCA';
+  String get whitelistCertButtonLabel =>
+      'ACCETTA IL RISCHIO E METTI IN LISTA BIANCA';
 
   @override
   String get fileSharedByDescription => 'Condiviso con te da questo utente';
@@ -799,7 +881,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get emptyTrashbinConfirmationDialogTitle => 'Svuota il cestino';
 
   @override
-  String get emptyTrashbinConfirmationDialogContent => 'Tutti gli elementi saranno cancellati permanentemente dal server.\n\nQuesta azione non è reversibile.';
+  String get emptyTrashbinConfirmationDialogContent =>
+      'Tutti gli elementi saranno cancellati permanentemente dal server.\n\nQuesta azione non è reversibile.';
 
   @override
   String get unsetAlbumCoverTooltip => 'Rimuovi copertina';
@@ -820,7 +903,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get slideshowSetupDialogTitle => 'Imposta slideshow';
 
   @override
-  String get slideshowSetupDialogDurationTitle => 'Durata dell\'immagine (MM:SS)';
+  String get slideshowSetupDialogDurationTitle =>
+      'Durata dell\'immagine (MM:SS)';
 
   @override
   String get slideshowSetupDialogShuffleTitle => 'Mischia';
@@ -841,25 +925,30 @@ class AppLocalizationsIt extends AppLocalizations {
   String get shareMethodPreviewTitle => 'Anteprima';
 
   @override
-  String get shareMethodPreviewDescription => 'Condividi con altre app una anteprima di qualità ridotta (solo immagini)';
+  String get shareMethodPreviewDescription =>
+      'Condividi con altre app una anteprima di qualità ridotta (solo immagini)';
 
   @override
   String get shareMethodOriginalFileTitle => 'File originale';
 
   @override
-  String get shareMethodOriginalFileDescription => 'Scarica il file originale e condividilo con altre app';
+  String get shareMethodOriginalFileDescription =>
+      'Scarica il file originale e condividilo con altre app';
 
   @override
   String get shareMethodPublicLinkTitle => 'Collegamento pubblico';
 
   @override
-  String get shareMethodPublicLinkDescription => 'Crea un nuovo collegamento pubblico sul server. Chiunque abbia il collegamento può accedere al file';
+  String get shareMethodPublicLinkDescription =>
+      'Crea un nuovo collegamento pubblico sul server. Chiunque abbia il collegamento può accedere al file';
 
   @override
-  String get shareMethodPasswordLinkTitle => 'Collegamento protetto da password';
+  String get shareMethodPasswordLinkTitle =>
+      'Collegamento protetto da password';
 
   @override
-  String get shareMethodPasswordLinkDescription => 'Crea un nuovo collegamento protetto da password al server';
+  String get shareMethodPasswordLinkDescription =>
+      'Crea un nuovo collegamento protetto da password al server';
 
   @override
   String get collectionSharingLabel => 'Condivisione';
@@ -892,16 +981,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get locationLabel => 'Luogo';
 
   @override
-  String get multipleFilesLinkShareDialogContent => 'Nextcloud non supporta collegamenti di condivisione a file multipli. L\'app invece COPIA i file un una nuova cartella e condivide la cartella.';
+  String get multipleFilesLinkShareDialogContent =>
+      'Nextcloud non supporta collegamenti di condivisione a file multipli. L\'app invece COPIA i file un una nuova cartella e condivide la cartella.';
 
   @override
   String get folderNameInputHint => 'Nome della cartella';
 
   @override
-  String get folderNameInputInvalidEmpty => 'Per favore inserisci il nome della cartella';
+  String get folderNameInputInvalidEmpty =>
+      'Per favore inserisci il nome della cartella';
 
   @override
-  String get folderNameInputInvalidCharacters => 'Contiene caratteri non validi';
+  String get folderNameInputInvalidCharacters =>
+      'Contiene caratteri non validi';
 
   @override
   String get createShareProgressText => 'Creando la condivisione';
@@ -921,7 +1013,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unshareLinkShareDirDialogTitle => 'Cancellare la cartella?';
 
   @override
-  String get unshareLinkShareDirDialogContent => 'Questa cartella è stata creata dall\'app per condividere più file come link. Ora non è più condivisa con alcuno, vuoi cancellarla?';
+  String get unshareLinkShareDirDialogContent =>
+      'Questa cartella è stata creata dall\'app per condividere più file come link. Ora non è più condivisa con alcuno, vuoi cancellarla?';
 
   @override
   String get addToCollectionsViewTooltip => 'Aggiungi a Collezioni';
@@ -968,7 +1061,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get sharedAlbumInfoDialogTitle => 'Album condiviso';
 
   @override
-  String get sharedAlbumInfoDialogContent => 'Gli album condivisi permettono a più utenti dello stesso server di accedere allo stesso album. Per favore leggi attentamente le limitazioni prima di procedere';
+  String get sharedAlbumInfoDialogContent =>
+      'Gli album condivisi permettono a più utenti dello stesso server di accedere allo stesso album. Per favore leggi attentamente le limitazioni prima di procedere';
 
   @override
   String get learnMoreButtonLabel => 'MOSTRA DI PIÙ';
@@ -977,7 +1071,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get migrateDatabaseProcessingNotification => 'Aggiornando il databasw';
 
   @override
-  String get migrateDatabaseFailureNotification => 'Migrazione del database fallita';
+  String get migrateDatabaseFailureNotification =>
+      'Migrazione del database fallita';
 
   @override
   String memoryAlbumName(num count) {
@@ -991,13 +1086,16 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get homeFolderNotFoundDialogTitle => 'La cartella home non è stata trovata';
+  String get homeFolderNotFoundDialogTitle =>
+      'La cartella home non è stata trovata';
 
   @override
-  String get homeFolderNotFoundDialogContent => 'Per favore correggi l\'URL WebDAV qui sotto. Puoi trovare l\'URL nell\'interfaccia web di Nextcloud.';
+  String get homeFolderNotFoundDialogContent =>
+      'Per favore correggi l\'URL WebDAV qui sotto. Puoi trovare l\'URL nell\'interfaccia web di Nextcloud.';
 
   @override
-  String get homeFolderInputInvalidEmpty => 'Per favore inserisci il nome della tua cartella home';
+  String get homeFolderInputInvalidEmpty =>
+      'Per favore inserisci il nome della tua cartella home';
 
   @override
   String get createCollectionTooltip => 'Nuova collezione';
@@ -1006,13 +1104,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get createCollectionDialogAlbumLabel2 => 'Client-side album';
 
   @override
-  String get createCollectionDialogAlbumDescription2 => 'Album with extra features, accessible only with this app';
+  String get createCollectionDialogAlbumDescription2 =>
+      'Album with extra features, accessible only with this app';
 
   @override
   String get createCollectionDialogFolderLabel => 'Cartella';
 
   @override
-  String get createCollectionDialogFolderDescription => 'Mostra le foto dentro una cartella';
+  String get createCollectionDialogFolderDescription =>
+      'Mostra le foto dentro una cartella';
 
   @override
   String get collectionFavoritesLabel => 'Preferiti';
@@ -1024,7 +1124,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get favoriteSuccessNotification => 'Aggiunto ai preferiti';
 
   @override
-  String get favoriteFailureNotification => 'Non aggiunto ai preferiti per un problema';
+  String get favoriteFailureNotification =>
+      'Non aggiunto ai preferiti per un problema';
 
   @override
   String get unfavoriteTooltip => 'Rimovi dai preferiti';
@@ -1033,19 +1134,22 @@ class AppLocalizationsIt extends AppLocalizations {
   String get unfavoriteSuccessNotification => 'Rimosso dai preferiti';
 
   @override
-  String get unfavoriteFailureNotification => 'Non rimosso dai preferiti per errore';
+  String get unfavoriteFailureNotification =>
+      'Non rimosso dai preferiti per errore';
 
   @override
   String get createCollectionDialogTagLabel => 'Tag';
 
   @override
-  String get createCollectionDialogTagDescription => 'Mostra le foto con un tag specifico';
+  String get createCollectionDialogTagDescription =>
+      'Mostra le foto con un tag specifico';
 
   @override
   String get addTagInputHint => 'Aggiungi tag';
 
   @override
-  String get tagPickerNoTagSelectedNotification => 'Per favore aggiungi almeno un tag';
+  String get tagPickerNoTagSelectedNotification =>
+      'Per favore aggiungi almeno un tag';
 
   @override
   String get backgroundServiceStopping => 'Fermando il servizio';
@@ -1063,13 +1167,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enhanceIntroDialogTitle => 'Migliora le tue foto';
 
   @override
-  String get enhanceIntroDialogDescription => 'Le tue foto sono processate localmente nel tuo dispositivo. Sono ridotte a 2048x1536 per preimpostazione. Puoi modificare la risoluzione di uscita su Impostazioni';
+  String get enhanceIntroDialogDescription =>
+      'Le tue foto sono processate localmente nel tuo dispositivo. Sono ridotte a 2048x1536 per preimpostazione. Puoi modificare la risoluzione di uscita su Impostazioni';
 
   @override
   String get enhanceLowLightTitle => 'Migliora sottoesposizione';
 
   @override
-  String get enhanceLowLightDescription => 'Aumenta la luminosità delle foto sottoesposte';
+  String get enhanceLowLightDescription =>
+      'Aumenta la luminosità delle foto sottoesposte';
 
   @override
   String get enhanceLowLightParamBrightnessLabel => 'Luminosità';
@@ -1078,13 +1184,15 @@ class AppLocalizationsIt extends AppLocalizations {
   String get collectionEditedPhotosLabel => 'Modificata (localmente)';
 
   @override
-  String get deletePermanentlyLocalConfirmationDialogContent => 'Gli elementi selezionati saranno eliminati permanentemente dal dispositivo.\n\nQuesta azione è irreversibile';
+  String get deletePermanentlyLocalConfirmationDialogContent =>
+      'Gli elementi selezionati saranno eliminati permanentemente dal dispositivo.\n\nQuesta azione è irreversibile';
 
   @override
   String get enhancePortraitBlurTitle => 'Sfocatura del ritratto';
 
   @override
-  String get enhancePortraitBlurDescription => 'Sfoca lo sfondo delle tue foto, funziona al meglio con i ritratti';
+  String get enhancePortraitBlurDescription =>
+      'Sfoca lo sfondo delle tue foto, funziona al meglio con i ritratti';
 
   @override
   String get enhancePortraitBlurParamBlurLabel => 'Sfocatura';
@@ -1093,7 +1201,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enhanceSuperResolution4xTitle => 'Super risoluzione (4x)';
 
   @override
-  String get enhanceSuperResolution4xDescription => 'Quadruplica la risoluzione delle tue foto (consulta la guida per dettagli su come si applica la massima risoluzione)';
+  String get enhanceSuperResolution4xDescription =>
+      'Quadruplica la risoluzione delle tue foto (consulta la guida per dettagli su come si applica la massima risoluzione)';
 
   @override
   String get enhanceStyleTransferTitle => 'Trasferisci stile';
@@ -1102,16 +1211,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enhanceStyleTransferStyleDialogTitle => 'Scegli uno stile';
 
   @override
-  String get enhanceStyleTransferStyleDialogDescription => 'Trasferisci lo stile dell\'immagine da una immagine di riferimento alle tue foto';
+  String get enhanceStyleTransferStyleDialogDescription =>
+      'Trasferisci lo stile dell\'immagine da una immagine di riferimento alle tue foto';
 
   @override
-  String get enhanceStyleTransferNoStyleSelectedNotification => 'Scegli uno stile';
+  String get enhanceStyleTransferNoStyleSelectedNotification =>
+      'Scegli uno stile';
 
   @override
   String get enhanceColorPopTitle => 'Color pop';
 
   @override
-  String get enhanceColorPopDescription => 'Desatura lo sfondo, funziona al meglio con i primi piani';
+  String get enhanceColorPopDescription =>
+      'Desatura lo sfondo, funziona al meglio con i primi piani';
 
   @override
   String get enhanceGenericParamWeightLabel => 'Peso';
@@ -1120,7 +1232,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get enhanceRetouchTitle => 'Auto ritocco';
 
   @override
-  String get enhanceRetouchDescription => 'Ritocca automaticamente le tue foto, migliora il colore e vitalità';
+  String get enhanceRetouchDescription =>
+      'Ritocca automaticamente le tue foto, migliora il colore e vitalità';
 
   @override
   String get doubleTapExitNotification => 'Un altro tap per uscire';
@@ -1129,7 +1242,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get imageEditDiscardDialogTitle => 'Scarti le modifiche?';
 
   @override
-  String get imageEditDiscardDialogContent => 'Le tue modifiche non sono state salvate';
+  String get imageEditDiscardDialogContent =>
+      'Le tue modifiche non sono state salvate';
 
   @override
   String get discardButtonLabel => 'SCARTA';
@@ -1231,10 +1345,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get imageEditNoFaceDetected => 'No faces detected';
 
   @override
-  String get imageEditFaceNotSelected => 'Select one or more faces on your photos to apply the effects';
+  String get imageEditFaceNotSelected =>
+      'Select one or more faces on your photos to apply the effects';
 
   @override
-  String get imageEditResetSelectedFaceMessage => 'Selected faces are cleared after adjusting image transformation settings';
+  String get imageEditResetSelectedFaceMessage =>
+      'Selected faces are cleared after adjusting image transformation settings';
 
   @override
   String get imageEditOpenErrorMessage => 'Unable to open file';
@@ -1246,7 +1362,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get categoriesLabel => 'Categorie';
 
   @override
-  String get searchLandingPeopleListEmptyText2 => 'Premere impostazioni per cambiare fornitore o premere aiuto per saperne di più';
+  String get searchLandingPeopleListEmptyText2 =>
+      'Premere impostazioni per cambiare fornitore o premere aiuto per saperne di più';
 
   @override
   String get searchLandingCategoryVideosLabel => 'Video';
@@ -1305,7 +1422,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get gpsPlaceAboutDialogTitle => 'Info sul posto';
 
   @override
-  String get gpsPlaceAboutDialogContent => 'La posizione è approssimativa e non c\'è garanzia circa l\'accuratezza. Non rappresenta la nostra visione su alcuna area disputata.';
+  String get gpsPlaceAboutDialogContent =>
+      'La posizione è approssimativa e non c\'è garanzia circa l\'accuratezza. Non rappresenta la nostra visione su alcuna area disputata.';
 
   @override
   String get collectionPlacesLabel => 'Luoghi';
@@ -1314,7 +1432,8 @@ class AppLocalizationsIt extends AppLocalizations {
   String get imageSaveOptionDialogTitle => 'Salvataggio del riaultato';
 
   @override
-  String get imageSaveOptionDialogContent => 'Seleziona dove salvare le immagini processate. Se hai scelto di salvarle sul server e l\'app non riesce a caricarle, verranno salvare sul tuo dispositivo.';
+  String get imageSaveOptionDialogContent =>
+      'Seleziona dove salvare le immagini processate. Se hai scelto di salvarle sul server e l\'app non riesce a caricarle, verranno salvare sul tuo dispositivo.';
 
   @override
   String get imageSaveOptionDialogDeviceButtonLabel => 'DISPOSITIVO';
@@ -1329,16 +1448,19 @@ class AppLocalizationsIt extends AppLocalizations {
   String get loopTooltip => 'Ciclo';
 
   @override
-  String get createCollectionFailureNotification => 'Fallita la creazione di una collezione';
+  String get createCollectionFailureNotification =>
+      'Fallita la creazione di una collezione';
 
   @override
   String get addItemToCollectionTooltip => 'Aggiungi a collezione';
 
   @override
-  String get addItemToCollectionFailureNotification => 'Non aggiunto alla collezione per un problema';
+  String get addItemToCollectionFailureNotification =>
+      'Non aggiunto alla collezione per un problema';
 
   @override
-  String get setCollectionCoverFailureNotification => 'Copertina non impostata per un problema';
+  String get setCollectionCoverFailureNotification =>
+      'Copertina non impostata per un problema';
 
   @override
   String get exportCollectionTooltip => 'Esporta';
@@ -1350,10 +1472,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get createCollectionDialogNextcloudAlbumLabel2 => 'Server-side album';
 
   @override
-  String get createCollectionDialogNextcloudAlbumDescription2 => 'Create an album on your server, accessible with any app';
+  String get createCollectionDialogNextcloudAlbumDescription2 =>
+      'Create an album on your server, accessible with any app';
 
   @override
-  String get removeCollectionsFailedNotification => 'Qualche collezione non è stata rimossa per un problema';
+  String get removeCollectionsFailedNotification =>
+      'Qualche collezione non è stata rimossa per un problema';
 
   @override
   String get accountSettingsTooltip => 'Impostazioni account';
@@ -1394,10 +1518,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get trustedCertManagerNoHttpsServerError => 'No server available';
 
   @override
-  String get trustedCertManagerFailedToRemoveCertError => 'Failed to remove certificate';
+  String get trustedCertManagerFailedToRemoveCertError =>
+      'Failed to remove certificate';
 
   @override
-  String get missingVideoThumbnailHelpDialogTitle => 'Having trouble with video thumbnails?';
+  String get missingVideoThumbnailHelpDialogTitle =>
+      'Having trouble with video thumbnails?';
 
   @override
   String get dontShowAgain => 'Don\'t show again';
@@ -1430,13 +1556,16 @@ class AppLocalizationsIt extends AppLocalizations {
   String get livePhotoTooltip => 'Live photo';
 
   @override
-  String get dragAndDropRearrangeButtons => 'Drag and drop to rearrange buttons';
+  String get dragAndDropRearrangeButtons =>
+      'Drag and drop to rearrange buttons';
 
   @override
-  String get customizeCollectionsNavBarDescription => 'Drag and drop to rearrange buttons, tap the buttons above to minimize them';
+  String get customizeCollectionsNavBarDescription =>
+      'Drag and drop to rearrange buttons, tap the buttons above to minimize them';
 
   @override
-  String get customizeButtonsUnsupportedWarning => 'This button cannot be customized';
+  String get customizeButtonsUnsupportedWarning =>
+      'This button cannot be customized';
 
   @override
   String get placePickerTitle => 'Pick a place';
@@ -1466,10 +1595,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get uploadFolderPickerTitle => 'Upload to';
 
   @override
-  String get opOnlySupportRemoteFiles => 'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
+  String get opOnlySupportRemoteFiles =>
+      'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
 
   @override
-  String get opOnlySupportLocalFiles => 'This feature only supports local files on your device. Any selected remote files are ignored';
+  String get opOnlySupportLocalFiles =>
+      'This feature only supports local files on your device. Any selected remote files are ignored';
 
   @override
   String get uploadDialogPath => 'Path';
@@ -1478,16 +1609,20 @@ class AppLocalizationsIt extends AppLocalizations {
   String get uploadDialogBatchConvert => 'Batch convert';
 
   @override
-  String get uploadBatchConvertWarningText1 => 'Your photos will be compressed before uploading to your server.';
+  String get uploadBatchConvertWarningText1 =>
+      'Your photos will be compressed before uploading to your server.';
 
   @override
-  String get uploadBatchConvertWarningText2 => 'Motion photos are NOT supported and they will be uploaded as a still image.';
+  String get uploadBatchConvertWarningText2 =>
+      'Motion photos are NOT supported and they will be uploaded as a still image.';
 
   @override
-  String get uploadBatchConvertWarningText3 => 'Some metadata may be altered or dropped.';
+  String get uploadBatchConvertWarningText3 =>
+      'Some metadata may be altered or dropped.';
 
   @override
-  String get uploadBatchConvertWarningText4 => 'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
+  String get uploadBatchConvertWarningText4 =>
+      'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
 
   @override
   String get uploadBatchConvertSettings => 'Conversion settings';
@@ -1514,10 +1649,12 @@ class AppLocalizationsIt extends AppLocalizations {
   String get deleteMergedFileDialogBothButton => 'Both';
 
   @override
-  String get deleteMergedFileDialogContent => 'Some of the files exist both on your server and your device. Where should we delete these files from?';
+  String get deleteMergedFileDialogContent =>
+      'Some of the files exist both on your server and your device. Where should we delete these files from?';
 
   @override
-  String get deleteSingleMergedFileDialogContent => 'File exists both on your server and your device. Where should we delete this file from?';
+  String get deleteSingleMergedFileDialogContent =>
+      'File exists both on your server and your device. Where should we delete this file from?';
 
   @override
   String get collectionAddItemTitle => 'Where to insert item?';
@@ -1538,29 +1675,37 @@ class AppLocalizationsIt extends AppLocalizations {
   }
 
   @override
-  String get errorUnauthenticated => 'Accesso non autenticato. Accedi nuovamente se il problema persiste';
+  String get errorUnauthenticated =>
+      'Accesso non autenticato. Accedi nuovamente se il problema persiste';
 
   @override
-  String get errorDisconnected => 'Impossibile connettersi. Il server può essere offline o il tuo dispositivo può essere disconnesso';
+  String get errorDisconnected =>
+      'Impossibile connettersi. Il server può essere offline o il tuo dispositivo può essere disconnesso';
 
   @override
   String get errorLocked => 'Il file è bloccato nel server. Riprova più tardi';
 
   @override
-  String get errorInvalidBaseUrl => 'Impossibile comunicare. Verifica che l\'indirizzo sia l\'URL di base della tua istanza Nextcloud';
+  String get errorInvalidBaseUrl =>
+      'Impossibile comunicare. Verifica che l\'indirizzo sia l\'URL di base della tua istanza Nextcloud';
 
   @override
-  String get errorWrongPassword => 'Impossibile autenticarsi. Verifica nome utente e password';
+  String get errorWrongPassword =>
+      'Impossibile autenticarsi. Verifica nome utente e password';
 
   @override
-  String get errorServerError => 'Errore del server. Verifica la configurazione del server';
+  String get errorServerError =>
+      'Errore del server. Verifica la configurazione del server';
 
   @override
-  String get errorAlbumDowngrade => 'Non è possibile modificare l\'album perché creato con una versione successiva di questa app. Aggiorna l\'app e riprova';
+  String get errorAlbumDowngrade =>
+      'Non è possibile modificare l\'album perché creato con una versione successiva di questa app. Aggiorna l\'app e riprova';
 
   @override
-  String get errorNoStoragePermission => 'Richiede il permesso di accedere all\'archivio';
+  String get errorNoStoragePermission =>
+      'Richiede il permesso di accedere all\'archivio';
 
   @override
-  String get errorServerNoCert => 'Server certificate not found. Try HTTP instead?';
+  String get errorServerNoCert =>
+      'Server certificate not found. Try HTTP instead?';
 }

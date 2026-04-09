@@ -77,15 +77,20 @@ import 'country_localizations_zh.dart';
 /// be consistent with the languages listed in the CountryLocalizations.supportedLocales
 /// property.
 abstract class CountryLocalizations {
-  CountryLocalizations(String locale) : localeName = intl.Intl.canonicalizedLocale(locale.toString());
+  CountryLocalizations(String locale)
+    : localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
   final String localeName;
 
   static CountryLocalizations? of(BuildContext context) {
-    return Localizations.of<CountryLocalizations>(context, CountryLocalizations);
+    return Localizations.of<CountryLocalizations>(
+      context,
+      CountryLocalizations,
+    );
   }
 
-  static const LocalizationsDelegate<CountryLocalizations> delegate = _CountryLocalizationsDelegate();
+  static const LocalizationsDelegate<CountryLocalizations> delegate =
+      _CountryLocalizationsDelegate();
 
   /// A list of this localizations delegate along with the default localizations
   /// delegates.
@@ -97,12 +102,13 @@ abstract class CountryLocalizations {
   /// Additional delegates can be added by appending to this list in
   /// MaterialApp. This list does not have to be used at all if a custom list
   /// of delegates is preferred or required.
-  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    delegate,
-    GlobalMaterialLocalizations.delegate,
-    GlobalCupertinoLocalizations.delegate,
-    GlobalWidgetsLocalizations.delegate,
-  ];
+  static const List<LocalizationsDelegate<dynamic>> localizationsDelegates =
+      <LocalizationsDelegate<dynamic>>[
+        delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ];
 
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[
@@ -123,7 +129,7 @@ abstract class CountryLocalizations {
     Locale('sk'),
     Locale('tr'),
     Locale('zh'),
-    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant')
+    Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant'),
   ];
 
   /// No description provided for @ccAd.
@@ -1621,58 +1627,97 @@ abstract class CountryLocalizations {
   String get ccZw;
 }
 
-class _CountryLocalizationsDelegate extends LocalizationsDelegate<CountryLocalizations> {
+class _CountryLocalizationsDelegate
+    extends LocalizationsDelegate<CountryLocalizations> {
   const _CountryLocalizationsDelegate();
 
   @override
   Future<CountryLocalizations> load(Locale locale) {
-    return SynchronousFuture<CountryLocalizations>(lookupCountryLocalizations(locale));
+    return SynchronousFuture<CountryLocalizations>(
+      lookupCountryLocalizations(locale),
+    );
   }
 
   @override
-  bool isSupported(Locale locale) => <String>['ca', 'cs', 'de', 'el', 'en', 'es', 'fi', 'fr', 'it', 'ja', 'nl', 'pl', 'pt', 'ru', 'sk', 'tr', 'zh'].contains(locale.languageCode);
+  bool isSupported(Locale locale) => <String>[
+    'ca',
+    'cs',
+    'de',
+    'el',
+    'en',
+    'es',
+    'fi',
+    'fr',
+    'it',
+    'ja',
+    'nl',
+    'pl',
+    'pt',
+    'ru',
+    'sk',
+    'tr',
+    'zh',
+  ].contains(locale.languageCode);
 
   @override
   bool shouldReload(_CountryLocalizationsDelegate old) => false;
 }
 
 CountryLocalizations lookupCountryLocalizations(Locale locale) {
-
   // Lookup logic when language+script codes are specified.
   switch (locale.languageCode) {
-    case 'zh': {
-  switch (locale.scriptCode) {
-    case 'Hant': return CountryLocalizationsZhHant();
-   }
-  break;
-   }
+    case 'zh':
+      {
+        switch (locale.scriptCode) {
+          case 'Hant':
+            return CountryLocalizationsZhHant();
+        }
+        break;
+      }
   }
 
   // Lookup logic when only language code is specified.
   switch (locale.languageCode) {
-    case 'ca': return CountryLocalizationsCa();
-    case 'cs': return CountryLocalizationsCs();
-    case 'de': return CountryLocalizationsDe();
-    case 'el': return CountryLocalizationsEl();
-    case 'en': return CountryLocalizationsEn();
-    case 'es': return CountryLocalizationsEs();
-    case 'fi': return CountryLocalizationsFi();
-    case 'fr': return CountryLocalizationsFr();
-    case 'it': return CountryLocalizationsIt();
-    case 'ja': return CountryLocalizationsJa();
-    case 'nl': return CountryLocalizationsNl();
-    case 'pl': return CountryLocalizationsPl();
-    case 'pt': return CountryLocalizationsPt();
-    case 'ru': return CountryLocalizationsRu();
-    case 'sk': return CountryLocalizationsSk();
-    case 'tr': return CountryLocalizationsTr();
-    case 'zh': return CountryLocalizationsZh();
+    case 'ca':
+      return CountryLocalizationsCa();
+    case 'cs':
+      return CountryLocalizationsCs();
+    case 'de':
+      return CountryLocalizationsDe();
+    case 'el':
+      return CountryLocalizationsEl();
+    case 'en':
+      return CountryLocalizationsEn();
+    case 'es':
+      return CountryLocalizationsEs();
+    case 'fi':
+      return CountryLocalizationsFi();
+    case 'fr':
+      return CountryLocalizationsFr();
+    case 'it':
+      return CountryLocalizationsIt();
+    case 'ja':
+      return CountryLocalizationsJa();
+    case 'nl':
+      return CountryLocalizationsNl();
+    case 'pl':
+      return CountryLocalizationsPl();
+    case 'pt':
+      return CountryLocalizationsPt();
+    case 'ru':
+      return CountryLocalizationsRu();
+    case 'sk':
+      return CountryLocalizationsSk();
+    case 'tr':
+      return CountryLocalizationsTr();
+    case 'zh':
+      return CountryLocalizationsZh();
   }
 
   throw FlutterError(
     'CountryLocalizations.delegate failed to load unsupported locale "$locale". This is likely '
     'an issue with the localizations generation tool. Please file an issue '
     'on GitHub with a reproducible sample app and the gen-l10n configuration '
-    'that was used.'
+    'that was used.',
   );
 }
