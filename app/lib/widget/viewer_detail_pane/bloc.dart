@@ -51,7 +51,12 @@ class _Bloc extends Bloc<_Event, _State> {
       if (rawMake != null) {
         final rawModel = await metadataGetter.model;
         if (rawModel != null) {
-          return "$rawMake $rawModel";
+          // some phones also write its make to the model string
+          if (rawModel.contains(rawMake)) {
+            return rawModel;
+          } else {
+            return "$rawMake $rawModel";
+          }
         }
       }
       return null;
