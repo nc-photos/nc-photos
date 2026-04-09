@@ -48,7 +48,7 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
     Resolver resolver,
     ClassElement clazz,
   ) async {
-    const typeChecker = TypeChecker.fromRuntime(NpSubjectAccessor);
+    const typeChecker = TypeChecker.typeNamed(NpSubjectAccessor);
     final data = <_FieldMeta>[];
     for (final f in clazz.fields.where(typeChecker.hasAnnotationOf)) {
       // final annotation = typeChecker.annotationsOf(f).first;
@@ -67,14 +67,14 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
   }
 
   _NameParseResult _parseName(FieldElement field) {
-    var name = field.name;
+    var name = field.name!;
     if (name.startsWith("_")) {
       name = name.substring(1);
     }
     if (name.endsWith("Controller")) {
       name = name.substring(0, name.length - 10);
     }
-    return _NameParseResult(name: name, fullname: field.name);
+    return _NameParseResult(name: name, fullname: field.name!);
   }
 
   Future<_TypeParseResult> _parseTypeString(
@@ -82,11 +82,9 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
     FieldElement field,
   ) async {
     String? typeStr;
-    if (const TypeChecker.fromRuntime(
-      NpSubjectAccessor,
-    ).hasAnnotationOf(field)) {
+    if (const TypeChecker.typeNamed(NpSubjectAccessor).hasAnnotationOf(field)) {
       final annotation =
-          const TypeChecker.fromRuntime(
+          const TypeChecker.typeNamed(
             NpSubjectAccessor,
           ).annotationsOf(field).first;
       final type = annotation.getField("type")?.toStringValue();
@@ -94,7 +92,10 @@ extension \$${clazz.name}NpSubjectAccessor on ${clazz.name} {
     }
 
     if (typeStr == null) {
-      final astNode = await resolver.astNodeFor(field, resolve: true);
+      final astNode = await resolver.astNodeFor(
+        field.firstFragment,
+        resolve: true,
+      );
       typeStr =
           (astNode! as VariableDeclaration).initializer!.staticType!
               .getDisplayString();

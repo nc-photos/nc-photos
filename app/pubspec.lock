@@ -5,18 +5,18 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: da0d9209ca76bde579f2da330aeb9df62b6319c834fa7baae052021b0462401f
+      sha256: f0bb5d1648339c8308cc0b9838d8456b3cfe5c91f9dc1a735b4d003269e5da9a
       url: "https://pub.dev"
     source: hosted
-    version: "85.0.0"
+    version: "88.0.0"
   analyzer:
     dependency: transitive
     description:
       name: analyzer
-      sha256: "974859dc0ff5f37bc4313244b3218c791810d03ab3470a579580279ba971a48d"
+      sha256: "0b7b9c329d2879f8f05d6c05b32ee9ec025f39b077864bdb5ac9a7b63418a98f"
       url: "https://pub.dev"
     source: hosted
-    version: "7.7.1"
+    version: "8.1.1"
   android_intent_plus:
     dependency: "direct main"
     description:
@@ -110,18 +110,18 @@ packages:
     dependency: transitive
     description:
       name: build
-      sha256: cef23f1eda9b57566c81e2133d196f8e3df48f244b317368d65c5943d91148f0
+      sha256: aadd943f4f8cc946882c954c187e6115a84c98c81ad1d9c6cbf0895a8c85da9c
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.2"
+    version: "4.0.5"
   build_config:
     dependency: transitive
     description:
       name: build_config
-      sha256: bf80fcfb46a29945b423bd9aad884590fb1dc69b330a4d4700cac476af1708d1
+      sha256: "4070d2a59f8eec34c97c86ceb44403834899075f66e8a9d59706f8e7834f6f71"
       url: "https://pub.dev"
     source: hosted
-    version: "1.1.1"
+    version: "1.3.0"
   build_daemon:
     dependency: transitive
     description:
@@ -130,30 +130,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.0.1"
-  build_resolvers:
-    dependency: transitive
-    description:
-      name: build_resolvers
-      sha256: b9e4fda21d846e192628e7a4f6deda6888c36b5b69ba02ff291a01fd529140f0
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.4.4"
   build_runner:
     dependency: "direct dev"
     description:
       name: build_runner
-      sha256: "058fe9dce1de7d69c4b84fada934df3e0153dd000758c4d65964d0166779aa99"
+      sha256: "521daf8d189deb79ba474e43a696b41c49fb3987818dbacf3308f1e03673a75e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.4.15"
-  build_runner_core:
-    dependency: transitive
-    description:
-      name: build_runner_core
-      sha256: "22e3aa1c80e0ada3722fe5b63fd43d9c8990759d0a2cf489c8c5d7b2bdebc021"
-      url: "https://pub.dev"
-    source: hosted
-    version: "8.0.0"
+    version: "2.13.1"
   built_collection:
     dependency: transitive
     description:
@@ -166,10 +150,10 @@ packages:
     dependency: transitive
     description:
       name: built_value
-      sha256: c7913a9737ee4007efedaffc968c049fd0f3d0e49109e778edc10de9426005cb
+      sha256: "0730c18c770d05636a8f945c32a4d7d81cb6e0f0148c8db4ad12e7748f7e49af"
       url: "https://pub.dev"
     source: hosted
-    version: "8.9.2"
+    version: "8.12.5"
   cached_network_image:
     dependency: "direct main"
     description:
@@ -221,6 +205,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  cli_config:
+    dependency: transitive
+    description:
+      name: cli_config
+      sha256: ac20a183a07002b700f0c25e61b7ee46b23c309d76ab7b7640a028f18e4d99ec
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.2.0"
   clock:
     dependency: "direct main"
     description:
@@ -257,28 +249,28 @@ packages:
     dependency: "direct main"
     description:
       path: copy_with
-      ref: "copy_with-2.0.0"
-      resolved-ref: d7b65a9e3bf1a5f6b002d932a743610e38fde7d5
+      ref: "copy_with-3.0.0"
+      resolved-ref: "104d7889a646ed524faebbf7842d77eef1911c7b"
       url: "https://github.com/nkming2/dart-copy-with.git"
     source: git
-    version: "2.0.0"
+    version: "3.0.0"
   copy_with_build:
     dependency: "direct dev"
     description:
       path: copy_with_build
-      ref: "copy_with_build-2.0.0"
-      resolved-ref: d7b65a9e3bf1a5f6b002d932a743610e38fde7d5
+      ref: "copy_with_build-3.0.1"
+      resolved-ref: fb1eb6ce5e693a7cb56b63525ca58c451337dcad
       url: "https://github.com/nkming2/dart-copy-with.git"
     source: git
-    version: "2.0.0"
+    version: "3.0.1"
   coverage:
     dependency: transitive
     description:
       name: coverage
-      sha256: "3945034e86ea203af7a056d98e98e42a5518fff200d6e8e6647e1886b07e936e"
+      sha256: "5da775aa218eaf2151c721b16c01c7676fbfdd99cebba2bf64e8b807a28ff94d"
       url: "https://pub.dev"
     source: hosted
-    version: "1.8.0"
+    version: "1.15.0"
   cronet_http:
     dependency: transitive
     description:
@@ -331,10 +323,10 @@ packages:
     dependency: "direct dev"
     description:
       name: dart_style
-      sha256: "27eb0ae77836989a3bc541ce55595e8ceee0992807f14511552a898ddd0d88ac"
+      sha256: c87dfe3d56f183ffe9106a18aebc6db431fc7c98c31a54b952a77f3d54a85697
       url: "https://pub.dev"
     source: hosted
-    version: "3.0.1"
+    version: "3.1.2"
   dbus:
     dependency: transitive
     description:
@@ -388,18 +380,19 @@ packages:
     dependency: "direct dev"
     description:
       name: drift
-      sha256: af3941e4d544727b2eb80590eb64e9cb8d77cd68c7690265502ea6a2427aa621
+      sha256: "970cd188fddb111b26ea6a9b07a62bf5c2432d74147b8122c67044ae3b97e99e"
       url: "https://pub.dev"
     source: hosted
-    version: "2.23.1"
+    version: "2.31.0"
   dynamic_color:
     dependency: "direct main"
     description:
-      name: dynamic_color
-      sha256: eae98052fa6e2826bdac3dd2e921c6ce2903be15c6b7f8b6d8a5d49b5086298d
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.7.0"
+      path: "packages/dynamic_color"
+      ref: c8ffaf3ab37654eaa3709a35c65010487d481314
+      resolved-ref: c8ffaf3ab37654eaa3709a35c65010487d481314
+      url: "https://github.com/vauvenal5/flutter-packages.git"
+    source: git
+    version: "1.8.1"
   equatable:
     dependency: "direct main"
     description:
@@ -424,14 +417,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
-  fake_async:
-    dependency: transitive
-    description:
-      name: fake_async
-      sha256: "6a95e56b2449df2273fd8c45a662d6947ce1ebb7aafe80e550a3f68297f3cacc"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.3.2"
   ffi:
     dependency: transitive
     description:
@@ -696,11 +681,6 @@ packages:
       url: "https://github.com/nc-photos/flutter_staggered_grid_view.git"
     source: git
     version: "0.4.0"
-  flutter_test:
-    dependency: "direct dev"
-    description: flutter
-    source: sdk
-    version: "0.0.0"
   flutter_typeahead:
     dependency: "direct main"
     description:
@@ -958,30 +938,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.9.1"
-  leak_tracker:
-    dependency: transitive
-    description:
-      name: leak_tracker
-      sha256: c35baad643ba394b40aac41080300150a4f08fd0fd6a10378f8f7c6bc161acec
-      url: "https://pub.dev"
-    source: hosted
-    version: "10.0.8"
-  leak_tracker_flutter_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_flutter_testing
-      sha256: f8b613e7e6a13ec79cfdc0e97638fddb3ab848452eff057653abd3edba760573
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.9"
-  leak_tracker_testing:
-    dependency: transitive
-    description:
-      name: leak_tracker_testing
-      sha256: "6ba465d5d76e67ddf503e1161d1f4a6bc42306f9d66ca1e8f079a47290fb06d3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.0.1"
   lints:
     dependency: transitive
     description:
@@ -1828,10 +1784,10 @@ packages:
     dependency: transitive
     description:
       name: source_gen
-      sha256: "35c8150ece9e8c8d263337a265153c3329667640850b9304861faea59fc98f6b"
+      sha256: "585bc140f20da42c584ece2df28f4d9ef2566955332b626f655957b3a8c8ad54"
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.0"
+    version: "4.1.2"
   source_map_stack_trace:
     dependency: transitive
     description:
@@ -1956,52 +1912,44 @@ packages:
     dependency: "direct dev"
     description:
       name: test
-      sha256: "301b213cd241ca982e9ba50266bd3f5bd1ea33f1455554c5abb85d1be0e2d87e"
+      sha256: "8d9ceddbab833f180fbefed08afa76d7c03513dfdba87ffcec2718b02bbcbf20"
       url: "https://pub.dev"
     source: hosted
-    version: "1.25.15"
+    version: "1.31.0"
   test_api:
     dependency: transitive
     description:
       name: test_api
-      sha256: fb31f383e2ee25fbbfe06b40fe21e1e458d14080e3c67e7ba0acfde4df4e0bbd
+      sha256: "949a932224383300f01be9221c39180316445ecb8e7547f70a41a35bf421fb9e"
       url: "https://pub.dev"
     source: hosted
-    version: "0.7.4"
+    version: "0.7.11"
   test_core:
     dependency: transitive
     description:
       name: test_core
-      sha256: "84d17c3486c8dfdbe5e12a50c8ae176d15e2a771b96909a9442b40173649ccaa"
+      sha256: "1991d4cfe85d5043241acac92962c3977c8d2f2add1ee73130c7b286417d1d34"
       url: "https://pub.dev"
     source: hosted
-    version: "0.6.8"
-  timing:
-    dependency: transitive
-    description:
-      name: timing
-      sha256: "70a3b636575d4163c477e6de42f247a23b315ae20e86442bebe32d3cabf61c32"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.0.1"
+    version: "0.6.17"
   to_string:
     dependency: "direct main"
     description:
       path: to_string
-      ref: "to_string-2.0.0"
-      resolved-ref: a8d5f3c200e0435914f10bbdb6ffa07f4f548b83
+      ref: "to_string-3.0.0"
+      resolved-ref: "052799899b1c41e0e1b1a2ac290d54e15e472f49"
       url: "https://github.com/nkming2/dart-to-string.git"
     source: git
-    version: "2.0.0"
+    version: "3.0.0"
   to_string_build:
     dependency: "direct dev"
     description:
       path: to_string_build
-      ref: "to_string_build-2.0.0"
-      resolved-ref: a8d5f3c200e0435914f10bbdb6ffa07f4f548b83
+      ref: "to_string_build-3.0.1"
+      resolved-ref: c7d471c64c5c6698aa22b492d74c7b3985089659
       url: "https://github.com/nkming2/dart-to-string.git"
     source: git
-    version: "2.0.0"
+    version: "3.0.1"
   typed_data:
     dependency: transitive
     description:
@@ -2273,10 +2221,10 @@ packages:
     dependency: transitive
     description:
       name: yaml
-      sha256: "75769501ea3489fca56601ff33454fe45507ea3bfb014161abc3b43ae25989d5"
+      sha256: b9da305ac7c39faa3f030eccd175340f968459dae4af175130b3fc47e40d76ce
       url: "https://pub.dev"
     source: hosted
-    version: "3.1.2"
+    version: "3.1.3"
   zstandard:
     dependency: transitive
     description:

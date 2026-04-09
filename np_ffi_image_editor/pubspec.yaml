@@ -21,7 +21,7 @@ dependencies:
   plugin_platform_interface: ^2.0.2
 
 dev_dependencies:
-  dart_style: 3.0.1
+  dart_style: 3.1.2
   ffigen: ^19.0.0
   np_lints:
     path: ../np_lints

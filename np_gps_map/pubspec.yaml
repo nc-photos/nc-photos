@@ -31,7 +31,7 @@ dependencies:
   rxdart: ^0.27.7
 
 dev_dependencies:
-  dart_style: 3.0.1
+  dart_style: 3.1.2
   np_lints:
     path: ../np_lints
 

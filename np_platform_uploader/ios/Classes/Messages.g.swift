@@ -55,6 +55,10 @@ private func wrapError(_ error: Any) -> [Any?] {
   ]
 }
 
+private func createConnectionError(withChannelName channelName: String) -> PigeonError {
+  return PigeonError(code: "channel-error", message: "Unable to establish connection on channel: '\(channelName)'.", details: "")
+}
+
 private func isNullish(_ value: Any?) -> Bool {
   return value is NSNull || value == nil
 }
@@ -128,33 +132,38 @@ func deepHashMessages(value: Any?, hasher: inout Hasher) {
 
     
 
+enum ConvertFormat: Int {
+  case jpeg = 0
+  case jxl = 1
+}
+
 /// Generated class from Pigeon that represents data sent in messages.
-struct Image: Hashable {
-  var pixel: FlutterStandardTypedData
-  var width: Int64
-  var height: Int64
+struct Uploadable: Hashable {
+  var platformIdentifier: String
+  var endPoint: String
+  var canConvert: Bool
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> Image? {
-    let pixel = pigeonVar_list[0] as! FlutterStandardTypedData
-    let width = pigeonVar_list[1] as! Int64
-    let height = pigeonVar_list[2] as! Int64
+  static func fromList(_ pigeonVar_list: [Any?]) -> Uploadable? {
+    let platformIdentifier = pigeonVar_list[0] as! String
+    let endPoint = pigeonVar_list[1] as! String
+    let canConvert = pigeonVar_list[2] as! Bool
 
-    return Image(
-      pixel: pixel,
-      width: width,
-      height: height
+    return Uploadable(
+      platformIdentifier: platformIdentifier,
+      endPoint: endPoint,
+      canConvert: canConvert
     )
   }
   func toList() -> [Any?] {
     return [
-      pixel,
-      width,
-      height,
+      platformIdentifier,
+      endPoint,
+      canConvert,
     ]
   }
-  static func == (lhs: Image, rhs: Image) -> Bool {
+  static func == (lhs: Uploadable, rhs: Uploadable) -> Bool {
     return deepEqualsMessages(lhs.toList(), rhs.toList())  }
   func hash(into hasher: inout Hasher) {
     deepHashMessages(value: toList(), hasher: &hasher)
@@ -162,28 +171,32 @@ struct Image: Hashable {
 }
 
 /// Generated class from Pigeon that represents data sent in messages.
-struct Metadata: Hashable {
-  var w: Int64
-  var h: Int64
+struct ConvertConfig: Hashable {
+  var format: ConvertFormat
+  var quality: Int64
+  var downsizeMp: Double? = nil
 
 
   // swift-format-ignore: AlwaysUseLowerCamelCase
-  static func fromList(_ pigeonVar_list: [Any?]) -> Metadata? {
-    let w = pigeonVar_list[0] as! Int64
-    let h = pigeonVar_list[1] as! Int64
+  static func fromList(_ pigeonVar_list: [Any?]) -> ConvertConfig? {
+    let format = pigeonVar_list[0] as! ConvertFormat
+    let quality = pigeonVar_list[1] as! Int64
+    let downsizeMp: Double? = nilOrValue(pigeonVar_list[2])
 
-    return Metadata(
-      w: w,
-      h: h
+    return ConvertConfig(
+      format: format,
+      quality: quality,
+      downsizeMp: downsizeMp
     )
   }
   func toList() -> [Any?] {
     return [
-      w,
-      h,
+      format,
+      quality,
+      downsizeMp,
     ]
   }
-  static func == (lhs: Metadata, rhs: Metadata) -> Bool {
+  static func == (lhs: ConvertConfig, rhs: ConvertConfig) -> Bool {
     return deepEqualsMessages(lhs.toList(), rhs.toList())  }
   func hash(into hasher: inout Hasher) {
     deepHashMessages(value: toList(), hasher: &hasher)
@@ -194,9 +207,15 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
   override func readValue(ofType type: UInt8) -> Any? {
     switch type {
     case 129:
-      return Image.fromList(self.readValue() as! [Any?])
+      let enumResultAsInt: Int? = nilOrValue(self.readValue() as! Int?)
+      if let enumResultAsInt = enumResultAsInt {
+        return ConvertFormat(rawValue: enumResultAsInt)
+      }
+      return nil
     case 130:
-      return Metadata.fromList(self.readValue() as! [Any?])
+      return Uploadable.fromList(self.readValue() as! [Any?])
+    case 131:
+      return ConvertConfig.fromList(self.readValue() as! [Any?])
     default:
       return super.readValue(ofType: type)
     }
@@ -205,11 +224,14 @@ private class MessagesPigeonCodecReader: FlutterStandardReader {
 
 private class MessagesPigeonCodecWriter: FlutterStandardWriter {
   override func writeValue(_ value: Any) {
-    if let value = value as? Image {
+    if let value = value as? ConvertFormat {
       super.writeByte(129)
-      super.writeValue(value.toList())
-    } else if let value = value as? Metadata {
+      super.writeValue(value.rawValue)
+    } else if let value = value as? Uploadable {
       super.writeByte(130)
+      super.writeValue(value.toList())
+    } else if let value = value as? ConvertConfig {
+      super.writeByte(131)
       super.writeValue(value.toList())
     } else {
       super.writeValue(value)
@@ -231,14 +253,9 @@ class MessagesPigeonCodec: FlutterStandardMessageCodec, @unchecked Sendable {
   static let shared = MessagesPigeonCodec(readerWriter: MessagesPigeonCodecReaderWriter())
 }
 
-
 /// Generated protocol from Pigeon that represents a handler of messages from Flutter.
 protocol MyHostApi {
-  func load(filepath: String, w: Int64?, h: Int64?, completion: @escaping (Result<Image, Error>) -> Void)
-  func loadBytes(bytes: FlutterStandardTypedData, w: Int64?, h: Int64?, completion: @escaping (Result<Image, Error>) -> Void)
-  func loadMetadata(filepath: String, completion: @escaping (Result<Metadata?, Error>) -> Void)
-  func save(img: Image, filepath: String, completion: @escaping (Result<Bool, Error>) -> Void)
-  func convertJpeg(filepath: String, w: Int64?, h: Int64?, completion: @escaping (Result<Void, Error>) -> Void)
+  func asyncUpload(taskId: String, uploadables: [Uploadable], httpHeaders: [String: String], convertConfig: ConvertConfig?) throws
 }
 
 /// Generated setup class from Pigeon to handle messages through the `binaryMessenger`.
@@ -247,97 +264,75 @@ class MyHostApiSetup {
   /// Sets up an instance of `MyHostApi` to handle messages through the `binaryMessenger`.
   static func setUp(binaryMessenger: FlutterBinaryMessenger, api: MyHostApi?, messageChannelSuffix: String = "") {
     let channelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
-    let loadChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.load\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
+    let asyncUploadChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.np_platform_uploader.MyHostApi.asyncUpload\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
     if let api = api {
-      loadChannel.setMessageHandler { message, reply in
+      asyncUploadChannel.setMessageHandler { message, reply in
         let args = message as! [Any?]
-        let filepathArg = args[0] as! String
-        let wArg: Int64? = nilOrValue(args[1])
-        let hArg: Int64? = nilOrValue(args[2])
-        api.load(filepath: filepathArg, w: wArg, h: hArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
+        let taskIdArg = args[0] as! String
+        let uploadablesArg = args[1] as! [Uploadable]
+        let httpHeadersArg = args[2] as! [String: String]
+        let convertConfigArg: ConvertConfig? = nilOrValue(args[3])
+        do {
+          try api.asyncUpload(taskId: taskIdArg, uploadables: uploadablesArg, httpHeaders: httpHeadersArg, convertConfig: convertConfigArg)
+          reply(wrapResult(nil))
+        } catch {
+          reply(wrapError(error))
         }
       }
     } else {
-      loadChannel.setMessageHandler(nil)
+      asyncUploadChannel.setMessageHandler(nil)
     }
-    let loadBytesChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.loadBytes\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      loadBytesChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let bytesArg = args[0] as! FlutterStandardTypedData
-        let wArg: Int64? = nilOrValue(args[1])
-        let hArg: Int64? = nilOrValue(args[2])
-        api.loadBytes(bytes: bytesArg, w: wArg, h: hArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
+  }
+}
+/// Generated protocol from Pigeon that represents Flutter messages that can be called from Swift.
+protocol MyFlutterApiProtocol {
+  func notifyUploadResult(taskId taskIdArg: String, uploadable uploadableArg: Uploadable, isSuccess isSuccessArg: Bool, completion: @escaping (Result<Void, PigeonError>) -> Void)
+  func notifyTaskComplete(taskId taskIdArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void)
+}
+class MyFlutterApi: MyFlutterApiProtocol {
+  private let binaryMessenger: FlutterBinaryMessenger
+  private let messageChannelSuffix: String
+  init(binaryMessenger: FlutterBinaryMessenger, messageChannelSuffix: String = "") {
+    self.binaryMessenger = binaryMessenger
+    self.messageChannelSuffix = messageChannelSuffix.count > 0 ? ".\(messageChannelSuffix)" : ""
+  }
+  var codec: MessagesPigeonCodec {
+    return MessagesPigeonCodec.shared
+  }
+  func notifyUploadResult(taskId taskIdArg: String, uploadable uploadableArg: Uploadable, isSuccess isSuccessArg: Bool, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+    let channelName: String = "dev.flutter.pigeon.np_platform_uploader.MyFlutterApi.notifyUploadResult\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([taskIdArg, uploadableArg, isSuccessArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
       }
-    } else {
-      loadBytesChannel.setMessageHandler(nil)
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
+      }
     }
-    let loadMetadataChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.loadMetadata\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      loadMetadataChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let filepathArg = args[0] as! String
-        api.loadMetadata(filepath: filepathArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
+  }
+  func notifyTaskComplete(taskId taskIdArg: String, completion: @escaping (Result<Void, PigeonError>) -> Void) {
+    let channelName: String = "dev.flutter.pigeon.np_platform_uploader.MyFlutterApi.notifyTaskComplete\(messageChannelSuffix)"
+    let channel = FlutterBasicMessageChannel(name: channelName, binaryMessenger: binaryMessenger, codec: codec)
+    channel.sendMessage([taskIdArg] as [Any?]) { response in
+      guard let listResponse = response as? [Any?] else {
+        completion(.failure(createConnectionError(withChannelName: channelName)))
+        return
       }
-    } else {
-      loadMetadataChannel.setMessageHandler(nil)
-    }
-    let saveChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.save\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      saveChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let imgArg = args[0] as! Image
-        let filepathArg = args[1] as! String
-        api.save(img: imgArg, filepath: filepathArg) { result in
-          switch result {
-          case .success(let res):
-            reply(wrapResult(res))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
+      if listResponse.count > 1 {
+        let code: String = listResponse[0] as! String
+        let message: String? = nilOrValue(listResponse[1])
+        let details: String? = nilOrValue(listResponse[2])
+        completion(.failure(PigeonError(code: code, message: message, details: details)))
+      } else {
+        completion(.success(()))
       }
-    } else {
-      saveChannel.setMessageHandler(nil)
-    }
-    let convertJpegChannel = FlutterBasicMessageChannel(name: "dev.flutter.pigeon.np_platform_image_format_jxl.MyHostApi.convertJpeg\(channelSuffix)", binaryMessenger: binaryMessenger, codec: codec)
-    if let api = api {
-      convertJpegChannel.setMessageHandler { message, reply in
-        let args = message as! [Any?]
-        let filepathArg = args[0] as! String
-        let wArg: Int64? = nilOrValue(args[1])
-        let hArg: Int64? = nilOrValue(args[2])
-        api.convertJpeg(filepath: filepathArg, w: wArg, h: hArg) { result in
-          switch result {
-          case .success:
-            reply(wrapResult(nil))
-          case .failure(let error):
-            reply(wrapError(error))
-          }
-        }
-      }
-    } else {
-      convertJpegChannel.setMessageHandler(nil)
     }
   }
 }

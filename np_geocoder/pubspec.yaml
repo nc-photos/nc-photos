@@ -16,7 +16,7 @@ dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with
-      ref: copy_with-2.0.0
+      ref: copy_with-3.0.0
   flutter_localizations:
     sdk: flutter
   http: ^1.1.2
@@ -42,20 +42,18 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-2.0.0
+      ref: to_string-3.0.0
       path: to_string
   zstandard: ^1.5.0
 
 dev_dependencies:
-  analyzer: ^6.2.0
-  build_runner: ^2.4.9
-  build_runner_core: ">=7.2.9"
+  build_runner: ^2.13.1
   copy_with_build:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
-      ref: copy_with_build-2.0.0
-  dart_style: 3.0.1
+      ref: copy_with_build-3.0.1
+  dart_style: 3.1.2
   np_lints:
     path: ../np_lints
   np_log_build:
@@ -64,7 +62,7 @@ dev_dependencies:
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-2.0.0
+      ref: to_string_build-3.0.1
       path: to_string_build
 
 flutter:

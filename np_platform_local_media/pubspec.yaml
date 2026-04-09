@@ -22,19 +22,19 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-2.0.0
+      ref: to_string-3.0.0
       path: to_string
 
 dev_dependencies:
-  build_runner: ^2.4.9
-  dart_style: 3.0.1
+  build_runner: ^2.13.1
+  dart_style: 3.1.2
   np_lints:
     path: ../np_lints
-  pigeon: ^22.6.0
+  pigeon: ^26.1.0
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-2.0.0
+      ref: to_string_build-3.0.1
       path: to_string_build
 
 flutter:

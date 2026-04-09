@@ -52,7 +52,7 @@ dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with
-      ref: copy_with-2.0.0
+      ref: copy_with-3.0.0
   crypto: ^3.0.3
   devicelocale: ^0.7.1
   device_info_plus: ^10.1.2
@@ -60,7 +60,12 @@ dependencies:
     git:
       url: https://github.com/nc-photos/flutter-draggable-scrollbar.git
       ref: v0.1.0-nc-photos-9
-  dynamic_color: ^1.7.0
+  # workaround upstream putting flutter_test in dependencies block
+  dynamic_color:
+    git:
+      url: https://github.com/vauvenal5/flutter-packages.git
+      path: packages/dynamic_color
+      ref: c8ffaf3ab37654eaa3709a35c65010487d481314
   equatable: ^2.0.5
   event_bus: ^2.0.0
   flex_seed_scheme: ^3.0.0
@@ -175,7 +180,7 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-2.0.0
+      ref: to_string-3.0.0
       path: to_string
   url_launcher: ^6.2.6
   uuid: ^4.5.1
@@ -209,19 +214,18 @@ dependency_overrides:
       path: flutter_cache_manager
 
 dev_dependencies:
-  test: ^1.22.1
+  test: ">=1.27.0"
   bloc_test: any
-  build_runner: ^2.4.9
+  build_runner: ^2.13.1
   copy_with_build:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
-      ref: copy_with_build-2.0.0
-  dart_style: 3.0.1
-  drift: 2.23.1
-  flutter_test:
-    sdk: flutter
-  # integration_test:
+      ref: copy_with_build-3.0.1
+  dart_style: 3.1.2
+  drift: 2.31.0
+  # temporarily removed due to dependency issue
+  # flutter_test:
   #   sdk: flutter
   np_codegen_build:
     path: ../codegen_build
@@ -234,7 +238,7 @@ dev_dependencies:
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-2.0.0
+      ref: to_string_build-3.0.1
       path: to_string_build
 
 # For information on the generic Dart part of this file, see the

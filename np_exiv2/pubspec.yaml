@@ -21,7 +21,7 @@ dependencies:
   quiver: ^3.2.1
 
 dev_dependencies:
-  dart_style: 3.0.1
+  dart_style: 3.1.2
   ffigen: ^19.0.0
   flutter_test:
     sdk: flutter

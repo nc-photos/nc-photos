@@ -530,9 +530,6 @@ class $FilesTable extends Files with TableInfo<$FilesTable, File> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
-    'lastModified',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
   lastModified = GeneratedColumn<DateTime>(
@@ -676,7 +673,6 @@ class $FilesTable extends Files with TableInfo<$FilesTable, File> {
         etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
       );
     }
-    context.handle(_lastModifiedMeta, const VerificationResult.success());
     if (data.containsKey('is_collection')) {
       context.handle(
         _isCollectionMeta,
@@ -1302,9 +1298,6 @@ class $AccountFilesTable extends AccountFiles
       'CHECK ("is_archived" IN (0, 1))',
     ),
   );
-  static const VerificationMeta _overrideDateTimeMeta = const VerificationMeta(
-    'overrideDateTime',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
   overrideDateTime = GeneratedColumn<DateTime>(
@@ -1314,9 +1307,6 @@ class $AccountFilesTable extends AccountFiles
     type: DriftSqlType.dateTime,
     requiredDuringInsert: false,
   ).withConverter<DateTime?>($AccountFilesTable.$converteroverrideDateTimen);
-  static const VerificationMeta _bestDateTimeMeta = const VerificationMeta(
-    'bestDateTime',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> bestDateTime =
       GeneratedColumn<DateTime>(
@@ -1394,8 +1384,6 @@ class $AccountFilesTable extends AccountFiles
         isArchived.isAcceptableOrUnknown(data['is_archived']!, _isArchivedMeta),
       );
     }
-    context.handle(_overrideDateTimeMeta, const VerificationResult.success());
-    context.handle(_bestDateTimeMeta, const VerificationResult.success());
     return context;
   }
 
@@ -1798,9 +1786,6 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
       'REFERENCES account_files (row_id) ON DELETE CASCADE',
     ),
   );
-  static const VerificationMeta _lastUpdatedMeta = const VerificationMeta(
-    'lastUpdated',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> lastUpdated =
       GeneratedColumn<DateTime>(
@@ -1868,9 +1853,6 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
     type: DriftSqlType.int,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _dateTimeOriginalMeta = const VerificationMeta(
-    'dateTimeOriginal',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
   dateTimeOriginal = GeneratedColumn<DateTime>(
@@ -1913,7 +1895,6 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
         ),
       );
     }
-    context.handle(_lastUpdatedMeta, const VerificationResult.success());
     if (data.containsKey('file_etag')) {
       context.handle(
         _fileEtagMeta,
@@ -1950,7 +1931,6 @@ class $ImagesTable extends Images with TableInfo<$ImagesTable, Image> {
         src.isAcceptableOrUnknown(data['src']!, _srcMeta),
       );
     }
-    context.handle(_dateTimeOriginalMeta, const VerificationResult.success());
     return context;
   }
 
@@ -2772,9 +2752,6 @@ class $TrashesTable extends Trashes with TableInfo<$TrashesTable, Trash> {
     type: DriftSqlType.string,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _deletionTimeMeta = const VerificationMeta(
-    'deletionTime',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> deletionTime =
       GeneratedColumn<DateTime>(
@@ -2828,7 +2805,6 @@ class $TrashesTable extends Trashes with TableInfo<$TrashesTable, Trash> {
     } else if (isInserting) {
       context.missing(_originalLocationMeta);
     }
-    context.handle(_deletionTimeMeta, const VerificationResult.success());
     return context;
   }
 
@@ -3322,9 +3298,6 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, Album> {
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _lastUpdatedMeta = const VerificationMeta(
-    'lastUpdated',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> lastUpdated =
       GeneratedColumn<DateTime>(
@@ -3465,7 +3438,6 @@ class $AlbumsTable extends Albums with TableInfo<$AlbumsTable, Album> {
     } else if (isInserting) {
       context.missing(_versionMeta);
     }
-    context.handle(_lastUpdatedMeta, const VerificationResult.success());
     if (data.containsKey('name')) {
       context.handle(
         _nameMeta,
@@ -4068,9 +4040,6 @@ class $AlbumSharesTable extends AlbumShares
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _sharedAtMeta = const VerificationMeta(
-    'sharedAt',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime, DateTime> sharedAt =
       GeneratedColumn<DateTime>(
@@ -4119,7 +4088,6 @@ class $AlbumSharesTable extends AlbumShares
         ),
       );
     }
-    context.handle(_sharedAtMeta, const VerificationResult.success());
     return context;
   }
 
@@ -5244,9 +5212,6 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _dateStartMeta = const VerificationMeta(
-    'dateStart',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime> dateStart =
       GeneratedColumn<DateTime>(
@@ -5256,9 +5221,6 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
         type: DriftSqlType.dateTime,
         requiredDuringInsert: false,
       ).withConverter<DateTime?>($NcAlbumsTable.$converterdateStartn);
-  static const VerificationMeta _dateEndMeta = const VerificationMeta(
-    'dateEnd',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime> dateEnd =
       GeneratedColumn<DateTime>(
@@ -5363,8 +5325,6 @@ class $NcAlbumsTable extends NcAlbums with TableInfo<$NcAlbumsTable, NcAlbum> {
         location.isAcceptableOrUnknown(data['location']!, _locationMeta),
       );
     }
-    context.handle(_dateStartMeta, const VerificationResult.success());
-    context.handle(_dateEndMeta, const VerificationResult.success());
     if (data.containsKey('collaborators')) {
       context.handle(
         _collaboratorsMeta,
@@ -5899,9 +5859,6 @@ class $NcAlbumItemsTable extends NcAlbumItems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
-    'lastModified',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
   lastModified = GeneratedColumn<DateTime>(
@@ -6044,7 +6001,6 @@ class $NcAlbumItemsTable extends NcAlbumItems
         etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
       );
     }
-    context.handle(_lastModifiedMeta, const VerificationResult.success());
     if (data.containsKey('has_preview')) {
       context.handle(
         _hasPreviewMeta,
@@ -6929,9 +6885,6 @@ class $RecognizeFaceItemsTable extends RecognizeFaceItems
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
-  static const VerificationMeta _lastModifiedMeta = const VerificationMeta(
-    'lastModified',
-  );
   @override
   late final GeneratedColumnWithTypeConverter<DateTime?, DateTime>
   lastModified = GeneratedColumn<DateTime>(
@@ -7098,7 +7051,6 @@ class $RecognizeFaceItemsTable extends RecognizeFaceItems
         etag.isAcceptableOrUnknown(data['etag']!, _etagMeta),
       );
     }
-    context.handle(_lastModifiedMeta, const VerificationResult.success());
     if (data.containsKey('has_preview')) {
       context.handle(
         _hasPreviewMeta,
@@ -8078,7 +8030,6 @@ class $ImageLocationIdsTable extends ImageLocationIds
     type: DriftSqlType.int,
     requiredDuringInsert: true,
   );
-  static const VerificationMeta _typeMeta = const VerificationMeta('type');
   @override
   late final GeneratedColumnWithTypeConverter<ImageLocationType, int> type =
       GeneratedColumn<int>(
@@ -8121,7 +8072,6 @@ class $ImageLocationIdsTable extends ImageLocationIds
     } else if (isInserting) {
       context.missing(_geonameIdMeta);
     }
-    context.handle(_typeMeta, const VerificationResult.success());
     return context;
   }
 
@@ -8531,7 +8481,7 @@ final class $$ServersTableReferences
     final manager = $$AccountsTableTableManager(
       $_db,
       $_db.accounts,
-    ).filter((f) => f.server.rowId($_item.rowId));
+    ).filter((f) => f.server.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_accountsRefsTable($_db));
     return ProcessedTableManager(
@@ -8550,7 +8500,7 @@ final class $$ServersTableReferences
     final manager = $$FilesTableTableManager(
       $_db,
       $_db.files,
-    ).filter((f) => f.server.rowId($_item.rowId));
+    ).filter((f) => f.server.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_filesRefsTable($_db));
     return ProcessedTableManager(
@@ -8569,7 +8519,7 @@ final class $$ServersTableReferences
     final manager = $$TagsTableTableManager(
       $_db,
       $_db.tags,
-    ).filter((f) => f.server.rowId($_item.rowId));
+    ).filter((f) => f.server.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_tagsRefsTable($_db));
     return ProcessedTableManager(
@@ -8849,7 +8799,7 @@ class $$ServersTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (accountsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Server, $ServersTable, Account>(
                       currentTable: table,
                       referencedTable: $$ServersTableReferences
                           ._accountsRefsTable(db),
@@ -8867,7 +8817,7 @@ class $$ServersTableTableManager
                       typedResults: items,
                     ),
                   if (filesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Server, $ServersTable, File>(
                       currentTable: table,
                       referencedTable: $$ServersTableReferences._filesRefsTable(
                         db,
@@ -8882,7 +8832,7 @@ class $$ServersTableTableManager
                       typedResults: items,
                     ),
                   if (tagsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Server, $ServersTable, Tag>(
                       currentTable: table,
                       referencedTable: $$ServersTableReferences._tagsRefsTable(
                         db,
@@ -8940,10 +8890,12 @@ final class $$AccountsTableReferences
   );
 
   $$ServersTableProcessedTableManager get server {
+    final $_column = $_itemColumn<int>('server')!;
+
     final manager = $$ServersTableTableManager(
       $_db,
       $_db.servers,
-    ).filter((f) => f.rowId($_item.server!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_serverTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -8961,7 +8913,7 @@ final class $$AccountsTableReferences
     final manager = $$AccountFilesTableTableManager(
       $_db,
       $_db.accountFiles,
-    ).filter((f) => f.account.rowId($_item.rowId));
+    ).filter((f) => f.account.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_accountFilesRefsTable($_db));
     return ProcessedTableManager(
@@ -8987,7 +8939,7 @@ final class $$AccountsTableReferences
     final manager = $$FaceRecognitionPersonsTableTableManager(
       $_db,
       $_db.faceRecognitionPersons,
-    ).filter((f) => f.account.rowId($_item.rowId));
+    ).filter((f) => f.account.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(
       _faceRecognitionPersonsRefsTable($_db),
@@ -9008,7 +8960,7 @@ final class $$AccountsTableReferences
     final manager = $$NcAlbumsTableTableManager(
       $_db,
       $_db.ncAlbums,
-    ).filter((f) => f.account.rowId($_item.rowId));
+    ).filter((f) => f.account.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_ncAlbumsRefsTable($_db));
     return ProcessedTableManager(
@@ -9029,7 +8981,7 @@ final class $$AccountsTableReferences
     final manager = $$RecognizeFacesTableTableManager(
       $_db,
       $_db.recognizeFaces,
-    ).filter((f) => f.account.rowId($_item.rowId));
+    ).filter((f) => f.account.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_recognizeFacesRefsTable($_db));
     return ProcessedTableManager(
@@ -9477,7 +9429,11 @@ class $$AccountsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (accountFilesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      Account,
+                      $AccountsTable,
+                      AccountFile
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountsTableReferences
                           ._accountFilesRefsTable(db),
@@ -9495,7 +9451,11 @@ class $$AccountsTableTableManager
                       typedResults: items,
                     ),
                   if (faceRecognitionPersonsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      Account,
+                      $AccountsTable,
+                      FaceRecognitionPerson
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountsTableReferences
                           ._faceRecognitionPersonsRefsTable(db),
@@ -9513,7 +9473,7 @@ class $$AccountsTableTableManager
                       typedResults: items,
                     ),
                   if (ncAlbumsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Account, $AccountsTable, NcAlbum>(
                       currentTable: table,
                       referencedTable: $$AccountsTableReferences
                           ._ncAlbumsRefsTable(db),
@@ -9531,7 +9491,11 @@ class $$AccountsTableTableManager
                       typedResults: items,
                     ),
                   if (recognizeFacesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      Account,
+                      $AccountsTable,
+                      RecognizeFace
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountsTableReferences
                           ._recognizeFacesRefsTable(db),
@@ -9616,10 +9580,12 @@ final class $$FilesTableReferences
   );
 
   $$ServersTableProcessedTableManager get server {
+    final $_column = $_itemColumn<int>('server')!;
+
     final manager = $$ServersTableTableManager(
       $_db,
       $_db.servers,
-    ).filter((f) => f.rowId($_item.server!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_serverTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -9637,7 +9603,7 @@ final class $$FilesTableReferences
     final manager = $$AccountFilesTableTableManager(
       $_db,
       $_db.accountFiles,
-    ).filter((f) => f.file.rowId($_item.rowId));
+    ).filter((f) => f.file.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_accountFilesRefsTable($_db));
     return ProcessedTableManager(
@@ -9656,7 +9622,7 @@ final class $$FilesTableReferences
     final manager = $$TrashesTableTableManager(
       $_db,
       $_db.trashes,
-    ).filter((f) => f.file.rowId($_item.rowId));
+    ).filter((f) => f.file.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_trashesRefsTable($_db));
     return ProcessedTableManager(
@@ -9675,7 +9641,7 @@ final class $$FilesTableReferences
     final manager = $$DirFilesTableTableManager(
       $_db,
       $_db.dirFiles,
-    ).filter((f) => f.dir.rowId($_item.rowId));
+    ).filter((f) => f.dir.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_dirFilesRefsTable($_db));
     return ProcessedTableManager(
@@ -9694,7 +9660,7 @@ final class $$FilesTableReferences
     final manager = $$DirFilesTableTableManager(
       $_db,
       $_db.dirFiles,
-    ).filter((f) => f.child.rowId($_item.rowId));
+    ).filter((f) => f.child.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_childTable($_db));
     return ProcessedTableManager(
@@ -9713,7 +9679,7 @@ final class $$FilesTableReferences
     final manager = $$AlbumsTableTableManager(
       $_db,
       $_db.albums,
-    ).filter((f) => f.file.rowId($_item.rowId));
+    ).filter((f) => f.file.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_albumsRefsTable($_db));
     return ProcessedTableManager(
@@ -10374,7 +10340,7 @@ class $$FilesTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (accountFilesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<File, $FilesTable, AccountFile>(
                       currentTable: table,
                       referencedTable: $$FilesTableReferences
                           ._accountFilesRefsTable(db),
@@ -10392,7 +10358,7 @@ class $$FilesTableTableManager
                       typedResults: items,
                     ),
                   if (trashesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<File, $FilesTable, Trash>(
                       currentTable: table,
                       referencedTable: $$FilesTableReferences._trashesRefsTable(
                         db,
@@ -10407,7 +10373,7 @@ class $$FilesTableTableManager
                       typedResults: items,
                     ),
                   if (dirFilesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<File, $FilesTable, DirFile>(
                       currentTable: table,
                       referencedTable: $$FilesTableReferences
                           ._dirFilesRefsTable(db),
@@ -10424,7 +10390,7 @@ class $$FilesTableTableManager
                       typedResults: items,
                     ),
                   if (child)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<File, $FilesTable, DirFile>(
                       currentTable: table,
                       referencedTable: $$FilesTableReferences._childTable(db),
                       managerFromTypedResult:
@@ -10436,7 +10402,7 @@ class $$FilesTableTableManager
                       typedResults: items,
                     ),
                   if (albumsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<File, $FilesTable, Album>(
                       currentTable: table,
                       referencedTable: $$FilesTableReferences._albumsRefsTable(
                         db,
@@ -10511,10 +10477,12 @@ final class $$AccountFilesTableReferences
   );
 
   $$AccountsTableProcessedTableManager get account {
+    final $_column = $_itemColumn<int>('account')!;
+
     final manager = $$AccountsTableTableManager(
       $_db,
       $_db.accounts,
-    ).filter((f) => f.rowId($_item.account!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10527,10 +10495,12 @@ final class $$AccountFilesTableReferences
   );
 
   $$FilesTableProcessedTableManager get file {
+    final $_column = $_itemColumn<int>('file')!;
+
     final manager = $$FilesTableTableManager(
       $_db,
       $_db.files,
-    ).filter((f) => f.rowId($_item.file!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fileTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -10549,10 +10519,9 @@ final class $$AccountFilesTableReferences
   );
 
   $$ImagesTableProcessedTableManager get imagesRefs {
-    final manager = $$ImagesTableTableManager(
-      $_db,
-      $_db.images,
-    ).filter((f) => f.accountFile.rowId($_item.rowId));
+    final manager = $$ImagesTableTableManager($_db, $_db.images).filter(
+      (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
+    );
 
     final cache = $_typedResult.readTableOrNull(_imagesRefsTable($_db));
     return ProcessedTableManager(
@@ -10573,7 +10542,9 @@ final class $$AccountFilesTableReferences
     final manager = $$ImageLocationsTableTableManager(
       $_db,
       $_db.imageLocations,
-    ).filter((f) => f.accountFile.rowId($_item.rowId));
+    ).filter(
+      (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
+    );
 
     final cache = $_typedResult.readTableOrNull(_imageLocationsRefsTable($_db));
     return ProcessedTableManager(
@@ -10594,7 +10565,9 @@ final class $$AccountFilesTableReferences
     final manager = $$ImageLocationIdsTableTableManager(
       $_db,
       $_db.imageLocationIds,
-    ).filter((f) => f.accountFile.rowId($_item.rowId));
+    ).filter(
+      (f) => f.accountFile.rowId.sqlEquals($_itemColumn<int>('row_id')!),
+    );
 
     final cache = $_typedResult.readTableOrNull(
       _imageLocationIdsRefsTable($_db),
@@ -11161,7 +11134,11 @@ class $$AccountFilesTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (imagesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      AccountFile,
+                      $AccountFilesTable,
+                      Image
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountFilesTableReferences
                           ._imagesRefsTable(db),
@@ -11179,7 +11156,11 @@ class $$AccountFilesTableTableManager
                       typedResults: items,
                     ),
                   if (imageLocationsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      AccountFile,
+                      $AccountFilesTable,
+                      ImageLocation
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountFilesTableReferences
                           ._imageLocationsRefsTable(db),
@@ -11197,7 +11178,11 @@ class $$AccountFilesTableTableManager
                       typedResults: items,
                     ),
                   if (imageLocationIdsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      AccountFile,
+                      $AccountFilesTable,
+                      ImageLocationId
+                    >(
                       currentTable: table,
                       referencedTable: $$AccountFilesTableReferences
                           ._imageLocationIdsRefsTable(db),
@@ -11277,10 +11262,12 @@ final class $$ImagesTableReferences
       );
 
   $$AccountFilesTableProcessedTableManager get accountFile {
+    final $_column = $_itemColumn<int>('account_file')!;
+
     final manager = $$AccountFilesTableTableManager(
       $_db,
       $_db.accountFiles,
-    ).filter((f) => f.rowId($_item.accountFile!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountFileTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11671,10 +11658,12 @@ final class $$ImageLocationsTableReferences
       );
 
   $$AccountFilesTableProcessedTableManager get accountFile {
+    final $_column = $_itemColumn<int>('account_file')!;
+
     final manager = $$AccountFilesTableTableManager(
       $_db,
       $_db.accountFiles,
-    ).filter((f) => f.rowId($_item.accountFile!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountFileTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -11989,10 +11978,12 @@ final class $$TrashesTableReferences
   );
 
   $$FilesTableProcessedTableManager get file {
+    final $_column = $_itemColumn<int>('file')!;
+
     final manager = $$FilesTableTableManager(
       $_db,
       $_db.files,
-    ).filter((f) => f.rowId($_item.file!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fileTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12283,10 +12274,12 @@ final class $$DirFilesTableReferences
   );
 
   $$FilesTableProcessedTableManager get dir {
+    final $_column = $_itemColumn<int>('dir')!;
+
     final manager = $$FilesTableTableManager(
       $_db,
       $_db.files,
-    ).filter((f) => f.rowId($_item.dir!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_dirTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12299,10 +12292,12 @@ final class $$DirFilesTableReferences
   );
 
   $$FilesTableProcessedTableManager get child {
+    final $_column = $_itemColumn<int>('child')!;
+
     final manager = $$FilesTableTableManager(
       $_db,
       $_db.files,
-    ).filter((f) => f.rowId($_item.child!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_childTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12640,10 +12635,12 @@ final class $$AlbumsTableReferences
   );
 
   $$FilesTableProcessedTableManager get file {
+    final $_column = $_itemColumn<int>('file')!;
+
     final manager = $$FilesTableTableManager(
       $_db,
       $_db.files,
-    ).filter((f) => f.rowId($_item.file!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_fileTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -12661,7 +12658,7 @@ final class $$AlbumsTableReferences
     final manager = $$AlbumSharesTableTableManager(
       $_db,
       $_db.albumShares,
-    ).filter((f) => f.album.rowId($_item.rowId));
+    ).filter((f) => f.album.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_albumSharesRefsTable($_db));
     return ProcessedTableManager(
@@ -13106,7 +13103,7 @@ class $$AlbumsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (albumSharesRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<Album, $AlbumsTable, AlbumShare>(
                       currentTable: table,
                       referencedTable: $$AlbumsTableReferences
                           ._albumSharesRefsTable(db),
@@ -13171,10 +13168,12 @@ final class $$AlbumSharesTableReferences
   );
 
   $$AlbumsTableProcessedTableManager get album {
+    final $_column = $_itemColumn<int>('album')!;
+
     final manager = $$AlbumsTableTableManager(
       $_db,
       $_db.albums,
-    ).filter((f) => f.rowId($_item.album!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_albumTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13476,10 +13475,12 @@ final class $$TagsTableReferences
   );
 
   $$ServersTableProcessedTableManager get server {
+    final $_column = $_itemColumn<int>('server')!;
+
     final manager = $$ServersTableTableManager(
       $_db,
       $_db.servers,
-    ).filter((f) => f.rowId($_item.server!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_serverTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -13816,10 +13817,12 @@ final class $$FaceRecognitionPersonsTableReferences
   );
 
   $$AccountsTableProcessedTableManager get account {
+    final $_column = $_itemColumn<int>('account')!;
+
     final manager = $$AccountsTableTableManager(
       $_db,
       $_db.accounts,
-    ).filter((f) => f.rowId($_item.account!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14152,10 +14155,12 @@ final class $$NcAlbumsTableReferences
   );
 
   $$AccountsTableProcessedTableManager get account {
+    final $_column = $_itemColumn<int>('account')!;
+
     final manager = $$AccountsTableTableManager(
       $_db,
       $_db.accounts,
-    ).filter((f) => f.rowId($_item.account!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -14173,7 +14178,7 @@ final class $$NcAlbumsTableReferences
     final manager = $$NcAlbumItemsTableTableManager(
       $_db,
       $_db.ncAlbumItems,
-    ).filter((f) => f.parent.rowId($_item.rowId));
+    ).filter((f) => f.parent.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(_ncAlbumItemsRefsTable($_db));
     return ProcessedTableManager(
@@ -14577,7 +14582,11 @@ class $$NcAlbumsTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (ncAlbumItemsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      NcAlbum,
+                      $NcAlbumsTable,
+                      NcAlbumItem
+                    >(
                       currentTable: table,
                       referencedTable: $$NcAlbumsTableReferences
                           ._ncAlbumItemsRefsTable(db),
@@ -14656,10 +14665,12 @@ final class $$NcAlbumItemsTableReferences
   );
 
   $$NcAlbumsTableProcessedTableManager get parent {
+    final $_column = $_itemColumn<int>('parent')!;
+
     final manager = $$NcAlbumsTableTableManager(
       $_db,
       $_db.ncAlbums,
-    ).filter((f) => f.rowId($_item.parent!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_parentTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15106,10 +15117,12 @@ final class $$RecognizeFacesTableReferences
   );
 
   $$AccountsTableProcessedTableManager get account {
+    final $_column = $_itemColumn<int>('account')!;
+
     final manager = $$AccountsTableTableManager(
       $_db,
       $_db.accounts,
-    ).filter((f) => f.rowId($_item.account!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -15130,7 +15143,7 @@ final class $$RecognizeFacesTableReferences
     final manager = $$RecognizeFaceItemsTableTableManager(
       $_db,
       $_db.recognizeFaceItems,
-    ).filter((f) => f.parent.rowId($_item.rowId));
+    ).filter((f) => f.parent.rowId.sqlEquals($_itemColumn<int>('row_id')!));
 
     final cache = $_typedResult.readTableOrNull(
       _recognizeFaceItemsRefsTable($_db),
@@ -15421,7 +15434,11 @@ class $$RecognizeFacesTableTableManager
               getPrefetchedDataCallback: (items) async {
                 return [
                   if (recognizeFaceItemsRefs)
-                    await $_getPrefetchedData(
+                    await $_getPrefetchedData<
+                      RecognizeFace,
+                      $RecognizeFacesTable,
+                      RecognizeFaceItem
+                    >(
                       currentTable: table,
                       referencedTable: $$RecognizeFacesTableReferences
                           ._recognizeFaceItemsRefsTable(db),
@@ -15517,10 +15534,12 @@ final class $$RecognizeFaceItemsTableReferences
       );
 
   $$RecognizeFacesTableProcessedTableManager get parent {
+    final $_column = $_itemColumn<int>('parent')!;
+
     final manager = $$RecognizeFacesTableTableManager(
       $_db,
       $_db.recognizeFaces,
-    ).filter((f) => f.rowId($_item.parent!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_parentTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(
@@ -16225,10 +16244,12 @@ final class $$ImageLocationIdsTableReferences
       );
 
   $$AccountFilesTableProcessedTableManager get accountFile {
+    final $_column = $_itemColumn<int>('account_file')!;
+
     final manager = $$AccountFilesTableTableManager(
       $_db,
       $_db.accountFiles,
-    ).filter((f) => f.rowId($_item.accountFile!));
+    ).filter((f) => f.rowId.sqlEquals($_column));
     final item = $_typedResult.readTableOrNull(_accountFileTable($_db));
     if (item == null) return manager;
     return ProcessedTableManager(

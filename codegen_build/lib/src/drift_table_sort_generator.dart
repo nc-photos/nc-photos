@@ -33,7 +33,7 @@ class DriftTableSortGenerator extends GeneratorForAnnotation<DriftTableSort> {
     }
 
     final sortEnumName =
-        "${clazz.name.substring(0, clazz.name.length - 1)}Sort";
+        "${clazz.name!.substring(0, clazz.name!.length - 1)}Sort";
     final enumValues = columns
         .map((f) => "${f.name}Asc, ${f.name}Desc, ")
         .reduce((a, b) => a + b);
@@ -41,9 +41,9 @@ class DriftTableSortGenerator extends GeneratorForAnnotation<DriftTableSort> {
         .map((f) {
           return """
 case $sortEnumName.${f.name}Asc:
-  return OrderingTerm.asc(db.${clazz.name.replaceRange(0, 1, clazz.name[0].toLowerCase())}.${f.name});
+  return OrderingTerm.asc(db.${clazz.name!.replaceRange(0, 1, clazz.name![0].toLowerCase())}.${f.name});
 case $sortEnumName.${f.name}Desc:
-  return OrderingTerm.desc(db.${clazz.name.replaceRange(0, 1, clazz.name[0].toLowerCase())}.${f.name});
+  return OrderingTerm.desc(db.${clazz.name!.replaceRange(0, 1, clazz.name![0].toLowerCase())}.${f.name});
 """;
         })
         .reduce((a, b) => a + b);

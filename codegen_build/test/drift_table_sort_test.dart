@@ -1,10 +1,9 @@
+import 'package:build_test/build_test.dart';
 import 'package:np_codegen_build/src/drift_table_sort_generator.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
 
-import 'util.dart';
-
 void main() async {
-  await resolveCompilationUnit("test/src/drift_table_sort.dart");
   tearDown(() {
     // Increment this after each test so the next test has it's own package
     _pkgCacheCount++;
@@ -52,17 +51,18 @@ extension TestSortIterableExtension on Iterable<TestSort> {
   });
 }
 
-String _genSrc(String src) {
+String _genSrc(String src, {List<String> extraImportStatements = const []}) {
   return """
 import 'package:np_codegen/np_codegen.dart';
+${extraImportStatements.join("\n")}
 part 'test.g.dart';
 $src
 """;
 }
 
 String _genExpected(String src) {
-  return """// dart format width=80
-// GENERATED CODE - DO NOT MODIFY BY HAND
+  return """// GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 part of 'test.dart';
 
@@ -73,12 +73,20 @@ part of 'test.dart';
 $src""";
 }
 
-Future _buildTest(String src, String expected) => buildTest(
-  generators: [const DriftTableSortGenerator()],
-  pkgName: _pkgName,
-  src: src,
-  expected: expected,
-);
+Future _buildTest(
+  String src,
+  String expected, {
+  Map<String, Object>? extraSrcAssets,
+}) async {
+  final readerWriter = TestReaderWriter(rootPackage: _pkgName);
+  await readerWriter.testing.loadIsolateSources();
+  await testBuilder(
+    PartBuilder([const DriftTableSortGenerator()], ".g.dart"),
+    {"$_pkgName|lib/test.dart": src, ...?extraSrcAssets},
+    readerWriter: readerWriter,
+    outputs: {"$_pkgName|lib/test.g.dart": decodedMatches(expected)},
+  );
+}
 
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;

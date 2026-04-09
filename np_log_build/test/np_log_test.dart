@@ -1,7 +1,7 @@
+import 'package:build_test/build_test.dart';
 import 'package:np_log_build/src/np_log_generator.dart';
+import 'package:source_gen/source_gen.dart';
 import 'package:test/test.dart';
-
-import 'util.dart';
 
 // dummy class to free us from importing the actual logger library
 class Logger {
@@ -9,7 +9,6 @@ class Logger {
 }
 
 void main() async {
-  await resolveCompilationUnit("test/src/np_log.dart");
   tearDown(() {
     // Increment this after each test so the next test has it's own package
     _pkgCacheCount++;
@@ -32,17 +31,18 @@ extension _$FooNpLog on Foo {
   });
 }
 
-String _genSrc(String src) {
+String _genSrc(String src, {List<String> extraImportStatements = const []}) {
   return """
 import 'package:np_log_annotation/np_log_annotation.dart';
+${extraImportStatements.join("\n")}
 part 'test.g.dart';
 $src
 """;
 }
 
 String _genExpected(String src) {
-  return """// dart format width=80
-// GENERATED CODE - DO NOT MODIFY BY HAND
+  return """// GENERATED CODE - DO NOT MODIFY BY HAND
+// dart format width=80
 
 part of 'test.dart';
 
@@ -53,12 +53,20 @@ part of 'test.dart';
 $src""";
 }
 
-Future _buildTest(String src, String expected) => buildTest(
-  generators: [const NpLogGenerator()],
-  pkgName: _pkgName,
-  src: src,
-  expected: expected,
-);
+Future _buildTest(
+  String src,
+  String expected, {
+  Map<String, Object>? extraSrcAssets,
+}) async {
+  final readerWriter = TestReaderWriter(rootPackage: _pkgName);
+  await readerWriter.testing.loadIsolateSources();
+  await testBuilder(
+    PartBuilder([const NpLogGenerator()], ".g.dart"),
+    {"$_pkgName|lib/test.dart": src, ...?extraSrcAssets},
+    readerWriter: readerWriter,
+    outputs: {"$_pkgName|lib/test.g.dart": decodedMatches(expected)},
+  );
+}
 
 String get _pkgName => 'pkg$_pkgCacheCount';
 int _pkgCacheCount = 1;
