@@ -99,9 +99,9 @@ class PersonRecognizeProvider
     final cy = (viewportSize - resultFaceH) / 2;
 
     return Matrix4.identity()
-      ..translate(cx, cy)
-      ..scale(ms)
-      ..translate(mx, my);
+      ..translateByDouble(cx, cy, 0, 1)
+      ..scaleByDouble(ms, ms, ms, 1)
+      ..translateByDouble(mx, my, 0, 1);
   }
 
   @override

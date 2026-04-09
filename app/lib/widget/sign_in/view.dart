@@ -218,7 +218,7 @@ class _SchemeDropdown extends StatelessWidget {
         selector: (state) => state.scheme,
         builder:
             (context, scheme) => DropdownButtonFormField<_Scheme>(
-              value: scheme,
+              initialValue: scheme,
               items:
                   _Scheme.values
                       .map(

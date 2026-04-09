@@ -255,7 +255,7 @@ class _ProviderDropdown extends StatelessWidget {
       builder:
           (context, state) => DropdownButtonHideUnderline(
             child: DropdownButtonFormField<_ProviderOption>(
-              value: state.formValue.provider,
+              initialValue: state.formValue.provider,
               items:
                   state.supportedProviders
                       .map(

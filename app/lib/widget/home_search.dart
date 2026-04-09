@@ -791,7 +791,7 @@ class _FilterDropdownState<T> extends State<_FilterDropdown<T>> {
         ),
         Expanded(
           child: DropdownButtonFormField<T>(
-            value: _value,
+            initialValue: _value,
             items: [
               DropdownMenuItem(
                 value: null,

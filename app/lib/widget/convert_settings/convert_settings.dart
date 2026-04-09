@@ -76,7 +76,7 @@ class _WrappedConvertSettings extends StatelessWidget {
                                             ),
                                           )
                                           .toList(),
-                                  value: format,
+                                  initialValue: format,
                                   isExpanded: true,
                                   onChanged: (value) {
                                     context.addEvent(_SetFormat(value!));
