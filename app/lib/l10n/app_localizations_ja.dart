@@ -1471,7 +1471,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get opOnlySupportLocalFiles => 'この機能はデバイス内の写真のみをサポートします。サーバー上の写真は無視されます';
 
   @override
-  String get uploadDialogPath => 'パス';
+  String get uploadDialogPath => 'アップロード先';
 
   @override
   String get uploadDialogBatchConvert => '一括変換';
