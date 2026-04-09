@@ -189,6 +189,6 @@ extension _$DbFileMissingMetadataResultToString on DbFileMissingMetadataResult {
 extension _$DbFileQueryByLocationToString on DbFileQueryByLocation {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "DbFileQueryByLocation {place: $place, countryCode: $countryCode, isFuzzy: $isFuzzy}";
+    return "DbFileQueryByLocation {place: $place, locale: $locale, countryCode: $countryCode, isFuzzy: $isFuzzy}";
   }
 }
