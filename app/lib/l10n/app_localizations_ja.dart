@@ -378,13 +378,13 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsThemeDescription => 'アプリの外観をカスタマイズする';
 
   @override
-  String get settingsFollowSystemThemeTitle => 'システムテーマを使用する';
+  String get settingsFollowSystemThemeTitle => 'システムのデフォルトテーマを使用する';
 
   @override
-  String get settingsSeedColorTitle => 'テーマカラー';
+  String get settingsSeedColorTitle => '配色';
 
   @override
-  String get settingsSeedColorDescription => 'アプリで使用されるすべての色を導出するために使用されます';
+  String get settingsSeedColorDescription => '選んだ色を元にアプリ全体の配色が生成されます';
 
   @override
   String get settingsSeedColorSystemColorDescription => 'システムカラーを使用';
@@ -393,10 +393,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSeedColorPickerTitle => '色を選ぶ';
 
   @override
-  String get settingsThemePrimaryColor => 'プライマリ';
+  String get settingsThemePrimaryColor => 'メインカラー';
 
   @override
-  String get settingsThemeSecondaryColor => 'セカンダリ';
+  String get settingsThemeSecondaryColor => 'アクセントカラー';
 
   @override
   String get settingsThemePresets => 'プリセット';
@@ -405,14 +405,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSeedColorPickerSystemColorButtonLabel => 'システムカラーを使用';
 
   @override
-  String get settingsUseBlackInDarkThemeTitle => 'よりダークなテーマ';
+  String get settingsUseBlackInDarkThemeTitle => 'ダークテーマをより黒くする';
 
   @override
-  String get settingsUseBlackInDarkThemeTrueDescription => 'ダークテーマでは黒を使用する';
+  String get settingsUseBlackInDarkThemeTrueDescription => 'ダークテーマの背景を黒にします';
 
   @override
   String get settingsUseBlackInDarkThemeFalseDescription =>
-      'ダークテーマではダークグレーを使用する';
+      'ダークテーマの背景を暗いグレーにします';
 
   @override
   String get settingsMiscellaneousTitle => 'その他';
@@ -496,7 +496,7 @@ class AppLocalizationsJa extends AppLocalizations {
       'Chromiumベースの新しいHTTPエンジンで、HTTP/2*やHTTP/3 QUIC*などの新しい標準をサポートします。\n\n制限事項:\n自己署名証明書は管理できなくなりました。動作させるには、CA証明書をシステムの信頼ストアにインポートする必要があります。\n\n* HTTP/2およびHTTP/3にはHTTPSが必要です';
 
   @override
-  String get settingsAboutSectionTitle => 'このアプリについて';
+  String get settingsAboutSectionTitle => 'アプリ情報';
 
   @override
   String get settingsVersionTitle => 'バージョン';
@@ -508,13 +508,14 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsSourceCodeTitle => 'ソースコード';
 
   @override
-  String get settingsBugReportTitle => '問題を報告';
+  String get settingsBugReportTitle => '不具合を報告';
 
   @override
-  String get settingsCaptureLogsTitle => 'ログをキャプチャする';
+  String get settingsCaptureLogsTitle => 'ログを記録';
 
   @override
-  String get settingsCaptureLogsDescription => '開発者のバグ修正を助けます。';
+  String get settingsCaptureLogsDescription =>
+      '記録したログを開発者と共有すると、不具合の特定や修正に役立ちます';
 
   @override
   String get settingsTranslatorTitle => '翻訳者';

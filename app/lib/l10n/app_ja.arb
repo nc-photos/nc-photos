@@ -351,15 +351,15 @@
 	"settingsImageEditSaveResultsToServerFalseDescription": "結果はこのデバイスに保存されます。",
 	"settingsThemeTitle": "テーマ",
 	"settingsThemeDescription": "アプリの外観をカスタマイズする",
-	"settingsFollowSystemThemeTitle": "システムテーマを使用する",
+	"settingsFollowSystemThemeTitle": "システムのデフォルトテーマを使用する",
 	"@settingsFollowSystemThemeTitle": {
 		"description": "Respect the system dark mode settings introduced on Android 10"
 	},
-	"settingsSeedColorTitle": "テーマカラー",
+	"settingsSeedColorTitle": "配色",
 	"@settingsSeedColorTitle": {
 		"description": "Customize the colors used in app"
 	},
-	"settingsSeedColorDescription": "アプリで使用されるすべての色を導出するために使用されます",
+	"settingsSeedColorDescription": "選んだ色を元にアプリ全体の配色が生成されます",
 	"@settingsSeedColorDescription": {
 		"description": "Customize the colors used in app"
 	},
@@ -367,15 +367,15 @@
 	"@settingsSeedColorPickerTitle": {
 		"description": "Dialog to customize the colors used in app"
 	},
-	"settingsUseBlackInDarkThemeTitle": "よりダークなテーマ",
+	"settingsUseBlackInDarkThemeTitle": "ダークテーマをより黒くする",
 	"@settingsUseBlackInDarkThemeTitle": {
 		"description": "Make the dark theme darker"
 	},
-	"settingsUseBlackInDarkThemeTrueDescription": "ダークテーマでは黒を使用する",
+	"settingsUseBlackInDarkThemeTrueDescription": "ダークテーマの背景を黒にします",
 	"@settingsUseBlackInDarkThemeTrueDescription": {
 		"description": "When black in dark theme is set to true"
 	},
-	"settingsUseBlackInDarkThemeFalseDescription": "ダークテーマではダークグレーを使用する",
+	"settingsUseBlackInDarkThemeFalseDescription": "ダークテーマの背景を暗いグレーにします",
 	"@settingsUseBlackInDarkThemeFalseDescription": {
 		"description": "When black in dark theme is set to false"
 	},
@@ -398,7 +398,7 @@
 	"settingsClearCacheDatabaseTitle": "ファイルデータベースをクリア",
 	"settingsClearCacheDatabaseDescription": "キャッシュされたファイル情報をクリアして、サーバーと再同期を行います",
 	"settingsClearCacheDatabaseSuccessNotification": "データベースが正常にクリアされました。アプリを再起動してください。",
-	"settingsAboutSectionTitle": "このアプリについて",
+	"settingsAboutSectionTitle": "アプリ情報",
 	"@settingsAboutSectionTitle": {
 		"description": "Title of the about section in settings widget"
 	},
@@ -414,15 +414,15 @@
 	"@settingsSourceCodeTitle": {
 		"description": "Title of the source code item"
 	},
-	"settingsBugReportTitle": "問題を報告",
+	"settingsBugReportTitle": "不具合を報告",
 	"@settingsBugReportTitle": {
 		"description": "Report issue"
 	},
-	"settingsCaptureLogsTitle": "ログをキャプチャする",
+	"settingsCaptureLogsTitle": "ログを記録",
 	"@settingsCaptureLogsTitle": {
 		"description": "Capture app logs for bug report"
 	},
-	"settingsCaptureLogsDescription": "開発者のバグ修正を助けます。",
+	"settingsCaptureLogsDescription": "記録したログを開発者と共有すると、不具合の特定や修正に役立ちます",
 	"settingsTranslatorTitle": "翻訳者",
 	"@settingsTranslatorTitle": {
 		"description": "Title of the translator item"
@@ -1468,8 +1468,8 @@
 			}
 		}
 	},
-	"settingsThemePrimaryColor": "プライマリ",
-	"settingsThemeSecondaryColor": "セカンダリ",
+	"settingsThemePrimaryColor": "メインカラー",
+	"settingsThemeSecondaryColor": "アクセントカラー",
 	"settingsThemePresets": "プリセット",
 	"settingsAppLock": "アプリロック",
 	"@settingsAppLock": {
