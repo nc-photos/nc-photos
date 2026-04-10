@@ -31,9 +31,6 @@ android {
 
     defaultConfig {
         minSdk 24
-        ndk {
-            abiFilters "armeabi-v7a", "arm64-v8a"
-        }
         externalNativeBuild {
             cmake {
                 arguments.add("-DANDROID_WEAK_API_DEFS=ON")
@@ -49,6 +46,10 @@ android {
     }
 
     buildTypes {
+        all {
+            ndk.abiFilters.clear()
+            ndk.abiFilters.addAll(["armeabi-v7a", "arm64-v8a"])
+        }
         profile {
             if (it.hasProperty("matchingFallbacks")) {
                 matchingFallbacks = ["release"]
