@@ -89,68 +89,58 @@ class _WrappedAppLockSettings extends StatelessWidget {
         children: [
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                    child: Text(L10n.global().settingsAppLockDescription),
-                  ),
-                  const SizedBox(height: 16),
-                  _BlocSelector<ProtectedPageAuthType?>(
-                    selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: null,
+              child: _BlocSelector<ProtectedPageAuthType?>(
+                selector: (state) => state.appLockType,
+                builder: (context, appLockType) =>
+                    RadioGroup<ProtectedPageAuthType?>(
                       groupValue: appLockType,
-                      title: Text(L10n.global().disabledText),
                       onChanged: (value) async {
-                        if (await _confirmDisable(context)) {
+                        if (switch (value) {
+                          null => await _confirmDisable(context),
+                          ProtectedPageAuthType.biometric =>
+                            await _confirmBiometric(context) == true,
+                          ProtectedPageAuthType.pin =>
+                            await _confirmPin(context) == true,
+                          ProtectedPageAuthType.password =>
+                            await _confirmPassword(context) == true,
+                        }) {
                           context.addEvent(_SetAppLockType(value));
                         }
                       },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const SizedBox(height: 16),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 24),
+                            child: Text(
+                              L10n.global().settingsAppLockDescription,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          RadioListTile<ProtectedPageAuthType?>(
+                            value: null,
+                            title: Text(L10n.global().disabledText),
+                          ),
+                          RadioListTile<ProtectedPageAuthType?>(
+                            value: ProtectedPageAuthType.biometric,
+                            title: Text(
+                              L10n.global().settingsAppLockTypeBiometric,
+                            ),
+                          ),
+                          RadioListTile<ProtectedPageAuthType?>(
+                            value: ProtectedPageAuthType.pin,
+                            title: Text(L10n.global().settingsAppLockTypePin),
+                          ),
+                          RadioListTile<ProtectedPageAuthType?>(
+                            value: ProtectedPageAuthType.password,
+                            title: Text(
+                              L10n.global().settingsAppLockTypePassword,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  _BlocSelector<ProtectedPageAuthType?>(
-                    selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: ProtectedPageAuthType.biometric,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().settingsAppLockTypeBiometric),
-                      onChanged: (value) async {
-                        if (await _confirmBiometric(context) == true) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
-                  ),
-                  _BlocSelector<ProtectedPageAuthType?>(
-                    selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: ProtectedPageAuthType.pin,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().settingsAppLockTypePin),
-                      onChanged: (value) async {
-                        if (await _confirmPin(context) == true) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
-                  ),
-                  _BlocSelector<ProtectedPageAuthType?>(
-                    selector: (state) => state.appLockType,
-                    builder: (context, appLockType) => RadioListTile(
-                      value: ProtectedPageAuthType.password,
-                      groupValue: appLockType,
-                      title: Text(L10n.global().settingsAppLockTypePassword),
-                      onChanged: (value) async {
-                        if (await _confirmPassword(context) == true) {
-                          context.addEvent(_SetAppLockType(value));
-                        }
-                      },
-                    ),
-                  ),
-                ],
               ),
             ),
           ),
