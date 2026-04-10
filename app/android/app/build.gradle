@@ -42,7 +42,7 @@ android {
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId "com.nkming.nc_photos"
-        minSdk 23
+        minSdk 24
         targetSdk 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
