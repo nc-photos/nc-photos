@@ -42,34 +42,31 @@ class RemoveFromAlbum {
     _log.info("[call] Remove ${items.length} items from album '${album.name}'");
     assert(album.provider is AlbumStaticProvider);
 
-    final filtered =
-        items
-            .mapIndexed((i, e) {
-              if (album.albumFile!.isOwned(account.userId) ||
-                  e.addedBy == account.userId) {
-                return e;
-              } else {
-                onError?.call(
-                  i,
-                  e,
-                  const AlbumItemPermissionException(
-                    "No permission to remove item",
-                  ),
-                  StackTrace.current,
-                );
-                return null;
-              }
-            })
-            .nonNulls
-            .toList();
+    final filtered = items
+        .mapIndexed((i, e) {
+          if (album.albumFile!.isOwned(account.userId) ||
+              e.addedBy == account.userId) {
+            return e;
+          } else {
+            onError?.call(
+              i,
+              e,
+              const AlbumItemPermissionException(
+                "No permission to remove item",
+              ),
+              StackTrace.current,
+            );
+            return null;
+          }
+        })
+        .nonNulls
+        .toList();
     final provider = album.provider as AlbumStaticProvider;
-    final newItems =
-        provider.items
-            .where(
-              (e) =>
-                  !filtered.containsIf(e, (a, b) => a.compareServerIdentity(b)),
-            )
-            .toList();
+    final newItems = provider.items
+        .where(
+          (e) => !filtered.containsIf(e, (a, b) => a.compareServerIdentity(b)),
+        )
+        .toList();
     var newAlbum = album.copyWith(
       provider: AlbumStaticProvider.of(album).copyWith(items: newItems),
     );
@@ -81,8 +78,10 @@ class RemoveFromAlbum {
       _log.info("[call] Skip unsharing files");
     } else {
       if (album.shares?.isNotEmpty == true) {
-        final removeFiles =
-            filtered.whereType<AlbumFileItem>().map((e) => e.file).toList();
+        final removeFiles = filtered
+            .whereType<AlbumFileItem>()
+            .map((e) => e.file)
+            .toList();
         if (removeFiles.isNotEmpty) {
           await _unshareFiles(account, newAlbum, removeFiles);
         }

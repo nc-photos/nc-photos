@@ -3,11 +3,7 @@ part of '../metadata_settings.dart';
 @genCopyWith
 @toString
 class _State {
-  const _State({
-    required this.isEnable,
-    required this.isFallback,
-    this.error,
-  });
+  const _State({required this.isEnable, required this.isFallback, this.error});
 
   @override
   String toString() => _$toString();

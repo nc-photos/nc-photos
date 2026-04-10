@@ -167,11 +167,10 @@ extension on Pref {
   Future<bool> setSlideshowReverse(bool value) =>
       provider.setBool(PrefKey.isSlideshowReverse, value);
 
-  List<ViewerAppBarButtonType>? getViewerAppBarButtons() =>
-      provider
-          .getIntList(PrefKey.viewerAppBarButtons)
-          ?.map(ViewerAppBarButtonType.fromValue)
-          .toList();
+  List<ViewerAppBarButtonType>? getViewerAppBarButtons() => provider
+      .getIntList(PrefKey.viewerAppBarButtons)
+      ?.map(ViewerAppBarButtonType.fromValue)
+      .toList();
   Future<bool> setViewerAppBarButtons(List<ViewerAppBarButtonType>? value) {
     if (value == null) {
       return provider.remove(PrefKey.viewerAppBarButtons);
@@ -183,11 +182,10 @@ extension on Pref {
     }
   }
 
-  List<ViewerAppBarButtonType>? getViewerBottomAppBarButtons() =>
-      provider
-          .getIntList(PrefKey.viewerBottomAppBarButtons)
-          ?.map(ViewerAppBarButtonType.fromValue)
-          .toList();
+  List<ViewerAppBarButtonType>? getViewerBottomAppBarButtons() => provider
+      .getIntList(PrefKey.viewerBottomAppBarButtons)
+      ?.map(ViewerAppBarButtonType.fromValue)
+      .toList();
   Future<bool> setViewerBottomAppBarButtons(
     List<ViewerAppBarButtonType>? value,
   ) {

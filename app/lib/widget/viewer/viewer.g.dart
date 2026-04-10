@@ -123,26 +123,21 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           mergedAfIdFileMap as Map<String, AnyFile>? ?? that.mergedAfIdFileMap,
       fileStates: fileStates as Map<String, _PageState>? ?? that.fileStates,
       index: index as int? ?? that.index,
-      currentFile:
-          currentFile == copyWithNull
-              ? that.currentFile
-              : currentFile as AnyFile?,
-      currentFileState:
-          currentFileState == copyWithNull
-              ? that.currentFileState
-              : currentFileState as _PageState?,
-      collection:
-          collection == copyWithNull
-              ? that.collection
-              : collection as Collection?,
-      collectionItemsController:
-          collectionItemsController == copyWithNull
-              ? that.collectionItemsController
-              : collectionItemsController as CollectionItemsController?,
-      collectionItems:
-          collectionItems == copyWithNull
-              ? that.collectionItems
-              : collectionItems as Map<String, CollectionFileItem>?,
+      currentFile: currentFile == copyWithNull
+          ? that.currentFile
+          : currentFile as AnyFile?,
+      currentFileState: currentFileState == copyWithNull
+          ? that.currentFileState
+          : currentFileState as _PageState?,
+      collection: collection == copyWithNull
+          ? that.collection
+          : collection as Collection?,
+      collectionItemsController: collectionItemsController == copyWithNull
+          ? that.collectionItemsController
+          : collectionItemsController as CollectionItemsController?,
+      collectionItems: collectionItems == copyWithNull
+          ? that.collectionItems
+          : collectionItems as Map<String, CollectionFileItem>?,
       isShowDetailPane: isShowDetailPane as bool? ?? that.isShowDetailPane,
       isClosingDetailPane:
           isClosingDetailPane as bool? ?? that.isClosingDetailPane,
@@ -154,14 +149,12 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       closeDetailPane: closeDetailPane as Unique<bool>? ?? that.closeDetailPane,
       isZoomed: isZoomed as bool? ?? that.isZoomed,
       isInitialLoad: isInitialLoad as bool? ?? that.isInitialLoad,
-      forwardBound:
-          forwardBound == copyWithNull
-              ? that.forwardBound
-              : forwardBound as int?,
-      backwardBound:
-          backwardBound == copyWithNull
-              ? that.backwardBound
-              : backwardBound as int?,
+      forwardBound: forwardBound == copyWithNull
+          ? that.forwardBound
+          : forwardBound as int?,
+      backwardBound: backwardBound == copyWithNull
+          ? that.backwardBound
+          : backwardBound as int?,
       isShowAppBar: isShowAppBar as bool? ?? that.isShowAppBar,
       appBarButtons:
           appBarButtons as List<ViewerAppBarButtonType>? ?? that.appBarButtons,
@@ -222,8 +215,9 @@ class _$_PageStateCopyWithWorkerImpl implements $_PageStateCopyWithWorker {
     dynamic shouldPlayLivePhoto,
   }) {
     return _PageState(
-      itemHeight:
-          itemHeight == copyWithNull ? that.itemHeight : itemHeight as double?,
+      itemHeight: itemHeight == copyWithNull
+          ? that.itemHeight
+          : itemHeight as double?,
       hasLoaded: hasLoaded as bool? ?? that.hasLoaded,
       shouldPlayLivePhoto:
           shouldPlayLivePhoto as bool? ?? that.shouldPlayLivePhoto,

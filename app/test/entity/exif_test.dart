@@ -182,8 +182,9 @@ void main() {
             {"numerator": 4, "denominator": 100},
           ],
         };
-        final List<Rational> exif =
-            Exif.fromJson(json)["GPSLatitude"].cast<Rational>();
+        final List<Rational> exif = Exif.fromJson(
+          json,
+        )["GPSLatitude"].cast<Rational>();
         expect(exif.map((e) => e.makeComparable()).toList(), [
           const _Rational(2, 1),
           const _Rational(3, 1),

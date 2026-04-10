@@ -117,17 +117,16 @@ class FilesBuilder {
     isFavorite: isFavorite,
     ownerId: ownerId,
     ownerDisplayName: ownerDisplayName,
-    metadata:
-        metadata == null
-            ? Metadata(
-              lastUpdated:
-                  lastModified ??
-                  DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
-              imageWidth: 640,
-              imageHeight: 480,
-              src: MetadataSrc.legacy,
-            )
-            : metadata.obj,
+    metadata: metadata == null
+        ? Metadata(
+            lastUpdated:
+                lastModified ??
+                DateTime.utc(2020, 1, 2, 3, 4, 5 + files.length),
+            imageWidth: 640,
+            imageHeight: 480,
+            src: MetadataSrc.legacy,
+          )
+        : metadata.obj,
     location: location,
   );
 
@@ -199,14 +198,11 @@ class AlbumBuilder {
   );
 
   Album build() {
-    final latestFileItem =
-        items
-            .whereType<AlbumFileItem>()
-            .stableSorted(
-              (a, b) => a.file.fdDateTime.compareTo(b.file.fdDateTime),
-            )
-            .reversed
-            .firstOrNull;
+    final latestFileItem = items
+        .whereType<AlbumFileItem>()
+        .stableSorted((a, b) => a.file.fdDateTime.compareTo(b.file.fdDateTime))
+        .reversed
+        .firstOrNull;
     return Album(
       lastUpdated: lastUpdated,
       name: name,
@@ -214,10 +210,9 @@ class AlbumBuilder {
         items: items,
         latestItemTime: latestFileItem?.file.fdDateTime,
       ),
-      coverProvider:
-          cover == null
-              ? AlbumAutoCoverProvider(coverFile: latestFileItem?.file)
-              : AlbumManualCoverProvider(coverFile: cover!),
+      coverProvider: cover == null
+          ? AlbumAutoCoverProvider(coverFile: latestFileItem?.file)
+          : AlbumManualCoverProvider(coverFile: cover!),
       sortProvider: const AlbumNullSortProvider(),
       shares: shares.isEmpty ? null : shares,
       albumFile: buildAlbumFile(
@@ -466,9 +461,8 @@ Future<void> insertFiles(
           ..addColumns([db.files.rowId])
           ..where(db.accountFiles.account.equals(dbAccount.rowId).not())
           ..where(db.files.fileId.equals(f.fileId!));
-    var rowId =
-        (await sharedQuery.map((r) => r.read(db.files.rowId)).get())
-            .firstOrNull;
+    var rowId = (await sharedQuery.map((r) => r.read(db.files.rowId)).get())
+        .firstOrNull;
     final insert = _SqliteFileConverter.toSql(dbAccount, f);
     if (rowId == null) {
       final dbFile = await db.into(db.files).insertReturning(insert.file);
@@ -524,10 +518,10 @@ Future<void> insertDirRelation(
   Iterable<File> children,
 ) async {
   final dbAccount = await db.accountOf(compat.ByAccount.db(account.toDb()));
-  final dirRowIds =
-      (await db.accountFileRowIdsByFileIds(_ByAccount.sql(dbAccount), [
-        dir.fileId!,
-      ])).first;
+  final dirRowIds = (await db.accountFileRowIdsByFileIds(
+    _ByAccount.sql(dbAccount),
+    [dir.fileId!],
+  )).first;
   final childRowIds = await db.accountFileRowIdsByFileIds(
     _ByAccount.sql(dbAccount),
     [dir, ...children].map((f) => f.fileId!),
@@ -590,21 +584,20 @@ Future<Set<File>> listSqliteDbFiles(compat.SqliteDb db) async {
     ),
     sql.leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
   ]);
-  final results =
-      await query
-          .map(
-            (r) => (
-              uid: r.readTable(db.accounts).userId,
-              asf: compat.AlmostCompleteFile(
-                r.readTable(db.files),
-                r.readTable(db.accountFiles),
-                r.readTableOrNull(db.images),
-                r.readTableOrNull(db.imageLocations),
-                r.readTableOrNull(db.trashes),
-              ),
-            ),
-          )
-          .get();
+  final results = await query
+      .map(
+        (r) => (
+          uid: r.readTable(db.accounts).userId,
+          asf: compat.AlmostCompleteFile(
+            r.readTable(db.files),
+            r.readTable(db.accountFiles),
+            r.readTableOrNull(db.images),
+            r.readTableOrNull(db.imageLocations),
+            r.readTableOrNull(db.trashes),
+          ),
+        ),
+      )
+      .get();
   return (await results.asyncMap(
     (e) async => _SqliteFileConverter.fromSql(
       e.uid,
@@ -633,37 +626,36 @@ Future<Map<File, Set<File>>> listSqliteDbDirs(compat.SqliteDb db) async {
     ),
     sql.leftOuterJoin(db.trashes, db.trashes.file.equalsExp(db.files.rowId)),
   ]);
-  final results =
-      await query
-          .map(
-            (r) => (
-              uid: r.readTable(db.accounts).userId,
-              asf: compat.AlmostCompleteFile(
-                r.readTable(db.files),
-                r.readTable(db.accountFiles),
-                r.readTableOrNull(db.images),
-                r.readTableOrNull(db.imageLocations),
-                r.readTableOrNull(db.trashes),
-              ),
-            ),
-          )
-          .get();
-  final fileMap =
-      await results
-          .asyncMap(
-            (e) async => MapEntry(
-              e.asf.file.rowId,
-              _SqliteFileConverter.fromSql(
-                e.uid,
-                await _populateCompleteFile(db, [e.asf]).first,
-              ),
-            ),
-          )
-          .toMap();
+  final results = await query
+      .map(
+        (r) => (
+          uid: r.readTable(db.accounts).userId,
+          asf: compat.AlmostCompleteFile(
+            r.readTable(db.files),
+            r.readTable(db.accountFiles),
+            r.readTableOrNull(db.images),
+            r.readTableOrNull(db.imageLocations),
+            r.readTableOrNull(db.trashes),
+          ),
+        ),
+      )
+      .get();
+  final fileMap = await results
+      .asyncMap(
+        (e) async => MapEntry(
+          e.asf.file.rowId,
+          _SqliteFileConverter.fromSql(
+            e.uid,
+            await _populateCompleteFile(db, [e.asf]).first,
+          ),
+        ),
+      )
+      .toMap();
 
   final dirQuery = db.select(db.dirFiles);
-  final dirs =
-      await dirQuery.map((r) => (dirRowId: r.dir, childRowId: r.child)).get();
+  final dirs = await dirQuery
+      .map((r) => (dirRowId: r.dir, childRowId: r.child))
+      .get();
   final result = <File, Set<File>>{};
   for (final (:dirRowId, :childRowId) in dirs) {
     (result[fileMap[dirRowId]!] ??= <File>{}).add(fileMap[childRowId]!);
@@ -683,29 +675,28 @@ Future<Set<Album>> listSqliteDbAlbums(compat.SqliteDb db) async {
       db.accounts.rowId.equalsExp(db.accountFiles.account),
     ),
   ]);
-  final albums =
-      await albumQuery.map((r) {
-        final albumFile = _SqliteFileConverter.fromSql(
-          r.readTable(db.accounts).userId,
-          compat.CompleteFile(
-            r.readTable(db.files),
-            r.readTable(db.accountFiles),
-            null,
-            null,
-            null,
-            null,
-            null,
-          ),
-        );
-        return (
-          rowId: r.read(db.albums.rowId)!,
-          album: _SqliteAlbumConverter.fromSql(
-            r.readTable(db.albums),
-            albumFile,
-            [],
-          ),
-        );
-      }).get();
+  final albums = await albumQuery.map((r) {
+    final albumFile = _SqliteFileConverter.fromSql(
+      r.readTable(db.accounts).userId,
+      compat.CompleteFile(
+        r.readTable(db.files),
+        r.readTable(db.accountFiles),
+        null,
+        null,
+        null,
+        null,
+        null,
+      ),
+    );
+    return (
+      rowId: r.read(db.albums.rowId)!,
+      album: _SqliteAlbumConverter.fromSql(
+        r.readTable(db.albums),
+        albumFile,
+        [],
+      ),
+    );
+  }).get();
 
   final results = <Album>{};
   for (final (:rowId, :album) in albums) {
@@ -715,20 +706,19 @@ Future<Set<Album>> listSqliteDbAlbums(compat.SqliteDb db) async {
     results.add(
       album.copyWith(
         lastUpdated: const OrNull(null),
-        shares:
-            dbShares.isEmpty
-                ? null
-                : OrNull(
-                  dbShares
-                      .map(
-                        (s) => AlbumShare(
-                          userId: s.userId.toCi(),
-                          displayName: s.displayName,
-                          sharedAt: s.sharedAt,
-                        ),
-                      )
-                      .toList(),
-                ),
+        shares: dbShares.isEmpty
+            ? null
+            : OrNull(
+                dbShares
+                    .map(
+                      (s) => AlbumShare(
+                        userId: s.userId.toCi(),
+                        displayName: s.displayName,
+                        sharedAt: s.sharedAt,
+                      ),
+                    )
+                    .toList(),
+              ),
       ),
     );
   }
@@ -777,45 +767,42 @@ Future<List<compat.CompleteFile>> _populateCompleteFile(
   query
     ..where(db.accountFiles.rowId.isIn(accountFileRowIds))
     ..orderBy([sql.OrderingTerm.asc(db.accountFiles.rowId)]);
-  final locationNames =
-      await query
-          .map(
-            (r) => (
-              accountFile: r.read(db.imageLocationIds.accountFile)!,
-              geonameId: r.read(db.imageLocationIds.geonameId)!,
-              type: r.readWithConverter(db.imageLocationIds.type)!,
-              lang: r.read(db.imageLocationNames.lang)!,
-              name: r.read(db.imageLocationNames.name)!,
-            ),
-          )
-          .get();
+  final locationNames = await query
+      .map(
+        (r) => (
+          accountFile: r.read(db.imageLocationIds.accountFile)!,
+          geonameId: r.read(db.imageLocationIds.geonameId)!,
+          type: r.readWithConverter(db.imageLocationIds.type)!,
+          lang: r.read(db.imageLocationNames.lang)!,
+          name: r.read(db.imageLocationNames.name)!,
+        ),
+      )
+      .get();
 
   final locationNamesMap = locationNames.groupBy(key: (e) => e.accountFile);
   return acf.map((e) {
     List<compat.ImageLocationId>? locationIds;
     List<compat.ImageLocationName>? locationNames;
     if (e.imageLocation != null) {
-      locationIds =
-          locationNamesMap[e.accountFile.rowId]
-              ?.map(
-                (ee) => compat.ImageLocationId(
-                  accountFile: e.accountFile.rowId,
-                  geonameId: ee.geonameId,
-                  type: ee.type,
-                ),
-              )
-              .toList();
-      locationNames =
-          locationNamesMap[e.accountFile.rowId]
-              ?.map(
-                (ee) => compat.ImageLocationName(
-                  dataRevision: e.imageLocation!.dataRevision,
-                  geonameId: ee.geonameId,
-                  lang: ee.lang,
-                  name: ee.name,
-                ),
-              )
-              .toList();
+      locationIds = locationNamesMap[e.accountFile.rowId]
+          ?.map(
+            (ee) => compat.ImageLocationId(
+              accountFile: e.accountFile.rowId,
+              geonameId: ee.geonameId,
+              type: ee.type,
+            ),
+          )
+          .toList();
+      locationNames = locationNamesMap[e.accountFile.rowId]
+          ?.map(
+            (ee) => compat.ImageLocationName(
+              dataRevision: e.imageLocation!.dataRevision,
+              geonameId: ee.geonameId,
+              lang: ee.lang,
+              name: ee.name,
+            ),
+          )
+          .toList();
     }
     return compat.CompleteFile(
       e.file,

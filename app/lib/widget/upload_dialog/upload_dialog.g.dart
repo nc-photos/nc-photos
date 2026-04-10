@@ -32,10 +32,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     return _State(
       uploadRelativePath:
           uploadRelativePath as String? ?? that.uploadRelativePath,
-      convertConfig:
-          convertConfig == copyWithNull
-              ? that.convertConfig
-              : convertConfig as ConvertConfig?,
+      convertConfig: convertConfig == copyWithNull
+          ? that.convertConfig
+          : convertConfig as ConvertConfig?,
       result: result == copyWithNull ? that.result : result as UploadConfig?,
     );
   }

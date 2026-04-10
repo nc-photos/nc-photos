@@ -42,9 +42,9 @@ void main() {
 Future<void> _addFile() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final file =
-        (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg")).build()[0];
+    final file = (util.FilesBuilder(
+      initialFileId: 1,
+    )..addJpeg("admin/test1.jpg")).build()[0];
     final album = util.AlbumBuilder().build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -96,9 +96,10 @@ Future<void> _addExistingFile() async {
     final account = util.buildAccount();
     final files =
         (util.FilesBuilder(initialFileId: 1)..addJpeg(
-          "admin/test1.jpg",
-          lastModified: DateTime.utc(2019, 1, 2, 3, 4, 5),
-        )).build();
+              "admin/test1.jpg",
+              lastModified: DateTime.utc(2019, 1, 2, 3, 4, 5),
+            ))
+            .build();
     final oldFile = files[0].toDescriptor();
     final album =
         (util.AlbumBuilder()
@@ -176,14 +177,14 @@ Future<void> _addExistingSharedFile() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
     final user1Account = util.buildAccount(userId: "user1");
-    final files =
-        (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg")).build();
+    final files = (util.FilesBuilder(
+      initialFileId: 1,
+    )..addJpeg("admin/test1.jpg")).build();
     final user1Files = [
       files[0].copyWith(path: "remote.php/dav/files/user1/test1.jpg"),
     ];
-    final album =
-        (util.AlbumBuilder()..addFileItem(files[0].toDescriptor())).build();
+    final album = (util.AlbumBuilder()..addFileItem(files[0].toDescriptor()))
+        .build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
       fileRepo: MockFileMemoryRepo(),
@@ -236,9 +237,9 @@ Future<void> _addExistingSharedFile() async {
 Future<void> _addFileToSharedAlbumOwned() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final file =
-        (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg")).build()[0];
+    final file = (util.FilesBuilder(
+      initialFileId: 1,
+    )..addJpeg("admin/test1.jpg")).build()[0];
     final album = (util.AlbumBuilder()..addShare("user1")).build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -274,9 +275,9 @@ Future<void> _addFileToSharedAlbumOwned() async {
 Future<void> _addFileOwnedByUserToSharedAlbumOwned() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final file =
-        (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg", ownerId: "user1")).build()[0];
+    final file = (util.FilesBuilder(
+      initialFileId: 1,
+    )..addJpeg("admin/test1.jpg", ownerId: "user1")).build()[0];
     final album = (util.AlbumBuilder()..addShare("user1")).build();
     final albumFile = album.albumFile!;
     final c = DiContainer(
@@ -312,9 +313,9 @@ Future<void> _addFileToMultiuserSharedAlbumNotOwned() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     // doesn't work right now, skipped
     final account = util.buildAccount();
-    final file =
-        (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg")).build()[0];
+    final file = (util.FilesBuilder(
+      initialFileId: 1,
+    )..addJpeg("admin/test1.jpg")).build()[0];
     final album =
         (util.AlbumBuilder(ownerId: "user1")
               ..addShare("admin")

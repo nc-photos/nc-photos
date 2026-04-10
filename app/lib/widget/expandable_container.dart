@@ -54,20 +54,13 @@ class ExpandableContainerState extends State<ExpandableContainer>
   Widget build(BuildContext context) {
     return MatrixTransition(
       animation: _animation,
-      onTransform:
-          (animationValue) =>
-              Matrix4.identity()
-                ..translate(
-                  0.0,
-                  -(_size.height / 2) * (1 - animationValue),
-                  0.0,
-                )
-                ..scale(1.0, animationValue, 1.0),
+      onTransform: (animationValue) => Matrix4.identity()
+        ..translateByDouble(0, -(_size.height / 2) * (1 - animationValue), 0, 1)
+        ..scaleByDouble(1, animationValue, 1, 1),
       child: MeasureSize(
-        onChange:
-            (size) => setState(() {
-              _size = size;
-            }),
+        onChange: (size) => setState(() {
+          _size = size;
+        }),
         child: widget.child,
       ),
     );

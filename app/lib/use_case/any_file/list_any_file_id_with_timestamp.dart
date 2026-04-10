@@ -39,58 +39,56 @@ class ListAnyFileIdWithTimestamp {
     bool? isArchived,
   }) async {
     try {
-      final (remote, local) =
-          await (
-            ListFileIdWithTimestamp(fileRepo: fileRepo)(
-              account,
-              shareDirPath,
-              isArchived: isArchived,
-            ),
-            ListLocalFileIdWithTimestamp(
-              localFileRepo: localFileRepo,
-              prefController: prefController,
-            )(dirWhitelist: localDirWhitelist),
-          ).wait;
-      final remote2 =
-          remote
-              .map(
-                (e) => _AnyFileIdWithTimestamp(
-                  afId: AnyFileNextcloudProvider.toAfId(e.fileId),
-                  timestamp: e.timestamp,
-                  filename: e.filename,
-                  type: _AnyFileType.remote,
-                ),
-              )
-              .toList();
-      final local2 =
-          local
-              .map(
-                (e) => _AnyFileIdWithTimestamp(
-                  afId: AnyFileLocalProvider.toAfId(e.fileId),
-                  timestamp: e.timestamp,
-                  filename: e.filename,
-                  type: _AnyFileType.local,
-                ),
-              )
-              .toList();
-      final sorted = [...remote2, ...local2]..sort(
-        (a, b) => deconstructedAnyFileMergeSorter(
-          (
-            filename: a.filename,
-            dateTime: DateTime.fromMillisecondsSinceEpoch(
-              a.timestamp,
-              isUtc: true,
-            ),
-          ),
-          (
-            filename: b.filename,
-            dateTime: DateTime.fromMillisecondsSinceEpoch(
-              b.timestamp,
-              isUtc: true,
-            ),
-          ),
+      final (remote, local) = await (
+        ListFileIdWithTimestamp(fileRepo: fileRepo)(
+          account,
+          shareDirPath,
+          isArchived: isArchived,
         ),
-      );
+        ListLocalFileIdWithTimestamp(
+          localFileRepo: localFileRepo,
+          prefController: prefController,
+        )(dirWhitelist: localDirWhitelist),
+      ).wait;
+      final remote2 = remote
+          .map(
+            (e) => _AnyFileIdWithTimestamp(
+              afId: AnyFileNextcloudProvider.toAfId(e.fileId),
+              timestamp: e.timestamp,
+              filename: e.filename,
+              type: _AnyFileType.remote,
+            ),
+          )
+          .toList();
+      final local2 = local
+          .map(
+            (e) => _AnyFileIdWithTimestamp(
+              afId: AnyFileLocalProvider.toAfId(e.fileId),
+              timestamp: e.timestamp,
+              filename: e.filename,
+              type: _AnyFileType.local,
+            ),
+          )
+          .toList();
+      final sorted = [...remote2, ...local2]
+        ..sort(
+          (a, b) => deconstructedAnyFileMergeSorter(
+            (
+              filename: a.filename,
+              dateTime: DateTime.fromMillisecondsSinceEpoch(
+                a.timestamp,
+                isUtc: true,
+              ),
+            ),
+            (
+              filename: b.filename,
+              dateTime: DateTime.fromMillisecondsSinceEpoch(
+                b.timestamp,
+                isUtc: true,
+              ),
+            ),
+          ),
+        );
       final merged = <_AnyFileIdWithTimestamp>[];
       for (final e in sorted) {
         if (merged.isEmpty) {

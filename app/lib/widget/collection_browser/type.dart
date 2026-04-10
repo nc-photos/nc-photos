@@ -120,11 +120,9 @@ class _LabelItem extends _ActualItem {
   Widget buildWidget(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.isEditMode,
-      builder:
-          (context, isEditMode) =>
-              isEditMode
-                  ? _EditLabelView(text: text, onEditPressed: onEditPressed)
-                  : _LabelView(text: text),
+      builder: (context, isEditMode) => isEditMode
+          ? _EditLabelView(text: text, onEditPressed: onEditPressed)
+          : _LabelView(text: text),
     );
   }
 
@@ -163,19 +161,14 @@ class _MapItem extends _ActualItem {
   Widget buildWidget(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.isEditMode,
-      builder:
-          (context, isEditMode) =>
-              isEditMode
-                  ? _EditMapView(
-                    location: location,
-                    onEditPressed: onEditPressed,
-                  )
-                  : _MapView(
-                    location: location,
-                    onTap: () {
-                      launchExternalMap(location);
-                    },
-                  ),
+      builder: (context, isEditMode) => isEditMode
+          ? _EditMapView(location: location, onEditPressed: onEditPressed)
+          : _MapView(
+              location: location,
+              onTap: () {
+                launchExternalMap(location);
+              },
+            ),
     );
   }
 
@@ -210,7 +203,10 @@ class _DateItem extends _Item {
 
   @override
   Widget buildWidget(BuildContext context) {
-    return SizedBox(height: height, child: PhotoListDate(date: date));
+    return SizedBox(
+      height: height,
+      child: PhotoListDate(date: date),
+    );
   }
 
   final Date date;

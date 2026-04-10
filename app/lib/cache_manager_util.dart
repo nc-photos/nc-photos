@@ -176,15 +176,12 @@ class CachedNetworkImageBuilder {
       errorWidget: errorWidget,
       customDecoder:
           mime == "image/jxl" && type != CachedNetworkImageType.thumbnail
-              ? (file, decoder) {
-                _log.fine("[build] Using experimental jxl codec: $imageUrl");
-                // return decoder(raw);
-                return jxlImageCodecFromFile(
-                  file,
-                  resize: _boundingBoxFor(type),
-                );
-              }
-              : null,
+          ? (file, decoder) {
+              _log.fine("[build] Using experimental jxl codec: $imageUrl");
+              // return decoder(raw);
+              return jxlImageCodecFromFile(file, resize: _boundingBoxFor(type));
+            }
+          : null,
       compareKey: type.name,
     );
   }

@@ -96,13 +96,10 @@ class ShareHandler {
   Future<ShareMethodDialogResult?> _askShareMethod(List<File> files) {
     return showDialog<ShareMethodDialogResult>(
       context: context,
-      builder:
-          (context) => ShareMethodDialog(
-            isSupportPerview: files.any(
-              (f) => file_util.isSupportedImageFormat(f),
-            ),
-            isSupportRemoteLink: true,
-          ),
+      builder: (context) => ShareMethodDialog(
+        isSupportPerview: files.any((f) => file_util.isSupportedImageFormat(f)),
+        isSupportRemoteLink: true,
+      ),
     );
   }
 
@@ -217,18 +214,17 @@ class ShareHandler {
   Future<String?> _askPassword() {
     return showDialog<String>(
       context: context,
-      builder:
-          (context) => SimpleInputDialog(
-            hintText: L10n.global().passwordInputHint,
-            buttonText: MaterialLocalizations.of(context).okButtonLabel,
-            validator: (value) {
-              if (value?.isNotEmpty != true) {
-                return L10n.global().passwordInputInvalidEmpty;
-              }
-              return null;
-            },
-            obscureText: true,
-          ),
+      builder: (context) => SimpleInputDialog(
+        hintText: L10n.global().passwordInputHint,
+        buttonText: MaterialLocalizations.of(context).okButtonLabel,
+        validator: (value) {
+          if (value?.isNotEmpty != true) {
+            return L10n.global().passwordInputInvalidEmpty;
+          }
+          return null;
+        },
+        obscureText: true,
+      ),
     );
   }
 
@@ -238,10 +234,8 @@ class ShareHandler {
   ) {
     return showDialog<ShareLinkMultipleFilesDialogResult>(
       context: context,
-      builder:
-          (_) => ShareLinkMultipleFilesDialog(
-            shouldAskPassword: isPasswordProtected,
-          ),
+      builder: (_) =>
+          ShareLinkMultipleFilesDialog(shouldAskPassword: isPasswordProtected),
     );
   }
 

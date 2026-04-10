@@ -40,37 +40,35 @@ class AddFileToAlbum {
     final files = await InflateFileDescriptor(_c)(account, fds);
     // resync is needed to work out album cover and latest item
     final oldItems = await PreProcessAlbum(_c)(account, album);
-    final itemSet =
-        oldItems
-            .map(
-              (e) => OverrideComparator<AlbumItem>(
-                e,
-                _isItemFileEqual,
-                _getItemHashCode,
-              ),
-            )
-            .toSet();
+    final itemSet = oldItems
+        .map(
+          (e) => OverrideComparator<AlbumItem>(
+            e,
+            _isItemFileEqual,
+            _getItemHashCode,
+          ),
+        )
+        .toSet();
     // find the items that are not having the same file as any existing ones
-    final addItems =
-        files
-            .map(
-              (f) => AlbumFileItem(
-                addedBy: account.userId,
-                addedAt: clock.now(),
-                file: f.toDescriptor(),
-                ownerId: f.ownerId ?? account.userId,
-              ),
-            )
-            .where(
-              (i) => itemSet.add(
-                OverrideComparator<AlbumItem>(
-                  i,
-                  _isItemFileEqual,
-                  _getItemHashCode,
-                ),
-              ),
-            )
-            .toList();
+    final addItems = files
+        .map(
+          (f) => AlbumFileItem(
+            addedBy: account.userId,
+            addedAt: clock.now(),
+            file: f.toDescriptor(),
+            ownerId: f.ownerId ?? account.userId,
+          ),
+        )
+        .where(
+          (i) => itemSet.add(
+            OverrideComparator<AlbumItem>(
+              i,
+              _isItemFileEqual,
+              _getItemHashCode,
+            ),
+          ),
+        )
+        .toList();
     if (addItems.isEmpty) {
       return album;
     }
@@ -112,11 +110,10 @@ class AddFileToAlbum {
     }
     for (final i in fileItems) {
       try {
-        final fileShares =
-            (await ListShare(_c)(account, i.file))
-                .where((element) => element.shareType == ShareType.user)
-                .map((e) => e.shareWith!)
-                .toSet();
+        final fileShares = (await ListShare(_c)(account, i.file))
+            .where((element) => element.shareType == ShareType.user)
+            .map((e) => e.shareWith!)
+            .toSet();
         final diffShares = albumShares.difference(fileShares);
         for (final s in diffShares) {
           if (s == i.ownerId) {

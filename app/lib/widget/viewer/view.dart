@@ -27,9 +27,8 @@ class _ContentBodyState extends State<_ContentBody> {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen:
-              (previous, current) =>
-                  previous.pendingRemoveFile != current.pendingRemoveFile,
+          listenWhen: (previous, current) =>
+              previous.pendingRemoveFile != current.pendingRemoveFile,
           listener: (context, state) {
             final file = state.pendingRemoveFile.value;
             if (file == null) {
@@ -80,11 +79,10 @@ class _ContentBodyState extends State<_ContentBody> {
           },
         ),
         _BlocListener(
-          listenWhen:
-              (previous, current) =>
-                  previous.index != current.index ||
-                  previous.backwardBound != current.backwardBound ||
-                  previous.forwardBound != current.forwardBound,
+          listenWhen: (previous, current) =>
+              previous.index != current.index ||
+              previous.backwardBound != current.backwardBound ||
+              previous.forwardBound != current.forwardBound,
           listener: (context, state) {
             if (state.backwardBound != null &&
                 state.forwardBound != null &&
@@ -125,79 +123,67 @@ class _ContentBodyState extends State<_ContentBody> {
           children: [
             const Positioned.fill(child: ColoredBox(color: Colors.black)),
             _BlocBuilder(
-              buildWhen:
-                  (previous, current) =>
-                      previous.isZoomed != current.isZoomed ||
-                      previous.removedAfIds != current.removedAfIds,
-              builder:
-                  (context, state) => InfinitePageView(
-                    key: _key,
-                    itemBuilder:
-                        (context, i) => _BlocBuilder(
-                          buildWhen:
-                              (previous, current) =>
-                                  previous.pageAfIdMap[i] !=
-                                      current.pageAfIdMap[i] ||
-                                  previous.backwardBound !=
-                                      current.backwardBound ||
-                                  previous.forwardBound != current.forwardBound,
-                          builder: (context, state) {
-                            final afId = state.pageAfIdMap[i];
-                            if ((state.backwardBound != null &&
-                                    i < state.backwardBound!) ||
-                                (state.forwardBound != null &&
-                                    i > state.forwardBound!)) {
-                              return Center(
-                                child: Text(
-                                  L10n.global().viewerLastPageText,
-                                  style:
-                                      Theme.of(context).textTheme.headlineSmall,
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            } else if (afId == null) {
-                              return const Center(
-                                child:
-                                    AppIntermediateCircularProgressIndicator(),
-                              );
-                            } else {
-                              return _PageView(
-                                key: Key("Viewer-$afId"),
-                                afId: afId,
-                                pageHeight: MediaQuery.of(context).size.height,
-                              );
-                            }
-                          },
+              buildWhen: (previous, current) =>
+                  previous.isZoomed != current.isZoomed ||
+                  previous.removedAfIds != current.removedAfIds,
+              builder: (context, state) => InfinitePageView(
+                key: _key,
+                itemBuilder: (context, i) => _BlocBuilder(
+                  buildWhen: (previous, current) =>
+                      previous.pageAfIdMap[i] != current.pageAfIdMap[i] ||
+                      previous.backwardBound != current.backwardBound ||
+                      previous.forwardBound != current.forwardBound,
+                  builder: (context, state) {
+                    final afId = state.pageAfIdMap[i];
+                    if ((state.backwardBound != null &&
+                            i < state.backwardBound!) ||
+                        (state.forwardBound != null &&
+                            i > state.forwardBound!)) {
+                      return Center(
+                        child: Text(
+                          L10n.global().viewerLastPageText,
+                          style: Theme.of(context).textTheme.headlineSmall,
+                          textAlign: TextAlign.center,
                         ),
-                    controller: _pageViewController,
-                    physics:
-                        !state.isZoomed
-                            ? null
-                            : const NeverScrollableScrollPhysics(),
-                  ),
+                      );
+                    } else if (afId == null) {
+                      return const Center(
+                        child: AppIntermediateCircularProgressIndicator(),
+                      );
+                    } else {
+                      return _PageView(
+                        key: Key("Viewer-$afId"),
+                        afId: afId,
+                        pageHeight: MediaQuery.of(context).size.height,
+                      );
+                    }
+                  },
+                ),
+                controller: _pageViewController,
+                physics: !state.isZoomed
+                    ? null
+                    : const NeverScrollableScrollPhysics(),
+              ),
             ),
             _BlocSelector<bool>(
               selector: (state) => state.isShowAppBar,
-              builder:
-                  (context, isShowAppBar) =>
-                      isShowAppBar
-                          ? Container(
-                            // + status bar height
-                            height:
-                                kToolbarHeight +
-                                MediaQuery.of(context).padding.top,
-                            decoration: const BoxDecoration(
-                              gradient: LinearGradient(
-                                begin: Alignment(0, -1),
-                                end: Alignment(0, 1),
-                                colors: [
-                                  Color.fromARGB(192, 0, 0, 0),
-                                  Color.fromARGB(0, 0, 0, 0),
-                                ],
-                              ),
-                            ),
-                          )
-                          : const SizedBox.shrink(),
+              builder: (context, isShowAppBar) => isShowAppBar
+                  ? Container(
+                      // + status bar height
+                      height:
+                          kToolbarHeight + MediaQuery.of(context).padding.top,
+                      decoration: const BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment(0, -1),
+                          end: Alignment(0, 1),
+                          colors: [
+                            Color.fromARGB(192, 0, 0, 0),
+                            Color.fromARGB(0, 0, 0, 0),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ],
         ),
@@ -237,11 +223,11 @@ class _PageViewState extends State<_PageView> {
     _scrollController = ScrollController(
       initialScrollOffset:
           context.state.isShowDetailPane && !context.state.isClosingDetailPane
-              ? _calcDetailPaneOpenedScrollPosition(
-                context.state.fileStates[widget.afId],
-                widget.pageHeight,
-              )
-              : 0,
+          ? _calcDetailPaneOpenedScrollPosition(
+              context.state.fileStates[widget.afId],
+              widget.pageHeight,
+            )
+          : 0,
     );
     if (context.state.isShowDetailPane && !context.state.isClosingDetailPane) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -271,10 +257,8 @@ class _PageViewState extends State<_PageView> {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen:
-              (previous, current) =>
-                  previous.openDetailPaneRequest !=
-                  current.openDetailPaneRequest,
+          listenWhen: (previous, current) =>
+              previous.openDetailPaneRequest != current.openDetailPaneRequest,
           listener: (context, state) {
             if (!state.canOpenDetailPane) {
               _log.warning("[build] Can't open detail pane right now");
@@ -337,74 +321,65 @@ class _PageViewState extends State<_PageView> {
                   context,
                 ).copyWith(scrollbars: false),
                 child: _BlocBuilder(
-                  buildWhen:
-                      (previous, current) =>
-                          previous.isZoomed != current.isZoomed,
-                  builder:
-                      (context, state) => SingleChildScrollView(
-                        controller: _scrollController,
-                        physics:
-                            !state.isZoomed
-                                ? null
-                                : const NeverScrollableScrollPhysics(),
-                        child: Stack(
-                          children: [
-                            _BlocBuilder(
-                              buildWhen:
-                                  (previous, current) =>
-                                      previous.fileStates[widget.afId] !=
-                                          current.fileStates[widget.afId] ||
-                                      previous.isShowAppBar !=
-                                          current.isShowAppBar ||
-                                      previous.isDetailPaneActive !=
-                                          current.isDetailPaneActive,
-                              builder:
-                                  (context, state) => FileContentView(
-                                    file: file,
-                                    shouldPlayLivePhoto:
-                                        state
-                                            .fileStates[widget.afId]
-                                            ?.shouldPlayLivePhoto ??
-                                        false,
-                                    canZoom: !state.isDetailPaneActive,
-                                    canPlay: !state.isDetailPaneActive,
-                                    isPlayControlVisible:
-                                        state.isShowAppBar &&
-                                        !state.isDetailPaneActive,
-                                    onContentHeightChanged: (contentHeight) {
-                                      context.addEvent(
-                                        _SetFileContentHeight(
-                                          widget.afId,
-                                          contentHeight,
-                                        ),
-                                      );
-                                    },
-                                    onZoomChanged: (isZoomed) {
-                                      context.addEvent(_SetIsZoomed(isZoomed));
-                                    },
-                                    onVideoPlayingChanged: (isPlaying) {
-                                      if (isPlaying) {
-                                        context.addEvent(const _HideAppBar());
-                                      } else {
-                                        context.addEvent(const _ShowAppBar());
-                                      }
-                                    },
-                                    onLoadFailure: () {
-                                      if (state
-                                              .fileStates[widget.afId]
-                                              ?.shouldPlayLivePhoto ==
-                                          true) {
-                                        context.addEvent(
-                                          _PauseLivePhoto(widget.afId),
-                                        );
-                                      }
-                                    },
-                                  ),
-                            ),
-                            _DetailPaneContainer(afId: widget.afId),
-                          ],
+                  buildWhen: (previous, current) =>
+                      previous.isZoomed != current.isZoomed,
+                  builder: (context, state) => SingleChildScrollView(
+                    controller: _scrollController,
+                    physics: !state.isZoomed
+                        ? null
+                        : const NeverScrollableScrollPhysics(),
+                    child: Stack(
+                      children: [
+                        _BlocBuilder(
+                          buildWhen: (previous, current) =>
+                              previous.fileStates[widget.afId] !=
+                                  current.fileStates[widget.afId] ||
+                              previous.isShowAppBar != current.isShowAppBar ||
+                              previous.isDetailPaneActive !=
+                                  current.isDetailPaneActive,
+                          builder: (context, state) => FileContentView(
+                            file: file,
+                            shouldPlayLivePhoto:
+                                state
+                                    .fileStates[widget.afId]
+                                    ?.shouldPlayLivePhoto ??
+                                false,
+                            canZoom: !state.isDetailPaneActive,
+                            canPlay: !state.isDetailPaneActive,
+                            isPlayControlVisible:
+                                state.isShowAppBar && !state.isDetailPaneActive,
+                            onContentHeightChanged: (contentHeight) {
+                              context.addEvent(
+                                _SetFileContentHeight(
+                                  widget.afId,
+                                  contentHeight,
+                                ),
+                              );
+                            },
+                            onZoomChanged: (isZoomed) {
+                              context.addEvent(_SetIsZoomed(isZoomed));
+                            },
+                            onVideoPlayingChanged: (isPlaying) {
+                              if (isPlaying) {
+                                context.addEvent(const _HideAppBar());
+                              } else {
+                                context.addEvent(const _ShowAppBar());
+                              }
+                            },
+                            onLoadFailure: () {
+                              if (state
+                                      .fileStates[widget.afId]
+                                      ?.shouldPlayLivePhoto ==
+                                  true) {
+                                context.addEvent(_PauseLivePhoto(widget.afId));
+                              }
+                            },
+                          ),
                         ),
-                      ),
+                        _DetailPaneContainer(afId: widget.afId),
+                      ],
+                    ),
+                  ),
                 ),
               ),
             );

@@ -50,10 +50,9 @@ class CollectionNcAlbumProvider
   CollectionItemSort get itemSort => CollectionItemSort.dateDescending;
 
   @override
-  List<CollectionShare> get shares =>
-      album.collaborators
-          .map((c) => CollectionShare(userId: c.id, username: c.label))
-          .toList();
+  List<CollectionShare> get shares => album.collaborators
+      .map((c) => CollectionShare(userId: c.id, username: c.label))
+      .toList();
 
   @override
   CollectionCoverResult? getCoverUrl(

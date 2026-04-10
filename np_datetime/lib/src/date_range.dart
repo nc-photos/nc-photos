@@ -83,15 +83,13 @@ extension DateRangeExtension on DateRange {
   DateRange union(DateRange other) {
     assert(isOverlapped(other));
     return DateRange(
-      from:
-          from == null || other.from == null
-              ? null
-              : _inclusiveFrom!.min(other._inclusiveFrom!),
+      from: from == null || other.from == null
+          ? null
+          : _inclusiveFrom!.min(other._inclusiveFrom!),
       fromBound: TimeRangeBound.inclusive,
-      to:
-          to == null || other.to == null
-              ? null
-              : _inclusiveTo!.max(other._inclusiveTo!),
+      to: to == null || other.to == null
+          ? null
+          : _inclusiveTo!.max(other._inclusiveTo!),
       toBound: TimeRangeBound.inclusive,
     );
   }
@@ -99,9 +97,8 @@ extension DateRangeExtension on DateRange {
   TimeRange toLocalTimeRange() => TimeRange(
     from: from?.toLocalDateTime(),
     fromBound: fromBound,
-    to:
-        (toBound == TimeRangeBound.inclusive ? to?.add(day: 1) : to)
-            ?.toLocalDateTime(),
+    to: (toBound == TimeRangeBound.inclusive ? to?.add(day: 1) : to)
+        ?.toLocalDateTime(),
     toBound: TimeRangeBound.exclusive,
   );
 

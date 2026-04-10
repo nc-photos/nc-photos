@@ -16,10 +16,9 @@ class _ViewerContentController {
         (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value),
       );
       final results = await contentProvider.getFiles(from, _fileCountPerQuery);
-      final resultMap =
-          results.files
-              .mapIndexed((i, e) => MapEntry(from.pageIndex + 1 + i, e))
-              .toMap();
+      final resultMap = results.files
+          .mapIndexed((i, e) => MapEntry(from.pageIndex + 1 + i, e))
+          .toMap();
       _log.info("[_getForwardContent] Result: $results");
       _pageContentMap.addAll(resultMap);
       return resultMap;
@@ -38,10 +37,9 @@ class _ViewerContentController {
         (e) => ViewerPositionInfo(pageIndex: e.key, originalFile: e.value),
       );
       final results = await contentProvider.getFiles(from, -_fileCountPerQuery);
-      final resultMap =
-          results.files
-              .mapIndexed((i, e) => MapEntry(from.pageIndex - 1 - i, e))
-              .toMap();
+      final resultMap = results.files
+          .mapIndexed((i, e) => MapEntry(from.pageIndex - 1 - i, e))
+          .toMap();
       _log.info("[_getBackwardContent] Result: $results");
       _pageContentMap.addAll(resultMap);
       return resultMap;

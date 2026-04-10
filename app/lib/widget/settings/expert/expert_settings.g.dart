@@ -35,10 +35,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       isNewHttpEngine: isNewHttpEngine as bool? ?? that.isNewHttpEngine,
       isViewerUseOriginalImage:
           isViewerUseOriginalImage as bool? ?? that.isViewerUseOriginalImage,
-      lastSuccessful:
-          lastSuccessful == copyWithNull
-              ? that.lastSuccessful
-              : lastSuccessful as _Event?,
+      lastSuccessful: lastSuccessful == copyWithNull
+          ? that.lastSuccessful
+          : lastSuccessful as _Event?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }

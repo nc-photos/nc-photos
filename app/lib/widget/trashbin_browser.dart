@@ -185,13 +185,12 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         ),
         PopupMenuButton<_SelectionAppBarMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: _SelectionAppBarMenuOption.delete,
-                  child: Text(L10n.global().deletePermanentlyTooltip),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: _SelectionAppBarMenuOption.delete,
+              child: Text(L10n.global().deletePermanentlyTooltip),
+            ),
+          ],
           onSelected: (option) {
             switch (option) {
               case _SelectionAppBarMenuOption.delete:
@@ -222,13 +221,12 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         ),
         PopupMenuButton<_AppBarMenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: _AppBarMenuOption.empty,
-                  child: Text(L10n.global().emptyTrashbinTooltip),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: _AppBarMenuOption.empty,
+              child: Text(L10n.global().emptyTrashbinTooltip),
+            ),
+          ],
           onSelected: (option) {
             switch (option) {
               case _AppBarMenuOption.empty:
@@ -259,22 +257,19 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
     unawaited(
       showDialog(
         context: context,
-        builder:
-            (_) => AlertDialog(
-              title: Text(L10n.global().emptyTrashbinConfirmationDialogTitle),
-              content: Text(
-                L10n.global().emptyTrashbinConfirmationDialogContent,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _deleteFiles(_backingFiles);
-                  },
-                  child: Text(L10n.global().confirmButtonLabel),
-                ),
-              ],
+        builder: (_) => AlertDialog(
+          title: Text(L10n.global().emptyTrashbinConfirmationDialogTitle),
+          content: Text(L10n.global().emptyTrashbinConfirmationDialogContent),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteFiles(_backingFiles);
+              },
+              child: Text(L10n.global().confirmButtonLabel),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -290,11 +285,10 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
         duration: k.snackBarDurationShort,
       ),
     );
-    final selection =
-        selectedListItems
-            .whereType<PhotoListFileItem>()
-            .map((e) => e.file)
-            .toList();
+    final selection = selectedListItems
+        .whereType<PhotoListFileItem>()
+        .map((e) => e.file)
+        .toList();
     setState(() {
       clearSelectedItems();
     });
@@ -339,24 +333,21 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
     unawaited(
       showDialog(
         context: context,
-        builder:
-            (_) => AlertDialog(
-              title: Text(
-                L10n.global().deletePermanentlyConfirmationDialogTitle,
-              ),
-              content: Text(
-                L10n.global().deletePermanentlyConfirmationDialogContent,
-              ),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    _deleteSelected();
-                  },
-                  child: Text(L10n.global().confirmButtonLabel),
-                ),
-              ],
+        builder: (_) => AlertDialog(
+          title: Text(L10n.global().deletePermanentlyConfirmationDialogTitle),
+          content: Text(
+            L10n.global().deletePermanentlyConfirmationDialogContent,
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteSelected();
+              },
+              child: Text(L10n.global().confirmButtonLabel),
             ),
+          ],
+        ),
       ),
     );
   }
@@ -384,11 +375,10 @@ class _TrashbinBrowserState extends State<TrashbinBrowser>
   }
 
   Future<void> _deleteSelected() async {
-    final selectedFiles =
-        selectedListItems
-            .whereType<PhotoListFileItem>()
-            .map((e) => e.file)
-            .toList();
+    final selectedFiles = selectedListItems
+        .whereType<PhotoListFileItem>()
+        .map((e) => e.file)
+        .toList();
     setState(() {
       clearSelectedItems();
     });

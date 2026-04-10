@@ -44,11 +44,10 @@ class TrustedCertManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (_) => _Bloc(
-            trustedCertController: context.read(),
-            prefController: context.read(),
-          )..add(const _Load()),
+      create: (_) => _Bloc(
+        trustedCertController: context.read(),
+        prefController: context.read(),
+      )..add(const _Load()),
       child: const _WrappedTrustedCertManager(),
     );
   }
@@ -100,9 +99,8 @@ class _WrappedTrustedCertManagerState extends State<_WrappedTrustedCertManager>
         ),
         body: _BlocSelector<bool>(
           selector: (state) => state.isCertsReady,
-          builder:
-              (context, isCertsReady) =>
-                  isCertsReady ? const _ContentView() : const _InitView(),
+          builder: (context, isCertsReady) =>
+              isCertsReady ? const _ContentView() : const _InitView(),
         ),
       ),
     );
@@ -111,11 +109,10 @@ class _WrappedTrustedCertManagerState extends State<_WrappedTrustedCertManager>
   Future<void> _onAddPressed(BuildContext context) async {
     final result = await showDialog<Account>(
       context: context,
-      builder:
-          (_) => BlocProvider.value(
-            value: context.bloc,
-            child: const _AccountDialog(),
-          ),
+      builder: (_) => BlocProvider.value(
+        value: context.bloc,
+        child: const _AccountDialog(),
+      ),
     );
     if (result == null) {
       return;

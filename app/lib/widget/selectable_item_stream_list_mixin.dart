@@ -82,14 +82,13 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         key: _listKey,
         maxCrossAxisExtent: maxCrossAxisExtent,
         itemCount: _items.length,
-        itemBuilder:
-            (context, i) => _buildItem(
-              context,
-              i,
-              isEnableVisibilityCallback: isEnableVisibilityCallback,
-              childBorderRadius: childBorderRadius!,
-              indicatorAlignment: indicatorAlignment,
-            ),
+        itemBuilder: (context, i) => _buildItem(
+          context,
+          i,
+          isEnableVisibilityCallback: isEnableVisibilityCallback,
+          childBorderRadius: childBorderRadius!,
+          indicatorAlignment: indicatorAlignment,
+        ),
         staggeredTileBuilder: (index) => _items[index].staggeredTile,
         mainAxisSpacing: mainAxisSpacing,
         onMaxExtentChanged: onMaxExtentChanged,
@@ -99,14 +98,13 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         key: ObjectKey(maxCrossAxisExtent),
         maxCrossAxisExtent: maxCrossAxisExtent,
         itemCount: _items.length,
-        itemBuilder:
-            (context, i) => _buildItem(
-              context,
-              i,
-              isEnableVisibilityCallback: isEnableVisibilityCallback,
-              childBorderRadius: childBorderRadius!,
-              indicatorAlignment: indicatorAlignment,
-            ),
+        itemBuilder: (context, i) => _buildItem(
+          context,
+          i,
+          isEnableVisibilityCallback: isEnableVisibilityCallback,
+          childBorderRadius: childBorderRadius!,
+          indicatorAlignment: indicatorAlignment,
+        ),
         staggeredTileBuilder: (index) => _items[index].staggeredTile,
         mainAxisSpacing: mainAxisSpacing,
       );
@@ -134,8 +132,9 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
 
   @protected
   set itemStreamListItems(List<SelectableItem> newItems) {
-    final lastSelectedItem =
-        _lastSelectPosition != null ? _items[_lastSelectPosition!] : null;
+    final lastSelectedItem = _lastSelectPosition != null
+        ? _items[_lastSelectPosition!]
+        : null;
 
     _items = newItems;
     _transformSelectedItems();
@@ -154,9 +153,8 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
       "[itemStreamListItems] updateListHeight: list item changed",
     );
     WidgetsBinding.instance.addPostFrameCallback(
-      (_) =>
-          (_listKey.currentState as MeasurableItemListState?)
-              ?.updateListHeight(),
+      (_) => (_listKey.currentState as MeasurableItemListState?)
+          ?.updateListHeight(),
     );
   }
 
@@ -188,10 +186,9 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
         childBorderRadius: childBorderRadius,
         indicatorAlignment: indicatorAlignment,
         onTap: () => _onItemTap(item, index),
-        onLongPress:
-            isSelectionMode && getRawPlatform() == NpPlatform.web
-                ? null
-                : () => _onItemLongPress(item, index),
+        onLongPress: isSelectionMode && getRawPlatform() == NpPlatform.web
+            ? null
+            : () => _onItemLongPress(item, index),
         child: content,
       );
     }
@@ -298,19 +295,18 @@ mixin SelectableItemStreamListMixin<T extends StatefulWidget> on State<T> {
   /// Map selected items to the new item list
   void _transformSelectedItems() {
     // TODO too slow!
-    final newSelectedItems =
-        _selectedItems
-            .map((from) {
-              try {
-                return _items
-                    .where((e) => e.isSelectable)
-                    .firstWhere((to) => from == to);
-              } catch (_) {
-                return null;
-              }
-            })
-            .whereType<SelectableItem>()
-            .toList();
+    final newSelectedItems = _selectedItems
+        .map((from) {
+          try {
+            return _items
+                .where((e) => e.isSelectable)
+                .firstWhere((to) => from == to);
+          } catch (_) {
+            return null;
+          }
+        })
+        .whereType<SelectableItem>()
+        .toList();
     _selectedItems
       ..clear()
       ..addAll(newSelectedItems);

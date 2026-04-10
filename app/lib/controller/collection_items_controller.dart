@@ -98,14 +98,13 @@ class CollectionItemsController {
     final isInited = _isDataStreamInited;
     final List<FileDescriptor> toAdd;
     if (isInited) {
-      toAdd =
-          files
-              .where(
-                (a) => _dataStreamController.value.items
-                    .whereType<CollectionFileItem>()
-                    .every((b) => !a.compareServerIdentity(b.file)),
-              )
-              .toList();
+      toAdd = files
+          .where(
+            (a) => _dataStreamController.value.items
+                .whereType<CollectionFileItem>()
+                .every((b) => !a.compareServerIdentity(b.file)),
+          )
+          .toList();
       _log.info("[addFiles] Adding ${toAdd.length} non duplicated files");
       if (toAdd.isEmpty) {
         return;
@@ -165,27 +164,26 @@ class CollectionItemsController {
           });
         }
         // convert intermediate items
-        finalize =
-            (await finalize.asyncMap((e) async {
-              try {
-                if (e is NewCollectionFileItem) {
-                  return await CollectionAdapter.of(
-                    _c,
-                    account,
-                    collection,
-                  ).adaptToNewItem(e);
-                } else {
-                  return e;
-                }
-              } catch (e, stackTrace) {
-                _log.severe(
-                  "[addFiles] Item not found in resulting collection: $e",
-                  e,
-                  stackTrace,
-                );
-                return null;
-              }
-            })).nonNulls.toList();
+        finalize = (await finalize.asyncMap((e) async {
+          try {
+            if (e is NewCollectionFileItem) {
+              return await CollectionAdapter.of(
+                _c,
+                account,
+                collection,
+              ).adaptToNewItem(e);
+            } else {
+              return e;
+            }
+          } catch (e, stackTrace) {
+            _log.severe(
+              "[addFiles] Item not found in resulting collection: $e",
+              e,
+              stackTrace,
+            );
+            return null;
+          }
+        })).nonNulls.toList();
         _dataStreamController.addWithValue(
           (value) => value.copyWith(items: finalize),
         );
@@ -206,10 +204,9 @@ class CollectionItemsController {
     if (isInited) {
       _dataStreamController.addWithValue(
         (value) => value.copyWith(
-          items:
-              value.items
-                  .where((a) => !items.any((b) => identical(a, b)))
-                  .toList(),
+          items: value.items
+              .where((a) => !items.any((b) => identical(a, b)))
+              .toList(),
         ),
       );
     }
@@ -382,28 +379,27 @@ class CollectionItemsController {
       return;
     }
     await _mutex.protect(() async {
-      final newItems =
-          _dataStreamController.value.items
-              .map((e) {
-                if (e is CollectionFileItem) {
-                  final file = ev.dataMap[e.file.fdId];
-                  if (file == null) {
-                    if (file_util.isNcAlbumFile(account, e.file)) {
-                      // file shared with us are not in our db
-                      return e;
-                    } else {
-                      // removed
-                      return null;
-                    }
-                  } else {
-                    return e.copyWith(file: file.replacePath(e.file.fdPath));
-                  }
-                } else {
+      final newItems = _dataStreamController.value.items
+          .map((e) {
+            if (e is CollectionFileItem) {
+              final file = ev.dataMap[e.file.fdId];
+              if (file == null) {
+                if (file_util.isNcAlbumFile(account, e.file)) {
+                  // file shared with us are not in our db
                   return e;
+                } else {
+                  // removed
+                  return null;
                 }
-              })
-              .nonNulls
-              .toList();
+              } else {
+                return e.copyWith(file: file.replacePath(e.file.fdPath));
+              }
+            } else {
+              return e;
+            }
+          })
+          .nonNulls
+          .toList();
       _dataStreamController.addWithValue(
         (value) => value.copyWith(items: newItems),
       );

@@ -82,20 +82,17 @@ class _TagPickerDialogState extends State<TagPickerDialog> {
       child: TypeAheadField<Tag>(
         controller: _searchController,
         suggestionsCallback: _onSearch,
-        itemBuilder:
-            (_, suggestion) => ListTile(title: Text(suggestion.displayName)),
+        itemBuilder: (_, suggestion) =>
+            ListTile(title: Text(suggestion.displayName)),
         onSelected: _onSearchSuggestionSelected,
         hideOnEmpty: true,
         hideOnLoading: true,
         autoFlipDirection: true,
-        builder:
-            (context, controller, focusNode) => TextField(
-              controller: controller,
-              focusNode: focusNode,
-              decoration: InputDecoration(
-                hintText: L10n.global().addTagInputHint,
-              ),
-            ),
+        builder: (context, controller, focusNode) => TextField(
+          controller: controller,
+          focusNode: focusNode,
+          decoration: InputDecoration(hintText: L10n.global().addTagInputHint),
+        ),
       ),
     );
   }

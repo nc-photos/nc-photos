@@ -105,10 +105,9 @@ extension on LocalFilesSummary {
       return _LocalFilesSummaryDiff(
         onlyInOther: const {},
         onlyInThis: const {},
-        updated:
-            thisObj.value == otherObj.value
-                ? const {}
-                : Map.fromEntries([otherObj]),
+        updated: thisObj.value == otherObj.value
+            ? const {}
+            : Map.fromEntries([otherObj]),
       );
     }
   }

@@ -62,10 +62,9 @@ String toUserString(Object? exception) {
       L10n.global().serverCertErrorDialogTitle,
       SnackBarAction(
         label: L10n.global().configButtonLabel,
-        onPressed:
-            () => NavigationManager().getNavigator()?.pushNamed(
-              TrustedCertManager.routeName,
-            ),
+        onPressed: () => NavigationManager().getNavigator()?.pushNamed(
+          TrustedCertManager.routeName,
+        ),
       ),
     );
   } else if (exception is UpdatePropertyFailureError) {

@@ -117,10 +117,9 @@ class ScanLocalDirBloc
     _ScanLocalDirBlocFileDeleted event,
     Emitter<ScanLocalDirBlocState> emit,
   ) async {
-    final newFiles =
-        state.files
-            .where((f) => !event.files.any((d) => d.compareIdentity(f)))
-            .toList();
+    final newFiles = state.files
+        .where((f) => !event.files.any((d) => d.compareIdentity(f)))
+        .toList();
     if (newFiles.length != state.files.length) {
       emit(ScanLocalDirBlocSuccess(newFiles));
     }

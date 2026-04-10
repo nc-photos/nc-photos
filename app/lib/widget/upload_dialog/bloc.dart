@@ -9,14 +9,13 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   }) : super(
          _State.init(
            uploadRelativePath: accountPrefController.uploadRelativePathValue,
-           convertConfig:
-               prefController.isEnableUploadConvertValue
-                   ? ConvertConfig(
-                     format: prefController.uploadConvertFormatValue,
-                     quality: prefController.uploadConvertQualityValue,
-                     downsizeMp: prefController.uploadConvertDownsizeMpValue,
-                   )
-                   : null,
+           convertConfig: prefController.isEnableUploadConvertValue
+               ? ConvertConfig(
+                   format: prefController.uploadConvertFormatValue,
+                   quality: prefController.uploadConvertQualityValue,
+                   downsizeMp: prefController.uploadConvertDownsizeMpValue,
+                 )
+               : null,
          ),
        ) {
     on<_SetUploadRelativePath>(_onSetUploadRelativePath);
@@ -63,14 +62,13 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     _log.info(ev);
     emit(
       state.copyWith(
-        convertConfig:
-            ev.value
-                ? ConvertConfig(
-                  format: prefController.uploadConvertFormatValue,
-                  quality: prefController.uploadConvertQualityValue,
-                  downsizeMp: prefController.uploadConvertDownsizeMpValue,
-                )
-                : null,
+        convertConfig: ev.value
+            ? ConvertConfig(
+                format: prefController.uploadConvertFormatValue,
+                quality: prefController.uploadConvertQualityValue,
+                downsizeMp: prefController.uploadConvertDownsizeMpValue,
+              )
+            : null,
       ),
     );
   }

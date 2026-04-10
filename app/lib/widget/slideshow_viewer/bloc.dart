@@ -129,11 +129,10 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetCollectionItems(_SetCollectionItems ev, _Emitter emit) {
     _log.info(ev);
-    final itemMap =
-        ev.value
-            ?.whereType<CollectionFileItem>()
-            .map((e) => MapEntry(e.file.fdId, e))
-            .toMap();
+    final itemMap = ev.value
+        ?.whereType<CollectionFileItem>()
+        .map((e) => MapEntry(e.file.fdId, e))
+        .toMap();
     emit(state.copyWith(collectionItems: itemMap));
   }
 

@@ -13,10 +13,9 @@ class _Bloc extends Bloc<_Event, _State>
     required Collection collection,
     required this.dateHeight,
   }) : _c = container,
-       _isAdHocCollection =
-           !collectionsController.stream.value.data.any(
-             (e) => e.collection.compareIdentity(collection),
-           ),
+       _isAdHocCollection = !collectionsController.stream.value.data.any(
+         (e) => e.collection.compareIdentity(collection),
+       ),
        super(
          _State.init(
            collection: collection,
@@ -160,12 +159,11 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         itemsController.stream,
-        onData:
-            (data) => state.copyWith(
-              items: _filterItems(data.items, state.itemsWhitelist),
-              rawItems: data.items,
-              isLoading: data.hasNext,
-            ),
+        onData: (data) => state.copyWith(
+          items: _filterItems(data.items, state.itemsWhitelist),
+          rawItems: data.items,
+          isLoading: data.hasNext,
+        ),
       ),
       forEach(
         emit,
@@ -187,11 +185,10 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         filesController.errorStream,
-        onData:
-            (data) => state.copyWith(
-              isLoading: false,
-              error: ExceptionEvent(data.error, data.stackTrace),
-            ),
+        onData: (data) => state.copyWith(
+          isLoading: false,
+          error: ExceptionEvent(data.error, data.stackTrace),
+        ),
       ),
     ]);
   }
@@ -289,14 +286,13 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     emit(
       state.copyWith(
-        editItems:
-            (state.editItems ?? state.items).map((e) {
-              if (e.id == ev.item.id) {
-                return NewCollectionLabelItem(ev.newText, clock.now().toUtc());
-              } else {
-                return e;
-              }
-            }).toList(),
+        editItems: (state.editItems ?? state.items).map((e) {
+          if (e.id == ev.item.id) {
+            return NewCollectionLabelItem(ev.newText, clock.now().toUtc());
+          } else {
+            return e;
+          }
+        }).toList(),
       ),
     );
   }
@@ -330,22 +326,20 @@ class _Bloc extends Bloc<_Event, _State>
                 .toList(),
             onFileNotFound: (_) {},
           );
-          final location =
-              files
-                  .firstWhereOrNull((e) => e.metadata?.gpsCoord != null)
-                  ?.metadata
-                  ?.gpsCoord;
+          final location = files
+              .firstWhereOrNull((e) => e.metadata?.gpsCoord != null)
+              ?.metadata
+              ?.gpsCoord;
           mapCoord = location?.let((e) => MapCoord(e.lat, e.lng));
         }
       }
       if (mapCoord == null && state.transformedItems.isNotEmpty) {
         final latlng = await db.getFirstLocationLatLngOfFileIds(
           account: account.toDb(),
-          fileIds:
-              state.transformedItems
-                  .whereType<_FileItem>()
-                  .map((e) => e.file.fdId)
-                  .toList(),
+          fileIds: state.transformedItems
+              .whereType<_FileItem>()
+              .map((e) => e.file.fdId)
+              .toList(),
         );
         mapCoord = latlng?.let((e) => MapCoord(e.lat, e.lng));
       }
@@ -401,17 +395,13 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     emit(
       state.copyWith(
-        editItems:
-            (state.editItems ?? state.items).map((e) {
-              if (e.id == ev.item.id) {
-                return NewCollectionMapItem(
-                  ev.newLocation,
-                  clock.now().toUtc(),
-                );
-              } else {
-                return e;
-              }
-            }).toList(),
+        editItems: (state.editItems ?? state.items).map((e) {
+          if (e.id == ev.item.id) {
+            return NewCollectionMapItem(ev.newLocation, clock.now().toUtc());
+          } else {
+            return e;
+          }
+        }).toList(),
       ),
     );
   }
@@ -433,8 +423,10 @@ class _Bloc extends Bloc<_Event, _State>
     emit(
       state.copyWith(
         editSort: CollectionItemSort.manual,
-        editItems:
-            ev.sorted.whereType<_ActualItem>().map((e) => e.original).toList(),
+        editItems: ev.sorted
+            .whereType<_ActualItem>()
+            .map((e) => e.original)
+            .toList(),
         editTransformedItems: ev.sorted,
       ),
     );
@@ -524,8 +516,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       unawaited(DownloadHandler(_c).downloadFiles(account, selectedFiles));
     }
@@ -538,8 +532,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       final targetController = collectionsController.stream.value
           .itemsControllerByCollection(ev.collection);
@@ -559,12 +555,11 @@ class _Bloc extends Bloc<_Event, _State>
     final selected = state.selectedItems;
     _clearSelection(emit);
     final adapter = CollectionAdapter.of(_c, account, state.collection);
-    final selectedItems =
-        selected
-            .whereType<_ActualItem>()
-            .map((e) => e.original)
-            .where(adapter.isItemRemovable)
-            .toList();
+    final selectedItems = selected
+        .whereType<_ActualItem>()
+        .map((e) => e.original)
+        .where(adapter.isItemRemovable)
+        .toList();
     if (selectedItems.isNotEmpty) {
       unawaited(itemsController.removeItems(selectedItems));
     }
@@ -574,8 +569,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       filesController.updateProperty(
         selectedFiles,
@@ -593,18 +590,16 @@ class _Bloc extends Bloc<_Event, _State>
     final selected = state.selectedItems;
     _clearSelection(emit);
     final adapter = CollectionAdapter.of(_c, account, state.collection);
-    final selectedItems =
-        selected
-            .whereType<_ActualItem>()
-            .map((e) => e.original)
-            .where(adapter.isItemRemovable)
-            .toList();
-    final selectedFiles =
-        selected
-            .whereType<_FileItem>()
-            .where((e) => adapter.isItemDeletable(e.original))
-            .map((e) => e.file)
-            .toList();
+    final selectedItems = selected
+        .whereType<_ActualItem>()
+        .map((e) => e.original)
+        .where(adapter.isItemRemovable)
+        .toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .where((e) => adapter.isItemDeletable(e.original))
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       await filesController.remove(
         selectedFiles,
@@ -621,8 +616,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file.toAnyFile()).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file.toAnyFile())
+        .toList();
     if (selectedFiles.isNotEmpty) {
       emit(
         state.copyWith(
@@ -777,19 +774,18 @@ class _Bloc extends Bloc<_Event, _State>
     if (whitelist == null) {
       return rawItems;
     }
-    final results =
-        rawItems.where((e) {
-          if (e is CollectionFileItem) {
-            if (file_util.isNcAlbumFile(account, e.file)) {
-              // file shared with us are not in our db
-              return true;
-            } else {
-              return whitelist.contains(e.file.fdId);
-            }
-          } else {
-            return true;
-          }
-        }).toList();
+    final results = rawItems.where((e) {
+      if (e is CollectionFileItem) {
+        if (file_util.isNcAlbumFile(account, e.file)) {
+          // file shared with us are not in our db
+          return true;
+        } else {
+          return whitelist.contains(e.file.fdId);
+        }
+      } else {
+        return true;
+      }
+    }).toList();
     if (rawItems.length != results.length) {
       _log.fine(
         "[_filterItems] ${rawItems.length - results.length} items filtered out",
@@ -800,8 +796,10 @@ class _Bloc extends Bloc<_Event, _State>
 
   CollectionCoverResult? _getCoverByItems() {
     try {
-      final firstFile =
-          state.transformedItems.whereType<_FileItem>().first.file;
+      final firstFile = state.transformedItems
+          .whereType<_FileItem>()
+          .first
+          .file;
       return CollectionCoverResult(
         url: getStaticViewUrlForImageFile(
           account,

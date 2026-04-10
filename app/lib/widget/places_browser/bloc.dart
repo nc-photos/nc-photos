@@ -22,9 +22,8 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         placesController.stream,
-        onData:
-            (data) =>
-                state.copyWith(places: data.data, isLoading: data.hasNext),
+        onData: (data) =>
+            state.copyWith(places: data.data, isLoading: data.hasNext),
       ),
       forEach(
         emit,
@@ -44,16 +43,14 @@ class _Bloc extends Bloc<_Event, _State>
     Emitter<_State> emit,
   ) async {
     _log.info(ev);
-    final transformedPlaces =
-        ev.places.name
-            .sorted((a, b) => _sorter(a, b, locale))
-            .map((e) => _Item(account: account, place: e))
-            .toList();
-    final transformedCountries =
-        ev.places.countryCode
-            .sorted((a, b) => _sorter(a, b, locale))
-            .map((e) => _Item(account: account, place: e))
-            .toList();
+    final transformedPlaces = ev.places.name
+        .sorted((a, b) => _sorter(a, b, locale))
+        .map((e) => _Item(account: account, place: e))
+        .toList();
+    final transformedCountries = ev.places.countryCode
+        .sorted((a, b) => _sorter(a, b, locale))
+        .map((e) => _Item(account: account, place: e))
+        .toList();
     emit(
       state.copyWith(
         transformedPlaceItems: transformedPlaces,

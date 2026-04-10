@@ -34,17 +34,16 @@ class NcAlbumParser extends XmlResponseParser {
         prefix: "DAV:",
         namespaces: namespaces,
       )) {
-        final status =
-            child.children
-                .whereType<XmlElement>()
-                .firstWhere(
-                  (element) => element.matchQualifiedName(
-                    "status",
-                    prefix: "DAV:",
-                    namespaces: namespaces,
-                  ),
-                )
-                .innerText;
+        final status = child.children
+            .whereType<XmlElement>()
+            .firstWhere(
+              (element) => element.matchQualifiedName(
+                "status",
+                prefix: "DAV:",
+                namespaces: namespaces,
+              ),
+            )
+            .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
@@ -87,8 +86,9 @@ class _PropParser {
         prefix: "http://nextcloud.org/ns",
         namespaces: namespaces,
       )) {
-        _lastPhoto =
-            child.innerText.isEmpty ? null : int.parse(child.innerText);
+        _lastPhoto = child.innerText.isEmpty
+            ? null
+            : int.parse(child.innerText);
       } else if (child.matchQualifiedName(
         "nbItems",
         prefix: "http://nextcloud.org/ns",
@@ -106,8 +106,9 @@ class _PropParser {
         prefix: "http://nextcloud.org/ns",
         namespaces: namespaces,
       )) {
-        _dateRange =
-            child.innerText.isEmpty ? null : jsonDecode(child.innerText);
+        _dateRange = child.innerText.isEmpty
+            ? null
+            : jsonDecode(child.innerText);
       } else if (child.matchQualifiedName(
         "collaborators",
         prefix: "http://nextcloud.org/ns",

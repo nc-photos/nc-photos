@@ -100,19 +100,18 @@ class FilesBuilder {
     isFavorite: isFavorite,
     ownerId: ownerId,
     ownerDisplayName: ownerDisplayName,
-    imageData:
-        imageData == null
-            ? DbImageData(
-              lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
-              fileEtag: etag,
-              width: 640,
-              height: 480,
-              exif: null,
-              xmp: null,
-              dateTime: null,
-              src: 0,
-            )
-            : imageData.obj,
+    imageData: imageData == null
+        ? DbImageData(
+            lastUpdated: DateTime.utc(2020, 1, 2, 3, 4, 5),
+            fileEtag: etag,
+            width: 640,
+            height: 480,
+            exif: null,
+            xmp: null,
+            dateTime: null,
+            src: 0,
+          )
+        : imageData.obj,
     location: location,
   );
 
@@ -186,9 +185,8 @@ Future<void> insertFiles(
           ..addColumns([db.files.rowId])
           ..where(db.accountFiles.account.equals(sqlAccount.rowId).not())
           ..where(db.files.fileId.equals(f.fileId));
-    var rowId =
-        (await sharedQuery.map((r) => r.read(db.files.rowId)).get())
-            .firstOrNull;
+    var rowId = (await sharedQuery.map((r) => r.read(db.files.rowId)).get())
+        .firstOrNull;
     final insert = FileConverter.toSql(f);
     if (rowId == null) {
       final dbFile = await db

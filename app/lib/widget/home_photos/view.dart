@@ -6,10 +6,9 @@ class _ContentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.zoom != current.zoom ||
-              previous.viewWidth != current.viewWidth,
+      buildWhen: (previous, current) =>
+          previous.zoom != current.zoom ||
+          previous.viewWidth != current.viewWidth,
       builder: (context, state) {
         if (state.viewWidth == null) {
           return const SliverFillRemaining();
@@ -34,10 +33,9 @@ class _ScalingList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.scale != current.scale ||
-              previous.viewWidth != current.viewWidth,
+      buildWhen: (previous, current) =>
+          previous.scale != current.scale ||
+          previous.viewWidth != current.viewWidth,
       builder: (context, state) {
         if (state.viewWidth == null || state.scale == null) {
           return const SliverFillRemaining();
@@ -74,64 +72,54 @@ class _ContentListBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.transformedItems != current.transformedItems ||
-              previous.selectedItems != current.selectedItems ||
-              (previous.itemPerRow == null) != (current.itemPerRow == null) ||
-              (previous.itemSize == null) != (current.itemSize == null),
-      builder:
-          (context, state) =>
-              state.itemPerRow == null || state.itemSize == null
-                  ? const SliverToBoxAdapter(child: SizedBox.shrink())
-                  : SelectableSectionList<_Item>(
-                    sections:
-                        state.transformedItems
-                            .map(
-                              (e) => SelectableSection(
-                                header: e.first,
-                                items: e.sublist(1),
-                              ),
-                            )
-                            .toList(),
-                    selectedItems: state.selectedItems,
-                    sectionHeaderBuilder:
-                        (context, section, item) => item.buildWidget(context),
-                    itemBuilder: (context, section, index, item) {
-                      final w = item.buildWidget(context);
-                      if (isNeedVisibilityInfo) {
-                        return _ContentListItemView(
-                          key: Key("${_log.fullName}.${item.id}"),
-                          item: item,
-                          child: w,
-                        );
-                      } else {
-                        return w;
-                      }
-                    },
-                    extentOptimizer: SelectableSectionListExtentOptimizer(
-                      itemPerRow: itemPerRow,
-                      titleExtentBuilder:
-                          (_) =>
-                              AppDimension.of(context).timelineDateItemHeight,
-                      itemExtentBuilder: (_) => itemSize,
-                    ),
-                    onSelectionChange: (_, selected) {
-                      context.addEvent(
-                        _SetSelectedItems(items: selected.cast()),
-                      );
-                    },
-                    onItemTap: (context, section, index, item) {
-                      if (item is _FileItem) {
-                        Navigator.of(context).pushNamed(
-                          TimelineViewer.routeName,
-                          arguments: TimelineViewerArguments(
-                            initialFile: item.file,
-                          ),
-                        );
-                      }
-                    },
-                  ),
+      buildWhen: (previous, current) =>
+          previous.transformedItems != current.transformedItems ||
+          previous.selectedItems != current.selectedItems ||
+          (previous.itemPerRow == null) != (current.itemPerRow == null) ||
+          (previous.itemSize == null) != (current.itemSize == null),
+      builder: (context, state) =>
+          state.itemPerRow == null || state.itemSize == null
+          ? const SliverToBoxAdapter(child: SizedBox.shrink())
+          : SelectableSectionList<_Item>(
+              sections: state.transformedItems
+                  .map(
+                    (e) =>
+                        SelectableSection(header: e.first, items: e.sublist(1)),
+                  )
+                  .toList(),
+              selectedItems: state.selectedItems,
+              sectionHeaderBuilder: (context, section, item) =>
+                  item.buildWidget(context),
+              itemBuilder: (context, section, index, item) {
+                final w = item.buildWidget(context);
+                if (isNeedVisibilityInfo) {
+                  return _ContentListItemView(
+                    key: Key("${_log.fullName}.${item.id}"),
+                    item: item,
+                    child: w,
+                  );
+                } else {
+                  return w;
+                }
+              },
+              extentOptimizer: SelectableSectionListExtentOptimizer(
+                itemPerRow: itemPerRow,
+                titleExtentBuilder: (_) =>
+                    AppDimension.of(context).timelineDateItemHeight,
+                itemExtentBuilder: (_) => itemSize,
+              ),
+              onSelectionChange: (_, selected) {
+                context.addEvent(_SetSelectedItems(items: selected.cast()));
+              },
+              onItemTap: (context, section, index, item) {
+                if (item is _FileItem) {
+                  Navigator.of(context).pushNamed(
+                    TimelineViewer.routeName,
+                    arguments: TimelineViewerArguments(initialFile: item.file),
+                  );
+                }
+              },
+            ),
     );
   }
 
@@ -218,32 +206,30 @@ class _MemoryCollectionList extends StatelessWidget {
         height: _MemoryCollectionItemView.height,
         child: _BlocSelector<List<Collection>>(
           selector: (state) => state.memoryCollections,
-          builder:
-              (context, memoryCollections) => ListView.separated(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                itemCount: memoryCollections.length,
-                itemBuilder: (context, index) {
-                  final c = memoryCollections[index];
-                  final result = c.getCoverUrl(k.coverSize, k.coverSize);
-                  final year =
-                      (c.contentProvider as CollectionMemoryProvider).year;
-                  return _MemoryCollectionItemView(
-                    coverUrl: result?.url,
-                    coverMime: result?.mime,
-                    label: c.name,
-                    year: year,
-                    heroTag: flutter_util.HeroTag.fromCollection(c),
-                    onTap: () {
-                      Navigator.of(context).pushNamed(
-                        CollectionBrowser.routeName,
-                        arguments: CollectionBrowserArguments(c),
-                      );
-                    },
+          builder: (context, memoryCollections) => ListView.separated(
+            scrollDirection: Axis.horizontal,
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            itemCount: memoryCollections.length,
+            itemBuilder: (context, index) {
+              final c = memoryCollections[index];
+              final result = c.getCoverUrl(k.coverSize, k.coverSize);
+              final year = (c.contentProvider as CollectionMemoryProvider).year;
+              return _MemoryCollectionItemView(
+                coverUrl: result?.url,
+                coverMime: result?.mime,
+                label: c.name,
+                year: year,
+                heroTag: flutter_util.HeroTag.fromCollection(c),
+                onTap: () {
+                  Navigator.of(context).pushNamed(
+                    CollectionBrowser.routeName,
+                    arguments: CollectionBrowserArguments(c),
                   );
                 },
-                separatorBuilder: (context, index) => const SizedBox(width: 8),
-              ),
+              );
+            },
+            separatorBuilder: (context, index) => const SizedBox(width: 8),
+          ),
         ),
       ),
     );
@@ -336,9 +322,10 @@ class _MemoryCollectionItemViewState extends State<_MemoryCollectionItemView> {
               left: 0,
               right: 0,
               child: Container(
-                color: (_colorScheme?.primaryContainer ??
-                        Theme.of(context).colorScheme.inverseSurface)
-                    .withValues(alpha: 0.75),
+                color:
+                    (_colorScheme?.primaryContainer ??
+                            Theme.of(context).colorScheme.inverseSurface)
+                        .withValues(alpha: 0.75),
                 alignment: Alignment.center,
                 padding: const EdgeInsets.all(4),
                 child: Text(
@@ -400,10 +387,9 @@ class _DateBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.dateBarContent != current.dateBarContent ||
-              previous.appBarPosition != current.appBarPosition,
+      buildWhen: (previous, current) =>
+          previous.dateBarContent != current.dateBarContent ||
+          previous.appBarPosition != current.appBarPosition,
       builder: (context, state) {
         if (state.dateBarContent == null) {
           return const SizedBox.shrink();

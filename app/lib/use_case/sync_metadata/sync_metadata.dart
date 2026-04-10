@@ -42,8 +42,10 @@ class SyncMetadata {
   ) async* {
     final bool isNcMetadataSupported;
     try {
-      isNcMetadataSupported =
-          (await _isNcMetadataSupported(account, accountPrefController))!;
+      isNcMetadataSupported = (await _isNcMetadataSupported(
+        account,
+        accountPrefController,
+      ))!;
     } catch (e) {
       _log.severe("[syncAccount] Failed to get server version", e);
       return;

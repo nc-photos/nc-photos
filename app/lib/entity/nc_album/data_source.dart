@@ -31,10 +31,9 @@ class NcAlbumRemoteDataSource implements NcAlbumDataSource {
   @override
   Future<void> create(Account account, NcAlbum album) async {
     _log.info("[create] account: ${account.userId}, album: ${album.path}");
-    final response =
-        await ApiUtil.fromAccount(
-          account,
-        ).photos(account.userId.toString()).album(album.strippedPath).mkcol();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).photos(account.userId.toString()).album(album.strippedPath).mkcol();
     if (!response.isGood) {
       _log.severe("[create] Failed requesting server: $response");
       throw ApiException(
@@ -47,10 +46,9 @@ class NcAlbumRemoteDataSource implements NcAlbumDataSource {
   @override
   Future<void> remove(Account account, NcAlbum album) async {
     _log.info("[remove] account: ${account.userId}, album: ${album.path}");
-    final response =
-        await ApiUtil.fromAccount(
-          account,
-        ).photos(account.userId.toString()).album(album.strippedPath).delete();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).photos(account.userId.toString()).album(album.strippedPath).delete();
     if (!response.isGood) {
       _log.severe("[remove] Failed requesting server: $response");
       throw ApiException(

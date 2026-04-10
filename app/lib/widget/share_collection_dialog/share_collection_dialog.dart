@@ -46,14 +46,14 @@ class ShareCollectionDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            container: KiwiContainer().resolve<DiContainer>(),
-            account: account,
-            collectionsController:
-                context.read<AccountController>().collectionsController,
-            collection: collection,
-          ),
+      create: (context) => _Bloc(
+        container: KiwiContainer().resolve<DiContainer>(),
+        account: account,
+        collectionsController: context
+            .read<AccountController>()
+            .collectionsController,
+        collection: collection,
+      ),
       child: const _WrappedShareCollectionDialog(),
     );
   }
@@ -117,10 +117,9 @@ class _WrappedShareCollectionDialogState
         ),
       ],
       child: _BlocBuilder(
-        buildWhen:
-            (previous, current) =>
-                previous.collection != current.collection ||
-                previous.processingShares != current.processingShares,
+        buildWhen: (previous, current) =>
+            previous.collection != current.collection ||
+            previous.processingShares != current.processingShares,
         builder: (context, state) {
           final shares = {
             ...state.collection.shares,
@@ -162,9 +161,8 @@ class _ShareeInputViewState extends State<_ShareeInputView> {
     return MultiBlocListener(
       listeners: [
         BlocListener<_Bloc, _State>(
-          listenWhen:
-              (previous, current) =>
-                  previous.shareeSuggester != current.shareeSuggester,
+          listenWhen: (previous, current) =>
+              previous.shareeSuggester != current.shareeSuggester,
           listener: (context, state) {
             // search again
             if (_lastPattern != null) {
@@ -178,23 +176,21 @@ class _ShareeInputViewState extends State<_ShareeInputView> {
         child: TypeAheadField<Sharee>(
           controller: _textController,
           suggestionsCallback: _onSearch,
-          itemBuilder:
-              (context, suggestion) => ListTile(
-                title: Text(suggestion.label),
-                subtitle: Text(suggestion.shareWith.toString()),
-              ),
+          itemBuilder: (context, suggestion) => ListTile(
+            title: Text(suggestion.label),
+            subtitle: Text(suggestion.shareWith.toString()),
+          ),
           onSelected: _onSuggestionSelected,
           hideOnEmpty: true,
           hideOnLoading: true,
           autoFlipDirection: true,
-          builder:
-              (context, controller, focusNode) => TextField(
-                controller: controller,
-                focusNode: focusNode,
-                decoration: InputDecoration(
-                  hintText: L10n.global().addUserInputHint,
-                ),
-              ),
+          builder: (context, controller, focusNode) => TextField(
+            controller: controller,
+            focusNode: focusNode,
+            decoration: InputDecoration(
+              hintText: L10n.global().addUserInputHint,
+            ),
+          ),
         ),
       ),
     );

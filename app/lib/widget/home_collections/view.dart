@@ -63,31 +63,29 @@ class _CollectionCover extends StatelessWidget {
       child: Container(
         color: Theme.of(context).listPlaceholderBackgroundColor,
         constraints: const BoxConstraints.expand(),
-        child:
-            url != null
-                ? Hero(
-                  tag: flutter_util.HeroTag.fromCollection(collection),
-                  child: FittedBox(
-                    clipBehavior: Clip.hardEdge,
-                    fit: BoxFit.cover,
-                    child:
-                        CachedNetworkImageBuilder(
-                          type: CachedNetworkImageType.cover,
-                          imageUrl: url!,
-                          mime: mime,
-                          account: account,
-                          errorWidget: (context, url, error) {
-                            // just leave it empty
-                            return Container();
-                          },
-                        ).build(),
-                  ),
-                )
-                : Icon(
-                  Icons.panorama,
-                  color: Theme.of(context).listPlaceholderForegroundColor,
-                  size: 88,
+        child: url != null
+            ? Hero(
+                tag: flutter_util.HeroTag.fromCollection(collection),
+                child: FittedBox(
+                  clipBehavior: Clip.hardEdge,
+                  fit: BoxFit.cover,
+                  child: CachedNetworkImageBuilder(
+                    type: CachedNetworkImageType.cover,
+                    imageUrl: url!,
+                    mime: mime,
+                    account: account,
+                    errorWidget: (context, url, error) {
+                      // just leave it empty
+                      return Container();
+                    },
+                  ).build(),
                 ),
+              )
+            : Icon(
+                Icons.panorama,
+                color: Theme.of(context).listPlaceholderForegroundColor,
+                size: 88,
+              ),
       ),
     );
   }

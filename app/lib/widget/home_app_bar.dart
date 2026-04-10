@@ -35,8 +35,9 @@ class HomeSliverAppBar extends StatelessWidget {
         },
         child: _TitleView(account: account),
       ),
-      scrolledUnderBackgroundColor:
-          Theme.of(context).homeNavigationBarBackgroundColor,
+      scrolledUnderBackgroundColor: Theme.of(
+        context,
+      ).homeNavigationBarBackgroundColor,
       blurFilter: Theme.of(context).appBarBlurFilter,
       floating: true,
       automaticallyImplyLeading: false,
@@ -87,33 +88,34 @@ class _TitleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ValueStreamBuilder<String?>(
-      stream:
-          context.read<AccountController>().accountPrefController.accountLabel,
-      builder:
-          (context, snapshot) => AppBarTitleContainer(
-            title: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                account.scheme == "http"
-                    ? Icon(
-                      Icons.no_encryption_outlined,
-                      color: Theme.of(context).colorScheme.error,
-                      size: 16,
-                    )
-                    : Icon(
-                      Icons.https_outlined,
-                      color: Theme.of(context).colorScheme.primary,
-                      size: 16,
-                    ),
-                Text(
-                  snapshot.data ?? account.address,
-                  maxLines: 1,
-                  overflow: TextOverflow.clip,
-                ),
-              ],
+      stream: context
+          .read<AccountController>()
+          .accountPrefController
+          .accountLabel,
+      builder: (context, snapshot) => AppBarTitleContainer(
+        title: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            account.scheme == "http"
+                ? Icon(
+                    Icons.no_encryption_outlined,
+                    color: Theme.of(context).colorScheme.error,
+                    size: 16,
+                  )
+                : Icon(
+                    Icons.https_outlined,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 16,
+                  ),
+            Text(
+              snapshot.data ?? account.address,
+              maxLines: 1,
+              overflow: TextOverflow.clip,
             ),
-            subtitle: snapshot.data == null ? Text(account.username2) : null,
-          ),
+          ],
+        ),
+        subtitle: snapshot.data == null ? Text(account.username2) : null,
+      ),
     );
   }
 
@@ -136,13 +138,13 @@ class _ProfileIconView extends StatelessWidget {
           isProcessing
               ? const AppBarProgressIndicator()
               : ClipRRect(
-                borderRadius: BorderRadius.circular(_size / 2),
-                child: CachedNetworkImage(
-                  imageUrl: api_util.getAccountAvatarUrl(account, 64),
-                  fadeInDuration: const Duration(),
-                  filterQuality: FilterQuality.high,
+                  borderRadius: BorderRadius.circular(_size / 2),
+                  child: CachedNetworkImage(
+                    imageUrl: api_util.getAccountAvatarUrl(account, 64),
+                    fadeInDuration: const Duration(),
+                    filterQuality: FilterQuality.high,
+                  ),
                 ),
-              ),
           Positioned.fill(
             child: Material(
               type: MaterialType.transparency,

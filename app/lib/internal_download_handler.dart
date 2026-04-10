@@ -42,21 +42,19 @@ class InternalDownloadHandler {
     unawaited(
       showDialog(
         context: context,
-        builder:
-            (context) => ValueStreamBuilder<_DownloadProgress>(
-              stream: controller.stream,
-              builder:
-                  (_, snapshot) => DownloadProgressDialog(
-                    max: files.length,
-                    current: snapshot.requireData.current,
-                    progress: snapshot.requireData.progress,
-                    label: files[snapshot.requireData.current].filename,
-                    onCancel: () {
-                      download?.cancel();
-                      shouldRun = false;
-                    },
-                  ),
-            ),
+        builder: (context) => ValueStreamBuilder<_DownloadProgress>(
+          stream: controller.stream,
+          builder: (_, snapshot) => DownloadProgressDialog(
+            max: files.length,
+            current: snapshot.requireData.current,
+            progress: snapshot.requireData.progress,
+            label: files[snapshot.requireData.current].filename,
+            onCancel: () {
+              download?.cancel();
+              shouldRun = false;
+            },
+          ),
+        ),
       ),
     );
     try {
@@ -117,21 +115,19 @@ class InternalDownloadHandler {
     unawaited(
       showDialog(
         context: context,
-        builder:
-            (context) => ValueStreamBuilder<_DownloadProgress>(
-              stream: controller.stream,
-              builder:
-                  (_, snapshot) => DownloadProgressDialog(
-                    max: files.length,
-                    current: snapshot.requireData.current,
-                    progress: snapshot.requireData.progress,
-                    label: files[snapshot.requireData.current].filename,
-                    onCancel: () {
-                      download?.cancel();
-                      shouldRun = false;
-                    },
-                  ),
-            ),
+        builder: (context) => ValueStreamBuilder<_DownloadProgress>(
+          stream: controller.stream,
+          builder: (_, snapshot) => DownloadProgressDialog(
+            max: files.length,
+            current: snapshot.requireData.current,
+            progress: snapshot.requireData.progress,
+            label: files[snapshot.requireData.current].filename,
+            onCancel: () {
+              download?.cancel();
+              shouldRun = false;
+            },
+          ),
+        ),
       ),
     );
     try {

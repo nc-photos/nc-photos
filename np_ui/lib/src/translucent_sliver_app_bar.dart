@@ -491,12 +491,11 @@ class _SliverAppBarState extends State<TranslucentSliverAppBar>
       _snapConfiguration = null;
     }
 
-    _showOnScreenConfiguration =
-        widget.floating & widget.snap
-            ? const PersistentHeaderShowOnScreenConfiguration(
-              minShowOnScreenExtent: double.infinity,
-            )
-            : null;
+    _showOnScreenConfiguration = widget.floating & widget.snap
+        ? const PersistentHeaderShowOnScreenConfiguration(
+            minShowOnScreenExtent: double.infinity,
+          )
+        : null;
   }
 
   void _updateStretchConfiguration() {
@@ -533,14 +532,15 @@ class _SliverAppBarState extends State<TranslucentSliverAppBar>
   Widget build(BuildContext context) {
     assert(!widget.primary || debugCheckHasMediaQuery(context));
     final double bottomHeight = widget.bottom?.preferredSize.height ?? 0.0;
-    final double topPadding =
-        widget.primary ? MediaQuery.paddingOf(context).top : 0.0;
+    final double topPadding = widget.primary
+        ? MediaQuery.paddingOf(context).top
+        : 0.0;
     final double collapsedHeight =
         (widget.pinned && widget.floating && widget.bottom != null)
-            ? (widget.collapsedHeight ?? 0.0) + bottomHeight + topPadding
-            : (widget.collapsedHeight ?? widget.toolbarHeight) +
-                bottomHeight +
-                topPadding;
+        ? (widget.collapsedHeight ?? 0.0) + bottomHeight + topPadding
+        : (widget.collapsedHeight ?? widget.toolbarHeight) +
+              bottomHeight +
+              topPadding;
     final double? effectiveExpandedHeight;
     final double effectiveCollapsedHeight;
     final Widget? effectiveFlexibleSpace;
@@ -655,13 +655,12 @@ class _ScrollUnderFlexibleSpace extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    late final AppBarTheme appBarTheme = AppBarTheme.of(context);
-    late final AppBarTheme defaults =
-        Theme.of(context).useMaterial3
-            ? _AppBarDefaultsM3(context)
-            : _AppBarDefaultsM2(context);
-    final FlexibleSpaceBarSettings settings =
-        context.dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>()!;
+    late final AppBarThemeData appBarTheme = AppBarTheme.of(context);
+    late final AppBarTheme defaults = Theme.of(context).useMaterial3
+        ? _AppBarDefaultsM3(context)
+        : _AppBarDefaultsM2(context);
+    final FlexibleSpaceBarSettings settings = context
+        .dependOnInheritedWidgetOfExactType<FlexibleSpaceBarSettings>()!;
     final _ScrollUnderFlexibleConfig config = configBuilder(context);
     assert(
       config.expandedTitlePadding.isNonNegative,
@@ -691,10 +690,9 @@ class _ScrollUnderFlexibleSpace extends StatelessWidget {
     final EdgeInsets resolvedTitlePadding = config.expandedTitlePadding.resolve(
       Directionality.of(context),
     );
-    final EdgeInsetsGeometry expandedTitlePadding =
-        bottomHeight > 0
-            ? resolvedTitlePadding.copyWith(bottom: 0)
-            : resolvedTitlePadding;
+    final EdgeInsetsGeometry expandedTitlePadding = bottomHeight > 0
+        ? resolvedTitlePadding.copyWith(bottom: 0)
+        : resolvedTitlePadding;
 
     // Set maximum text scale factor to [_kMaxTitleTextScaleFactor] for the
     // title to keep the visual hierarchy the same even with larger font
@@ -851,14 +849,13 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
         (pinned && shrinkOffset > maxExtent - minExtent);
     final bool isPinnedWithOpacityFade =
         pinned && floating && bottom != null && extraToolbarHeight == 0.0;
-    final double toolbarOpacity =
-        !pinned || isPinnedWithOpacityFade
-            ? clampDouble(
-              visibleToolbarHeight / (toolbarHeight ?? kToolbarHeight),
-              0.0,
-              1.0,
-            )
-            : 1.0;
+    final double toolbarOpacity = !pinned || isPinnedWithOpacityFade
+        ? clampDouble(
+            visibleToolbarHeight / (toolbarHeight ?? kToolbarHeight),
+            0.0,
+            1.0,
+          )
+        : 1.0;
     final Widget? effectiveTitle = switch (variant) {
       _SliverAppVariant.small => title,
       _SliverAppVariant.medium || _SliverAppVariant.large => AnimatedOpacity(
@@ -896,19 +893,18 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
             actions: actions,
             flexibleSpace:
                 (title == null &&
-                        flexibleSpace != null &&
-                        !excludeHeaderSemantics)
-                    ? Semantics(header: true, child: flexibleSpace)
-                    : flexibleSpace,
+                    flexibleSpace != null &&
+                    !excludeHeaderSemantics)
+                ? Semantics(header: true, child: flexibleSpace)
+                : flexibleSpace,
             bottom: bottom,
             elevation: isScrolledUnder ? elevation : 0.0,
             scrolledUnderElevation: 0,
             shadowColor: shadowColor,
             surfaceTintColor: surfaceTintColor,
-            backgroundColor:
-                isScrolledUnder
-                    ? scrolledUnderBackgroundColor
-                    : backgroundColor,
+            backgroundColor: isScrolledUnder
+                ? scrolledUnderBackgroundColor
+                : backgroundColor,
             foregroundColor: foregroundColor,
             iconTheme: iconTheme,
             actionsIconTheme: actionsIconTheme,
@@ -918,10 +914,9 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
             titleSpacing: titleSpacing,
             shape: shape,
             toolbarOpacity: toolbarOpacity,
-            bottomOpacity:
-                pinned
-                    ? 1.0
-                    : clampDouble(visibleMainHeight / _bottomHeight, 0.0, 1.0),
+            bottomOpacity: pinned
+                ? 1.0
+                : clampDouble(visibleMainHeight / _bottomHeight, 0.0, 1.0),
             toolbarHeight: toolbarHeight,
             leadingWidth: leadingWidth,
             toolbarTextStyle: toolbarTextStyle,
@@ -1064,7 +1059,7 @@ class _RenderExpandedTitleBox extends RenderShiftedBox {
     return child == null
         ? 0.0
         : child.getMaxIntrinsicHeight(math.max(0, width - padding.horizontal)) +
-            padding.vertical;
+              padding.vertical;
   }
 
   @override
@@ -1081,7 +1076,7 @@ class _RenderExpandedTitleBox extends RenderShiftedBox {
     return child == null
         ? 0.0
         : child.getMinIntrinsicHeight(math.max(0, width - padding.horizontal)) +
-            padding.vertical;
+              padding.vertical;
   }
 
   @override
@@ -1112,8 +1107,10 @@ class _RenderExpandedTitleBox extends RenderShiftedBox {
       this.size = constraints.smallest;
       return;
     }
-    final Size size =
-        this.size = _computeSize(constraints, ChildLayoutHelper.layoutChild);
+    final Size size = this.size = _computeSize(
+      constraints,
+      ChildLayoutHelper.layoutChild,
+    );
     final Size childSize = child.size;
 
     assert(padding.isNonNegative);
@@ -1167,10 +1164,9 @@ class _AppBarDefaultsM2 extends AppBarTheme {
       _colors.brightness == Brightness.dark ? _colors.surface : _colors.primary;
 
   @override
-  Color? get foregroundColor =>
-      _colors.brightness == Brightness.dark
-          ? _colors.onSurface
-          : _colors.onPrimary;
+  Color? get foregroundColor => _colors.brightness == Brightness.dark
+      ? _colors.onSurface
+      : _colors.onPrimary;
 
   @override
   IconThemeData? get iconTheme => _theme.iconTheme;

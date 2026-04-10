@@ -39,10 +39,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   }) {
     return _State(
       data: data as List<_DataPoint>? ?? that.data,
-      initialPoint:
-          initialPoint == copyWithNull
-              ? that.initialPoint
-              : initialPoint as MapCoord?,
+      initialPoint: initialPoint == copyWithNull
+          ? that.initialPoint
+          : initialPoint as MapCoord?,
       isShowDataRangeControlPanel:
           isShowDataRangeControlPanel as bool? ??
           that.isShowDataRangeControlPanel,

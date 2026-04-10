@@ -1080,11 +1080,10 @@ void main() {
                         "metadata": <String, dynamic>{
                           "exif": <String, dynamic>{
                             // convert 2020-01-02T03:04:05Z to local time
-                            "DateTimeOriginal": DateFormat(
-                              "yyyy:MM:dd HH:mm:ss",
-                            ).format(
-                              DateTime.utc(2020, 1, 2, 3, 4, 5).toLocal(),
-                            ),
+                            "DateTimeOriginal":
+                                DateFormat("yyyy:MM:dd HH:mm:ss").format(
+                                  DateTime.utc(2020, 1, 2, 3, 4, 5).toLocal(),
+                                ),
                           },
                         },
                       },

@@ -166,8 +166,8 @@ class _AlbumImporterState extends State<AlbumImporter> {
 
   Widget _buildList(BuildContext context, ListImportableAlbumBlocState state) {
     return ListView.separated(
-      itemBuilder:
-          (context, index) => _buildItem(context, _backingFiles[index]),
+      itemBuilder: (context, index) =>
+          _buildItem(context, _backingFiles[index]),
       separatorBuilder: (context, index) => const Divider(),
       itemCount: _backingFiles.length,
     );
@@ -190,9 +190,8 @@ class _AlbumImporterState extends State<AlbumImporter> {
       leading: IconButton(
         icon: AnimatedSwitcher(
           duration: k.animationDurationShort,
-          transitionBuilder:
-              (child, animation) =>
-                  ScaleTransition(scale: animation, child: child),
+          transitionBuilder: (child, animation) =>
+              ScaleTransition(scale: animation, child: child),
           child: Icon(
             isPicked ? Icons.check_box : Icons.check_box_outline_blank,
             key: ValueKey(isPicked),
@@ -223,9 +222,8 @@ class _AlbumImporterState extends State<AlbumImporter> {
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder:
-            (context) =>
-                ProcessingDialog(text: L10n.global().albumImporterProgressText),
+        builder: (context) =>
+            ProcessingDialog(text: L10n.global().albumImporterProgressText),
       ),
     );
     try {
@@ -270,11 +268,10 @@ class _AlbumImporterState extends State<AlbumImporter> {
   }
 
   void _transformItems(List<ListImportableAlbumBlocItem> items) {
-    _backingFiles =
-        items
-            .sorted((a, b) => b.photoCount - a.photoCount)
-            .map((e) => e.file)
-            .toList();
+    _backingFiles = items
+        .sorted((a, b) => b.photoCount - a.photoCount)
+        .map((e) => e.file)
+        .toList();
   }
 
   late final DiContainer _c;

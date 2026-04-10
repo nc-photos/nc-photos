@@ -88,9 +88,9 @@ class _WrappedEnhancementSettingsState
                       subtitle: Text(
                         state
                             ? L10n.global()
-                                .settingsImageEditSaveResultsToServerTrueDescription
+                                  .settingsImageEditSaveResultsToServerTrueDescription
                             : L10n.global()
-                                .settingsImageEditSaveResultsToServerFalseDescription,
+                                  .settingsImageEditSaveResultsToServerFalseDescription,
                       ),
                       value: state,
                       onChanged: (value) {
@@ -125,34 +125,33 @@ class _WrappedEnhancementSettingsState
     var height = initialSize.height;
     final result = await showDialog<bool>(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            title: Text(L10n.global().settingsEnhanceMaxResolutionTitle2),
-            content: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(L10n.global().settingsEnhanceMaxResolutionDescription),
-                const SizedBox(height: 16),
-                _SizeSlider(
-                  initialWidth: initialSize.width,
-                  initialHeight: initialSize.height,
-                  onChanged: (size) {
-                    width = size.w;
-                    height = size.h;
-                  },
-                ),
-              ],
+      builder: (_) => AlertDialog(
+        title: Text(L10n.global().settingsEnhanceMaxResolutionTitle2),
+        content: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(L10n.global().settingsEnhanceMaxResolutionDescription),
+            const SizedBox(height: 16),
+            _SizeSlider(
+              initialWidth: initialSize.width,
+              initialHeight: initialSize.height,
+              onChanged: (size) {
+                width = size.w;
+                height = size.h;
+              },
             ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(MaterialLocalizations.of(context).okButtonLabel),
-              ),
-            ],
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(MaterialLocalizations.of(context).okButtonLabel),
           ),
+        ],
+      ),
     );
     if (!context.mounted ||
         result != true ||

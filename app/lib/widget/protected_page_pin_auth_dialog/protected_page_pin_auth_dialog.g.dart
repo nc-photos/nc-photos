@@ -38,10 +38,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       obsecuredInput: obsecuredInput as List<int>? ?? that.obsecuredInput,
       isAuthorized: isAuthorized as bool? ?? that.isAuthorized,
       isPinError: isPinError as Unique<bool?>? ?? that.isPinError,
-      setupResult:
-          setupResult == copyWithNull
-              ? that.setupResult
-              : setupResult as CiString?,
+      setupResult: setupResult == copyWithNull
+          ? that.setupResult
+          : setupResult as CiString?,
     );
   }
 

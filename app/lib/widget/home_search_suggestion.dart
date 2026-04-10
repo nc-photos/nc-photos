@@ -62,31 +62,29 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
       child:
           BlocBuilder<HomeSearchSuggestionBloc, HomeSearchSuggestionBlocState>(
             bloc: _bloc,
-            builder:
-                (context, state) => Theme(
-                  data: Theme.of(context).run((t) {
-                    return t.copyWith(
-                      listTileTheme: ListTileThemeData(
-                        iconColor: t.colorScheme.onSurface,
-                        textColor: t.colorScheme.onSurface,
-                      ),
-                    );
-                  }),
-                  child: _buildContent(context, state),
-                ),
+            builder: (context, state) => Theme(
+              data: Theme.of(context).run((t) {
+                return t.copyWith(
+                  listTileTheme: ListTileThemeData(
+                    iconColor: t.colorScheme.onSurface,
+                    textColor: t.colorScheme.onSurface,
+                  ),
+                );
+              }),
+              child: _buildContent(context, state),
+            ),
           ),
     );
   }
 
   void _initBloc() {
-    _bloc =
-        (widget.controller._bloc ??= HomeSearchSuggestionBloc(
-          widget.account,
-          context.read<AccountController>().collectionsController,
-          context.read<AccountController>().serverController,
-          context.read<AccountController>().accountPrefController,
-          locale: Localizations.localeOf(MyApp.globalContext),
-        ));
+    _bloc = (widget.controller._bloc ??= HomeSearchSuggestionBloc(
+      widget.account,
+      context.read<AccountController>().collectionsController,
+      context.read<AccountController>().serverController,
+      context.read<AccountController>().accountPrefController,
+      locale: Localizations.localeOf(MyApp.globalContext),
+    ));
     if (_bloc.state is! HomeSearchSuggestionBlocInit) {
       // process the current state
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -182,25 +180,21 @@ class _HomeSearchSuggestionState extends State<HomeSearchSuggestion>
   }
 
   void _transformItems(List<HomeSearchResult> results) {
-    final items =
-        () sync* {
-          for (final r in results) {
-            if (r is HomeSearchCollectionResult) {
-              yield _CollectionListItem(
-                r.collection,
-                onTap: _onCollectionPressed,
-              );
-            } else if (r is HomeSearchTagResult) {
-              yield _TagListItem(r.tag, onTap: _onTagPressed);
-            } else if (r is HomeSearchPersonResult) {
-              yield _PersonListItem(r.person, onTap: _onPersonPressed);
-            } else if (r is HomeSearchLocationResult) {
-              yield _LocationListItem(r.location, onTap: _onLocationPressed);
-            } else {
-              _log.warning("[_transformItems] Unknown type: ${r.runtimeType}");
-            }
-          }
-        }().toList();
+    final items = () sync* {
+      for (final r in results) {
+        if (r is HomeSearchCollectionResult) {
+          yield _CollectionListItem(r.collection, onTap: _onCollectionPressed);
+        } else if (r is HomeSearchTagResult) {
+          yield _TagListItem(r.tag, onTap: _onTagPressed);
+        } else if (r is HomeSearchPersonResult) {
+          yield _PersonListItem(r.person, onTap: _onPersonPressed);
+        } else if (r is HomeSearchLocationResult) {
+          yield _LocationListItem(r.location, onTap: _onLocationPressed);
+        } else {
+          _log.warning("[_transformItems] Unknown type: ${r.runtimeType}");
+        }
+      }
+    }().toList();
     _items = items;
   }
 

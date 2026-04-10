@@ -199,7 +199,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get setupSettingsModifyLaterHint => '你亦可稍后于设置页面中修改';
 
   @override
-  String get setupHiddenPrefDirNoticeDetail => '本 App 将于你的 Nextcloud 服务器中添加一个文件夹以储存配置文档，除非你计划删除本 App，否则请不要更改或删除文件夹的内容';
+  String get setupHiddenPrefDirNoticeDetail =>
+      '本 App 将于你的 Nextcloud 服务器中添加一个文件夹以储存配置文档，除非你计划删除本 App，否则请不要更改或删除文件夹的内容';
 
   @override
   String get settingsWidgetTitle => '设置';
@@ -220,19 +221,24 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsExifSupportTrueSubtitle => '需要额外的网络流量';
 
   @override
-  String get settingsFallbackClientExifTitle => 'Fall back to client-side parser';
+  String get settingsFallbackClientExifTitle =>
+      'Fall back to client-side parser';
 
   @override
-  String get settingsFallbackClientExifTrueText => 'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
+  String get settingsFallbackClientExifTrueText =>
+      'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
 
   @override
-  String get settingsFallbackClientExifFalseText => 'If Nextcloud failed to extract the file metadata, leave it as is';
+  String get settingsFallbackClientExifFalseText =>
+      'If Nextcloud failed to extract the file metadata, leave it as is';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogTitle => 'Enable client-side fallback?';
+  String get settingsFallbackClientExifConfirmDialogTitle =>
+      'Enable client-side fallback?';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogText => 'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
+  String get settingsFallbackClientExifConfirmDialogText =>
+      'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
 
   @override
   String get settingsMemoriesTitle => '回忆';
@@ -259,10 +265,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsShareFolderDialogTitle => '设置共享文件夹';
 
   @override
-  String get settingsShareFolderDialogDescription => '此设置必需与你服务器上的设置一致，请参考服务器上 config.php 内的 share_folder 项目';
+  String get settingsShareFolderDialogDescription =>
+      '此设置必需与你服务器上的设置一致，请参考服务器上 config.php 内的 share_folder 项目';
 
   @override
-  String get settingsShareFolderPickerDescription => '请选择与 config.php 中 share_folder 路径一致的文件夹，若你从未更改服务器设置，请按默认';
+  String get settingsShareFolderPickerDescription =>
+      '请选择与 config.php 中 share_folder 路径一致的文件夹，若你从未更改服务器设置，请按默认';
 
   @override
   String get settingsPersonProviderTitle => 'Person provider';
@@ -291,7 +299,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsDeviceMediaTitle => 'Show device media';
 
   @override
-  String get settingsDeviceMediaDescription => 'Selected folders will be displayed';
+  String get settingsDeviceMediaDescription =>
+      'Selected folders will be displayed';
 
   @override
   String get settingsViewerTitle => '查看器';
@@ -318,7 +327,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsViewerCustomizeAppBarTitle => 'Customize app bar';
 
   @override
-  String get settingsViewerCustomizeBottomAppBarTitle => 'Customize bottom app bar';
+  String get settingsViewerCustomizeBottomAppBarTitle =>
+      'Customize bottom app bar';
 
   @override
   String get settingsShowDateInAlbumTitle => '显示日期分类';
@@ -327,7 +337,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsShowDateInAlbumDescription => '只应用于以日期排序的相册';
 
   @override
-  String get settingsCollectionsCustomizeNavigationBarTitle => 'Customize navigation bar';
+  String get settingsCollectionsCustomizeNavigationBarTitle =>
+      'Customize navigation bar';
 
   @override
   String get settingsImageEditTitle => '编辑器';
@@ -339,16 +350,19 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsEnhanceMaxResolutionTitle2 => '图片增强的分辨率';
 
   @override
-  String get settingsEnhanceMaxResolutionDescription => '大于选定分辨率的图片会被缩小。\n\n高分辨率的图片需要更多的内存和时间进行处理。如果增强图片时应用发生了崩溃，请降低该数值。';
+  String get settingsEnhanceMaxResolutionDescription =>
+      '大于选定分辨率的图片会被缩小。\n\n高分辨率的图片需要更多的内存和时间进行处理。如果增强图片时应用发生了崩溃，请降低该数值。';
 
   @override
   String get settingsImageEditSaveResultsToServerTitle => '将编辑后的图片保存至服务器';
 
   @override
-  String get settingsImageEditSaveResultsToServerTrueDescription => '编辑后的图片会保存到服务器，出错仍会保存到本地';
+  String get settingsImageEditSaveResultsToServerTrueDescription =>
+      '编辑后的图片会保存到服务器，出错仍会保存到本地';
 
   @override
-  String get settingsImageEditSaveResultsToServerFalseDescription => '编辑后的图片已保存到设备';
+  String get settingsImageEditSaveResultsToServerFalseDescription =>
+      '编辑后的图片已保存到设备';
 
   @override
   String get settingsThemeTitle => '主题';
@@ -363,7 +377,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsSeedColorTitle => '主题色';
 
   @override
-  String get settingsSeedColorDescription => 'Used to derive all colors used in the app';
+  String get settingsSeedColorDescription =>
+      'Used to derive all colors used in the app';
 
   @override
   String get settingsSeedColorSystemColorDescription => 'Use system color';
@@ -381,7 +396,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsThemePresets => 'Presets';
 
   @override
-  String get settingsSeedColorPickerSystemColorButtonLabel => 'USE SYSTEM COLOR';
+  String get settingsSeedColorPickerSystemColorButtonLabel =>
+      'USE SYSTEM COLOR';
 
   @override
   String get settingsUseBlackInDarkThemeTitle => '黑色主题';
@@ -414,10 +430,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAppLockTypePassword => 'Password';
 
   @override
-  String get settingsAppLockDescription => 'If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.';
+  String get settingsAppLockDescription =>
+      'If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.';
 
   @override
-  String get settingsAppLockSetupBiometricFallbackDialogTitle => 'Pick the fallback when biometric is not available';
+  String get settingsAppLockSetupBiometricFallbackDialogTitle =>
+      'Pick the fallback when biometric is not available';
 
   @override
   String get settingsAppLockSetupPinDialogTitle => 'Set the PIN to unlock app';
@@ -426,13 +444,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsAppLockConfirmPinDialogTitle => 'Enter the same PIN again';
 
   @override
-  String get settingsAppLockSetupPasswordDialogTitle => 'Set the password to unlock app';
+  String get settingsAppLockSetupPasswordDialogTitle =>
+      'Set the password to unlock app';
 
   @override
-  String get settingsAppLockConfirmPasswordDialogTitle => 'Enter the same password again';
+  String get settingsAppLockConfirmPasswordDialogTitle =>
+      'Enter the same password again';
 
   @override
-  String get settingsViewerUseOriginalImageTitle => 'Show original image instead of high quality preview in viewer';
+  String get settingsViewerUseOriginalImageTitle =>
+      'Show original image instead of high quality preview in viewer';
 
   @override
   String get settingsExperimentalTitle => '实验';
@@ -456,13 +477,15 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsClearCacheDatabaseSuccessNotification => '存数据已清除，建议重启应用';
 
   @override
-  String get settingsManageTrustedCertificateTitle => 'Manage trusted certificates';
+  String get settingsManageTrustedCertificateTitle =>
+      'Manage trusted certificates';
 
   @override
   String get settingsUseNewHttpEngine => 'Use new HTTP engine';
 
   @override
-  String get settingsUseNewHttpEngineDescription => 'New HTTP engine based on Chromium, supporting new standards like HTTP/2* and HTTP/3 QUIC*.\n\nLimitations:\nSelf-signed certs can no longer be managed by us. You must import your CA certs to the system trust store for them to work.\n\n* HTTPS is required for HTTP/2 and HTTP/3';
+  String get settingsUseNewHttpEngineDescription =>
+      'New HTTP engine based on Chromium, supporting new standards like HTTP/2* and HTTP/3 QUIC*.\n\nLimitations:\nSelf-signed certs can no longer be managed by us. You must import your CA certs to the system trust store for them to work.\n\n* HTTPS is required for HTTP/2 and HTTP/3';
 
   @override
   String get settingsAboutSectionTitle => '关于';
@@ -489,7 +512,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get settingsTranslatorTitle => '翻译';
 
   @override
-  String get settingsRestartNeededDialog => 'Please restart the app to apply changes';
+  String get settingsRestartNeededDialog =>
+      'Please restart the app to apply changes';
 
   @override
   String get writePreferenceFailureNotification => '未能储存设置';
@@ -501,13 +525,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enableButtonLabel2 => 'Enable';
 
   @override
-  String get exifSupportNextcloud28Notes => 'Client-side support complements your server. The app will process files and attributes not supported by Nextcloud';
+  String get exifSupportNextcloud28Notes =>
+      'Client-side support complements your server. The app will process files and attributes not supported by Nextcloud';
 
   @override
-  String get exifSupportConfirmationDialogTitle2 => 'Enable client-side EXIF support?';
+  String get exifSupportConfirmationDialogTitle2 =>
+      'Enable client-side EXIF support?';
 
   @override
-  String get captureLogDetails => '如需记录事件日志以反馈问题:\n\n1. 启用本设置\n2. 重现一次你遇到的问题\n3. 禁用本设置\n4. 在装置的下载文件夹寻找 nc-photos.log 文件\n\n*此功能不支持使 App 强制关闭的问题，如遇此种情况，请直接联络开发者';
+  String get captureLogDetails =>
+      '如需记录事件日志以反馈问题:\n\n1. 启用本设置\n2. 重现一次你遇到的问题\n3. 禁用本设置\n4. 在装置的下载文件夹寻找 nc-photos.log 文件\n\n*此功能不支持使 App 强制关闭的问题，如遇此种情况，请直接联络开发者';
 
   @override
   String get captureLogSuccessNotification => '成功储存事件日志';
@@ -522,7 +549,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get connectButtonLabel => '连接';
 
   @override
-  String get rootPickerSkipConfirmationDialogContent2 => '你服务器上的所有文件将会被添加到 App，这将提高内存用量并有机会影响 App 的性能';
+  String get rootPickerSkipConfirmationDialogContent2 =>
+      '你服务器上的所有文件将会被添加到 App，这将提高内存用量并有机会影响 App 的性能';
 
   @override
   String megapixelCount(Object count) {
@@ -615,7 +643,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get albumImporterHeaderText => '导入文件夹为相册';
 
   @override
-  String get albumImporterSubHeaderText => '于下表列出推荐的文件夹。若你的服务器包含大量文件夹，将可能增加所需的时间';
+  String get albumImporterSubHeaderText =>
+      '于下表列出推荐的文件夹。若你的服务器包含大量文件夹，将可能增加所需的时间';
 
   @override
   String get importButtonLabel => '导入';
@@ -734,7 +763,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deletePermanentlyConfirmationDialogTitle => '永久删除';
 
   @override
-  String get deletePermanentlyConfirmationDialogContent => '将于你的服务器上永久删除所选的文件。\n\n此为不可逆操作';
+  String get deletePermanentlyConfirmationDialogContent =>
+      '将于你的服务器上永久删除所选的文件。\n\n此为不可逆操作';
 
   @override
   String get albumSharedLabel => '已分享';
@@ -790,7 +820,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get emptyTrashbinConfirmationDialogTitle => '清空回收站';
 
   @override
-  String get emptyTrashbinConfirmationDialogContent => '将于你的服务器上永久删除所有文件。\n\n此为不可逆操作';
+  String get emptyTrashbinConfirmationDialogContent =>
+      '将于你的服务器上永久删除所有文件。\n\n此为不可逆操作';
 
   @override
   String get unsetAlbumCoverTooltip => '取消设为相册封面';
@@ -883,7 +914,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get locationLabel => '地点';
 
   @override
-  String get multipleFilesLinkShareDialogContent => 'Nextcloud 并不支持建立多文件的分享链接，App 将会复制选取的文件到一新的文件夹，并分享该文件夹';
+  String get multipleFilesLinkShareDialogContent =>
+      'Nextcloud 并不支持建立多文件的分享链接，App 将会复制选取的文件到一新的文件夹，并分享该文件夹';
 
   @override
   String get folderNameInputHint => '文件夹名称';
@@ -911,7 +943,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get unshareLinkShareDirDialogTitle => '删除文件夹?';
 
   @override
-  String get unshareLinkShareDirDialogContent => '此文件夹本是 App 为了分享多文件而建立的，而此文件夹现在已没有任何分享，你希望删除此文件夹吗?';
+  String get unshareLinkShareDirDialogContent =>
+      '此文件夹本是 App 为了分享多文件而建立的，而此文件夹现在已没有任何分享，你希望删除此文件夹吗?';
 
   @override
   String get addToCollectionsViewTooltip => '添加到收藏库';
@@ -958,7 +991,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get sharedAlbumInfoDialogTitle => '关于共享相册';
 
   @override
-  String get sharedAlbumInfoDialogContent => '共享相册容许同一服务器上的多名用户存取相同的相册，请于使用本功能前细阅说明和限制';
+  String get sharedAlbumInfoDialogContent =>
+      '共享相册容许同一服务器上的多名用户存取相同的相册，请于使用本功能前细阅说明和限制';
 
   @override
   String get learnMoreButtonLabel => '更多说明';
@@ -983,7 +1017,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get homeFolderNotFoundDialogTitle => '未找到用户文件夹';
 
   @override
-  String get homeFolderNotFoundDialogContent => '请更正下面的 WebDAV 网址，你可以在 Nextcloud 网页界面中找到正确的网址';
+  String get homeFolderNotFoundDialogContent =>
+      '请更正下面的 WebDAV 网址，你可以在 Nextcloud 网页界面中找到正确的网址';
 
   @override
   String get homeFolderInputInvalidEmpty => '请输入用户文件夹的名称';
@@ -995,7 +1030,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createCollectionDialogAlbumLabel2 => 'Client-side album';
 
   @override
-  String get createCollectionDialogAlbumDescription2 => 'Album with extra features, accessible only with this app';
+  String get createCollectionDialogAlbumDescription2 =>
+      'Album with extra features, accessible only with this app';
 
   @override
   String get createCollectionDialogFolderLabel => '文件夹';
@@ -1052,7 +1088,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enhanceIntroDialogTitle => '增强你的图片';
 
   @override
-  String get enhanceIntroDialogDescription => '你的图片将会在本地处理，默认情况下会降低分辨率至2048x1536，你可以随时在设置的输出分辨率中调整';
+  String get enhanceIntroDialogDescription =>
+      '你的图片将会在本地处理，默认情况下会降低分辨率至2048x1536，你可以随时在设置的输出分辨率中调整';
 
   @override
   String get enhanceLowLightTitle => '弱光优化';
@@ -1067,7 +1104,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get collectionEditedPhotosLabel => '本地编辑';
 
   @override
-  String get deletePermanentlyLocalConfirmationDialogContent => '被选择的项目将会被永久的从此设备中删除\n\n这个操作是不可逆的';
+  String get deletePermanentlyLocalConfirmationDialogContent =>
+      '被选择的项目将会被永久的从此设备中删除\n\n这个操作是不可逆的';
 
   @override
   String get enhancePortraitBlurTitle => '背景虚化';
@@ -1082,7 +1120,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get enhanceSuperResolution4xTitle => '超分辨率（4x）';
 
   @override
-  String get enhanceSuperResolution4xDescription => '将您的照片放大到原始分辨率的4倍（有关最大分辨率如何作用的信息，请参阅帮助）';
+  String get enhanceSuperResolution4xDescription =>
+      '将您的照片放大到原始分辨率的4倍（有关最大分辨率如何作用的信息，请参阅帮助）';
 
   @override
   String get enhanceStyleTransferTitle => '风格转变';
@@ -1220,10 +1259,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageEditNoFaceDetected => 'No faces detected';
 
   @override
-  String get imageEditFaceNotSelected => 'Select one or more faces on your photos to apply the effects';
+  String get imageEditFaceNotSelected =>
+      'Select one or more faces on your photos to apply the effects';
 
   @override
-  String get imageEditResetSelectedFaceMessage => 'Selected faces are cleared after adjusting image transformation settings';
+  String get imageEditResetSelectedFaceMessage =>
+      'Selected faces are cleared after adjusting image transformation settings';
 
   @override
   String get imageEditOpenErrorMessage => 'Unable to open file';
@@ -1235,7 +1276,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get categoriesLabel => '类别';
 
   @override
-  String get searchLandingPeopleListEmptyText2 => 'Press settings to switch provider or press help to learn more';
+  String get searchLandingPeopleListEmptyText2 =>
+      'Press settings to switch provider or press help to learn more';
 
   @override
   String get searchLandingCategoryVideosLabel => '视频';
@@ -1303,7 +1345,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get imageSaveOptionDialogTitle => '保存结果';
 
   @override
-  String get imageSaveOptionDialogContent => 'Select where to save this and future processed images. If you picked server but the app failed to upload it, it will be saved on your device.';
+  String get imageSaveOptionDialogContent =>
+      'Select where to save this and future processed images. If you picked server but the app failed to upload it, it will be saved on your device.';
 
   @override
   String get imageSaveOptionDialogDeviceButtonLabel => '设备';
@@ -1339,7 +1382,8 @@ class AppLocalizationsZh extends AppLocalizations {
   String get createCollectionDialogNextcloudAlbumLabel2 => 'Server-side album';
 
   @override
-  String get createCollectionDialogNextcloudAlbumDescription2 => 'Create an album on your server, accessible with any app';
+  String get createCollectionDialogNextcloudAlbumDescription2 =>
+      'Create an album on your server, accessible with any app';
 
   @override
   String get removeCollectionsFailedNotification => '删除影集失败';
@@ -1383,10 +1427,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get trustedCertManagerNoHttpsServerError => 'No server available';
 
   @override
-  String get trustedCertManagerFailedToRemoveCertError => 'Failed to remove certificate';
+  String get trustedCertManagerFailedToRemoveCertError =>
+      'Failed to remove certificate';
 
   @override
-  String get missingVideoThumbnailHelpDialogTitle => 'Having trouble with video thumbnails?';
+  String get missingVideoThumbnailHelpDialogTitle =>
+      'Having trouble with video thumbnails?';
 
   @override
   String get dontShowAgain => 'Don\'t show again';
@@ -1419,13 +1465,16 @@ class AppLocalizationsZh extends AppLocalizations {
   String get livePhotoTooltip => 'Live photo';
 
   @override
-  String get dragAndDropRearrangeButtons => 'Drag and drop to rearrange buttons';
+  String get dragAndDropRearrangeButtons =>
+      'Drag and drop to rearrange buttons';
 
   @override
-  String get customizeCollectionsNavBarDescription => 'Drag and drop to rearrange buttons, tap the buttons above to minimize them';
+  String get customizeCollectionsNavBarDescription =>
+      'Drag and drop to rearrange buttons, tap the buttons above to minimize them';
 
   @override
-  String get customizeButtonsUnsupportedWarning => 'This button cannot be customized';
+  String get customizeButtonsUnsupportedWarning =>
+      'This button cannot be customized';
 
   @override
   String get placePickerTitle => 'Pick a place';
@@ -1455,10 +1504,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get uploadFolderPickerTitle => 'Upload to';
 
   @override
-  String get opOnlySupportRemoteFiles => 'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
+  String get opOnlySupportRemoteFiles =>
+      'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
 
   @override
-  String get opOnlySupportLocalFiles => 'This feature only supports local files on your device. Any selected remote files are ignored';
+  String get opOnlySupportLocalFiles =>
+      'This feature only supports local files on your device. Any selected remote files are ignored';
 
   @override
   String get uploadDialogPath => 'Path';
@@ -1467,16 +1518,20 @@ class AppLocalizationsZh extends AppLocalizations {
   String get uploadDialogBatchConvert => 'Batch convert';
 
   @override
-  String get uploadBatchConvertWarningText1 => 'Your photos will be compressed before uploading to your server.';
+  String get uploadBatchConvertWarningText1 =>
+      'Your photos will be compressed before uploading to your server.';
 
   @override
-  String get uploadBatchConvertWarningText2 => 'Motion photos are NOT supported and they will be uploaded as a still image.';
+  String get uploadBatchConvertWarningText2 =>
+      'Motion photos are NOT supported and they will be uploaded as a still image.';
 
   @override
-  String get uploadBatchConvertWarningText3 => 'Some metadata may be altered or dropped.';
+  String get uploadBatchConvertWarningText3 =>
+      'Some metadata may be altered or dropped.';
 
   @override
-  String get uploadBatchConvertWarningText4 => 'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
+  String get uploadBatchConvertWarningText4 =>
+      'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
 
   @override
   String get uploadBatchConvertSettings => 'Conversion settings';
@@ -1503,10 +1558,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get deleteMergedFileDialogBothButton => 'Both';
 
   @override
-  String get deleteMergedFileDialogContent => 'Some of the files exist both on your server and your device. Where should we delete these files from?';
+  String get deleteMergedFileDialogContent =>
+      'Some of the files exist both on your server and your device. Where should we delete these files from?';
 
   @override
-  String get deleteSingleMergedFileDialogContent => 'File exists both on your server and your device. Where should we delete this file from?';
+  String get deleteSingleMergedFileDialogContent =>
+      'File exists both on your server and your device. Where should we delete this file from?';
 
   @override
   String get collectionAddItemTitle => 'Where to insert item?';
@@ -1551,12 +1608,13 @@ class AppLocalizationsZh extends AppLocalizations {
   String get errorNoStoragePermission => '需要存取装置文件的权限';
 
   @override
-  String get errorServerNoCert => 'Server certificate not found. Try HTTP instead?';
+  String get errorServerNoCert =>
+      'Server certificate not found. Try HTTP instead?';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).
 class AppLocalizationsZhHant extends AppLocalizationsZh {
-  AppLocalizationsZhHant(): super('zh_Hant');
+  AppLocalizationsZhHant() : super('zh_Hant');
 
   @override
   String get appTitle => '相簿';
@@ -1737,7 +1795,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get setupSettingsModifyLaterHint => '你亦可稍後於設定頁面中修改';
 
   @override
-  String get setupHiddenPrefDirNoticeDetail => '本 App 將於你的 Nextcloud 伺服器中新增一個資料夾以儲存設定文件，除非你計劃刪除本 App，否則請不要更改或刪除資料夾的內容';
+  String get setupHiddenPrefDirNoticeDetail =>
+      '本 App 將於你的 Nextcloud 伺服器中新增一個資料夾以儲存設定文件，除非你計劃刪除本 App，否則請不要更改或刪除資料夾的內容';
 
   @override
   String get settingsWidgetTitle => '設定';
@@ -1767,10 +1826,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get settingsShareFolderDialogTitle => '設置共享資料夾';
 
   @override
-  String get settingsShareFolderDialogDescription => '此設定必需與你伺服器上的設置一致，請參考伺服器上 config.php 內的 share_folder 項目';
+  String get settingsShareFolderDialogDescription =>
+      '此設定必需與你伺服器上的設置一致，請參考伺服器上 config.php 內的 share_folder 項目';
 
   @override
-  String get settingsShareFolderPickerDescription => '請選擇與 config.php 中 share_folder 路徑一致的資料夾，若你從未更改伺服器設置，請按默認';
+  String get settingsShareFolderPickerDescription =>
+      '請選擇與 config.php 中 share_folder 路徑一致的資料夾，若你從未更改伺服器設置，請按默認';
 
   @override
   String get settingsServerAppSectionTitle => '伺服器 App 支援';
@@ -1854,7 +1915,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get enableButtonLabel => '啟用';
 
   @override
-  String get captureLogDetails => '如需記錄事件日誌以匯報問題:\n\n1. 啟用本設定\n2. 重現一次你遇到的問題\n3. 禁用本設定\n4. 在裝置的下載資料夾尋找 nc-photos.log 檔案\n\n*此功能不支援使 App 強制關閉的問題，如遇此種情況，請直接聯絡開發者';
+  String get captureLogDetails =>
+      '如需記錄事件日誌以匯報問題:\n\n1. 啟用本設定\n2. 重現一次你遇到的問題\n3. 禁用本設定\n4. 在裝置的下載資料夾尋找 nc-photos.log 檔案\n\n*此功能不支援使 App 強制關閉的問題，如遇此種情況，請直接聯絡開發者';
 
   @override
   String get captureLogSuccessNotification => '成功儲存事件日誌';
@@ -1869,7 +1931,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get connectButtonLabel => '連接';
 
   @override
-  String get rootPickerSkipConfirmationDialogContent2 => '你伺服器上的所有檔案將會被加入到 App，這將提高記憶體用量並有機會影響 App 的性能';
+  String get rootPickerSkipConfirmationDialogContent2 =>
+      '你伺服器上的所有檔案將會被加入到 App，這將提高記憶體用量並有機會影響 App 的性能';
 
   @override
   String megapixelCount(Object count) {
@@ -1962,7 +2025,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get albumImporterHeaderText => '導入資料夾為相簿';
 
   @override
-  String get albumImporterSubHeaderText => '於下表列出推薦的資料夾。若你的伺服器包含大量資料夾，將可能增加所需的時間';
+  String get albumImporterSubHeaderText =>
+      '於下表列出推薦的資料夾。若你的伺服器包含大量資料夾，將可能增加所需的時間';
 
   @override
   String get importButtonLabel => '導入';
@@ -2075,7 +2139,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get deletePermanentlyConfirmationDialogTitle => '永久刪除';
 
   @override
-  String get deletePermanentlyConfirmationDialogContent => '將於你的伺服器上永久刪除所選的檔案。\n\n此為不可逆操作';
+  String get deletePermanentlyConfirmationDialogContent =>
+      '將於你的伺服器上永久刪除所選的檔案。\n\n此為不可逆操作';
 
   @override
   String get albumSharedLabel => '已分享';
@@ -2131,7 +2196,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get emptyTrashbinConfirmationDialogTitle => '清空垃圾桶';
 
   @override
-  String get emptyTrashbinConfirmationDialogContent => '將於你的伺服器上永久刪除所有檔案。\n\n此為不可逆操作';
+  String get emptyTrashbinConfirmationDialogContent =>
+      '將於你的伺服器上永久刪除所有檔案。\n\n此為不可逆操作';
 
   @override
   String get unsetAlbumCoverTooltip => '取消設為相簿封面';
@@ -2209,7 +2275,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get locationLabel => '地點';
 
   @override
-  String get multipleFilesLinkShareDialogContent => 'Nextcloud 並不支援建立多檔案的分享連結，App 將會複製選取的檔案至一新的資料夾，並分享該資料夾';
+  String get multipleFilesLinkShareDialogContent =>
+      'Nextcloud 並不支援建立多檔案的分享連結，App 將會複製選取的檔案至一新的資料夾，並分享該資料夾';
 
   @override
   String get folderNameInputHint => '資料夾名稱';
@@ -2237,7 +2304,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get unshareLinkShareDirDialogTitle => '刪除資料夾?';
 
   @override
-  String get unshareLinkShareDirDialogContent => '此資料夾本是 App 為了分享多檔案而建立的，而此資料夾現在已沒有任何分享，你希望刪除此資料夾嗎?';
+  String get unshareLinkShareDirDialogContent =>
+      '此資料夾本是 App 為了分享多檔案而建立的，而此資料夾現在已沒有任何分享，你希望刪除此資料夾嗎?';
 
   @override
   String get addToCollectionsViewTooltip => '新增至收藏庫';
@@ -2284,7 +2352,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get sharedAlbumInfoDialogTitle => '關於共享相簿';
 
   @override
-  String get sharedAlbumInfoDialogContent => '共享相簿容許同一伺服器上的多名用戶存取相同的相簿，請於使用本功能前細閱說明和限制';
+  String get sharedAlbumInfoDialogContent =>
+      '共享相簿容許同一伺服器上的多名用戶存取相同的相簿，請於使用本功能前細閱說明和限制';
 
   @override
   String get learnMoreButtonLabel => '更多說明';
@@ -2309,7 +2378,8 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
   String get homeFolderNotFoundDialogTitle => '未找到用戶資料夾';
 
   @override
-  String get homeFolderNotFoundDialogContent => '請修正下面的 WebDAV 地址，你可以於 Nextcloud 網頁介面中找到正確的地址';
+  String get homeFolderNotFoundDialogContent =>
+      '請修正下面的 WebDAV 地址，你可以於 Nextcloud 網頁介面中找到正確的地址';
 
   @override
   String get homeFolderInputInvalidEmpty => '請輸入用戶資料夾的名稱';

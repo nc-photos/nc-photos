@@ -30,10 +30,9 @@ class _SimpleInputDialogState extends State<SimpleInputDialog> {
       content: Form(
         key: _formKey,
         child: TextFormField(
-          decoration:
-              widget.hintText == null
-                  ? null
-                  : InputDecoration(hintText: widget.hintText),
+          decoration: widget.hintText == null
+              ? null
+              : InputDecoration(hintText: widget.hintText),
           validator: widget.validator,
           onSaved: (value) {
             _formValue.text = value!;

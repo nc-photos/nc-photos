@@ -100,14 +100,13 @@ class _WrappedLocalRootPicker extends StatelessWidget {
             Expanded(
               child: _BlocSelector(
                 selector: (state) => state.isEnable,
-                builder:
-                    (context, isEnable) => IgnorePointer(
-                      ignoring: !isEnable,
-                      child: Opacity(
-                        opacity: isEnable ? 1 : .4,
-                        child: const _ContentList(),
-                      ),
-                    ),
+                builder: (context, isEnable) => IgnorePointer(
+                  ignoring: !isEnable,
+                  child: Opacity(
+                    opacity: isEnable ? 1 : .4,
+                    child: const _ContentList(),
+                  ),
+                ),
               ),
             ),
           ],
@@ -135,14 +134,13 @@ class _EnableSwitch extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: _BlocSelector(
           selector: (state) => state.isEnable,
-          builder:
-              (context, isEnable) => SwitchListTile(
-                title: Text(title),
-                value: isEnable,
-                onChanged: (value) {
-                  context.addEvent(_SetEnableLocalFile(value));
-                },
-              ),
+          builder: (context, isEnable) => SwitchListTile(
+            title: Text(title),
+            value: isEnable,
+            onChanged: (value) {
+              context.addEvent(_SetEnableLocalFile(value));
+            },
+          ),
         ),
       ),
     );
@@ -158,41 +156,37 @@ class _ContentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.dirs,
-      builder:
-          (context, dirs) =>
-              dirs == null
-                  ? const Align(
-                    alignment: Alignment.topCenter,
-                    child: LinearProgressIndicator(),
-                  )
-                  : ListView.builder(
-                    itemCount: dirs.length + 1,
-                    itemBuilder: (context, index) {
-                      final dir = index == 0 ? "DCIM" : dirs[index - 1];
-                      return _BlocSelector(
-                        selector: (state) => state.selectedDirs,
-                        builder: (context, selectedDirs) {
-                          final selectedMe = selectedDirs.contains(dir);
-                          final selectedParent = selectedDirs.any(
-                            (e) => file_util.isOrUnderDirPath(dir, e),
-                          );
-                          return CheckboxListTile(
-                            title: Text(path_lib.basename(dir)),
-                            subtitle: Text(dir),
-                            value: selectedMe || selectedParent,
-                            enabled: !(!selectedMe && selectedParent),
-                            onChanged: (value) {
-                              context.addEvent(
-                                value == true
-                                    ? _SelectDir(dir)
-                                    : _UnselectDir(dir),
-                              );
-                            },
-                          );
-                        },
-                      );
-                    },
-                  ),
+      builder: (context, dirs) => dirs == null
+          ? const Align(
+              alignment: Alignment.topCenter,
+              child: LinearProgressIndicator(),
+            )
+          : ListView.builder(
+              itemCount: dirs.length + 1,
+              itemBuilder: (context, index) {
+                final dir = index == 0 ? "DCIM" : dirs[index - 1];
+                return _BlocSelector(
+                  selector: (state) => state.selectedDirs,
+                  builder: (context, selectedDirs) {
+                    final selectedMe = selectedDirs.contains(dir);
+                    final selectedParent = selectedDirs.any(
+                      (e) => file_util.isOrUnderDirPath(dir, e),
+                    );
+                    return CheckboxListTile(
+                      title: Text(path_lib.basename(dir)),
+                      subtitle: Text(dir),
+                      value: selectedMe || selectedParent,
+                      enabled: !(!selectedMe && selectedParent),
+                      onChanged: (value) {
+                        context.addEvent(
+                          value == true ? _SelectDir(dir) : _UnselectDir(dir),
+                        );
+                      },
+                    );
+                  },
+                );
+              },
+            ),
     );
   }
 }

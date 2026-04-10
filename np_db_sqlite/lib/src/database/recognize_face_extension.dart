@@ -61,9 +61,8 @@ extension SqliteDbRecognizeFaceExtension on SqliteDb {
         batch.update(
           recognizeFaces,
           RecognizeFacesCompanion(label: Value(u.label)),
-          where:
-              ($RecognizeFacesTable t) =>
-                  t.account.equals(sqlAccount.rowId) & t.label.equals(u.label),
+          where: ($RecognizeFacesTable t) =>
+              t.account.equals(sqlAccount.rowId) & t.label.equals(u.label),
         );
       }
       for (final i in inserts) {
@@ -98,9 +97,8 @@ extension SqliteDbRecognizeFaceExtension on SqliteDb {
             parent: const Value.absent(),
             fileId: const Value.absent(),
           ),
-          where:
-              ($RecognizeFaceItemsTable t) =>
-                  t.parent.equals(face.rowId) & t.fileId.equals(u.fileId),
+          where: ($RecognizeFaceItemsTable t) =>
+              t.parent.equals(face.rowId) & t.fileId.equals(u.fileId),
         );
       }
       for (final i in inserts) {

@@ -79,8 +79,8 @@ class _WrappedCollectionsNavBarSettingsState
         body: MultiBlocListener(
           listeners: [
             _BlocListener(
-              listenWhen:
-                  (previous, current) => previous.error != current.error,
+              listenWhen: (previous, current) =>
+                  previous.error != current.error,
               listener: (context, state) {
                 if (state.error != null && isPageVisible()) {
                   SnackBarManager().showSnackBarForException(

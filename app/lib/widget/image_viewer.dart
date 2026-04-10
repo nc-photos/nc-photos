@@ -47,30 +47,28 @@ class LocalImageViewer extends StatelessWidget {
       onZoomEnded: onZoomEnded,
       child: _ImageViewHeroContainer(
         file: file.toAnyFile(),
-        heroImageBuilder:
-            (context) => Image(
-              image: heroProvider,
-              fit: BoxFit.contain,
-              filterQuality: FilterQuality.high,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                const SizeChangedLayoutNotification().dispatch(context);
-                return child;
-              },
-            ),
-        imageBuilder:
-            (context, onLoaded) => Image(
-              image: provider,
-              fit: BoxFit.contain,
-              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
-                if (frame != null) {
-                  WidgetsBinding.instance.addPostFrameCallback((_) {
-                    onLoaded();
-                  });
-                }
-                const SizeChangedLayoutNotification().dispatch(context);
-                return child;
-              },
-            ),
+        heroImageBuilder: (context) => Image(
+          image: heroProvider,
+          fit: BoxFit.contain,
+          filterQuality: FilterQuality.high,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            const SizeChangedLayoutNotification().dispatch(context);
+            return child;
+          },
+        ),
+        imageBuilder: (context, onLoaded) => Image(
+          image: provider,
+          fit: BoxFit.contain,
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (frame != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                onLoaded();
+              });
+            }
+            const SizeChangedLayoutNotification().dispatch(context);
+            return child;
+          },
+        ),
         onLoaded: onLoaded,
       ),
     );
@@ -135,14 +133,13 @@ class RemoteImageViewer extends StatelessWidget {
       onZoomEnded: onZoomEnded,
       child: _ImageViewHeroContainer(
         file: file.toAnyFile(),
-        heroImageBuilder:
-            (context) => _PreviewImage(account: account, file: file),
-        imageBuilder:
-            (context, onLoaded) => _FullSizedImage(
-              account: account,
-              file: file,
-              onItemLoaded: onLoaded,
-            ),
+        heroImageBuilder: (context) =>
+            _PreviewImage(account: account, file: file),
+        imageBuilder: (context, onLoaded) => _FullSizedImage(
+          account: account,
+          file: file,
+          onItemLoaded: onLoaded,
+        ),
         onLoaded: onLoaded,
       ),
     );
@@ -296,23 +293,24 @@ class _ImageViewHeroContainerState extends State<_ImageViewHeroContainer> {
           opacity: !_isHeroDone || !_isLoaded ? 1 : 0,
           child: Hero(
             tag: flutter_util.HeroTag.fromAnyFile(widget.file),
-            flightShuttleBuilder: (
-              flightContext,
-              animation,
-              flightDirection,
-              fromHeroContext,
-              toHeroContext,
-            ) {
-              _isHeroDone = false;
-              animation.addStatusListener(_animationListener);
-              return flutter_util.defaultHeroFlightShuttleBuilder(
-                flightContext,
-                animation,
-                flightDirection,
-                fromHeroContext,
-                toHeroContext,
-              );
-            },
+            flightShuttleBuilder:
+                (
+                  flightContext,
+                  animation,
+                  flightDirection,
+                  fromHeroContext,
+                  toHeroContext,
+                ) {
+                  _isHeroDone = false;
+                  animation.addStatusListener(_animationListener);
+                  return flutter_util.defaultHeroFlightShuttleBuilder(
+                    flightContext,
+                    animation,
+                    flightDirection,
+                    fromHeroContext,
+                    toHeroContext,
+                  );
+                },
             child: widget.heroImageBuilder(context),
           ),
         ),

@@ -60,12 +60,11 @@ class SharingBrowser extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (_) => _Bloc(
-            account: accountController.account,
-            accountPrefController: accountController.accountPrefController,
-            sharingsController: accountController.sharingsController,
-          ),
+      create: (_) => _Bloc(
+        account: accountController.account,
+        accountPrefController: accountController.accountPrefController,
+        sharingsController: accountController.sharingsController,
+      ),
       child: const _WrappedSharingBrowser(),
     );
   }
@@ -111,10 +110,9 @@ class _WrappedSharingBrowserState extends State<_WrappedSharingBrowser>
       ],
       child: Scaffold(
         body: _BlocBuilder(
-          buildWhen:
-              (previous, current) =>
-                  previous.items.isEmpty != current.items.isEmpty ||
-                  previous.isLoading != current.isLoading,
+          buildWhen: (previous, current) =>
+              previous.items.isEmpty != current.items.isEmpty ||
+              previous.isLoading != current.isLoading,
           builder: (context, state) {
             if (state.items.isEmpty && !state.isLoading) {
               return const _EmptyContentList();
@@ -126,14 +124,11 @@ class _WrappedSharingBrowserState extends State<_WrappedSharingBrowser>
                       const _AppBar(),
                       SliverToBoxAdapter(
                         child: _BlocBuilder(
-                          buildWhen:
-                              (previous, current) =>
-                                  previous.isLoading != current.isLoading,
-                          builder:
-                              (context, state) =>
-                                  state.isLoading
-                                      ? const LinearProgressIndicator()
-                                      : const SizedBox(height: 4),
+                          buildWhen: (previous, current) =>
+                              previous.isLoading != current.isLoading,
+                          builder: (context, state) => state.isLoading
+                              ? const LinearProgressIndicator()
+                              : const SizedBox(height: 4),
                         ),
                       ),
                       const _ContentList(),
@@ -189,17 +184,15 @@ class _ContentList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.transformedItems != current.transformedItems,
-      builder:
-          (_, state) => SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) =>
-                  _buildItem(context, state.transformedItems[index]),
-              childCount: state.transformedItems.length,
-            ),
-          ),
+      buildWhen: (previous, current) =>
+          previous.transformedItems != current.transformedItems,
+      builder: (_, state) => SliverList(
+        delegate: SliverChildBuilderDelegate(
+          (context, index) =>
+              _buildItem(context, state.transformedItems[index]),
+          childCount: state.transformedItems.length,
+        ),
+      ),
     );
   }
 
@@ -286,31 +279,29 @@ class _FileTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final dateStr = _getDateFormat(context).format(item.sharedTime!.toLocal());
     return _ListTile(
-      leading:
-          item.shares.first.itemType == ShareItemType.folder
-              ? const SizedBox(
-                height: _leadingSize,
-                width: _leadingSize,
-                child: Icon(Icons.folder, size: 32),
-              )
-              : NetworkRectThumbnail(
-                account: account,
-                imageUrl: NetworkRectThumbnail.imageUrlForFile(
-                  account,
-                  item.file,
-                ),
-                mime: item.file.fdMime,
-                dimension: _leadingSize,
-                errorBuilder: (_) => const Icon(Icons.folder, size: 32),
+      leading: item.shares.first.itemType == ShareItemType.folder
+          ? const SizedBox(
+              height: _leadingSize,
+              width: _leadingSize,
+              child: Icon(Icons.folder, size: 32),
+            )
+          : NetworkRectThumbnail(
+              account: account,
+              imageUrl: NetworkRectThumbnail.imageUrlForFile(
+                account,
+                item.file,
               ),
+              mime: item.file.fdMime,
+              dimension: _leadingSize,
+              errorBuilder: (_) => const Icon(Icons.folder, size: 32),
+            ),
       label: item.name,
-      description:
-          item.sharedBy == null
-              ? L10n.global().fileLastSharedDescription(dateStr)
-              : L10n.global().fileLastSharedByOthersDescription(
-                item.sharedBy!,
-                dateStr,
-              ),
+      description: item.sharedBy == null
+          ? L10n.global().fileLastSharedDescription(dateStr)
+          : L10n.global().fileLastSharedByOthersDescription(
+              item.sharedBy!,
+              dateStr,
+            ),
       trailing: isLinkShare ? const Icon(Icons.link) : null,
       onTap: onTap,
     );
@@ -330,28 +321,26 @@ class _AlbumTile extends StatelessWidget {
     final dateStr = _getDateFormat(context).format(item.sharedTime!.toLocal());
     final cover = item.album.coverProvider.getCover(item.album);
     return _ListTile(
-      leading:
-          cover == null
-              ? const SizedBox(
-                height: _leadingSize,
-                width: _leadingSize,
-                child: Icon(Icons.photo_album, size: 32),
-              )
-              : NetworkRectThumbnail(
-                account: account,
-                imageUrl: NetworkRectThumbnail.imageUrlForFile(account, cover),
-                mime: cover.fdMime,
-                dimension: _leadingSize,
-                errorBuilder: (_) => const Icon(Icons.photo_album, size: 32),
-              ),
+      leading: cover == null
+          ? const SizedBox(
+              height: _leadingSize,
+              width: _leadingSize,
+              child: Icon(Icons.photo_album, size: 32),
+            )
+          : NetworkRectThumbnail(
+              account: account,
+              imageUrl: NetworkRectThumbnail.imageUrlForFile(account, cover),
+              mime: cover.fdMime,
+              dimension: _leadingSize,
+              errorBuilder: (_) => const Icon(Icons.photo_album, size: 32),
+            ),
       label: item.album.name,
-      description:
-          item.sharedBy == null
-              ? L10n.global().fileLastSharedDescription(dateStr)
-              : L10n.global().albumLastSharedByOthersDescription(
-                item.sharedBy!,
-                dateStr,
-              ),
+      description: item.sharedBy == null
+          ? L10n.global().fileLastSharedDescription(dateStr)
+          : L10n.global().albumLastSharedByOthersDescription(
+              item.sharedBy!,
+              dateStr,
+            ),
       trailing: const Icon(Icons.photo_album_outlined),
       onTap: onTap,
     );

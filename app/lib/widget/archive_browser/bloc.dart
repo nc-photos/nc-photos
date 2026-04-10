@@ -61,20 +61,18 @@ class _Bloc extends Bloc<_Event, _State>
       forEach(
         emit,
         filesController.stream,
-        onData:
-            (data) => state.copyWith(
-              files: data.data,
-              isLoading: data.hasNext || _itemTransformerQueue.isProcessing,
-            ),
+        onData: (data) => state.copyWith(
+          files: data.data,
+          isLoading: data.hasNext || _itemTransformerQueue.isProcessing,
+        ),
       ),
       forEach(
         emit,
         filesController.errorStream,
-        onData:
-            (data) => state.copyWith(
-              isLoading: _itemTransformerQueue.isProcessing,
-              error: data,
-            ),
+        onData: (data) => state.copyWith(
+          isLoading: _itemTransformerQueue.isProcessing,
+          error: data,
+        ),
       ),
     ]);
   }
@@ -107,8 +105,10 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final selectedFiles =
-        selected.whereType<_FileItem>().map((e) => e.file).toList();
+    final selectedFiles = selected
+        .whereType<_FileItem>()
+        .map((e) => e.file)
+        .toList();
     if (selectedFiles.isNotEmpty) {
       filesController.updateProperty(
         selectedFiles,

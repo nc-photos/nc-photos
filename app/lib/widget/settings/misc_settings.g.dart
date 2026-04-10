@@ -31,10 +31,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   }) {
     return _State(
       isDoubleTapExit: isDoubleTapExit as bool? ?? that.isDoubleTapExit,
-      appLockType:
-          appLockType == copyWithNull
-              ? that.appLockType
-              : appLockType as ProtectedPageAuthType?,
+      appLockType: appLockType == copyWithNull
+          ? that.appLockType
+          : appLockType as ProtectedPageAuthType?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }

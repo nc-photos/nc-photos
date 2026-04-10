@@ -57,8 +57,8 @@ class _WrappedDeveloperSettingsState extends State<_WrappedDeveloperSettings>
             },
           ),
           BlocListener<_Bloc, _State>(
-            listenWhen:
-                (previous, current) => previous.message != current.message,
+            listenWhen: (previous, current) =>
+                previous.message != current.message,
             listener: (context, state) {
               if (state.message != null && isPageVisible()) {
                 SnackBarManager().showSnackBar(

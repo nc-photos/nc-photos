@@ -60,19 +60,16 @@ class _SettingsState extends State<Settings> {
             delegate: SliverChildListDelegate([
               ValueStreamBuilder<language_util.AppLanguage>(
                 stream: context.read<PrefController>().language,
-                builder:
-                    (context, snapshot) => ListTile(
-                      leading: const ListTileCenterLeading(
-                        child: Icon(Icons.translate_outlined),
-                      ),
-                      title: Text(L10n.global().settingsLanguageTitle),
-                      subtitle: Text(snapshot.requireData.nativeName),
-                      onTap: () {
-                        Navigator.of(
-                          context,
-                        ).pushNamed(LanguageSettings.routeName);
-                      },
-                    ),
+                builder: (context, snapshot) => ListTile(
+                  leading: const ListTileCenterLeading(
+                    child: Icon(Icons.translate_outlined),
+                  ),
+                  title: Text(L10n.global().settingsLanguageTitle),
+                  subtitle: Text(snapshot.requireData.nativeName),
+                  onTap: () {
+                    Navigator.of(context).pushNamed(LanguageSettings.routeName);
+                  },
+                ),
               ),
               _SubPageItem(
                 leading: const Icon(Icons.palette_outlined),
@@ -185,18 +182,17 @@ class _SettingsState extends State<Settings> {
     if (value) {
       final result = await showDialog<bool>(
         context: context,
-        builder:
-            (context) => AlertDialog(
-              content: Text(L10n.global().captureLogDetails),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(true);
-                  },
-                  child: Text(L10n.global().enableButtonLabel),
-                ),
-              ],
+        builder: (context) => AlertDialog(
+          content: Text(L10n.global().captureLogDetails),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(true);
+              },
+              child: Text(L10n.global().enableButtonLabel),
             ),
+          ],
+        ),
       );
       if (result == true) {
         setState(() {
@@ -232,7 +228,8 @@ class _SettingsState extends State<Settings> {
 
   static const String _sourceRepo = "https://nc-photos.web.app/link/repo";
   static const String _bugReportUrl = "https://nc-photos.web.app/link/issue";
-  static const String _translationUrl = "https://nc-photos.web.app/link/localization";
+  static const String _translationUrl =
+      "https://nc-photos.web.app/link/localization";
 }
 
 class _SubPageItem extends StatelessWidget {

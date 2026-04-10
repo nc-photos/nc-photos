@@ -48,8 +48,9 @@ class ListAlbum {
       yield ExceptionEvent(e, stackTrace);
       return;
     }
-    final List<File?> albumFiles =
-        ls.where((element) => element.isCollection != true).toList();
+    final List<File?> albumFiles = ls
+        .where((element) => element.isCollection != true)
+        .toList();
     // migrate files
     for (var i = 0; i < albumFiles.length; ++i) {
       var f = albumFiles[i]!;

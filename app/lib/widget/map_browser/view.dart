@@ -24,54 +24,52 @@ class _MapViewState extends State<_MapView> {
       child: _BlocBuilder(
         buildWhen: (previous, current) => previous.data != current.data,
         builder: (context, state) {
-          final prevPosition =
-              context.read<PrefController>().mapBrowserPrevPositionValue;
+          final prevPosition = context
+              .read<PrefController>()
+              .mapBrowserPrevPositionValue;
           return ValueStreamBuilder<GpsMapProvider>(
             stream: context.bloc.prefController.gpsMapProvider,
-            builder:
-                (context, gpsMapProvider) => InteractiveMap(
-                  providerHint: gpsMapProvider.requireData,
-                  initialPosition: prevPosition ?? const MapCoord(0, 0),
-                  initialZoom: prevPosition == null ? 2.5 : 10,
-                  dataPoints: state.data,
-                  onClusterTap: (dataPoints) {
-                    final c = Collection(
-                      name: "",
-                      contentProvider: CollectionAdHocProvider(
-                        account: context.bloc.account,
-                        fileIds:
-                            dataPoints
-                                .cast<_DataPoint>()
-                                .map((e) => e.fileId)
-                                .toList(),
-                      ),
-                    );
-                    Navigator.of(context).pushNamed(
-                      CollectionBrowser.routeName,
-                      arguments: CollectionBrowserArguments(c),
-                    );
-                  },
-                  googleClusterBuilder:
-                      (context, dataPoints) => _GoogleMarkerBuilder(
-                        context,
-                        account: context.bloc.account,
-                      ).build(dataPoints.cast()),
-                  osmClusterBuilder:
-                      (context, dataPoints) => _OsmMarkerBuilder(
-                        context,
-                        account: context.bloc.account,
-                      ).build(dataPoints.cast()),
-                  contentPadding: EdgeInsets.only(
-                    top: MediaQuery.of(context).padding.top,
-                    bottom: MediaQuery.of(context).padding.bottom,
+            builder: (context, gpsMapProvider) => InteractiveMap(
+              providerHint: gpsMapProvider.requireData,
+              initialPosition: prevPosition ?? const MapCoord(0, 0),
+              initialZoom: prevPosition == null ? 2.5 : 10,
+              dataPoints: state.data,
+              onClusterTap: (dataPoints) {
+                final c = Collection(
+                  name: "",
+                  contentProvider: CollectionAdHocProvider(
+                    account: context.bloc.account,
+                    fileIds: dataPoints
+                        .cast<_DataPoint>()
+                        .map((e) => e.fileId)
+                        .toList(),
                   ),
-                  onMapCreated: (controller) {
-                    _controller = controller;
-                    if (state.initialPoint != null) {
-                      controller.setPosition(state.initialPoint!);
-                    }
-                  },
-                ),
+                );
+                Navigator.of(context).pushNamed(
+                  CollectionBrowser.routeName,
+                  arguments: CollectionBrowserArguments(c),
+                );
+              },
+              googleClusterBuilder: (context, dataPoints) =>
+                  _GoogleMarkerBuilder(
+                    context,
+                    account: context.bloc.account,
+                  ).build(dataPoints.cast()),
+              osmClusterBuilder: (context, dataPoints) => _OsmMarkerBuilder(
+                context,
+                account: context.bloc.account,
+              ).build(dataPoints.cast()),
+              contentPadding: EdgeInsets.only(
+                top: MediaQuery.of(context).padding.top,
+                bottom: MediaQuery.of(context).padding.bottom,
+              ),
+              onMapCreated: (controller) {
+                _controller = controller;
+                if (state.initialPoint != null) {
+                  controller.setPosition(state.initialPoint!);
+                }
+              },
+            ),
           );
         },
       ),
@@ -214,20 +212,13 @@ class _PanelContainerState extends State<_PanelContainer>
   Widget build(BuildContext context) {
     return MatrixTransition(
       animation: _animation,
-      onTransform:
-          (animationValue) =>
-              Matrix4.identity()
-                ..translate(
-                  0.0,
-                  -(_size.height / 2) * (1 - animationValue),
-                  0.0,
-                )
-                ..scale(1.0, animationValue, 1.0),
+      onTransform: (animationValue) => Matrix4.identity()
+        ..translateByDouble(0, -(_size.height / 2) * (1 - animationValue), 0, 1)
+        ..scaleByDouble(1, animationValue, 1, 1),
       child: MeasureSize(
-        onChange:
-            (size) => setState(() {
-              _size = size;
-            }),
+        onChange: (size) => setState(() {
+          _size = size;
+        }),
         child: widget.child,
       ),
     );
@@ -285,25 +276,23 @@ class _DateRangeControlPanel extends StatelessWidget {
                   Expanded(
                     child: _BlocSelector<_DateRangeType>(
                       selector: (state) => state.dateRangeType,
-                      builder:
-                          (context, dateRangeType) =>
-                              DropdownButtonFormField<_DateRangeType>(
-                                items:
-                                    _DateRangeType.values
-                                        .map(
-                                          (e) => DropdownMenuItem(
-                                            value: e,
-                                            child: Text(e.toDisplayString()),
-                                          ),
-                                        )
-                                        .toList(),
-                                value: dateRangeType,
-                                onChanged: (value) {
-                                  if (value != null) {
-                                    context.addEvent(_SetDateRangeType(value));
-                                  }
-                                },
-                              ),
+                      builder: (context, dateRangeType) =>
+                          DropdownButtonFormField<_DateRangeType>(
+                            items: _DateRangeType.values
+                                .map(
+                                  (e) => DropdownMenuItem(
+                                    value: e,
+                                    child: Text(e.toDisplayString()),
+                                  ),
+                                )
+                                .toList(),
+                            initialValue: dateRangeType,
+                            onChanged: (value) {
+                              if (value != null) {
+                                context.addEvent(_SetDateRangeType(value));
+                              }
+                            },
+                          ),
                     ),
                   ),
                 ],
@@ -314,34 +303,32 @@ class _DateRangeControlPanel extends StatelessWidget {
                   Expanded(
                     child: _BlocSelector<DateRange>(
                       selector: (state) => state.localDateRange,
-                      builder:
-                          (context, localDateRange) => _DateField(
-                            localDateRange.from!,
-                            onChanged: (value) {
-                              context.addEvent(
-                                _SetLocalDateRange(
-                                  localDateRange.copyWith(from: value.toDate()),
-                                ),
-                              );
-                            },
-                          ),
+                      builder: (context, localDateRange) => _DateField(
+                        localDateRange.from!,
+                        onChanged: (value) {
+                          context.addEvent(
+                            _SetLocalDateRange(
+                              localDateRange.copyWith(from: value.toDate()),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                   const Text(" - "),
                   Expanded(
                     child: _BlocSelector<DateRange>(
                       selector: (state) => state.localDateRange,
-                      builder:
-                          (context, localDateRange) => _DateField(
-                            localDateRange.to!,
-                            onChanged: (value) {
-                              context.addEvent(
-                                _SetLocalDateRange(
-                                  localDateRange.copyWith(to: value.toDate()),
-                                ),
-                              );
-                            },
-                          ),
+                      builder: (context, localDateRange) => _DateField(
+                        localDateRange.to!,
+                        onChanged: (value) {
+                          context.addEvent(
+                            _SetLocalDateRange(
+                              localDateRange.copyWith(to: value.toDate()),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ],
@@ -429,11 +416,10 @@ class _SetAsDefaultSwitch extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.dateRangeType != current.dateRangeType ||
-              previous.prefDateRangeType != current.prefDateRangeType ||
-              previous.localDateRange != current.localDateRange,
+      buildWhen: (previous, current) =>
+          previous.dateRangeType != current.dateRangeType ||
+          previous.prefDateRangeType != current.prefDateRangeType ||
+          previous.localDateRange != current.localDateRange,
       builder: (context, state) {
         final isChecked = state.dateRangeType == state.prefDateRangeType;
         final isEnabled =
@@ -443,14 +429,13 @@ class _SetAsDefaultSwitch extends StatelessWidget {
           customBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(64),
           ),
-          onTap:
-              isEnabled && !isChecked
-                  ? () {
-                    if (!isChecked) {
-                      context.addEvent(const _SetAsDefaultRange());
-                    }
+          onTap: isEnabled && !isChecked
+              ? () {
+                  if (!isChecked) {
+                    context.addEvent(const _SetAsDefaultRange());
                   }
-                  : null,
+                }
+              : null,
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [

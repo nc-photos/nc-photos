@@ -29,61 +29,56 @@ Future<(T, U, V)> handleAnyFileIdByType<T, U, V>(
       "[handleAnyFileIdByType] Unknown ids: ${groups[null]}",
     );
   }
-  final nextcloudIds =
-      (groups[AnyFileProviderType.nextcloud] ?? [])
-          .map((e) {
-            try {
-              return (afId: e, fileId: AnyFileNextcloudProvider.parseAfId(e));
-            } catch (err, stackTrace) {
-              _$__NpLog.log.severe(
-                "[handleAnyFileIdByType] Failed to parse nextcloud file id: $e",
-                err,
-                stackTrace,
-              );
-              return null;
-            }
-          })
-          .nonNulls
-          .toList();
-  final localIds =
-      (groups[AnyFileProviderType.local] ?? [])
-          .map((e) {
-            try {
-              return (afId: e, fileId: AnyFileLocalProvider.parseAfId(e));
-            } catch (err, stackTrace) {
-              _$__NpLog.log.severe(
-                "[handleAnyFileIdByType] Failed to parse local file id: $e",
-                err,
-                stackTrace,
-              );
-              return null;
-            }
-          })
-          .nonNulls
-          .toList();
-  final mergedIds =
-      (groups[AnyFileProviderType.merged] ?? [])
-          .map((e) {
-            try {
-              final ids = AnyFileMergedProvider.parseAfId(e);
-              return (
-                afId: e,
-                remoteFileId: AnyFileNextcloudProvider.parseAfId(
-                  ids.remoteAfId,
-                ),
-                localFileId: AnyFileLocalProvider.parseAfId(ids.localAfId),
-              );
-            } catch (err, stackTrace) {
-              _$__NpLog.log.severe(
-                "[handleAnyFileIdByType] Failed to parse local file id: $e",
-                err,
-                stackTrace,
-              );
-              return null;
-            }
-          })
-          .nonNulls
-          .toList();
+  final nextcloudIds = (groups[AnyFileProviderType.nextcloud] ?? [])
+      .map((e) {
+        try {
+          return (afId: e, fileId: AnyFileNextcloudProvider.parseAfId(e));
+        } catch (err, stackTrace) {
+          _$__NpLog.log.severe(
+            "[handleAnyFileIdByType] Failed to parse nextcloud file id: $e",
+            err,
+            stackTrace,
+          );
+          return null;
+        }
+      })
+      .nonNulls
+      .toList();
+  final localIds = (groups[AnyFileProviderType.local] ?? [])
+      .map((e) {
+        try {
+          return (afId: e, fileId: AnyFileLocalProvider.parseAfId(e));
+        } catch (err, stackTrace) {
+          _$__NpLog.log.severe(
+            "[handleAnyFileIdByType] Failed to parse local file id: $e",
+            err,
+            stackTrace,
+          );
+          return null;
+        }
+      })
+      .nonNulls
+      .toList();
+  final mergedIds = (groups[AnyFileProviderType.merged] ?? [])
+      .map((e) {
+        try {
+          final ids = AnyFileMergedProvider.parseAfId(e);
+          return (
+            afId: e,
+            remoteFileId: AnyFileNextcloudProvider.parseAfId(ids.remoteAfId),
+            localFileId: AnyFileLocalProvider.parseAfId(ids.localAfId),
+          );
+        } catch (err, stackTrace) {
+          _$__NpLog.log.severe(
+            "[handleAnyFileIdByType] Failed to parse local file id: $e",
+            err,
+            stackTrace,
+          );
+          return null;
+        }
+      })
+      .nonNulls
+      .toList();
   try {
     return await (
       Future.value(nextcloudHandler(nextcloudIds)),

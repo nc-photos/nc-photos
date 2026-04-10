@@ -89,16 +89,17 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
                 alignment: Alignment.center,
                 fit: BoxFit.cover,
                 clipBehavior: Clip.hardEdge,
-                child: AnyFilePresenterFactory.largeImage(
-                  widget.file.toAnyFile(),
-                  account: widget.account,
-                  prefController: context.read(),
-                ).buildWidget(
-                  errorBuilder: (context) {
-                    // just leave it empty
-                    return Container();
-                  },
-                ),
+                child:
+                    AnyFilePresenterFactory.largeImage(
+                      widget.file.toAnyFile(),
+                      account: widget.account,
+                      prefController: context.read(),
+                    ).buildWidget(
+                      errorBuilder: (context) {
+                        // just leave it empty
+                        return Container();
+                      },
+                    ),
               ),
             ),
           ),
@@ -158,15 +159,14 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
             ),
           PopupMenuButton<_ItemMenuOption>(
             tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-            itemBuilder:
-                (_) => [
-                  PopupMenuItem(
-                    value: _ItemMenuOption.unshare,
-                    child: Text(L10n.global().unshareTooltip),
-                  ),
-                ],
-            onSelected:
-                (option) => _onItemMenuOptionSelected(context, share, option),
+            itemBuilder: (_) => [
+              PopupMenuItem(
+                value: _ItemMenuOption.unshare,
+                child: Text(L10n.global().unshareTooltip),
+              ),
+            ],
+            onSelected: (option) =>
+                _onItemMenuOptionSelected(context, share, option),
           ),
         ],
       ),
@@ -239,27 +239,24 @@ class _SharedFileViewerState extends State<SharedFileViewer> {
   Future<bool> _askDeleteLinkShareDir() async {
     final result = await showDialog<bool>(
       context: context,
-      builder:
-          (_) => AlertDialog(
-            title: Text(L10n.global().unshareLinkShareDirDialogTitle),
-            content: Text(L10n.global().unshareLinkShareDirDialogContent),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(false);
-                },
-                child: Text(
-                  MaterialLocalizations.of(context).cancelButtonLabel,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop(true);
-                },
-                child: Text(MaterialLocalizations.of(context).okButtonLabel),
-              ),
-            ],
+      builder: (_) => AlertDialog(
+        title: Text(L10n.global().unshareLinkShareDirDialogTitle),
+        content: Text(L10n.global().unshareLinkShareDirDialogContent),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(false);
+            },
+            child: Text(MaterialLocalizations.of(context).cancelButtonLabel),
           ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(true);
+            },
+            child: Text(MaterialLocalizations.of(context).okButtonLabel),
+          ),
+        ],
+      ),
     );
     return result == true;
   }

@@ -30,17 +30,16 @@ class TagParser extends XmlResponseParser {
         prefix: "DAV:",
         namespaces: namespaces,
       )) {
-        final status =
-            child.children
-                .whereType<XmlElement>()
-                .firstWhere(
-                  (element) => element.matchQualifiedName(
-                    "status",
-                    prefix: "DAV:",
-                    namespaces: namespaces,
-                  ),
-                )
-                .innerText;
+        final status = child.children
+            .whereType<XmlElement>()
+            .firstWhere(
+              (element) => element.matchQualifiedName(
+                "status",
+                prefix: "DAV:",
+                namespaces: namespaces,
+              ),
+            )
+            .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }

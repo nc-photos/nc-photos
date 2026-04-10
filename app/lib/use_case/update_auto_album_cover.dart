@@ -43,12 +43,11 @@ class UpdateAutoAlbumCover {
     }
 
     try {
-      final coverFile =
-          sortedItems
-              .whereType<AlbumFileItem>()
-              .map((e) => e.file)
-              .where(file_util.isSupportedFormat)
-              .first;
+      final coverFile = sortedItems
+          .whereType<AlbumFileItem>()
+          .map((e) => e.file)
+          .where(file_util.isSupportedFormat)
+          .first;
       // cache the result for later use
       if ((album.coverProvider as AlbumAutoCoverProvider).coverFile
               ?.compareServerIdentity(coverFile) !=

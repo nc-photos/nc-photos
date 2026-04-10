@@ -10,16 +10,15 @@ class _SaveDialog extends StatelessWidget {
       children: [
         const Positioned.fill(child: ColoredBox(color: Colors.black38)),
         _BlocBuilder(
-          buildWhen:
-              (previous, current) => previous.saveState != current.saveState,
-          builder:
-              (context, state) => switch (state.saveState) {
-                _SaveState.init => const _ProcessSaveDialog(),
-                _SaveState.download => const _DownloadSaveDialog(),
-                _SaveState.process => const _ProcessSaveDialog(),
-                _SaveState.save => const _SavingSaveDialog(),
-                null => const _ProcessSaveDialog(),
-              },
+          buildWhen: (previous, current) =>
+              previous.saveState != current.saveState,
+          builder: (context, state) => switch (state.saveState) {
+            _SaveState.init => const _ProcessSaveDialog(),
+            _SaveState.download => const _DownloadSaveDialog(),
+            _SaveState.process => const _ProcessSaveDialog(),
+            _SaveState.save => const _SavingSaveDialog(),
+            null => const _ProcessSaveDialog(),
+          },
         ),
       ],
     );
@@ -33,11 +32,10 @@ class _DownloadSaveDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.downloadProgress,
-      builder:
-          (context, downloadProgress) => AlertDialog(
-            title: Text(L10n.global().imageEditDownloadDialogTitle),
-            content: LinearProgressIndicator(value: downloadProgress),
-          ),
+      builder: (context, downloadProgress) => AlertDialog(
+        title: Text(L10n.global().imageEditDownloadDialogTitle),
+        content: LinearProgressIndicator(value: downloadProgress),
+      ),
     );
   }
 }

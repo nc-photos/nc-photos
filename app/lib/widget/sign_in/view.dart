@@ -149,13 +149,12 @@ class _SignInBody extends StatelessWidget {
           const SizedBox(height: 16),
           _BlocSelector(
             selector: (state) => state.method,
-            builder:
-                (context, method) => FilledButton.tonal(
-                  onPressed: () {
-                    _onSignInMethodPressed(context);
-                  },
-                  child: Text(method.toOptionString()),
-                ),
+            builder: (context, method) => FilledButton.tonal(
+              onPressed: () {
+                _onSignInMethodPressed(context);
+              },
+              child: Text(method.toOptionString()),
+            ),
           ),
           const Row(
             children: [
@@ -170,11 +169,10 @@ class _SignInBody extends StatelessWidget {
           const SizedBox(height: 8),
           _BlocSelector(
             selector: (state) => state.method,
-            builder:
-                (context, method) => ExpandableContainer(
-                  isShow: method == _SignInMethod.usernamePassword,
-                  child: const _UsernamePasswordForm(),
-                ),
+            builder: (context, method) => ExpandableContainer(
+              isShow: method == _SignInMethod.usernamePassword,
+              child: const _UsernamePasswordForm(),
+            ),
           ),
         ],
       ),
@@ -185,21 +183,19 @@ class _SignInBody extends StatelessWidget {
     final pageContext = context;
     final result = await showDialog<_SignInMethod>(
       context: context,
-      builder:
-          (context) => FancyOptionPicker(
-            items:
-                _SignInMethod.values
-                    .map(
-                      (e) => FancyOptionPickerItem(
-                        label: e.toOptionString(),
-                        isSelected: pageContext.state.method == e,
-                        onSelect: () {
-                          Navigator.of(context).pop(e);
-                        },
-                      ),
-                    )
-                    .toList(),
-          ),
+      builder: (context) => FancyOptionPicker(
+        items: _SignInMethod.values
+            .map(
+              (e) => FancyOptionPickerItem(
+                label: e.toOptionString(),
+                isSelected: pageContext.state.method == e,
+                onSelect: () {
+                  Navigator.of(context).pop(e);
+                },
+              ),
+            )
+            .toList(),
+      ),
     );
     if (result == null || !context.mounted) {
       return;
@@ -216,24 +212,22 @@ class _SchemeDropdown extends StatelessWidget {
     return DropdownButtonHideUnderline(
       child: _BlocSelector(
         selector: (state) => state.scheme,
-        builder:
-            (context, scheme) => DropdownButtonFormField<_Scheme>(
-              value: scheme,
-              items:
-                  _Scheme.values
-                      .map(
-                        (e) => DropdownMenuItem<_Scheme>(
-                          value: e,
-                          child: Text(e.toValueString()),
-                        ),
-                      )
-                      .toList(),
-              onChanged: (value) {
-                if (value != null) {
-                  context.addEvent(_SetScheme(value));
-                }
-              },
-            ),
+        builder: (context, scheme) => DropdownButtonFormField<_Scheme>(
+          initialValue: scheme,
+          items: _Scheme.values
+              .map(
+                (e) => DropdownMenuItem<_Scheme>(
+                  value: e,
+                  child: Text(e.toValueString()),
+                ),
+              )
+              .toList(),
+          onChanged: (value) {
+            if (value != null) {
+              context.addEvent(_SetScheme(value));
+            }
+          },
+        ),
       ),
     );
   }
@@ -291,42 +285,38 @@ class _UsernamePasswordForm extends StatelessWidget {
         const SizedBox(height: 8),
         _BlocSelector(
           selector: (state) => state.shouldObscurePassword,
-          builder:
-              (context, shouldObscurePassword) => TextFormField(
-                decoration: InputDecoration(
-                  hintText: L10n.global().passwordInputHint,
-                  suffixIcon:
-                      shouldObscurePassword
-                          ? IconButton(
-                            icon: const Icon(Icons.visibility_off_outlined),
-                            onPressed: () {
-                              context.addEvent(
-                                const _SetObscurePassword(false),
-                              );
-                            },
-                          )
-                          : IconButton(
-                            icon: const Icon(Icons.visibility_outlined),
-                            onPressed: () {
-                              context.addEvent(const _SetObscurePassword(true));
-                            },
-                          ),
-                ),
-                keyboardType: TextInputType.text,
-                obscureText: shouldObscurePassword,
-                validator: (value) {
-                  if (context.state.method != _SignInMethod.usernamePassword) {
-                    return null;
-                  }
-                  if (value!.trim().isEmpty) {
-                    return L10n.global().passwordInputInvalidEmpty;
-                  }
-                  return null;
-                },
-                onChanged: (value) {
-                  context.addEvent(_SetPassword(value));
-                },
-              ),
+          builder: (context, shouldObscurePassword) => TextFormField(
+            decoration: InputDecoration(
+              hintText: L10n.global().passwordInputHint,
+              suffixIcon: shouldObscurePassword
+                  ? IconButton(
+                      icon: const Icon(Icons.visibility_off_outlined),
+                      onPressed: () {
+                        context.addEvent(const _SetObscurePassword(false));
+                      },
+                    )
+                  : IconButton(
+                      icon: const Icon(Icons.visibility_outlined),
+                      onPressed: () {
+                        context.addEvent(const _SetObscurePassword(true));
+                      },
+                    ),
+            ),
+            keyboardType: TextInputType.text,
+            obscureText: shouldObscurePassword,
+            validator: (value) {
+              if (context.state.method != _SignInMethod.usernamePassword) {
+                return null;
+              }
+              if (value!.trim().isEmpty) {
+                return L10n.global().passwordInputInvalidEmpty;
+              }
+              return null;
+            },
+            onChanged: (value) {
+              context.addEvent(_SetPassword(value));
+            },
+          ),
         ),
       ],
     );

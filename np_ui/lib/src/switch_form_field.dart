@@ -20,10 +20,9 @@ class SwitchFormField extends FormField<bool> {
              value: value,
              contentPadding: const EdgeInsets.all(0),
              title: title,
-             subtitle:
-                 value
-                     ? (subtitleTrue ?? subtitle)
-                     : (subtitleFalse ?? subtitle),
+             subtitle: value
+                 ? (subtitleTrue ?? subtitle)
+                 : (subtitleFalse ?? subtitle),
              dense: dense,
              onChanged: field.didChange,
            );

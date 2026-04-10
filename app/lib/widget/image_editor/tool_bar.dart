@@ -14,41 +14,36 @@ class _ToolBar extends StatelessWidget {
             const SizedBox(width: 16),
             _BlocSelector(
               selector: (state) => state.activeTool,
-              builder:
-                  (context, activeTool) => _ToolButton(
-                    icon: Icons.palette_outlined,
-                    label: L10n.global().imageEditToolbarColorLabel,
-                    isSelected: activeTool == _ToolType.color,
-                    onPressed: () {
-                      context.addEvent(const _SetActiveTool(_ToolType.color));
-                    },
-                  ),
+              builder: (context, activeTool) => _ToolButton(
+                icon: Icons.palette_outlined,
+                label: L10n.global().imageEditToolbarColorLabel,
+                isSelected: activeTool == _ToolType.color,
+                onPressed: () {
+                  context.addEvent(const _SetActiveTool(_ToolType.color));
+                },
+              ),
             ),
             _BlocSelector(
               selector: (state) => state.activeTool,
-              builder:
-                  (context, activeTool) => _ToolButton(
-                    icon: Icons.auto_awesome,
-                    label: L10n.global().imageEditToolbarEffectLabel,
-                    isSelected: activeTool == _ToolType.effect,
-                    onPressed: () {
-                      context.addEvent(const _SetActiveTool(_ToolType.effect));
-                    },
-                  ),
+              builder: (context, activeTool) => _ToolButton(
+                icon: Icons.auto_awesome,
+                label: L10n.global().imageEditToolbarEffectLabel,
+                isSelected: activeTool == _ToolType.effect,
+                onPressed: () {
+                  context.addEvent(const _SetActiveTool(_ToolType.effect));
+                },
+              ),
             ),
             _BlocSelector(
               selector: (state) => state.activeTool,
-              builder:
-                  (context, activeTool) => _ToolButton(
-                    icon: Icons.transform_outlined,
-                    label: L10n.global().imageEditToolbarTransformLabel,
-                    isSelected: activeTool == _ToolType.transform,
-                    onPressed: () {
-                      context.addEvent(
-                        const _SetActiveTool(_ToolType.transform),
-                      );
-                    },
-                  ),
+              builder: (context, activeTool) => _ToolButton(
+                icon: Icons.transform_outlined,
+                label: L10n.global().imageEditToolbarTransformLabel,
+                isSelected: activeTool == _ToolType.transform,
+                onPressed: () {
+                  context.addEvent(const _SetActiveTool(_ToolType.transform));
+                },
+              ),
             ),
             const SizedBox(width: 16),
           ],
@@ -78,10 +73,9 @@ class _ToolButton extends StatelessWidget {
             onTap: onPressed,
             child: Container(
               decoration: BoxDecoration(
-                color:
-                    isSelected
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : null,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
                 // borderRadius: const BorderRadius.all(Radius.circular(24)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -91,22 +85,18 @@ class _ToolButton extends StatelessWidget {
                 children: [
                   Icon(
                     icon,
-                    color:
-                        isSelected
-                            ? Theme.of(context).colorScheme.onSecondaryContainer
-                            : M3.of(context).filterChip.disabled.labelText,
+                    color: isSelected
+                        ? Theme.of(context).colorScheme.onSecondaryContainer
+                        : M3.of(context).filterChip.disabled.labelText,
                     size: 18,
                   ),
                   const SizedBox(width: 4),
                   Text(
                     label,
                     style: TextStyle(
-                      color:
-                          isSelected
-                              ? Theme.of(
-                                context,
-                              ).colorScheme.onSecondaryContainer
-                              : Theme.of(context).colorScheme.onSurface,
+                      color: isSelected
+                          ? Theme.of(context).colorScheme.onSecondaryContainer
+                          : Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ],

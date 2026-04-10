@@ -106,12 +106,11 @@ class AnyFileNextcloudLargeImagePresenter
       imageBuilder: (context, child, imageProvider) {
         return imageBuilder?.call(context, child) ?? child;
       },
-      errorWidget:
-          errorBuilder == null
-              ? null
-              : (context, url, error) {
-                return errorBuilder.call(context);
-              },
+      errorWidget: errorBuilder == null
+          ? null
+          : (context, url, error) {
+              return errorBuilder.call(context);
+            },
     ).build();
   }
 
@@ -140,12 +139,11 @@ class AnyFileNextcloudOriginalImagePresenter
       imageBuilder: (context, child, imageProvider) {
         return imageBuilder?.call(context, child) ?? child;
       },
-      errorWidget:
-          errorBuilder == null
-              ? null
-              : (context, url, error) {
-                return errorBuilder.call(context);
-              },
+      errorWidget: errorBuilder == null
+          ? null
+          : (context, url, error) {
+              return errorBuilder.call(context);
+            },
     ).build();
   }
 
@@ -208,8 +206,9 @@ class AnyFileNextcloudPhotoListImagePresenter
       previewUrl: NetworkRectThumbnail.imageUrlForFile(account, _provider.file),
       mime: _provider.file.fdMime,
       isFavorite: shouldShowFavorite == true && _provider.file.fdIsFavorite,
-      heroKey:
-          shouldUseHero == true ? flutter_util.HeroTag.fromAnyFile(file) : null,
+      heroKey: shouldUseHero == true
+          ? flutter_util.HeroTag.fromAnyFile(file)
+          : null,
     );
   }
 

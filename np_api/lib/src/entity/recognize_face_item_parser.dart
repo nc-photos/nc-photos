@@ -41,17 +41,16 @@ class RecognizeFaceItemParser extends XmlResponseParser {
         prefix: "DAV:",
         namespaces: namespaces,
       )) {
-        final status =
-            child.children
-                .whereType<XmlElement>()
-                .firstWhere(
-                  (element) => element.matchQualifiedName(
-                    "status",
-                    prefix: "DAV:",
-                    namespaces: namespaces,
-                  ),
-                )
-                .innerText;
+        final status = child.children
+            .whereType<XmlElement>()
+            .firstWhere(
+              (element) => element.matchQualifiedName(
+                "status",
+                prefix: "DAV:",
+                namespaces: namespaces,
+              ),
+            )
+            .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
@@ -84,10 +83,9 @@ class RecognizeFaceItemParser extends XmlResponseParser {
       etag: etag,
       lastModified: lastModified,
       faceDetections: faceDetections,
-      fileMetadataSize:
-          fileMetadataSize is Map
-              ? fileMetadataSize.cast<String, dynamic>()
-              : null,
+      fileMetadataSize: fileMetadataSize is Map
+          ? fileMetadataSize.cast<String, dynamic>()
+          : null,
       hasPreview: hasPreview,
       realPath: realPath,
       favorite: favorite,
@@ -131,17 +129,17 @@ class _PropParser {
         prefix: "http://nextcloud.org/ns",
         namespaces: namespaces,
       )) {
-        _faceDetections =
-            child.innerText.isEmpty
-                ? null
-                : (jsonDecode(child.innerText) as List).cast<JsonObj>();
+        _faceDetections = child.innerText.isEmpty
+            ? null
+            : (jsonDecode(child.innerText) as List).cast<JsonObj>();
       } else if (child.matchQualifiedName(
         "file-metadata-size",
         prefix: "http://nextcloud.org/ns",
         namespaces: namespaces,
       )) {
-        _fileMetadataSize =
-            child.innerText.isEmpty ? null : jsonDecode(child.innerText);
+        _fileMetadataSize = child.innerText.isEmpty
+            ? null
+            : jsonDecode(child.innerText);
       } else if (child.matchQualifiedName(
         "has-preview",
         prefix: "http://nextcloud.org/ns",

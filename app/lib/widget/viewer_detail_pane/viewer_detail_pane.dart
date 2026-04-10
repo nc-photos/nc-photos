@@ -74,14 +74,13 @@ class ViewerDetailPane extends StatelessWidget {
   Widget build(BuildContext context) {
     final accountController = context.read<AccountController>();
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            c: KiwiContainer().resolve(),
-            collectionsController: accountController.collectionsController,
-            account: accountController.account,
-            file: file,
-            fromCollection: fromCollection,
-          ),
+      create: (context) => _Bloc(
+        c: KiwiContainer().resolve(),
+        collectionsController: accountController.collectionsController,
+        account: accountController.account,
+        file: file,
+        fromCollection: fromCollection,
+      ),
       child: _WrappedViewerDetailPane(
         onRemoveFromCollectionPressed: onRemoveFromCollectionPressed,
         onArchivePressed: onArchivePressed,

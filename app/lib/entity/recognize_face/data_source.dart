@@ -23,10 +23,9 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
   @override
   Future<List<RecognizeFace>> getFaces(Account account) async {
     _log.info("[getFaces] account: ${account.userId}");
-    final response =
-        await ApiUtil.fromAccount(
-          account,
-        ).recognize(account.userId.raw).faces().propfind();
+    final response = await ApiUtil.fromAccount(
+      account,
+    ).recognize(account.userId.raw).faces().propfind();
     if (!response.isGood) {
       _log.severe("[getFaces] Failed requesting server: $response");
       throw ApiException(

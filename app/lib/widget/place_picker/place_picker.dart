@@ -46,12 +46,11 @@ class PlacePicker extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            prefController: context.read(),
-            initialPosition: initialPosition,
-            initialZoom: initialZoom,
-          ),
+      create: (context) => _Bloc(
+        prefController: context.read(),
+        initialPosition: initialPosition,
+        initialZoom: initialZoom,
+      ),
       child: const _WrappedPlacePicker(),
     );
   }

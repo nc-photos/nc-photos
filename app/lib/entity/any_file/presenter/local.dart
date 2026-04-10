@@ -61,12 +61,11 @@ class AnyFileLocalLargeImagePresenter implements AnyFileLargeImagePresenter {
       frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
         return imageBuilder?.call(context, child) ?? child;
       },
-      errorBuilder:
-          errorBuilder == null
-              ? null
-              : (context, error, stackTrace) {
-                return errorBuilder.call(context);
-              },
+      errorBuilder: errorBuilder == null
+          ? null
+          : (context, error, stackTrace) {
+              return errorBuilder.call(context);
+            },
     );
   }
 
@@ -114,10 +113,9 @@ class AnyFileLocalPhotoListImagePresenter
   }) {
     return PhotoListLocalImage(
       file: _provider.file,
-      backupStatus:
-          isUploading == true
-              ? PhotoListLocalFileBackupStatus.uploading
-              : PhotoListLocalFileBackupStatus.none,
+      backupStatus: isUploading == true
+          ? PhotoListLocalFileBackupStatus.uploading
+          : PhotoListLocalFileBackupStatus.none,
     );
   }
 
@@ -133,10 +131,9 @@ class AnyFileLocalPhotoListVideoPresenter
   Widget buildWidget({bool? shouldShowFavorite, bool? isUploading}) {
     return PhotoListLocalVideo(
       file: _provider.file,
-      backupStatus:
-          isUploading == true
-              ? PhotoListLocalFileBackupStatus.uploading
-              : PhotoListLocalFileBackupStatus.none,
+      backupStatus: isUploading == true
+          ? PhotoListLocalFileBackupStatus.uploading
+          : PhotoListLocalFileBackupStatus.none,
     );
   }
 

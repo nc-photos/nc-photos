@@ -37,12 +37,12 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       collection: collection as Collection? ?? that.collection,
       processingShares:
           processingShares as List<CollectionShare>? ?? that.processingShares,
-      sharees:
-          sharees == copyWithNull ? that.sharees : sharees as List<Sharee>?,
-      shareeSuggester:
-          shareeSuggester == copyWithNull
-              ? that.shareeSuggester
-              : shareeSuggester as Suggester<Sharee>?,
+      sharees: sharees == copyWithNull
+          ? that.sharees
+          : sharees as List<Sharee>?,
+      shareeSuggester: shareeSuggester == copyWithNull
+          ? that.shareeSuggester
+          : shareeSuggester as Suggester<Sharee>?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }

@@ -192,10 +192,9 @@ class NcAlbumItems extends Table {
 
 class Albums extends Table {
   IntColumn get rowId => integer().autoIncrement()();
-  IntColumn get file =>
-      integer()
-          .references(Files, #rowId, onDelete: KeyAction.cascade)
-          .unique()();
+  IntColumn get file => integer()
+      .references(Files, #rowId, onDelete: KeyAction.cascade)
+      .unique()();
   // store the etag of the file when the album is cached in the db
   TextColumn get fileEtag => text().nullable()();
   IntColumn get version => integer()();
@@ -272,12 +271,11 @@ class RecognizeFaces extends Table {
 @DriftTableSort("SqliteDb")
 class RecognizeFaceItems extends Table {
   IntColumn get rowId => integer().autoIncrement()();
-  IntColumn get parent =>
-      integer().references(
-        RecognizeFaces,
-        #rowId,
-        onDelete: KeyAction.cascade,
-      )();
+  IntColumn get parent => integer().references(
+    RecognizeFaces,
+    #rowId,
+    onDelete: KeyAction.cascade,
+  )();
   TextColumn get relativePath => text()();
   IntColumn get fileId => integer()();
   IntColumn get contentLength => integer().nullable()();

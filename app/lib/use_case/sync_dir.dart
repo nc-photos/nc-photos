@@ -70,17 +70,16 @@ class SyncDir {
       await dataSrc.concludeSync(syncState);
       return true;
     }
-    final subDirs =
-        children
-            .where(
-              (f) =>
-                  f.isCollection == true &&
-                  !remoteDir.compareServerIdentity(f) &&
-                  !f.path.endsWith(
-                    remote_storage_util.getRemoteStorageDir(account),
-                  ),
-            )
-            .toList();
+    final subDirs = children
+        .where(
+          (f) =>
+              f.isCollection == true &&
+              !remoteDir.compareServerIdentity(f) &&
+              !f.path.endsWith(
+                remote_storage_util.getRemoteStorageDir(account),
+              ),
+        )
+        .toList();
     final progress = IntProgress(subDirs.length);
     for (final d in subDirs) {
       onProgressUpdate?.call(

@@ -65,11 +65,10 @@ class ShareBlocListener extends StatelessWidget {
     }
     final result = await showDialog<ShareMethodDialogResult>(
       context: context,
-      builder:
-          (context) => ShareMethodDialog(
-            isSupportPerview: shareRequest.value!.isSupportPerview,
-            isSupportRemoteLink: shareRequest.value!.isSupportRemoteLink,
-          ),
+      builder: (context) => ShareMethodDialog(
+        isSupportPerview: shareRequest.value!.isSupportPerview,
+        isSupportRemoteLink: shareRequest.value!.isSupportRemoteLink,
+      ),
     );
     if (result == null || !context.mounted) {
       return;
@@ -88,18 +87,17 @@ class ShareBlocListener extends StatelessWidget {
     if (shareLinkRequest.value!.shareRequest.files.length == 1) {
       final result = await showDialog<String>(
         context: context,
-        builder:
-            (context) => SimpleInputDialog(
-              hintText: L10n.global().passwordInputHint,
-              buttonText: MaterialLocalizations.of(context).okButtonLabel,
-              validator: (value) {
-                if (value?.isNotEmpty != true) {
-                  return L10n.global().passwordInputInvalidEmpty;
-                }
-                return null;
-              },
-              obscureText: true,
-            ),
+        builder: (context) => SimpleInputDialog(
+          hintText: L10n.global().passwordInputHint,
+          buttonText: MaterialLocalizations.of(context).okButtonLabel,
+          validator: (value) {
+            if (value?.isNotEmpty != true) {
+              return L10n.global().passwordInputInvalidEmpty;
+            }
+            return null;
+          },
+          obscureText: true,
+        ),
       );
       if (result == null || !context.mounted) {
         return;
@@ -110,10 +108,9 @@ class ShareBlocListener extends StatelessWidget {
     } else {
       final result = await showDialog<ShareLinkMultipleFilesDialogResult>(
         context: context,
-        builder:
-            (_) => ShareLinkMultipleFilesDialog(
-              shouldAskPassword: shareLinkRequest.value!.isPasswordProtected,
-            ),
+        builder: (_) => ShareLinkMultipleFilesDialog(
+          shouldAskPassword: shareLinkRequest.value!.isPasswordProtected,
+        ),
       );
       if (result == null || !context.mounted) {
         return;

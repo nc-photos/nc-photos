@@ -223,8 +223,9 @@ class FilesController {
           final next = Map.of(value.summary.items);
           for (final f in files) {
             final key = f.fdDateTime.toLocal().toDate();
-            final dstKey =
-                overrideDateTime == null ? key : overrideDateTime.obj?.toDate();
+            final dstKey = overrideDateTime == null
+                ? key
+                : overrideDateTime.obj?.toDate();
             final original = next[key];
             if (original == null) {
               continue;
@@ -462,10 +463,9 @@ class FilesController {
 
   Future<void> queryByFileId(List<int> fileIds) async {
     try {
-      final interests =
-          fileIds
-              .where((e) => !_dataStreamController.value.files.containsKey(e))
-              .toList();
+      final interests = fileIds
+          .where((e) => !_dataStreamController.value.files.containsKey(e))
+          .toList();
       if (interests.isEmpty) {
         return;
       }
@@ -599,15 +599,13 @@ class FilesController {
         const DbFilesSummary(items: {});
     final results = await _c.npDb.getFilesSummary(
       account: account.toDb(),
-      includeRelativeRoots:
-          account.roots
-              .map(
-                (e) =>
-                    File(
-                      path: file_util.unstripPath(account, e),
-                    ).strippedPathWithEmpty,
-              )
-              .toList(),
+      includeRelativeRoots: account.roots
+          .map(
+            (e) => File(
+              path: file_util.unstripPath(account, e),
+            ).strippedPathWithEmpty,
+          )
+          .toList(),
       includeRelativeDirs: [accountPrefController.shareFolderValue],
       excludeRelativeRoots: [remote_storage_util.remoteStorageDirRelativePath],
       mimes: file_util.supportedFormatMimes,
@@ -676,10 +674,9 @@ class FilesController {
 
   void _addTimelineDateRange(DateRange dateRange) {
     // merge and sort the ranges
-    final sorted =
-        List.of(_timelineQueriedRanges)
-          ..add(dateRange)
-          ..sort((a, b) => b.to!.compareTo(a.to!));
+    final sorted = List.of(_timelineQueriedRanges)
+      ..add(dateRange)
+      ..sort((a, b) => b.to!.compareTo(a.to!));
     final results = <DateRange>[];
     for (final d in sorted) {
       if (results.isEmpty) {

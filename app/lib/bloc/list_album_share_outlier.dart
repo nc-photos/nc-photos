@@ -177,10 +177,9 @@ class ListAlbumShareOutlierBloc
       emit(ListAlbumShareOutlierBlocLoading(ev.account, state.items));
 
       final albumShares = await () async {
-        var temp =
-            (ev.album.shares ?? [])
-                .where((s) => s.userId != ev.account.userId)
-                .toList();
+        var temp = (ev.album.shares ?? [])
+            .where((s) => s.userId != ev.account.userId)
+            .toList();
         if (ev.album.albumFile!.ownerId != ev.account.userId) {
           // add owner if the album is not owned by this account
           final ownerSharee = (await ListSharee(_c.shareeRepo)(
@@ -232,11 +231,10 @@ class ListAlbumShareOutlierBloc
     final shareItems = <ListAlbumShareOutlierShareItem>[];
     try {
       final albumSharees = albumShares.values.map((s) => s.userId).toSet();
-      final shares =
-          (await ListShare(_c)(
-            account,
-            album.albumFile!,
-          )).where((element) => element.shareType == ShareType.user).toList();
+      final shares = (await ListShare(_c)(
+        account,
+        album.albumFile!,
+      )).where((element) => element.shareType == ShareType.user).toList();
       final sharees = shares.map((s) => s.shareWith!).toSet();
       final missings = albumSharees.difference(sharees);
       _log.info(
@@ -285,8 +283,9 @@ class ListAlbumShareOutlierBloc
     List<Object> errors,
   ) async {
     final products = <ListAlbumShareOutlierItem>[];
-    final fileItems =
-        AlbumStaticProvider.of(album).items.whereType<AlbumFileItem>().toList();
+    final fileItems = AlbumStaticProvider.of(
+      album,
+    ).items.whereType<AlbumFileItem>().toList();
     for (final fi in fileItems) {
       try {
         (await _processSingleFileItem(
@@ -318,20 +317,16 @@ class ListAlbumShareOutlierBloc
     List<Object> errors,
   ) async {
     final shareItems = <ListAlbumShareOutlierShareItem>[];
-    final shares =
-        (await ListShare(_c)(
-          account,
-          fileItem.file,
-          isIncludeReshare: true,
-        )).where((s) => s.shareType == ShareType.user).toList();
+    final shares = (await ListShare(_c)(
+      account,
+      fileItem.file,
+      isIncludeReshare: true,
+    )).where((s) => s.shareType == ShareType.user).toList();
     final albumSharees = albumShares.keys.toSet();
-    final managedAlbumSharees =
-        albumShares.values
-            .where(
-              (s) => _isItemSharePairOfInterest(account, album, fileItem, s),
-            )
-            .map((s) => s.userId)
-            .toSet();
+    final managedAlbumSharees = albumShares.values
+        .where((s) => _isItemSharePairOfInterest(account, album, fileItem, s))
+        .map((s) => s.userId)
+        .toSet();
     _log.info(
       "[_processSingleFileItem] Sharees: ${albumSharees.map((s) => managedAlbumSharees.contains(s) ? "(managed)$s" : s).toReadableString()} for file: ${logFilename(fileItem.file.fdPath)}",
     );
@@ -339,12 +334,11 @@ class ListAlbumShareOutlierBloc
     // check all shares (including reshares) against sharees that are managed by
     // us
     final allSharees = shares.map((s) => s.shareWith!).toSet();
-    var missings =
-        managedAlbumSharees
-            .difference(allSharees)
-            // Can't share to ourselves or the file owner
-            .where((s) => s != account.userId && s != fileItem.ownerId)
-            .toList();
+    var missings = managedAlbumSharees
+        .difference(allSharees)
+        // Can't share to ourselves or the file owner
+        .where((s) => s != account.userId && s != fileItem.ownerId)
+        .toList();
     _log.info(
       "[_processSingleFileItem] Missing shares: ${missings.toReadableString()} for file: ${logFilename(fileItem.file.fdPath)}",
     );
@@ -357,11 +351,10 @@ class ListAlbumShareOutlierBloc
 
     // check owned shares against all album sharees. Use all album sharees such
     // that non-managed sharees will not be listed
-    final ownedSharees =
-        shares
-            .where((s) => s.uidOwner == account.userId)
-            .map((s) => s.shareWith!)
-            .toSet();
+    final ownedSharees = shares
+        .where((s) => s.uidOwner == account.userId)
+        .map((s) => s.shareWith!)
+        .toSet();
     final extras = ownedSharees.difference(albumSharees);
     _log.info(
       "[_processSingleFileItem] Extra shares: ${extras.toReadableString()} for file: ${logFilename(fileItem.file.fdPath)}",

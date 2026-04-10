@@ -84,9 +84,9 @@ class ApiFileConverter {
   static File fromApi(api.File file) {
     final mime =
         file.contentType == "application/octet-stream" &&
-                file.href.toLowerCase().endsWith(".jxl")
-            ? "image/jxl"
-            : file.contentType;
+            file.href.toLowerCase().endsWith(".jxl")
+        ? "image/jxl"
+        : file.contentType;
     return File(
       path: _hrefToPath(file.href),
       contentLength: file.contentLength,
@@ -128,16 +128,15 @@ class ApiNcAlbumConverter {
       dateEnd: (album.dateRange?["end"] as int?)?.run(
         (d) => DateTime.fromMillisecondsSinceEpoch(d * 1000),
       ),
-      collaborators:
-          album.collaborators
-              .map(
-                (c) => NcAlbumCollaborator(
-                  id: c.id.toCi(),
-                  label: c.label,
-                  type: c.type,
-                ),
-              )
-              .toList(),
+      collaborators: album.collaborators
+          .map(
+            (c) => NcAlbumCollaborator(
+              id: c.id.toCi(),
+              label: c.label,
+              type: c.type,
+            ),
+          )
+          .toList(),
     );
   }
 }
@@ -197,8 +196,9 @@ class ApiRecognizeFaceItemConverter {
       isFavorite: item.favorite,
       fileMetadataWidth: item.fileMetadataSize?["width"],
       fileMetadataHeight: item.fileMetadataSize?["height"],
-      faceDetections:
-          item.faceDetections?.isEmpty == true ? null : item.faceDetections,
+      faceDetections: item.faceDetections?.isEmpty == true
+          ? null
+          : item.faceDetections,
     );
   }
 }
@@ -220,8 +220,9 @@ class ApiShareConverter {
       itemSource: share.itemSource,
       // when shared with a password protected link, shareWith somehow contains
       // the password, which doesn't make sense. We set it to null instead
-      shareWith:
-          shareType == ShareType.publicLink ? null : share.shareWith?.toCi(),
+      shareWith: shareType == ShareType.publicLink
+          ? null
+          : share.shareWith?.toCi(),
       shareWithDisplayName: share.shareWithDisplayName,
       url: share.url,
     );

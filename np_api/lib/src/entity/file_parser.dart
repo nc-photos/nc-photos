@@ -51,17 +51,16 @@ class FileParser extends XmlResponseParser {
         prefix: "DAV:",
         namespaces: namespaces,
       )) {
-        final status =
-            child.children
-                .whereType<XmlElement>()
-                .firstWhere(
-                  (element) => element.matchQualifiedName(
-                    "status",
-                    prefix: "DAV:",
-                    namespaces: namespaces,
-                  ),
-                )
-                .innerText;
+        final status = child.children
+            .whereType<XmlElement>()
+            .firstWhere(
+              (element) => element.matchQualifiedName(
+                "status",
+                prefix: "DAV:",
+                namespaces: namespaces,
+              ),
+            )
+            .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
@@ -244,10 +243,9 @@ class _PropParser {
           (_metadataPhotosSize ??= {})[c.localName] = c.innerText;
         }
       } else {
-        final key =
-            child.name.prefix == null
-                ? child.localName
-                : "${_expandNamespace(child, namespaces)}:${child.localName}";
+        final key = child.name.prefix == null
+            ? child.localName
+            : "${_expandNamespace(child, namespaces)}:${child.localName}";
         (_customProperties ??= {})[key] = child.innerText;
       }
     }

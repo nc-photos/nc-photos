@@ -61,8 +61,9 @@ Future<void> _shareWithoutFile() async {
 /// files
 Future<void> _shareWithFile() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album = (util.AlbumBuilder()..addFileItem(files[0])).build();
   final file1 = files[0];
   final albumFile = album.albumFile!;
@@ -100,9 +101,9 @@ Future<void> _shareWithFile() async {
 Future<void> _shareWithFileOwnedByUser() async {
   await withClock(Clock.fixed(DateTime.utc(2020, 1, 2, 3, 4, 5)), () async {
     final account = util.buildAccount();
-    final files =
-        (util.FilesBuilder(initialFileId: 1)
-          ..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
+    final files = (util.FilesBuilder(
+      initialFileId: 1,
+    )..addJpeg("admin/test1.jpg", ownerId: "user1")).build();
     final album = (util.AlbumBuilder()..addFileItem(files[0])).build();
     final albumFile = album.albumFile!;
     final albumRepo = MockAlbumMemoryRepo([album]);

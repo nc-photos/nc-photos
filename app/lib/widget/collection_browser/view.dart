@@ -7,11 +7,9 @@ class _ContentList extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocBuilder(
       buildWhen: (previous, current) => previous.zoom != current.zoom,
-      builder:
-          (context, state) => _ContentListBody(
-            maxCrossAxisExtent:
-                photo_list_util.getThumbSize(state.zoom).toDouble(),
-          ),
+      builder: (context, state) => _ContentListBody(
+        maxCrossAxisExtent: photo_list_util.getThumbSize(state.zoom).toDouble(),
+      ),
     );
   }
 }
@@ -48,44 +46,42 @@ class _ContentListBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.collection != current.collection ||
-              previous.transformedItems != current.transformedItems ||
-              previous.selectedItems != current.selectedItems,
-      builder:
-          (context, state) => SelectableItemList<_Item>(
-            maxCrossAxisExtent: maxCrossAxisExtent,
-            items: state.transformedItems,
-            itemBuilder: (context, _, item) => item.buildWidget(context),
-            staggeredTileBuilder: (_, item) => item.staggeredTile,
-            selectedItems: state.selectedItems,
-            onSelectionChange: (_, selected) {
-              context.addEvent(_SetSelectedItems(items: selected.cast()));
-            },
-            onItemTap: (context, index, _) {
-              if (state.transformedItems[index] is! _FileItem) {
-                return;
-              }
-              final actualIndex =
-                  index -
-                  state.transformedItems
-                      .sublist(0, index)
-                      .where((e) => e is! _FileItem)
-                      .length;
-              Navigator.of(context).pushNamed(
-                CollectionViewer.routeName,
-                arguments: CollectionViewerArguments(
-                  state.transformedItems
-                      .whereType<_FileItem>()
-                      .map((e) => e.file)
-                      .toList(),
-                  actualIndex,
-                  context.bloc.isAdHocCollection ? null : state.collection.id,
-                ),
-              );
-            },
-          ),
+      buildWhen: (previous, current) =>
+          previous.collection != current.collection ||
+          previous.transformedItems != current.transformedItems ||
+          previous.selectedItems != current.selectedItems,
+      builder: (context, state) => SelectableItemList<_Item>(
+        maxCrossAxisExtent: maxCrossAxisExtent,
+        items: state.transformedItems,
+        itemBuilder: (context, _, item) => item.buildWidget(context),
+        staggeredTileBuilder: (_, item) => item.staggeredTile,
+        selectedItems: state.selectedItems,
+        onSelectionChange: (_, selected) {
+          context.addEvent(_SetSelectedItems(items: selected.cast()));
+        },
+        onItemTap: (context, index, _) {
+          if (state.transformedItems[index] is! _FileItem) {
+            return;
+          }
+          final actualIndex =
+              index -
+              state.transformedItems
+                  .sublist(0, index)
+                  .where((e) => e is! _FileItem)
+                  .length;
+          Navigator.of(context).pushNamed(
+            CollectionViewer.routeName,
+            arguments: CollectionViewerArguments(
+              state.transformedItems
+                  .whereType<_FileItem>()
+                  .map((e) => e.file)
+                  .toList(),
+              actualIndex,
+              context.bloc.isAdHocCollection ? null : state.collection.id,
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -107,55 +103,47 @@ class _EditContentList extends StatelessWidget {
           );
         }
         return _BlocBuilder(
-          buildWhen:
-              (previous, current) =>
-                  previous.editTransformedItems != current.editTransformedItems,
+          buildWhen: (previous, current) =>
+              previous.editTransformedItems != current.editTransformedItems,
           builder: (context, state) {
             if (context.bloc.isCollectionCapabilityPermitted(
               CollectionCapability.manualSort,
             )) {
               return DraggableItemList<_Item>(
-                maxCrossAxisExtent:
-                    photo_list_util
-                        .getThumbSize(zoomLevel.requireData)
-                        .toDouble(),
+                maxCrossAxisExtent: photo_list_util
+                    .getThumbSize(zoomLevel.requireData)
+                    .toDouble(),
                 items: state.editTransformedItems ?? state.transformedItems,
-                itemBuilder:
-                    (context, _, item) => _BlocSelector(
-                      selector: (state) => state.editPickerMode,
-                      builder: (context, editPickerMode) {
-                        Widget child = Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: item.buildWidget(context),
-                        );
-                        if (editPickerMode != null && item is _ActualItem) {
-                          child = GestureDetector(
-                            onTap: () {
-                              switch (editPickerMode) {
-                                case _EditPickerMode.label:
-                                  context.addEvent(
-                                    _RequestAddLabel2(before: item),
-                                  );
-                                  break;
-                                case _EditPickerMode.map:
-                                  context.addEvent(
-                                    _RequestAddMap2(before: item),
-                                  );
-                                  break;
-                              }
-                            },
-                            child: child,
-                          );
-                        }
-                        return child;
-                      },
-                    ),
-                itemDragFeedbackBuilder:
-                    (context, _, item) =>
-                        item.buildDragFeedbackWidget(context) ??
-                        item.buildWidget(context),
-                itemDragFeedbackSize:
-                    (_, item) => item.dragFeedbackWidgetSize(),
+                itemBuilder: (context, _, item) => _BlocSelector(
+                  selector: (state) => state.editPickerMode,
+                  builder: (context, editPickerMode) {
+                    Widget child = Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: item.buildWidget(context),
+                    );
+                    if (editPickerMode != null && item is _ActualItem) {
+                      child = GestureDetector(
+                        onTap: () {
+                          switch (editPickerMode) {
+                            case _EditPickerMode.label:
+                              context.addEvent(_RequestAddLabel2(before: item));
+                              break;
+                            case _EditPickerMode.map:
+                              context.addEvent(_RequestAddMap2(before: item));
+                              break;
+                          }
+                        },
+                        child: child,
+                      );
+                    }
+                    return child;
+                  },
+                ),
+                itemDragFeedbackBuilder: (context, _, item) =>
+                    item.buildDragFeedbackWidget(context) ??
+                    item.buildWidget(context),
+                itemDragFeedbackSize: (_, item) =>
+                    item.dragFeedbackWidgetSize(),
                 staggeredTileBuilder: (_, item) => item.staggeredTile,
                 onDragResult: (results) {
                   context.addEvent(_EditManualSort(results));
@@ -166,10 +154,9 @@ class _EditContentList extends StatelessWidget {
               );
             } else {
               return SelectableItemList<_Item>(
-                maxCrossAxisExtent:
-                    photo_list_util
-                        .getThumbSize(zoomLevel.requireData)
-                        .toDouble(),
+                maxCrossAxisExtent: photo_list_util
+                    .getThumbSize(zoomLevel.requireData)
+                    .toDouble(),
                 items: state.editTransformedItems ?? state.transformedItems,
                 itemBuilder: (context, _, item) => item.buildWidget(context),
                 staggeredTileBuilder: (_, item) => item.staggeredTile,
@@ -194,8 +181,9 @@ class _UnmodifiableEditContentList extends StatelessWidget {
         opacity: .25,
         sliver: StreamBuilder<int>(
           stream: context.read<PrefController>().albumBrowserZoomLevelChange,
-          initialData:
-              context.read<PrefController>().albumBrowserZoomLevelValue,
+          initialData: context
+              .read<PrefController>()
+              .albumBrowserZoomLevelValue,
           builder: (_, zoomLevel) {
             if (zoomLevel.hasError) {
               context.addEvent(
@@ -203,16 +191,13 @@ class _UnmodifiableEditContentList extends StatelessWidget {
               );
             }
             return _BlocBuilder(
-              buildWhen:
-                  (previous, current) =>
-                      previous.editTransformedItems !=
-                      current.editTransformedItems,
+              buildWhen: (previous, current) =>
+                  previous.editTransformedItems != current.editTransformedItems,
               builder: (context, state) {
                 return SelectableItemList<_Item>(
-                  maxCrossAxisExtent:
-                      photo_list_util
-                          .getThumbSize(zoomLevel.requireData)
-                          .toDouble(),
+                  maxCrossAxisExtent: photo_list_util
+                      .getThumbSize(zoomLevel.requireData)
+                      .toDouble(),
                   items: state.editTransformedItems ?? state.transformedItems,
                   itemBuilder: (context, _, item) => item.buildWidget(context),
                   staggeredTileBuilder: (_, item) => item.staggeredTile,

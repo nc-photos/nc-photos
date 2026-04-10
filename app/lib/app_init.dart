@@ -243,8 +243,9 @@ Future<void> _initRefreshRate() async {
 
 Future<NpDb> _createDb(InitIsolateType isolateType) async {
   final npDb = NpDb();
-  final androidSdk =
-      getRawPlatform() == NpPlatform.android ? AndroidInfo().sdkInt : null;
+  final androidSdk = getRawPlatform() == NpPlatform.android
+      ? AndroidInfo().sdkInt
+      : null;
   if (isolateType == InitIsolateType.main) {
     await npDb.initMainIsolate(androidSdk: androidSdk);
   } else {

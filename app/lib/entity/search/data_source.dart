@@ -30,13 +30,12 @@ class SearchSqliteDbDataSource implements SearchDataSource {
     _log.info("[list] $criteria");
     final stopwatch = Stopwatch()..start();
     try {
-      final keywords =
-          search_util
-              .cleanUpSymbols(criteria.input)
-              .split(" ")
-              .where((s) => s.isNotEmpty)
-              .map((s) => s.toCi().toCaseInsensitiveString())
-              .toSet();
+      final keywords = search_util
+          .cleanUpSymbols(criteria.input)
+          .split(" ")
+          .where((s) => s.isNotEmpty)
+          .map((s) => s.toCi().toCaseInsensitiveString())
+          .toSet();
       final futures = await Future.wait([
         _listByPath(account, criteria, keywords),
         _listByLocation(account, criteria),
@@ -172,11 +171,10 @@ class SearchSqliteDbDataSource implements SearchDataSource {
       if (dbPersons.isEmpty) {
         return [];
       }
-      final persons =
-          dbPersons
-              .map(DbFaceRecognitionPersonConverter.fromDb)
-              .map((p) => PersonBuilder.byFaceRecognitionPerson(account, p))
-              .toList();
+      final persons = dbPersons
+          .map(DbFaceRecognitionPersonConverter.fromDb)
+          .map((p) => PersonBuilder.byFaceRecognitionPerson(account, p))
+          .toList();
       _log.info(
         "[_listByPerson] Found people: ${persons.map((p) => p.name).toReadableString()}",
       );

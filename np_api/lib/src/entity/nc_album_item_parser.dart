@@ -42,17 +42,16 @@ class NcAlbumItemParser extends XmlResponseParser {
         prefix: "DAV:",
         namespaces: namespaces,
       )) {
-        final status =
-            child.children
-                .whereType<XmlElement>()
-                .firstWhere(
-                  (element) => element.matchQualifiedName(
-                    "status",
-                    prefix: "DAV:",
-                    namespaces: namespaces,
-                  ),
-                )
-                .innerText;
+        final status = child.children
+            .whereType<XmlElement>()
+            .firstWhere(
+              (element) => element.matchQualifiedName(
+                "status",
+                prefix: "DAV:",
+                namespaces: namespaces,
+              ),
+            )
+            .innerText;
         if (!status.contains(" 200 ")) {
           continue;
         }
@@ -85,10 +84,9 @@ class NcAlbumItemParser extends XmlResponseParser {
       lastModified: lastModified,
       hasPreview: hasPreview,
       favorite: favorite,
-      fileMetadataSize:
-          fileMetadataSize is Map
-              ? fileMetadataSize.cast<String, dynamic>()
-              : null,
+      fileMetadataSize: fileMetadataSize is Map
+          ? fileMetadataSize.cast<String, dynamic>()
+          : null,
     );
   }
 }
@@ -146,8 +144,9 @@ class _PropParser {
         prefix: "http://nextcloud.org/ns",
         namespaces: namespaces,
       )) {
-        _fileMetadataSize =
-            child.innerText.isEmpty ? null : jsonDecode(child.innerText);
+        _fileMetadataSize = child.innerText.isEmpty
+            ? null
+            : jsonDecode(child.innerText);
       }
     }
   }

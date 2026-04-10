@@ -64,22 +64,19 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       isLoaded: isLoaded as bool? ?? that.isLoaded,
       isZoomed: isZoomed as bool? ?? that.isZoomed,
       isPlaying: isPlaying as bool? ?? that.isPlaying,
-      contentHeight:
-          contentHeight == copyWithNull
-              ? that.contentHeight
-              : contentHeight as double?,
+      contentHeight: contentHeight == copyWithNull
+          ? that.contentHeight
+          : contentHeight as double?,
       videoAspectRatio: videoAspectRatio as double? ?? that.videoAspectRatio,
       videoDuration: videoDuration as Duration? ?? that.videoDuration,
       videoIsLooping: videoIsLooping as bool? ?? that.videoIsLooping,
       videoVolume: videoVolume as double? ?? that.videoVolume,
-      error:
-          error == copyWithNull
-              ? that.error
-              : error as ({Object error, StackTrace? stackTrace})?,
-      loadError:
-          loadError == copyWithNull
-              ? that.loadError
-              : loadError as ({Object error, StackTrace? stackTrace})?,
+      error: error == copyWithNull
+          ? that.error
+          : error as ({Object error, StackTrace? stackTrace})?,
+      loadError: loadError == copyWithNull
+          ? that.loadError
+          : loadError as ({Object error, StackTrace? stackTrace})?,
     );
   }
 

@@ -76,8 +76,9 @@ class _TransformToolbarState extends State<TransformToolbar> {
                 label: L10n.global().imageEditTransformCrop,
                 onPressed: _onCropPressed,
                 isSelected: _selectedFilter == TransformToolType.crop,
-                activationOrder:
-                    _filters.containsKey(TransformToolType.crop) ? -1 : null,
+                activationOrder: _filters.containsKey(TransformToolType.crop)
+                    ? -1
+                    : null,
               ),
               ToolbarButton(
                 icon: Icons.rotate_90_degrees_ccw_outlined,
@@ -86,8 +87,8 @@ class _TransformToolbarState extends State<TransformToolbar> {
                 isSelected: _selectedFilter == TransformToolType.orientation,
                 activationOrder:
                     _filters.containsKey(TransformToolType.orientation)
-                        ? -1
-                        : null,
+                    ? -1
+                    : null,
               ),
               const SizedBox(width: 16),
             ],
@@ -262,10 +263,9 @@ class _OrientationButton extends StatelessWidget {
             onTap: onPressed,
             child: Container(
               decoration: BoxDecoration(
-                color:
-                    isSelected
-                        ? Theme.of(context).colorScheme.secondaryContainer
-                        : null,
+                color: isSelected
+                    ? Theme.of(context).colorScheme.secondaryContainer
+                    : null,
                 // borderRadius: const BorderRadius.all(Radius.circular(24)),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -274,10 +274,9 @@ class _OrientationButton extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color:
-                      isSelected
-                          ? Theme.of(context).colorScheme.onSecondaryContainer
-                          : Theme.of(context).colorScheme.onSurface,
+                  color: isSelected
+                      ? Theme.of(context).colorScheme.onSecondaryContainer
+                      : Theme.of(context).colorScheme.onSurface,
                 ),
               ),
             ),

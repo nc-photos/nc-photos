@@ -41,8 +41,8 @@ class _PhotoItem extends _FileItem {
   Widget buildWidget(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.uploadingFiles,
-      builder:
-          (context, uploadingFiles) => AnyFilePresenterFactory.photoListImage(
+      builder: (context, uploadingFiles) =>
+          AnyFilePresenterFactory.photoListImage(
             file,
             account: account,
           ).buildWidget(
@@ -67,8 +67,8 @@ class _VideoItem extends _FileItem {
   Widget buildWidget(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.uploadingFiles,
-      builder:
-          (context, uploadingFiles) => AnyFilePresenterFactory.photoListVideo(
+      builder: (context, uploadingFiles) =>
+          AnyFilePresenterFactory.photoListVideo(
             file,
             account: account,
             onError: () {
@@ -109,12 +109,11 @@ class _SectionHeaderItem extends _Item {
       builder: (context, selectedItems) {
         final isSectionSelected = selectedItems.containsAll(children);
         return InkWell(
-          onTap:
-              isSectionSelected
-                  ? () {
-                    context.addEvent(_UnselectSection(date));
-                  }
-                  : null,
+          onTap: isSectionSelected
+              ? () {
+                  context.addEvent(_UnselectSection(date));
+                }
+              : null,
           onLongPress: () {
             if (isSectionSelected) {
               context.addEvent(_UnselectSection(date));
@@ -132,14 +131,13 @@ class _SectionHeaderItem extends _Item {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: IconButton(
-                    icon:
-                        isSectionSelected
-                            ? Icon(
-                              Icons.check_circle,
-                              size: 20,
-                              color: Theme.of(context).colorScheme.primary,
-                            )
-                            : const Icon(Icons.check_circle_outline, size: 20),
+                    icon: isSectionSelected
+                        ? Icon(
+                            Icons.check_circle,
+                            size: 20,
+                            color: Theme.of(context).colorScheme.primary,
+                          )
+                        : const Icon(Icons.check_circle_outline, size: 20),
                     color: Theme.of(context).colorScheme.onSurfaceLow,
                     onPressed: () {
                       if (isSectionSelected) {

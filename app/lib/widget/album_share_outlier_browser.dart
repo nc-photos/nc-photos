@@ -70,20 +70,22 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   @override
   build(BuildContext context) {
     return Scaffold(
-      body: BlocListener<
-        ListAlbumShareOutlierBloc,
-        ListAlbumShareOutlierBlocState
-      >(
-        bloc: _bloc,
-        listener: (context, state) => _onStateChange(context, state),
-        child: BlocBuilder<
-          ListAlbumShareOutlierBloc,
-          ListAlbumShareOutlierBlocState
-        >(
-          bloc: _bloc,
-          builder: (context, state) => _buildContent(context, state),
-        ),
-      ),
+      body:
+          BlocListener<
+            ListAlbumShareOutlierBloc,
+            ListAlbumShareOutlierBlocState
+          >(
+            bloc: _bloc,
+            listener: (context, state) => _onStateChange(context, state),
+            child:
+                BlocBuilder<
+                  ListAlbumShareOutlierBloc,
+                  ListAlbumShareOutlierBlocState
+                >(
+                  bloc: _bloc,
+                  builder: (context, state) => _buildContent(context, state),
+                ),
+          ),
     );
   }
 
@@ -143,13 +145,12 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
       actions: [
         PopupMenuButton<_MenuOption>(
           tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
-          itemBuilder:
-              (context) => [
-                PopupMenuItem(
-                  value: _MenuOption.fixAll,
-                  child: Text(L10n.global().fixAllTooltip),
-                ),
-              ],
+          itemBuilder: (context) => [
+            PopupMenuItem(
+              value: _MenuOption.fixAll,
+              child: Text(L10n.global().fixAllTooltip),
+            ),
+          ],
           onSelected: (option) {
             switch (option) {
               case _MenuOption.fixAll:
@@ -324,17 +325,16 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
 
   Future<void> _onFixAllPressed(BuildContext context) async {
     // select only items that are not fixed/being fixed
-    final items =
-        _items.where((i) {
-          if (i is _MissingShareeItem) {
-            return _getItemStatus(i.file.fdPath, i.shareWith) == null;
-          } else if (i is _ExtraShareItem) {
-            return _getItemStatus(i.file.fdPath, i.share.shareWith!) == null;
-          } else {
-            // ?
-            return false;
-          }
-        }).toList();
+    final items = _items.where((i) {
+      if (i is _MissingShareeItem) {
+        return _getItemStatus(i.file.fdPath, i.shareWith) == null;
+      } else if (i is _ExtraShareItem) {
+        return _getItemStatus(i.file.fdPath, i.share.shareWith!) == null;
+      } else {
+        // ?
+        return false;
+      }
+    }).toList();
     setState(() {
       for (final i in items) {
         if (i is _MissingShareeItem) {
@@ -358,22 +358,21 @@ class _AlbumShareOutlierBrowserState extends State<AlbumShareOutlierBrowser> {
   }
 
   void _transformItems(List<ListAlbumShareOutlierItem> items) {
-    _items =
-        () sync* {
-          for (final item in items) {
-            for (final si in item.shareItems) {
-              if (si is ListAlbumShareOutlierMissingShareItem) {
-                yield _MissingShareeItem(
-                  item.file,
-                  si.shareWith,
-                  si.shareWithDisplayName,
-                );
-              } else if (si is ListAlbumShareOutlierExtraShareItem) {
-                yield _ExtraShareItem(item.file, si.share);
-              }
-            }
+    _items = () sync* {
+      for (final item in items) {
+        for (final si in item.shareItems) {
+          if (si is ListAlbumShareOutlierMissingShareItem) {
+            yield _MissingShareeItem(
+              item.file,
+              si.shareWith,
+              si.shareWithDisplayName,
+            );
+          } else if (si is ListAlbumShareOutlierExtraShareItem) {
+            yield _ExtraShareItem(item.file, si.share);
           }
-        }().toList();
+        }
+      }
+    }().toList();
   }
 
   Future<void> _fixMissingSharee(_MissingShareeItem item) async {

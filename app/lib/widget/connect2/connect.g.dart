@@ -40,10 +40,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           that.askWebDavUrlRequest,
       userId: userId == copyWithNull ? that.userId : userId as String?,
       cancelRequest: cancelRequest as bool? ?? that.cancelRequest,
-      error:
-          error == copyWithNull
-              ? that.error
-              : error as ({Object error, StackTrace? stackTrace})?,
+      error: error == copyWithNull
+          ? that.error
+          : error as ({Object error, StackTrace? stackTrace})?,
     );
   }
 

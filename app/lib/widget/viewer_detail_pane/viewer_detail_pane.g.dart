@@ -74,29 +74,27 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       byteSize: byteSize == copyWithNull ? that.byteSize : byteSize as int?,
       model: model == copyWithNull ? that.model : model as String?,
       fNumber: fNumber == copyWithNull ? that.fNumber : fNumber as double?,
-      exposureTime:
-          exposureTime == copyWithNull
-              ? that.exposureTime
-              : exposureTime as String?,
-      focalLength:
-          focalLength == copyWithNull
-              ? that.focalLength
-              : focalLength as double?,
-      isoSpeedRatings:
-          isoSpeedRatings == copyWithNull
-              ? that.isoSpeedRatings
-              : isoSpeedRatings as int?,
+      exposureTime: exposureTime == copyWithNull
+          ? that.exposureTime
+          : exposureTime as String?,
+      focalLength: focalLength == copyWithNull
+          ? that.focalLength
+          : focalLength as double?,
+      isoSpeedRatings: isoSpeedRatings == copyWithNull
+          ? that.isoSpeedRatings
+          : isoSpeedRatings as int?,
       gps: gps == copyWithNull ? that.gps : gps as MapCoord?,
-      location:
-          location == copyWithNull ? that.location : location as ImageLocation?,
+      location: location == copyWithNull
+          ? that.location
+          : location as ImageLocation?,
       tags: tags == copyWithNull ? that.tags : tags as List<AnyFileTag>?,
-      offsetTime:
-          offsetTime == copyWithNull
-              ? that.offsetTime
-              : offsetTime as Duration?,
+      offsetTime: offsetTime == copyWithNull
+          ? that.offsetTime
+          : offsetTime as Duration?,
       fps: fps == copyWithNull ? that.fps : fps as double?,
-      duration:
-          duration == copyWithNull ? that.duration : duration as Duration?,
+      duration: duration == copyWithNull
+          ? that.duration
+          : duration as Duration?,
       canRemoveFromAlbum:
           canRemoveFromAlbum as bool? ?? that.canRemoveFromAlbum,
       canSetCover: canSetCover as bool? ?? that.canSetCover,

@@ -61,20 +61,19 @@ extension SqliteDbCompat55Extension on SqliteDb {
           OrderingTerm(expression: accountFiles.rowId, mode: OrderingMode.asc),
         ])
         ..limit(1000, offset: i);
-      final dbFiles =
-          await q
-              .map(
-                (r) => CompleteFile(
-                  r.readTable(files),
-                  r.readTable(accountFiles),
-                  r.readTable(images),
-                  null,
-                  null,
-                  null,
-                  null,
-                ),
-              )
-              .get();
+      final dbFiles = await q
+          .map(
+            (r) => CompleteFile(
+              r.readTable(files),
+              r.readTable(accountFiles),
+              r.readTable(images),
+              null,
+              null,
+              null,
+              null,
+            ),
+          )
+          .get();
       for (final f in dbFiles) {
         final bestDateTime = _getBestDateTimeV55(
           overrideDateTime: f.accountFile.overrideDateTime,

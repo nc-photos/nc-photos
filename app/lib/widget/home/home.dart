@@ -58,10 +58,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) =>
-              _Bloc(accountController: context.read(), account: account)
-                ..add(const _Init()),
+      create: (context) =>
+          _Bloc(accountController: context.read(), account: account)
+            ..add(const _Init()),
       child: const _WrappedHome(),
     );
   }
@@ -112,36 +111,28 @@ class _WrappedHomeState extends State<_WrappedHome>
         bottomNavigationBar: const _NavigationTabBar(),
         body: _BlocSelector(
           selector: (state) => state.isInitDone,
-          builder:
-              (context, isInitDone) =>
-                  isInitDone
-                      ? PageView.builder(
-                        controller: _pageController,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 3,
-                        itemBuilder:
-                            (context, index) => SlideTransition(
-                              position: Tween(
-                                begin: const Offset(0, .05),
-                                end: Offset.zero,
-                              ).animate(_animation),
-                              child: FadeTransition(
-                                opacity: _animation,
-                                child: switch (index) {
-                                  0 => const HomePhotos2(),
-                                  1 => HomeSearch(
-                                    account: context.bloc.account,
-                                  ),
-                                  2 => const HomeCollections(),
-                                  _ =>
-                                    throw ArgumentError(
-                                      "Invalid page index: $index",
-                                    ),
-                                },
-                              ),
-                            ),
-                      )
-                      : Container(),
+          builder: (context, isInitDone) => isInitDone
+              ? PageView.builder(
+                  controller: _pageController,
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 3,
+                  itemBuilder: (context, index) => SlideTransition(
+                    position: Tween(
+                      begin: const Offset(0, .05),
+                      end: Offset.zero,
+                    ).animate(_animation),
+                    child: FadeTransition(
+                      opacity: _animation,
+                      child: switch (index) {
+                        0 => const HomePhotos2(),
+                        1 => HomeSearch(account: context.bloc.account),
+                        2 => const HomeCollections(),
+                        _ => throw ArgumentError("Invalid page index: $index"),
+                      },
+                    ),
+                  ),
+                )
+              : Container(),
         ),
       ),
     );
@@ -166,31 +157,30 @@ class _NavigationTabBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector(
       selector: (state) => state.page,
-      builder:
-          (context, page) => NavigationBar(
-            height: AppDimension.of(context).homeBottomAppBarHeight,
-            destinations: [
-              NavigationDestination(
-                icon: const Icon(Icons.photo_outlined),
-                selectedIcon: const Icon(Icons.photo),
-                label: L10n.global().photosTabLabel,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.search),
-                label: L10n.global().searchTooltip,
-              ),
-              NavigationDestination(
-                icon: const Icon(Icons.grid_view_outlined),
-                selectedIcon: const Icon(Icons.grid_view_sharp),
-                label: L10n.global().collectionsTooltip,
-              ),
-            ],
-            selectedIndex: page,
-            onDestinationSelected: (value) {
-              context.addEvent(_ChangePage(value));
-            },
-            backgroundColor: Theme.of(context).homeNavigationBarBackgroundColor,
+      builder: (context, page) => NavigationBar(
+        height: AppDimension.of(context).homeBottomAppBarHeight,
+        destinations: [
+          NavigationDestination(
+            icon: const Icon(Icons.photo_outlined),
+            selectedIcon: const Icon(Icons.photo),
+            label: L10n.global().photosTabLabel,
           ),
+          NavigationDestination(
+            icon: const Icon(Icons.search),
+            label: L10n.global().searchTooltip,
+          ),
+          NavigationDestination(
+            icon: const Icon(Icons.grid_view_outlined),
+            selectedIcon: const Icon(Icons.grid_view_sharp),
+            label: L10n.global().collectionsTooltip,
+          ),
+        ],
+        selectedIndex: page,
+        onDestinationSelected: (value) {
+          context.addEvent(_ChangePage(value));
+        },
+        backgroundColor: Theme.of(context).homeNavigationBarBackgroundColor,
+      ),
     );
   }
 }

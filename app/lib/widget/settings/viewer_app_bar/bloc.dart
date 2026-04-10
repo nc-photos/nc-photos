@@ -6,10 +6,9 @@ class _Bloc extends Bloc<_Event, _State>
   _Bloc({required this.prefController, required this.isBottom})
     : super(
         _State.init(
-          buttons:
-              isBottom
-                  ? prefController.viewerBottomAppBarButtonsValue
-                  : prefController.viewerAppBarButtonsValue,
+          buttons: isBottom
+              ? prefController.viewerBottomAppBarButtonsValue
+              : prefController.viewerAppBarButtonsValue,
         ),
       ) {
     on<_MoveButton>(_onMoveButton);

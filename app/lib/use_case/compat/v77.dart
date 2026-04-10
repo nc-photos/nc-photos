@@ -10,8 +10,8 @@ class CompatV77 {
     if (found == -1) {
       newValue = oldValue.added(ViewerAppBarButtonType.upload);
     } else {
-      newValue =
-          oldValue.toList()..insert(found, ViewerAppBarButtonType.upload);
+      newValue = oldValue.toList()
+        ..insert(found, ViewerAppBarButtonType.upload);
     }
     prefController.setViewerBottomAppBarButtons(newValue);
   }

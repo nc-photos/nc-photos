@@ -47,9 +47,8 @@ class SignIn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) =>
-              _Bloc(npDb: context.read(), prefController: context.read()),
+      create: (context) =>
+          _Bloc(npDb: context.read(), prefController: context.read()),
       child: const _WrappedSignIn(),
     );
   }
@@ -137,11 +136,8 @@ class _WrappedSignInState extends State<_WrappedSignIn>
                 ],
                 child: _BlocSelector(
                   selector: (state) => state.isConnecting,
-                  builder:
-                      (context, isConnecting) =>
-                          isConnecting
-                              ? const _ConnectingBody()
-                              : const _Body(),
+                  builder: (context, isConnecting) =>
+                      isConnecting ? const _ConnectingBody() : const _Body(),
                 ),
               ),
             ),

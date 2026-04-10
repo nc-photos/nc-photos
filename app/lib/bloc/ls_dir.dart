@@ -152,11 +152,10 @@ class LsDirBloc extends Bloc<LsDirBlocEvent, LsDirBlocState> {
     var files = _cache[ev.root.path];
     if (files == null) {
       final op = isListMinimal ? LsMinimal(fileRepo) : Ls(fileRepo);
-      files =
-          (await op(
-            ev.account,
-            ev.root,
-          )).where((f) => f.isCollection ?? false).toList();
+      files = (await op(
+        ev.account,
+        ev.root,
+      )).where((f) => f.isCollection ?? false).toList();
       _cache[ev.root.path] = files;
     }
     final removes = <File>[];

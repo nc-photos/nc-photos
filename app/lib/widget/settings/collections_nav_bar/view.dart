@@ -68,23 +68,22 @@ class _DemoViewState extends State<_DemoView> {
         );
         if (buttons.isEmpty) {
           return DragTarget<HomeCollectionsNavBarButtonType>(
-            builder:
-                (context, candidateData, rejectedData) => SizedBox(
-                  height: 48,
-                  child: Stack(
-                    children: [
-                      navBar,
-                      IgnorePointer(
-                        child: Opacity(
-                          opacity: candidateData.isNotEmpty ? .35 : 0,
-                          child: Container(
-                            color: Theme.of(context).colorScheme.onSurface,
-                          ),
-                        ),
+            builder: (context, candidateData, rejectedData) => SizedBox(
+              height: 48,
+              child: Stack(
+                children: [
+                  navBar,
+                  IgnorePointer(
+                    child: Opacity(
+                      opacity: candidateData.isNotEmpty ? .35 : 0,
+                      child: Container(
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
+              ),
+            ),
             onAcceptWithDetails: (details) {
               context.addEvent(_MoveButton.first(which: details.data));
             },
@@ -153,47 +152,37 @@ class _CandidateGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DragTarget<HomeCollectionsNavBarButtonType>(
-      builder:
-          (context, candidateData, rejectedData) => Stack(
-            children: [
-              _BlocSelector(
-                selector: (state) => state.buttons,
-                builder:
-                    (context, buttons) => Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+      builder: (context, candidateData, rejectedData) => Stack(
+        children: [
+          _BlocSelector(
+            selector: (state) => state.buttons,
+            builder: (context, buttons) => Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              child: Wrap(
+                direction: Axis.horizontal,
+                spacing: 16,
+                runSpacing: 8,
+                children: HomeCollectionsNavBarButtonType.values
+                    .where((e) => !buttons.any((b) => b.type == e))
+                    .map(
+                      (e) => my.Draggable<HomeCollectionsNavBarButtonType>(
+                        data: e,
+                        feedback: _CandidateButtonDelegate(e),
+                        child: _CandidateButtonDelegate(e),
                       ),
-                      child: Wrap(
-                        direction: Axis.horizontal,
-                        spacing: 16,
-                        runSpacing: 8,
-                        children:
-                            HomeCollectionsNavBarButtonType.values
-                                .where((e) => !buttons.any((b) => b.type == e))
-                                .map(
-                                  (e) => my.Draggable<
-                                    HomeCollectionsNavBarButtonType
-                                  >(
-                                    data: e,
-                                    feedback: _CandidateButtonDelegate(e),
-                                    child: _CandidateButtonDelegate(e),
-                                  ),
-                                )
-                                .toList(),
-                      ),
-                    ),
+                    )
+                    .toList(),
               ),
-              IgnorePointer(
-                child: Opacity(
-                  opacity: candidateData.isNotEmpty ? .1 : 0,
-                  child: Container(
-                    color: Theme.of(context).colorScheme.onSurface,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
+          IgnorePointer(
+            child: Opacity(
+              opacity: candidateData.isNotEmpty ? .1 : 0,
+              child: Container(color: Theme.of(context).colorScheme.onSurface),
+            ),
+          ),
+        ],
+      ),
       onAcceptWithDetails: (details) {
         context.addEvent(_RemoveButton(details.data));
       },

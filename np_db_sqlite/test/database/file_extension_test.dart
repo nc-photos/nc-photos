@@ -131,11 +131,10 @@ Future<void> _queryByIdsMultilangLocation() async {
       await util.insertFiles(db, account, files);
     });
 
-    final result =
-        (await db.queryFilesByFileIds(
-          account: ByAccount.db(account),
-          fileIds: [1, 2],
-        )).map(FileConverter.fromSql).toList();
+    final result = (await db.queryFilesByFileIds(
+      account: ByAccount.db(account),
+      fileIds: [1, 2],
+    )).map(FileConverter.fromSql).toList();
     expect(result.map((e) => e.location).toList(), [
       const DbLocation(
         dataRevision: 202603,

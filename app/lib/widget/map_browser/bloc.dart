@@ -122,10 +122,9 @@ class _Bloc extends Bloc<_Event, _State>
     emit(
       state.copyWith(
         dateRangeType: ev.value,
-        localDateRange:
-            ev.value == _DateRangeType.custom
-                ? null
-                : _calcDateRange(clock.now().toDate(), ev.value),
+        localDateRange: ev.value == _DateRangeType.custom
+            ? null
+            : _calcDateRange(clock.now().toDate(), ev.value),
       ),
     );
   }

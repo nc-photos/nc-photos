@@ -49,22 +49,21 @@ class SyncRecognizeFace {
   ) async {
     Object? firstError;
     StackTrace? firstStackTrace;
-    final remote =
-        await ListMultipleRecognizeFaceItem(_c.withRemoteRepo())(
-          account,
-          faces,
-          onError: (f, e, stackTrace) {
-            _log.severe(
-              "[_getFaceItems] Failed while listing remote face: $f",
-              e,
-              stackTrace,
-            );
-            if (firstError == null) {
-              firstError = e;
-              firstStackTrace = stackTrace;
-            }
-          },
-        ).last;
+    final remote = await ListMultipleRecognizeFaceItem(_c.withRemoteRepo())(
+      account,
+      faces,
+      onError: (f, e, stackTrace) {
+        _log.severe(
+          "[_getFaceItems] Failed while listing remote face: $f",
+          e,
+          stackTrace,
+        );
+        if (firstError == null) {
+          firstError = e;
+          firstStackTrace = stackTrace;
+        }
+      },
+    ).last;
     if (firstError != null) {
       Error.throwWithStackTrace(
         firstError!,

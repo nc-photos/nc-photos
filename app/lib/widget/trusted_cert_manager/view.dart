@@ -23,51 +23,43 @@ class _ContentView extends StatelessWidget {
         Expanded(
           child: _BlocSelector<List<CertInfo>>(
             selector: (state) => state.certs,
-            builder:
-                (context, certs) =>
-                    certs.isEmpty
-                        ? const _EmptyView()
-                        : ListView.builder(
-                          itemCount: certs.length,
-                          itemBuilder: (_, index) {
-                            final item = certs[index];
-                            return Dismissible(
-                              key: Key(item.sha1),
-                              onDismissed: (direction) {
-                                context.addEvent(_RemoveCert(item));
-                              },
-                              background: Container(
-                                color: Theme.of(context).colorScheme.error,
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Icon(
-                                    Icons.delete_outline,
-                                    color:
-                                        Theme.of(context).colorScheme.onError,
-                                  ),
-                                ),
-                              ),
-                              secondaryBackground: Container(
-                                color: Theme.of(context).colorScheme.error,
-                                alignment: Alignment.centerRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                  ),
-                                  child: Icon(
-                                    Icons.delete_outline,
-                                    color:
-                                        Theme.of(context).colorScheme.onError,
-                                  ),
-                                ),
-                              ),
-                              child: _ItemView(item),
-                            );
-                          },
+            builder: (context, certs) => certs.isEmpty
+                ? const _EmptyView()
+                : ListView.builder(
+                    itemCount: certs.length,
+                    itemBuilder: (_, index) {
+                      final item = certs[index];
+                      return Dismissible(
+                        key: Key(item.sha1),
+                        onDismissed: (direction) {
+                          context.addEvent(_RemoveCert(item));
+                        },
+                        background: Container(
+                          color: Theme.of(context).colorScheme.error,
+                          alignment: Alignment.centerLeft,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Icon(
+                              Icons.delete_outline,
+                              color: Theme.of(context).colorScheme.onError,
+                            ),
+                          ),
                         ),
+                        secondaryBackground: Container(
+                          color: Theme.of(context).colorScheme.error,
+                          alignment: Alignment.centerRight,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 16),
+                            child: Icon(
+                              Icons.delete_outline,
+                              color: Theme.of(context).colorScheme.onError,
+                            ),
+                          ),
+                        ),
+                        child: _ItemView(item),
+                      );
+                    },
+                  ),
           ),
         ),
       ],
@@ -119,8 +111,9 @@ class _ItemView extends StatelessWidget {
           ),
         ],
       ),
-      tileColor:
-          isExpired ? Theme.of(context).colorScheme.errorContainer : null,
+      tileColor: isExpired
+          ? Theme.of(context).colorScheme.errorContainer
+          : null,
     );
   }
 
@@ -147,35 +140,31 @@ class _AccountDialog extends StatelessWidget {
     return ValueStreamBuilder(
       stream: context.bloc.prefController.accounts,
       builder: (context, snapshot) {
-        final data =
-            snapshot.requireData
-                .where((a) => a.scheme == "https")
-                .distinctIf((a, b) => a.url == b.url, (a) => a.url.hashCode)
-                .toList();
+        final data = snapshot.requireData
+            .where((a) => a.scheme == "https")
+            .distinctIf((a, b) => a.url == b.url, (a) => a.url.hashCode)
+            .toList();
         return SimpleDialog(
           title: Text(L10n.global().trustedCertManagerSelectServer),
-          children:
-              data.isEmpty
-                  ? [
-                    ListTile(
-                      title: Text(
-                        L10n.global().trustedCertManagerNoHttpsServerError,
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                      ),
+          children: data.isEmpty
+              ? [
+                  ListTile(
+                    title: Text(
+                      L10n.global().trustedCertManagerNoHttpsServerError,
                     ),
-                  ]
-                  : data
-                      .map(
-                        (e) => SimpleDialogOption(
-                          onPressed: () {
-                            Navigator.of(context).pop(e);
-                          },
-                          child: Text(e.url),
-                        ),
-                      )
-                      .toList(),
+                    contentPadding: const EdgeInsets.symmetric(horizontal: 24),
+                  ),
+                ]
+              : data
+                    .map(
+                      (e) => SimpleDialogOption(
+                        onPressed: () {
+                          Navigator.of(context).pop(e);
+                        },
+                        child: Text(e.url),
+                      ),
+                    )
+                    .toList(),
         );
       },
     );

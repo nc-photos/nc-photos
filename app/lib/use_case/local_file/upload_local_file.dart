@@ -59,24 +59,23 @@ class UploadLocalFile {
     }
     final dir = "${api_util.getWebdavRootUrl(account)}/$relativePath";
     Uploader.asyncUpload(
-      uploadables:
-          files.map((e) {
-            final canConvert = supportedConvertSrcMimes.contains(e.mime);
-            final srcFilename = e.filename ?? "file";
-            final String dstFilename;
-            if (convertConfig != null && canConvert) {
-              final basename = path_lib.basenameWithoutExtension(srcFilename);
-              dstFilename = "$basename.${convertConfig.getExtension()}";
-            } else {
-              dstFilename = srcFilename;
-            }
-            final path = "$dir/$dstFilename";
-            return Uploadable(
-              platformIdentifier: e.platformIdentifier,
-              uploadPath: path,
-              canConvert: canConvert,
-            );
-          }).toList(),
+      uploadables: files.map((e) {
+        final canConvert = supportedConvertSrcMimes.contains(e.mime);
+        final srcFilename = e.filename ?? "file";
+        final String dstFilename;
+        if (convertConfig != null && canConvert) {
+          final basename = path_lib.basenameWithoutExtension(srcFilename);
+          dstFilename = "$basename.${convertConfig.getExtension()}";
+        } else {
+          dstFilename = srcFilename;
+        }
+        final path = "$dir/$dstFilename";
+        return Uploadable(
+          platformIdentifier: e.platformIdentifier,
+          uploadPath: path,
+          canConvert: canConvert,
+        );
+      }).toList(),
       headers: {
         "Content-Type": "application/octet-stream",
         "User-Agent": getAppUserAgent(),

@@ -22,10 +22,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({dynamic appLockType = copyWithNull}) {
     return _State(
-      appLockType:
-          appLockType == copyWithNull
-              ? that.appLockType
-              : appLockType as ProtectedPageAuthType?,
+      appLockType: appLockType == copyWithNull
+          ? that.appLockType
+          : appLockType as ProtectedPageAuthType?,
     );
   }
 

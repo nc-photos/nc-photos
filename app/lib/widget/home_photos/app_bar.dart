@@ -7,11 +7,10 @@ class _AppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocSelector<bool>(
       selector: (state) => state.isLoading || state.syncProgress != null,
-      builder:
-          (context, isProcessing) => HomeSliverAppBar(
-            account: context.bloc.account,
-            isShowProgressIcon: isProcessing,
-          ),
+      builder: (context, isProcessing) => HomeSliverAppBar(
+        account: context.bloc.account,
+        isShowProgressIcon: isProcessing,
+      ),
     );
   }
 }
@@ -23,38 +22,36 @@ class _SelectionAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.selectedItems != current.selectedItems ||
-              previous.selectedCanAddToCollection !=
-                  current.selectedCanAddToCollection,
-      builder:
-          (context, state) => SelectionAppBar(
-            count: state.selectedItems.length,
-            onClosePressed: () {
-              context.addEvent(const _SetSelectedItems(items: {}));
-            },
-            actions: [
-              IconButton(
-                icon: const Icon(Icons.share_outlined),
-                tooltip: L10n.global().shareTooltip,
-                onPressed: () => _onSharePressed(context),
-              ),
-              if (state.selectedCanAddToCollection)
-                IconButton(
-                  icon: const Icon(Icons.add),
-                  tooltip: L10n.global().addItemToCollectionTooltip,
-                  onPressed: () => _onAddPressed(context),
-                ),
-              if (state.selectedCanUpload)
-                IconButton(
-                  icon: const Icon(Icons.cloud_upload_outlined),
-                  tooltip: L10n.global().uploadTooltip,
-                  onPressed: () => _onUploadPressed(context),
-                ),
-              const _SelectionAppBarMenu(),
-            ],
+      buildWhen: (previous, current) =>
+          previous.selectedItems != current.selectedItems ||
+          previous.selectedCanAddToCollection !=
+              current.selectedCanAddToCollection,
+      builder: (context, state) => SelectionAppBar(
+        count: state.selectedItems.length,
+        onClosePressed: () {
+          context.addEvent(const _SetSelectedItems(items: {}));
+        },
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.share_outlined),
+            tooltip: L10n.global().shareTooltip,
+            onPressed: () => _onSharePressed(context),
           ),
+          if (state.selectedCanAddToCollection)
+            IconButton(
+              icon: const Icon(Icons.add),
+              tooltip: L10n.global().addItemToCollectionTooltip,
+              onPressed: () => _onAddPressed(context),
+            ),
+          if (state.selectedCanUpload)
+            IconButton(
+              icon: const Icon(Icons.cloud_upload_outlined),
+              tooltip: L10n.global().uploadTooltip,
+              onPressed: () => _onUploadPressed(context),
+            ),
+          const _SelectionAppBarMenu(),
+        ],
+      ),
     );
   }
 
@@ -84,52 +81,48 @@ class _SelectionAppBarMenu extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return _BlocBuilder(
-      buildWhen:
-          (previous, current) =>
-              previous.selectedCanArchive != current.selectedCanArchive ||
-              previous.selectedCanDownload != current.selectedCanDownload ||
-              previous.selectedCanDelete != current.selectedCanDelete,
-      builder:
-          (context, state) =>
-              state.selectedCanDownload ||
-                      state.selectedCanArchive ||
-                      state.selectedCanDelete
-                  ? PopupMenuButton<_SelectionMenuOption>(
-                    tooltip:
-                        MaterialLocalizations.of(context).moreButtonTooltip,
-                    itemBuilder:
-                        (context) => [
-                          if (state.selectedCanDownload)
-                            PopupMenuItem(
-                              value: _SelectionMenuOption.download,
-                              child: Text(L10n.global().downloadTooltip),
-                            ),
-                          if (state.selectedCanArchive)
-                            PopupMenuItem(
-                              value: _SelectionMenuOption.archive,
-                              child: Text(L10n.global().archiveTooltip),
-                            ),
-                          if (state.selectedCanDelete)
-                            PopupMenuItem(
-                              value: _SelectionMenuOption.delete,
-                              child: Text(L10n.global().deleteTooltip),
-                            ),
-                        ],
-                    onSelected: (option) {
-                      switch (option) {
-                        case _SelectionMenuOption.archive:
-                          context.addEvent(const _ArchiveSelectedItems());
-                          break;
-                        case _SelectionMenuOption.delete:
-                          context.addEvent(const _DeleteSelectedItems());
-                          break;
-                        case _SelectionMenuOption.download:
-                          context.addEvent(const _DownloadSelectedItems());
-                          break;
-                      }
-                    },
-                  )
-                  : const SizedBox.shrink(),
+      buildWhen: (previous, current) =>
+          previous.selectedCanArchive != current.selectedCanArchive ||
+          previous.selectedCanDownload != current.selectedCanDownload ||
+          previous.selectedCanDelete != current.selectedCanDelete,
+      builder: (context, state) =>
+          state.selectedCanDownload ||
+              state.selectedCanArchive ||
+              state.selectedCanDelete
+          ? PopupMenuButton<_SelectionMenuOption>(
+              tooltip: MaterialLocalizations.of(context).moreButtonTooltip,
+              itemBuilder: (context) => [
+                if (state.selectedCanDownload)
+                  PopupMenuItem(
+                    value: _SelectionMenuOption.download,
+                    child: Text(L10n.global().downloadTooltip),
+                  ),
+                if (state.selectedCanArchive)
+                  PopupMenuItem(
+                    value: _SelectionMenuOption.archive,
+                    child: Text(L10n.global().archiveTooltip),
+                  ),
+                if (state.selectedCanDelete)
+                  PopupMenuItem(
+                    value: _SelectionMenuOption.delete,
+                    child: Text(L10n.global().deleteTooltip),
+                  ),
+              ],
+              onSelected: (option) {
+                switch (option) {
+                  case _SelectionMenuOption.archive:
+                    context.addEvent(const _ArchiveSelectedItems());
+                    break;
+                  case _SelectionMenuOption.delete:
+                    context.addEvent(const _DeleteSelectedItems());
+                    break;
+                  case _SelectionMenuOption.download:
+                    context.addEvent(const _DownloadSelectedItems());
+                    break;
+                }
+              },
+            )
+          : const SizedBox.shrink(),
     );
   }
 }
@@ -212,11 +205,10 @@ class _AppBarAnchorState extends State<_AppBarAnchor>
     if (!mounted) {
       return;
     }
-    final translation =
-        _key.currentContext
-            ?.findRenderObject()
-            ?.getTransformTo(null)
-            .getTranslation();
+    final translation = _key.currentContext
+        ?.findRenderObject()
+        ?.getTransformTo(null)
+        .getTranslation();
     if (translation != null) {
       final p = Offset(translation.x, translation.y);
       if (_position != p) {

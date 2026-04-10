@@ -88,27 +88,23 @@ class SearchSuggestionBloc<T>
       final str = results.map((e) => "${e.score}: ${e.text}").join("\n");
       _log.info("[_onEventSearch] Search '${ev.phrase}':\n$str");
     }
-    final matches =
-        results
-            .where((element) => element.score > 0)
-            .map((e) {
-              if (itemToKeywords(
-                e.value as T,
-              ).any((k) => k.startsWith(ev.phrase))) {
-                // prefer names that start exactly with the search phrase
-                return (score: e.score + 1, item: e.value as T);
-              } else {
-                return (score: e.score, item: e.value as T);
-              }
-            })
-            .sorted((a, b) => a.score.compareTo(b.score))
-            .reversed
-            .distinctIf(
-              (a, b) => identical(a.item, b.item),
-              (a) => a.item.hashCode,
-            )
-            .map((e) => e.item)
-            .toList();
+    final matches = results
+        .where((element) => element.score > 0)
+        .map((e) {
+          if (itemToKeywords(
+            e.value as T,
+          ).any((k) => k.startsWith(ev.phrase))) {
+            // prefer names that start exactly with the search phrase
+            return (score: e.score + 1, item: e.value as T);
+          } else {
+            return (score: e.score, item: e.value as T);
+          }
+        })
+        .sorted((a, b) => a.score.compareTo(b.score))
+        .reversed
+        .distinctIf((a, b) => identical(a.item, b.item), (a) => a.item.hashCode)
+        .map((e) => e.item)
+        .toList();
     emit(SearchSuggestionBlocSuccess(matches));
     _lastSearch = ev;
   }

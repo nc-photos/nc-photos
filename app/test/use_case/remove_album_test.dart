@@ -58,8 +58,9 @@ Future<void> _removeAlbum() async {
 /// share (admin -> user1) for the files deleted
 Future<void> _removeSharedAlbum() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final album =
       (util.AlbumBuilder()
             ..addFileItem(files[0])
@@ -95,8 +96,9 @@ Future<void> _removeSharedAlbum() async {
 /// share (admin -> user1) for the file unchanged
 Future<void> _removeSharedAlbumFileInOtherAlbum() async {
   final account = util.buildAccount();
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final albums = [
     (util.AlbumBuilder()
           ..addFileItem(files[0])
@@ -144,8 +146,9 @@ Future<void> _removeSharedAlbumFileInOtherAlbum() async {
 Future<void> _removeSharedAlbumResyncedFile() async {
   final account = util.buildAccount();
   final user1Account = util.buildAccount(userId: "user1");
-  final files =
-      (util.FilesBuilder(initialFileId: 1)..addJpeg("admin/test1.jpg")).build();
+  final files = (util.FilesBuilder(
+    initialFileId: 1,
+  )..addJpeg("admin/test1.jpg")).build();
   final user1Files = [
     files[0].copyWith(path: "remote.php/dav/files/user1/share/test1.jpg"),
   ];

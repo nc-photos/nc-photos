@@ -48,7 +48,8 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get deleteSelectedSuccessNotification => 'Kaikki valitut kohteet poistettu onnistuneesti';
+  String get deleteSelectedSuccessNotification =>
+      'Kaikki valitut kohteet poistettu onnistuneesti';
 
   @override
   String deleteSelectedFailureNotification(num count) {
@@ -65,7 +66,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get archiveTooltip => 'Arkistoi';
 
   @override
-  String get archiveSelectedSuccessNotification => 'Kaikki valitut kohteet arkistoitu';
+  String get archiveSelectedSuccessNotification =>
+      'Kaikki valitut kohteet arkistoitu';
 
   @override
   String archiveSelectedFailureNotification(num count) {
@@ -82,7 +84,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get unarchiveTooltip => 'Peru arkistointi';
 
   @override
-  String get unarchiveSelectedSuccessNotification => 'Kaikkien kohteiden arkistointi peruttu';
+  String get unarchiveSelectedSuccessNotification =>
+      'Kaikkien kohteiden arkistointi peruttu';
 
   @override
   String unarchiveSelectedFailureNotification(num count) {
@@ -105,7 +108,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get deleteFailureNotification => 'Kohteen poistaminen epäonnistui';
 
   @override
-  String get removeSelectedFromAlbumFailureNotification => 'Kohteiden poistaminen albumista epäonnistui';
+  String get removeSelectedFromAlbumFailureNotification =>
+      'Kohteiden poistaminen albumista epäonnistui';
 
   @override
   String get addServerTooltip => 'Lisää palvelin';
@@ -142,7 +146,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get connectingToServer2 => 'Odotetaan palvelimen tunnistautumista';
 
   @override
-  String get connectingToServerInstruction => 'Kirjaudu auenneen selaimen kautta';
+  String get connectingToServerInstruction =>
+      'Kirjaudu auenneen selaimen kautta';
 
   @override
   String get nameInputHint => 'Nimi';
@@ -160,7 +165,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get signInHeaderText => 'Kirjaudu Nextcloud-palvelimeen';
 
   @override
-  String get signIn2faHintText => 'Käytä sovellussalasanaa, jos käytössäsi on kaksivaiheinen tunnistautuminen';
+  String get signIn2faHintText =>
+      'Käytä sovellussalasanaa, jos käytössäsi on kaksivaiheinen tunnistautuminen';
 
   @override
   String get signInHeaderText2 => 'Nextcloud\nKirjaudu sisään';
@@ -187,25 +193,30 @@ class AppLocalizationsFi extends AppLocalizations {
   String get rootPickerHeaderText => 'Valitse sisällytetyt kansiot';
 
   @override
-  String get rootPickerSubHeaderText => 'Ainoastaan kansion sisäisest kuvat näytetään. Paina Ohita sisällyttääksesi kaikki kuvat';
+  String get rootPickerSubHeaderText =>
+      'Ainoastaan kansion sisäisest kuvat näytetään. Paina Ohita sisällyttääksesi kaikki kuvat';
 
   @override
   String get rootPickerNavigateUpItemText => '(takaisin)';
 
   @override
-  String get rootPickerUnpickFailureNotification => 'Kohteen valinta epäonnistui';
+  String get rootPickerUnpickFailureNotification =>
+      'Kohteen valinta epäonnistui';
 
   @override
-  String get rootPickerListEmptyNotification => 'Valitse vähintään yksi kansio tai paina ohita sisällyttääksesi kaikki';
+  String get rootPickerListEmptyNotification =>
+      'Valitse vähintään yksi kansio tai paina ohita sisällyttääksesi kaikki';
 
   @override
   String get setupWidgetTitle => 'Aloitetaan';
 
   @override
-  String get setupSettingsModifyLaterHint => 'Voit muuttaa tämän myöhemmin asetuksista';
+  String get setupSettingsModifyLaterHint =>
+      'Voit muuttaa tämän myöhemmin asetuksista';
 
   @override
-  String get setupHiddenPrefDirNoticeDetail => 'Tämä sovellus luo Nextcloud-palvelimeen kansion asetustiedostoja. Älä muokkaa tai poista kansiota ellet ole aikeissa poistaa sovellusta';
+  String get setupHiddenPrefDirNoticeDetail =>
+      'Tämä sovellus luo Nextcloud-palvelimeen kansion asetustiedostoja. Älä muokkaa tai poista kansiota ellet ole aikeissa poistaa sovellusta';
 
   @override
   String get settingsWidgetTitle => 'Asetukset';
@@ -223,22 +234,28 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsExifSupportTitle2 => 'Client-side EXIF support';
 
   @override
-  String get settingsExifSupportTrueSubtitle => 'Vaatii ylimääräistä verkon käyttöä';
+  String get settingsExifSupportTrueSubtitle =>
+      'Vaatii ylimääräistä verkon käyttöä';
 
   @override
-  String get settingsFallbackClientExifTitle => 'Fall back to client-side parser';
+  String get settingsFallbackClientExifTitle =>
+      'Fall back to client-side parser';
 
   @override
-  String get settingsFallbackClientExifTrueText => 'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
+  String get settingsFallbackClientExifTrueText =>
+      'If Nextcloud failed to extract the file metadata, use the client-side parser instead';
 
   @override
-  String get settingsFallbackClientExifFalseText => 'If Nextcloud failed to extract the file metadata, leave it as is';
+  String get settingsFallbackClientExifFalseText =>
+      'If Nextcloud failed to extract the file metadata, leave it as is';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogTitle => 'Enable client-side fallback?';
+  String get settingsFallbackClientExifConfirmDialogTitle =>
+      'Enable client-side fallback?';
 
   @override
-  String get settingsFallbackClientExifConfirmDialogText => 'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
+  String get settingsFallbackClientExifConfirmDialogText =>
+      'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
 
   @override
   String get settingsMemoriesTitle => 'Muistot';
@@ -253,7 +270,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsAccountLabelTitle => 'Otsikko';
 
   @override
-  String get settingsAccountLabelDescription => 'Aseta tunniste, joka näytetään palvelimen URL:n sijasta';
+  String get settingsAccountLabelDescription =>
+      'Aseta tunniste, joka näytetään palvelimen URL:n sijasta';
 
   @override
   String get settingsIncludedFoldersTitle => 'Sisällytetyt kansiot';
@@ -265,10 +283,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsShareFolderDialogTitle => 'Paikanna jaettu kansio';
 
   @override
-  String get settingsShareFolderDialogDescription => 'Tämä asetus vaikuttaa share_folder parametreihini config.php -tiedostossa. Asetusten arvojen TÄYTYY olla identtisiä. \n\nPaikanna sama kansio, joka on määritetty config-php -tiedostossa.';
+  String get settingsShareFolderDialogDescription =>
+      'Tämä asetus vaikuttaa share_folder parametreihini config.php -tiedostossa. Asetusten arvojen TÄYTYY olla identtisiä. \n\nPaikanna sama kansio, joka on määritetty config-php -tiedostossa.';
 
   @override
-  String get settingsShareFolderPickerDescription => 'Paikanna sama kansio, joka on määritetty config.php -tiedostossa. Paina oletusta, jos et ole määrittänyt parametrejä käsin.';
+  String get settingsShareFolderPickerDescription =>
+      'Paikanna sama kansio, joka on määritetty config.php -tiedostossa. Paina oletusta, jos et ole määrittänyt parametrejä käsin.';
 
   @override
   String get settingsPersonProviderTitle => 'Henkilön tarjoaja';
@@ -277,7 +297,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsServerAppSectionTitle => 'Palvelimen sovellustuki';
 
   @override
-  String get settingsPhotosDescription => 'Muokkaa Kuvat-välilehdellä näytettävää sisältöä';
+  String get settingsPhotosDescription =>
+      'Muokkaa Kuvat-välilehdellä näytettävää sisältöä';
 
   @override
   String get settingsMemoriesRangeTitle => 'Muistojen väli';
@@ -297,7 +318,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsDeviceMediaTitle => 'Show device media';
 
   @override
-  String get settingsDeviceMediaDescription => 'Selected folders will be displayed';
+  String get settingsDeviceMediaDescription =>
+      'Selected folders will be displayed';
 
   @override
   String get settingsViewerTitle => 'Katselin';
@@ -309,13 +331,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsScreenBrightnessTitle => 'Näytön kirkkaus';
 
   @override
-  String get settingsScreenBrightnessDescription => 'Ohita järjestelmän määrittämä kirkkaus';
+  String get settingsScreenBrightnessDescription =>
+      'Ohita järjestelmän määrittämä kirkkaus';
 
   @override
   String get settingsForceRotationTitle => 'Ohita näytön kiertäjän lukitus';
 
   @override
-  String get settingsForceRotationDescription => 'Kierrä näyttöä, vaikka järjestelmän automaattinen näytönkierto on poiskytketty';
+  String get settingsForceRotationDescription =>
+      'Kierrä näyttöä, vaikka järjestelmän automaattinen näytönkierto on poiskytketty';
 
   @override
   String get settingsMapProviderTitle => 'Karttapalvelun-tarjoaja';
@@ -324,37 +348,46 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsViewerCustomizeAppBarTitle => 'Customize app bar';
 
   @override
-  String get settingsViewerCustomizeBottomAppBarTitle => 'Customize bottom app bar';
+  String get settingsViewerCustomizeBottomAppBarTitle =>
+      'Customize bottom app bar';
 
   @override
   String get settingsShowDateInAlbumTitle => 'Ryhmitä kuvat päivämäärän mukaan';
 
   @override
-  String get settingsShowDateInAlbumDescription => 'Käytä vain kun albumi on lajiteltu ajan mukaan';
+  String get settingsShowDateInAlbumDescription =>
+      'Käytä vain kun albumi on lajiteltu ajan mukaan';
 
   @override
-  String get settingsCollectionsCustomizeNavigationBarTitle => 'Customize navigation bar';
+  String get settingsCollectionsCustomizeNavigationBarTitle =>
+      'Customize navigation bar';
 
   @override
   String get settingsImageEditTitle => 'Editori';
 
   @override
-  String get settingsImageEditDescription => 'Muokkaa kuvien parannusta ja kuvaeditoria';
+  String get settingsImageEditDescription =>
+      'Muokkaa kuvien parannusta ja kuvaeditoria';
 
   @override
-  String get settingsEnhanceMaxResolutionTitle2 => 'Kuvaresoluutio muokkausta varten';
+  String get settingsEnhanceMaxResolutionTitle2 =>
+      'Kuvaresoluutio muokkausta varten';
 
   @override
-  String get settingsEnhanceMaxResolutionDescription => 'Määritettyä resoluutiota suuremmat kuvat skaalataan määritettyyn resoluutioon.\n\nKorkean resoluution kuvien käsittely vie huomattavasti enemmän muistia ja aikaa. Mikäli sovellus kaatuu käsittelyn aikana, vähennä tämän asetuksen arvoa.';
+  String get settingsEnhanceMaxResolutionDescription =>
+      'Määritettyä resoluutiota suuremmat kuvat skaalataan määritettyyn resoluutioon.\n\nKorkean resoluution kuvien käsittely vie huomattavasti enemmän muistia ja aikaa. Mikäli sovellus kaatuu käsittelyn aikana, vähennä tämän asetuksen arvoa.';
 
   @override
-  String get settingsImageEditSaveResultsToServerTitle => 'Tallenna muokkaus palvelimelle';
+  String get settingsImageEditSaveResultsToServerTitle =>
+      'Tallenna muokkaus palvelimelle';
 
   @override
-  String get settingsImageEditSaveResultsToServerTrueDescription => 'Muokkaukset tallennetaan palvelimelle. Virheen sattuessa muokkaukset tallennetaan paikallisesti laitteelle.';
+  String get settingsImageEditSaveResultsToServerTrueDescription =>
+      'Muokkaukset tallennetaan palvelimelle. Virheen sattuessa muokkaukset tallennetaan paikallisesti laitteelle.';
 
   @override
-  String get settingsImageEditSaveResultsToServerFalseDescription => 'Muokkaukset tallennetaan paikallisesti tälle laitteelle.';
+  String get settingsImageEditSaveResultsToServerFalseDescription =>
+      'Muokkaukset tallennetaan paikallisesti tälle laitteelle.';
 
   @override
   String get settingsThemeTitle => 'Teema';
@@ -369,10 +402,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsSeedColorTitle => 'Teeman väri';
 
   @override
-  String get settingsSeedColorDescription => 'Käytetään määrittämään sovelluksen kaikkia värejä';
+  String get settingsSeedColorDescription =>
+      'Käytetään määrittämään sovelluksen kaikkia värejä';
 
   @override
-  String get settingsSeedColorSystemColorDescription => 'Käytä järjestelmän oletusarvoa';
+  String get settingsSeedColorSystemColorDescription =>
+      'Käytä järjestelmän oletusarvoa';
 
   @override
   String get settingsSeedColorPickerTitle => 'Valitse väri';
@@ -387,16 +422,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsThemePresets => 'Presets';
 
   @override
-  String get settingsSeedColorPickerSystemColorButtonLabel => 'KÄYTÄ JÄRJESTELMÄN OLETUSARVOA';
+  String get settingsSeedColorPickerSystemColorButtonLabel =>
+      'KÄYTÄ JÄRJESTELMÄN OLETUSARVOA';
 
   @override
   String get settingsUseBlackInDarkThemeTitle => 'Tumma teema';
 
   @override
-  String get settingsUseBlackInDarkThemeTrueDescription => 'Käytä mustaa tummassa teemassa';
+  String get settingsUseBlackInDarkThemeTrueDescription =>
+      'Käytä mustaa tummassa teemassa';
 
   @override
-  String get settingsUseBlackInDarkThemeFalseDescription => 'Käytä tumman harmaata tummassa teemassa';
+  String get settingsUseBlackInDarkThemeFalseDescription =>
+      'Käytä tumman harmaata tummassa teemassa';
 
   @override
   String get settingsMiscellaneousTitle => 'Sekalaiset';
@@ -405,7 +443,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsDoubleTapExitTitle => 'Napauta kahdesti poistuaksesi';
 
   @override
-  String get settingsPhotosTabSortByNameTitle => 'Järjestä tiedostonimen mukaan';
+  String get settingsPhotosTabSortByNameTitle =>
+      'Järjestä tiedostonimen mukaan';
 
   @override
   String get settingsAppLock => 'App lock';
@@ -420,10 +459,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsAppLockTypePassword => 'Password';
 
   @override
-  String get settingsAppLockDescription => 'If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.';
+  String get settingsAppLockDescription =>
+      'If enabled, you will be asked to authenticate when you open the app. This feature does NOT protect you against real-world attacks.';
 
   @override
-  String get settingsAppLockSetupBiometricFallbackDialogTitle => 'Pick the fallback when biometric is not available';
+  String get settingsAppLockSetupBiometricFallbackDialogTitle =>
+      'Pick the fallback when biometric is not available';
 
   @override
   String get settingsAppLockSetupPinDialogTitle => 'Set the PIN to unlock app';
@@ -432,43 +473,52 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsAppLockConfirmPinDialogTitle => 'Enter the same PIN again';
 
   @override
-  String get settingsAppLockSetupPasswordDialogTitle => 'Set the password to unlock app';
+  String get settingsAppLockSetupPasswordDialogTitle =>
+      'Set the password to unlock app';
 
   @override
-  String get settingsAppLockConfirmPasswordDialogTitle => 'Enter the same password again';
+  String get settingsAppLockConfirmPasswordDialogTitle =>
+      'Enter the same password again';
 
   @override
-  String get settingsViewerUseOriginalImageTitle => 'Show original image instead of high quality preview in viewer';
+  String get settingsViewerUseOriginalImageTitle =>
+      'Show original image instead of high quality preview in viewer';
 
   @override
   String get settingsExperimentalTitle => 'Kokeellinen';
 
   @override
-  String get settingsExperimentalDescription => 'Kokeellisia ominaisuuksia, jotka eivät ole vielä täysin vakaita';
+  String get settingsExperimentalDescription =>
+      'Kokeellisia ominaisuuksia, jotka eivät ole vielä täysin vakaita';
 
   @override
   String get settingsExpertTitle => 'Edistyneet';
 
   @override
-  String get settingsExpertWarningText => 'Varmista, että olet ymmärtänyt jokaisen vaihtoehdon ennen kuin teet mitään';
+  String get settingsExpertWarningText =>
+      'Varmista, että olet ymmärtänyt jokaisen vaihtoehdon ennen kuin teet mitään';
 
   @override
   String get settingsClearCacheDatabaseTitle => 'Puhdista tietokanta';
 
   @override
-  String get settingsClearCacheDatabaseDescription => 'Puhdista välitiedostot ja aloita uudelleen synkronointi palvelimen kanssa';
+  String get settingsClearCacheDatabaseDescription =>
+      'Puhdista välitiedostot ja aloita uudelleen synkronointi palvelimen kanssa';
 
   @override
-  String get settingsClearCacheDatabaseSuccessNotification => 'Tietokannan puhdistus onnistui. Käynnistä sovellus uudelleen';
+  String get settingsClearCacheDatabaseSuccessNotification =>
+      'Tietokannan puhdistus onnistui. Käynnistä sovellus uudelleen';
 
   @override
-  String get settingsManageTrustedCertificateTitle => 'Manage trusted certificates';
+  String get settingsManageTrustedCertificateTitle =>
+      'Manage trusted certificates';
 
   @override
   String get settingsUseNewHttpEngine => 'Use new HTTP engine';
 
   @override
-  String get settingsUseNewHttpEngineDescription => 'New HTTP engine based on Chromium, supporting new standards like HTTP/2* and HTTP/3 QUIC*.\n\nLimitations:\nSelf-signed certs can no longer be managed by us. You must import your CA certs to the system trust store for them to work.\n\n* HTTPS is required for HTTP/2 and HTTP/3';
+  String get settingsUseNewHttpEngineDescription =>
+      'New HTTP engine based on Chromium, supporting new standards like HTTP/2* and HTTP/3 QUIC*.\n\nLimitations:\nSelf-signed certs can no longer be managed by us. You must import your CA certs to the system trust store for them to work.\n\n* HTTPS is required for HTTP/2 and HTTP/3';
 
   @override
   String get settingsAboutSectionTitle => 'Tietoa';
@@ -489,16 +539,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get settingsCaptureLogsTitle => 'Kaappaa lokitiedot';
 
   @override
-  String get settingsCaptureLogsDescription => 'Auta kehittäjää korjaamaan bugeja';
+  String get settingsCaptureLogsDescription =>
+      'Auta kehittäjää korjaamaan bugeja';
 
   @override
   String get settingsTranslatorTitle => 'Kääntäjä';
 
   @override
-  String get settingsRestartNeededDialog => 'Please restart the app to apply changes';
+  String get settingsRestartNeededDialog =>
+      'Please restart the app to apply changes';
 
   @override
-  String get writePreferenceFailureNotification => 'Asetusten tallennus epäonnistui';
+  String get writePreferenceFailureNotification =>
+      'Asetusten tallennus epäonnistui';
 
   @override
   String get enableButtonLabel => 'OTA KÄYTTÖÖN';
@@ -507,16 +560,20 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enableButtonLabel2 => 'Enable';
 
   @override
-  String get exifSupportNextcloud28Notes => 'Client-side support complements your server. The app will process files and attributes not supported by Nextcloud';
+  String get exifSupportNextcloud28Notes =>
+      'Client-side support complements your server. The app will process files and attributes not supported by Nextcloud';
 
   @override
-  String get exifSupportConfirmationDialogTitle2 => 'Enable client-side EXIF support?';
+  String get exifSupportConfirmationDialogTitle2 =>
+      'Enable client-side EXIF support?';
 
   @override
-  String get captureLogDetails => 'Lokitietojen tallenusta varten:\n\n1. Ota tämä asetus käyttöön\n2. Toista ongelma\n3. Poista tämä asetus käytöstä\n4. Etsi nc-photos.log -tiedosto latauskansiosta\n\n*Mikäli ongelma kaataa sovelluksen, lokitiedostoja ei pystytä tallentamaan. Tässä tapauksessa ota yhteyttä kehittäjään lisätietoja varten.';
+  String get captureLogDetails =>
+      'Lokitietojen tallenusta varten:\n\n1. Ota tämä asetus käyttöön\n2. Toista ongelma\n3. Poista tämä asetus käytöstä\n4. Etsi nc-photos.log -tiedosto latauskansiosta\n\n*Mikäli ongelma kaataa sovelluksen, lokitiedostoja ei pystytä tallentamaan. Tässä tapauksessa ota yhteyttä kehittäjään lisätietoja varten.';
 
   @override
-  String get captureLogSuccessNotification => 'Lokitiedot tallennettu onnistuneesti';
+  String get captureLogSuccessNotification =>
+      'Lokitiedot tallennettu onnistuneesti';
 
   @override
   String get doneButtonLabel => 'VALMIS';
@@ -528,7 +585,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get connectButtonLabel => 'YHDISTÄ';
 
   @override
-  String get rootPickerSkipConfirmationDialogContent2 => 'Kaikki tiedostosi sisällytetään. Tämä voi lisä muistinkäyttöä ja hidastaa suorituskykyä.';
+  String get rootPickerSkipConfirmationDialogContent2 =>
+      'Kaikki tiedostosi sisällytetään. Tämä voi lisä muistinkäyttöä ja hidastaa suorituskykyä.';
 
   @override
   String megapixelCount(Object count) {
@@ -567,10 +625,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get previousTooltip => 'Edellinen';
 
   @override
-  String get webSelectRangeNotification => 'Paina shift + napauta viimeistä kuvaa valitaksesi kuvat niiden välistä';
+  String get webSelectRangeNotification =>
+      'Paina shift + napauta viimeistä kuvaa valitaksesi kuvat niiden välistä';
 
   @override
-  String get mobileSelectRangeNotification => 'Paina kohdetta pitkään valitaksesi kaikki niiden väliltä';
+  String get mobileSelectRangeNotification =>
+      'Paina kohdetta pitkään valitaksesi kaikki niiden väliltä';
 
   @override
   String get updateDateTimeDialogTitle => 'Muokkaa aikaa ja päiväystä';
@@ -603,16 +663,19 @@ class AppLocalizationsFi extends AppLocalizations {
   String get dateTimeInputInvalid => 'Epäkelpo arvo';
 
   @override
-  String get updateDateTimeFailureNotification => 'Ajan ja päiväyksen muuttaminen epäonnistui';
+  String get updateDateTimeFailureNotification =>
+      'Ajan ja päiväyksen muuttaminen epäonnistui';
 
   @override
   String get albumDirPickerHeaderText => 'Valitse mukana olevat albumit';
 
   @override
-  String get albumDirPickerSubHeaderText => 'Ainoastaan valituissa kansioissa olevat kuvat näkyvät tässä albumissa';
+  String get albumDirPickerSubHeaderText =>
+      'Ainoastaan valituissa kansioissa olevat kuvat näkyvät tässä albumissa';
 
   @override
-  String get albumDirPickerListEmptyNotification => 'Valitse vähintään yksi albumi';
+  String get albumDirPickerListEmptyNotification =>
+      'Valitse vähintään yksi albumi';
 
   @override
   String get importFoldersTooltip => 'Tuo kansioita';
@@ -621,7 +684,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get albumImporterHeaderText => 'Tuo kansiot albumeiksi';
 
   @override
-  String get albumImporterSubHeaderText => 'Suositellut albumit on listattu alapuolelle. Tiedostojen tuontinopeus riippuu tiedostojen määrästä palvelimella.';
+  String get albumImporterSubHeaderText =>
+      'Suositellut albumit on listattu alapuolelle. Tiedostojen tuontinopeus riippuu tiedostojen määrästä palvelimella.';
 
   @override
   String get importButtonLabel => 'TUO';
@@ -636,7 +700,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get editTooltip => 'Edit';
 
   @override
-  String get editAccountConflictFailureNotification => 'Käyttäjätunnus samoilla asetuksilla on jo olemassa';
+  String get editAccountConflictFailureNotification =>
+      'Käyttäjätunnus samoilla asetuksilla on jo olemassa';
 
   @override
   String get genericProcessingDialogContent => 'Ole hyvä ja odota';
@@ -669,7 +734,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get sortOptionManualLabel => 'Käsin';
 
   @override
-  String get albumEditDragRearrangeNotification => 'Paina kohdetta pitkään järjestääksesi sen uudelleen käsin';
+  String get albumEditDragRearrangeNotification =>
+      'Paina kohdetta pitkään järjestääksesi sen uudelleen käsin';
 
   @override
   String get albumAddTextTooltip => 'Lisää teksti';
@@ -713,7 +779,8 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get restoreSelectedSuccessNotification => 'Kaikki kohteet palautettu onnistuneesti';
+  String get restoreSelectedSuccessNotification =>
+      'Kaikki kohteet palautettu onnistuneesti';
 
   @override
   String restoreSelectedFailureNotification(num count) {
@@ -742,13 +809,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get deletePermanentlyConfirmationDialogTitle => 'Poista lopullisesti';
 
   @override
-  String get deletePermanentlyConfirmationDialogContent => ' Valitut kohteet poistetaan palvelimelta lopullisesti.\n\nTätä toimintoa ei voi perua';
+  String get deletePermanentlyConfirmationDialogContent =>
+      ' Valitut kohteet poistetaan palvelimelta lopullisesti.\n\nTätä toimintoa ei voi perua';
 
   @override
   String get albumSharedLabel => 'Jaetut';
 
   @override
-  String get metadataTaskProcessingNotification => 'Prosessoidaan kuvien metadataa taustalla';
+  String get metadataTaskProcessingNotification =>
+      'Prosessoidaan kuvien metadataa taustalla';
 
   @override
   String get configButtonLabel => 'ASETUS';
@@ -769,10 +838,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get changelogTitle => 'Muutosloki';
 
   @override
-  String get serverCertErrorDialogTitle => 'Palvelisertifikaattiin ei voida luottaa';
+  String get serverCertErrorDialogTitle =>
+      'Palvelisertifikaattiin ei voida luottaa';
 
   @override
-  String get serverCertErrorDialogContent => 'Palvelimeen on mahdollisesti murtauduttu tai joku yrittää mahdollisesti varastaa tietojasi';
+  String get serverCertErrorDialogContent =>
+      'Palvelimeen on mahdollisesti murtauduttu tai joku yrittää mahdollisesti varastaa tietojasi';
 
   @override
   String get advancedButtonLabel => 'EDISTYNEET';
@@ -798,7 +869,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get emptyTrashbinConfirmationDialogTitle => 'Tyhjä roskakori';
 
   @override
-  String get emptyTrashbinConfirmationDialogContent => 'Kaikki kohteet poistetaan lopullisesti palvelimelta\n\nTätä ei voi peruuttaa';
+  String get emptyTrashbinConfirmationDialogContent =>
+      'Kaikki kohteet poistetaan lopullisesti palvelimelta\n\nTätä ei voi peruuttaa';
 
   @override
   String get unsetAlbumCoverTooltip => 'Poista albumin kansi';
@@ -840,25 +912,29 @@ class AppLocalizationsFi extends AppLocalizations {
   String get shareMethodPreviewTitle => 'Esikatselu';
 
   @override
-  String get shareMethodPreviewDescription => 'Jaa heikkolaatuisempi esikatselu muihin sovelluksiin (vain kuvat tuettu)';
+  String get shareMethodPreviewDescription =>
+      'Jaa heikkolaatuisempi esikatselu muihin sovelluksiin (vain kuvat tuettu)';
 
   @override
   String get shareMethodOriginalFileTitle => 'Alkuperäinen tiedosto';
 
   @override
-  String get shareMethodOriginalFileDescription => 'Lataa alkuperäinen tiedosto ja jaa se muiden sovellusten kanssa';
+  String get shareMethodOriginalFileDescription =>
+      'Lataa alkuperäinen tiedosto ja jaa se muiden sovellusten kanssa';
 
   @override
   String get shareMethodPublicLinkTitle => 'Julkinen linkki';
 
   @override
-  String get shareMethodPublicLinkDescription => 'Luo julkinen linkki palvelimelle. Kaikki linkinhaltijat voivat käyttää tiedostoa';
+  String get shareMethodPublicLinkDescription =>
+      'Luo julkinen linkki palvelimelle. Kaikki linkinhaltijat voivat käyttää tiedostoa';
 
   @override
   String get shareMethodPasswordLinkTitle => 'Password protected link';
 
   @override
-  String get shareMethodPasswordLinkDescription => 'Luo uusi salasanasuojattu linkki palvelimelle';
+  String get shareMethodPasswordLinkDescription =>
+      'Luo uusi salasanasuojattu linkki palvelimelle';
 
   @override
   String get collectionSharingLabel => 'Jaettu';
@@ -891,7 +967,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get locationLabel => 'Sijainti';
 
   @override
-  String get multipleFilesLinkShareDialogContent => 'Nextcloud ei tue linkin jakoa usealle tiedostolle. Sovellus KOPIO sen sijaan tiedostot kansioon ja jakaa luodun kansion.';
+  String get multipleFilesLinkShareDialogContent =>
+      'Nextcloud ei tue linkin jakoa usealle tiedostolle. Sovellus KOPIO sen sijaan tiedostot kansioon ja jakaa luodun kansion.';
 
   @override
   String get folderNameInputHint => 'Kansion nimi';
@@ -900,7 +977,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get folderNameInputInvalidEmpty => 'Syötä kansion nimi';
 
   @override
-  String get folderNameInputInvalidCharacters => 'Sisältää sopimattomia merkkejä';
+  String get folderNameInputInvalidCharacters =>
+      'Sisältää sopimattomia merkkejä';
 
   @override
   String get createShareProgressText => 'Luodaan jakoa';
@@ -920,7 +998,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get unshareLinkShareDirDialogTitle => 'Poista kansio?';
 
   @override
-  String get unshareLinkShareDirDialogContent => 'Sovellus loi tämän kansion jakaakseen useamman tiedoston samalla linkillä. Sitä ei enää jaeta kenenkään kanssa. Haluatko poistaa tämän kansion?';
+  String get unshareLinkShareDirDialogContent =>
+      'Sovellus loi tämän kansion jakaakseen useamman tiedoston samalla linkillä. Sitä ei enää jaeta kenenkään kanssa. Haluatko poistaa tämän kansion?';
 
   @override
   String get addToCollectionsViewTooltip => 'Lisää kokoelmaan';
@@ -964,10 +1043,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get addUserInputHint => 'Lisää käyttäjä';
 
   @override
-  String get sharedAlbumInfoDialogTitle => 'Uutena ominaisuutena jaetut albumit';
+  String get sharedAlbumInfoDialogTitle =>
+      'Uutena ominaisuutena jaetut albumit';
 
   @override
-  String get sharedAlbumInfoDialogContent => 'Jaetut albumit sallii useiden käyttäjien yhtäaikaisen pääsyn albumiin. Lue huolellisesti jaettujen albumien rajoitukset ennen käyttöä';
+  String get sharedAlbumInfoDialogContent =>
+      'Jaetut albumit sallii useiden käyttäjien yhtäaikaisen pääsyn albumiin. Lue huolellisesti jaettujen albumien rajoitukset ennen käyttöä';
 
   @override
   String get learnMoreButtonLabel => 'LUE LISÄÄ';
@@ -976,7 +1057,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get migrateDatabaseProcessingNotification => 'Päivitetään tietokantaa';
 
   @override
-  String get migrateDatabaseFailureNotification => 'Tietokantojen yhdistäminen epäonnistui';
+  String get migrateDatabaseFailureNotification =>
+      'Tietokantojen yhdistäminen epäonnistui';
 
   @override
   String memoryAlbumName(num count) {
@@ -993,7 +1075,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get homeFolderNotFoundDialogTitle => 'Kotikansiota ei löytynyt';
 
   @override
-  String get homeFolderNotFoundDialogContent => 'Korjaa WebDAV URL-osoite. Löydät URL-osoitteen Nextloud-verkkokäyttöliittymästä.';
+  String get homeFolderNotFoundDialogContent =>
+      'Korjaa WebDAV URL-osoite. Löydät URL-osoitteen Nextloud-verkkokäyttöliittymästä.';
 
   @override
   String get homeFolderInputInvalidEmpty => 'Nimeä kotikansiosi';
@@ -1005,13 +1088,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createCollectionDialogAlbumLabel2 => 'Client-side album';
 
   @override
-  String get createCollectionDialogAlbumDescription2 => 'Album with extra features, accessible only with this app';
+  String get createCollectionDialogAlbumDescription2 =>
+      'Album with extra features, accessible only with this app';
 
   @override
   String get createCollectionDialogFolderLabel => 'Kansio';
 
   @override
-  String get createCollectionDialogFolderDescription => 'Näytä kaikki kansion kuvat';
+  String get createCollectionDialogFolderDescription =>
+      'Näytä kaikki kansion kuvat';
 
   @override
   String get collectionFavoritesLabel => 'Suosikit';
@@ -1023,7 +1108,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get favoriteSuccessNotification => 'Lisää suosikkeihin';
 
   @override
-  String get favoriteFailureNotification => 'Kuvien lisäys suosikkeihin epäonnistui';
+  String get favoriteFailureNotification =>
+      'Kuvien lisäys suosikkeihin epäonnistui';
 
   @override
   String get unfavoriteTooltip => 'Poista suosikeista';
@@ -1038,13 +1124,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createCollectionDialogTagLabel => 'Tunniste';
 
   @override
-  String get createCollectionDialogTagDescription => 'Näytä kuvat tietyillä tunnisteilla';
+  String get createCollectionDialogTagDescription =>
+      'Näytä kuvat tietyillä tunnisteilla';
 
   @override
   String get addTagInputHint => 'Lisää tunniste';
 
   @override
-  String get tagPickerNoTagSelectedNotification => 'Lisää ainakin yksi tunniste';
+  String get tagPickerNoTagSelectedNotification =>
+      'Lisää ainakin yksi tunniste';
 
   @override
   String get backgroundServiceStopping => 'Pysäytetään palvelua';
@@ -1062,13 +1150,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enhanceIntroDialogTitle => 'Paranna kuviasi';
 
   @override
-  String get enhanceIntroDialogDescription => 'Kuviasi käsitellään paikallisesti laitteellasi. Oletuksena kuvat skaalataan resoluutioon 2048x1536. Voit muuttaa tämän resoluution asetuksista.';
+  String get enhanceIntroDialogDescription =>
+      'Kuviasi käsitellään paikallisesti laitteellasi. Oletuksena kuvat skaalataan resoluutioon 2048x1536. Voit muuttaa tämän resoluution asetuksista.';
 
   @override
   String get enhanceLowLightTitle => 'Hämärässä otettujen kuvien parannus';
 
   @override
-  String get enhanceLowLightDescription => 'Kirkasta hämärässä ympäristössä otettuja kuvia';
+  String get enhanceLowLightDescription =>
+      'Kirkasta hämärässä ympäristössä otettuja kuvia';
 
   @override
   String get enhanceLowLightParamBrightnessLabel => 'Kirkkaus';
@@ -1077,13 +1167,15 @@ class AppLocalizationsFi extends AppLocalizations {
   String get collectionEditedPhotosLabel => 'Muokatut (paikallinen)';
 
   @override
-  String get deletePermanentlyLocalConfirmationDialogContent => 'Valitut kuvat poistetaan lopullisesti laitteeltasi.\n\nTätä toimintoa ei voi perua.';
+  String get deletePermanentlyLocalConfirmationDialogContent =>
+      'Valitut kuvat poistetaan lopullisesti laitteeltasi.\n\nTätä toimintoa ei voi perua.';
 
   @override
   String get enhancePortraitBlurTitle => 'Muotokuvan sumennus';
 
   @override
-  String get enhancePortraitBlurDescription => 'Sumenna kuviesi taustaa, toimii parhaiten muotokuvien kanssa';
+  String get enhancePortraitBlurDescription =>
+      'Sumenna kuviesi taustaa, toimii parhaiten muotokuvien kanssa';
 
   @override
   String get enhancePortraitBlurParamBlurLabel => 'Blurriness';
@@ -1092,7 +1184,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enhanceSuperResolution4xTitle => 'Super-resoluutio (4x)';
 
   @override
-  String get enhanceSuperResolution4xDescription => 'Skaalaa kuviesi resoluutiota jopa 4x normaalista resoluutiosta. (Lue kohta Apua saadaksesi lisätietoa, kuinka toiminto toimii.)';
+  String get enhanceSuperResolution4xDescription =>
+      'Skaalaa kuviesi resoluutiota jopa 4x normaalista resoluutiosta. (Lue kohta Apua saadaksesi lisätietoa, kuinka toiminto toimii.)';
 
   @override
   String get enhanceStyleTransferTitle => 'Tyylin siirto';
@@ -1101,7 +1194,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enhanceStyleTransferStyleDialogTitle => 'Valitse tyyli';
 
   @override
-  String get enhanceStyleTransferStyleDialogDescription => 'Siirrä kuvan tyyli vertailukuvasta omiin kuviisi.';
+  String get enhanceStyleTransferStyleDialogDescription =>
+      'Siirrä kuvan tyyli vertailukuvasta omiin kuviisi.';
 
   @override
   String get enhanceStyleTransferNoStyleSelectedNotification => 'Valitse tyyli';
@@ -1110,7 +1204,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enhanceColorPopTitle => 'Värihyppy';
 
   @override
-  String get enhanceColorPopDescription => 'Vähennä kuvien taustan saturaatiota, toimii parhaiten muotokuvien kanssa.';
+  String get enhanceColorPopDescription =>
+      'Vähennä kuvien taustan saturaatiota, toimii parhaiten muotokuvien kanssa.';
 
   @override
   String get enhanceGenericParamWeightLabel => 'Paino';
@@ -1119,7 +1214,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get enhanceRetouchTitle => 'Automaattinen parannus';
 
   @override
-  String get enhanceRetouchDescription => 'Paranna kuvia automaattisesti. Parantaa kuvien värisävyjä.';
+  String get enhanceRetouchDescription =>
+      'Paranna kuvia automaattisesti. Parantaa kuvien värisävyjä.';
 
   @override
   String get doubleTapExitNotification => 'Napauta uudelleen poistuaksesi';
@@ -1230,10 +1326,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get imageEditNoFaceDetected => 'No faces detected';
 
   @override
-  String get imageEditFaceNotSelected => 'Select one or more faces on your photos to apply the effects';
+  String get imageEditFaceNotSelected =>
+      'Select one or more faces on your photos to apply the effects';
 
   @override
-  String get imageEditResetSelectedFaceMessage => 'Selected faces are cleared after adjusting image transformation settings';
+  String get imageEditResetSelectedFaceMessage =>
+      'Selected faces are cleared after adjusting image transformation settings';
 
   @override
   String get imageEditOpenErrorMessage => 'Unable to open file';
@@ -1245,7 +1343,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get categoriesLabel => 'Luokat';
 
   @override
-  String get searchLandingPeopleListEmptyText2 => 'Valitse \"asetukset\" vaihtaaksesi tarjoajaa tai paina \"apua\" saadaksesi lisää tietoa';
+  String get searchLandingPeopleListEmptyText2 =>
+      'Valitse \"asetukset\" vaihtaaksesi tarjoajaa tai paina \"apua\" saadaksesi lisää tietoa';
 
   @override
   String get searchLandingCategoryVideosLabel => 'Videot';
@@ -1304,7 +1403,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get gpsPlaceAboutDialogTitle => 'Paikasta';
 
   @override
-  String get gpsPlaceAboutDialogContent => 'Näytetty paikka on vain karkea arvio. Se ei välttämättä ole tarkka. Paikka ei kuvaa sovelluksen kehittäjien näkökantaa alueesta.';
+  String get gpsPlaceAboutDialogContent =>
+      'Näytetty paikka on vain karkea arvio. Se ei välttämättä ole tarkka. Paikka ei kuvaa sovelluksen kehittäjien näkökantaa alueesta.';
 
   @override
   String get collectionPlacesLabel => 'Paikat';
@@ -1313,7 +1413,8 @@ class AppLocalizationsFi extends AppLocalizations {
   String get imageSaveOptionDialogTitle => 'Tallennetaan tulosta';
 
   @override
-  String get imageSaveOptionDialogContent => 'Valitse mihin prosessoidut kuvat tallennetaan. Mikäli kuvansiirto palvelimelle epäonnistuu, tallennetaan kuva laitteelle.';
+  String get imageSaveOptionDialogContent =>
+      'Valitse mihin prosessoidut kuvat tallennetaan. Mikäli kuvansiirto palvelimelle epäonnistuu, tallennetaan kuva laitteelle.';
 
   @override
   String get imageSaveOptionDialogDeviceButtonLabel => 'LAITE';
@@ -1322,22 +1423,26 @@ class AppLocalizationsFi extends AppLocalizations {
   String get imageSaveOptionDialogServerButtonLabel => 'PALVELIN';
 
   @override
-  String get initialSyncMessage => 'Synkronoidaan palvelimen kanssa ensimmäistä kertaa';
+  String get initialSyncMessage =>
+      'Synkronoidaan palvelimen kanssa ensimmäistä kertaa';
 
   @override
   String get loopTooltip => 'Uudelleentoista';
 
   @override
-  String get createCollectionFailureNotification => 'Kokoelman luonti epäonnistui';
+  String get createCollectionFailureNotification =>
+      'Kokoelman luonti epäonnistui';
 
   @override
   String get addItemToCollectionTooltip => 'Lisää kokoelmaan';
 
   @override
-  String get addItemToCollectionFailureNotification => 'Kokoelmaan lisääminen epäonnistui';
+  String get addItemToCollectionFailureNotification =>
+      'Kokoelmaan lisääminen epäonnistui';
 
   @override
-  String get setCollectionCoverFailureNotification => 'Kokoelman kansikuvan asetus epäonnistui';
+  String get setCollectionCoverFailureNotification =>
+      'Kokoelman kansikuvan asetus epäonnistui';
 
   @override
   String get exportCollectionTooltip => 'Vie';
@@ -1349,10 +1454,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get createCollectionDialogNextcloudAlbumLabel2 => 'Server-side album';
 
   @override
-  String get createCollectionDialogNextcloudAlbumDescription2 => 'Create an album on your server, accessible with any app';
+  String get createCollectionDialogNextcloudAlbumDescription2 =>
+      'Create an album on your server, accessible with any app';
 
   @override
-  String get removeCollectionsFailedNotification => 'Joidenkin kokoelmien poisto epäonnistui';
+  String get removeCollectionsFailedNotification =>
+      'Joidenkin kokoelmien poisto epäonnistui';
 
   @override
   String get accountSettingsTooltip => 'Tiliasetukset';
@@ -1393,10 +1500,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get trustedCertManagerNoHttpsServerError => 'No server available';
 
   @override
-  String get trustedCertManagerFailedToRemoveCertError => 'Failed to remove certificate';
+  String get trustedCertManagerFailedToRemoveCertError =>
+      'Failed to remove certificate';
 
   @override
-  String get missingVideoThumbnailHelpDialogTitle => 'Having trouble with video thumbnails?';
+  String get missingVideoThumbnailHelpDialogTitle =>
+      'Having trouble with video thumbnails?';
 
   @override
   String get dontShowAgain => 'Don\'t show again';
@@ -1429,13 +1538,16 @@ class AppLocalizationsFi extends AppLocalizations {
   String get livePhotoTooltip => 'Live photo';
 
   @override
-  String get dragAndDropRearrangeButtons => 'Drag and drop to rearrange buttons';
+  String get dragAndDropRearrangeButtons =>
+      'Drag and drop to rearrange buttons';
 
   @override
-  String get customizeCollectionsNavBarDescription => 'Drag and drop to rearrange buttons, tap the buttons above to minimize them';
+  String get customizeCollectionsNavBarDescription =>
+      'Drag and drop to rearrange buttons, tap the buttons above to minimize them';
 
   @override
-  String get customizeButtonsUnsupportedWarning => 'This button cannot be customized';
+  String get customizeButtonsUnsupportedWarning =>
+      'This button cannot be customized';
 
   @override
   String get placePickerTitle => 'Pick a place';
@@ -1465,10 +1577,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get uploadFolderPickerTitle => 'Upload to';
 
   @override
-  String get opOnlySupportRemoteFiles => 'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
+  String get opOnlySupportRemoteFiles =>
+      'This feature only supports remote files on your Nextcloud server. Any selected local files are ignored';
 
   @override
-  String get opOnlySupportLocalFiles => 'This feature only supports local files on your device. Any selected remote files are ignored';
+  String get opOnlySupportLocalFiles =>
+      'This feature only supports local files on your device. Any selected remote files are ignored';
 
   @override
   String get uploadDialogPath => 'Path';
@@ -1477,16 +1591,20 @@ class AppLocalizationsFi extends AppLocalizations {
   String get uploadDialogBatchConvert => 'Batch convert';
 
   @override
-  String get uploadBatchConvertWarningText1 => 'Your photos will be compressed before uploading to your server.';
+  String get uploadBatchConvertWarningText1 =>
+      'Your photos will be compressed before uploading to your server.';
 
   @override
-  String get uploadBatchConvertWarningText2 => 'Motion photos are NOT supported and they will be uploaded as a still image.';
+  String get uploadBatchConvertWarningText2 =>
+      'Motion photos are NOT supported and they will be uploaded as a still image.';
 
   @override
-  String get uploadBatchConvertWarningText3 => 'Some metadata may be altered or dropped.';
+  String get uploadBatchConvertWarningText3 =>
+      'Some metadata may be altered or dropped.';
 
   @override
-  String get uploadBatchConvertWarningText4 => 'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
+  String get uploadBatchConvertWarningText4 =>
+      'Supported source formats: JPEG, PNG, WEBP, BMP, HEIC';
 
   @override
   String get uploadBatchConvertSettings => 'Conversion settings';
@@ -1513,10 +1631,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get deleteMergedFileDialogBothButton => 'Both';
 
   @override
-  String get deleteMergedFileDialogContent => 'Some of the files exist both on your server and your device. Where should we delete these files from?';
+  String get deleteMergedFileDialogContent =>
+      'Some of the files exist both on your server and your device. Where should we delete these files from?';
 
   @override
-  String get deleteSingleMergedFileDialogContent => 'File exists both on your server and your device. Where should we delete this file from?';
+  String get deleteSingleMergedFileDialogContent =>
+      'File exists both on your server and your device. Where should we delete this file from?';
 
   @override
   String get collectionAddItemTitle => 'Where to insert item?';
@@ -1537,29 +1657,37 @@ class AppLocalizationsFi extends AppLocalizations {
   }
 
   @override
-  String get errorUnauthenticated => 'Ei sallittu pääsyä. Kirjaudu sovellukseen uudelleen mikäli virhe toistuu';
+  String get errorUnauthenticated =>
+      'Ei sallittu pääsyä. Kirjaudu sovellukseen uudelleen mikäli virhe toistuu';
 
   @override
-  String get errorDisconnected => 'Yhdistäminen epäonnistui. Palvelin saattaa olla offline-tilassa tai mobiililaitettasi ei ole kytketty verkkoon';
+  String get errorDisconnected =>
+      'Yhdistäminen epäonnistui. Palvelin saattaa olla offline-tilassa tai mobiililaitettasi ei ole kytketty verkkoon';
 
   @override
-  String get errorLocked => 'Tiedosto lukittu palvelimella. Yritä myöhemmin uudelleen';
+  String get errorLocked =>
+      'Tiedosto lukittu palvelimella. Yritä myöhemmin uudelleen';
 
   @override
-  String get errorInvalidBaseUrl => 'Yhteyttä ei voitu muodostaa. Varmista, että Nextcloud-palvelimesi URL-osoite on oikein';
+  String get errorInvalidBaseUrl =>
+      'Yhteyttä ei voitu muodostaa. Varmista, että Nextcloud-palvelimesi URL-osoite on oikein';
 
   @override
-  String get errorWrongPassword => 'Kirjautuminen epäonnistui. Varmista, että käyttäjätunnuksesi ja salasanasi on oikein';
+  String get errorWrongPassword =>
+      'Kirjautuminen epäonnistui. Varmista, että käyttäjätunnuksesi ja salasanasi on oikein';
 
   @override
-  String get errorServerError => 'Palvelin-virhe. Varmista, että palvelin on konfiguroitu oikein';
+  String get errorServerError =>
+      'Palvelin-virhe. Varmista, että palvelin on konfiguroitu oikein';
 
   @override
-  String get errorAlbumDowngrade => 'Albumia ei voitu muokata, koska albumi on luotu sovelluksen uudemmalla versiolla. Päivitä sovellus viimeisimpään versioon ja yritä uudelleen';
+  String get errorAlbumDowngrade =>
+      'Albumia ei voitu muokata, koska albumi on luotu sovelluksen uudemmalla versiolla. Päivitä sovellus viimeisimpään versioon ja yritä uudelleen';
 
   @override
   String get errorNoStoragePermission => 'Tallennustilan käyttölupa vaaditaan';
 
   @override
-  String get errorServerNoCert => 'Server certificate not found. Try HTTP instead?';
+  String get errorServerNoCert =>
+      'Server certificate not found. Try HTTP instead?';
 }

@@ -45,10 +45,9 @@ String logFilename(String? filename, {bool? shouldLogFileName}) {
   }
   try {
     final basename = path_lib.basenameWithoutExtension(filename);
-    final displayName =
-        basename.length <= 6
-            ? basename
-            : "${basename.slice(0, 3)}***${basename.slice(-3)}";
+    final displayName = basename.length <= 6
+        ? basename
+        : "${basename.slice(0, 3)}***${basename.slice(-3)}";
     return "${path_lib.dirname(filename) != "." ? "***/" : ""}"
         "$displayName"
         "${path_lib.extension(filename)}";

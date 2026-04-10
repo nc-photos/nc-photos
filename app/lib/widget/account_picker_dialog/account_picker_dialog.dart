@@ -43,12 +43,11 @@ class AccountPickerDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) => _Bloc(
-            accountController: context.read(),
-            prefController: context.read(),
-            db: context.read(),
-          ),
+      create: (context) => _Bloc(
+        accountController: context.read(),
+        prefController: context.read(),
+        db: context.read(),
+      ),
       child: const _WrappedAccountPickerDialog(),
     );
   }
@@ -62,9 +61,8 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
     return MultiBlocListener(
       listeners: [
         _BlocListener(
-          listenWhen:
-              (previous, current) =>
-                  previous.newSelectAccount != current.newSelectAccount,
+          listenWhen: (previous, current) =>
+              previous.newSelectAccount != current.newSelectAccount,
           listener: (context, state) {
             if (state.newSelectAccount != null) {
               Navigator.of(context).pushNamedAndRemoveUntil(
@@ -116,11 +114,10 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                         child: Material(
                           type: MaterialType.transparency,
                           child: _BlocBuilder(
-                            buildWhen:
-                                (previous, current) =>
-                                    previous.isOpenDropdown !=
-                                        current.isOpenDropdown ||
-                                    previous.accounts != current.accounts,
+                            buildWhen: (previous, current) =>
+                                previous.isOpenDropdown !=
+                                    current.isOpenDropdown ||
+                                previous.accounts != current.accounts,
                             builder: (context, state) {
                               final bloc = context.read<_Bloc>();
                               return Column(
@@ -176,10 +173,9 @@ class _WrappedAccountPickerDialog extends StatelessWidget {
                       children: [
                         const _AboutChin(),
                         ValueStreamBuilder<bool>(
-                          stream:
-                              context
-                                  .read<PrefController>()
-                                  .isFollowSystemTheme,
+                          stream: context
+                              .read<PrefController>()
+                              .isFollowSystemTheme,
                           builder: (_, isFollowSystemTheme) {
                             if (!isFollowSystemTheme.requireData) {
                               return Align(
@@ -273,10 +269,9 @@ class _AccountDropdown extends StatelessWidget {
               ignoring: true,
               child: IconButton(
                 onPressed: () {},
-                color:
-                    state.isOpenDropdown
-                        ? Theme.of(context).colorScheme.primary
-                        : null,
+                color: state.isOpenDropdown
+                    ? Theme.of(context).colorScheme.primary
+                    : null,
                 icon: const Icon(Icons.keyboard_arrow_down_outlined),
               ),
             ),
@@ -302,20 +297,19 @@ class _AccountTile extends StatelessWidget {
         dimension: 40,
         child: Center(child: _AccountIcon(account)),
       ),
-      title:
-          accountLabel != null
-              ? SizedBox(
-                height: 64,
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: Text(
-                    accountLabel,
-                    maxLines: 1,
-                    overflow: TextOverflow.clip,
-                  ),
+      title: accountLabel != null
+          ? SizedBox(
+              height: 64,
+              child: Align(
+                alignment: AlignmentDirectional.centerStart,
+                child: Text(
+                  accountLabel,
+                  maxLines: 1,
+                  overflow: TextOverflow.clip,
                 ),
-              )
-              : Text(account.address, maxLines: 1, overflow: TextOverflow.clip),
+              ),
+            )
+          : Text(account.address, maxLines: 1, overflow: TextOverflow.clip),
       subtitle: accountLabel == null ? Text(account.username2) : null,
       trailing: trailing,
       onTap: onTap,
@@ -391,10 +385,9 @@ class _AccountView extends StatelessWidget {
         onPressed: () async {
           final result = await showDialog<bool>(
             context: context,
-            builder:
-                (_) => _DeleteAccountConfirmDialog(
-                  accountLabel: accountLabel ?? account.address,
-                ),
+            builder: (_) => _DeleteAccountConfirmDialog(
+              accountLabel: accountLabel ?? account.address,
+            ),
           );
           if (!context.mounted || result != true) {
             return;
@@ -452,13 +445,12 @@ class _AboutChin extends StatelessWidget {
   Widget build(BuildContext context) {
     return StreamBuilder<ServerStatus?>(
       stream: context.read<_Bloc>().accountController.serverController.status,
-      initialData:
-          context
-              .read<_Bloc>()
-              .accountController
-              .serverController
-              .status
-              .valueOrNull,
+      initialData: context
+          .read<_Bloc>()
+          .accountController
+          .serverController
+          .status
+          .valueOrNull,
       builder: (context, snapshot) {
         var text = "${L10n.global().appTitle} ${k.versionStr}";
         if (snapshot.hasData) {

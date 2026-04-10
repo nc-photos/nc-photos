@@ -113,10 +113,9 @@ class _ZoomableViewerState extends State<ZoomableViewer>
     final originY = -_prevFingerPosition.dy / 2;
     final anim = Matrix4Tween(
       begin: Matrix4.identity(),
-      end:
-          Matrix4.identity()
-            ..scale(2.0)
-            ..translate(originX, originY),
+      end: Matrix4.identity()
+        ..scaleByDouble(2, 2, 2, 1)
+        ..translateByDouble(originX, originY, 0, 1),
     ).animate(animController);
     animController
       ..addListener(() {

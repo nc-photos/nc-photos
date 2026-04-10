@@ -48,10 +48,9 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create:
-          (context) =>
-              _Bloc(prefController: context.read(), npDb: context.read())
-                ..add(const _Init()),
+      create: (context) =>
+          _Bloc(prefController: context.read(), npDb: context.read())
+            ..add(const _Init()),
       child: const _WrappedSplash(),
     );
   }

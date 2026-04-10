@@ -42,8 +42,9 @@ class _$NcAlbumCopyWithWorkerImpl implements $NcAlbumCopyWithWorker {
       lastPhoto: lastPhoto == copyWithNull ? that.lastPhoto : lastPhoto as int?,
       nbItems: nbItems as int? ?? that.nbItems,
       location: location == copyWithNull ? that.location : location as String?,
-      dateStart:
-          dateStart == copyWithNull ? that.dateStart : dateStart as DateTime?,
+      dateStart: dateStart == copyWithNull
+          ? that.dateStart
+          : dateStart as DateTime?,
       dateEnd: dateEnd == copyWithNull ? that.dateEnd : dateEnd as DateTime?,
       collaborators:
           collaborators as List<NcAlbumCollaborator>? ?? that.collaborators,

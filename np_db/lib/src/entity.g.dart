@@ -112,10 +112,9 @@ class _$DbAlbumShareCopyWithWorkerImpl implements $DbAlbumShareCopyWithWorker {
   }) {
     return DbAlbumShare(
       userId: userId as String? ?? that.userId,
-      displayName:
-          displayName == copyWithNull
-              ? that.displayName
-              : displayName as String?,
+      displayName: displayName == copyWithNull
+          ? that.displayName
+          : displayName as String?,
       sharedAt: sharedAt as DateTime? ?? that.sharedAt,
     );
   }
@@ -208,51 +207,47 @@ class _$DbFileCopyWithWorkerImpl implements $DbFileCopyWithWorker {
   }) {
     return DbFile(
       fileId: fileId as int? ?? that.fileId,
-      contentLength:
-          contentLength == copyWithNull
-              ? that.contentLength
-              : contentLength as int?,
-      contentType:
-          contentType == copyWithNull
-              ? that.contentType
-              : contentType as String?,
+      contentLength: contentLength == copyWithNull
+          ? that.contentLength
+          : contentLength as int?,
+      contentType: contentType == copyWithNull
+          ? that.contentType
+          : contentType as String?,
       etag: etag == copyWithNull ? that.etag : etag as String?,
-      lastModified:
-          lastModified == copyWithNull
-              ? that.lastModified
-              : lastModified as DateTime?,
-      isCollection:
-          isCollection == copyWithNull
-              ? that.isCollection
-              : isCollection as bool?,
+      lastModified: lastModified == copyWithNull
+          ? that.lastModified
+          : lastModified as DateTime?,
+      isCollection: isCollection == copyWithNull
+          ? that.isCollection
+          : isCollection as bool?,
       usedBytes: usedBytes == copyWithNull ? that.usedBytes : usedBytes as int?,
-      hasPreview:
-          hasPreview == copyWithNull ? that.hasPreview : hasPreview as bool?,
+      hasPreview: hasPreview == copyWithNull
+          ? that.hasPreview
+          : hasPreview as bool?,
       ownerId: ownerId == copyWithNull ? that.ownerId : ownerId as CiString?,
-      ownerDisplayName:
-          ownerDisplayName == copyWithNull
-              ? that.ownerDisplayName
-              : ownerDisplayName as String?,
+      ownerDisplayName: ownerDisplayName == copyWithNull
+          ? that.ownerDisplayName
+          : ownerDisplayName as String?,
       relativePath: relativePath as String? ?? that.relativePath,
-      isFavorite:
-          isFavorite == copyWithNull ? that.isFavorite : isFavorite as bool?,
-      isArchived:
-          isArchived == copyWithNull ? that.isArchived : isArchived as bool?,
-      overrideDateTime:
-          overrideDateTime == copyWithNull
-              ? that.overrideDateTime
-              : overrideDateTime as DateTime?,
+      isFavorite: isFavorite == copyWithNull
+          ? that.isFavorite
+          : isFavorite as bool?,
+      isArchived: isArchived == copyWithNull
+          ? that.isArchived
+          : isArchived as bool?,
+      overrideDateTime: overrideDateTime == copyWithNull
+          ? that.overrideDateTime
+          : overrideDateTime as DateTime?,
       bestDateTime: bestDateTime as DateTime? ?? that.bestDateTime,
-      imageData:
-          imageData == copyWithNull
-              ? that.imageData
-              : imageData as DbImageData?,
-      location:
-          location == copyWithNull ? that.location : location as DbLocation?,
-      trashData:
-          trashData == copyWithNull
-              ? that.trashData
-              : trashData as DbTrashData?,
+      imageData: imageData == copyWithNull
+          ? that.imageData
+          : imageData as DbImageData?,
+      location: location == copyWithNull
+          ? that.location
+          : location as DbLocation?,
+      trashData: trashData == copyWithNull
+          ? that.trashData
+          : trashData as DbTrashData?,
     );
   }
 
@@ -291,14 +286,15 @@ class _$DbFileDescriptorCopyWithWorkerImpl
     return DbFileDescriptor(
       relativePath: relativePath as String? ?? that.relativePath,
       fileId: fileId as int? ?? that.fileId,
-      contentType:
-          contentType == copyWithNull
-              ? that.contentType
-              : contentType as String?,
-      isArchived:
-          isArchived == copyWithNull ? that.isArchived : isArchived as bool?,
-      isFavorite:
-          isFavorite == copyWithNull ? that.isFavorite : isFavorite as bool?,
+      contentType: contentType == copyWithNull
+          ? that.contentType
+          : contentType as String?,
+      isArchived: isArchived == copyWithNull
+          ? that.isArchived
+          : isArchived as bool?,
+      isFavorite: isFavorite == copyWithNull
+          ? that.isFavorite
+          : isFavorite as bool?,
       bestDateTime: bestDateTime as DateTime? ?? that.bestDateTime,
     );
   }
@@ -346,8 +342,9 @@ class _$DbImageDataCopyWithWorkerImpl implements $DbImageDataCopyWithWorker {
       height: height == copyWithNull ? that.height : height as int?,
       exif: exif == copyWithNull ? that.exif : exif as JsonObj?,
       xmp: xmp == copyWithNull ? that.xmp : xmp as JsonObj?,
-      dateTime:
-          dateTime == copyWithNull ? that.dateTime : dateTime as DateTime?,
+      dateTime: dateTime == copyWithNull
+          ? that.dateTime
+          : dateTime as DateTime?,
       src: src == copyWithNull ? that.src : src as int?,
     );
   }
@@ -389,12 +386,12 @@ class _$DbLocationCopyWithWorkerImpl implements $DbLocationCopyWithWorker {
     return DbLocation(
       dataRevision: dataRevision as int? ?? that.dataRevision,
       latitude: latitude == copyWithNull ? that.latitude : latitude as double?,
-      longitude:
-          longitude == copyWithNull ? that.longitude : longitude as double?,
-      countryCode:
-          countryCode == copyWithNull
-              ? that.countryCode
-              : countryCode as String?,
+      longitude: longitude == copyWithNull
+          ? that.longitude
+          : longitude as double?,
+      countryCode: countryCode == copyWithNull
+          ? that.countryCode
+          : countryCode as String?,
       city: city == copyWithNull ? that.city : city as DbLocationName?,
       admin1: admin1 == copyWithNull ? that.admin1 : admin1 as DbLocationName?,
       admin2: admin2 == copyWithNull ? that.admin2 : admin2 as DbLocationName?,
@@ -467,8 +464,9 @@ class _$DbNcAlbumCopyWithWorkerImpl implements $DbNcAlbumCopyWithWorker {
       lastPhoto: lastPhoto == copyWithNull ? that.lastPhoto : lastPhoto as int?,
       nbItems: nbItems as int? ?? that.nbItems,
       location: location == copyWithNull ? that.location : location as String?,
-      dateStart:
-          dateStart == copyWithNull ? that.dateStart : dateStart as DateTime?,
+      dateStart: dateStart == copyWithNull
+          ? that.dateStart
+          : dateStart as DateTime?,
       dateEnd: dateEnd == copyWithNull ? that.dateEnd : dateEnd as DateTime?,
       collaborators: collaborators as List<JsonObj>? ?? that.collaborators,
       isOwned: isOwned as bool? ?? that.isOwned,
@@ -519,31 +517,28 @@ class _$DbNcAlbumItemCopyWithWorkerImpl
     return DbNcAlbumItem(
       relativePath: relativePath as String? ?? that.relativePath,
       fileId: fileId as int? ?? that.fileId,
-      contentLength:
-          contentLength == copyWithNull
-              ? that.contentLength
-              : contentLength as int?,
-      contentType:
-          contentType == copyWithNull
-              ? that.contentType
-              : contentType as String?,
+      contentLength: contentLength == copyWithNull
+          ? that.contentLength
+          : contentLength as int?,
+      contentType: contentType == copyWithNull
+          ? that.contentType
+          : contentType as String?,
       etag: etag == copyWithNull ? that.etag : etag as String?,
-      lastModified:
-          lastModified == copyWithNull
-              ? that.lastModified
-              : lastModified as DateTime?,
-      hasPreview:
-          hasPreview == copyWithNull ? that.hasPreview : hasPreview as bool?,
-      isFavorite:
-          isFavorite == copyWithNull ? that.isFavorite : isFavorite as bool?,
-      fileMetadataWidth:
-          fileMetadataWidth == copyWithNull
-              ? that.fileMetadataWidth
-              : fileMetadataWidth as int?,
-      fileMetadataHeight:
-          fileMetadataHeight == copyWithNull
-              ? that.fileMetadataHeight
-              : fileMetadataHeight as int?,
+      lastModified: lastModified == copyWithNull
+          ? that.lastModified
+          : lastModified as DateTime?,
+      hasPreview: hasPreview == copyWithNull
+          ? that.hasPreview
+          : hasPreview as bool?,
+      isFavorite: isFavorite == copyWithNull
+          ? that.isFavorite
+          : isFavorite as bool?,
+      fileMetadataWidth: fileMetadataWidth == copyWithNull
+          ? that.fileMetadataWidth
+          : fileMetadataWidth as int?,
+      fileMetadataHeight: fileMetadataHeight == copyWithNull
+          ? that.fileMetadataHeight
+          : fileMetadataHeight as int?,
     );
   }
 
@@ -617,36 +612,32 @@ class _$DbRecognizeFaceItemCopyWithWorkerImpl
     return DbRecognizeFaceItem(
       relativePath: relativePath as String? ?? that.relativePath,
       fileId: fileId as int? ?? that.fileId,
-      contentLength:
-          contentLength == copyWithNull
-              ? that.contentLength
-              : contentLength as int?,
-      contentType:
-          contentType == copyWithNull
-              ? that.contentType
-              : contentType as String?,
+      contentLength: contentLength == copyWithNull
+          ? that.contentLength
+          : contentLength as int?,
+      contentType: contentType == copyWithNull
+          ? that.contentType
+          : contentType as String?,
       etag: etag == copyWithNull ? that.etag : etag as String?,
-      lastModified:
-          lastModified == copyWithNull
-              ? that.lastModified
-              : lastModified as DateTime?,
-      hasPreview:
-          hasPreview == copyWithNull ? that.hasPreview : hasPreview as bool?,
+      lastModified: lastModified == copyWithNull
+          ? that.lastModified
+          : lastModified as DateTime?,
+      hasPreview: hasPreview == copyWithNull
+          ? that.hasPreview
+          : hasPreview as bool?,
       realPath: realPath == copyWithNull ? that.realPath : realPath as String?,
-      isFavorite:
-          isFavorite == copyWithNull ? that.isFavorite : isFavorite as bool?,
-      fileMetadataWidth:
-          fileMetadataWidth == copyWithNull
-              ? that.fileMetadataWidth
-              : fileMetadataWidth as int?,
-      fileMetadataHeight:
-          fileMetadataHeight == copyWithNull
-              ? that.fileMetadataHeight
-              : fileMetadataHeight as int?,
-      faceDetections:
-          faceDetections == copyWithNull
-              ? that.faceDetections
-              : faceDetections as String?,
+      isFavorite: isFavorite == copyWithNull
+          ? that.isFavorite
+          : isFavorite as bool?,
+      fileMetadataWidth: fileMetadataWidth == copyWithNull
+          ? that.fileMetadataWidth
+          : fileMetadataWidth as int?,
+      fileMetadataHeight: fileMetadataHeight == copyWithNull
+          ? that.fileMetadataHeight
+          : fileMetadataHeight as int?,
+      faceDetections: faceDetections == copyWithNull
+          ? that.faceDetections
+          : faceDetections as String?,
     );
   }
 
@@ -681,12 +672,12 @@ class _$DbTagCopyWithWorkerImpl implements $DbTagCopyWithWorker {
     return DbTag(
       id: id as int? ?? that.id,
       displayName: displayName as String? ?? that.displayName,
-      userVisible:
-          userVisible == copyWithNull ? that.userVisible : userVisible as bool?,
-      userAssignable:
-          userAssignable == copyWithNull
-              ? that.userAssignable
-              : userAssignable as bool?,
+      userVisible: userVisible == copyWithNull
+          ? that.userVisible
+          : userVisible as bool?,
+      userAssignable: userAssignable == copyWithNull
+          ? that.userAssignable
+          : userAssignable as bool?,
     );
   }
 

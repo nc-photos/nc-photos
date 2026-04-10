@@ -82,11 +82,10 @@ extension SqliteDbFileExtension on SqliteDb {
     final sqlAccount = await accountOf(account);
     final AccountFileRowIds dirIds;
     try {
-      dirIds =
-          await _accountFileRowIdsOfSingle(
-            ByAccount.sql(sqlAccount),
-            dir,
-          ).notNull();
+      dirIds = await _accountFileRowIdsOfSingle(
+        ByAccount.sql(sqlAccount),
+        dir,
+      ).notNull();
     } catch (_) {
       throw DbNotFoundException("No entry: $dir");
     }
@@ -150,11 +149,10 @@ extension SqliteDbFileExtension on SqliteDb {
     List<int>? dirIds;
     if (includeRelativeDirs?.isNotEmpty == true) {
       final sqlAccount = await accountOf(account);
-      final result =
-          await _accountFileRowIdsOf(
-            ByAccount.sql(sqlAccount),
-            includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList(),
-          ).notNull();
+      final result = await _accountFileRowIdsOf(
+        ByAccount.sql(sqlAccount),
+        includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList(),
+      ).notNull();
       dirIds = result.values.map((e) => e.fileRowId).toList();
       if (dirIds.length != includeRelativeDirs.length) {
         _log.warning(
@@ -227,10 +225,9 @@ extension SqliteDbFileExtension on SqliteDb {
         .map(
           (r) => QueryFileIdResult(
             r.read(files.fileId)!,
-            timestamp:
-                requestTimestamp == true
-                    ? r.read(accountFiles.bestDateTime)!.millisecondsSinceEpoch
-                    : null,
+            timestamp: requestTimestamp == true
+                ? r.read(accountFiles.bestDateTime)!.millisecondsSinceEpoch
+                : null,
             filename: requestFilename == true ? r.read(colFilename) : null,
           ),
         )
@@ -256,11 +253,10 @@ extension SqliteDbFileExtension on SqliteDb {
     _log.info(
       "[updateFileByFileId] fileId: $fileId, relativePath: $relativePath",
     );
-    final rowId =
-        await _accountFileRowIdsOfSingle(
-          account,
-          DbFileKey.byId(fileId),
-        ).notNull();
+    final rowId = await _accountFileRowIdsOfSingle(
+      account,
+      DbFileKey.byId(fileId),
+    ).notNull();
     final q = update(accountFiles)
       ..where((t) => t.rowId.equals(rowId.accountFileRowId));
     await q.write(
@@ -277,8 +273,9 @@ extension SqliteDbFileExtension on SqliteDb {
     );
     if (imageData != null) {
       if (imageData.obj == null) {
-        await (delete(images)
-          ..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
+        await (delete(
+          images,
+        )..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
       } else {
         await into(images).insertOnConflictUpdate(
           ImagesCompanion.insert(
@@ -297,8 +294,9 @@ extension SqliteDbFileExtension on SqliteDb {
     }
     if (location != null) {
       if (location.obj == null) {
-        await (delete(imageLocations)
-          ..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
+        await (delete(
+          imageLocations,
+        )..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
       } else {
         await into(imageLocations).insertOnConflictUpdate(
           ImageLocationsCompanion.insert(
@@ -309,8 +307,9 @@ extension SqliteDbFileExtension on SqliteDb {
             countryCode: Value(location.obj!.countryCode),
           ),
         );
-        await (delete(imageLocationIds)
-          ..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
+        await (delete(
+          imageLocationIds,
+        )..where((t) => t.accountFile.equals(rowId.accountFileRowId))).go();
         if (location.obj!.city != null) {
           for (final e
               in location.obj!.city?.name.value.entries ??
@@ -666,11 +665,10 @@ extension SqliteDbFileExtension on SqliteDb {
     List<int>? dirIds;
     if (includeRelativeDirs?.isNotEmpty == true) {
       final sqlAccount = await accountOf(account);
-      final result =
-          await _accountFileRowIdsOf(
-            ByAccount.sql(sqlAccount),
-            includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList(),
-          ).notNull();
+      final result = await _accountFileRowIdsOf(
+        ByAccount.sql(sqlAccount),
+        includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList(),
+      ).notNull();
       dirIds = result.values.map((e) => e.fileRowId).toList();
       if (dirIds.length != includeRelativeDirs.length) {
         _log.warning("Some dirs not found: $includeRelativeDirs");
@@ -835,12 +833,12 @@ extension SqliteDbFileExtension on SqliteDb {
     }
 
     // remove children
-    final childIdsQuery =
-        selectOnly(dirFiles)
-          ..addColumns([dirFiles.child])
-          ..where(dirFiles.dir.equals(rowId.fileRowId));
-    final childRowIds =
-        await childIdsQuery.map((r) => r.read(dirFiles.child)!).get();
+    final childIdsQuery = selectOnly(dirFiles)
+      ..addColumns([dirFiles.child])
+      ..where(dirFiles.dir.equals(rowId.fileRowId));
+    final childRowIds = await childIdsQuery
+        .map((r) => r.read(dirFiles.child)!)
+        .get();
     childRowIds.removeWhere((id) => id == rowId.fileRowId);
     if (childRowIds.isNotEmpty) {
       final dbAccount = await accountOf(account);
@@ -887,11 +885,10 @@ extension SqliteDbFileExtension on SqliteDb {
     List<int>? dirIds;
     if (includeRelativeDirs?.isNotEmpty == true) {
       final sqlAccount = await accountOf(account);
-      final result =
-          await _accountFileRowIdsOf(
-            ByAccount.sql(sqlAccount),
-            includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList(),
-          ).notNull();
+      final result = await _accountFileRowIdsOf(
+        ByAccount.sql(sqlAccount),
+        includeRelativeDirs!.map((e) => DbFileKey.byPath(e)).toList(),
+      ).notNull();
       dirIds = result.values.map((e) => e.fileRowId).toList();
       if (dirIds.length != includeRelativeDirs.length) {
         _log.warning("Some dirs not found: $includeRelativeDirs");
@@ -899,10 +896,9 @@ extension SqliteDbFileExtension on SqliteDb {
     }
 
     final count = countAll();
-    final localDate =
-        accountFiles.bestDateTime
-            .modify(const DateTimeModifier.localTime())
-            .date;
+    final localDate = accountFiles.bestDateTime
+        .modify(const DateTimeModifier.localTime())
+        .date;
     final query = _queryFiles().let((q) {
       q
         ..setQueryMode(
@@ -953,15 +949,14 @@ extension SqliteDbFileExtension on SqliteDb {
     query
       ..orderBy([OrderingTerm.desc(accountFiles.bestDateTime)])
       ..groupBy([localDate]);
-    final results =
-        await query
-            .map(
-              (r) => MapEntry<Date, int>(
-                DateTime.parse(r.read(localDate)!).toDate(),
-                r.read(count)!,
-              ),
-            )
-            .get();
+    final results = await query
+        .map(
+          (r) => MapEntry<Date, int>(
+            DateTime.parse(r.read(localDate)!).toDate(),
+            r.read(count)!,
+          ),
+        )
+        .get();
     return CountFileGroupsByDateResult(dateCount: results.toMap());
   }
 
@@ -1042,19 +1037,18 @@ extension SqliteDbFileExtension on SqliteDb {
       }
     }
     query.where(dateExp!.isValue(true));
-    final results =
-        await query
-            .map(
-              (r) => FileDescriptor(
-                relativePath: r.read(accountFiles.relativePath)!,
-                fileId: r.read(files.fileId)!,
-                contentType: r.read(files.contentType),
-                isArchived: r.read(accountFiles.isArchived),
-                isFavorite: r.read(accountFiles.isFavorite),
-                bestDateTime: r.read(accountFiles.bestDateTime)!.toUtc(),
-              ),
-            )
-            .get();
+    final results = await query
+        .map(
+          (r) => FileDescriptor(
+            relativePath: r.read(accountFiles.relativePath)!,
+            fileId: r.read(files.fileId)!,
+            contentType: r.read(files.contentType),
+            isArchived: r.read(accountFiles.isArchived),
+            isFavorite: r.read(accountFiles.isFavorite),
+            bestDateTime: r.read(accountFiles.bestDateTime)!.toUtc(),
+          ),
+        )
+        .get();
     return results;
   }
 
@@ -1080,17 +1074,15 @@ extension SqliteDbFileExtension on SqliteDb {
           batch.update(
             accountFiles,
             f.accountFile,
-            where:
-                ($AccountFilesTable t) =>
-                    t.rowId.equals(thisRowIds.accountFileRowId),
+            where: ($AccountFilesTable t) =>
+                t.rowId.equals(thisRowIds.accountFileRowId),
           );
           if (f.image != null) {
             batch.update(
               images,
               f.image!,
-              where:
-                  ($ImagesTable t) =>
-                      t.accountFile.equals(thisRowIds.accountFileRowId),
+              where: ($ImagesTable t) =>
+                  t.accountFile.equals(thisRowIds.accountFileRowId),
             );
           } else {
             batch.deleteWhere(
@@ -1103,9 +1095,8 @@ extension SqliteDbFileExtension on SqliteDb {
             batch.update(
               imageLocations,
               f.imageLocation!,
-              where:
-                  ($ImageLocationsTable t) =>
-                      t.accountFile.equals(thisRowIds.accountFileRowId),
+              where: ($ImageLocationsTable t) =>
+                  t.accountFile.equals(thisRowIds.accountFileRowId),
             );
           } else {
             batch.deleteWhere(
@@ -1219,10 +1210,9 @@ extension SqliteDbFileExtension on SqliteDb {
     required int dirRowId,
     required List<int> childRowIds,
   }) async {
-    final dirFileQuery =
-        select(dirFiles)
-          ..where((t) => t.dir.equals(dirRowId))
-          ..orderBy([(t) => OrderingTerm.asc(t.child)]);
+    final dirFileQuery = select(dirFiles)
+      ..where((t) => t.dir.equals(dirRowId))
+      ..orderBy([(t) => OrderingTerm.asc(t.child)]);
     final dirFileObjs = await dirFileQuery.get();
     final diff = getDiff(
       dirFileObjs.map((e) => e.child),
@@ -1240,12 +1230,11 @@ extension SqliteDbFileExtension on SqliteDb {
     if (diff.onlyInA.isNotEmpty) {
       // remove entries from the DirFiles table first
       await diff.onlyInA.withPartitionNoReturn((sublist) async {
-        final deleteQuery =
-            delete(dirFiles)
-              ..where((t) => t.child.isIn(sublist))
-              ..where(
-                (t) => t.dir.equals(dirRowId) | t.dir.equalsExp(dirFiles.child),
-              );
+        final deleteQuery = delete(dirFiles)
+          ..where((t) => t.child.isIn(sublist))
+          ..where(
+            (t) => t.dir.equals(dirRowId) | t.dir.equalsExp(dirFiles.child),
+          );
         await deleteQuery.go();
       }, _maxByFileIdsSize);
 
@@ -1277,10 +1266,9 @@ extension SqliteDbFileExtension on SqliteDb {
   }) async {
     // query list of children, in case some of the files are dirs
     final childRowIds = await fileRowIds.withPartition((sublist) {
-      final childQuery =
-          selectOnly(dirFiles)
-            ..addColumns([dirFiles.child])
-            ..where(dirFiles.dir.isIn(sublist));
+      final childQuery = selectOnly(dirFiles)
+        ..addColumns([dirFiles.child])
+        ..where(dirFiles.dir.isIn(sublist));
       return childQuery.map((r) => r.read(dirFiles.child)!).get();
     }, _maxByFileIdsSize);
     childRowIds.removeWhere((id) => fileRowIds.contains(id));
@@ -1289,8 +1277,9 @@ extension SqliteDbFileExtension on SqliteDb {
     // because a file could be associated with multiple accounts
     await fileRowIds.withPartitionNoReturn((sublist) async {
       await (delete(accountFiles)..where(
-        (t) => t.account.equals(account.rowId) & t.file.isIn(sublist),
-      )).go();
+            (t) => t.account.equals(account.rowId) & t.file.isIn(sublist),
+          ))
+          .go();
     }, _maxByFileIdsSize);
 
     if (childRowIds.isNotEmpty) {
@@ -1341,27 +1330,25 @@ extension SqliteDbFileExtension on SqliteDb {
       List<ImageLocationId>? locationIds;
       List<ImageLocationName>? locationNames;
       if (e.imageLocation != null) {
-        locationIds =
-            locationNamesMap[e.accountFile.rowId]
-                ?.map(
-                  (ee) => ImageLocationId(
-                    accountFile: e.accountFile.rowId,
-                    geonameId: ee.geonameId,
-                    type: ee.type,
-                  ),
-                )
-                .toList();
-        locationNames =
-            locationNamesMap[e.accountFile.rowId]
-                ?.map(
-                  (ee) => ImageLocationName(
-                    dataRevision: e.imageLocation!.dataRevision,
-                    geonameId: ee.geonameId,
-                    lang: ee.lang,
-                    name: ee.name,
-                  ),
-                )
-                .toList();
+        locationIds = locationNamesMap[e.accountFile.rowId]
+            ?.map(
+              (ee) => ImageLocationId(
+                accountFile: e.accountFile.rowId,
+                geonameId: ee.geonameId,
+                type: ee.type,
+              ),
+            )
+            .toList();
+        locationNames = locationNamesMap[e.accountFile.rowId]
+            ?.map(
+              (ee) => ImageLocationName(
+                dataRevision: e.imageLocation!.dataRevision,
+                geonameId: ee.geonameId,
+                lang: ee.lang,
+                name: ee.name,
+              ),
+            )
+            .toList();
       }
       return CompleteFile(
         e.file,

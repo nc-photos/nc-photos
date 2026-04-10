@@ -176,24 +176,20 @@ class HomeSearchSuggestionBloc
       final str = results.map((e) => "${e.score}: ${e.text}").join("\n");
       _log.fine("[_onEventSearch] Search '${ev.phrase}':\n$str");
     }
-    final matches =
-        results
-            .where((element) => element.score > 0)
-            .map((e) {
-              if (e.value!.toKeywords().any((k) => k.startsWith(ev.phrase))) {
-                // prefer names that start exactly with the search phrase
-                return (score: e.score + 1, item: e.value);
-              } else {
-                return (score: e.score, item: e.value);
-              }
-            })
-            .sorted((a, b) => b.score.compareTo(a.score))
-            .distinctIf(
-              (a, b) => identical(a.item, b.item),
-              (a) => a.item.hashCode,
-            )
-            .map((e) => e.item!.toResult())
-            .toList();
+    final matches = results
+        .where((element) => element.score > 0)
+        .map((e) {
+          if (e.value!.toKeywords().any((k) => k.startsWith(ev.phrase))) {
+            // prefer names that start exactly with the search phrase
+            return (score: e.score + 1, item: e.value);
+          } else {
+            return (score: e.score, item: e.value);
+          }
+        })
+        .sorted((a, b) => b.score.compareTo(a.score))
+        .distinctIf((a, b) => identical(a.item, b.item), (a) => a.item.hashCode)
+        .map((e) => e.item!.toResult())
+        .toList();
     emit(HomeSearchSuggestionBlocSuccess(matches));
   }
 
@@ -203,17 +199,16 @@ class HomeSearchSuggestionBloc
   ) async {
     final product = <_Searcheable>[];
     try {
-      var collections =
-          collectionsController
-              .peekStream()
-              .data
-              .map((e) => e.collection)
-              .toList();
+      var collections = collectionsController
+          .peekStream()
+          .data
+          .map((e) => e.collection)
+          .toList();
       if (collections.isEmpty) {
-        collections =
-            await ListCollection(_c, serverController: serverController)(
-              account,
-            ).last;
+        collections = await ListCollection(
+          _c,
+          serverController: serverController,
+        )(account).last;
       }
       product.addAll(collections.map(_CollectionSearcheable.new));
       _log.info(
@@ -230,11 +225,10 @@ class HomeSearchSuggestionBloc
       _log.warning("[_onEventPreloadData] Failed while ListTag", e);
     }
     try {
-      final persons =
-          await ListPerson(_c)(
-            account,
-            accountPrefController.personProviderValue,
-          ).last;
+      final persons = await ListPerson(_c)(
+        account,
+        accountPrefController.personProviderValue,
+      ).last;
       product.addAll(persons.map((t) => _PersonSearcheable(t)));
       _log.info("[_onEventPreloadData] Loaded ${persons.length} people");
     } catch (e) {

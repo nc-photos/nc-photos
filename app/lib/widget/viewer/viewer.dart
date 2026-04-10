@@ -153,28 +153,26 @@ class Viewer extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create:
-              (_) => _Bloc(
-                KiwiContainer().resolve(),
-                account: accountController.account,
-                anyFilesController: accountController.anyFilesController,
-                filesController: accountController.filesController,
-                localFilesController: context.read(),
-                collectionsController: accountController.collectionsController,
-                prefController: context.read(),
-                accountPrefController: accountController.accountPrefController,
-                contentProvider: contentProvider,
-                initialFile: initialFile,
-                brightness: Theme.of(context).brightness,
-                collectionId: collectionId,
-              )..add(const _Init()),
+          create: (_) => _Bloc(
+            KiwiContainer().resolve(),
+            account: accountController.account,
+            anyFilesController: accountController.anyFilesController,
+            filesController: accountController.filesController,
+            localFilesController: context.read(),
+            collectionsController: accountController.collectionsController,
+            prefController: context.read(),
+            accountPrefController: accountController.accountPrefController,
+            contentProvider: contentProvider,
+            initialFile: initialFile,
+            brightness: Theme.of(context).brightness,
+            collectionId: collectionId,
+          )..add(const _Init()),
         ),
         BlocProvider(
-          create:
-              (_) => ShareBloc(
-                KiwiContainer().resolve(),
-                account: accountController.account,
-              ),
+          create: (_) => ShareBloc(
+            KiwiContainer().resolve(),
+            account: accountController.account,
+          ),
         ),
       ],
       child: const _WrappedViewer(),
@@ -282,61 +280,48 @@ class _WrappedViewerState extends State<_WrappedViewer>
           child: ShareBlocListener(
             child: _BlocSelector(
               selector: (state) => state.isBusy,
-              builder:
-                  (context, isBusy) => PopScope(
-                    canPop: !isBusy,
-                    child: _BlocBuilder(
-                      buildWhen:
-                          (previous, current) =>
-                              previous.isShowAppBar != current.isShowAppBar ||
-                              previous.isDetailPaneActive !=
-                                  current.isDetailPaneActive,
-                      builder:
-                          (context, state) => Scaffold(
-                            extendBodyBehindAppBar: true,
-                            extendBody: true,
-                            appBar:
-                                state.isShowAppBar
-                                    ? const PreferredSize(
-                                      preferredSize: Size.fromHeight(
-                                        kToolbarHeight,
-                                      ),
-                                      child: _AppBar(),
-                                    )
-                                    : null,
-                            bottomNavigationBar:
-                                state.isShowAppBar && !state.isDetailPaneActive
-                                    ? const _BottomAppBar()
-                                    : null,
-                            body: Stack(
-                              children: [
-                                OrientationBuilder(
-                                  builder:
-                                      (context, orientation) => _ContentBody(
-                                        key: Key(
-                                          "viewer._ContentBody.${orientation.name}",
-                                        ),
-                                      ),
-                                ),
-                                _BlocSelector(
-                                  selector: (state) => state.isBusy,
-                                  builder:
-                                      (context, isBusy) =>
-                                          isBusy
-                                              ? AbsorbPointer(
-                                                child: ProcessingOverlay(
-                                                  text:
-                                                      L10n.global()
-                                                          .genericProcessingDialogContent,
-                                                ),
-                                              )
-                                              : const SizedBox.shrink(),
-                                ),
-                              ],
-                            ),
+              builder: (context, isBusy) => PopScope(
+                canPop: !isBusy,
+                child: _BlocBuilder(
+                  buildWhen: (previous, current) =>
+                      previous.isShowAppBar != current.isShowAppBar ||
+                      previous.isDetailPaneActive != current.isDetailPaneActive,
+                  builder: (context, state) => Scaffold(
+                    extendBodyBehindAppBar: true,
+                    extendBody: true,
+                    appBar: state.isShowAppBar
+                        ? const PreferredSize(
+                            preferredSize: Size.fromHeight(kToolbarHeight),
+                            child: _AppBar(),
+                          )
+                        : null,
+                    bottomNavigationBar:
+                        state.isShowAppBar && !state.isDetailPaneActive
+                        ? const _BottomAppBar()
+                        : null,
+                    body: Stack(
+                      children: [
+                        OrientationBuilder(
+                          builder: (context, orientation) => _ContentBody(
+                            key: Key("viewer._ContentBody.${orientation.name}"),
                           ),
+                        ),
+                        _BlocSelector(
+                          selector: (state) => state.isBusy,
+                          builder: (context, isBusy) => isBusy
+                              ? AbsorbPointer(
+                                  child: ProcessingOverlay(
+                                    text: L10n.global()
+                                        .genericProcessingDialogContent,
+                                  ),
+                                )
+                              : const SizedBox.shrink(),
+                        ),
+                      ],
                     ),
                   ),
+                ),
+              ),
             ),
           ),
         ),
@@ -350,13 +335,12 @@ class _WrappedViewerState extends State<_WrappedViewer>
   ) async {
     final result = await showDialog<SlideshowConfig>(
       context: context,
-      builder:
-          (_) => SlideshowDialog(
-            duration: context.bloc.prefController.slideshowDurationValue,
-            isShuffle: context.bloc.prefController.isSlideshowShuffleValue,
-            isRepeat: context.bloc.prefController.isSlideshowRepeatValue,
-            isReverse: context.bloc.prefController.isSlideshowReverseValue,
-          ),
+      builder: (_) => SlideshowDialog(
+        duration: context.bloc.prefController.slideshowDurationValue,
+        isShuffle: context.bloc.prefController.isSlideshowShuffleValue,
+        isRepeat: context.bloc.prefController.isSlideshowRepeatValue,
+        isReverse: context.bloc.prefController.isSlideshowReverseValue,
+      ),
     );
     if (!context.mounted || result == null) {
       return;

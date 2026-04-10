@@ -178,9 +178,9 @@ Future<void> _deleteAccountSameServerSharedFile() async {
             ..addDir("admin")
             ..addJpeg("admin/test1.jpg"))
           .build();
-  final user1Files =
-      (util.FilesBuilder(initialFileId: files.length)
-        ..addDir("user1", ownerId: "user1")).build();
+  final user1Files = (util.FilesBuilder(
+    initialFileId: files.length,
+  )..addDir("user1", ownerId: "user1")).build();
   user1Files.add(
     files[0].copyWith(path: "remote.php/dav/files/user1/test1.jpg"),
   );
@@ -232,13 +232,12 @@ Future<void> _truncate() async {
     await db.truncate();
   });
   await c.sqliteDb.use((db) async {
-    final tables =
-        await db
-            .customSelect(
-              "SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';",
-            )
-            .map((r) => r.read<String>("name"))
-            .get();
+    final tables = await db
+        .customSelect(
+          "SELECT name FROM sqlite_schema WHERE type='table' AND name NOT LIKE 'sqlite_%';",
+        )
+        .map((r) => r.read<String>("name"))
+        .get();
     // this check is to make sure that we are testing all tables
     expect(tables.toSet(), {
       "servers",

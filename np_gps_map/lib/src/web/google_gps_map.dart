@@ -26,13 +26,12 @@ class _GoogleGpsMapState extends State<GoogleGpsMap> {
   @override
   void initState() {
     super.initState();
-    final iframe =
-        IFrameElement()
-          ..src =
-              "https://www.google.com/maps/embed/v1/place?key=$_apiKey"
-              "&q=${widget.center.lat},${widget.center.lng}"
-              "&zoom=${widget.zoom}"
-          ..style.border = "none";
+    final iframe = IFrameElement()
+      ..src =
+          "https://www.google.com/maps/embed/v1/place?key=$_apiKey"
+          "&q=${widget.center.lat},${widget.center.lng}"
+          "&zoom=${widget.zoom}"
+      ..style.border = "none";
     ui.platformViewRegistry.registerViewFactory(viewType, (_) => iframe);
   }
 

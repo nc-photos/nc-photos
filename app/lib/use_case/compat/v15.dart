@@ -34,8 +34,9 @@ class _MigrateAlbumFiles {
         account,
         File(path: _getAlbumFileRootCompat14(account)),
       );
-      final albumFiles =
-          ls.where((element) => element.isCollection != true).toList();
+      final albumFiles = ls
+          .where((element) => element.isCollection != true)
+          .toList();
       if (albumFiles.isEmpty) {
         return false;
       }

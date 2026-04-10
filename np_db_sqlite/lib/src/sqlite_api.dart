@@ -176,11 +176,10 @@ class NpDbSqlite implements NpDb {
       _log.info(
         "[replaceFaceRecognitionPersons] Removed persons: ${deletes.toReadableString()}",
       );
-      final updates =
-          to.where((t) {
-            final f = from.firstWhereOrNull((e) => e.name == t.name);
-            return f != null && f != t;
-          }).toList();
+      final updates = to.where((t) {
+        final f = from.firstWhereOrNull((e) => e.name == t.name);
+        return f != null && f != t;
+      }).toList();
       _log.info(
         "[replaceFaceRecognitionPersons] Updated persons: ${updates.toReadableString()}",
       );
@@ -585,26 +584,22 @@ class NpDbSqlite implements NpDb {
       }
     });
     return DbLocationGroupResult(
-      name:
-          results
-              .where((e) => e.type == ImageLocationType.city)
-              .toList()
-              .toDbLocationGroups(),
-      admin1:
-          results
-              .where((e) => e.type == ImageLocationType.admin1)
-              .toList()
-              .toDbLocationGroups(),
-      admin2:
-          results
-              .where((e) => e.type == ImageLocationType.admin2)
-              .toList()
-              .toDbLocationGroups(),
-      countryCode:
-          results
-              .where((e) => e.type == ImageLocationType.country)
-              .toList()
-              .toDbLocationGroups(),
+      name: results
+          .where((e) => e.type == ImageLocationType.city)
+          .toList()
+          .toDbLocationGroups(),
+      admin1: results
+          .where((e) => e.type == ImageLocationType.admin1)
+          .toList()
+          .toDbLocationGroups(),
+      admin2: results
+          .where((e) => e.type == ImageLocationType.admin2)
+          .toList()
+          .toDbLocationGroups(),
+      countryCode: results
+          .where((e) => e.type == ImageLocationType.country)
+          .toList()
+          .toDbLocationGroups(),
     );
   }
 
@@ -695,13 +690,12 @@ class NpDbSqlite implements NpDb {
       _log.info(
         "[syncNcAlbums] Removed nc albums: ${deletes.toReadableString()}",
       );
-      final updates =
-          to.where((t) {
-            final f = from.firstWhereOrNull(
-              (e) => e.relativePath == t.relativePath,
-            );
-            return f != null && f != t;
-          }).toList();
+      final updates = to.where((t) {
+        final f = from.firstWhereOrNull(
+          (e) => e.relativePath == t.relativePath,
+        );
+        return f != null && f != t;
+      }).toList();
       _log.info(
         "[syncNcAlbums] Updated nc albums: ${updates.toReadableString()}",
       );
@@ -770,11 +764,10 @@ class NpDbSqlite implements NpDb {
       _log.info(
         "[syncNcAlbumItems] Removed nc album items: ${deletes.toReadableString()}",
       );
-      final updates =
-          to.where((t) {
-            final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
-            return f != null && f != t;
-          }).toList();
+      final updates = to.where((t) {
+        final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
+        return f != null && f != t;
+      }).toList();
       _log.info(
         "[syncNcAlbumItems] Updated nc album items: ${updates.toReadableString()}",
       );
@@ -902,11 +895,10 @@ class NpDbSqlite implements NpDb {
       _log.info(
         "[syncRecognizeFacesAndItems] Removed faces: ${deletes.toReadableString()}",
       );
-      final updates =
-          to.where((t) {
-            final f = from.firstWhereOrNull((e) => e.label == t.label);
-            return f != null && f != t;
-          }).toList();
+      final updates = to.where((t) {
+        final f = from.firstWhereOrNull((e) => e.label == t.label);
+        return f != null && f != t;
+      }).toList();
       _log.info(
         "[syncRecognizeFacesAndItems] Updated faces: ${updates.toReadableString()}",
       );
@@ -984,11 +976,10 @@ class NpDbSqlite implements NpDb {
       _log.info("[syncTags] New tags: ${inserts.toReadableString()}");
       final deletes = diff.onlyInA;
       _log.info("[syncTags] Removed tags: ${deletes.toReadableString()}");
-      final updates =
-          to.where((t) {
-            final f = from.firstWhereOrNull((e) => e.id == t.id);
-            return f != null && f != t;
-          }).toList();
+      final updates = to.where((t) {
+        final f = from.firstWhereOrNull((e) => e.id == t.id);
+        return f != null && f != t;
+      }).toList();
       _log.info("[syncTags] Updated tags: ${updates.toReadableString()}");
       if (inserts.isNotEmpty || deletes.isNotEmpty || updates.isNotEmpty) {
         await db.replaceTags(
@@ -1051,11 +1042,10 @@ class NpDbSqlite implements NpDb {
     _log.info(
       "[_replaceRecognizeFaceItems] Removed faces: ${deletes.toReadableString()}",
     );
-    final updates =
-        to.where((t) {
-          final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
-          return f != null && f != t;
-        }).toList();
+    final updates = to.where((t) {
+      final f = from.firstWhereOrNull((e) => e.fileId == t.fileId);
+      return f != null && f != t;
+    }).toList();
     _log.info(
       "[_replaceRecognizeFaceItems] Updated faces: ${updates.toReadableString()}",
     );

@@ -104,46 +104,42 @@ class AlbumUpgraderV4 implements AlbumUpgrader {
       if (result["provider"]["type"] != "static") {
         return result;
       }
-      final latestItem =
-          (result["provider"]["content"]["items"] as List)
-              .map((e) => e.cast<String, dynamic>())
-              .where((e) => e["type"] == "file")
-              .map((e) => e["content"]["file"] as JsonObj)
-              .map((e) {
-                final overrideDateTime =
-                    e["overrideDateTime"] == null
-                        ? null
-                        : DateTime.parse(e["overrideDateTime"]);
-                final String? dateTimeOriginalStr =
-                    e["metadata"]?["exif"]?["DateTimeOriginal"];
-                final dateTimeOriginal =
-                    dateTimeOriginalStr == null || dateTimeOriginalStr.isEmpty
-                        ? null
-                        : Exif.dateTimeFormat
-                            .parse(dateTimeOriginalStr)
-                            .toUtc();
-                final lastModified =
-                    e["lastModified"] == null
-                        ? null
-                        : DateTime.parse(e["lastModified"]);
-                final latestItemTime =
-                    overrideDateTime ?? dateTimeOriginal ?? lastModified;
+      final latestItem = (result["provider"]["content"]["items"] as List)
+          .map((e) => e.cast<String, dynamic>())
+          .where((e) => e["type"] == "file")
+          .map((e) => e["content"]["file"] as JsonObj)
+          .map((e) {
+            final overrideDateTime = e["overrideDateTime"] == null
+                ? null
+                : DateTime.parse(e["overrideDateTime"]);
+            final String? dateTimeOriginalStr =
+                e["metadata"]?["exif"]?["DateTimeOriginal"];
+            final dateTimeOriginal =
+                dateTimeOriginalStr == null || dateTimeOriginalStr.isEmpty
+                ? null
+                : Exif.dateTimeFormat.parse(dateTimeOriginalStr).toUtc();
+            final lastModified = e["lastModified"] == null
+                ? null
+                : DateTime.parse(e["lastModified"]);
+            final latestItemTime =
+                overrideDateTime ?? dateTimeOriginal ?? lastModified;
 
-                // remove metadata
-                e.remove("metadata");
-                if (latestItemTime != null) {
-                  return (latestItemTime: latestItemTime, item: e);
-                } else {
-                  return null;
-                }
-              })
-              .whereType<({DateTime latestItemTime, JsonObj item})>()
-              .sorted((a, b) => a.latestItemTime.compareTo(b.latestItemTime))
-              .lastOrNull;
+            // remove metadata
+            e.remove("metadata");
+            if (latestItemTime != null) {
+              return (latestItemTime: latestItemTime, item: e);
+            } else {
+              return null;
+            }
+          })
+          .whereType<({DateTime latestItemTime, JsonObj item})>()
+          .sorted((a, b) => a.latestItemTime.compareTo(b.latestItemTime))
+          .lastOrNull;
       if (latestItem != null) {
         // save the latest item time
-        result["provider"]["content"]["latestItemTime"] =
-            latestItem.latestItemTime.toIso8601String();
+        result["provider"]["content"]["latestItemTime"] = latestItem
+            .latestItemTime
+            .toIso8601String();
         if (result["coverProvider"]["type"] == "auto") {
           // save the cover
           result["coverProvider"]["content"]["coverFile"] = Map.of(
@@ -182,10 +178,9 @@ class AlbumUpgraderV5 implements AlbumUpgrader {
       for (final item in (result["provider"]["content"]["items"] as List)) {
         final CiString addedBy;
         if (result.containsKey("albumFile")) {
-          addedBy =
-              result["albumFile"]["ownerId"] == null
-                  ? account.userId
-                  : CiString(result["albumFile"]["ownerId"]);
+          addedBy = result["albumFile"]["ownerId"] == null
+              ? account.userId
+              : CiString(result["albumFile"]["ownerId"]);
         } else {
           addedBy = albumFile?.ownerId ?? account.userId;
         }
@@ -256,9 +251,8 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
     _log.fine("[doJson] Upgrade v8 Album for file: $logFilePath");
     final result = JsonObj.from(json);
     if (result["coverProvider"]["type"] == "manual") {
-      final content =
-          (result["coverProvider"]["content"]["coverFile"] as Map)
-              .cast<String, dynamic>();
+      final content = (result["coverProvider"]["content"]["coverFile"] as Map)
+          .cast<String, dynamic>();
       final fd = _fileJsonToFileDescriptorJson(content);
       // some very old album file may contain files w/o id
       if (fd["fdId"] != null) {
@@ -267,9 +261,8 @@ class AlbumUpgraderV8 implements AlbumUpgrader {
         result["coverProvider"]["content"] = {};
       }
     } else if (result["coverProvider"]["type"] == "auto") {
-      final content =
-          (result["coverProvider"]["content"]["coverFile"] as Map?)
-              ?.cast<String, dynamic>();
+      final content = (result["coverProvider"]["content"]["coverFile"] as Map?)
+          ?.cast<String, dynamic>();
       if (content != null) {
         final fd = _fileJsonToFileDescriptorJson(content);
         if (fd["fdId"] != null) {
@@ -351,8 +344,8 @@ class AlbumUpgraderV9 implements AlbumUpgrader {
       if (item["type"] != "file") {
         continue;
       }
-      final originalFile =
-          (item["content"]["file"] as Map).cast<String, dynamic>();
+      final originalFile = (item["content"]["file"] as Map)
+          .cast<String, dynamic>();
       item["content"]["file"] = AlbumUpgraderV8._fileJsonToFileDescriptorJson(
         originalFile,
       );
@@ -373,8 +366,8 @@ class AlbumUpgraderV9 implements AlbumUpgrader {
       if (item["type"] != "file") {
         continue;
       }
-      final originalFile =
-          (item["content"]["file"] as Map).cast<String, dynamic>();
+      final originalFile = (item["content"]["file"] as Map)
+          .cast<String, dynamic>();
       item["content"]["file"] = AlbumUpgraderV8._fileJsonToFileDescriptorJson(
         originalFile,
       );
