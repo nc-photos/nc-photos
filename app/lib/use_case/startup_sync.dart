@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/material.dart';
 import 'package:flutter_isolate/flutter_isolate.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -164,6 +165,7 @@ class _IsolateMessage {
 @pragma("vm:entry-point")
 Future<JsonObj> _isolateMain(JsonObj messageJson) async {
   final message = _IsolateMessage.fromJson(messageJson);
+  WidgetsFlutterBinding.ensureInitialized();
   await app_init.init(app_init.InitIsolateType.flutterIsolate);
 
   final c = KiwiContainer().resolve<DiContainer>();
