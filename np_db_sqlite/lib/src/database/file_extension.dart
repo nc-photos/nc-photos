@@ -383,27 +383,29 @@ extension SqliteDbFileExtension on SqliteDb {
     OrNull<bool>? isFavorite,
     OrNull<bool>? isArchived,
   }) async {
-    // TODO: partition
     _log.info(
       "[updateFilesByFileIds] fileIds: $fileIds, "
       "isFavorite: $isFavorite, "
       "isArchived: $isArchived",
     );
-    final rowIds = await _accountFileRowIdsOf(
-      account,
-      fileIds.map(DbFileKey.byId).toList(),
-    );
-    final q = update(
-      accountFiles,
-    )..where((t) => t.rowId.isIn(rowIds.values.map((e) => e.accountFileRowId)));
-    await q.write(
-      AccountFilesCompanion(
-        isFavorite:
-            isFavorite?.let((e) => Value(e.obj)) ?? const Value.absent(),
-        isArchived:
-            isArchived?.let((e) => Value(e.obj)) ?? const Value.absent(),
-      ),
-    );
+    await fileIds.withPartitionNoReturn((sublist) async {
+      final rowIds = await _accountFileRowIdsOf(
+        account,
+        sublist.map(DbFileKey.byId).toList(),
+      );
+      final q = update(accountFiles)
+        ..where(
+          (t) => t.rowId.isIn(rowIds.values.map((e) => e.accountFileRowId)),
+        );
+      await q.write(
+        AccountFilesCompanion(
+          isFavorite:
+              isFavorite?.let((e) => Value(e.obj)) ?? const Value.absent(),
+          isArchived:
+              isArchived?.let((e) => Value(e.obj)) ?? const Value.absent(),
+        ),
+      );
+    }, _maxByFileIdsSize);
   }
 
   Future<void> syncDirFiles({
