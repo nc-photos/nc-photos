@@ -1199,10 +1199,9 @@ _ItemTransformerResult _buildItem(_ItemTransformerArgument arg) {
       )
       .sorted(anyFileDateTimeDescSorter);
 
-  final tzOffset = clock.now().timeZoneOffset;
   final fileGroups = groupBy<AnyFile, Date>(sortedFiles, (e) {
     // convert to local date
-    return e.dateTime.add(tzOffset).toDate();
+    return e.dateTime.toLocal().toDate();
   });
 
   final dateHelper = photo_list_util.DateGroupHelper(
