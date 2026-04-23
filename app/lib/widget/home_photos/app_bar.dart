@@ -161,6 +161,13 @@ class _AppBarAnchor extends StatefulWidget {
 class _AppBarAnchorState extends State<_AppBarAnchor>
     with WidgetsBindingObserver {
   @override
+  void dispose() {
+    _positionTimer?.cancel();
+    _positionTimer = null;
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
@@ -170,7 +177,7 @@ class _AppBarAnchorState extends State<_AppBarAnchor>
             if (isScrolling) {
               if (!_shouldWork) {
                 _shouldWork = true;
-                _updatePoisiton();
+                _beginUpdatePosition();
               }
             } else {
               _shouldWork = false;
@@ -192,13 +199,14 @@ class _AppBarAnchorState extends State<_AppBarAnchor>
     );
   }
 
-  void _updatePoisiton() {
-    _updatePoisitonOnce();
-    if (_shouldWork) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _updatePoisiton();
-      });
-    }
+  void _beginUpdatePosition() {
+    _positionTimer = Timer.periodic(const Duration(milliseconds: 16), (_) {
+      _updatePoisitonOnce();
+      if (!_shouldWork) {
+        _positionTimer?.cancel();
+        _positionTimer = null;
+      }
+    });
   }
 
   void _updatePoisitonOnce() {
@@ -220,5 +228,6 @@ class _AppBarAnchorState extends State<_AppBarAnchor>
 
   final _key = GlobalKey();
   Offset? _position;
+  Timer? _positionTimer;
   var _shouldWork = false;
 }
