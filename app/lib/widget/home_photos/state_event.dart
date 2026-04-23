@@ -9,6 +9,7 @@ class _State {
     required this.isLoading,
     required this.transformedItems,
     required this.selectedItems,
+    required this.visibleDateItems,
     required this.visibleDates,
     this.dateBarContent,
     required this.queriedDates,
@@ -55,6 +56,7 @@ class _State {
     isLoading: false,
     transformedItems: const [],
     selectedItems: const {},
+    visibleDateItems: const {},
     visibleDates: const {},
     queriedDates: const {},
     mergedCounts: const {},
@@ -88,7 +90,8 @@ class _State {
   final bool isLoading;
   final List<List<_Item>> transformedItems;
   final Set<_Item> selectedItems;
-  final Set<_VisibleDate> visibleDates;
+  final Set<_VisibleDate> visibleDateItems;
+  final Set<Date> visibleDates;
   final Date? dateBarContent;
   final Set<Date> queriedDates;
   final Map<Date, int> mergedCounts;

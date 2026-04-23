@@ -120,7 +120,10 @@ class _Bloc extends Bloc<_Event, _State>
     );
     _subscriptions.add(
       stream
-          .distinctBy((e) => e.visibleDates.map((d) => d.date).sortedBySelf())
+          .distinct(
+            (previous, next) =>
+                setEquals(previous.visibleDates, next.visibleDates),
+          )
           .listen((event) {
             _onVisibleDatesUpdated();
           }),
@@ -129,7 +132,7 @@ class _Bloc extends Bloc<_Event, _State>
       stream
           .distinct(
             (previous, next) =>
-                previous.visibleDates == next.visibleDates &&
+                setEquals(previous.visibleDates, next.visibleDates) &&
                 previous.isDragging == next.isDragging,
           )
           .listen((event) {
@@ -189,7 +192,7 @@ class _Bloc extends Bloc<_Event, _State>
     currentState = currentState as _State;
     nextState = nextState as _State;
     return currentState.scale == nextState.scale &&
-        currentState.visibleDates == nextState.visibleDates &&
+        currentState.visibleDateItems == nextState.visibleDateItems &&
         currentState.syncProgress == nextState.syncProgress &&
         currentState.dateBarContent == nextState.dateBarContent &&
         currentState.appBarPosition == nextState.appBarPosition &&
@@ -556,18 +559,28 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onAddVisibleDate(_AddVisibleDate ev, Emitter<_State> emit) {
     // _log.info(ev);
-    if (state.visibleDates.contains(ev.date)) {
+    if (state.visibleDateItems.contains(ev.date)) {
       return;
     }
-    emit(state.copyWith(visibleDates: state.visibleDates.added(ev.date)));
+    emit(
+      state.copyWith(
+        visibleDateItems: state.visibleDateItems.added(ev.date),
+        visibleDates: state.visibleDateItems.map((e) => e.date).toSet(),
+      ),
+    );
   }
 
   void _onRemoveVisibleDate(_RemoveVisibleDate ev, Emitter<_State> emit) {
     // _log.info(ev);
-    if (!state.visibleDates.contains(ev.date)) {
+    if (!state.visibleDateItems.contains(ev.date)) {
       return;
     }
-    emit(state.copyWith(visibleDates: state.visibleDates.removed(ev.date)));
+    emit(
+      state.copyWith(
+        visibleDateItems: state.visibleDateItems.removed(ev.date),
+        visibleDates: state.visibleDateItems.map((e) => e.date).toSet(),
+      ),
+    );
   }
 
   void _onSetSyncProgress(_SetSyncProgress ev, Emitter<_State> emit) {
@@ -698,7 +711,7 @@ class _Bloc extends Bloc<_Event, _State>
     var visibleCount = 0;
     if (prefController.homePhotosZoomLevelValue >= 0) {
       groups = state.visibleDates.groupFoldBy<Date, int>(
-        (e) => e.date,
+        (e) => e,
         (previous, element) => (previous ?? 0) + 1,
       );
       final firstDate = groups.keys.sortedBySelf().lastOrNull;
@@ -711,7 +724,7 @@ class _Bloc extends Bloc<_Event, _State>
       date = firstDate;
     } else {
       groups = state.visibleDates.groupFoldBy<Date, int>(
-        (e) => e.date.copyWith(day: 1),
+        (e) => e.copyWith(day: 1),
         (previous, element) => (previous ?? 0) + 1,
       );
       final firstMonth = groups.keys.sortedBySelf().lastOrNull;
@@ -932,7 +945,6 @@ class _Bloc extends Bloc<_Event, _State>
   void _requestMoreFiles() {
     final queriedDates = state.queriedDates;
     final missingDates = state.visibleDates
-        .map((e) => e.date)
         .whereNot((d) => queriedDates.contains(d))
         .where(state.anyFilesSummary.items.containsKey)
         .toSet();
