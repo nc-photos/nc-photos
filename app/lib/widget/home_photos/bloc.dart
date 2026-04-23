@@ -935,7 +935,7 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onVisibleDatesUpdated() {
     _filesQueryTimer?.cancel();
-    _filesQueryTimer = Timer(const Duration(milliseconds: 500), () {
+    _filesQueryTimer = Timer(const Duration(milliseconds: 250), () {
       if (!_isQueryingFiles) {
         _requestMoreFiles();
       }
