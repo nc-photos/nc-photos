@@ -62,7 +62,6 @@ class _Bloc extends Bloc<_Event, _State>
     });
     on<_SetLayoutConstraint>(_onSetLayoutConstraint);
     on<_TransformMinimap>(_onTransformMinimap);
-    on<_UpdateScrollDate>(_onUpdateScrollDate);
     on<_UpdateDateBar>(_onUpdateDateBar);
     on<_SetAppBarPosition>((ev, emit) {
       emit(state.copyWith(appBarPosition: ev.value));
@@ -131,17 +130,6 @@ class _Bloc extends Bloc<_Event, _State>
           .distinct(
             (previous, next) =>
                 previous.visibleDates == next.visibleDates &&
-                previous.itemPerRow == next.itemPerRow,
-          )
-          .listen((event) {
-            add(const _UpdateScrollDate());
-          }),
-    );
-    _subscriptions.add(
-      stream
-          .distinct(
-            (previous, next) =>
-                previous.visibleDates == next.visibleDates &&
                 previous.isDragging == next.isDragging,
           )
           .listen((event) {
@@ -203,7 +191,6 @@ class _Bloc extends Bloc<_Event, _State>
     return currentState.scale == nextState.scale &&
         currentState.visibleDates == nextState.visibleDates &&
         currentState.syncProgress == nextState.syncProgress &&
-        currentState.scrollDate == nextState.scrollDate &&
         currentState.dateBarContent == nextState.dateBarContent &&
         currentState.appBarPosition == nextState.appBarPosition &&
         !identical(currentState, nextState);
@@ -745,46 +732,6 @@ class _Bloc extends Bloc<_Event, _State>
       emit(state.copyWith(dateBarContent: date));
     } else {
       emit(state.copyWith(dateBarContent: null));
-    }
-  }
-
-  void _onUpdateScrollDate(_UpdateScrollDate ev, Emitter<_State> emit) {
-    // _log.info(ev);
-    if (state.itemPerRow == null || state.visibleDates.isEmpty) {
-      if (state.scrollDate != null) {
-        emit(state.copyWith(scrollDate: null));
-      }
-      return;
-    }
-    final dateRows = state.visibleDates
-        .map((e) => e.date)
-        .sortedBySelf()
-        .reversed
-        .groupBy(
-          key: (e) {
-            if (prefController.homePhotosZoomLevelValue >= 0) {
-              return e;
-            } else {
-              // month
-              return Date(e.year, e.month);
-            }
-          },
-        )
-        .map(
-          (key, value) =>
-              MapEntry(key, (value.length / state.itemPerRow!).ceil()),
-        );
-    final totalRows = dateRows.values.sum;
-    final midRow = totalRows / 2;
-    var x = 0;
-    for (final e in dateRows.entries) {
-      x += e.value;
-      if (x >= midRow) {
-        if (state.scrollDate != e.key) {
-          emit(state.copyWith(scrollDate: e.key));
-        }
-        return;
-      }
     }
   }
 

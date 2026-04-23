@@ -28,7 +28,6 @@ class _State {
     required this.isScrolling,
     this.minimapItems,
     required this.minimapYRatio,
-    this.scrollDate,
     this.appBarPosition,
     this.appBarPositionUpdateRequest,
     required this.isDragging,
@@ -112,7 +111,6 @@ class _State {
   final bool isScrolling;
   final List<_MinimapItem>? minimapItems;
   final double minimapYRatio;
-  final Date? scrollDate;
   final Offset? appBarPosition;
   final Unique<bool>? appBarPositionUpdateRequest;
   final bool isDragging;
@@ -421,14 +419,6 @@ class _SetLayoutConstraint implements _Event {
 @toString
 class _TransformMinimap implements _Event {
   const _TransformMinimap();
-
-  @override
-  String toString() => _$toString();
-}
-
-@toString
-class _UpdateScrollDate implements _Event {
-  const _UpdateScrollDate();
 
   @override
   String toString() => _$toString();
