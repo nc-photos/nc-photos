@@ -24,5 +24,7 @@ class SessionStorage {
 
   bool hasShownVideoPreviewHint = false;
 
+  Map<String, String> accountRecognizeApiKeys = {};
+
   static final _inst = SessionStorage._();
 }
