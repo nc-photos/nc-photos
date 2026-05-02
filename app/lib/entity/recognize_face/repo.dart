@@ -11,44 +11,66 @@ part 'repo.g.dart';
 
 abstract class RecognizeFaceRepo {
   /// Query all [RecognizeFace]s belonging to [account]
-  Stream<List<RecognizeFace>> getFaces(Account account);
+  Stream<List<RecognizeFace>> getFaces(
+    Account account, {
+    required bool shouldUseApiKey,
+  });
 
   /// Query all items belonging to [face]
-  Stream<List<RecognizeFaceItem>> getItems(Account account, RecognizeFace face);
+  Stream<List<RecognizeFaceItem>> getItems(
+    Account account,
+    RecognizeFace face, {
+    required bool shouldUseApiKey,
+  });
 
   /// Query all items belonging to each face
   Stream<Map<RecognizeFace, List<RecognizeFaceItem>>> getMultiFaceItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   });
 }
 
-/// A repo that simply relay the call to the backed [NcAlbumDataSource]
+/// A repo that simply relay the call to the backed [RecognizeFaceDataSource]
 @npLog
 class BasicRecognizeFaceRepo implements RecognizeFaceRepo {
   const BasicRecognizeFaceRepo(this.dataSrc);
 
   @override
-  Stream<List<RecognizeFace>> getFaces(Account account) async* {
-    yield await dataSrc.getFaces(account);
+  Stream<List<RecognizeFace>> getFaces(
+    Account account, {
+    required bool shouldUseApiKey,
+  }) async* {
+    yield await dataSrc.getFaces(account, shouldUseApiKey: shouldUseApiKey);
   }
 
   @override
   Stream<List<RecognizeFaceItem>> getItems(
     Account account,
-    RecognizeFace face,
-  ) async* {
-    yield await dataSrc.getItems(account, face);
+    RecognizeFace face, {
+    required bool shouldUseApiKey,
+  }) async* {
+    yield await dataSrc.getItems(
+      account,
+      face,
+      shouldUseApiKey: shouldUseApiKey,
+    );
   }
 
   @override
   Stream<Map<RecognizeFace, List<RecognizeFaceItem>>> getMultiFaceItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async* {
-    yield await dataSrc.getMultiFaceItems(account, faces, onError: onError);
+    yield await dataSrc.getMultiFaceItems(
+      account,
+      faces,
+      shouldUseApiKey: shouldUseApiKey,
+      onError: onError,
+    );
   }
 
   final RecognizeFaceDataSource dataSrc;
@@ -56,15 +78,23 @@ class BasicRecognizeFaceRepo implements RecognizeFaceRepo {
 
 abstract class RecognizeFaceDataSource {
   /// Query all [RecognizeFace]s belonging to [account]
-  Future<List<RecognizeFace>> getFaces(Account account);
+  Future<List<RecognizeFace>> getFaces(
+    Account account, {
+    required bool shouldUseApiKey,
+  });
 
   /// Query all items belonging to [face]
-  Future<List<RecognizeFaceItem>> getItems(Account account, RecognizeFace face);
+  Future<List<RecognizeFaceItem>> getItems(
+    Account account,
+    RecognizeFace face, {
+    required bool shouldUseApiKey,
+  });
 
   /// Query all items belonging to each face
   Future<Map<RecognizeFace, List<RecognizeFaceItem>>> getMultiFaceItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   });
 
@@ -72,6 +102,7 @@ abstract class RecognizeFaceDataSource {
   Future<Map<RecognizeFace, RecognizeFaceItem>> getMultiFaceLastItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   });
 }

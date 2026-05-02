@@ -8,6 +8,7 @@ import 'package:nc_photos/entity/recognize_face/repo.dart';
 import 'package:nc_photos/entity/recognize_face_item.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/np_api_util.dart';
+import 'package:nc_photos/use_case/recognize_face/recognize_api_key_manager.dart';
 import 'package:np_api/np_api.dart' as api;
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/type.dart';
@@ -21,11 +22,18 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
   const RecognizeFaceRemoteDataSource();
 
   @override
-  Future<List<RecognizeFace>> getFaces(Account account) async {
+  Future<List<RecognizeFace>> getFaces(
+    Account account, {
+    required bool shouldUseApiKey,
+  }) async {
     _log.info("[getFaces] account: ${account.userId}");
-    final response = await ApiUtil.fromAccount(
-      account,
-    ).recognize(account.userId.raw).faces().propfind();
+    final response = await _callRecognizeApi(
+      (apiKey) => ApiUtil.fromAccount(
+        account,
+      ).recognize(account.userId.raw, apiKey: apiKey).faces().propfind(),
+      shouldUseApiKey: shouldUseApiKey,
+      account: account,
+    );
     if (!response.isGood) {
       _log.severe("[getFaces] Failed requesting server: $response");
       throw ApiException(
@@ -44,24 +52,29 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
   @override
   Future<List<RecognizeFaceItem>> getItems(
     Account account,
-    RecognizeFace face,
-  ) async {
+    RecognizeFace face, {
+    required bool shouldUseApiKey,
+  }) async {
     _log.info("[getItems] account: ${account.userId}, face: ${face.label}");
-    final response = await ApiUtil.fromAccount(account)
-        .recognize(account.userId.raw)
-        .face(face.label)
-        .propfind(
-          getcontentlength: 1,
-          getcontenttype: 1,
-          getetag: 1,
-          getlastmodified: 1,
-          faceDetections: 1,
-          fileMetadataSize: 1,
-          hasPreview: 1,
-          realpath: 1,
-          favorite: 1,
-          fileid: 1,
-        );
+    final response = await _callRecognizeApi(
+      (apiKey) => ApiUtil.fromAccount(account)
+          .recognize(account.userId.raw, apiKey: apiKey)
+          .face(face.label)
+          .propfind(
+            getcontentlength: 1,
+            getcontenttype: 1,
+            getetag: 1,
+            getlastmodified: 1,
+            faceDetections: 1,
+            fileMetadataSize: 1,
+            hasPreview: 1,
+            realpath: 1,
+            favorite: 1,
+            fileid: 1,
+          ),
+      shouldUseApiKey: shouldUseApiKey,
+      account: account,
+    );
     if (!response.isGood) {
       _log.severe("[getItems] Failed requesting server: $response");
       throw ApiException(
@@ -81,12 +94,16 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
   Future<Map<RecognizeFace, List<RecognizeFaceItem>>> getMultiFaceItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async {
     final results = await Future.wait(
       faces.map((f) async {
         try {
-          return MapEntry(f, await getItems(account, f));
+          return MapEntry(
+            f,
+            await getItems(account, f, shouldUseApiKey: shouldUseApiKey),
+          );
         } catch (e, stackTrace) {
           _log.severe(
             "[getMultiFaceItems] Failed while querying face: $f",
@@ -105,11 +122,47 @@ class RecognizeFaceRemoteDataSource implements RecognizeFaceDataSource {
   Future<Map<RecognizeFace, RecognizeFaceItem>> getMultiFaceLastItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async {
-    final results = await getMultiFaceItems(account, faces, onError: onError);
+    final results = await getMultiFaceItems(
+      account,
+      faces,
+      shouldUseApiKey: shouldUseApiKey,
+      onError: onError,
+    );
     return results.map(
       (key, value) => MapEntry(key, maxBy(value, (e) => e.fileId)!),
+    );
+  }
+
+  static Future<api.Response> _callRecognizeApi(
+    Future<api.Response> Function(String? apiKey) apiCall, {
+    required bool shouldUseApiKey,
+    required Account account,
+  }) async {
+    final _log = _$RecognizeFaceRemoteDataSourceNpLog.log;
+    String? apiKey;
+    if (shouldUseApiKey) {
+      final apiKeyManager = RecognizeApiKeyManager(account: account);
+      apiKey = await apiKeyManager.getKey();
+    }
+    var response = await apiCall(apiKey);
+    if (response.isGood) {
+      return response;
+    }
+    if (response.statusCode == 403 && shouldUseApiKey) {
+      _log.info("[getFaces] API return 403, API key expired?");
+      if (shouldUseApiKey) {
+        final apiKeyManager = RecognizeApiKeyManager(account: account);
+        apiKey = await apiKeyManager.renewKey();
+        response = await apiCall(apiKey);
+      }
+    }
+    _log.severe("[getFaces] Failed requesting server: $response");
+    throw ApiException(
+      response: response,
+      message: "Server responed with an error: HTTP ${response.statusCode}",
     );
   }
 }
@@ -119,7 +172,10 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
   const RecognizeFaceSqliteDbDataSource(this.db);
 
   @override
-  Future<List<RecognizeFace>> getFaces(Account account) async {
+  Future<List<RecognizeFace>> getFaces(
+    Account account, {
+    required bool shouldUseApiKey,
+  }) async {
     _log.info("[getFaces] $account");
     final results = await db.getRecognizeFaces(account: account.toDb());
     return results
@@ -142,8 +198,9 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
   @override
   Future<List<RecognizeFaceItem>> getItems(
     Account account,
-    RecognizeFace face,
-  ) async {
+    RecognizeFace face, {
+    required bool shouldUseApiKey,
+  }) async {
     _log.info("[getItems] $face");
     final results = await db.getRecognizeFaceItemsByFaceLabel(
       account: account.toDb(),
@@ -174,6 +231,7 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
   Future<Map<RecognizeFace, List<RecognizeFaceItem>>> getMultiFaceItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async {
     _log.info("[getMultiFaceItems] ${faces.toReadableString()}");
@@ -213,6 +271,7 @@ class RecognizeFaceSqliteDbDataSource implements RecognizeFaceDataSource {
   Future<Map<RecognizeFace, RecognizeFaceItem>> getMultiFaceLastItems(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
   }) async {
     _log.info("[getMultiFaceLastItems] ${faces.toReadableString()}");
