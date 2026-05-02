@@ -215,6 +215,23 @@ class NcAlbumItem with EquatableMixin {
 }
 
 @toString
+class RecognizeApiKey with EquatableMixin {
+  const RecognizeApiKey({required this.apiKey});
+
+  factory RecognizeApiKey.fromJson(JsonObj json) {
+    return RecognizeApiKey(apiKey: json["apiKey"]);
+  }
+
+  @override
+  String toString() => _$toString();
+
+  @override
+  List<Object?> get props => [apiKey];
+
+  final String apiKey;
+}
+
+@toString
 class RecognizeFace with EquatableMixin {
   const RecognizeFace({required this.href});
 

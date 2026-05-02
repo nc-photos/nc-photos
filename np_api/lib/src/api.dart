@@ -12,6 +12,7 @@ part 'direct_api.dart';
 part 'face_recognition_api.dart';
 part 'files_api.dart';
 part 'files_sharing_api.dart';
+part 'nc_photos_server_api.dart';
 part 'photos_api.dart';
 part 'recognize_api.dart';
 part 'status_api.dart';
@@ -29,7 +30,8 @@ class Api {
 
   ApiPhotos photos(String userId) => ApiPhotos(this, userId);
 
-  ApiRecognize recognize(String userId) => ApiRecognize(this, userId);
+  ApiRecognize recognize(String userId, {required String? apiKey}) =>
+      ApiRecognize(this, userId, apiKey: apiKey);
 
   ApiStatus status() => ApiStatus(this);
 
@@ -107,6 +109,8 @@ class ApiOcs {
   ApiOcsFacerecognition facerecognition() => ApiOcsFacerecognition(this);
 
   ApiOcsFilesSharing filesSharing() => ApiOcsFilesSharing(this);
+
+  ApiOcsNcPhotosServer ncPhotosServer() => ApiOcsNcPhotosServer(this);
 
   final Api _api;
 }
