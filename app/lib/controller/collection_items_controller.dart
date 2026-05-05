@@ -10,7 +10,7 @@ import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/new_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -167,7 +167,7 @@ class CollectionItemsController {
         finalize = (await finalize.asyncMap((e) async {
           try {
             if (e is NewCollectionFileItem) {
-              return await CollectionAdapter.of(
+              return await CollectionWorkerFactory.adaptToNewItem(
                 _c,
                 account,
                 collection,

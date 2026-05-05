@@ -10,8 +10,8 @@ import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection/util.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/new_item.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
@@ -212,7 +212,11 @@ class CollectionsController {
       final newItems = await items?.asyncMap((e) {
         if (e is NewCollectionItem) {
           try {
-            return CollectionAdapter.of(_c, account, c).adaptToNewItem(e);
+            return CollectionWorkerFactory.adaptToNewItem(
+              _c,
+              account,
+              c,
+            ).adaptToNewItem(e);
           } catch (e, stackTrace) {
             _log.severe("[edit] Failed to adapt new item: $e", e, stackTrace);
             return Future.value(null);

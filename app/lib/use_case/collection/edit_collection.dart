@@ -1,7 +1,7 @@
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/util.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -33,7 +33,7 @@ class EditCollection {
     CollectionItemSort? itemSort,
     OrNull<FileDescriptor>? cover,
     List<CollectionItem>? knownItems,
-  }) => CollectionAdapter.of(_c, account, collection).edit(
+  }) => CollectionWorkerFactory.edit(_c, account, collection).edit(
     name: name,
     items: items,
     itemSort: itemSort,

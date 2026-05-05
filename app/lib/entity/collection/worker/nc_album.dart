@@ -4,9 +4,9 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
-import 'package:nc_photos/entity/collection/adapter/adapter_mixin.dart';
 import 'package:nc_photos/entity/collection/content_provider/nc_album.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
+import 'package:nc_photos/entity/collection/worker/mixin.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/basic_item.dart';
 import 'package:nc_photos/entity/collection_item/nc_album_item_adapter.dart';
@@ -28,14 +28,9 @@ import 'package:np_log/np_log.dart';
 part 'nc_album.g.dart';
 
 @npLog
-class CollectionNcAlbumAdapter
-    with CollectionAdapterUnshareableTag
-    implements CollectionAdapter {
-  CollectionNcAlbumAdapter(this._c, this.account, this.collection)
-    : assert(require(_c)),
-      _provider = collection.contentProvider as CollectionNcAlbumProvider;
-
-  static bool require(DiContainer c) => ListNcAlbumItem.require(c);
+class CollectionNcAlbumListItemWorker implements CollectionListItemWorker {
+  CollectionNcAlbumListItemWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionNcAlbumProvider;
 
   @override
   Stream<List<CollectionItem>> listItem() {
@@ -62,6 +57,18 @@ class CollectionNcAlbumAdapter
     });
   }
 
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionNcAlbumProvider _provider;
+}
+
+@npLog
+class CollectionNcAlbumAddFilesWorker implements CollectionAddFilesWorker {
+  CollectionNcAlbumAddFilesWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionNcAlbumProvider;
+
   @override
   Future<int> addFiles(
     List<FileDescriptor> files, {
@@ -76,7 +83,7 @@ class CollectionNcAlbumAdapter
     );
     if (count > 0) {
       try {
-        final newAlbum = await _syncRemote();
+        final newAlbum = await _syncRemote(_c, account, _provider);
         onCollectionUpdated(
           collection.copyWith(
             contentProvider: _provider.copyWith(album: newAlbum),
@@ -88,6 +95,18 @@ class CollectionNcAlbumAdapter
     }
     return count;
   }
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionNcAlbumProvider _provider;
+}
+
+@npLog
+class CollectionNcAlbumEditWorker implements CollectionEditWorker {
+  CollectionNcAlbumEditWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionNcAlbumProvider;
 
   @override
   Future<Collection> edit({
@@ -120,6 +139,19 @@ class CollectionNcAlbumAdapter
     );
   }
 
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionNcAlbumProvider _provider;
+}
+
+@npLog
+class CollectionNcAlbumRemoveItemsWorker
+    implements CollectionRemoveItemsWorker {
+  CollectionNcAlbumRemoveItemsWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionNcAlbumProvider;
+
   @override
   Future<int> removeItems(
     List<CollectionItem> items, {
@@ -134,7 +166,7 @@ class CollectionNcAlbumAdapter
     );
     if (count > 0) {
       try {
-        final newAlbum = await _syncRemote();
+        final newAlbum = await _syncRemote(_c, account, _provider);
         onCollectionUpdated(
           collection.copyWith(
             contentProvider: _provider.copyWith(album: newAlbum),
@@ -147,23 +179,78 @@ class CollectionNcAlbumAdapter
     return count;
   }
 
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionNcAlbumProvider _provider;
+}
+
+class CollectionNcAlbumShareWorker
+    with CollectionWorkerNoShareTag
+    implements CollectionShareWorker {
+  const CollectionNcAlbumShareWorker();
+}
+
+class CollectionNcAlbumUnshareWorker
+    with CollectionWorkerNoUnshareTag
+    implements CollectionUnshareWorker {
+  const CollectionNcAlbumUnshareWorker();
+}
+
+class CollectionNcAlbumImportPendingSharedWorker
+    with CollectionWorkerNoImportPendingSharedTag
+    implements CollectionImportPendingSharedWorker {
+  const CollectionNcAlbumImportPendingSharedWorker();
+}
+
+class CollectionNcAlbumAdaptToNewItemWorker
+    implements CollectionAdaptToNewItemWorker {
+  const CollectionNcAlbumAdaptToNewItemWorker();
+
   @override
   Future<CollectionItem> adaptToNewItem(NewCollectionItem original) async {
     if (original is NewCollectionFileItem) {
       return BasicCollectionFileItem(original.file);
-    } else {
-      throw UnsupportedError("Unsupported type: ${original.runtimeType}");
     }
+    throw UnsupportedError("Unsupported type: ${original.runtimeType}");
   }
+}
+
+class CollectionNcAlbumIsItemRemovableWorker
+    implements CollectionIsItemRemovableWorker {
+  const CollectionNcAlbumIsItemRemovableWorker();
 
   @override
   bool isItemRemovable(CollectionItem item) => true;
+}
+
+class CollectionNcAlbumIsItemDeletableWorker
+    implements CollectionIsItemDeletableWorker {
+  const CollectionNcAlbumIsItemDeletableWorker();
 
   @override
   bool isItemDeletable(CollectionItem item) => false;
+}
+
+class CollectionNcAlbumRemoveWorker implements CollectionRemoveWorker {
+  CollectionNcAlbumRemoveWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionNcAlbumProvider;
 
   @override
   Future<void> remove() => RemoveNcAlbum(_c)(account, _provider.album);
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionNcAlbumProvider _provider;
+}
+
+class CollectionNcAlbumIsPermittedWorker
+    implements CollectionIsPermittedWorker {
+  CollectionNcAlbumIsPermittedWorker(this.collection)
+    : _provider = collection.contentProvider as CollectionNcAlbumProvider;
 
   @override
   bool isPermitted(CollectionCapability capability) {
@@ -177,21 +264,33 @@ class CollectionNcAlbumAdapter
     }
   }
 
+  final Collection collection;
+
+  final CollectionNcAlbumProvider _provider;
+}
+
+class CollectionNcAlbumIsManualCoverWorker
+    implements CollectionIsManualCoverWorker {
+  const CollectionNcAlbumIsManualCoverWorker();
+
   @override
   bool isManualCover() => false;
+}
+
+class CollectionNcAlbumUpdatePostLoadWorker
+    implements CollectionUpdatePostLoadWorker {
+  const CollectionNcAlbumUpdatePostLoadWorker();
 
   @override
   Future<Collection?> updatePostLoad(List<CollectionItem> items) =>
       Future.value(null);
+}
 
-  Future<NcAlbum> _syncRemote() async {
-    final remote = await ListNcAlbum(_c)(account).last;
-    return remote.firstWhere((e) => e.compareIdentity(_provider.album));
-  }
-
-  final DiContainer _c;
-  final Account account;
-  final Collection collection;
-
-  final CollectionNcAlbumProvider _provider;
+Future<NcAlbum> _syncRemote(
+  DiContainer c,
+  Account account,
+  CollectionNcAlbumProvider provider,
+) async {
+  final remote = await ListNcAlbum(c)(account).last;
+  return remote.firstWhere((e) => e.compareIdentity(provider.album));
 }

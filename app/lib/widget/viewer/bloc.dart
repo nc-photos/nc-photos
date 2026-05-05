@@ -564,7 +564,7 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onRemoveFromCollection(_RemoveFromCollection ev, _Emitter emit) {
     _log.info(ev);
-    if (!CollectionAdapter.of(
+    if (!CollectionWorkerFactory.isPermitted(
       _c,
       account,
       state.collection!,
