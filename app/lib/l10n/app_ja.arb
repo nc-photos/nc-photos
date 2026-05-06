@@ -706,7 +706,7 @@
 	"@albumSharedLabel": {
 		"description": "A small label placed next to a shared album"
 	},
-	"metadataTaskProcessingNotification": "バックグラウンドで画像のメタデータを処理",
+	"metadataTaskProcessingNotification": "画像のメタデータを処理しています",
 	"@metadataTaskProcessingNotification": {
 		"description": "Shown when the app is reading image metadata"
 	},

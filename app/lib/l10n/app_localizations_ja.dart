@@ -782,7 +782,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get albumSharedLabel => '共有';
 
   @override
-  String get metadataTaskProcessingNotification => 'バックグラウンドで画像のメタデータを処理';
+  String get metadataTaskProcessingNotification => '画像のメタデータを処理しています';
 
   @override
   String get configButtonLabel => '設定';
