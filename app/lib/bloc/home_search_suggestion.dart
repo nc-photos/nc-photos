@@ -228,6 +228,9 @@ class HomeSearchSuggestionBloc
       final persons = await ListPerson(_c)(
         account,
         accountPrefController.personProviderValue,
+        shouldUseRecognizeApiKey: serverController.isSupported(
+          ServerFeature.recognizeApiKey,
+        ),
       ).last;
       product.addAll(persons.map((t) => _PersonSearcheable(t)));
       _log.info("[_onEventPreloadData] Loaded ${persons.length} people");

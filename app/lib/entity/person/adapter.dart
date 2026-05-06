@@ -10,12 +10,22 @@ import 'package:nc_photos/entity/person_face.dart';
 abstract class PersonAdapter {
   const PersonAdapter();
 
-  static PersonAdapter of(DiContainer c, Account account, Person person) {
+  static PersonAdapter of(
+    DiContainer c,
+    Account account,
+    Person person, {
+    required bool shouldUseRecognizeApiKey,
+  }) {
     switch (person.contentProvider.runtimeType) {
       case const (PersonFaceRecognitionProvider):
         return PersonFaceRecognitionAdapter(c, account, person);
       case const (PersonRecognizeProvider):
-        return PersonRecognizeAdapter(c, account, person);
+        return PersonRecognizeAdapter(
+          c,
+          account,
+          person,
+          shouldUseApiKey: shouldUseRecognizeApiKey,
+        );
       default:
         throw UnsupportedError(
           "Unknown type: ${person.contentProvider.runtimeType}",

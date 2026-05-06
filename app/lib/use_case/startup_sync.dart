@@ -9,6 +9,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_init.dart' as app_init;
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/persons_controller.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/use_case/person/sync_person.dart';
@@ -36,18 +37,30 @@ class StartupSync {
     FilesController filesController,
     PersonsController personsController,
     PersonProvider personProvider,
+    ServerController serverController,
   ) async {
     return _mutex.protect(() async {
+      final shouldUseRecognizeApiKey = serverController.isSupported(
+        ServerFeature.recognizeApiKey,
+      );
       if (getRawPlatform() == NpPlatform.web) {
         // not supported on web
         final c = KiwiContainer().resolve<DiContainer>();
-        return await StartupSync(c)(account, personProvider);
+        return await StartupSync(c)(
+          account,
+          personProvider,
+          shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+        );
       } else {
         // we can't use regular isolate here because self-signed cert support
         // requires native plugins
         final resultJson = await flutterCompute(
           _isolateMain,
-          _IsolateMessage(account, personProvider).toJson(),
+          _IsolateMessage(
+            account,
+            personProvider,
+            shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+          ).toJson(),
         );
         final result = SyncResult.fromJson(resultJson);
         // events fired in background isolate won't be noticed by the main isolate,
@@ -60,8 +73,9 @@ class StartupSync {
 
   Future<SyncResult> call(
     Account account,
-    PersonProvider personProvider,
-  ) async {
+    PersonProvider personProvider, {
+    required bool shouldUseRecognizeApiKey,
+  }) async {
     _log.info("[_run] Begin sync");
     final stopwatch = Stopwatch()..start();
     DbSyncIdResult? syncFavoriteResult;
@@ -78,7 +92,11 @@ class StartupSync {
       _log.shout("[_run] Failed while SyncTag", e, stackTrace);
     }
     try {
-      isSyncPersonUpdated = await SyncPerson(_c)(account, personProvider);
+      isSyncPersonUpdated = await SyncPerson(_c)(
+        account,
+        personProvider,
+        shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+      );
     } catch (e, stackTrace) {
       _log.shout("[_run] Failed while SyncPerson", e, stackTrace);
     }
@@ -143,7 +161,11 @@ class SyncResult {
 }
 
 class _IsolateMessage {
-  const _IsolateMessage(this.account, this.personProvider);
+  const _IsolateMessage(
+    this.account,
+    this.personProvider, {
+    required this.shouldUseRecognizeApiKey,
+  });
 
   factory _IsolateMessage.fromJson(JsonObj json) => _IsolateMessage(
     Account.fromJson(
@@ -151,15 +173,18 @@ class _IsolateMessage {
       upgraderV1: const AccountUpgraderV1(),
     )!,
     PersonProvider.fromValue(json["personProvider"]),
+    shouldUseRecognizeApiKey: json["shouldUseRecognizeApiKey"],
   );
 
   JsonObj toJson() => <String, dynamic>{
     "account": account.toJson(),
     "personProvider": personProvider.index,
+    "shouldUseRecognizeApiKey": shouldUseRecognizeApiKey,
   };
 
   final Account account;
   final PersonProvider personProvider;
+  final bool shouldUseRecognizeApiKey;
 }
 
 @pragma("vm:entry-point")
@@ -169,6 +194,10 @@ Future<JsonObj> _isolateMain(JsonObj messageJson) async {
   await app_init.init(app_init.InitIsolateType.flutterIsolate);
 
   final c = KiwiContainer().resolve<DiContainer>();
-  final result = await StartupSync(c)(message.account, message.personProvider);
+  final result = await StartupSync(c)(
+    message.account,
+    message.personProvider,
+    shouldUseRecognizeApiKey: message.shouldUseRecognizeApiKey,
+  );
   return result.toJson();
 }

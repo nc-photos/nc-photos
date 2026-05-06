@@ -25,8 +25,9 @@ class SearchSqliteDbDataSource implements SearchDataSource {
   @override
   Future<List<FileDescriptor>> list(
     Account account,
-    SearchCriteria criteria,
-  ) async {
+    SearchCriteria criteria, {
+    required bool shouldUseRecognizeApiKey,
+  }) async {
     _log.info("[list] $criteria");
     final stopwatch = Stopwatch()..start();
     try {
@@ -40,7 +41,11 @@ class SearchSqliteDbDataSource implements SearchDataSource {
         _listByPath(account, criteria, keywords),
         _listByLocation(account, criteria),
         _listByTag(account, criteria),
-        _listByPerson(account, criteria),
+        _listByPerson(
+          account,
+          criteria,
+          shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+        ),
       ]);
       return futures.flatten().distinctIf(
         (a, b) => a.compareServerIdentity(b),
@@ -159,8 +164,9 @@ class SearchSqliteDbDataSource implements SearchDataSource {
 
   Future<List<FileDescriptor>> _listByPerson(
     Account account,
-    SearchCriteria criteria,
-  ) async {
+    SearchCriteria criteria, {
+    required bool shouldUseRecognizeApiKey,
+  }) async {
     // person search requires exact match of any parts, for example, searching
     // "Ada" will return results from "Ada Crook" but NOT "Adabelle"
     try {
@@ -179,7 +185,13 @@ class SearchSqliteDbDataSource implements SearchDataSource {
         "[_listByPerson] Found people: ${persons.map((p) => p.name).toReadableString()}",
       );
       final futures = await Future.wait(
-        persons.map((p) async => ListPersonFace(_c)(account, p).last),
+        persons.map(
+          (p) async => ListPersonFace(_c)(
+            account,
+            p,
+            shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+          ).last,
+        ),
       );
       final faces = futures.flatten().toList();
       final files = await InflateFileDescriptor(

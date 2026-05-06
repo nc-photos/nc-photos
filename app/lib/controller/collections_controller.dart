@@ -333,6 +333,7 @@ class CollectionsController {
       _itemControllers[k] ??= CollectionItemsController(
         _c,
         filesController: filesController,
+        serverController: serverController,
         account: account,
         collection: k.collection,
         onCollectionUpdated: _updateCollection,

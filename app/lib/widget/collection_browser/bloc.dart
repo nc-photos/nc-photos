@@ -9,6 +9,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.prefController,
     required this.collectionsController,
     required this.filesController,
+    required this.serverController,
     required this.db,
     required Collection collection,
     required this.dateHeight,
@@ -711,6 +712,7 @@ class _Bloc extends Bloc<_Event, _State>
         account: account,
         collection: collection,
         onCollectionUpdated: (_) {},
+        serverController: serverController,
       );
     }
   }
@@ -857,6 +859,7 @@ class _Bloc extends Bloc<_Event, _State>
   final PrefController prefController;
   final CollectionsController collectionsController;
   final FilesController filesController;
+  final ServerController serverController;
   final NpDb db;
   final double dateHeight;
   late final CollectionItemsController itemsController;

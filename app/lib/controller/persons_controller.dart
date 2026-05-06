@@ -4,6 +4,7 @@ import 'package:copy_with/copy_with.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/person.dart';
 import 'package:nc_photos/exception_event.dart';
@@ -30,6 +31,7 @@ class PersonsController {
     this._c, {
     required this.account,
     required this.accountPrefController,
+    required this.serverController,
   }) {
     _subscriptions.add(
       accountPrefController.personProvider.distinct().listen((event) {
@@ -74,6 +76,9 @@ class PersonsController {
     ListPerson(_c.withLocalRepo())(
       account,
       accountPrefController.personProviderValue,
+      shouldUseRecognizeApiKey: serverController.isSupported(
+        ServerFeature.recognizeApiKey,
+      ),
     ).listen(
       (results) {
         lastData = PersonStreamEvent(data: results, hasNext: true);
@@ -89,6 +94,7 @@ class PersonsController {
   final DiContainer _c;
   final Account account;
   final AccountPrefController accountPrefController;
+  final ServerController serverController;
 
   final _subscriptions = <StreamSubscription>[];
 

@@ -20,6 +20,7 @@ import 'package:nc_photos/controller/collection_items_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/download_handler.dart';
@@ -121,6 +122,7 @@ class CollectionBrowser extends StatelessWidget {
             prefController: context.read(),
             collectionsController: accountController.collectionsController,
             filesController: accountController.filesController,
+            serverController: accountController.serverController,
             db: context.read(),
             collection: collection,
             dateHeight: AppDimension.of(context).timelineDateItemHeight,

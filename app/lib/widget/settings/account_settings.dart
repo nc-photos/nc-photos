@@ -112,6 +112,7 @@ class _WrappedAccountSettingsState extends State<_WrappedAccountSettings>
         filesController: _accountController.filesController,
         personsController: _accountController.personsController,
         personProvider: _bloc.state.personProvider,
+        serverController: _accountController.serverController,
       );
     }
     _animationController.dispose();
