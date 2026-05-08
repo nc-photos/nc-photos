@@ -71,6 +71,13 @@ extension _$ApiOcsNcPhotosServerRecognizeApiKeyNpLog
   static final log = Logger("src.api.ApiOcsNcPhotosServerRecognizeApiKey");
 }
 
+extension _$ApiOcsNcPhotosServerHealthNpLog on ApiOcsNcPhotosServerHealth {
+  // ignore: unused_element
+  Logger get _log => log;
+
+  static final log = Logger("src.api.ApiOcsNcPhotosServerHealth");
+}
+
 extension _$ApiPhotosAlbumsNpLog on ApiPhotosAlbums {
   // ignore: unused_element
   Logger get _log => log;

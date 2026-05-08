@@ -6,6 +6,8 @@ class ApiOcsNcPhotosServer {
   ApiOcsNcPhotosServerRecognizeApiKey recognizeApiKey() =>
       ApiOcsNcPhotosServerRecognizeApiKey(this);
 
+  ApiOcsNcPhotosServerHealth health() => ApiOcsNcPhotosServerHealth(this);
+
   final ApiOcs ocs;
 }
 
@@ -20,6 +22,26 @@ class ApiOcsNcPhotosServerRecognizeApiKey {
         "ocs/v2.php/apps/nc_photos_server/api/recognize_api_key",
         header: {"OCS-APIRequest": "true"},
         queryParameters: {"format": "json"},
+      );
+    } catch (e) {
+      _log.severe("[get] Failed while get", e);
+      rethrow;
+    }
+  }
+
+  final ApiOcsNcPhotosServer ncPhotosServer;
+}
+
+@npLog
+class ApiOcsNcPhotosServerHealth {
+  ApiOcsNcPhotosServerHealth(this.ncPhotosServer);
+
+  Future<Response> get() async {
+    try {
+      return await ncPhotosServer.ocs._api.request(
+        "GET",
+        "ocs/v2.php/apps/nc_photos_server/api/health",
+        header: {"OCS-APIRequest": "true"},
       );
     } catch (e) {
       _log.severe("[get] Failed while get", e);
