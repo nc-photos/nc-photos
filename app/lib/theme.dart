@@ -215,6 +215,9 @@ ThemeData _applyColorScheme(ColorScheme colorScheme) {
     progressIndicatorTheme: ProgressIndicatorThemeData(
       color: colorScheme.secondary,
     ),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {TargetPlatform.android: FadeForwardsPageTransitionsBuilder()},
+    ),
     extensions: [
       M3(
         checkbox: M3Checkbox(
