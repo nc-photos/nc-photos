@@ -11,16 +11,25 @@ class _AppBar extends StatelessWidget {
           previous.items != current.items ||
           previous.collection != current.collection,
       builder: (context, state) {
-        final adapter = CollectionAdapter.of(
+        final permittedWorker = CollectionWorkerFactory.isPermitted(
           c,
           context.bloc.account,
           state.collection,
         );
-        final canRename = adapter.isPermitted(CollectionCapability.rename);
-        final canManualCover = adapter.isPermitted(
+        final canRename = permittedWorker.isPermitted(
+          CollectionCapability.rename,
+        );
+        final canManualCover = permittedWorker.isPermitted(
           CollectionCapability.manualCover,
         );
-        final canShare = adapter.isPermitted(CollectionCapability.share);
+        final canShare = permittedWorker.isPermitted(
+          CollectionCapability.share,
+        );
+        final manualCoverWorker = CollectionWorkerFactory.isManualCover(
+          c,
+          context.bloc.account,
+          state.collection,
+        );
         return SafeArea(
           child: Container(
             height: kToolbarHeight,
@@ -68,7 +77,7 @@ class _AppBar extends StatelessWidget {
                           value: _MenuOption.edit,
                           child: Text(L10n.global().editTooltip),
                         ),
-                      if (canManualCover && adapter.isManualCover())
+                      if (canManualCover && manualCoverWorker.isManualCover())
                         PopupMenuItem(
                           value: _MenuOption.unsetCover,
                           child: Text(L10n.global().unsetAlbumCoverTooltip),
@@ -85,11 +94,9 @@ class _AppBar extends StatelessWidget {
                       ],
                       if (state.collection.contentProvider
                               is CollectionAlbumProvider &&
-                          CollectionAdapter.of(
-                            c,
-                            context.bloc.account,
-                            state.collection,
-                          ).isPermitted(CollectionCapability.share))
+                          permittedWorker.isPermitted(
+                            CollectionCapability.share,
+                          ))
                         PopupMenuItem(
                           value: _MenuOption.albumFixShare,
                           child: Text(L10n.global().fixSharesTooltip),
@@ -369,7 +376,7 @@ class _EditAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final capabilitiesAdapter = CollectionAdapter.of(
+    final permittedWorker = CollectionWorkerFactory.isPermitted(
       KiwiContainer().resolve<DiContainer>(),
       context.read<_Bloc>().account,
       context.read<_Bloc>().state.collection,
@@ -401,7 +408,7 @@ class _EditAppBar extends StatelessWidget {
         },
       ),
       actions: [
-        if (capabilitiesAdapter.isPermitted(CollectionCapability.labelItem))
+        if (permittedWorker.isPermitted(CollectionCapability.labelItem))
           IconButton(
             icon: const Icon(Icons.text_fields_outlined),
             tooltip: L10n.global().albumAddTextTooltip,
@@ -409,7 +416,7 @@ class _EditAppBar extends StatelessWidget {
               context.addEvent(const _RequestAddLabel());
             },
           ),
-        if (capabilitiesAdapter.isPermitted(CollectionCapability.mapItem))
+        if (permittedWorker.isPermitted(CollectionCapability.mapItem))
           _BlocSelector(
             selector: (state) => state.isAddMapBusy,
             builder: (context, isAddMapBusy) => isAddMapBusy
@@ -425,7 +432,7 @@ class _EditAppBar extends StatelessWidget {
                     },
                   ),
           ),
-        if (capabilitiesAdapter.isPermitted(CollectionCapability.sort))
+        if (permittedWorker.isPermitted(CollectionCapability.sort))
           IconButton(
             icon: const Icon(Icons.sort_by_alpha_outlined),
             tooltip: L10n.global().sortTooltip,

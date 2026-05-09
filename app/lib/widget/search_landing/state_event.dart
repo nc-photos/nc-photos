@@ -75,3 +75,14 @@ class _TransformPlaceItems implements _Event {
 
   final LocationGroupResult places;
 }
+
+@toString
+class _SetError implements _Event {
+  const _SetError(this.error, [this.stackTrace]);
+
+  @override
+  String toString() => _$toString();
+
+  final Object error;
+  final StackTrace? stackTrace;
+}

@@ -2937,6 +2937,24 @@ abstract class AppLocalizations {
   /// **'Good evening, {user}'**
   String greetingsNight(Object user);
 
+  /// No description provided for @recognizeInstructionDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Setup required for Recognize integration'**
+  String get recognizeInstructionDialogTitle;
+
+  /// No description provided for @recognizeInstructionDialogContent.
+  ///
+  /// In en, this message translates to:
+  /// **'Since Nextcloud 33, a server-side app is required to support Recognize.'**
+  String get recognizeInstructionDialogContent;
+
+  /// No description provided for @recognizeInstructionDialogButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Open Guide'**
+  String get recognizeInstructionDialogButton;
+
   /// Error message when server responds with HTTP401
   ///
   /// In en, this message translates to:

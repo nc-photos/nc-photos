@@ -543,7 +543,10 @@ class _HomeSearchState extends State<HomeSearch>
 
   bool _isShowLanding(SearchBlocState state) => state is SearchBlocInit;
 
-  late final _bloc = SearchBloc(KiwiContainer().resolve<DiContainer>());
+  late final _bloc = SearchBloc(
+    KiwiContainer().resolve<DiContainer>(),
+    serverController: context.read<AccountController>().serverController,
+  );
 
   final _formKey = GlobalKey<FormState>();
   _FormValue? _formValue;

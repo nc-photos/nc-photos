@@ -1676,5 +1676,8 @@
 	"errorServerNoCert": "サーバー証明書が正しく設定されていません。暗号化されていないHTTPで接続しますか？",
 	"@errorServerNoCert": {
 		"description": "No cert to establish HTTPS connection"
-	}
+	},
+	"recognizeInstructionDialogTitle": "Recognize連携の設定",
+	"recognizeInstructionDialogContent": "Nextcloud 33以降でRecognizeアプリと連携するには、サーバーアプリをインストール必要があります。",
+	"recognizeInstructionDialogButton": "手順へ"
 }

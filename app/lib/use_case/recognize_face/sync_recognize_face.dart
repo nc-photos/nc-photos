@@ -18,11 +18,14 @@ class SyncRecognizeFace {
   /// Sync people in cache db with remote server
   ///
   /// Return if any people were updated
-  Future<bool> call(Account account) async {
+  Future<bool> call(Account account, {required bool shouldUseApiKey}) async {
     _log.info("[call] Sync people with remote");
     final List<RecognizeFace> remote;
     try {
-      remote = await ListRecognizeFace(_c.withRemoteRepo())(account).last;
+      remote = await ListRecognizeFace(_c.withRemoteRepo())(
+        account,
+        shouldUseApiKey: shouldUseApiKey,
+      ).last;
     } catch (e) {
       if (e is ApiException && e.response.statusCode == 404) {
         // recognize app probably not installed, ignore
@@ -31,7 +34,11 @@ class SyncRecognizeFace {
       }
       rethrow;
     }
-    final remoteItems = await _getFaceItems(account, remote);
+    final remoteItems = await _getFaceItems(
+      account,
+      remote,
+      shouldUseApiKey: shouldUseApiKey,
+    );
     return _c.npDb.syncRecognizeFacesAndItems(
       account: account.toDb(),
       data: remoteItems.map(
@@ -45,13 +52,15 @@ class SyncRecognizeFace {
 
   Future<Map<RecognizeFace, List<RecognizeFaceItem>>> _getFaceItems(
     Account account,
-    List<RecognizeFace> faces,
-  ) async {
+    List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
+  }) async {
     Object? firstError;
     StackTrace? firstStackTrace;
     final remote = await ListMultipleRecognizeFaceItem(_c.withRemoteRepo())(
       account,
       faces,
+      shouldUseApiKey: shouldUseApiKey,
       onError: (f, e, stackTrace) {
         _log.severe(
           "[_getFaceItems] Failed while listing remote face: $f",

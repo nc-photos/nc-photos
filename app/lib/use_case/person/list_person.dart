@@ -16,7 +16,11 @@ part 'list_person.g.dart';
 class ListPerson {
   const ListPerson(this._c);
 
-  Stream<List<Person>> call(Account account, PersonProvider provider) async* {
+  Stream<List<Person>> call(
+    Account account,
+    PersonProvider provider, {
+    required bool shouldUseRecognizeApiKey,
+  }) async* {
     _log.info("[call] Current provider: $provider");
     switch (provider) {
       case PersonProvider.none:
@@ -25,7 +29,10 @@ class ListPerson {
         yield* _withFaceRecognition(account);
         break;
       case PersonProvider.recognize:
-        yield* _withRecognize(account);
+        yield* _withRecognize(
+          account,
+          shouldUseApiKey: shouldUseRecognizeApiKey,
+        );
         break;
     }
   }
@@ -47,12 +54,19 @@ class ListPerson {
     }
   }
 
-  Stream<List<Person>> _withRecognize(Account account) async* {
+  Stream<List<Person>> _withRecognize(
+    Account account, {
+    required bool shouldUseApiKey,
+  }) async* {
     try {
-      await for (final faces in ListRecognizeFace(_c)(account)) {
+      await for (final faces in ListRecognizeFace(_c)(
+        account,
+        shouldUseApiKey: shouldUseApiKey,
+      )) {
         final itemStream = ListMultipleRecognizeFaceItem(_c)(
           account,
           faces,
+          shouldUseApiKey: shouldUseApiKey,
           onError: (value, e, stackTrace) {
             _log.severe(
               "[_withRecognize] Failed while ListRecognizeFace for $value",

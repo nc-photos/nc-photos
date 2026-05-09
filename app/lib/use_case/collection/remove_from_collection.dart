@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:np_common/type.dart';
 
@@ -16,7 +16,11 @@ class RemoveFromCollection {
     ErrorWithValueIndexedHandler<CollectionItem>? onError,
     required ValueChanged<Collection> onCollectionUpdated,
   }) {
-    return CollectionAdapter.of(_c, account, collection).removeItems(
+    return CollectionWorkerFactory.removeItems(
+      _c,
+      account,
+      collection,
+    ).removeItems(
       items,
       onError: onError,
       onCollectionUpdated: onCollectionUpdated,

@@ -20,13 +20,14 @@ import 'package:nc_photos/controller/collection_items_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/db/entity_converter.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/download_handler.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection/content_provider/album.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/new_item.dart';
 import 'package:nc_photos/entity/collection_item/sorter.dart';
@@ -121,6 +122,7 @@ class CollectionBrowser extends StatelessWidget {
             prefController: context.read(),
             collectionsController: accountController.collectionsController,
             filesController: accountController.filesController,
+            serverController: accountController.serverController,
             db: context.read(),
             collection: collection,
             dateHeight: AppDimension.of(context).timelineDateItemHeight,
@@ -225,7 +227,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                 listener: (context, state) {
                   final c = KiwiContainer().resolve<DiContainer>();
                   final bloc = context.read<_Bloc>();
-                  final canSort = CollectionAdapter.of(
+                  final canSort = CollectionWorkerFactory.isPermitted(
                     c,
                     bloc.account,
                     state.collection,

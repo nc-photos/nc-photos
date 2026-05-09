@@ -8,8 +8,15 @@ class ListRecognizeFaceItem {
   const ListRecognizeFaceItem(this._c);
 
   /// List all [RecognizeFaceItem]s belonging to [face]
-  Stream<List<RecognizeFaceItem>> call(Account account, RecognizeFace face) =>
-      _c.recognizeFaceRepo.getItems(account, face);
+  Stream<List<RecognizeFaceItem>> call(
+    Account account,
+    RecognizeFace face, {
+    required bool shouldUseApiKey,
+  }) => _c.recognizeFaceRepo.getItems(
+    account,
+    face,
+    shouldUseApiKey: shouldUseApiKey,
+  );
 
   final DiContainer _c;
 }
@@ -21,9 +28,14 @@ class ListMultipleRecognizeFaceItem {
   Stream<Map<RecognizeFace, List<RecognizeFaceItem>>> call(
     Account account,
     List<RecognizeFace> faces, {
+    required bool shouldUseApiKey,
     ErrorWithValueHandler<RecognizeFace>? onError,
-  }) =>
-      _c.recognizeFaceRepo.getMultiFaceItems(account, faces, onError: onError);
+  }) => _c.recognizeFaceRepo.getMultiFaceItems(
+    account,
+    faces,
+    shouldUseApiKey: shouldUseApiKey,
+    onError: onError,
+  );
 
   final DiContainer _c;
 }

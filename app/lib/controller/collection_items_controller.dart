@@ -7,10 +7,11 @@ import 'package:logging/logging.dart';
 import 'package:mutex/mutex.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/files_controller.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/debug_util.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/new_item.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -45,6 +46,7 @@ class CollectionItemsController {
   CollectionItemsController(
     this._c, {
     required this.filesController,
+    required this.serverController,
     required this.account,
     required this.collection,
     required this.onCollectionUpdated,
@@ -167,7 +169,7 @@ class CollectionItemsController {
         finalize = (await finalize.asyncMap((e) async {
           try {
             if (e is NewCollectionFileItem) {
-              return await CollectionAdapter.of(
+              return await CollectionWorkerFactory.adaptToNewItem(
                 _c,
                 account,
                 collection,
@@ -316,7 +318,13 @@ class CollectionItemsController {
       List<CollectionItem>? items;
       ExceptionEvent? originalException;
       try {
-        await for (final r in ListCollectionItem(_c)(account, collection)) {
+        await for (final r in ListCollectionItem(_c)(
+          account,
+          collection,
+          shouldUseRecognizeApiKey: serverController.isSupported(
+            ServerFeature.recognizeApiKey,
+          ),
+        )) {
           items = r;
           _dataStreamController.add(
             CollectionItemStreamData(items: r, hasNext: true),
@@ -336,6 +344,9 @@ class CollectionItemsController {
           await for (final r in ListCollectionItem(_c.withLocalRepo())(
             account,
             collection,
+            shouldUseRecognizeApiKey: serverController.isSupported(
+              ServerFeature.recognizeApiKey,
+            ),
           )) {
             items = r;
             _dataStreamController.add(
@@ -408,6 +419,7 @@ class CollectionItemsController {
 
   final DiContainer _c;
   final FilesController filesController;
+  final ServerController serverController;
   final Account account;
   Collection collection;
   ValueChanged<Collection> onCollectionUpdated;

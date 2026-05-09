@@ -921,6 +921,7 @@ class _Bloc extends Bloc<_Event, _State>
             filesController: filesController,
             personsController: personsController,
             personProvider: accountPrefController.personProviderValue,
+            serverController: serverController,
           );
           metadataController.kickstart();
           _log.info(

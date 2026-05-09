@@ -17,7 +17,11 @@ class SyncPerson {
   /// Sync people in cache db with remote server
   ///
   /// Return if any people were updated
-  Future<bool> call(Account account, PersonProvider provider) async {
+  Future<bool> call(
+    Account account,
+    PersonProvider provider, {
+    required bool shouldUseRecognizeApiKey,
+  }) async {
     _log.info("[call] Current provider: $provider");
     switch (provider) {
       case PersonProvider.none:
@@ -25,15 +29,20 @@ class SyncPerson {
       case PersonProvider.faceRecognition:
         return _withFaceRecognition(account);
       case PersonProvider.recognize:
-        return _withRecognize(account);
+        return _withRecognize(
+          account,
+          shouldUseApiKey: shouldUseRecognizeApiKey,
+        );
     }
   }
 
   Future<bool> _withFaceRecognition(Account account) =>
       SyncFaceRecognitionPerson(_c)(account);
 
-  Future<bool> _withRecognize(Account account) =>
-      SyncRecognizeFace(_c)(account);
+  Future<bool> _withRecognize(
+    Account account, {
+    required bool shouldUseApiKey,
+  }) => SyncRecognizeFace(_c)(account, shouldUseApiKey: shouldUseApiKey);
 
   final DiContainer _c;
 }

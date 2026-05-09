@@ -66,7 +66,7 @@ class _Bloc extends Bloc<_Event, _State>
   List<_Item> _transformCollections(List<Collection> collections) {
     final sorted = collections
         .where(
-          (c) => CollectionAdapter.of(
+          (c) => CollectionWorkerFactory.isPermitted(
             KiwiContainer().resolve<DiContainer>(),
             account,
             c,

@@ -80,13 +80,24 @@ class SearchFavoriteFilter implements SearchFilter {
 class SearchRepo {
   const SearchRepo(this.dataSrc);
 
-  Future<List<FileDescriptor>> list(Account account, SearchCriteria criteria) =>
-      dataSrc.list(account, criteria);
+  Future<List<FileDescriptor>> list(
+    Account account,
+    SearchCriteria criteria, {
+    required bool shouldUseRecognizeApiKey,
+  }) => dataSrc.list(
+    account,
+    criteria,
+    shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+  );
 
   final SearchDataSource dataSrc;
 }
 
 abstract class SearchDataSource {
   /// List all results from a given search criteria
-  Future<List<FileDescriptor>> list(Account account, SearchCriteria criteria);
+  Future<List<FileDescriptor>> list(
+    Account account,
+    SearchCriteria criteria, {
+    required bool shouldUseRecognizeApiKey,
+  });
 }

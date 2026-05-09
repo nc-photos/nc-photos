@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -96,7 +97,7 @@ class SearchBlocInconsistent extends SearchBlocState {
 
 @npLog
 class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
-  SearchBloc(this._c)
+  SearchBloc(this._c, {required this.serverController})
     : assert(require(_c)),
       assert(Search.require(_c)),
       super(SearchBlocInit()) {
@@ -199,8 +200,13 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
     }
   }
 
-  Future<List<FileDescriptor>> _query(SearchBlocQuery ev) =>
-      Search(_c)(ev.account, ev.criteria);
+  Future<List<FileDescriptor>> _query(SearchBlocQuery ev) => Search(_c)(
+    ev.account,
+    ev.criteria,
+    shouldUseRecognizeApiKey: serverController.isSupported(
+      ServerFeature.recognizeApiKey,
+    ),
+  );
 
   bool _isFileOfInterest(FileDescriptor file) {
     if (!file_util.isSupportedFormat(file)) {
@@ -217,6 +223,7 @@ class SearchBloc extends Bloc<SearchBlocEvent, SearchBlocState> {
   }
 
   final DiContainer _c;
+  final ServerController serverController;
 
   late final _fileRemovedEventListener = AppEventListener<FileRemovedEvent>(
     _onFileRemovedEvent,

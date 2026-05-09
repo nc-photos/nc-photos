@@ -17,7 +17,7 @@ import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/image_location/image_location.dart';

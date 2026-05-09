@@ -8,10 +8,10 @@ import 'package:nc_photos/entity/album/cover_provider.dart';
 import 'package:nc_photos/entity/album/item.dart';
 import 'package:nc_photos/entity/album/provider.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection/builder.dart';
 import 'package:nc_photos/entity/collection/content_provider/album.dart';
 import 'package:nc_photos/entity/collection/util.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:nc_photos/entity/collection_item.dart';
 import 'package:nc_photos/entity/collection_item/album_item_adapter.dart';
 import 'package:nc_photos/entity/collection_item/new_item.dart';
@@ -19,7 +19,6 @@ import 'package:nc_photos/entity/collection_item/util.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/sharee.dart';
-import 'package:nc_photos/object_extension.dart';
 import 'package:nc_photos/use_case/album/add_file_to_album.dart';
 import 'package:nc_photos/use_case/album/edit_album.dart';
 import 'package:nc_photos/use_case/album/remove_album.dart';
@@ -31,6 +30,7 @@ import 'package:nc_photos/use_case/preprocess_album.dart';
 import 'package:nc_photos/use_case/unimport_shared_album.dart';
 import 'package:nc_photos/use_case/update_album_with_actual_items.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/type.dart';
 import 'package:np_log/np_log.dart';
@@ -39,12 +39,9 @@ import 'package:np_string/np_string.dart';
 part 'album.g.dart';
 
 @npLog
-class CollectionAlbumAdapter implements CollectionAdapter {
-  CollectionAlbumAdapter(this._c, this.account, this.collection)
-    : assert(require(_c)),
-      _provider = collection.contentProvider as CollectionAlbumProvider;
-
-  static bool require(DiContainer c) => PreProcessAlbum.require(c);
+class CollectionAlbumListItemWorker implements CollectionListItemWorker {
+  CollectionAlbumListItemWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Stream<List<CollectionItem>> listItem() async* {
@@ -62,6 +59,17 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       }
     }).toList();
   }
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumAddFilesWorker implements CollectionAddFilesWorker {
+  CollectionAlbumAddFilesWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Future<int> addFiles(
@@ -85,6 +93,18 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     }
   }
 
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+@npLog
+class CollectionAlbumEditWorker implements CollectionEditWorker {
+  CollectionAlbumEditWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
+
   @override
   Future<Collection> edit({
     String? name,
@@ -94,13 +114,12 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     List<CollectionItem>? knownItems,
   }) async {
     assert(name != null || items != null || itemSort != null || cover != null);
-    final newItems = items?.run(
+    final newItems = items?.let(
       (items) => items
           .map((e) {
             if (e is AlbumAdaptedCollectionItem) {
               return e.albumItem;
             } else if (e is NewCollectionLabelItem) {
-              // new labels
               return AlbumLabelItem(
                 addedBy: account.userId,
                 addedAt: e.createdAt,
@@ -137,6 +156,18 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       contentProvider: _provider.copyWith(album: newAlbum),
     );
   }
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+@npLog
+class CollectionAlbumRemoveItemsWorker implements CollectionRemoveItemsWorker {
+  CollectionAlbumRemoveItemsWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Future<int> removeItems(
@@ -195,6 +226,18 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     }
   }
 
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+@npLog
+class CollectionAlbumShareWorker implements CollectionShareWorker {
+  CollectionAlbumShareWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
+
   @override
   Future<CollectionShareResult> share(
     Sharee sharee, {
@@ -219,6 +262,18 @@ class CollectionAlbumAdapter implements CollectionAdapter {
         ? CollectionShareResult.partial
         : CollectionShareResult.ok;
   }
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+@npLog
+class CollectionAlbumUnshareWorker implements CollectionUnshareWorker {
+  CollectionAlbumUnshareWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Future<CollectionShareResult> unshare(
@@ -245,6 +300,21 @@ class CollectionAlbumAdapter implements CollectionAdapter {
         : CollectionShareResult.ok;
   }
 
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumImportPendingSharedWorker
+    implements CollectionImportPendingSharedWorker {
+  CollectionAlbumImportPendingSharedWorker(
+    this._c,
+    this.account,
+    this.collection,
+  ) : _provider = collection.contentProvider as CollectionAlbumProvider;
+
   @override
   Future<Collection> importPendingShared() async {
     final newAlbum = await ImportPendingSharedAlbum(_c)(
@@ -253,6 +323,18 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     );
     return CollectionBuilder.byAlbum(account, newAlbum);
   }
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumAdaptToNewItemWorker
+    implements CollectionAdaptToNewItemWorker {
+  CollectionAlbumAdaptToNewItemWorker(this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Future<CollectionItem> adaptToNewItem(NewCollectionItem original) async {
@@ -284,6 +366,16 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     }
   }
 
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumIsItemRemovableWorker
+    implements CollectionIsItemRemovableWorker {
+  CollectionAlbumIsItemRemovableWorker(this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
+
   @override
   bool isItemRemovable(CollectionItem item) {
     if (_provider.album.provider is! AlbumStaticProvider) {
@@ -299,8 +391,35 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     return item.albumItem.addedBy == account.userId;
   }
 
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+
+  static final _log = Logger(
+    "entity.collection.worker.album.CollectionAlbumIsItemRemovableWorker",
+  );
+}
+
+class CollectionAlbumIsItemDeletableWorker
+    implements CollectionIsItemDeletableWorker {
+  CollectionAlbumIsItemDeletableWorker(this.account, this.collection)
+    : _delegate = CollectionAlbumIsItemRemovableWorker(account, collection);
+
   @override
-  bool isItemDeletable(CollectionItem item) => isItemRemovable(item);
+  bool isItemDeletable(CollectionItem item) {
+    return _delegate.isItemRemovable(item);
+  }
+
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumIsItemRemovableWorker _delegate;
+}
+
+class CollectionAlbumRemoveWorker implements CollectionRemoveWorker {
+  CollectionAlbumRemoveWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Future<void> remove() {
@@ -310,6 +429,17 @@ class CollectionAlbumAdapter implements CollectionAdapter {
       return UnimportSharedAlbum(_c)(account, _provider.album);
     }
   }
+
+  final DiContainer _c;
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumIsPermittedWorker implements CollectionIsPermittedWorker {
+  CollectionAlbumIsPermittedWorker(this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   bool isPermitted(CollectionCapability capability) {
@@ -323,9 +453,30 @@ class CollectionAlbumAdapter implements CollectionAdapter {
     }
   }
 
+  final Account account;
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumIsManualCoverWorker
+    implements CollectionIsManualCoverWorker {
+  CollectionAlbumIsManualCoverWorker(this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
+
   @override
   bool isManualCover() =>
       _provider.album.coverProvider is AlbumManualCoverProvider;
+
+  final Collection collection;
+
+  final CollectionAlbumProvider _provider;
+}
+
+class CollectionAlbumUpdatePostLoadWorker
+    implements CollectionUpdatePostLoadWorker {
+  CollectionAlbumUpdatePostLoadWorker(this._c, this.account, this.collection)
+    : _provider = collection.contentProvider as CollectionAlbumProvider;
 
   @override
   Future<Collection?> updatePostLoad(List<CollectionItem> items) async {

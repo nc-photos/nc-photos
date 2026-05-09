@@ -1584,6 +1584,17 @@ class AppLocalizationsZh extends AppLocalizations {
   }
 
   @override
+  String get recognizeInstructionDialogTitle =>
+      'Setup required for Recognize integration';
+
+  @override
+  String get recognizeInstructionDialogContent =>
+      'Since Nextcloud 33, a server-side app is required to support Recognize.';
+
+  @override
+  String get recognizeInstructionDialogButton => 'Open Guide';
+
+  @override
   String get errorUnauthenticated => '未授权的存取，若问题持续请重新登录';
 
   @override

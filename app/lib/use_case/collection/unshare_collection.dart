@@ -2,8 +2,8 @@ import 'package:flutter/foundation.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
 import 'package:nc_photos/entity/collection/util.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:np_string/np_string.dart';
 
 class UnshareCollection {
@@ -15,7 +15,7 @@ class UnshareCollection {
     Collection collection,
     CiString userId, {
     required ValueChanged<Collection> onCollectionUpdated,
-  }) => CollectionAdapter.of(
+  }) => CollectionWorkerFactory.unshare(
     _c,
     account,
     collection,

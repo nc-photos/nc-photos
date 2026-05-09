@@ -2,7 +2,7 @@ import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/collection.dart';
-import 'package:nc_photos/entity/collection/adapter.dart';
+import 'package:nc_photos/entity/collection/worker/factory.dart';
 import 'package:np_common/type.dart';
 import 'package:np_log/np_log.dart';
 
@@ -26,10 +26,11 @@ class RemoveCollections {
     var failed = 0;
     final futures = Future.wait(
       collections.map((c) {
-        return CollectionAdapter.of(_c, account, c).remove().catchError((
-          e,
-          stackTrace,
-        ) {
+        return CollectionWorkerFactory.remove(
+          _c,
+          account,
+          c,
+        ).remove().catchError((e, stackTrace) {
           ++failed;
           onError?.call(c, e, stackTrace);
         });

@@ -215,6 +215,47 @@ class NcAlbumItem with EquatableMixin {
 }
 
 @toString
+class NcPhotosServerHealth with EquatableMixin {
+  const NcPhotosServerHealth({
+    required this.version,
+    required this.recognizeOk,
+  });
+
+  factory NcPhotosServerHealth.fromJson(JsonObj json) {
+    return NcPhotosServerHealth(
+      version: json["version"],
+      recognizeOk: json["recognizeOk"],
+    );
+  }
+
+  @override
+  String toString() => _$toString();
+
+  @override
+  List<Object?> get props => [version, recognizeOk];
+
+  final int version;
+  final bool recognizeOk;
+}
+
+@toString
+class RecognizeApiKey with EquatableMixin {
+  const RecognizeApiKey({required this.apiKey});
+
+  factory RecognizeApiKey.fromJson(JsonObj json) {
+    return RecognizeApiKey(apiKey: json["apiKey"]);
+  }
+
+  @override
+  String toString() => _$toString();
+
+  @override
+  List<Object?> get props => [apiKey];
+
+  final String apiKey;
+}
+
+@toString
 class RecognizeFace with EquatableMixin {
   const RecognizeFace({required this.href});
 

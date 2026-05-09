@@ -114,15 +114,24 @@ class _Bloc extends Bloc<_Event, _State> {
 
   Future<void> _initCapability(_Emitter emit) async {
     final capability = AnyFileWorkerFactory.capability(file);
-    final collectionAdapter = fromCollection?.let(
-      (e) => CollectionAdapter.of(c, account, e.collection),
-    );
-
     var canRemoveFromAlbum =
-        collectionAdapter?.isItemRemovable(fromCollection!.item) ?? false;
+        fromCollection?.let(
+          (e) => CollectionWorkerFactory.isItemRemovable(
+            c,
+            account,
+            e.collection,
+          ).isItemRemovable(e.item),
+        ) ??
+        false;
 
     var canSetCover =
-        collectionAdapter?.isPermitted(CollectionCapability.manualCover) ??
+        fromCollection?.let(
+          (e) => CollectionWorkerFactory.isPermitted(
+            c,
+            account,
+            e.collection,
+          ).isPermitted(CollectionCapability.manualCover),
+        ) ??
         false;
     if (canSetCover) {
       canSetCover = switch (file.provider) {
@@ -136,10 +145,18 @@ class _Bloc extends Bloc<_Event, _State> {
     );
 
     var canDelete = capability.isPermitted(AnyFileCapability.delete);
-    if (canDelete && collectionAdapter != null) {
+    if (canDelete && fromCollection != null) {
       canDelete =
-          collectionAdapter.isPermitted(CollectionCapability.deleteItem) &&
-          collectionAdapter.isItemDeletable(fromCollection!.item);
+          CollectionWorkerFactory.isPermitted(
+            c,
+            account,
+            fromCollection!.collection,
+          ).isPermitted(CollectionCapability.deleteItem) &&
+          CollectionWorkerFactory.isItemDeletable(
+            c,
+            account,
+            fromCollection!.collection,
+          ).isItemDeletable(fromCollection!.item);
     }
 
     emit(

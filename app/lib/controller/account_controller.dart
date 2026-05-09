@@ -79,10 +79,10 @@ class AccountController {
         KiwiContainer().resolve<DiContainer>(),
         account: _account!,
         accountPrefController: accountPrefController,
+        serverController: serverController,
       );
 
-  SyncController get syncController =>
-      _syncController ??= SyncController(account: _account!);
+  SyncController get syncController => _syncController ??= SyncController();
 
   SessionController get sessionController =>
       _sessionController ??= SessionController();

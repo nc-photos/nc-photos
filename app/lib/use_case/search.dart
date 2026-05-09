@@ -11,9 +11,14 @@ class Search {
 
   Future<List<FileDescriptor>> call(
     Account account,
-    SearchCriteria criteria,
-  ) async {
-    final files = await _c.searchRepo.list(account, criteria);
+    SearchCriteria criteria, {
+    required bool shouldUseRecognizeApiKey,
+  }) async {
+    final files = await _c.searchRepo.list(
+      account,
+      criteria,
+      shouldUseRecognizeApiKey: shouldUseRecognizeApiKey,
+    );
     return files.where((f) => file_util.isSupportedFormat(f)).toList();
   }
 

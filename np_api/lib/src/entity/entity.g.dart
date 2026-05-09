@@ -55,6 +55,20 @@ extension _$NcAlbumItemToString on NcAlbumItem {
   }
 }
 
+extension _$NcPhotosServerHealthToString on NcPhotosServerHealth {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "NcPhotosServerHealth {version: $version, recognizeOk: $recognizeOk}";
+  }
+}
+
+extension _$RecognizeApiKeyToString on RecognizeApiKey {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "RecognizeApiKey {apiKey: $apiKey}";
+  }
+}
+
 extension _$RecognizeFaceToString on RecognizeFace {
   String _$toString() {
     // ignore: unnecessary_string_interpolations

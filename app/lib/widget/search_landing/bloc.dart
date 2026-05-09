@@ -7,12 +7,15 @@ class _Bloc extends Bloc<_Event, _State>
     required this.account,
     required this.personsController,
     required this.placesController,
+    required this.accountPrefController,
+    required this.serverController,
     required this.locale,
   }) : super(_State.init()) {
     on<_LoadPersons>(_onLoadPersons);
     on<_TransformPersonItems>(_onTransformPersonItems);
     on<_LoadPlaces>(_onLoadPlaces);
     on<_TransformPlaceItems>(_onTransformPlaceItems);
+    on<_SetError>(_onSetError);
   }
 
   @override
@@ -20,6 +23,22 @@ class _Bloc extends Bloc<_Event, _State>
 
   Future<void> _onLoadPersons(_LoadPersons ev, Emitter<_State> emit) {
     _log.info(ev);
+    CheckPersonSupport(
+      account: account,
+      accountPrefController: accountPrefController,
+      serverController: serverController,
+    ).check().then((e) {
+      if (!isClosed) {
+        switch (e) {
+          case CheckPersonSupportResult.ok:
+          case CheckPersonSupportResult.noop:
+            break;
+          case CheckPersonSupportResult.noServerApp:
+            add(const _SetError(ServerAppNotInstalledError()));
+            break;
+        }
+      }
+    });
     return Future.wait([
       forEach(
         emit,
@@ -92,8 +111,15 @@ class _Bloc extends Bloc<_Event, _State>
     emit(state.copyWith(transformedPlaceItems: transformed));
   }
 
+  void _onSetError(_SetError ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(error: ExceptionEvent(ev.error)));
+  }
+
   final Account account;
   final PersonsController personsController;
   final PlacesController placesController;
+  final AccountPrefController accountPrefController;
+  final ServerController serverController;
   final Locale locale;
 }

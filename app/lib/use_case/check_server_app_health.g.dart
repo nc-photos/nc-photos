@@ -1,16 +1,16 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'nc_album.dart';
+part of 'check_server_app_health.dart';
 
 // **************************************************************************
 // NpLogGenerator
 // **************************************************************************
 
-extension _$CollectionNcAlbumAdapterNpLog on CollectionNcAlbumAdapter {
+extension _$CheckServerAppHealthNpLog on CheckServerAppHealth {
   // ignore: unused_element
   Logger get _log => log;
 
   static final log = Logger(
-    "entity.collection.adapter.nc_album.CollectionNcAlbumAdapter",
+    "use_case.check_server_app_health.CheckServerAppHealth",
   );
 }

@@ -9,6 +9,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.prefController,
     required this.collectionsController,
     required this.filesController,
+    required this.serverController,
     required this.db,
     required Collection collection,
     required this.dateHeight,
@@ -138,7 +139,7 @@ class _Bloc extends Bloc<_Event, _State>
   }
 
   bool isCollectionCapabilityPermitted(CollectionCapability capability) {
-    return CollectionAdapter.of(
+    return CollectionWorkerFactory.isPermitted(
       _c,
       account,
       state.collection,
@@ -493,18 +494,27 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetSelectedItems(_SetSelectedItems ev, Emitter<_State> emit) {
     _log.info(ev);
-    final adapter = CollectionAdapter.of(_c, account, state.collection);
+    final itemRemovableWorker = CollectionWorkerFactory.isItemRemovable(
+      _c,
+      account,
+      state.collection,
+    );
+    final itemDeletableWorker = CollectionWorkerFactory.isItemDeletable(
+      _c,
+      account,
+      state.collection,
+    );
     emit(
       state.copyWith(
         selectedItems: ev.items,
         isSelectionRemovable: ev.items
             .whereType<_ActualItem>()
             .map((e) => e.original)
-            .any(adapter.isItemRemovable),
+            .any(itemRemovableWorker.isItemRemovable),
         isSelectionDeletable: ev.items
             .whereType<_ActualItem>()
             .map((e) => e.original)
-            .any(adapter.isItemDeletable),
+            .any(itemDeletableWorker.isItemDeletable),
       ),
     );
   }
@@ -554,11 +564,15 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final adapter = CollectionAdapter.of(_c, account, state.collection);
+    final itemRemovableWorker = CollectionWorkerFactory.isItemRemovable(
+      _c,
+      account,
+      state.collection,
+    );
     final selectedItems = selected
         .whereType<_ActualItem>()
         .map((e) => e.original)
-        .where(adapter.isItemRemovable)
+        .where(itemRemovableWorker.isItemRemovable)
         .toList();
     if (selectedItems.isNotEmpty) {
       unawaited(itemsController.removeItems(selectedItems));
@@ -589,15 +603,24 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     final selected = state.selectedItems;
     _clearSelection(emit);
-    final adapter = CollectionAdapter.of(_c, account, state.collection);
+    final itemRemovableWorker = CollectionWorkerFactory.isItemRemovable(
+      _c,
+      account,
+      state.collection,
+    );
+    final itemDeletableWorker = CollectionWorkerFactory.isItemDeletable(
+      _c,
+      account,
+      state.collection,
+    );
     final selectedItems = selected
         .whereType<_ActualItem>()
         .map((e) => e.original)
-        .where(adapter.isItemRemovable)
+        .where(itemRemovableWorker.isItemRemovable)
         .toList();
     final selectedFiles = selected
         .whereType<_FileItem>()
-        .where((e) => adapter.isItemDeletable(e.original))
+        .where((e) => itemDeletableWorker.isItemDeletable(e.original))
         .map((e) => e.file)
         .toList();
     if (selectedFiles.isNotEmpty) {
@@ -689,6 +712,7 @@ class _Bloc extends Bloc<_Event, _State>
         account: account,
         collection: collection,
         onCollectionUpdated: (_) {},
+        serverController: serverController,
       );
     }
   }
@@ -835,6 +859,7 @@ class _Bloc extends Bloc<_Event, _State>
   final PrefController prefController;
   final CollectionsController collectionsController;
   final FilesController filesController;
+  final ServerController serverController;
   final NpDb db;
   final double dateHeight;
   late final CollectionItemsController itemsController;

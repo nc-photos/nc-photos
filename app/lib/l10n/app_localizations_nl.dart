@@ -1649,6 +1649,17 @@ class AppLocalizationsNl extends AppLocalizations {
   }
 
   @override
+  String get recognizeInstructionDialogTitle =>
+      'Setup required for Recognize integration';
+
+  @override
+  String get recognizeInstructionDialogContent =>
+      'Since Nextcloud 33, a server-side app is required to support Recognize.';
+
+  @override
+  String get recognizeInstructionDialogButton => 'Open Guide';
+
+  @override
   String get errorUnauthenticated =>
       'Unauthenticated access. Please sign-in again if the problem continues';
 

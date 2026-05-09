@@ -132,3 +132,10 @@ extension _$_TransformPlaceItemsToString on _TransformPlaceItems {
     return "_TransformPlaceItems {places: $places}";
   }
 }
+
+extension _$_SetErrorToString on _SetError {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetError {error: $error, stackTrace: $stackTrace}";
+  }
+}

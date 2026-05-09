@@ -12,7 +12,7 @@ import 'package:rxdart/rxdart.dart';
 
 part 'server_controller.g.dart';
 
-enum ServerFeature { ncAlbum, ncMetadata }
+enum ServerFeature { ncAlbum, ncMetadata, recognizeApiKey }
 
 @npLog
 class ServerController {
@@ -82,6 +82,8 @@ extension ServerControllerExtension on ServerController {
         return status == null || status.majorVersion >= 25;
       case ServerFeature.ncMetadata:
         return status != null && status.majorVersion >= 28;
+      case ServerFeature.recognizeApiKey:
+        return status != null && status.majorVersion >= 33;
     }
   }
 }
