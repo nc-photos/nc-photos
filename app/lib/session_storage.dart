@@ -26,5 +26,7 @@ class SessionStorage {
 
   Map<String, String> accountRecognizeApiKeys = {};
 
+  bool hasCheckedRecognizeSupport = false;
+
   static final _inst = SessionStorage._();
 }

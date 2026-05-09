@@ -1633,6 +1633,9 @@
 			}
 		}
 	},
+	"recognizeInstructionDialogTitle": "Setup required for Recognize integration",
+	"recognizeInstructionDialogContent": "Since Nextcloud 33, a server-side app is required to support Recognize.",
+	"recognizeInstructionDialogButton": "Open Guide",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

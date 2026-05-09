@@ -328,6 +328,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -398,6 +401,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -472,6 +478,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -692,6 +701,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -754,6 +766,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -869,6 +884,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -931,6 +949,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -1051,6 +1072,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -1495,6 +1519,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1622,6 +1649,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -1755,6 +1785,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -1870,6 +1903,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -1932,6 +1968,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -1978,7 +2017,10 @@
     "collectionAddItemTitle",
     "greetingsMorning",
     "greetingsAfternoon",
-    "greetingsNight"
+    "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton"
   ],
 
   "zh": [
@@ -2124,6 +2166,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ],
 
@@ -2360,6 +2405,9 @@
     "greetingsMorning",
     "greetingsAfternoon",
     "greetingsNight",
+    "recognizeInstructionDialogTitle",
+    "recognizeInstructionDialogContent",
+    "recognizeInstructionDialogButton",
     "errorServerNoCert"
   ]
 }

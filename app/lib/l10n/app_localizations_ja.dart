@@ -1595,6 +1595,16 @@ class AppLocalizationsJa extends AppLocalizations {
   }
 
   @override
+  String get recognizeInstructionDialogTitle => 'Recognize連携の設定';
+
+  @override
+  String get recognizeInstructionDialogContent =>
+      'Nextcloud 33以降でRecognizeアプリと連携するには、サーバーアプリをインストール必要があります。';
+
+  @override
+  String get recognizeInstructionDialogButton => '手順へ';
+
+  @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';
 
   @override

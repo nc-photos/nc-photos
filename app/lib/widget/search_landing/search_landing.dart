@@ -12,6 +12,7 @@ import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/persons_controller.dart';
 import 'package:nc_photos/controller/places_controller.dart';
+import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/entity/collection/builder.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
@@ -26,12 +27,15 @@ import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/url_launcher_util.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
+import 'package:nc_photos/use_case/person/check_person_support.dart';
+import 'package:nc_photos/use_case/recognize_face/recognize_api_key_manager.dart';
 import 'package:nc_photos/widget/app_intermediate_circular_progress_indicator.dart';
 import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
 import 'package:nc_photos/widget/people_browser/people_browser.dart';
 import 'package:nc_photos/widget/person_thumbnail.dart';
 import 'package:nc_photos/widget/places_browser/places_browser.dart';
+import 'package:nc_photos/widget/recognize_instruction_dialog.dart';
 import 'package:nc_photos/widget/settings/account_settings.dart';
 import 'package:np_common/localized_string.dart';
 import 'package:np_log/np_log.dart';
@@ -45,9 +49,6 @@ part 'state_event.dart';
 part 'type.dart';
 part 'view.dart';
 
-typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
-typedef _BlocListener = BlocListener<_Bloc, _State>;
-
 class SearchLanding extends StatelessWidget {
   const SearchLanding({super.key, this.onFavoritePressed, this.onVideoPressed});
 
@@ -59,6 +60,8 @@ class SearchLanding extends StatelessWidget {
         account: accountController.account,
         personsController: accountController.personsController,
         placesController: accountController.placesController,
+        accountPrefController: accountController.accountPrefController,
+        serverController: accountController.serverController,
         locale: Localizations.localeOf(context),
       ),
       child: _WrappedSearchLanding(
@@ -126,12 +129,18 @@ class _WrappedSearchLandingState extends State<_WrappedSearchLanding> {
             listenWhen: (previous, current) => previous.error != current.error,
             listener: (context, state) {
               if (state.error != null && _isVisible == true) {
-                if (state.error is ApiException) {
-                  final e = state.error as ApiException;
+                if (state.error!.error is ApiException) {
+                  final e = state.error!.error as ApiException;
                   if (e.response.statusCode == 404) {
                     // face recognition app probably not installed, ignore
                     return;
                   }
+                } else if (state.error!.error is ServerAppNotInstalledError) {
+                  showDialog(
+                    context: context,
+                    builder: (context) => const RecognizeInstructionDialog(),
+                  );
+                  return;
                 }
                 SnackBarManager().showSnackBarForException(state.error!.error);
               }
@@ -377,4 +386,16 @@ class _PlaceSection extends StatelessWidget {
       ),
     );
   }
+}
+
+typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
+typedef _BlocListener = BlocListener<_Bloc, _State>;
+// typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
+// typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+typedef _Emitter = Emitter<_State>;
+
+extension on BuildContext {
+  // _Bloc get bloc => read<_Bloc>();
+  // _State get state => bloc.state;
+  // void addEvent(_Event event) => bloc.add(event);
 }
