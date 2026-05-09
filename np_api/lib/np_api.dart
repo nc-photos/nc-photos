@@ -6,6 +6,7 @@ export 'src/entity/favorite_parser.dart';
 export 'src/entity/file_parser.dart';
 export 'src/entity/nc_album_item_parser.dart';
 export 'src/entity/nc_album_parser.dart';
+export 'src/entity/nc_photos_server_parser.dart';
 export 'src/entity/recognize_api_key_parser.dart';
 export 'src/entity/recognize_face_item_parser.dart';
 export 'src/entity/recognize_face_parser.dart';

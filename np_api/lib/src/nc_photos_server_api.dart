@@ -42,6 +42,7 @@ class ApiOcsNcPhotosServerHealth {
         "GET",
         "ocs/v2.php/apps/nc_photos_server/api/health",
         header: {"OCS-APIRequest": "true"},
+        queryParameters: {"format": "json"},
       );
     } catch (e) {
       _log.severe("[get] Failed while get", e);
