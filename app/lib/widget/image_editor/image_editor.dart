@@ -230,6 +230,7 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
                       content: Text(
                         "${L10n.global().imageEditOpenErrorMessage} ($text)",
                       ),
+                      persist: false,
                       action: action,
                       duration: k.snackBarDurationNormal,
                     ),
@@ -250,6 +251,7 @@ class _WrappedImageEditorState extends State<_WrappedImageEditor> {
                       content: Text(
                         "${L10n.global().imageEditSaveErrorMessage} ($text)",
                       ),
+                      persist: false,
                       action: action,
                       duration: k.snackBarDurationNormal,
                     ),

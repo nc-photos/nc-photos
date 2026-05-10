@@ -44,6 +44,7 @@ class SnackBarManager {
     showSnackBar(
       SnackBar(
         content: Text(text),
+        persist: false,
         action: action,
         duration: k.snackBarDurationNormal,
       ),

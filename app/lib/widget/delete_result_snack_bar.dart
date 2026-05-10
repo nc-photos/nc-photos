@@ -36,12 +36,14 @@ SnackBar buildDeleteResultSnackBar(
     return SnackBar(
       content: Text(successText),
       duration: k.snackBarDurationNormal,
+      persist: false,
       action: trashAction,
     );
   } else {
     return SnackBar(
       content: Text(failureText(failureCount)),
       duration: k.snackBarDurationNormal,
+      persist: false,
       action: trashAction,
     );
   }
