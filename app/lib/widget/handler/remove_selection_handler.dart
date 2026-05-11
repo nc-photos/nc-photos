@@ -59,6 +59,7 @@ class RemoveSelectionHandler {
         SnackBar(
           content: Text(successText),
           duration: k.snackBarDurationNormal,
+          persist: false,
           action: trashAction,
         ),
       );
@@ -67,6 +68,7 @@ class RemoveSelectionHandler {
         SnackBar(
           content: Text(failureText(failureCount)),
           duration: k.snackBarDurationNormal,
+          persist: false,
           action: trashAction,
         ),
       );
