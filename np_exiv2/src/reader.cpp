@@ -182,27 +182,27 @@ TypeId convertTypeId(const Exiv2::TypeId value) {
 
 Reader::Reader(const bool is_read_xmp) : is_read_xmp_(is_read_xmp) {}
 
-unique_ptr<Result> Reader::read_file(const string &path) {
+unique_ptr<Result> Reader::readFile(const string &path) {
   auto image = Exiv2::ImageFactory::open(path, false);
   if (!image || !image->good()) {
     LOGE(TAG, "Failed to open image file: %s", path.c_str());
     return nullptr;
   }
-  return read_image(image);
+  return readImage(image);
 }
 
-unique_ptr<Result> Reader::read_buffer(const uint8_t *buffer,
-                                       const size_t size) {
+unique_ptr<Result> Reader::readBuffer(const uint8_t *buffer,
+                                      const size_t size) {
   auto image = Exiv2::ImageFactory::open(buffer, size);
   if (!image || !image->good()) {
     LOGE(TAG, "Failed to open image buffer");
     return nullptr;
   }
-  return read_image(image);
+  return readImage(image);
 }
 
-unique_ptr<Result> Reader::read_http(const string &url,
-                                     const map<string, string> &httpHeaders) {
+unique_ptr<Result> Reader::readHttp(const string &url,
+                                    const map<string, string> &httpHeaders) {
   auto io = make_unique<Exiv2::CurlIo>(url);
   io->addHttpHeaders(httpHeaders);
   auto image = Exiv2::ImageFactory::open(std::move(io));
@@ -210,10 +210,10 @@ unique_ptr<Result> Reader::read_http(const string &url,
     LOGE(TAG, "Failed to open image url: %s", url.c_str());
     return nullptr;
   }
-  return read_image(image);
+  return readImage(image);
 }
 
-unique_ptr<Result> Reader::read_image(const Exiv2::Image::UniquePtr &image) {
+unique_ptr<Result> Reader::readImage(const Exiv2::Image::UniquePtr &image) {
   try {
     image->readMetadata();
   } catch (const exception &e) {

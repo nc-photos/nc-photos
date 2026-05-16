@@ -30,54 +30,54 @@ class NpExiv2Bindings {
   /// Extract metadata from a file pointed to by @a path
   ///
   /// @return A handle to retrieve actual results, 0 if failed
-  ffi.Pointer<Exiv2ReadResult> exiv2_read_file(
+  ffi.Pointer<Exiv2ReadResult> exiv2ReadFile(
     ffi.Pointer<ffi.Char> path,
     int is_read_xmp,
   ) {
-    return _exiv2_read_file(
+    return _exiv2ReadFile(
       path,
       is_read_xmp,
     );
   }
 
-  late final _exiv2_read_filePtr = _lookup<
+  late final _exiv2ReadFilePtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<Exiv2ReadResult> Function(
-              ffi.Pointer<ffi.Char>, ffi.Int)>>('exiv2_read_file');
-  late final _exiv2_read_file = _exiv2_read_filePtr.asFunction<
+              ffi.Pointer<ffi.Char>, ffi.Int)>>('exiv2ReadFile');
+  late final _exiv2ReadFile = _exiv2ReadFilePtr.asFunction<
       ffi.Pointer<Exiv2ReadResult> Function(ffi.Pointer<ffi.Char>, int)>();
 
   /// Extract metadata from a buffer
   ///
   /// @return A handle to retrieve actual results, 0 if failed
-  ffi.Pointer<Exiv2ReadResult> exiv2_read_buffer(
+  ffi.Pointer<Exiv2ReadResult> exiv2ReadBuffer(
     ffi.Pointer<ffi.Uint8> buffer,
     int size,
     int is_read_xmp,
   ) {
-    return _exiv2_read_buffer(
+    return _exiv2ReadBuffer(
       buffer,
       size,
       is_read_xmp,
     );
   }
 
-  late final _exiv2_read_bufferPtr = _lookup<
+  late final _exiv2ReadBufferPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<Exiv2ReadResult> Function(
-              ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Int)>>('exiv2_read_buffer');
-  late final _exiv2_read_buffer = _exiv2_read_bufferPtr.asFunction<
+              ffi.Pointer<ffi.Uint8>, ffi.Size, ffi.Int)>>('exiv2ReadBuffer');
+  late final _exiv2ReadBuffer = _exiv2ReadBufferPtr.asFunction<
       ffi.Pointer<Exiv2ReadResult> Function(
           ffi.Pointer<ffi.Uint8>, int, int)>();
 
-  ffi.Pointer<Exiv2ReadResult> exiv2_read_http(
+  ffi.Pointer<Exiv2ReadResult> exiv2ReadHttp(
     ffi.Pointer<ffi.Char> url,
     ffi.Pointer<ffi.Pointer<ffi.Char>> header_keys,
     ffi.Pointer<ffi.Pointer<ffi.Char>> header_values,
     int header_size,
     int is_read_xmp,
   ) {
-    return _exiv2_read_http(
+    return _exiv2ReadHttp(
       url,
       header_keys,
       header_values,
@@ -86,15 +86,15 @@ class NpExiv2Bindings {
     );
   }
 
-  late final _exiv2_read_httpPtr = _lookup<
+  late final _exiv2ReadHttpPtr = _lookup<
       ffi.NativeFunction<
           ffi.Pointer<Exiv2ReadResult> Function(
               ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Pointer<ffi.Char>>,
               ffi.Pointer<ffi.Pointer<ffi.Char>>,
               ffi.UnsignedInt,
-              ffi.Int)>>('exiv2_read_http');
-  late final _exiv2_read_http = _exiv2_read_httpPtr.asFunction<
+              ffi.Int)>>('exiv2ReadHttp');
+  late final _exiv2ReadHttp = _exiv2ReadHttpPtr.asFunction<
       ffi.Pointer<Exiv2ReadResult> Function(
           ffi.Pointer<ffi.Char>,
           ffi.Pointer<ffi.Pointer<ffi.Char>>,
@@ -105,13 +105,13 @@ class NpExiv2Bindings {
   /// Copy metadata from one file to another
   ///
   /// @return boolean
-  int exiv2_copy_metadata_from_buffer(
+  int exiv2CopyMetadataFromBuffer(
     ffi.Pointer<ffi.Uint8> from_buffer,
     int from_size,
     ffi.Pointer<ffi.Char> to_path,
     int should_copy_orientation,
   ) {
-    return _exiv2_copy_metadata_from_buffer(
+    return _exiv2CopyMetadataFromBuffer(
       from_buffer,
       from_size,
       to_path,
@@ -119,32 +119,29 @@ class NpExiv2Bindings {
     );
   }
 
-  late final _exiv2_copy_metadata_from_bufferPtr = _lookup<
+  late final _exiv2CopyMetadataFromBufferPtr = _lookup<
       ffi.NativeFunction<
-          ffi.Int Function(
-              ffi.Pointer<ffi.Uint8>,
-              ffi.Size,
-              ffi.Pointer<ffi.Char>,
-              ffi.Int)>>('exiv2_copy_metadata_from_buffer');
-  late final _exiv2_copy_metadata_from_buffer =
-      _exiv2_copy_metadata_from_bufferPtr.asFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Uint8>, ffi.Size,
+              ffi.Pointer<ffi.Char>, ffi.Int)>>('exiv2CopyMetadataFromBuffer');
+  late final _exiv2CopyMetadataFromBuffer =
+      _exiv2CopyMetadataFromBufferPtr.asFunction<
           int Function(
               ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Char>, int)>();
 
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file
-  void exiv2_result_free(
+  void exiv2ResultFree(
     ffi.Pointer<Exiv2ReadResult> that,
   ) {
-    return _exiv2_result_free(
+    return _exiv2ResultFree(
       that,
     );
   }
 
-  late final _exiv2_result_freePtr = _lookup<
+  late final _exiv2ResultFreePtr = _lookup<
           ffi.NativeFunction<ffi.Void Function(ffi.Pointer<Exiv2ReadResult>)>>(
-      'exiv2_result_free');
-  late final _exiv2_result_free = _exiv2_result_freePtr
+      'exiv2ResultFree');
+  late final _exiv2ResultFree = _exiv2ResultFreePtr
       .asFunction<void Function(ffi.Pointer<Exiv2ReadResult>)>();
 }
 

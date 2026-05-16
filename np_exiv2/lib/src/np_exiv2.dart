@@ -288,7 +288,7 @@ ReadResult readFile(String path, {required bool isReadXmp}) {
   final pathC = path.toNativeUtf8();
   try {
     _log.fine("[readFile] Reading $path");
-    final result = _bindings.exiv2_read_file(pathC.cast(), isReadXmp ? 1 : 0);
+    final result = _bindings.exiv2ReadFile(pathC.cast(), isReadXmp ? 1 : 0);
     if (result == nullptr) {
       _log.severe("[readFile] Result is null for file: $path");
       throw StateError("Failed to read file");
@@ -296,7 +296,7 @@ ReadResult readFile(String path, {required bool isReadXmp}) {
     try {
       return ReadResult.fromNative(result[0]);
     } finally {
-      _bindings.exiv2_result_free(result);
+      _bindings.exiv2ResultFree(result);
     }
   } finally {
     ffi.malloc.free(pathC);
@@ -313,7 +313,7 @@ ReadResult readBuffer(Uint8List buffer, {required bool isReadXmp}) {
     final cbufferView = cbuffer.asTypedList(buffer.length);
     cbufferView.setAll(0, buffer);
     _log.fine("[readBuffer] Reading buffer");
-    final result = _bindings.exiv2_read_buffer(
+    final result = _bindings.exiv2ReadBuffer(
       cbuffer,
       buffer.length,
       isReadXmp ? 1 : 0,
@@ -325,7 +325,7 @@ ReadResult readBuffer(Uint8List buffer, {required bool isReadXmp}) {
     try {
       return ReadResult.fromNative(result[0]);
     } finally {
-      _bindings.exiv2_result_free(result);
+      _bindings.exiv2ResultFree(result);
     }
   } finally {
     if (cbuffer != null) {
@@ -357,7 +357,7 @@ Future<ReadResult> readHttp(
       headerValuesC = headerValues.toNativeArray();
 
       _log.fine("[readHttp] Reading $url");
-      final result = _bindings.exiv2_read_http(
+      final result = _bindings.exiv2ReadHttp(
         urlC.cast(),
         headerKeysC,
         headerValuesC,
@@ -371,7 +371,7 @@ Future<ReadResult> readHttp(
       try {
         return ReadResult.fromNative(result[0]);
       } finally {
-        _bindings.exiv2_result_free(result);
+        _bindings.exiv2ResultFree(result);
       }
     } finally {
       ffi.malloc.free(urlC);
@@ -423,7 +423,7 @@ Future<bool> _copyMetadata(
       final fromBufferView = fromBufferC.asTypedList(from.length);
       fromBufferView.setAll(0, from);
       final result =
-          _bindings.exiv2_copy_metadata_from_buffer(
+          _bindings.exiv2CopyMetadataFromBuffer(
             fromBufferC,
             from.length,
             toC.cast(),

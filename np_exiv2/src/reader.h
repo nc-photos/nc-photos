@@ -82,14 +82,14 @@ class Reader {
 public:
   explicit Reader(const bool is_read_xmp);
 
-  std::unique_ptr<Result> read_file(const std::string &path);
-  std::unique_ptr<Result> read_buffer(const uint8_t *buffer, const size_t size);
+  std::unique_ptr<Result> readFile(const std::string &path);
+  std::unique_ptr<Result> readBuffer(const uint8_t *buffer, const size_t size);
   std::unique_ptr<Result>
-  read_http(const std::string &url,
-            const std::map<std::string, std::string> &http_headers);
+  readHttp(const std::string &url,
+           const std::map<std::string, std::string> &http_headers);
 
 private:
-  std::unique_ptr<Result> read_image(const Exiv2::Image::UniquePtr &image);
+  std::unique_ptr<Result> readImage(const Exiv2::Image::UniquePtr &image);
 
   bool is_read_xmp_;
 };

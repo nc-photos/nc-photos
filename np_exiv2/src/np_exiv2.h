@@ -74,22 +74,22 @@ typedef struct {
  *
  * @return A handle to retrieve actual results, 0 if failed
  */
-FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2_read_file(const char *path,
-                                                         const int is_read_xmp);
+FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2ReadFile(const char *path,
+                                                       const int is_read_xmp);
 
 /**
  * Extract metadata from a buffer
  *
  * @return A handle to retrieve actual results, 0 if failed
  */
-FFI_PLUGIN_EXPORT const Exiv2ReadResult *
-exiv2_read_buffer(const uint8_t *buffer, const size_t size,
-                  const int is_read_xmp);
+FFI_PLUGIN_EXPORT const Exiv2ReadResult *exiv2ReadBuffer(const uint8_t *buffer,
+                                                         const size_t size,
+                                                         const int is_read_xmp);
 
 FFI_PLUGIN_EXPORT const Exiv2ReadResult *
-exiv2_read_http(const char *url, const char **header_keys,
-                const char **header_values, const unsigned header_size,
-                const int is_read_xmp);
+exiv2ReadHttp(const char *url, const char **header_keys,
+              const char **header_values, const unsigned header_size,
+              const int is_read_xmp);
 
 /**
  * Copy metadata from one file to another
@@ -97,15 +97,15 @@ exiv2_read_http(const char *url, const char **header_keys,
  * @return boolean
  */
 FFI_PLUGIN_EXPORT int
-exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
-                                const size_t from_size, const char *to_path,
-                                const int should_copy_orientation);
+exiv2CopyMetadataFromBuffer(const uint8_t *from_buffer, const size_t from_size,
+                            const char *to_path,
+                            const int should_copy_orientation);
 
 /**
  * Release the resources of a Exiv2ReadResult object returned by
  * @a exiv2_read_file
  */
-FFI_PLUGIN_EXPORT void exiv2_result_free(const Exiv2ReadResult *that);
+FFI_PLUGIN_EXPORT void exiv2ResultFree(const Exiv2ReadResult *that);
 
 #ifdef __cplusplus
 }

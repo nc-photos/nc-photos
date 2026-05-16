@@ -20,15 +20,14 @@ void convertCppType(Exiv2Metadatum *that,
 
 void convertCppType(Exiv2ReadResult *that, const np_exiv2::reader::Result &obj);
 
-void exiv2_metadatum_free(const Exiv2Metadatum *that);
+void exiv2MetadatumFree(const Exiv2Metadatum *that);
 
 } // namespace
 
-const Exiv2ReadResult *exiv2_read_file(const char *path,
-                                       const int is_read_xmp) {
+const Exiv2ReadResult *exiv2ReadFile(const char *path, const int is_read_xmp) {
   np_exiv2::reader::Reader reader(is_read_xmp);
   try {
-    auto result = reader.read_file(path);
+    auto result = reader.readFile(path);
     if (result) {
       LOGI(TAG, "Converting result");
       auto cresult = (Exiv2ReadResult *)malloc(sizeof(Exiv2ReadResult));
@@ -45,12 +44,11 @@ const Exiv2ReadResult *exiv2_read_file(const char *path,
   return nullptr;
 }
 
-const Exiv2ReadResult *exiv2_read_buffer(const uint8_t *buffer,
-                                         const size_t size,
-                                         const int is_read_xmp) {
+const Exiv2ReadResult *exiv2ReadBuffer(const uint8_t *buffer, const size_t size,
+                                       const int is_read_xmp) {
   np_exiv2::reader::Reader reader(is_read_xmp);
   try {
-    auto result = reader.read_buffer(buffer, size);
+    auto result = reader.readBuffer(buffer, size);
     if (result) {
       LOGI(TAG, "Converting result");
       auto cresult = (Exiv2ReadResult *)malloc(sizeof(Exiv2ReadResult));
@@ -67,18 +65,17 @@ const Exiv2ReadResult *exiv2_read_buffer(const uint8_t *buffer,
   return nullptr;
 }
 
-const Exiv2ReadResult *exiv2_read_http(const char *url,
-                                       const char **header_keys,
-                                       const char **header_values,
-                                       const unsigned header_size,
-                                       const int is_read_xmp) {
+const Exiv2ReadResult *exiv2ReadHttp(const char *url, const char **header_keys,
+                                     const char **header_values,
+                                     const unsigned header_size,
+                                     const int is_read_xmp) {
   np_exiv2::reader::Reader reader(is_read_xmp);
   map<string, string> headers;
   for (unsigned i = 0; i < header_size; ++i) {
     headers[header_keys[i]] = header_values[i];
   }
   try {
-    auto result = reader.read_http(url, headers);
+    auto result = reader.readHttp(url, headers);
     if (result) {
       LOGI(TAG, "Converting result");
       auto cresult = (Exiv2ReadResult *)malloc(sizeof(Exiv2ReadResult));
@@ -95,9 +92,9 @@ const Exiv2ReadResult *exiv2_read_http(const char *url,
   return nullptr;
 }
 
-int exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
-                                    const size_t from_size, const char *to,
-                                    const int should_copy_orientation) {
+int exiv2CopyMetadataFromBuffer(const uint8_t *from_buffer,
+                                const size_t from_size, const char *to,
+                                const int should_copy_orientation) {
   try {
     auto src = Exiv2::ImageFactory::open(from_buffer, from_size);
     auto dst = Exiv2::ImageFactory::open(to);
@@ -129,25 +126,25 @@ int exiv2_copy_metadata_from_buffer(const uint8_t *from_buffer,
   }
 }
 
-void exiv2_result_free(const Exiv2ReadResult *that) {
+void exiv2ResultFree(const Exiv2ReadResult *that) {
   if (that->iptc_data) {
     for (auto it = that->iptc_data; it != that->iptc_data + that->iptc_count;
          ++it) {
-      exiv2_metadatum_free(it);
+      exiv2MetadatumFree(it);
     }
     free((void *)that->iptc_data);
   }
   if (that->exif_data) {
     for (auto it = that->exif_data; it != that->exif_data + that->exif_count;
          ++it) {
-      exiv2_metadatum_free(it);
+      exiv2MetadatumFree(it);
     }
     free((void *)that->exif_data);
   }
   if (that->xmp_data) {
     for (auto it = that->xmp_data; it != that->xmp_data + that->xmp_count;
          ++it) {
-      exiv2_metadatum_free(it);
+      exiv2MetadatumFree(it);
     }
     free((void *)that->xmp_data);
   }
@@ -207,7 +204,7 @@ void convertCppType(Exiv2ReadResult *that,
   that->xmp_count = obj.xmp_data.size();
 }
 
-void exiv2_metadatum_free(const Exiv2Metadatum *that) {
+void exiv2MetadatumFree(const Exiv2Metadatum *that) {
   free((void *)that->tag_key);
   free((void *)that->data);
 }
