@@ -20,9 +20,10 @@ class PutFileBinary {
     String path,
     Uint8List content, {
     bool shouldCreateMissingDir = false,
+    void Function(double progress)? onProgress,
   }) async {
     try {
-      await fileRepo.putBinary(account, path, content);
+      await fileRepo.putBinary(account, path, content, onProgress: onProgress);
     } catch (e) {
       if (e is ApiException &&
           (e.response.statusCode == 404 || e.response.statusCode == 409) &&
@@ -30,7 +31,12 @@ class PutFileBinary {
         // no dir
         _log.info("[call] Auto creating parent dirs");
         await CreateDir(fileRepo)(account, path_lib.dirname(path));
-        await fileRepo.putBinary(account, path, content);
+        await fileRepo.putBinary(
+          account,
+          path,
+          content,
+          onProgress: onProgress,
+        );
       } else {
         rethrow;
       }

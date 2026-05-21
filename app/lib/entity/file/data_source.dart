@@ -117,11 +117,16 @@ class FileWebdavDataSource implements FileDataSource {
   }
 
   @override
-  putBinary(Account account, String path, Uint8List content) async {
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) async {
     _log.info("[putBinary] $path");
     final response = await ApiUtil.fromAccount(
       account,
-    ).files().put(path: path, content: content);
+    ).files().put(path: path, content: content, onProgress: onProgress);
     if (!response.isGood) {
       _log.severe("[putBinary] Failed requesting server: $response");
       throw ApiException(
@@ -419,7 +424,12 @@ class FileSqliteDbDataSource implements FileDataSource {
   }
 
   @override
-  putBinary(Account account, String path, Uint8List content) async {
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) async {
     _log.info("[putBinary] $path");
     // do nothing, we currently don't store file contents locally
   }
@@ -674,8 +684,13 @@ class FileCachedDataSource implements FileDataSource {
   }
 
   @override
-  putBinary(Account account, String path, Uint8List content) async {
-    await _remoteSrc.putBinary(account, path, content);
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) async {
+    await _remoteSrc.putBinary(account, path, content, onProgress: onProgress);
   }
 
   @override
