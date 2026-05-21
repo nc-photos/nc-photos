@@ -582,6 +582,7 @@
 	},
 	"dateSubtitle": "Date",
 	"timeSubtitle": "Time",
+	"timeZoneOffsetSubtitle": "Time zone offset",
 	"dateYearInputHint": "Year",
 	"dateMonthInputHint": "Month",
 	"dateDayInputHint": "Day",
@@ -1672,5 +1673,9 @@
 	"errorServerNoCert": "Server certificate not found. Try HTTP instead?",
 	"@errorServerNoCert": {
 		"description": "No cert to establish HTTPS connection"
+	},
+	"editMetadataWriteProgressTitle": "Uploading file",
+	"@editMetadataWriteProgressTitle": {
+		"description": "Title of the progress dialog when uploading the file after editing its metadata"
 	}
 }

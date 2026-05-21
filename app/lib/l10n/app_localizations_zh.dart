@@ -604,6 +604,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get timeSubtitle => '时间';
 
   @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
+
+  @override
   String get dateYearInputHint => '年';
 
   @override
@@ -1621,6 +1624,9 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

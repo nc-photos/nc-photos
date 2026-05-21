@@ -1143,6 +1143,12 @@ abstract class AppLocalizations {
   /// **'Time'**
   String get timeSubtitle;
 
+  /// No description provided for @timeZoneOffsetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time zone offset'**
+  String get timeZoneOffsetSubtitle;
+
   /// No description provided for @dateYearInputHint.
   ///
   /// In en, this message translates to:
@@ -3008,6 +3014,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Server certificate not found. Try HTTP instead?'**
   String get errorServerNoCert;
+
+  /// Title of the progress dialog when uploading the file after editing its metadata
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading file'**
+  String get editMetadataWriteProgressTitle;
 }
 
 class _AppLocalizationsDelegate

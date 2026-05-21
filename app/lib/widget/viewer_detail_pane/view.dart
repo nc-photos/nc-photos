@@ -99,12 +99,12 @@ class _ButtonBarState extends State<_ButtonBar> {
                       )
                     : const SizedBox.shrink(),
               ),
-              _BlocSelector(
-                selector: (state) => state.canArchive,
-                builder: (context, canArchive) {
-                  if (canArchive) {
-                    if ((context.bloc.file.provider as ArchivableAnyFile)
-                        .isArchived) {
+              _BlocBuilder(
+                buildWhen: (previous, current) =>
+                    previous.canArchive != current.canArchive,
+                builder: (context, state) {
+                  if (state.canArchive) {
+                    if ((state.file.provider as ArchivableAnyFile).isArchived) {
                       return _DetailPaneButton(
                         icon: Icons.unarchive_outlined,
                         label: L10n.global().unarchiveTooltip,
@@ -191,7 +191,7 @@ class _ButtonBarState extends State<_ButtonBar> {
   }
 
   Future<void> _onAddToAlbumPressed(BuildContext context) {
-    final f = context.bloc.file;
+    final f = context.state.file;
     if (!AnyFileWorkerFactory.capability(
       f,
     ).isPermitted(AnyFileCapability.collection)) {
@@ -214,7 +214,7 @@ class _ButtonBarState extends State<_ButtonBar> {
   void _onSetAsPressed(BuildContext context) {
     final c = KiwiContainer().resolve<DiContainer>();
     final worker = AnyFileWorkerFactory.setAs(
-      context.bloc.file,
+      context.state.file,
       account: context.bloc.account,
       c: c,
     );
@@ -282,16 +282,17 @@ class _NameItem extends StatelessWidget {
     return _BlocBuilder(
       buildWhen: (previous, current) =>
           previous.size != current.size ||
-          previous.duration != current.duration,
+          previous.duration != current.duration ||
+          previous.file != current.file,
       builder: (context, state) => ListTile(
         leading: ListTileCenterLeading(
-          child: file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
+          child: file_util.isSupportedVideoMime(state.file.mime ?? "")
               ? const Icon(Icons.video_file_outlined)
               : const Icon(Icons.image_outlined),
         ),
-        title: Text(path_lib.basenameWithoutExtension(context.bloc.file.name)),
+        title: Text(path_lib.basenameWithoutExtension(state.file.name)),
         subtitle:
-            (file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
+            (file_util.isSupportedVideoMime(state.file.mime ?? "")
                     ? _buildVideoSubtitle(
                         size: state.size,
                         duration: state.duration,
@@ -411,14 +412,17 @@ class _DateTimeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.offsetTime,
-      builder: (context, offsetTime) {
+    return _BlocBuilder(
+      buildWhen: (previous, current) =>
+          previous.offsetTime != current.offsetTime ||
+          previous.file != current.file,
+      builder: (context, state) {
+        final offsetTime = state.offsetTime;
         final DateTime t;
         if (offsetTime == null) {
-          t = context.bloc.file.dateTime.toLocal();
+          t = state.file.dateTime.toLocal();
         } else {
-          t = context.bloc.file.dateTime.toUtc().add(offsetTime);
+          t = state.file.dateTime.toUtc().add(offsetTime);
         }
         final dateStr = DateFormat(
           DateFormat.YEAR_ABBR_MONTH_DAY,
@@ -440,8 +444,24 @@ class _DateTimeItem extends StatelessWidget {
             final minStr = (e.inMinutes % 60).toString().padLeft(2, "0");
             return Text("UTC${e.isNegative ? "-" : "+"}$hrStr:$minStr");
           }),
-          // trailing: _file == null ? null : const Icon(Icons.edit_outlined),
-          // onTap: _file == null ? null : () => _onDateTimeTap(context),
+          trailing: const Icon(Icons.edit_outlined),
+          onTap: () async {
+            final zonedDt = t.let((t) {
+              final local = LocalDateTime.dateTime(t);
+              final zone = offsetTime == null
+                  ? DateTimeZone.local
+                  : DateTimeZone.forOffset(Offset.duration(offsetTime));
+              return ZonedDateTime.atLeniently(local, zone);
+            });
+            final result = await showDialog<ZonedDateTime>(
+              context: context,
+              builder: (context) =>
+                  PhotoDateTimeEditDialog(initialDateTime: zonedDt),
+            );
+            if (result != null) {
+              context.addEvent(_EditDateTime(result));
+            }
+          },
         );
       },
     );
@@ -453,12 +473,15 @@ class _SizeItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.byteSize,
-      builder: (context, byteSize) {
+    return _BlocBuilder(
+      buildWhen: (previous, current) =>
+          previous.byteSize != current.byteSize ||
+          previous.file != current.file,
+      builder: (context, state) {
+        final byteSize = state.byteSize;
         final IconData icon;
         String title;
-        switch (context.bloc.file.provider) {
+        switch (state.file.provider) {
           case AnyFileNextcloudProvider _:
           case AnyFileMergedProvider _:
             icon = Icons.cloud_outlined;
@@ -475,7 +498,7 @@ class _SizeItem extends StatelessWidget {
         return ListTile(
           leading: ListTileCenterLeading(child: Icon(icon)),
           title: Text(title),
-          subtitle: context.bloc.file.displayPath?.let(Text.new),
+          subtitle: state.file.displayPath?.let(Text.new),
         );
       },
     );
@@ -494,7 +517,8 @@ class _ModelItem extends StatelessWidget {
           previous.exposureTime != current.exposureTime ||
           previous.focalLength != current.focalLength ||
           previous.isoSpeedRatings != current.isoSpeedRatings ||
-          previous.fps != current.fps,
+          previous.fps != current.fps ||
+          previous.file != current.file,
       builder: (context, state) => state.model != null
           ? ListTile(
               leading: const ListTileCenterLeading(
@@ -502,7 +526,7 @@ class _ModelItem extends StatelessWidget {
               ),
               title: Text(state.model!),
               subtitle:
-                  (file_util.isSupportedVideoMime(context.bloc.file.mime ?? "")
+                  (file_util.isSupportedVideoMime(state.file.mime ?? "")
                           ? _buildVideoSubtitle(fps: state.fps)
                           : _buildCameraSubtitle(
                               fNumber: state.fNumber,

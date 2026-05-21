@@ -655,6 +655,9 @@ class AppLocalizationsFr extends AppLocalizations {
   String get timeSubtitle => 'Heure';
 
   @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
+
+  @override
   String get dateYearInputHint => 'Année';
 
   @override
@@ -1726,4 +1729,7 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

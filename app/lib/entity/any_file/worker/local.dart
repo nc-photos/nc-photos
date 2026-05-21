@@ -1,3 +1,5 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
@@ -86,6 +88,23 @@ class AnyFileLocalSetAsWorker implements AnyFileSetAsWorker {
     throw UnsupportedError("Unsupported file");
   }
 
+  final AnyFileLocalProvider _provider;
+}
+
+class AnyFileLocalReplaceWithBackupWorker
+    implements AnyFileReplaceWithBackupWorker {
+  AnyFileLocalReplaceWithBackupWorker(AnyFile file)
+    : _provider = file.provider as AnyFileLocalProvider;
+
+  @override
+  Future<void> replace(
+    io.File srcFile, {
+    void Function(double progress)? onProgress,
+  }) {
+    throw UnimplementedError();
+  }
+
+  // ignore: unused_field
   final AnyFileLocalProvider _provider;
 }
 

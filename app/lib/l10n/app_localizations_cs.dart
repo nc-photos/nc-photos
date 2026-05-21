@@ -649,6 +649,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get timeSubtitle => 'Čas';
 
   @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
+
+  @override
   String get dateYearInputHint => 'Rok';
 
   @override
@@ -1713,4 +1716,7 @@ class AppLocalizationsCs extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

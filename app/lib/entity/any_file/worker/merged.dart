@@ -1,7 +1,11 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
+import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
+import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
@@ -113,4 +117,30 @@ class AnyFileMergedUploadWorker
     with AnyFileWorkerNoUploadTag
     implements AnyFileUploadWorker {
   const AnyFileMergedUploadWorker();
+}
+
+class AnyFileMergedReplaceWithBackupWorker
+    implements AnyFileReplaceWithBackupWorker {
+  AnyFileMergedReplaceWithBackupWorker(
+    AnyFile file, {
+    required this.account,
+    required this.c,
+  }) : _delegate = AnyFileNextcloudReplaceWithBackupWorker(
+         (file.provider as AnyFileMergedProvider).asRemoteFile(),
+         account: account,
+         c: c,
+       );
+
+  @override
+  Future<void> replace(
+    io.File srcFile, {
+    void Function(double progress)? onProgress,
+  }) {
+    return _delegate.replace(srcFile, onProgress: onProgress);
+  }
+
+  final Account account;
+  final DiContainer c;
+
+  final AnyFileReplaceWithBackupWorker _delegate;
 }

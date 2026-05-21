@@ -74,6 +74,7 @@
     "rootPickerSkipConfirmationDialogContent2",
     "megapixelCount",
     "secondCountSymbol",
+    "timeZoneOffsetSubtitle",
     "updateDateTimeFailureNotification",
     "albumDirPickerHeaderText",
     "albumDirPickerSubHeaderText",
@@ -339,7 +340,8 @@
     "errorServerError",
     "errorAlbumDowngrade",
     "errorNoStoragePermission",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "cs": [
@@ -352,6 +354,7 @@
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -404,7 +407,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "de": [
@@ -422,6 +426,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -481,7 +486,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "el": [
@@ -547,6 +553,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "slideshowSetupDialogReverseTitle",
     "shareMethodPreviewTitle",
     "shareMethodPreviewDescription",
@@ -704,7 +711,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "es": [
@@ -717,6 +725,7 @@
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -769,7 +778,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "fi": [
@@ -805,6 +815,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -887,7 +898,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "fr": [
@@ -900,6 +912,7 @@
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -952,7 +965,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "it": [
@@ -990,6 +1004,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "unmuteTooltip",
     "slideshowTooltip",
     "createCollectionDialogAlbumLabel2",
@@ -1075,7 +1090,13 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
+  ],
+
+  "ja": [
+    "timeZoneOffsetSubtitle",
+    "editMetadataWriteProgressTitle"
   ],
 
   "nl": [
@@ -1220,6 +1241,7 @@
     "updateDateTimeDialogTitle",
     "dateSubtitle",
     "timeSubtitle",
+    "timeZoneOffsetSubtitle",
     "dateYearInputHint",
     "dateMonthInputHint",
     "dateDayInputHint",
@@ -1530,7 +1552,8 @@
     "errorServerError",
     "errorAlbumDowngrade",
     "errorNoStoragePermission",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "pl": [
@@ -1567,6 +1590,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "enhanceColorPopTitle",
@@ -1652,7 +1676,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "pt": [
@@ -1694,6 +1719,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -1788,7 +1814,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "ru": [
@@ -1824,6 +1851,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -1906,7 +1934,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "sk": [
@@ -1919,6 +1948,7 @@
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -1971,12 +2001,14 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "tr": [
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -2020,7 +2052,8 @@
     "greetingsNight",
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
-    "recognizeInstructionDialogButton"
+    "recognizeInstructionDialogButton",
+    "editMetadataWriteProgressTitle"
   ],
 
   "zh": [
@@ -2063,6 +2096,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "slideshowSetupDialogReverseTitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
@@ -2169,7 +2203,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "zh_Hant": [
@@ -2238,6 +2273,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "sortOptionFilenameAscendingLabel",
     "sortOptionFilenameDescendingLabel",
     "slideshowSetupDialogReverseTitle",
@@ -2408,6 +2444,7 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ]
 }

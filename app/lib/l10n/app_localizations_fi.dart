@@ -642,6 +642,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get timeSubtitle => 'Aika';
 
   @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
+
+  @override
   String get dateYearInputHint => 'Vuosi';
 
   @override
@@ -1701,4 +1704,7 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

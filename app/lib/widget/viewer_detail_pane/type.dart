@@ -7,3 +7,14 @@ class _SetAlbumCoverFailedError implements Exception {
   @override
   String toString() => _$toString();
 }
+
+@toString
+class _EditMetadataProgress {
+  const _EditMetadataProgress({required this.step, required this.progress});
+
+  @override
+  String toString() => _$toString();
+
+  final UpdateAnyFileMetadataStep step;
+  final double progress;
+}

@@ -643,6 +643,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get timeSubtitle => 'Saat';
 
   @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
+
+  @override
   String get dateYearInputHint => 'Yıl';
 
   @override
@@ -1706,4 +1709,7 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Sunucu sertifikası bulunamadı. Bunun yerine HTTP denemek ister misiniz?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

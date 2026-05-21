@@ -613,6 +613,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get timeSubtitle => '時間';
 
   @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
+
+  @override
   String get dateYearInputHint => '年';
 
   @override
@@ -1632,4 +1635,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get errorServerNoCert => 'サーバー証明書が正しく設定されていません。暗号化されていないHTTPで接続しますか？';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

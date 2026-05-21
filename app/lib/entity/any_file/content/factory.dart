@@ -1,3 +1,4 @@
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:nc_photos/account.dart';
@@ -117,6 +118,25 @@ abstract interface class AnyFileContentGetterFactory {
         return AnyFileMergedBinaryBitmapGetter(file);
     }
   }
+
+  static AnyFilePrivateFileCopyGetter privateFileCopy(
+    AnyFile file, {
+    required Account account,
+    bool isPreferRemote = false,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return AnyFileNextcloudPrivateFileCopyGetter(file, account: account);
+      case AnyFileLocalProvider _:
+        return AnyFileLocalPrivateFileCopyGetter(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedPrivateFileCopyGetter(
+          file,
+          account: account,
+          isPreferRemote: isPreferRemote,
+        );
+    }
+  }
 }
 
 abstract interface class AnyFileUriGetter {
@@ -219,4 +239,9 @@ abstract interface class AnyFileBinaryBitmapGetter {
     bool shouldFixOrientation = false,
     void Function(double progress)? onProgress,
   });
+}
+
+abstract interface class AnyFilePrivateFileCopyGetter {
+  /// Return a private local copy of this file
+  Future<io.File> get({void Function(double progress)? onProgress});
 }
