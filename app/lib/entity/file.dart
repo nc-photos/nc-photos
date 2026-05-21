@@ -720,7 +720,7 @@ class FileRepo {
   /// See [FileDataSource.move]
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) => dataSrc.move(account, f, destination, shouldOverwrite: shouldOverwrite);
@@ -786,7 +786,7 @@ abstract class FileDataSource {
   /// remote.php/dav/files/admin/new/location
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   });

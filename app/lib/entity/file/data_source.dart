@@ -212,15 +212,15 @@ class FileWebdavDataSource implements FileDataSource {
   }
 
   @override
-  move(
+  Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) async {
-    _log.info("[move] ${f.path} to $destination");
+    _log.info("[move] ${f.fdPath} to $destination");
     final response = await ApiUtil.fromAccount(account).files().move(
-      path: f.path,
+      path: f.fdPath,
       destinationUrl: "${account.url}/$destination",
       overwrite: shouldOverwrite,
     );
@@ -470,14 +470,14 @@ class FileSqliteDbDataSource implements FileDataSource {
   @override
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) {
-    _log.info("[move] ${f.path} to $destination");
+    _log.info("[move] ${f.fdPath} to $destination");
     return _c.npDb.updateFileByFileId(
       account: account.toDb(),
-      fileId: f.fileId!,
+      fileId: f.fdId,
       relativePath: File(path: destination).strippedPathWithEmpty,
     );
   }
@@ -730,7 +730,7 @@ class FileCachedDataSource implements FileDataSource {
   @override
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) async {

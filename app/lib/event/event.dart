@@ -80,7 +80,7 @@ class FileMovedEvent {
   FileMovedEvent(this.account, this.file, this.destination);
 
   final Account account;
-  final File file;
+  final FileDescriptor file;
   final String destination;
 }
 
