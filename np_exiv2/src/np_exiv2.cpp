@@ -150,6 +150,49 @@ void exiv2ResultFree(const Exiv2ReadResult *that) {
   }
 }
 
+int exiv2WriteFileDateTimeOriginal(const char *path, const char *dateTime,
+                                   const char *offsetTime) {
+  try {
+    auto image = Exiv2::ImageFactory::open(path, false);
+    if (!image || !image->good()) {
+      LOGE(TAG, "Failed to open image file: %s", path);
+      return false;
+    }
+    image->readMetadata();
+    auto &exifData = image->exifData();
+    const Exiv2::ExifKey dateTimeKey("Exif.Photo.DateTimeOriginal");
+    const Exiv2::ExifKey offsetKey("Exif.Photo.OffsetTimeOriginal");
+    if (dateTime) {
+      exifData[dateTimeKey.key()] = dateTime;
+      if (offsetTime) {
+        exifData[offsetKey.key()] = offsetTime;
+      } else {
+        auto it = exifData.findKey(offsetKey);
+        if (it != exifData.end()) {
+          exifData.erase(it);
+        }
+      }
+    } else {
+      auto it = exifData.findKey(dateTimeKey);
+      if (it != exifData.end()) {
+        exifData.erase(it);
+      }
+      it = exifData.findKey(offsetKey);
+      if (it != exifData.end()) {
+        exifData.erase(it);
+      }
+    }
+    image->writeMetadata();
+    return true;
+  } catch (const exception &e) {
+    LOGE(TAG, "Exception writing DateTimeOriginal: %s", e.what());
+    return false;
+  } catch (...) {
+    LOGE(TAG, "Exception writing DateTimeOriginal");
+    return false;
+  }
+}
+
 namespace {
 
 void convertCppType(Exiv2Metadatum *that,

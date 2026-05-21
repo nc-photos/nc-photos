@@ -9,6 +9,7 @@ import 'package:ffi/ffi.dart' as ffi;
 import 'package:logging/logging.dart';
 import 'package:np_common/object_util.dart';
 import 'package:quiver/iterables.dart';
+import 'package:time_machine2/time_machine2.dart';
 
 import 'np_exiv2_bindings_generated.dart';
 
@@ -407,6 +408,47 @@ Future<bool> copyMetadata(
     _log.severe("[copyMetadata] Failed while copyMetadata", e, stackTrace);
     return false;
   }
+}
+
+Future<bool> writeFileDateTimeOriginal(String path, ZonedDateTime? value) {
+  final timeStr = value?.let((e) {
+    final dt = e.localDateTime;
+    final y = dt.year.toString().padLeft(4, "0");
+    final m = dt.monthOfYear.toString().padLeft(2, "0");
+    final d = dt.dayOfMonth.toString().padLeft(2, "0");
+    final h = dt.hourOfDay.toString().padLeft(2, "0");
+    final min = dt.minuteOfHour.toString().padLeft(2, "0");
+    final s = dt.secondOfMinute.toString().padLeft(2, "0");
+    return "$y:$m:$d $h:$min:$s";
+  });
+  final offsetStr = value?.let((e) {
+    final offsetS = e.offset.inSeconds;
+    final sign = offsetS < 0 ? "-" : "+";
+    final h = (offsetS.abs() ~/ 3600).toString().padLeft(2, "0");
+    final m = ((offsetS.abs() % 3600) ~/ 60).toString().padLeft(2, "0");
+    return "$sign$h:$m";
+  });
+  return Isolate.run(() {
+    final pathC = path.toNativeUtf8();
+    final timeC = timeStr?.toNativeUtf8();
+    final offsetC = offsetStr?.toNativeUtf8();
+    try {
+      return _bindings.exiv2WriteFileDateTimeOriginal(
+            pathC.cast(),
+            timeC?.cast() ?? nullptr,
+            offsetC?.cast() ?? nullptr,
+          ) !=
+          0;
+    } finally {
+      ffi.malloc.free(pathC);
+      if (timeC != null) {
+        ffi.malloc.free(timeC);
+      }
+      if (offsetC != null) {
+        ffi.malloc.free(offsetC);
+      }
+    }
+  });
 }
 
 Future<bool> _copyMetadata(

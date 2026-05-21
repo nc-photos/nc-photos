@@ -128,6 +128,33 @@ class NpExiv2Bindings {
           int Function(
               ffi.Pointer<ffi.Uint8>, int, ffi.Pointer<ffi.Char>, int)>();
 
+  /// Write or remove the EXIF DateTimeOriginal and OffsetTimeOriginal tags in
+  /// the file at @a path
+  ///
+  /// If @a dateTime is null, both tags will be removed. If @a dateTime is not null
+  /// but @a offsetTime is null, OffsetTimeOriginal will be removed.
+  /// @return boolean
+  int exiv2WriteFileDateTimeOriginal(
+    ffi.Pointer<ffi.Char> path,
+    ffi.Pointer<ffi.Char> dateTime,
+    ffi.Pointer<ffi.Char> offsetTime,
+  ) {
+    return _exiv2WriteFileDateTimeOriginal(
+      path,
+      dateTime,
+      offsetTime,
+    );
+  }
+
+  late final _exiv2WriteFileDateTimeOriginalPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>>('exiv2WriteFileDateTimeOriginal');
+  late final _exiv2WriteFileDateTimeOriginal =
+      _exiv2WriteFileDateTimeOriginalPtr.asFunction<
+          int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>)>();
+
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file
   void exiv2ResultFree(
