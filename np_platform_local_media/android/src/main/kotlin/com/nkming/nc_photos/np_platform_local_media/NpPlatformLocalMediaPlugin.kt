@@ -418,6 +418,34 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, CoroutineScope by MainSc
         }
     }
 
+    override fun copyFileToPrivateDir(
+        platformIdentifier: String,
+        dstPath: String,
+        callback: (Result<Unit>) -> Unit
+    ) {
+        if (activity == null) {
+            callback(Result.failure(IllegalStateException("Context is null")))
+            return
+        }
+        launch(Dispatchers.IO) {
+            try {
+                val uri = platformIdentifier.toUri()
+                val dst = File(dstPath).also { it.parentFile?.mkdirs() }
+                val iStream = if (UriUtil.isAssetUri(uri)) {
+                    context!!.assets.open(UriUtil.getAssetUriPath(uri))
+                } else {
+                    context!!.contentResolver.openInputStream(uri)!!
+                }
+                iStream.use { src -> dst.outputStream().use { src.copyTo(it) } }
+                callback(Result.success(Unit))
+            } catch (e: FileNotFoundException) {
+                callback(Result.failure(FlutterError("fileNotFoundException", e.message, null)))
+            } catch (e: Throwable) {
+                callback(Result.failure(FlutterError("systemException", e.message, null)))
+            }
+        }
+    }
+
     private fun dirWhitelistToSql(dirWhitelist: List<String>): Pair<String, List<String>> {
         val wheres = mutableListOf<String>()
         val whereArgs = mutableListOf<String>()

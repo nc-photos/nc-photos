@@ -306,4 +306,31 @@ class MyHostApi {
       return (pigeonVar_replyList[0] as String?)!;
     }
   }
+
+  /// Copy a file identified by [platformIdentifier] to [dstPath]. No checking
+  /// is done by this function so caller must ensure [privateDir] is a valid and
+  /// accessible dir. Typically you can only write to one of the app private
+  /// dirs.
+  Future<void> copyFileToPrivateDir(String platformIdentifier, {required String dstPath}) async {
+    final String pigeonVar_channelName = 'dev.flutter.pigeon.np_platform_local_media.MyHostApi.copyFileToPrivateDir$pigeonVar_messageChannelSuffix';
+    final BasicMessageChannel<Object?> pigeonVar_channel = BasicMessageChannel<Object?>(
+      pigeonVar_channelName,
+      pigeonChannelCodec,
+      binaryMessenger: pigeonVar_binaryMessenger,
+    );
+    final Future<Object?> pigeonVar_sendFuture = pigeonVar_channel.send(<Object?>[platformIdentifier, dstPath]);
+    final List<Object?>? pigeonVar_replyList =
+        await pigeonVar_sendFuture as List<Object?>?;
+    if (pigeonVar_replyList == null) {
+      throw _createConnectionError(pigeonVar_channelName);
+    } else if (pigeonVar_replyList.length > 1) {
+      throw PlatformException(
+        code: pigeonVar_replyList[0]! as String,
+        message: pigeonVar_replyList[1] as String?,
+        details: pigeonVar_replyList[2],
+      );
+    } else {
+      return;
+    }
+  }
 }

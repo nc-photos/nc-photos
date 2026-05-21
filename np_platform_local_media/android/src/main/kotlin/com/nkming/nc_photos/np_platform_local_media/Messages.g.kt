@@ -180,6 +180,13 @@ interface MyHostApi {
    * copied to the Photos library.
    */
   fun copyPrivateFileToPublicDir(srcFilePath: String, srcMime: String?, dstDir: String?, callback: (Result<String>) -> Unit)
+  /**
+   * Copy a file identified by [platformIdentifier] to [dstPath]. No checking
+   * is done by this function so caller must ensure [privateDir] is a valid and
+   * accessible dir. Typically you can only write to one of the app private
+   * dirs.
+   */
+  fun copyFileToPrivateDir(platformIdentifier: String, dstPath: String, callback: (Result<Unit>) -> Unit)
 
   companion object {
     /** The codec used by MyHostApi. */
@@ -295,6 +302,26 @@ interface MyHostApi {
               } else {
                 val data = result.getOrNull()
                 reply.reply(MessagesPigeonUtils.wrapResult(data))
+              }
+            }
+          }
+        } else {
+          channel.setMessageHandler(null)
+        }
+      }
+      run {
+        val channel = BasicMessageChannel<Any?>(binaryMessenger, "dev.flutter.pigeon.np_platform_local_media.MyHostApi.copyFileToPrivateDir$separatedMessageChannelSuffix", codec)
+        if (api != null) {
+          channel.setMessageHandler { message, reply ->
+            val args = message as List<Any?>
+            val platformIdentifierArg = args[0] as String
+            val dstPathArg = args[1] as String
+            api.copyFileToPrivateDir(platformIdentifierArg, dstPathArg) { result: Result<Unit> ->
+              val error = result.exceptionOrNull()
+              if (error != null) {
+                reply.reply(MessagesPigeonUtils.wrapError(error))
+              } else {
+                reply.reply(MessagesPigeonUtils.wrapResult(null))
               }
             }
           }
