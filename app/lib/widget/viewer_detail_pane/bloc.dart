@@ -241,7 +241,11 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   Future<void> _onEditDateTime(_EditDateTime ev, _Emitter emit) async {
     _log.info(ev);
     try {
-      await UpdateAnyFileMetadata(c, prefController).setDateTimeOriginal(
+      await UpdateAnyFileMetadata(
+        c,
+        filesController: anyFilesController.filesController,
+        prefController: prefController,
+      ).setDateTimeOriginal(
         state.file,
         ev.value,
         account: account,

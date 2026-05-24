@@ -123,10 +123,12 @@ class AnyFileMergedReplaceWithBackupWorker
     implements AnyFileReplaceWithBackupWorker {
   AnyFileMergedReplaceWithBackupWorker(
     AnyFile file, {
-    required this.account,
-    required this.c,
+    required FilesController filesController,
+    required Account account,
+    required DiContainer c,
   }) : _remoteDelegate = AnyFileNextcloudReplaceWithBackupWorker(
          (file.provider as AnyFileMergedProvider).asRemoteFile(),
+         filesController: filesController,
          account: account,
          c: c,
        ),
@@ -151,9 +153,6 @@ class AnyFileMergedReplaceWithBackupWorker
       shouldBackup: shouldBackup,
     );
   }
-
-  final Account account;
-  final DiContainer c;
 
   final AnyFileReplaceWithBackupWorker _remoteDelegate;
   final AnyFileReplaceWithBackupWorker _localDelegate;

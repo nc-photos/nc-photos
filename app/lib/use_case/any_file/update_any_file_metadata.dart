@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
@@ -12,7 +13,11 @@ import 'package:time_machine2/time_machine2.dart';
 enum UpdateAnyFileMetadataStep { read, write }
 
 class UpdateAnyFileMetadata {
-  const UpdateAnyFileMetadata(this._c, this.prefController);
+  const UpdateAnyFileMetadata(
+    this._c, {
+    required this.filesController,
+    required this.prefController,
+  });
 
   // Currently only work with remote file
   Future<void> setDateTimeOriginal(
@@ -37,6 +42,7 @@ class UpdateAnyFileMetadata {
       }
       final worker = AnyFileWorkerFactory.replaceWithBackup(
         file,
+        filesController: filesController,
         account: account,
         c: _c,
       );
@@ -53,5 +59,6 @@ class UpdateAnyFileMetadata {
   }
 
   final DiContainer _c;
+  final FilesController filesController;
   final PrefController prefController;
 }

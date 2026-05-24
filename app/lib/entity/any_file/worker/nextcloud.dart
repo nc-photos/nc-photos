@@ -14,7 +14,6 @@ import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/exception.dart';
 import 'package:nc_photos/set_as_handler.dart';
 import 'package:nc_photos/use_case/copy.dart';
-import 'package:nc_photos/use_case/ls_single_file.dart';
 import 'package:nc_photos/use_case/put_file_binary.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_log/np_log.dart';
@@ -151,6 +150,7 @@ class AnyFileNextcloudReplaceWithBackupWorker
     implements AnyFileReplaceWithBackupWorker {
   AnyFileNextcloudReplaceWithBackupWorker(
     AnyFile file, {
+    required this.filesController,
     required this.account,
     required this.c,
   }) : _provider = file.provider as AnyFileNextcloudProvider;
@@ -198,13 +198,14 @@ class AnyFileNextcloudReplaceWithBackupWorker
         onProgress: onProgress,
       );
       // update db
-      unawaited(LsSingleFile(c)(account, filePath));
+      unawaited(filesController.querySingle(_provider.file));
     } catch (e, stackTrace) {
       _log.severe("[replace] Failed while PutFileBinary", e, stackTrace);
       rethrow;
     }
   }
 
+  final FilesController filesController;
   final Account account;
   final DiContainer c;
 

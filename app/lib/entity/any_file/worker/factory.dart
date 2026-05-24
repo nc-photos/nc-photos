@@ -133,6 +133,7 @@ abstract interface class AnyFileWorkerFactory {
   // currently only work with nextcloud files
   static AnyFileReplaceWithBackupWorker replaceWithBackup(
     AnyFile file, {
+    required FilesController filesController,
     required Account account,
     required DiContainer c,
   }) {
@@ -140,6 +141,7 @@ abstract interface class AnyFileWorkerFactory {
       case AnyFileNextcloudProvider _:
         return AnyFileNextcloudReplaceWithBackupWorker(
           file,
+          filesController: filesController,
           account: account,
           c: c,
         );
@@ -148,6 +150,7 @@ abstract interface class AnyFileWorkerFactory {
       case AnyFileMergedProvider _:
         return AnyFileMergedReplaceWithBackupWorker(
           file,
+          filesController: filesController,
           account: account,
           c: c,
         );
