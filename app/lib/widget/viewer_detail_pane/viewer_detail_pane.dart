@@ -84,6 +84,7 @@ class ViewerDetailPane extends StatelessWidget {
         c: KiwiContainer().resolve(),
         collectionsController: accountController.collectionsController,
         anyFilesController: accountController.anyFilesController,
+        prefController: context.read(),
         account: accountController.account,
         initialFile: file,
         fromCollection: fromCollection,

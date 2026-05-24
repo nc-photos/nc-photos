@@ -194,5 +194,6 @@ abstract interface class AnyFileReplaceWithBackupWorker {
   Future<void> replace(
     io.File srcFile, {
     void Function(double progress)? onProgress,
+    required bool shouldBackup,
   });
 }

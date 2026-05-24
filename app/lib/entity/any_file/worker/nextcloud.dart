@@ -159,15 +159,25 @@ class AnyFileNextcloudReplaceWithBackupWorker
   Future<void> replace(
     io.File srcFile, {
     void Function(double progress)? onProgress,
+    required bool shouldBackup,
   }) async {
     final filePath = _provider.file.fdPath;
     // to play safe, we first backup the orig file
-    try {
-      await Copy(c.fileRepo)(account, _provider.file, "${filePath}_original");
-    } on ApiException catch (e, stackTrace) {
-      if (e.response.statusCode == 412) {
-        _log.fine("[replace] Original file already backed up, skip");
-      } else {
+    if (shouldBackup) {
+      try {
+        await Copy(c.fileRepo)(account, _provider.file, "${filePath}_original");
+      } on ApiException catch (e, stackTrace) {
+        if (e.response.statusCode == 412) {
+          _log.fine("[replace] Original file already backed up, skip");
+        } else {
+          _log.severe(
+            "[replace] Failed while Copy on original file",
+            e,
+            stackTrace,
+          );
+          rethrow;
+        }
+      } catch (e, stackTrace) {
         _log.severe(
           "[replace] Failed while Copy on original file",
           e,
@@ -175,13 +185,8 @@ class AnyFileNextcloudReplaceWithBackupWorker
         );
         rethrow;
       }
-    } catch (e, stackTrace) {
-      _log.severe(
-        "[replace] Failed while Copy on original file",
-        e,
-        stackTrace,
-      );
-      rethrow;
+    } else {
+      _log.info("[replace] Backup skipped by pref");
     }
     // then upload new file to replace
     try {

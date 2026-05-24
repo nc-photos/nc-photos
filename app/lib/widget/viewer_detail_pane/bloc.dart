@@ -6,6 +6,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     required this.c,
     required this.collectionsController,
     required this.anyFilesController,
+    required this.prefController,
     required this.account,
     required AnyFile initialFile,
     required this.fromCollection,
@@ -240,7 +241,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   Future<void> _onEditDateTime(_EditDateTime ev, _Emitter emit) async {
     _log.info(ev);
     try {
-      await UpdateAnyFileMetadata(c).setDateTimeOriginal(
+      await UpdateAnyFileMetadata(c, prefController).setDateTimeOriginal(
         state.file,
         ev.value,
         account: account,
@@ -270,6 +271,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   final DiContainer c;
   final CollectionsController collectionsController;
   final AnyFilesController anyFilesController;
+  final PrefController prefController;
   final Account account;
   final ViewerSingleCollectionData? fromCollection;
 

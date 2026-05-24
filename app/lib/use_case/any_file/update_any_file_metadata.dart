@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:nc_photos/account.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/content/factory.dart';
@@ -11,7 +12,7 @@ import 'package:time_machine2/time_machine2.dart';
 enum UpdateAnyFileMetadataStep { read, write }
 
 class UpdateAnyFileMetadata {
-  const UpdateAnyFileMetadata(this._c);
+  const UpdateAnyFileMetadata(this._c, this.prefController);
 
   // Currently only work with remote file
   Future<void> setDateTimeOriginal(
@@ -44,6 +45,7 @@ class UpdateAnyFileMetadata {
         onProgress: (progress) {
           onProgress?.call(UpdateAnyFileMetadataStep.write, progress);
         },
+        shouldBackup: prefController.isBackupOnRemoteExifEditValue,
       );
     } finally {
       unawaited(result.delete());
@@ -51,4 +53,5 @@ class UpdateAnyFileMetadata {
   }
 
   final DiContainer _c;
+  final PrefController prefController;
 }
