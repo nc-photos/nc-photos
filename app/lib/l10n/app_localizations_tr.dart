@@ -259,6 +259,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Normalde Nextcloud sunucusu fotoğraflarınızı otomatik olarak işler ve EXIF ​​meta verilerini arka planda depolar. Ancak arka plan görevi yapılandırma sorunu veya sunucu hatası nedeniyle başarısız olabilir. Etkinleştirilirse, bu dosyaları uygulamada işleriz.';
 
   @override
+  String get settingsBackupOnRemoteExifEditTitle =>
+      'Create backup before modifying metadata (server file only)';
+
+  @override
   String get settingsMemoriesTitle => 'Anılar';
 
   @override
