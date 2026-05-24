@@ -328,6 +328,26 @@ class AnyFileNextcloudBinaryBitmapGetter implements AnyFileBinaryBitmapGetter {
   final AnyFileNextcloudProvider _provider;
 }
 
+class AnyFileNextcloudPrivateFileCopyGetter
+    implements AnyFilePrivateFileCopyGetter {
+  AnyFileNextcloudPrivateFileCopyGetter(AnyFile file, {required this.account})
+    : _provider = file.provider as AnyFileNextcloudProvider;
+
+  @override
+  Future<io.File> get({void Function(double progress)? onProgress}) async {
+    final filePath = await DownloadInternalTempFile()(
+      account,
+      _provider.file,
+      onProgress: onProgress,
+    );
+    return io.File(filePath);
+  }
+
+  final Account account;
+
+  final AnyFileNextcloudProvider _provider;
+}
+
 extension on Rational {
   AnyFileMetadataRational toAnyFile() {
     return AnyFileMetadataRational(numerator, denominator);

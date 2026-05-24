@@ -1,3 +1,5 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
@@ -127,6 +129,33 @@ abstract interface class AnyFileWorkerFactory {
         return const AnyFileMergedUploadWorker();
     }
   }
+
+  // currently only work with nextcloud files
+  static AnyFileReplaceWithBackupWorker replaceWithBackup(
+    AnyFile file, {
+    required FilesController filesController,
+    required Account account,
+    required DiContainer c,
+  }) {
+    switch (file.provider) {
+      case AnyFileNextcloudProvider _:
+        return AnyFileNextcloudReplaceWithBackupWorker(
+          file,
+          filesController: filesController,
+          account: account,
+          c: c,
+        );
+      case AnyFileLocalProvider _:
+        return AnyFileLocalReplaceWithBackupWorker(file);
+      case AnyFileMergedProvider _:
+        return AnyFileMergedReplaceWithBackupWorker(
+          file,
+          filesController: filesController,
+          account: account,
+          c: c,
+        );
+    }
+  }
 }
 
 abstract interface class AnyFileCapabilityWorker {
@@ -161,5 +190,13 @@ abstract interface class AnyFileUploadWorker {
     String relativePath, {
     ConvertConfig? convertConfig,
     void Function(bool isSuccess)? onResult,
+  });
+}
+
+abstract interface class AnyFileReplaceWithBackupWorker {
+  Future<void> replace(
+    io.File srcFile, {
+    void Function(double progress)? onProgress,
+    required bool shouldBackup,
   });
 }

@@ -256,6 +256,11 @@ extension on Pref {
       provider.getBool(PrefKey.isViewerUseOriginalImage);
   Future<bool> setViewerUseOriginalImage(bool value) =>
       provider.setBool(PrefKey.isViewerUseOriginalImage, value);
+
+  bool? isBackupOnRemoteExifEdit() =>
+      provider.getBool(PrefKey.backupOnRemoteExifEdit);
+  Future<bool> setBackupOnRemoteExifEdit(bool value) =>
+      provider.setBool(PrefKey.backupOnRemoteExifEdit, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

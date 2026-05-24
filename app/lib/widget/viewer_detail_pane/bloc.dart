@@ -1,19 +1,49 @@
 part of 'viewer_detail_pane.dart';
 
 @npLog
-class _Bloc extends Bloc<_Event, _State> {
+class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   _Bloc({
     required this.c,
     required this.collectionsController,
+    required this.anyFilesController,
+    required this.prefController,
     required this.account,
-    required this.file,
+    required AnyFile initialFile,
     required this.fromCollection,
-  }) : super(_State.init()) {
+  }) : super(_State.init(file: initialFile)) {
     on<_Init>(_onInit);
     on<_SetAlbumCover>(_onSetAlbumCover);
+    on<_SetFile>(_onSetFile);
+    on<_FileUpdated>(_onFileUpdated);
+    on<_EditDateTime>(_onEditDateTime);
+
+    _subscriptions.add(
+      anyFilesController.stream.listen((event) {
+        final f = event.data[initialFile.id];
+        if (f != null) {
+          add(_SetFile(f));
+        }
+      }),
+    );
+    _subscriptions.add(
+      stream.distinctBy((e) => e.file).listen((e) {
+        add(const _FileUpdated());
+      }),
+    );
 
     add(const _Init());
   }
+
+  @override
+  Future<void> close() {
+    for (final s in _subscriptions) {
+      s.cancel();
+    }
+    return super.close();
+  }
+
+  @override
+  String get tag => _log.fullName;
 
   Future<void> _onInit(_Init ev, _Emitter emit) async {
     _log.info(ev);
@@ -26,7 +56,7 @@ class _Bloc extends Bloc<_Event, _State> {
 
   Future<void> _initMetadata(_Emitter emit) async {
     final metadataGetter = AnyFileContentGetterFactory.metadata(
-      file,
+      state.file,
       c: c,
       account: account,
     );
@@ -104,7 +134,7 @@ class _Bloc extends Bloc<_Event, _State> {
 
   Future<void> _initTag(_Emitter emit) async {
     final getter = AnyFileContentGetterFactory.tag(
-      file,
+      state.file,
       c: c,
       account: account,
     );
@@ -113,7 +143,7 @@ class _Bloc extends Bloc<_Event, _State> {
   }
 
   Future<void> _initCapability(_Emitter emit) async {
-    final capability = AnyFileWorkerFactory.capability(file);
+    final capability = AnyFileWorkerFactory.capability(state.file);
     var canRemoveFromAlbum =
         fromCollection?.let(
           (e) => CollectionWorkerFactory.isItemRemovable(
@@ -134,7 +164,7 @@ class _Bloc extends Bloc<_Event, _State> {
         ) ??
         false;
     if (canSetCover) {
-      canSetCover = switch (file.provider) {
+      canSetCover = switch (state.file.provider) {
         AnyFileNextcloudProvider _ || AnyFileMergedProvider _ => true,
         AnyFileLocalProvider _ => false,
       };
@@ -166,7 +196,7 @@ class _Bloc extends Bloc<_Event, _State> {
         canAddToCollection: canAddToCollection,
         canSetAs:
             getRawPlatform() == NpPlatform.android &&
-            file_util.isSupportedImageMime(file.mime ?? ""),
+            file_util.isSupportedImageMime(state.file.mime ?? ""),
         canArchive: capability.isPermitted(AnyFileCapability.archive),
         canDelete: canDelete,
       ),
@@ -176,9 +206,9 @@ class _Bloc extends Bloc<_Event, _State> {
   Future<void> _onSetAlbumCover(_SetAlbumCover ev, _Emitter emit) async {
     assert(fromCollection != null);
     _log.info(
-      "[_onSetAlbumCover] Set '${file.displayPath}' as album cover for '${fromCollection!.collection.name}'",
+      "[_onSetAlbumCover] Set '${state.file.displayPath}' as album cover for '${fromCollection!.collection.name}'",
     );
-    final f = (file.provider as AnyFileNextcloudProvider).file;
+    final f = (state.file.provider as AnyFileNextcloudProvider).file;
     try {
       await collectionsController.edit(
         fromCollection!.collection,
@@ -198,9 +228,56 @@ class _Bloc extends Bloc<_Event, _State> {
     }
   }
 
+  void _onSetFile(_SetFile ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(file: ev.file));
+  }
+
+  Future<void> _onFileUpdated(_FileUpdated ev, _Emitter emit) async {
+    _log.info(ev);
+    await _initMetadata(emit);
+  }
+
+  Future<void> _onEditDateTime(_EditDateTime ev, _Emitter emit) async {
+    _log.info(ev);
+    try {
+      await UpdateAnyFileMetadata(
+        c,
+        filesController: anyFilesController.filesController,
+        prefController: prefController,
+      ).setDateTimeOriginal(
+        state.file,
+        ev.value,
+        account: account,
+        onProgress: (step, progress) {
+          emit(
+            state.copyWith(
+              editMetadataProgress: _EditMetadataProgress(
+                step: step,
+                progress: progress,
+              ),
+            ),
+          );
+        },
+      );
+      emit(state.copyWith(editMetadataProgress: null));
+    } catch (e, stackTrace) {
+      _log.severe(
+        "[_onEditDateTime] Failed while setDateTimeOriginal",
+        e,
+        stackTrace,
+      );
+      emit(state.copyWith(editMetadataProgress: null));
+      emit(state.copyWith(error: ExceptionEvent(e, stackTrace)));
+    }
+  }
+
   final DiContainer c;
   final CollectionsController collectionsController;
+  final AnyFilesController anyFilesController;
+  final PrefController prefController;
   final Account account;
-  final AnyFile file;
   final ViewerSingleCollectionData? fromCollection;
+
+  final _subscriptions = <StreamSubscription>[];
 }

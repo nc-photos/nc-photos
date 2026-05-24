@@ -6,6 +6,7 @@ import 'package:np_common/type.dart';
 import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_string/np_string.dart';
+import 'package:time_machine2/time_machine2.dart' as tz;
 
 part 'exif.g.dart';
 
@@ -129,29 +130,35 @@ class Exif with EquatableMixin {
     }
   }
 
-  DateTime? get dateTimeOriginalWithOffset {
+  tz.ZonedDateTime? get dateTimeOriginalZoned {
     final d = dateTimeOriginal;
     if (d == null) {
       return null;
     }
+    final localDt = tz.LocalDateTime.dateTime(d);
     try {
       final offset = offsetTimeOriginal;
       if (offset == null) {
         // no tz data, assume local
-        return d.toUtc();
+        return tz.ZonedDateTime.atLeniently(localDt, tz.DateTimeZone.local);
+      } else {
+        return tz.ZonedDateTime.atLeniently(
+          localDt,
+          tz.DateTimeZone.forOffset(tz.Offset.duration(offset)),
+        );
       }
-      final result = d.copyWith(isUtc: true);
-      // subtract the timezone offset to get the utc time manually
-      return result.subtract(offset);
     } catch (e, stackTrace) {
       _log.severe(
         "[dateTimeOriginalWithTimezone] Non standard OffsetTimeOriginal value: ${data["OffsetTimeOriginal"]}",
         e,
         stackTrace,
       );
-      return d.toUtc();
+      return tz.ZonedDateTime.atLeniently(localDt, tz.DateTimeZone.local);
     }
   }
+
+  DateTime? get dateTimeOriginalWithOffset =>
+      dateTimeOriginalZoned?.toDateTimeUtc();
 
   Duration? get offsetTimeOriginal {
     var offsetStr =

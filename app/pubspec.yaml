@@ -177,6 +177,7 @@ dependencies:
   sliver_tools: ^0.2.12
   smooth_corner: ^1.1.1
   super_sliver_list: ^0.4.1
+  time_machine2: ^0.14.0
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git

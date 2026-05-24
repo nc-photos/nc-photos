@@ -74,4 +74,21 @@ abstract class MyHostApi {
     String? srcMime,
     String? dstDir,
   });
+
+  /// Copy a file identified by [platformIdentifier] to [dstPath]. No checking
+  /// is done by this function so caller must ensure [privateDir] is a valid and
+  /// accessible dir. Typically you can only write to one of the app private
+  /// dirs.
+  @async
+  void copyFileToPrivateDir(
+    String platformIdentifier, {
+    required String dstPath,
+  });
+
+  /// Replace the content of a file identified by [platformIdentifier] with
+  /// [bytes].
+  ///
+  /// On Android, [platformIdentifier] is a content URI managed by MediaStore.
+  @async
+  void replaceFile(String platformIdentifier, Uint8List bytes);
 }

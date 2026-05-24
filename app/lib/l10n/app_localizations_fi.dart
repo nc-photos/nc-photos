@@ -258,6 +258,10 @@ class AppLocalizationsFi extends AppLocalizations {
       'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.';
 
   @override
+  String get settingsBackupOnRemoteExifEditTitle =>
+      'Create backup before modifying metadata (server file only)';
+
+  @override
   String get settingsMemoriesTitle => 'Muistot';
 
   @override
@@ -640,6 +644,9 @@ class AppLocalizationsFi extends AppLocalizations {
 
   @override
   String get timeSubtitle => 'Aika';
+
+  @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
 
   @override
   String get dateYearInputHint => 'Vuosi';
@@ -1701,4 +1708,7 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

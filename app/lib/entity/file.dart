@@ -687,8 +687,12 @@ class FileRepo {
       dataSrc.getBinary(account, file);
 
   /// See [FileDataSource.putBinary]
-  Future<void> putBinary(Account account, String path, Uint8List content) =>
-      dataSrc.putBinary(account, path, content);
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) => dataSrc.putBinary(account, path, content, onProgress: onProgress);
 
   /// See [FileDataSource.updateMetadata]
   Future<void> updateProperty(
@@ -720,7 +724,7 @@ class FileRepo {
   /// See [FileDataSource.move]
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) => dataSrc.move(account, f, destination, shouldOverwrite: shouldOverwrite);
@@ -756,7 +760,12 @@ abstract class FileDataSource {
   Future<Uint8List> getBinary(Account account, FileDescriptor f);
 
   /// Upload content to [path]
-  Future<void> putBinary(Account account, String path, Uint8List content);
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  });
 
   /// Update one or more properties of a file
   Future<void> updateProperty(
@@ -786,7 +795,7 @@ abstract class FileDataSource {
   /// remote.php/dav/files/admin/new/location
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   });

@@ -489,6 +489,12 @@ abstract class AppLocalizations {
   /// **'Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.'**
   String get settingsFallbackClientExifConfirmDialogText;
 
+  /// Create a backup copy of the original file before editing metadata on server
+  ///
+  /// In en, this message translates to:
+  /// **'Create backup before modifying metadata (server file only)'**
+  String get settingsBackupOnRemoteExifEditTitle;
+
   /// Memory albums contain photos taken in a specific time range in the past
   ///
   /// In en, this message translates to:
@@ -1142,6 +1148,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Time'**
   String get timeSubtitle;
+
+  /// No description provided for @timeZoneOffsetSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time zone offset'**
+  String get timeZoneOffsetSubtitle;
 
   /// No description provided for @dateYearInputHint.
   ///
@@ -3008,6 +3020,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Server certificate not found. Try HTTP instead?'**
   String get errorServerNoCert;
+
+  /// Title of the progress dialog when uploading the file after editing its metadata
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading file'**
+  String get editMetadataWriteProgressTitle;
 }
 
 class _AppLocalizationsDelegate

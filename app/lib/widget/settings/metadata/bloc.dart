@@ -8,11 +8,14 @@ class _Bloc extends Bloc<_Event, _State>
         _State(
           isEnable: prefController.isEnableClientExifValue,
           isFallback: prefController.isFallbackClientExifValue,
+          isBackupOnRemoteExifEdit:
+              prefController.isBackupOnRemoteExifEditValue,
         ),
       ) {
     on<_Init>(_onInit);
     on<_SetEnable>(_onSetEnable);
     on<_SetFallback>(_onSetFallback);
+    on<_SetBackupOnRemoteExifEdit>(_onSetBackupOnRemoteExifEdit);
   }
 
   @override
@@ -39,6 +42,15 @@ class _Bloc extends Bloc<_Event, _State>
           return state.copyWith(error: ExceptionEvent(e, stackTrace));
         },
       ),
+      forEach(
+        emit,
+        prefController.isBackupOnRemoteExifEditChange,
+        onData: (data) => state.copyWith(isBackupOnRemoteExifEdit: data),
+        onError: (e, stackTrace) {
+          _log.severe("[_onInit] Uncaught exception", e, stackTrace);
+          return state.copyWith(error: ExceptionEvent(e, stackTrace));
+        },
+      ),
     ]);
   }
 
@@ -51,6 +63,14 @@ class _Bloc extends Bloc<_Event, _State>
     _log.info(ev);
     await prefController.setFallbackClientExif(ev.value);
     ServiceConfig.setFallbackClientExif(ev.value).ignore();
+  }
+
+  void _onSetBackupOnRemoteExifEdit(
+    _SetBackupOnRemoteExifEdit ev,
+    _Emitter emit,
+  ) {
+    _log.info(ev);
+    prefController.setBackupOnRemoteExifEdit(ev.value);
   }
 
   final PrefController prefController;

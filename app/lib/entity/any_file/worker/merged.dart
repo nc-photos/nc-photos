@@ -1,7 +1,11 @@
+import 'dart:io' as io;
+
 import 'package:flutter/material.dart';
+import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
+import 'package:nc_photos/di_container.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
@@ -113,4 +117,43 @@ class AnyFileMergedUploadWorker
     with AnyFileWorkerNoUploadTag
     implements AnyFileUploadWorker {
   const AnyFileMergedUploadWorker();
+}
+
+class AnyFileMergedReplaceWithBackupWorker
+    implements AnyFileReplaceWithBackupWorker {
+  AnyFileMergedReplaceWithBackupWorker(
+    AnyFile file, {
+    required FilesController filesController,
+    required Account account,
+    required DiContainer c,
+  }) : _remoteDelegate = AnyFileNextcloudReplaceWithBackupWorker(
+         (file.provider as AnyFileMergedProvider).asRemoteFile(),
+         filesController: filesController,
+         account: account,
+         c: c,
+       ),
+       _localDelegate = AnyFileLocalReplaceWithBackupWorker(
+         (file.provider as AnyFileMergedProvider).asLocalFile(),
+       );
+
+  @override
+  Future<void> replace(
+    io.File srcFile, {
+    void Function(double progress)? onProgress,
+    required bool shouldBackup,
+  }) async {
+    await _remoteDelegate.replace(
+      srcFile,
+      onProgress: onProgress,
+      shouldBackup: shouldBackup,
+    );
+    await _localDelegate.replace(
+      srcFile,
+      onProgress: onProgress,
+      shouldBackup: shouldBackup,
+    );
+  }
+
+  final AnyFileReplaceWithBackupWorker _remoteDelegate;
+  final AnyFileReplaceWithBackupWorker _localDelegate;
 }

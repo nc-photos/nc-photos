@@ -19,6 +19,7 @@ import 'package:nc_photos/rx_extension.dart';
 import 'package:nc_photos/use_case/file/list_file.dart';
 import 'package:nc_photos/use_case/find_file_descriptor.dart';
 import 'package:nc_photos/use_case/list_archived_file.dart';
+import 'package:nc_photos/use_case/ls_single_file.dart';
 import 'package:nc_photos/use_case/remove.dart';
 import 'package:nc_photos/use_case/sync_dir.dart';
 import 'package:nc_photos/use_case/update_property.dart';
@@ -479,6 +480,46 @@ class FilesController {
       final data = _toFileMap(files);
       _dataStreamController.addWithValue(
         (v) => v.copyWith(files: v.files.addedAll(data)),
+      );
+    } catch (e, stackTrace) {
+      _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));
+    }
+  }
+
+  Future<void> querySingle(FileDescriptor file) async {
+    try {
+      final newFile = await LsSingleFile(_c)(account, file.fdPath);
+      final data = _toFileMap([newFile]);
+      _dataStreamController.addWithValue(
+        (v) => v.copyWith(files: v.files.addedAll(data)),
+      );
+      _summaryStreamController.addWithValue((value) {
+        final next = Map.of(value.summary.items);
+        final oldKey = file.fdDateTime.toLocal().toDate();
+        final newKey = newFile.fdDateTime.toLocal().toDate();
+        if (!file.fdIsArchived) {
+          final original = next[oldKey];
+          if (original != null) {
+            final count = original.count - 1;
+            if (count == 0) {
+              next.remove(oldKey);
+            } else {
+              next[oldKey] = original.copyWith(count: count);
+            }
+          }
+        }
+        if (!newFile.fdIsArchived) {
+          final original = next[newKey];
+          if (original == null) {
+            next[newKey] = const DbFilesSummaryItem(count: 1);
+          } else {
+            next[newKey] = original.copyWith(count: original.count + 1);
+          }
+        }
+        return value.copyWith(summary: value.summary.copyWith(items: next));
+      });
+      _timelineStreamController.addWithValue(
+        (v) => v.copyWith(data: v.data.addedAll(data)),
       );
     } catch (e, stackTrace) {
       _dataErrorStreamController.add(ExceptionEvent(e, stackTrace));

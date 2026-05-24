@@ -28,6 +28,7 @@ class ApiFiles {
     required String path,
     String mime = "application/octet-stream",
     required Uint8List content,
+    void Function(double progress)? onProgress,
   }) async {
     try {
       return await _api.request(
@@ -35,6 +36,7 @@ class ApiFiles {
         path,
         header: {"Content-Type": mime},
         bodyBytes: content,
+        onSendProgress: onProgress,
       );
     } catch (e) {
       _log.severe("[put] Failed while put", e);

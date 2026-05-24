@@ -3,7 +3,7 @@ import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/di_container.dart';
-import 'package:nc_photos/entity/file.dart';
+import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/event/event.dart';
 import 'package:nc_photos/exception.dart';
@@ -22,7 +22,7 @@ class Move {
   /// Move a file from its original location to [destination]
   Future<void> call(
     Account account,
-    File file,
+    FileDescriptor file,
     String destination, {
     bool shouldCreateMissingDir = false,
     bool shouldOverwrite = false,
@@ -38,7 +38,7 @@ class Move {
 
   Future<void> _doWork(
     Account account,
-    File file,
+    FileDescriptor file,
     String destination, {
     required bool shouldCreateMissingDir,
     required bool shouldOverwrite,

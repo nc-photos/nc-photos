@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:nc_photos/account.dart';
@@ -157,4 +158,26 @@ class AnyFileMergedBinaryBitmapGetter implements AnyFileBinaryBitmapGetter {
   );
 
   final AnyFileBinaryBitmapGetter _delegate;
+}
+
+class AnyFileMergedPrivateFileCopyGetter
+    implements AnyFilePrivateFileCopyGetter {
+  AnyFileMergedPrivateFileCopyGetter(
+    AnyFile file, {
+    required Account account,
+    required bool isPreferRemote,
+  }) : _delegate = isPreferRemote
+           ? AnyFileNextcloudPrivateFileCopyGetter(
+               (file.provider as AnyFileMergedProvider).asRemoteFile(),
+               account: account,
+             )
+           : AnyFileLocalPrivateFileCopyGetter(
+               (file.provider as AnyFileMergedProvider).asLocalFile(),
+             );
+
+  @override
+  Future<io.File> get({void Function(double progress)? onProgress}) =>
+      _delegate.get(onProgress: onProgress);
+
+  final AnyFilePrivateFileCopyGetter _delegate;
 }

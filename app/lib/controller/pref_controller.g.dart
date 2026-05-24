@@ -339,6 +339,15 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isViewerUseOriginalImage.distinct().skip(1);
   bool get isViewerUseOriginalImageValue =>
       _isViewerUseOriginalImageController.value;
+  // _isBackupOnRemoteExifEditController
+  ValueStream<bool> get isBackupOnRemoteExifEdit =>
+      _isBackupOnRemoteExifEditController.stream;
+  Stream<bool> get isBackupOnRemoteExifEditNew =>
+      isBackupOnRemoteExifEdit.skip(1);
+  Stream<bool> get isBackupOnRemoteExifEditChange =>
+      isBackupOnRemoteExifEdit.distinct().skip(1);
+  bool get isBackupOnRemoteExifEditValue =>
+      _isBackupOnRemoteExifEditController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

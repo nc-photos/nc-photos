@@ -249,6 +249,10 @@ class AppLocalizationsJa extends AppLocalizations {
       '通常、サーバー側は自動的に写真を処理し、EXIFデータを処理し、保存します。しかし、設定の問題やサーバーのバグにより、処理が失敗することがあります。有効にすると、これらのファイルをアプリで処理します。';
 
   @override
+  String get settingsBackupOnRemoteExifEditTitle =>
+      'Create backup before modifying metadata (server file only)';
+
+  @override
   String get settingsMemoriesTitle => '思い出';
 
   @override
@@ -611,6 +615,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get timeSubtitle => '時間';
+
+  @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
 
   @override
   String get dateYearInputHint => '年';
@@ -1632,4 +1639,7 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get errorServerNoCert => 'サーバー証明書が正しく設定されていません。暗号化されていないHTTPで接続しますか？';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

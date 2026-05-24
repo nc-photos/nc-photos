@@ -19,6 +19,7 @@ dependencies:
   path: ^1.8.3
   plugin_platform_interface: ^2.0.2
   quiver: ^3.2.1
+  time_machine2: ^0.14.0
 
 dev_dependencies:
   dart_style: 3.1.2

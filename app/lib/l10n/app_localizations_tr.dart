@@ -259,6 +259,10 @@ class AppLocalizationsTr extends AppLocalizations {
       'Normalde Nextcloud sunucusu fotoğraflarınızı otomatik olarak işler ve EXIF ​​meta verilerini arka planda depolar. Ancak arka plan görevi yapılandırma sorunu veya sunucu hatası nedeniyle başarısız olabilir. Etkinleştirilirse, bu dosyaları uygulamada işleriz.';
 
   @override
+  String get settingsBackupOnRemoteExifEditTitle =>
+      'Create backup before modifying metadata (server file only)';
+
+  @override
   String get settingsMemoriesTitle => 'Anılar';
 
   @override
@@ -641,6 +645,9 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get timeSubtitle => 'Saat';
+
+  @override
+  String get timeZoneOffsetSubtitle => 'Time zone offset';
 
   @override
   String get dateYearInputHint => 'Yıl';
@@ -1706,4 +1713,7 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Sunucu sertifikası bulunamadı. Bunun yerine HTTP denemek ister misiniz?';
+
+  @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

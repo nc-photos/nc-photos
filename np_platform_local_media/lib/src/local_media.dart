@@ -115,6 +115,40 @@ interface class LocalMedia {
     }
   }
 
+  static Future<void> copyFileToPrivateDir(
+    String platformIdentifier, {
+    required String dstPath,
+  }) async {
+    try {
+      await _hostApi.copyFileToPrivateDir(platformIdentifier, dstPath: dstPath);
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else if (e.code == _exceptionFileNotFound) {
+        throw const FileNotFoundException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
+  static Future<void> replaceFile(
+    String platformIdentifier,
+    Uint8List bytes,
+  ) async {
+    try {
+      await _hostApi.replaceFile(platformIdentifier, bytes);
+    } on PlatformException catch (e) {
+      if (e.code == _exceptionCodePermissionError) {
+        throw const PermissionException();
+      } else if (e.code == _exceptionFileNotFound) {
+        throw const FileNotFoundException();
+      } else {
+        rethrow;
+      }
+    }
+  }
+
   static final _hostApi = api.MyHostApi();
 
   static const _exceptionCodePermissionError = "permissionError";

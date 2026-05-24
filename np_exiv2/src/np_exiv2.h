@@ -102,6 +102,18 @@ exiv2CopyMetadataFromBuffer(const uint8_t *from_buffer, const size_t from_size,
                             const int should_copy_orientation);
 
 /**
+ * Write or remove the EXIF DateTimeOriginal and OffsetTimeOriginal tags in
+ * the file at @a path
+ *
+ * If @a dateTime is null, both tags will be removed. If @a dateTime is not null
+ * but @a offsetTime is null, OffsetTimeOriginal will be removed.
+ * @return boolean
+ */
+FFI_PLUGIN_EXPORT int exiv2WriteFileDateTimeOriginal(const char *path,
+                                                     const char *dateTime,
+                                                     const char *offsetTime);
+
+/**
  * Release the resources of a Exiv2ReadResult object returned by
  * @a exiv2_read_file
  */

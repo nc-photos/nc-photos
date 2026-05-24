@@ -10,6 +10,7 @@ import 'package:nc_photos/account.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
+import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/collections_controller.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/di_container.dart';
@@ -27,11 +28,14 @@ import 'package:nc_photos/gps_map_util.dart';
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/platform/features.dart' as features;
 import 'package:nc_photos/snack_bar_manager.dart';
+import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:nc_photos/use_case/any_file/update_any_file_metadata.dart';
 import 'package:nc_photos/widget/about_geocoding_dialog.dart';
 import 'package:nc_photos/widget/handler/add_selection_to_collection_handler.dart';
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
+import 'package:nc_photos/widget/photo_date_time_edit_dialog.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/size.dart';
@@ -43,9 +47,11 @@ import 'package:np_platform_util/np_platform_util.dart';
 import 'package:np_string/np_string.dart';
 import 'package:np_ui/np_ui.dart';
 import 'package:path/path.dart' as path_lib;
+import 'package:time_machine2/time_machine2.dart';
 import 'package:to_string/to_string.dart';
 
 part 'bloc.dart';
+part 'progress_dialog.dart';
 part 'state_event.dart';
 part 'type.dart';
 part 'view.dart';
@@ -77,8 +83,10 @@ class ViewerDetailPane extends StatelessWidget {
       create: (context) => _Bloc(
         c: KiwiContainer().resolve(),
         collectionsController: accountController.collectionsController,
+        anyFilesController: accountController.anyFilesController,
+        prefController: context.read(),
         account: accountController.account,
-        file: file,
+        initialFile: file,
         fromCollection: fromCollection,
       ),
       child: _WrappedViewerDetailPane(
@@ -148,6 +156,26 @@ class _WrappedViewerDetailPaneState extends State<_WrappedViewerDetailPane>
             }
           },
         ),
+        _BlocListener(
+          listenWhen: (previous, current) =>
+              (previous.editMetadataProgress == null) !=
+              (current.editMetadataProgress == null),
+          listener: (context, state) {
+            if (state.editMetadataProgress != null) {
+              final bloc = context.bloc;
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (context) => BlocProvider.value(
+                  value: bloc,
+                  child: const _EditMetadataProgressDialog(),
+                ),
+              );
+            } else {
+              Navigator.of(context).pop();
+            }
+          },
+        ),
       ],
       child: Material(
         type: MaterialType.transparency,
@@ -183,13 +211,13 @@ class _WrappedViewerDetailPaneState extends State<_WrappedViewerDetailPane>
 }
 
 typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
-// typedef _BlocListener = BlocListener<_Bloc, _State>;
+typedef _BlocListener = BlocListener<_Bloc, _State>;
 typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
 typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
 typedef _Emitter = Emitter<_State>;
 
 extension on BuildContext {
   _Bloc get bloc => read<_Bloc>();
-  // _State get state => bloc.state;
+  _State get state => bloc.state;
   void addEvent(_Event event) => bloc.add(event);
 }

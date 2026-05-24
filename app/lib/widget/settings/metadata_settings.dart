@@ -92,6 +92,18 @@ class _WrappedMetadataSettingsState extends State<_WrappedMetadataSettings>
                         : null,
                   ),
                 ),
+                _BlocSelector(
+                  selector: (state) => state.isBackupOnRemoteExifEdit,
+                  builder: (context, isBackupOnRemoteExifEdit) =>
+                      SwitchListTile(
+                        title: Text(
+                          L10n.global().settingsBackupOnRemoteExifEditTitle,
+                        ),
+                        value: isBackupOnRemoteExifEdit,
+                        onChanged: (value) =>
+                            context.addEvent(_SetBackupOnRemoteExifEdit(value)),
+                      ),
+                ),
               ]),
             ),
             const SliverSafeBottom(),

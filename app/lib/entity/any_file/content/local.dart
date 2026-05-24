@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io' as io;
 import 'dart:typed_data';
 
 import 'package:nc_photos/entity/any_file/any_file.dart';
@@ -13,6 +14,8 @@ import 'package:np_exiv2/np_exiv2.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_platform_local_media/np_platform_local_media.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:uuid/uuid.dart';
 
 class AnyFileLocalUriGetter implements AnyFileUriGetter {
   AnyFileLocalUriGetter(AnyFile file)
@@ -184,6 +187,60 @@ class AnyFileLocalBinaryBitmapGetter implements AnyFileBinaryBitmapGetter {
   }
 
   final AnyFileLocalProvider _provider;
+}
+
+class AnyFileLocalPrivateFileCopyGetter
+    implements AnyFilePrivateFileCopyGetter {
+  AnyFileLocalPrivateFileCopyGetter(AnyFile file)
+    : _provider = file.provider as AnyFileLocalProvider;
+
+  @override
+  Future<io.File> get({void Function(double progress)? onProgress}) async {
+    if (_isInitialDownload) {
+      await _cleanUp();
+      _isInitialDownload = false;
+    }
+
+    if (_provider.file.filename == null) {
+      throw StateError("Can't get filename");
+    }
+    final dst = await _createTempFile(_provider.file.filename!);
+    await LocalMedia.copyFileToPrivateDir(
+      _provider.file.platformIdentifier,
+      dstPath: dst.path,
+    );
+    return dst;
+  }
+
+  static Future<io.File> _createTempFile(String filename) async {
+    final dir = await _openTempDir();
+    final subdir = io.Directory("${dir.path}/${const Uuid().v4()}");
+    await subdir.create();
+    return io.File("${subdir.path}/$filename");
+  }
+
+  static Future<io.Directory> _openTempDir() async {
+    final root = await getTemporaryDirectory();
+    final dir = io.Directory("${root.path}/private-file-copy");
+    if (!await dir.exists()) {
+      return dir.create();
+    } else {
+      return dir;
+    }
+  }
+
+  static Future<void> _cleanUp() async {
+    final tempDir = await _openTempDir();
+    await for (final f in tempDir.list(followLinks: false)) {
+      try {
+        await f.delete(recursive: true);
+      } catch (_) {}
+    }
+  }
+
+  final AnyFileLocalProvider _provider;
+
+  static bool _isInitialDownload = true;
 }
 
 extension on Rational {

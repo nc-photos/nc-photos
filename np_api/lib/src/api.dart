@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:logging/logging.dart';
@@ -47,28 +49,51 @@ class Api {
     String? body,
     Uint8List? bodyBytes,
     bool isResponseString = true,
+    void Function(double progress)? onSendProgress,
   }) async {
     final url = _makeUri(endpoint, queryParameters: queryParameters);
-    final req = http.Request(method, url);
-    if (auth != null) {
-      req.headers.addAll({"authorization": auth!.toHeaderValue()});
+    void setHeader(http.BaseRequest req) {
+      if (auth != null) {
+        req.headers.addAll({"authorization": auth!.toHeaderValue()});
+      }
+      if (header != null) {
+        // turn all to lower case, since HTTP headers are case-insensitive, this
+        // smooths our processing (if any)
+        req.headers.addEntries(
+          header.entries.map((e) => MapEntry(e.key.toLowerCase(), e.value)),
+        );
+      }
     }
-    if (header != null) {
-      // turn all to lower case, since HTTP headers are case-insensitive, this
-      // smooths our processing (if any)
-      req.headers.addEntries(
-        header.entries.map((e) => MapEntry(e.key.toLowerCase(), e.value)),
+
+    final http.Response response;
+    if (bodyBytes != null && onSendProgress != null) {
+      final req = http.StreamedRequest(method, url);
+      setHeader(req);
+      req.contentLength = bodyBytes.length;
+      const chunkSize = 32 * 1024;
+      var sent = 0;
+      for (var i = 0; i < bodyBytes.length; i += chunkSize) {
+        final end = (i + chunkSize).clamp(0, bodyBytes.length);
+        req.sink.add(bodyBytes.sublist(i, end));
+        sent = end;
+        onSendProgress(sent / bodyBytes.length);
+      }
+      unawaited(req.sink.close());
+      response = await http.Response.fromStream(
+        await getHttpClient().send(req),
+      );
+    } else {
+      final req = http.Request(method, url);
+      setHeader(req);
+      if (body != null) {
+        req.body = body;
+      } else if (bodyBytes != null) {
+        req.bodyBytes = bodyBytes;
+      }
+      response = await http.Response.fromStream(
+        await getHttpClient().send(req),
       );
     }
-    if (body != null) {
-      req.body = body;
-    } else if (bodyBytes != null) {
-      req.bodyBytes = bodyBytes;
-    }
-    _log.finer(req.url);
-    final response = await http.Response.fromStream(
-      await getHttpClient().send(req),
-    );
     if (!isHttpStatusGood(response.statusCode)) {
       if (response.statusCode == 404) {
         _log.severe(

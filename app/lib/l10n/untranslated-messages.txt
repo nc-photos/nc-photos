@@ -7,6 +7,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsShareFolderPickerDescription",
     "settingsPersonProviderTitle",
     "settingsServerAppSectionTitle",
@@ -74,6 +75,7 @@
     "rootPickerSkipConfirmationDialogContent2",
     "megapixelCount",
     "secondCountSymbol",
+    "timeZoneOffsetSubtitle",
     "updateDateTimeFailureNotification",
     "albumDirPickerHeaderText",
     "albumDirPickerSubHeaderText",
@@ -339,7 +341,8 @@
     "errorServerError",
     "errorAlbumDowngrade",
     "errorNoStoragePermission",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "cs": [
@@ -348,10 +351,12 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -404,7 +409,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "de": [
@@ -414,6 +420,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerCustomizeAppBarTitle",
@@ -422,6 +429,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -481,7 +489,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "el": [
@@ -497,6 +506,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsAccountLabelTitle",
     "settingsAccountLabelDescription",
     "settingsPersonProviderTitle",
@@ -547,6 +557,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "slideshowSetupDialogReverseTitle",
     "shareMethodPreviewTitle",
     "shareMethodPreviewDescription",
@@ -704,7 +715,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "es": [
@@ -713,10 +725,12 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -769,7 +783,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "fi": [
@@ -779,6 +794,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerCustomizeAppBarTitle",
@@ -805,6 +821,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -887,7 +904,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "fr": [
@@ -896,10 +914,12 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -952,7 +972,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "it": [
@@ -962,6 +983,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsPersonProviderTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
@@ -990,6 +1012,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "unmuteTooltip",
     "slideshowTooltip",
     "createCollectionDialogAlbumLabel2",
@@ -1075,7 +1098,14 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
+  ],
+
+  "ja": [
+    "settingsBackupOnRemoteExifEditTitle",
+    "timeZoneOffsetSubtitle",
+    "editMetadataWriteProgressTitle"
   ],
 
   "nl": [
@@ -1111,6 +1141,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsMemoriesTitle",
     "settingsMemoriesSubtitle",
     "settingsAccountTitle",
@@ -1220,6 +1251,7 @@
     "updateDateTimeDialogTitle",
     "dateSubtitle",
     "timeSubtitle",
+    "timeZoneOffsetSubtitle",
     "dateYearInputHint",
     "dateMonthInputHint",
     "dateDayInputHint",
@@ -1530,7 +1562,8 @@
     "errorServerError",
     "errorAlbumDowngrade",
     "errorNoStoragePermission",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "pl": [
@@ -1540,6 +1573,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsMemoriesRangeValueText",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
@@ -1567,6 +1601,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "enhanceColorPopTitle",
@@ -1652,7 +1687,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "pt": [
@@ -1664,6 +1700,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsPersonProviderTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
@@ -1694,6 +1731,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -1788,7 +1826,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "ru": [
@@ -1798,6 +1837,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerCustomizeAppBarTitle",
@@ -1824,6 +1864,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
     "imageEditDownloadDialogTitle",
@@ -1906,7 +1947,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "sk": [
@@ -1915,10 +1957,12 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsDeviceMediaTitle",
     "settingsDeviceMediaDescription",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -1971,12 +2015,15 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "tr": [
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsViewerUseOriginalImageTitle",
     "enableButtonLabel2",
+    "timeZoneOffsetSubtitle",
     "imageEditDownloadDialogTitle",
     "imageEditProcessDialogTitle",
     "imageEditSaveDialogTitle",
@@ -2020,7 +2067,8 @@
     "greetingsNight",
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
-    "recognizeInstructionDialogButton"
+    "recognizeInstructionDialogButton",
+    "editMetadataWriteProgressTitle"
   ],
 
   "zh": [
@@ -2031,6 +2079,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsPersonProviderTitle",
     "settingsMemoriesRangeValueText",
     "settingsDeviceMediaTitle",
@@ -2063,6 +2112,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "slideshowSetupDialogReverseTitle",
     "createCollectionDialogAlbumLabel2",
     "createCollectionDialogAlbumDescription2",
@@ -2169,7 +2219,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ],
 
   "zh_Hant": [
@@ -2185,6 +2236,7 @@
     "settingsFallbackClientExifFalseText",
     "settingsFallbackClientExifConfirmDialogTitle",
     "settingsFallbackClientExifConfirmDialogText",
+    "settingsBackupOnRemoteExifEditTitle",
     "settingsAccountLabelTitle",
     "settingsAccountLabelDescription",
     "settingsPersonProviderTitle",
@@ -2238,6 +2290,7 @@
     "enableButtonLabel2",
     "exifSupportNextcloud28Notes",
     "exifSupportConfirmationDialogTitle2",
+    "timeZoneOffsetSubtitle",
     "sortOptionFilenameAscendingLabel",
     "sortOptionFilenameDescendingLabel",
     "slideshowSetupDialogReverseTitle",
@@ -2408,6 +2461,7 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert"
+    "errorServerNoCert",
+    "editMetadataWriteProgressTitle"
   ]
 }

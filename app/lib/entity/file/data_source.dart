@@ -117,11 +117,16 @@ class FileWebdavDataSource implements FileDataSource {
   }
 
   @override
-  putBinary(Account account, String path, Uint8List content) async {
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) async {
     _log.info("[putBinary] $path");
     final response = await ApiUtil.fromAccount(
       account,
-    ).files().put(path: path, content: content);
+    ).files().put(path: path, content: content, onProgress: onProgress);
     if (!response.isGood) {
       _log.severe("[putBinary] Failed requesting server: $response");
       throw ApiException(
@@ -212,15 +217,15 @@ class FileWebdavDataSource implements FileDataSource {
   }
 
   @override
-  move(
+  Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) async {
-    _log.info("[move] ${f.path} to $destination");
+    _log.info("[move] ${f.fdPath} to $destination");
     final response = await ApiUtil.fromAccount(account).files().move(
-      path: f.path,
+      path: f.fdPath,
       destinationUrl: "${account.url}/$destination",
       overwrite: shouldOverwrite,
     );
@@ -419,7 +424,12 @@ class FileSqliteDbDataSource implements FileDataSource {
   }
 
   @override
-  putBinary(Account account, String path, Uint8List content) async {
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) async {
     _log.info("[putBinary] $path");
     // do nothing, we currently don't store file contents locally
   }
@@ -470,14 +480,14 @@ class FileSqliteDbDataSource implements FileDataSource {
   @override
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) {
-    _log.info("[move] ${f.path} to $destination");
+    _log.info("[move] ${f.fdPath} to $destination");
     return _c.npDb.updateFileByFileId(
       account: account.toDb(),
-      fileId: f.fileId!,
+      fileId: f.fdId,
       relativePath: File(path: destination).strippedPathWithEmpty,
     );
   }
@@ -674,8 +684,13 @@ class FileCachedDataSource implements FileDataSource {
   }
 
   @override
-  putBinary(Account account, String path, Uint8List content) async {
-    await _remoteSrc.putBinary(account, path, content);
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) async {
+    await _remoteSrc.putBinary(account, path, content, onProgress: onProgress);
   }
 
   @override
@@ -730,7 +745,7 @@ class FileCachedDataSource implements FileDataSource {
   @override
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) async {

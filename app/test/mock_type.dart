@@ -172,7 +172,7 @@ class MockFileDataSource implements FileDataSource {
   @override
   Future<void> move(
     Account account,
-    File f,
+    FileDescriptor f,
     String destination, {
     bool? shouldOverwrite,
   }) {
@@ -180,7 +180,12 @@ class MockFileDataSource implements FileDataSource {
   }
 
   @override
-  Future<void> putBinary(Account account, String path, Uint8List content) {
+  Future<void> putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) {
     throw UnimplementedError();
   }
 
@@ -276,12 +281,21 @@ class MockFileWebdavDataSource implements FileWebdavDataSource {
   listSingle(Account account, File f) => src.listSingle(account, f);
 
   @override
-  move(Account account, File f, String destination, {bool? shouldOverwrite}) =>
-      src.move(account, f, destination, shouldOverwrite: shouldOverwrite);
+  Future<void> move(
+    Account account,
+    FileDescriptor f,
+    String destination, {
+    bool? shouldOverwrite,
+  }) => src.move(account, f, destination, shouldOverwrite: shouldOverwrite);
 
   @override
-  putBinary(Account account, String path, Uint8List content) =>
-      src.putBinary(account, path, content);
+  putBinary(
+    Account account,
+    String path,
+    Uint8List content, {
+    void Function(double progress)? onProgress,
+  }) =>
+      src.putBinary(account, path, content, onProgress: onProgress);
 
   @override
   remove(Account account, FileDescriptor f) => src.remove(account, f);

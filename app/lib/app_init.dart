@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:equatable/equatable.dart';
 import 'package:event_bus/event_bus.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:kiwi/kiwi.dart';
 import 'package:logging/logging.dart';
@@ -51,6 +52,7 @@ import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_http/np_http.dart';
 import 'package:np_log/np_log.dart' as np_log;
 import 'package:np_platform_util/np_platform_util.dart';
+import 'package:time_machine2/time_machine2.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
 enum InitIsolateType {
@@ -89,6 +91,7 @@ Future<void> init(InitIsolateType isolateType) async {
       getRawPlatform() == NpPlatform.android) {
     unawaited(_initRefreshRate());
   }
+  await _initTimeZone();
 
   _hasInitedInThisIsolate = true;
 }
@@ -238,6 +241,14 @@ Future<void> _initRefreshRate() async {
       e,
       stackTrace,
     );
+  }
+}
+
+Future<void> _initTimeZone() async {
+  try {
+    await TimeMachine.initialize({"rootBundle": rootBundle});
+  } catch (e, stackTrace) {
+    _log.severe("[_initTimeZone] Failed while initialize", e, stackTrace);
   }
 }
 

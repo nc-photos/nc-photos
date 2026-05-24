@@ -340,6 +340,12 @@ class PrefController {
     value: value,
   );
 
+  Future<void> setBackupOnRemoteExifEdit(bool value) => _set(
+    controller: _isBackupOnRemoteExifEditController,
+    setter: (pref, value) => pref.setBackupOnRemoteExifEdit(value),
+    value: value,
+  );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -564,6 +570,10 @@ class PrefController {
   @npSubjectAccessor
   late final _isViewerUseOriginalImageController = BehaviorSubject.seeded(
     pref.isViewerUseOriginalImage() ?? false,
+  );
+  @npSubjectAccessor
+  late final _isBackupOnRemoteExifEditController = BehaviorSubject.seeded(
+    pref.isBackupOnRemoteExifEdit() ?? true,
   );
 }
 

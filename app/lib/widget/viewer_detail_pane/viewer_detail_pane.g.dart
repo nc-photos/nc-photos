@@ -14,6 +14,7 @@ part of 'viewer_detail_pane.dart';
 
 abstract class $_StateCopyWithWorker {
   _State call({
+    AnyFile? file,
     bool? isOwned,
     String? owner,
     SizeInt? size,
@@ -35,6 +36,7 @@ abstract class $_StateCopyWithWorker {
     bool? canSetAs,
     bool? canArchive,
     bool? canDelete,
+    _EditMetadataProgress? editMetadataProgress,
     ExceptionEvent? error,
   });
 }
@@ -44,6 +46,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
 
   @override
   _State call({
+    dynamic file,
     dynamic isOwned = copyWithNull,
     dynamic owner = copyWithNull,
     dynamic size = copyWithNull,
@@ -65,9 +68,11 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic canSetAs,
     dynamic canArchive,
     dynamic canDelete,
+    dynamic editMetadataProgress = copyWithNull,
     dynamic error = copyWithNull,
   }) {
     return _State(
+      file: file as AnyFile? ?? that.file,
       isOwned: isOwned == copyWithNull ? that.isOwned : isOwned as bool?,
       owner: owner == copyWithNull ? that.owner : owner as String?,
       size: size == copyWithNull ? that.size : size as SizeInt?,
@@ -103,6 +108,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       canSetAs: canSetAs as bool? ?? that.canSetAs,
       canArchive: canArchive as bool? ?? that.canArchive,
       canDelete: canDelete as bool? ?? that.canDelete,
+      editMetadataProgress: editMetadataProgress == copyWithNull
+          ? that.editMetadataProgress
+          : editMetadataProgress as _EditMetadataProgress?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }
@@ -145,7 +153,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {isOwned: $isOwned, owner: $owner, size: $size, byteSize: $byteSize, model: $model, fNumber: ${fNumber == null ? null : "${fNumber!.toStringAsFixed(3)}"}, exposureTime: $exposureTime, focalLength: ${focalLength == null ? null : "${focalLength!.toStringAsFixed(3)}"}, isoSpeedRatings: $isoSpeedRatings, gps: $gps, location: $location, tags: ${tags == null ? null : "[length: ${tags!.length}]"}, offsetTime: $offsetTime, fps: ${fps == null ? null : "${fps!.toStringAsFixed(3)}"}, duration: $duration, canRemoveFromAlbum: $canRemoveFromAlbum, canSetCover: $canSetCover, canAddToCollection: $canAddToCollection, canSetAs: $canSetAs, canArchive: $canArchive, canDelete: $canDelete, error: $error}";
+    return "_State {file: $file, isOwned: $isOwned, owner: $owner, size: $size, byteSize: $byteSize, model: $model, fNumber: ${fNumber == null ? null : "${fNumber!.toStringAsFixed(3)}"}, exposureTime: $exposureTime, focalLength: ${focalLength == null ? null : "${focalLength!.toStringAsFixed(3)}"}, isoSpeedRatings: $isoSpeedRatings, gps: $gps, location: $location, tags: ${tags == null ? null : "[length: ${tags!.length}]"}, offsetTime: $offsetTime, fps: ${fps == null ? null : "${fps!.toStringAsFixed(3)}"}, duration: $duration, canRemoveFromAlbum: $canRemoveFromAlbum, canSetCover: $canSetCover, canAddToCollection: $canAddToCollection, canSetAs: $canSetAs, canArchive: $canArchive, canDelete: $canDelete, editMetadataProgress: $editMetadataProgress, error: $error}";
   }
 }
 
@@ -163,9 +171,37 @@ extension _$_SetAlbumCoverToString on _SetAlbumCover {
   }
 }
 
+extension _$_SetFileToString on _SetFile {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetFile {file: $file}";
+  }
+}
+
+extension _$_FileUpdatedToString on _FileUpdated {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_FileUpdated {}";
+  }
+}
+
+extension _$_EditDateTimeToString on _EditDateTime {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_EditDateTime {value: $value}";
+  }
+}
+
 extension _$_SetAlbumCoverFailedErrorToString on _SetAlbumCoverFailedError {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetAlbumCoverFailedError {}";
+  }
+}
+
+extension _$_EditMetadataProgressToString on _EditMetadataProgress {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_EditMetadataProgress {step: ${step.name}, progress: ${progress.toStringAsFixed(3)}}";
   }
 }
