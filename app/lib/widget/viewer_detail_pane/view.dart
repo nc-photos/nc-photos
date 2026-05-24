@@ -432,6 +432,9 @@ class _DateTimeItem extends StatelessWidget {
           DateFormat.HOUR_MINUTE,
           Localizations.localeOf(context).languageCode,
         ).format(t);
+        final canEdit = file_util.isSupportedEditMetadataMime(
+          state.file.mime ?? "",
+        );
         return ListTile(
           leading: const Icon(Icons.calendar_today_outlined),
           title: Text("$dateStr $timeStr"),
@@ -444,24 +447,26 @@ class _DateTimeItem extends StatelessWidget {
             final minStr = (e.inMinutes % 60).toString().padLeft(2, "0");
             return Text("UTC${e.isNegative ? "-" : "+"}$hrStr:$minStr");
           }),
-          trailing: const Icon(Icons.edit_outlined),
-          onTap: () async {
-            final zonedDt = t.let((t) {
-              final local = LocalDateTime.dateTime(t);
-              final zone = offsetTime == null
-                  ? DateTimeZone.local
-                  : DateTimeZone.forOffset(Offset.duration(offsetTime));
-              return ZonedDateTime.atLeniently(local, zone);
-            });
-            final result = await showDialog<ZonedDateTime>(
-              context: context,
-              builder: (context) =>
-                  PhotoDateTimeEditDialog(initialDateTime: zonedDt),
-            );
-            if (result != null) {
-              context.addEvent(_EditDateTime(result));
-            }
-          },
+          trailing: canEdit ? const Icon(Icons.edit_outlined) : null,
+          onTap: canEdit
+              ? () async {
+                  final zonedDt = t.let((t) {
+                    final local = LocalDateTime.dateTime(t);
+                    final zone = offsetTime == null
+                        ? DateTimeZone.local
+                        : DateTimeZone.forOffset(Offset.duration(offsetTime));
+                    return ZonedDateTime.atLeniently(local, zone);
+                  });
+                  final result = await showDialog<ZonedDateTime>(
+                    context: context,
+                    builder: (context) =>
+                        PhotoDateTimeEditDialog(initialDateTime: zonedDt),
+                  );
+                  if (result != null) {
+                    context.addEvent(_EditDateTime(result));
+                  }
+                }
+              : null,
         );
       },
     );

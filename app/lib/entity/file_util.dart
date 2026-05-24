@@ -26,6 +26,9 @@ bool isSupportedVideoMime(String mime) =>
 bool isSupportedVideoFormat(FileDescriptor file) =>
     isSupportedVideoMime(file.fdMime ?? "");
 
+bool isSupportedEditMetadataMime(String mime) =>
+    supportedEditMetadataFormatMimes.contains(mime);
+
 bool isTrash(Account account, FileDescriptor file) =>
     file.fdPath.startsWith(api_util.getTrashbinPath(account));
 
@@ -145,3 +148,5 @@ final supportedImageFormatMimes = supportedFormatMimes
 final supportedVideoFormatMimes = supportedFormatMimes
     .where((f) => f.startsWith("video/"))
     .toList();
+
+final supportedEditMetadataFormatMimes = ["image/jpeg"];
