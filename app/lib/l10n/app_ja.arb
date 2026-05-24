@@ -263,8 +263,11 @@
 	"settingsFallbackClientExifTrueText": "サーバー側の処理が失敗した場合にアプリでEXIFデータを読み込みます",
 	"settingsFallbackClientExifFalseText": "サーバー側の処理が失敗した場合でもアプリでEXIFデータを読み込みません",
 	"settingsFallbackClientExifConfirmDialogTitle": "サーバー側の処理が失敗した場合にアプリで処理しますか？",
-	"settingsFallbackClientExifConfirmDialogText": "通常、サーバー側は自動的に写真を処理し、EXIFデータを処理し、保存します。しかし、設定の問題やサーバーのバグにより、処理が失敗することがあります。有効にすると、これらのファイルをアプリで処理します。",
-	"settingsMemoriesTitle": "思い出",
+	"settingsFallbackClientExifConfirmDialogText": "通常、サーバー側は自動的に写真を処理し、EXIFデータを保存します。しかし、設定の問題やサーバーのバグにより、処理が失敗することがあります。有効にすると、これらのファイルをアプリで処理します。",
+	"settingsBackupOnRemoteExifEditTitle": "写真のEXIFデータを上書きする前にバックアップを作成する（サーバーにアップロードしたファイルのみ）",
+	"@settingsBackupOnRemoteExifEditTitle": {
+		"description": "Create a backup copy of the original file before editing metadata on server"
+	},	"settingsMemoriesTitle": "思い出",
 	"@settingsMemoriesTitle": {
 		"description": "Memory albums contain photos taken in a specific time range in the past"
 	},

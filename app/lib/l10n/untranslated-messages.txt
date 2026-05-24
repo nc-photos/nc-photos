@@ -1103,7 +1103,6 @@
   ],
 
   "ja": [
-    "settingsBackupOnRemoteExifEditTitle",
     "timeZoneOffsetSubtitle",
     "editMetadataWriteProgressTitle"
   ],

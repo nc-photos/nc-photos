@@ -264,7 +264,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsBackupOnRemoteExifEditTitle =>
-      'Create backup before modifying metadata (server file only)';
+      'Create backup before modifying metadata (for server files only)';
 
   @override
   String get settingsMemoriesTitle => 'Souvenirs';

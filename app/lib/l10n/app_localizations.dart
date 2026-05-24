@@ -492,7 +492,7 @@ abstract class AppLocalizations {
   /// Create a backup copy of the original file before editing metadata on server
   ///
   /// In en, this message translates to:
-  /// **'Create backup before modifying metadata (server file only)'**
+  /// **'Create backup before modifying metadata (for server files only)'**
   String get settingsBackupOnRemoteExifEditTitle;
 
   /// Memory albums contain photos taken in a specific time range in the past

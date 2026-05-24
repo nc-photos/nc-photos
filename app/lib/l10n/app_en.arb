@@ -264,7 +264,7 @@
 	"settingsFallbackClientExifFalseText": "If Nextcloud failed to extract the file metadata, leave it as is",
 	"settingsFallbackClientExifConfirmDialogTitle": "Enable client-side fallback?",
 	"settingsFallbackClientExifConfirmDialogText": "Normally Nextcloud server will automatically process your photos and store the EXIF metadata in the background. However, the background job may fail due to a configuration issue or server bug. If enabled, we will process those files ourselves instead.",
-	"settingsBackupOnRemoteExifEditTitle": "Create backup before modifying metadata (server file only)",
+	"settingsBackupOnRemoteExifEditTitle": "Create backup before modifying metadata (for server files only)",
 	"@settingsBackupOnRemoteExifEditTitle": {
 		"description": "Create a backup copy of the original file before editing metadata on server"
 	},
