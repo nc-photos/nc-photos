@@ -84,4 +84,11 @@ abstract class MyHostApi {
     String platformIdentifier, {
     required String dstPath,
   });
+
+  /// Replace the content of a file identified by [platformIdentifier] with
+  /// [bytes].
+  ///
+  /// On Android, [platformIdentifier] is a content URI managed by MediaStore.
+  @async
+  void replaceFile(String platformIdentifier, Uint8List bytes);
 }

@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.ContentUris
 import android.content.Context
+import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Build
@@ -20,6 +21,7 @@ import com.nkming.nc_photos.np_android_core.logE
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
+import io.flutter.plugin.common.PluginRegistry
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
@@ -33,28 +35,63 @@ import java.time.ZonedDateTime.ofInstant
 import java.time.temporal.ChronoField
 import java.time.temporal.ChronoUnit
 import java.util.Locale
+import java.util.concurrent.atomic.AtomicInteger
 
-private class PigeonApiImpl : MyHostApi, ActivityAware, CoroutineScope by MainScope() {
+private data class ReplaceRequestData(
+    val callback: (Result<Unit>) -> Unit,
+    val uri: Uri,
+    val bytes: ByteArray,
+)
+
+private class PigeonApiImpl : MyHostApi, ActivityAware, PluginRegistry.ActivityResultListener,
+    CoroutineScope by MainScope() {
     companion object {
         private const val TAG = "NpPlatformLocalMediaPlugin"
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         activity = binding.activity
+        pluginBinding = binding
+        binding.addActivityResultListener(this)
     }
 
     override fun onReattachedToActivityForConfigChanges(
         binding: ActivityPluginBinding
     ) {
         activity = binding.activity
+        pluginBinding = binding
+        binding.addActivityResultListener(this)
     }
 
     override fun onDetachedFromActivity() {
         activity = null
+        pluginBinding?.removeActivityResultListener(this)
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
         activity = null
+        pluginBinding?.removeActivityResultListener(this)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?): Boolean {
+        return try {
+            if (requestCode >= K.MEDIA_STORE_WRITE_REQUEST_MIN_CODE && requestCode < K.MEDIA_STORE_WRITE_REQUEST_MAX_CODE) {
+                val reqData = synchronized(replaceFileReqLock) {
+                    replaceFileReqs.remove(requestCode)
+                }
+                if (reqData != null) {
+                    onMediaStoreWriteRequestResult(resultCode, reqData)
+                } else {
+                    logE(TAG, "Unknown replace request, requestCode=$requestCode")
+                }
+                true
+            } else {
+                false
+            }
+        } catch (e: Throwable) {
+            logE(TAG, "Failed while onActivityResult, requestCode=$requestCode")
+            false
+        }
     }
 
     override fun getFilesSummary(
@@ -419,9 +456,7 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, CoroutineScope by MainSc
     }
 
     override fun copyFileToPrivateDir(
-        platformIdentifier: String,
-        dstPath: String,
-        callback: (Result<Unit>) -> Unit
+        platformIdentifier: String, dstPath: String, callback: (Result<Unit>) -> Unit
     ) {
         if (activity == null) {
             callback(Result.failure(IllegalStateException("Context is null")))
@@ -446,6 +481,41 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, CoroutineScope by MainSc
         }
     }
 
+    override fun replaceFile(
+        platformIdentifier: String, bytes: ByteArray, callback: (Result<Unit>) -> Unit
+    ) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            callback(Result.failure(IllegalStateException("Only supported on Android 11+")))
+            return
+        }
+        if (activity == null) {
+            callback(Result.failure(IllegalStateException("Context is null")))
+            return
+        }
+        try {
+            val fileUri = platformIdentifier.toUri()
+            // MediaStore does not support writing to files via their file uris
+            // (seriously why?!), we need to first convert them to image/video
+            // uris
+            val convertedUris =
+                MediaStoreUtil.convertFileUrisToConcreteUris(context!!, listOf(fileUri))
+            val pendingIntent = MediaStore.createWriteRequest(
+                context!!.contentResolver, convertedUris.values
+            )
+            val reqCode =
+                replaceFileReqCode.getAndUpdate { current -> if (current >= K.MEDIA_STORE_WRITE_REQUEST_MAX_CODE) K.MEDIA_STORE_WRITE_REQUEST_MIN_CODE else current + 1 }
+            synchronized(replaceFileReqLock) {
+                replaceFileReqs[reqCode] =
+                    ReplaceRequestData(callback, convertedUris[fileUri]!!, bytes)
+            }
+            activity!!.startIntentSenderForResult(
+                pendingIntent.intentSender, reqCode, null, 0, 0, 0
+            )
+        } catch (e: Throwable) {
+            callback(Result.failure(FlutterError("systemException", e.message, null)))
+        }
+    }
+
     private fun dirWhitelistToSql(dirWhitelist: List<String>): Pair<String, List<String>> {
         val wheres = mutableListOf<String>()
         val whereArgs = mutableListOf<String>()
@@ -456,10 +526,37 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, CoroutineScope by MainSc
         return Pair("(" + wheres.joinToString(" OR ") + ")", whereArgs)
     }
 
+    private fun onMediaStoreWriteRequestResult(resultCode: Int, data: ReplaceRequestData) {
+        val (callback, uri, bytes) = data
+        if (resultCode == Activity.RESULT_OK) {
+            launch(Dispatchers.IO) {
+                try {
+                    context!!.contentResolver.openOutputStream(uri, "wt")!!.use { it.write(bytes) }
+                    callback(Result.success(Unit))
+                } catch (e: Throwable) {
+                    callback(
+                        Result.failure(FlutterError("systemException", e.message, null))
+                    )
+                }
+            }
+        } else {
+            callback(
+                Result.failure(
+                    FlutterError("permissionError", "User denied write permission", null)
+                )
+            )
+        }
+    }
+
     private val context: Context?
         get() = activity
 
     private var activity: Activity? = null
+    private var pluginBinding: ActivityPluginBinding? = null
+
+    private val replaceFileReqLock = Any()
+    private val replaceFileReqs = HashMap<Int, ReplaceRequestData>()
+    private val replaceFileReqCode = AtomicInteger(K.MEDIA_STORE_WRITE_REQUEST_MIN_CODE)
 }
 
 class NpPlatformLocalMediaPlugin : FlutterPlugin, ActivityAware {

@@ -125,22 +125,33 @@ class AnyFileMergedReplaceWithBackupWorker
     AnyFile file, {
     required this.account,
     required this.c,
-  }) : _delegate = AnyFileNextcloudReplaceWithBackupWorker(
+  }) : _remoteDelegate = AnyFileNextcloudReplaceWithBackupWorker(
          (file.provider as AnyFileMergedProvider).asRemoteFile(),
          account: account,
          c: c,
+       ),
+       _localDelegate = AnyFileLocalReplaceWithBackupWorker(
+         (file.provider as AnyFileMergedProvider).asLocalFile(),
        );
 
   @override
   Future<void> replace(
     io.File srcFile, {
     void Function(double progress)? onProgress,
-  }) {
-    return _delegate.replace(srcFile, onProgress: onProgress);
+  }) async {
+    await _remoteDelegate.replace(
+      srcFile,
+      onProgress: onProgress,
+    );
+    await _localDelegate.replace(
+      srcFile,
+      onProgress: onProgress,
+    );
   }
 
   final Account account;
   final DiContainer c;
 
-  final AnyFileReplaceWithBackupWorker _delegate;
+  final AnyFileReplaceWithBackupWorker _remoteDelegate;
+  final AnyFileReplaceWithBackupWorker _localDelegate;
 }

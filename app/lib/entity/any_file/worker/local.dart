@@ -1,6 +1,8 @@
+import 'dart:async';
 import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
+import 'package:logging/logging.dart';
 import 'package:nc_photos/account.dart';
 import 'package:nc_photos/controller/any_files_controller.dart';
 import 'package:nc_photos/controller/local_files_controller.dart';
@@ -10,8 +12,12 @@ import 'package:nc_photos/entity/any_file/worker/factory.dart';
 import 'package:nc_photos/entity/local_file.dart';
 import 'package:nc_photos/mobile/share.dart';
 import 'package:nc_photos/use_case/local_file/upload_local_file.dart';
+import 'package:np_log/np_log.dart';
+import 'package:np_platform_local_media/np_platform_local_media.dart';
 import 'package:np_platform_uploader/np_platform_uploader.dart';
 import 'package:np_platform_util/np_platform_util.dart';
+
+part 'local.g.dart';
 
 class AnyFileLocalCapabilityWorker implements AnyFileCapabilityWorker {
   const AnyFileLocalCapabilityWorker();
@@ -91,23 +97,6 @@ class AnyFileLocalSetAsWorker implements AnyFileSetAsWorker {
   final AnyFileLocalProvider _provider;
 }
 
-class AnyFileLocalReplaceWithBackupWorker
-    implements AnyFileReplaceWithBackupWorker {
-  AnyFileLocalReplaceWithBackupWorker(AnyFile file)
-    : _provider = file.provider as AnyFileLocalProvider;
-
-  @override
-  Future<void> replace(
-    io.File srcFile, {
-    void Function(double progress)? onProgress,
-  }) {
-    throw UnimplementedError();
-  }
-
-  // ignore: unused_field
-  final AnyFileLocalProvider _provider;
-}
-
 class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
   AnyFileLocalUploadWorker(AnyFile file, {required this.account})
     : _provider = file.provider as AnyFileLocalProvider;
@@ -128,6 +117,30 @@ class AnyFileLocalUploadWorker implements AnyFileUploadWorker {
   }
 
   final Account account;
+
+  final AnyFileLocalProvider _provider;
+}
+
+@npLog
+class AnyFileLocalReplaceWithBackupWorker
+    implements AnyFileReplaceWithBackupWorker {
+  AnyFileLocalReplaceWithBackupWorker(AnyFile file)
+    : _provider = file.provider as AnyFileLocalProvider;
+
+  @override
+  Future<void> replace(
+    io.File srcFile, {
+    void Function(double progress)? onProgress,
+  }) async {
+    final platformIdentifier = _provider.file.platformIdentifier;
+    try {
+      final bytes = await srcFile.readAsBytes();
+      await LocalMedia.replaceFile(platformIdentifier, bytes);
+    } catch (e, stackTrace) {
+      _log.severe("[replace] Failed while replaceFile", e, stackTrace);
+      rethrow;
+    }
+  }
 
   final AnyFileLocalProvider _provider;
 }
