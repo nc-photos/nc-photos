@@ -63,7 +63,11 @@ class _WrappedPhotoDateTimeEditDialog extends StatelessWidget {
                   }
                 },
                 child: _TextInputBox(
-                  text: Text(DateFormat.yMMMd().format(displayDt)),
+                  text: Text(
+                    DateFormat.yMMMd(
+                      Localizations.localeOf(context).languageCode,
+                    ).format(displayDt),
+                  ),
                 ),
               );
             },
@@ -94,7 +98,11 @@ class _WrappedPhotoDateTimeEditDialog extends StatelessWidget {
                   }
                 },
                 child: _TextInputBox(
-                  text: Text(DateFormat.jm().format(displayDt)),
+                  text: Text(
+                    DateFormat.jm(
+                      Localizations.localeOf(context).languageCode,
+                    ).format(displayDt),
+                  ),
                 ),
               );
             },
