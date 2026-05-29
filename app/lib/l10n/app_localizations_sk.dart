@@ -650,7 +650,7 @@ class AppLocalizationsSk extends AppLocalizations {
   String get timeSubtitle => 'Čas';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Rok';
@@ -1688,6 +1688,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'Neautentifikovaný prístup. Prihláste sa znova, ak problém pretrváva';
 
@@ -1721,7 +1724,4 @@ class AppLocalizationsSk extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

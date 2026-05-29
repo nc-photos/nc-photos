@@ -333,6 +333,7 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
+    "editMetadataWriteProgressTitle",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -341,8 +342,7 @@
     "errorServerError",
     "errorAlbumDowngrade",
     "errorNoStoragePermission",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "errorServerNoCert"
   ],
 
   "cs": [
@@ -409,8 +409,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "de": [
@@ -489,8 +489,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "el": [
@@ -715,8 +715,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "es": [
@@ -783,8 +783,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "fi": [
@@ -904,8 +904,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "fr": [
@@ -972,8 +972,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "it": [
@@ -1098,13 +1098,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
-  ],
-
-  "ja": [
-    "timeZoneOffsetSubtitle",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "nl": [
@@ -1553,6 +1548,7 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
+    "editMetadataWriteProgressTitle",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1561,8 +1557,7 @@
     "errorServerError",
     "errorAlbumDowngrade",
     "errorNoStoragePermission",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "errorServerNoCert"
   ],
 
   "pl": [
@@ -1686,8 +1681,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "pt": [
@@ -1825,8 +1820,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "ru": [
@@ -1946,8 +1941,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "sk": [
@@ -2014,8 +2009,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "tr": [
@@ -2218,8 +2213,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ],
 
   "zh_Hant": [
@@ -2460,7 +2455,7 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "errorServerNoCert",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "errorServerNoCert"
   ]
 }

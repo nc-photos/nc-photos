@@ -643,7 +643,7 @@ class AppLocalizationsRu extends AppLocalizations {
   String get timeSubtitle => 'Время';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Год';
@@ -1677,6 +1677,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'Неавторизованный доступ. Если ошибка возникает снова, попробуйте перелогиниться';
 
@@ -1711,7 +1714,4 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

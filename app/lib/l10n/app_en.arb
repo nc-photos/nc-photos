@@ -586,7 +586,7 @@
 	},
 	"dateSubtitle": "Date",
 	"timeSubtitle": "Time",
-	"timeZoneOffsetSubtitle": "Time zone offset",
+	"timeZoneOffsetSubtitle": "Time zone",
 	"dateYearInputHint": "Year",
 	"dateMonthInputHint": "Month",
 	"dateDayInputHint": "Day",
@@ -1641,6 +1641,10 @@
 	"recognizeInstructionDialogTitle": "Setup required for Recognize integration",
 	"recognizeInstructionDialogContent": "Since Nextcloud 33, a server-side app is required to support Recognize.",
 	"recognizeInstructionDialogButton": "Open Guide",
+	"editMetadataWriteProgressTitle": "Uploading file",
+	"@editMetadataWriteProgressTitle": {
+		"description": "Title of the progress dialog when uploading the file after editing its metadata"
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {
@@ -1677,9 +1681,5 @@
 	"errorServerNoCert": "Server certificate not found. Try HTTP instead?",
 	"@errorServerNoCert": {
 		"description": "No cert to establish HTTPS connection"
-	},
-	"editMetadataWriteProgressTitle": "Uploading file",
-	"@editMetadataWriteProgressTitle": {
-		"description": "Title of the progress dialog when uploading the file after editing its metadata"
 	}
 }

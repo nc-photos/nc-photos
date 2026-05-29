@@ -647,7 +647,7 @@ class AppLocalizationsCa extends AppLocalizations {
   String get timeSubtitle => 'Hora';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Any';
@@ -1679,6 +1679,9 @@ class AppLocalizationsCa extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'Unauthenticated access. Please sign-in again if the problem continues';
 
@@ -1711,7 +1714,4 @@ class AppLocalizationsCa extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

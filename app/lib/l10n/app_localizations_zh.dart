@@ -608,7 +608,7 @@ class AppLocalizationsZh extends AppLocalizations {
   String get timeSubtitle => '时间';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => '年';
@@ -1602,6 +1602,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated => '未授权的存取，若问题持续请重新登录';
 
   @override
@@ -1628,9 +1631,6 @@ class AppLocalizationsZh extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }
 
 /// The translations for Chinese, using the Han script (`zh_Hant`).

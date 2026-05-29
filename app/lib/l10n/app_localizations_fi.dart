@@ -646,7 +646,7 @@ class AppLocalizationsFi extends AppLocalizations {
   String get timeSubtitle => 'Aika';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Vuosi';
@@ -1675,6 +1675,9 @@ class AppLocalizationsFi extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'Ei sallittu pääsyä. Kirjaudu sovellukseen uudelleen mikäli virhe toistuu';
 
@@ -1708,7 +1711,4 @@ class AppLocalizationsFi extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

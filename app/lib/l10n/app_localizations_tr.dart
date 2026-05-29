@@ -647,7 +647,7 @@ class AppLocalizationsTr extends AppLocalizations {
   String get timeSubtitle => 'Saat';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Yıl';
@@ -1680,6 +1680,9 @@ class AppLocalizationsTr extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'Erişim kimliğiniz doğrulanamadı. Sorun devam ederse lütfen tekrar oturum açın';
 
@@ -1713,7 +1716,4 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Sunucu sertifikası bulunamadı. Bunun yerine HTTP denemek ister misiniz?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

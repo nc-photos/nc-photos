@@ -498,7 +498,7 @@
 	"@downloadTooltip": {
 		"description": "Tooltip of the download button"
 	},
-	"downloadProcessingNotification": "ファイルをダウンロードしています",
+	"downloadProcessingNotification": "ファイルをダウンロード中...",
 	"@downloadProcessingNotification": {
 		"description": "Inform user that the file is being downloaded"
 	},
@@ -531,7 +531,8 @@
 		"description": "Dialog to modify the date & time of a file"
 	},
 	"dateSubtitle": "日付",
-	"timeSubtitle": "時間",
+	"timeSubtitle": "時刻",
+	"timeZoneOffsetSubtitle": "タイムゾーン",
 	"dateYearInputHint": "年",
 	"dateMonthInputHint": "月",
 	"dateDayInputHint": "日",
@@ -1682,5 +1683,9 @@
 	},
 	"recognizeInstructionDialogTitle": "Recognize連携の設定",
 	"recognizeInstructionDialogContent": "Nextcloud 33以降でRecognizeアプリと連携するには、サーバーアプリをインストール必要があります。",
-	"recognizeInstructionDialogButton": "手順へ"
+	"recognizeInstructionDialogButton": "手順へ",
+	"editMetadataWriteProgressTitle": "ファイルをアップロード中...",
+	"@editMetadataWriteProgressTitle": {
+		"description": "Title of the progress dialog when uploading the file after editing its metadata"
+	}
 }

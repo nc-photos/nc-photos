@@ -652,7 +652,7 @@ class AppLocalizationsEl extends AppLocalizations {
   String get timeSubtitle => 'Ώρα';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Έτος';
@@ -1687,6 +1687,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'Μη εξουσιοδοτημένη πρόσβαση. Συνδεθείτε ξανά εάν το πρόβλημα συνεχίζεται';
 
@@ -1721,7 +1724,4 @@ class AppLocalizationsEl extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

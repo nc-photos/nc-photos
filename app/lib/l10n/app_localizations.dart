@@ -1152,7 +1152,7 @@ abstract class AppLocalizations {
   /// No description provided for @timeZoneOffsetSubtitle.
   ///
   /// In en, this message translates to:
-  /// **'Time zone offset'**
+  /// **'Time zone'**
   String get timeZoneOffsetSubtitle;
 
   /// No description provided for @dateYearInputHint.
@@ -2967,6 +2967,12 @@ abstract class AppLocalizations {
   /// **'Open Guide'**
   String get recognizeInstructionDialogButton;
 
+  /// Title of the progress dialog when uploading the file after editing its metadata
+  ///
+  /// In en, this message translates to:
+  /// **'Uploading file'**
+  String get editMetadataWriteProgressTitle;
+
   /// Error message when server responds with HTTP401
   ///
   /// In en, this message translates to:
@@ -3020,12 +3026,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Server certificate not found. Try HTTP instead?'**
   String get errorServerNoCert;
-
-  /// Title of the progress dialog when uploading the file after editing its metadata
-  ///
-  /// In en, this message translates to:
-  /// **'Uploading file'**
-  String get editMetadataWriteProgressTitle;
 }
 
 class _AppLocalizationsDelegate

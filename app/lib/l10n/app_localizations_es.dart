@@ -649,7 +649,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get timeSubtitle => 'Hora';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'Time zone';
 
   @override
   String get dateYearInputHint => 'Año';
@@ -1686,6 +1686,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get recognizeInstructionDialogButton => 'Open Guide';
 
   @override
+  String get editMetadataWriteProgressTitle => 'Uploading file';
+
+  @override
   String get errorUnauthenticated =>
       'No estás autentificado. Por favor inicia sesión otra vez si el problema continúa.';
 
@@ -1720,7 +1723,4 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get errorServerNoCert =>
       'Server certificate not found. Try HTTP instead?';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }

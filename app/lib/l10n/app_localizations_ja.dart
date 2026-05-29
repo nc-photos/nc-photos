@@ -585,7 +585,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get downloadTooltip => 'ダウンロード';
 
   @override
-  String get downloadProcessingNotification => 'ファイルをダウンロードしています';
+  String get downloadProcessingNotification => 'ファイルをダウンロード中...';
 
   @override
   String get downloadSuccessNotification => 'ファイルのダウンロードに成功しました';
@@ -614,10 +614,10 @@ class AppLocalizationsJa extends AppLocalizations {
   String get dateSubtitle => '日付';
 
   @override
-  String get timeSubtitle => '時間';
+  String get timeSubtitle => '時刻';
 
   @override
-  String get timeZoneOffsetSubtitle => 'Time zone offset';
+  String get timeZoneOffsetSubtitle => 'タイムゾーン';
 
   @override
   String get dateYearInputHint => '年';
@@ -1612,6 +1612,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get recognizeInstructionDialogButton => '手順へ';
 
   @override
+  String get editMetadataWriteProgressTitle => 'ファイルをアップロード中...';
+
+  @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';
 
   @override
@@ -1639,7 +1642,4 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get errorServerNoCert => 'サーバー証明書が正しく設定されていません。暗号化されていないHTTPで接続しますか？';
-
-  @override
-  String get editMetadataWriteProgressTitle => 'Uploading file';
 }
