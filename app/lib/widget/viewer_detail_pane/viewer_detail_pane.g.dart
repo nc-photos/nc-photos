@@ -37,6 +37,7 @@ abstract class $_StateCopyWithWorker {
     bool? canArchive,
     bool? canDelete,
     _EditMetadataProgress? editMetadataProgress,
+    bool? isLoading,
     ExceptionEvent? error,
   });
 }
@@ -69,6 +70,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic canArchive,
     dynamic canDelete,
     dynamic editMetadataProgress = copyWithNull,
+    dynamic isLoading,
     dynamic error = copyWithNull,
   }) {
     return _State(
@@ -111,6 +113,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       editMetadataProgress: editMetadataProgress == copyWithNull
           ? that.editMetadataProgress
           : editMetadataProgress as _EditMetadataProgress?,
+      isLoading: isLoading as bool? ?? that.isLoading,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }
@@ -153,7 +156,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {file: $file, isOwned: $isOwned, owner: $owner, size: $size, byteSize: $byteSize, model: $model, fNumber: ${fNumber == null ? null : "${fNumber!.toStringAsFixed(3)}"}, exposureTime: $exposureTime, focalLength: ${focalLength == null ? null : "${focalLength!.toStringAsFixed(3)}"}, isoSpeedRatings: $isoSpeedRatings, gps: $gps, location: $location, tags: ${tags == null ? null : "[length: ${tags!.length}]"}, offsetTime: $offsetTime, fps: ${fps == null ? null : "${fps!.toStringAsFixed(3)}"}, duration: $duration, canRemoveFromAlbum: $canRemoveFromAlbum, canSetCover: $canSetCover, canAddToCollection: $canAddToCollection, canSetAs: $canSetAs, canArchive: $canArchive, canDelete: $canDelete, editMetadataProgress: $editMetadataProgress, error: $error}";
+    return "_State {file: $file, isOwned: $isOwned, owner: $owner, size: $size, byteSize: $byteSize, model: $model, fNumber: ${fNumber == null ? null : "${fNumber!.toStringAsFixed(3)}"}, exposureTime: $exposureTime, focalLength: ${focalLength == null ? null : "${focalLength!.toStringAsFixed(3)}"}, isoSpeedRatings: $isoSpeedRatings, gps: $gps, location: $location, tags: ${tags == null ? null : "[length: ${tags!.length}]"}, offsetTime: $offsetTime, fps: ${fps == null ? null : "${fps!.toStringAsFixed(3)}"}, duration: $duration, canRemoveFromAlbum: $canRemoveFromAlbum, canSetCover: $canSetCover, canAddToCollection: $canAddToCollection, canSetAs: $canSetAs, canArchive: $canArchive, canDelete: $canDelete, editMetadataProgress: $editMetadataProgress, isLoading: $isLoading, error: $error}";
   }
 }
 

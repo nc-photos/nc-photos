@@ -27,6 +27,7 @@ final class _State {
     required this.canArchive,
     required this.canDelete,
     this.editMetadataProgress,
+    required this.isLoading,
     this.error,
   });
 
@@ -38,6 +39,7 @@ final class _State {
     canSetAs: false,
     canArchive: false,
     canDelete: false,
+    isLoading: false,
   );
 
   @override
@@ -68,6 +70,7 @@ final class _State {
   final bool canDelete;
 
   final _EditMetadataProgress? editMetadataProgress;
+  final bool isLoading;
 
   final ExceptionEvent? error;
 }
