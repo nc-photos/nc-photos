@@ -11,3 +11,4 @@ linter:
     unawaited_futures: true
     avoid_void_async: true
     directives_ordering: true
+    always_put_control_body_on_new_line: true
