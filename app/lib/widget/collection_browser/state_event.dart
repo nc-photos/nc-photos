@@ -18,6 +18,8 @@ class _State {
     required this.isSelectionManageableFile,
     required this.isSelectionDeletable,
     required this.shareRequest,
+    required this.startSlideshowRequest,
+    required this.slideshowRequest,
     required this.isEditMode,
     required this.isEditBusy,
     this.editName,
@@ -55,6 +57,8 @@ class _State {
       isSelectionManageableFile: true,
       isSelectionDeletable: true,
       shareRequest: Unique(null),
+      startSlideshowRequest: Unique(null),
+      slideshowRequest: Unique(null),
       isEditMode: false,
       isEditBusy: false,
       isAddMapBusy: false,
@@ -85,6 +89,9 @@ class _State {
   final bool isSelectionManageableFile;
   final bool isSelectionDeletable;
   final Unique<_ShareRequest?> shareRequest;
+
+  final Unique<_StartSlideshowRequest?> startSlideshowRequest;
+  final Unique<_SlideshowRequest?> slideshowRequest;
 
   final bool isEditMode;
   final bool isEditBusy;
@@ -148,6 +155,24 @@ class _ImportPendingSharedCollection implements _Event {
 
   @override
   String toString() => _$toString();
+}
+
+@toString
+class _StartSlideshow implements _Event {
+  const _StartSlideshow();
+
+  @override
+  String toString() => _$toString();
+}
+
+@toString
+class _StartSlideshowResult implements _Event {
+  const _StartSlideshowResult(this.config);
+
+  @override
+  String toString() => _$toString();
+
+  final SlideshowConfig config;
 }
 
 @toString

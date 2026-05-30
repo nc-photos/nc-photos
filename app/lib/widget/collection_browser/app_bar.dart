@@ -44,16 +44,18 @@ class _AppBar extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                if (canShare)
+                if (state.items.isNotEmpty)
                   IconButton(
-                    onPressed: () => _onSharePressed(context),
-                    icon: const Icon(Icons.share_outlined),
-                    tooltip: L10n.global().shareTooltip,
+                    icon: const Icon(Icons.slideshow_outlined),
+                    tooltip: L10n.global().slideshowTooltip,
                     style: IconButton.styleFrom(
                       backgroundColor: Theme.of(
                         context,
                       ).colorScheme.surfaceContainer,
                     ),
+                    onPressed: () {
+                      context.addEvent(const _StartSlideshow());
+                    },
                   ),
                 if (state.collection.isPendingSharedAlbum)
                   IconButton(
@@ -66,7 +68,7 @@ class _AppBar extends StatelessWidget {
                       ).colorScheme.surfaceContainer,
                     ),
                   ),
-                if (state.items.isNotEmpty || canRename)
+                if (state.items.isNotEmpty || canRename || canShare)
                   PopupMenuButton<_MenuOption>(
                     tooltip: MaterialLocalizations.of(
                       context,
@@ -81,6 +83,11 @@ class _AppBar extends StatelessWidget {
                         PopupMenuItem(
                           value: _MenuOption.unsetCover,
                           child: Text(L10n.global().unsetAlbumCoverTooltip),
+                        ),
+                      if (canShare)
+                        PopupMenuItem(
+                          value: _MenuOption.share,
+                          child: Text(L10n.global().shareTooltip),
                         ),
                       if (state.items.isNotEmpty) ...[
                         PopupMenuItem(
@@ -135,6 +142,9 @@ class _AppBar extends StatelessWidget {
         break;
       case _MenuOption.albumFixShare:
         _onAlbumFixShareSelected(context);
+        break;
+      case _MenuOption.share:
+        _onSharePressed(context);
         break;
     }
   }
@@ -641,7 +651,7 @@ class _EditAppBar extends StatelessWidget {
   }
 }
 
-enum _MenuOption { edit, unsetCover, download, export, albumFixShare }
+enum _MenuOption { edit, unsetCover, download, export, albumFixShare, share }
 
 enum _SelectionMenuOption { download, removeFromAlbum, archive, delete }
 

@@ -66,6 +66,8 @@ import 'package:nc_photos/widget/share_collection_dialog/share_collection_dialog
 import 'package:nc_photos/widget/share_helper/share_helper.dart';
 import 'package:nc_photos/widget/shared_album_info_dialog.dart';
 import 'package:nc_photos/widget/simple_input_dialog.dart';
+import 'package:nc_photos/widget/slideshow_dialog.dart';
+import 'package:nc_photos/widget/slideshow_viewer/slideshow_viewer.dart';
 import 'package:nc_photos/widget/sliver_visualized_scale.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_common/object_util.dart';
@@ -354,6 +356,22 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                 },
               ),
               _BlocListenerT(
+                selector: (state) => state.startSlideshowRequest,
+                listener: (context, startSlideshowRequest) {
+                  if (startSlideshowRequest.value != null) {
+                    _onStartSlideshowRequest(context);
+                  }
+                },
+              ),
+              _BlocListenerT(
+                selector: (state) => state.slideshowRequest,
+                listener: (context, slideshowRequest) {
+                  if (slideshowRequest.value != null) {
+                    _onSlideshowRequest(context, slideshowRequest.value!);
+                  }
+                },
+              ),
+              _BlocListenerT(
                 selector: (state) => state.shareRequest,
                 listener: _onShareRequest,
               ),
@@ -576,6 +594,39 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
     }
     context.read<ShareBloc>().add(
       ShareBlocShareFiles(shareRequest.value!.files),
+    );
+  }
+
+  Future<void> _onStartSlideshowRequest(BuildContext context) async {
+    final result = await showDialog<SlideshowConfig>(
+      context: context,
+      builder: (_) => SlideshowDialog(
+        duration: _bloc.prefController.slideshowDurationValue,
+        isShuffle: _bloc.prefController.isSlideshowShuffleValue,
+        isRepeat: _bloc.prefController.isSlideshowRepeatValue,
+        isReverse: _bloc.prefController.isSlideshowReverseValue,
+      ),
+    );
+    if (result == null || !context.mounted) {
+      return;
+    }
+    context.addEvent(_StartSlideshowResult(result));
+  }
+
+  void _onSlideshowRequest(
+    BuildContext context,
+    _SlideshowRequest slideshowRequest,
+  ) {
+    Navigator.of(context).pushNamed(
+      SlideshowViewer.routeName,
+      arguments: SlideshowViewerArguments(
+        slideshowRequest.afIds,
+        slideshowRequest.config.isReverse
+            ? slideshowRequest.afIds.length - 1
+            : 0,
+        slideshowRequest.collectionId,
+        slideshowRequest.config,
+      ),
     );
   }
 

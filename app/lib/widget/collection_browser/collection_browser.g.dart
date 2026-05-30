@@ -26,6 +26,8 @@ abstract class $_StateCopyWithWorker {
     bool? isSelectionManageableFile,
     bool? isSelectionDeletable,
     Unique<_ShareRequest?>? shareRequest,
+    Unique<_StartSlideshowRequest?>? startSlideshowRequest,
+    Unique<_SlideshowRequest?>? slideshowRequest,
     bool? isEditMode,
     bool? isEditBusy,
     String? editName,
@@ -64,6 +66,8 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic isSelectionManageableFile,
     dynamic isSelectionDeletable,
     dynamic shareRequest,
+    dynamic startSlideshowRequest,
+    dynamic slideshowRequest,
     dynamic isEditMode,
     dynamic isEditBusy,
     dynamic editName = copyWithNull,
@@ -105,6 +109,12 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
           isSelectionDeletable as bool? ?? that.isSelectionDeletable,
       shareRequest:
           shareRequest as Unique<_ShareRequest?>? ?? that.shareRequest,
+      startSlideshowRequest:
+          startSlideshowRequest as Unique<_StartSlideshowRequest?>? ??
+          that.startSlideshowRequest,
+      slideshowRequest:
+          slideshowRequest as Unique<_SlideshowRequest?>? ??
+          that.slideshowRequest,
       isEditMode: isEditMode as bool? ?? that.isEditMode,
       isEditBusy: isEditBusy as bool? ?? that.isEditBusy,
       editName: editName == copyWithNull ? that.editName : editName as String?,
@@ -189,7 +199,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, shareRequest: $shareRequest, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
+    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
   }
 }
 
@@ -219,6 +229,20 @@ extension _$_ImportPendingSharedCollectionToString
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_ImportPendingSharedCollection {}";
+  }
+}
+
+extension _$_StartSlideshowToString on _StartSlideshow {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_StartSlideshow {}";
+  }
+}
+
+extension _$_StartSlideshowResultToString on _StartSlideshowResult {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_StartSlideshowResult {config: $config}";
   }
 }
 

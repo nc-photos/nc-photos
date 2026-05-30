@@ -219,6 +219,22 @@ class _ShareRequest {
   final List<AnyFile> files;
 }
 
+class _StartSlideshowRequest {
+  const _StartSlideshowRequest();
+}
+
+class _SlideshowRequest {
+  const _SlideshowRequest({
+    required this.afIds,
+    required this.collectionId,
+    required this.config,
+  });
+
+  final List<String> afIds;
+  final String collectionId;
+  final SlideshowConfig config;
+}
+
 class _NewLabelRequest {
   const _NewLabelRequest({this.before});
 

@@ -32,6 +32,8 @@ class _Bloc extends Bloc<_Event, _State>
     on<_ImportPendingSharedCollection>(_onImportPendingSharedCollection);
 
     on<_Download>(_onDownload);
+    on<_StartSlideshow>(_onStartSlideshow);
+    on<_StartSlideshowResult>(_onStartSlideshowResult);
 
     on<_BeginEdit>(_onBeginEdit);
     on<_EditName>(_onEditName);
@@ -227,6 +229,36 @@ class _Bloc extends Bloc<_Event, _State>
     if (newCollection != null) {
       emit(state.copyWith(importResult: newCollection));
     }
+  }
+
+  void _onStartSlideshow(_StartSlideshow ev, _Emitter emit) {
+    _log.info(ev);
+    emit(
+      state.copyWith(
+        startSlideshowRequest: Unique(const _StartSlideshowRequest()),
+      ),
+    );
+  }
+
+  void _onStartSlideshowResult(_StartSlideshowResult ev, _Emitter emit) {
+    _log.info(ev);
+    final afIds = state.items
+        .whereType<CollectionFileItem>()
+        .map((e) => AnyFileNextcloudProvider.toAfId(e.file.fdId))
+        .toList();
+    if (afIds.isEmpty) {
+      return;
+    }
+    final req = _SlideshowRequest(
+      afIds: afIds,
+      collectionId: state.collection.id,
+      config: ev.config,
+    );
+    unawaited(prefController.setSlideshowDuration(ev.config.duration));
+    unawaited(prefController.setSlideshowShuffle(ev.config.isShuffle));
+    unawaited(prefController.setSlideshowRepeat(ev.config.isRepeat));
+    unawaited(prefController.setSlideshowReverse(ev.config.isReverse));
+    emit(state.copyWith(slideshowRequest: Unique(req)));
   }
 
   void _onBeginEdit(_BeginEdit ev, Emitter<_State> emit) {
