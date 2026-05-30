@@ -180,8 +180,40 @@ class _AppBar extends StatelessWidget {
   }
 }
 
-class _CoverView extends StatelessWidget {
+class _CoverView extends StatefulWidget {
   const _CoverView();
+
+  @override
+  State<StatefulWidget> createState() => _CoverViewState();
+}
+
+class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
+  @override
+  void initState() {
+    super.initState();
+    _controllers = List.generate(
+      2,
+      (_) => AnimationController(
+        vsync: this,
+        duration: const Duration(seconds: 30),
+      ),
+    );
+    _fadeController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    );
+    _controllers[_activeIndex].addListener(_transitionHandler);
+    _controllers[_activeIndex].forward();
+  }
+
+  @override
+  void dispose() {
+    for (final c in _controllers) {
+      c.dispose();
+    }
+    _fadeController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -192,26 +224,39 @@ class _CoverView extends StatelessWidget {
       builder: (context, state) {
         if (state.cover?.url != null) {
           return SizedBox(
-            height: MediaQuery.sizeOf(context).height / 2,
+            height: MediaQuery.sizeOf(context).height / 1.5,
             child: Stack(
               fit: StackFit.expand,
               children: [
-                Hero(
-                  tag: flutter_util.HeroTag.fromCollection(state.collection),
-                  child: FittedBox(
-                    clipBehavior: Clip.hardEdge,
-                    fit: BoxFit.cover,
-                    child: CachedNetworkImageBuilder(
-                      type: CachedNetworkImageType.cover,
-                      imageUrl: state.cover!.url,
-                      mime: state.cover!.mime,
-                      account: context.bloc.account,
-                      errorWidget: (context, url, error) {
-                        // just leave it empty
-                        return Container();
-                      },
-                    ).build(),
-                  ),
+                LayoutBuilder(
+                  builder: (context, constraints) {
+                    final currController = _controllers[_activeIndex];
+                    final nextController = _controllers[1 - _activeIndex];
+                    return Stack(
+                      fit: StackFit.expand,
+                      children: [
+                        _buildImage(
+                          context,
+                          currController,
+                          constraints,
+                          state.cover!,
+                        ),
+                        if (_isFading)
+                          AnimatedBuilder(
+                            animation: _fadeController,
+                            builder: (context, child) => Opacity(
+                              opacity: _fadeController.value,
+                              child: _buildImage(
+                                context,
+                                nextController,
+                                constraints,
+                                state.cover!,
+                              ),
+                            ),
+                          ),
+                      ],
+                    );
+                  },
                 ),
                 const DecoratedBox(
                   decoration: BoxDecoration(
@@ -248,6 +293,109 @@ class _CoverView extends StatelessWidget {
       },
     );
   }
+
+  Widget _buildImage(
+    BuildContext context,
+    AnimationController controller,
+    BoxConstraints constraints,
+    CollectionCoverResult cover,
+  ) {
+    return AnimatedBuilder(
+      animation: controller,
+      builder: (context, child) {
+        final t = controller.value * 2 - 1;
+        final (dx, dy) = _isLandscape
+            ? (-t * constraints.maxWidth * .25, .0)
+            : (.0, -t * constraints.maxHeight * .25);
+        return ClipRect(
+          child: Transform.translate(
+            offset: Offset(dx, dy),
+            child: Transform.scale(scale: 1.5, child: child),
+          ),
+        );
+      },
+      child: FittedBox(
+        clipBehavior: Clip.hardEdge,
+        fit: BoxFit.cover,
+        child: CachedNetworkImageBuilder(
+          type: CachedNetworkImageType.cover,
+          imageUrl: cover.url,
+          mime: cover.mime,
+          account: context.bloc.account,
+          imageBuilder: (ctx, child, imageProvider) {
+            _onImageLoaded(imageProvider, cover.url);
+            return child;
+          },
+          errorWidget: (context, url, error) {
+            // just leave it empty
+            return Container();
+          },
+        ).build(),
+      ),
+    );
+  }
+
+  void _onImageLoaded(ImageProvider imageProvider, String url) {
+    if (_coverUrl == url) {
+      return;
+    }
+    _coverUrl = url;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || _coverUrl != url) {
+        return;
+      }
+      final stream = imageProvider.resolve(ImageConfiguration.empty);
+      late ImageStreamListener listener;
+      listener = ImageStreamListener((info, _) {
+        stream.removeListener(listener);
+        if (!mounted || _coverUrl != url) {
+          return;
+        }
+        setState(() {
+          _isLandscape = info.image.width >= info.image.height;
+        });
+      });
+      stream.addListener(listener);
+    });
+  }
+
+  void _transitionHandler() {
+    final currController = _controllers[_activeIndex];
+    if (_isFading ||
+        currController.value <
+            (_controllers[0].duration!.inMilliseconds -
+                    _fadeController.duration!.inMilliseconds) /
+                _controllers[0].duration!.inMilliseconds) {
+      return;
+    }
+    final nextI = 1 - _activeIndex;
+    final nextController = _controllers[nextI];
+    nextController.value = 0;
+    nextController.forward();
+    setState(() {
+      _isFading = true;
+    });
+    _fadeController.forward(from: 0).then((_) {
+      if (!mounted) {
+        return;
+      }
+      currController.stop();
+      currController.removeListener(_transitionHandler);
+      setState(() {
+        _activeIndex = nextI;
+        _isFading = false;
+      });
+      _fadeController.value = 0;
+      _controllers[_activeIndex].addListener(_transitionHandler);
+    });
+  }
+
+  String? _coverUrl;
+  late List<AnimationController> _controllers;
+  late AnimationController _fadeController;
+  var _activeIndex = 0;
+  var _isFading = false;
+  var _isLandscape = true;
 }
 
 @npLog
