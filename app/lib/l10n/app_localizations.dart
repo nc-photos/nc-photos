@@ -2973,6 +2973,12 @@ abstract class AppLocalizations {
   /// **'Uploading file'**
   String get editMetadataWriteProgressTitle;
 
+  /// No description provided for @addLocationTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add location'**
+  String get addLocationTitle;
+
   /// Error message when server responds with HTTP401
   ///
   /// In en, this message translates to:

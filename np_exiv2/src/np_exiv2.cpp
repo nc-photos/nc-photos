@@ -193,6 +193,56 @@ int exiv2WriteFileDateTimeOriginal(const char *path, const char *dateTime,
   }
 }
 
+int exiv2WriteFileGps(const char *path, const char *latitudeRef,
+                      const uint32_t *latitude, const char *longitudeRef,
+                      const uint32_t *longitude) {
+  try {
+    auto image = Exiv2::ImageFactory::open(path, false);
+    if (!image || !image->good()) {
+      LOGE(TAG, "Failed to open image file: %s", path);
+      return false;
+    }
+    image->readMetadata();
+    auto &exifData = image->exifData();
+    const Exiv2::ExifKey gpsLatRefKey("Exif.GPSInfo.GPSLatitudeRef");
+    const Exiv2::ExifKey gpsLatKey("Exif.GPSInfo.GPSLatitude");
+    const Exiv2::ExifKey gpsLngRefKey("Exif.GPSInfo.GPSLongitudeRef");
+    const Exiv2::ExifKey gpsLngKey("Exif.GPSInfo.GPSLongitude");
+
+    if (latitudeRef && latitude && longitudeRef && longitude) {
+      exifData[gpsLatRefKey.key()] = latitudeRef;
+      Exiv2::URationalValue latVal;
+      for (int i = 0; i < 3; ++i) {
+        latVal.value_.push_back({latitude[i * 2], latitude[i * 2 + 1]});
+      }
+      exifData[gpsLatKey.key()].setValue(&latVal);
+
+      exifData[gpsLngRefKey.key()] = longitudeRef;
+      Exiv2::URationalValue lngVal;
+      for (int i = 0; i < 3; ++i) {
+        lngVal.value_.push_back({longitude[i * 2], longitude[i * 2 + 1]});
+      }
+      exifData[gpsLngKey.key()].setValue(&lngVal);
+    } else {
+      for (const auto &key :
+           {gpsLatRefKey, gpsLatKey, gpsLngRefKey, gpsLngKey}) {
+        auto it = exifData.findKey(key);
+        if (it != exifData.end()) {
+          exifData.erase(it);
+        }
+      }
+    }
+    image->writeMetadata();
+    return true;
+  } catch (const exception &e) {
+    LOGE(TAG, "Exception writing GPS: %s", e.what());
+    return false;
+  } catch (...) {
+    LOGE(TAG, "Exception writing GPS");
+    return false;
+  }
+}
+
 namespace {
 
 void convertCppType(Exiv2Metadatum *that,

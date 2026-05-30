@@ -9,6 +9,7 @@ class GoogleGpsMap extends StatelessWidget {
   Widget build(BuildContext context) {
     final center = LatLng(location.center.latitude, location.center.longitude);
     return GoogleMap(
+      key: Key(center.toString()),
       compassEnabled: false,
       mapToolbarEnabled: false,
       rotateGesturesEnabled: false,

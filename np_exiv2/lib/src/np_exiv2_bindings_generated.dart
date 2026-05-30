@@ -155,6 +155,41 @@ class NpExiv2Bindings {
           int Function(ffi.Pointer<ffi.Char>, ffi.Pointer<ffi.Char>,
               ffi.Pointer<ffi.Char>)>();
 
+  /// Write the EXIF GPS tags in the file at @a path.
+  ///
+  /// @return boolean
+  int exiv2WriteFileGps(
+    ffi.Pointer<ffi.Char> path,
+    ffi.Pointer<ffi.Char> gpsLatitudeRef,
+    ffi.Pointer<ffi.Uint32> gpsLatitude,
+    ffi.Pointer<ffi.Char> gpsLongitudeRef,
+    ffi.Pointer<ffi.Uint32> gpsLongitude,
+  ) {
+    return _exiv2WriteFileGps(
+      path,
+      gpsLatitudeRef,
+      gpsLatitude,
+      gpsLongitudeRef,
+      gpsLongitude,
+    );
+  }
+
+  late final _exiv2WriteFileGpsPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Int Function(
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Uint32>,
+              ffi.Pointer<ffi.Char>,
+              ffi.Pointer<ffi.Uint32>)>>('exiv2WriteFileGps');
+  late final _exiv2WriteFileGps = _exiv2WriteFileGpsPtr.asFunction<
+      int Function(
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Uint32>,
+          ffi.Pointer<ffi.Char>,
+          ffi.Pointer<ffi.Uint32>)>();
+
   /// Release the resources of a Exiv2ReadResult object returned by
   /// @a exiv2_read_file
   void exiv2ResultFree(

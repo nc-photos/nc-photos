@@ -1690,6 +1690,9 @@ class AppLocalizationsEl extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'Μη εξουσιοδοτημένη πρόσβαση. Συνδεθείτε ξανά εάν το πρόβλημα συνεχίζεται';
 

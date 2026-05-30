@@ -1605,6 +1605,9 @@ class AppLocalizationsZh extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated => '未授权的存取，若问题持续请重新登录';
 
   @override

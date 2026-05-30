@@ -1670,6 +1670,9 @@ class AppLocalizationsNl extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'Unauthenticated access. Please sign-in again if the problem continues';
 

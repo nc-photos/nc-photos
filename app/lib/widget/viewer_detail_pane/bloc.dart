@@ -16,6 +16,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
     on<_SetFile>(_onSetFile);
     on<_FileUpdated>(_onFileUpdated);
     on<_EditDateTime>(_onEditDateTime);
+    on<_EditGps>(_onEditGps);
 
     _subscriptions.add(
       anyFilesController.stream.listen((event) {
@@ -267,6 +268,36 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
         e,
         stackTrace,
       );
+      emit(state.copyWith(editMetadataProgress: null));
+      emit(state.copyWith(error: ExceptionEvent(e, stackTrace)));
+    }
+  }
+
+  Future<void> _onEditGps(_EditGps ev, _Emitter emit) async {
+    _log.info(ev);
+    try {
+      await UpdateAnyFileMetadata(
+        c,
+        filesController: anyFilesController.filesController,
+        prefController: prefController,
+      ).setGps(
+        state.file,
+        ev.value,
+        account: account,
+        onProgress: (step, progress) {
+          emit(
+            state.copyWith(
+              editMetadataProgress: _EditMetadataProgress(
+                step: step,
+                progress: progress,
+              ),
+            ),
+          );
+        },
+      );
+      emit(state.copyWith(editMetadataProgress: null));
+    } catch (e, stackTrace) {
+      _log.severe("[_onEditGps] Failed while setGps", e, stackTrace);
       emit(state.copyWith(editMetadataProgress: null));
       emit(state.copyWith(error: ExceptionEvent(e, stackTrace)));
     }

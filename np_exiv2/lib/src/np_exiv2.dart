@@ -451,6 +451,78 @@ Future<bool> writeFileDateTimeOriginal(String path, ZonedDateTime? value) {
   });
 }
 
+Future<bool> writeFileGps(
+  String path, {
+  required String? latitudeRef,
+  required List<Rational>? latitude,
+  required String? longitudeRef,
+  required List<Rational>? longitude,
+}) {
+  if (!(latitude == null || latitude.length == 3)) {
+    throw ArgumentError.value(
+      latitude,
+      "latitude",
+      "Must be null or length == 3",
+    );
+  }
+  if (!(longitude == null || longitude.length == 3)) {
+    throw ArgumentError.value(
+      longitude,
+      "longitude",
+      "Must be null or length == 3",
+    );
+  }
+  final latData = latitude
+      ?.expand((r) => [r.numerator, r.denominator])
+      .toList();
+  final lngData = longitude
+      ?.expand((r) => [r.numerator, r.denominator])
+      .toList();
+  return Isolate.run(() {
+    final pathC = path.toNativeUtf8();
+    final latRefC = latitudeRef?.toNativeUtf8();
+    final lngRefC = longitudeRef?.toNativeUtf8();
+    Pointer<Uint32>? latC;
+    Pointer<Uint32>? lngC;
+    try {
+      if (latData != null) {
+        latC = ffi.malloc.allocate<Uint32>(latData.length * sizeOf<Uint32>());
+        for (var i = 0; i < latData.length; ++i) {
+          latC[i] = latData[i];
+        }
+      }
+      if (lngData != null) {
+        lngC = ffi.malloc.allocate<Uint32>(lngData.length * sizeOf<Uint32>());
+        for (var i = 0; i < lngData.length; ++i) {
+          lngC[i] = lngData[i];
+        }
+      }
+      return _bindings.exiv2WriteFileGps(
+            pathC.cast(),
+            latRefC?.cast() ?? nullptr,
+            latC ?? nullptr,
+            lngRefC?.cast() ?? nullptr,
+            lngC ?? nullptr,
+          ) !=
+          0;
+    } finally {
+      ffi.malloc.free(pathC);
+      if (latRefC != null) {
+        ffi.malloc.free(latRefC);
+      }
+      if (lngRefC != null) {
+        ffi.malloc.free(lngRefC);
+      }
+      if (latC != null) {
+        ffi.malloc.free(latC);
+      }
+      if (lngC != null) {
+        ffi.malloc.free(lngC);
+      }
+    }
+  });
+}
+
 Future<bool> _copyMetadata(
   Uint8List from,
   String toPath, {

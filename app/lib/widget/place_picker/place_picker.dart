@@ -6,6 +6,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:np_common/or_null.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_log/np_log.dart';
 import 'package:to_string/to_string.dart';
@@ -15,17 +16,22 @@ part 'place_picker.g.dart';
 part 'state_event.dart';
 
 class PlacePickerArguments {
-  const PlacePickerArguments({this.initialPosition, this.initialZoom});
+  const PlacePickerArguments({
+    this.initialPosition,
+    this.initialZoom,
+    this.canDelete = false,
+  });
 
   final MapCoord? initialPosition;
   final double? initialZoom;
+  final bool canDelete;
 }
 
 class PlacePicker extends StatelessWidget {
   static const routeName = "/place-picker";
 
-  static Route buildRoute(PlacePickerArguments? args, RouteSettings settings) =>
-      MaterialPageRoute<CameraPosition>(
+  static Route buildRoute(PlacePickerArguments args, RouteSettings settings) =>
+      MaterialPageRoute<OrNull<CameraPosition>>(
         builder: (_) => PlacePicker.fromArgs(args),
         settings: settings,
       );
@@ -34,13 +40,15 @@ class PlacePicker extends StatelessWidget {
     super.key,
     required this.initialPosition,
     required this.initialZoom,
+    required this.canDelete,
   });
 
-  PlacePicker.fromArgs(PlacePickerArguments? args, {Key? key})
+  PlacePicker.fromArgs(PlacePickerArguments args, {Key? key})
     : this(
         key: key,
-        initialPosition: args?.initialPosition,
-        initialZoom: args?.initialZoom,
+        initialPosition: args.initialPosition,
+        initialZoom: args.initialZoom,
+        canDelete: args.canDelete,
       );
 
   @override
@@ -51,17 +59,18 @@ class PlacePicker extends StatelessWidget {
         initialPosition: initialPosition,
         initialZoom: initialZoom,
       ),
-      child: const _WrappedPlacePicker(),
+      child: _WrappedPlacePicker(canDelete: canDelete),
     );
   }
 
   final MapCoord? initialPosition;
   final double? initialZoom;
+  final bool canDelete;
 }
 
 @npLog
 class _WrappedPlacePicker extends StatelessWidget {
-  const _WrappedPlacePicker();
+  const _WrappedPlacePicker({required this.canDelete});
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +82,7 @@ class _WrappedPlacePicker extends StatelessWidget {
             if (isDone) {
               final position = context.state.position;
               _log.info("[build] Position picked: $position");
-              Navigator.of(context).pop(position);
+              Navigator.of(context).pop(OrNull(position));
             }
           },
         ),
@@ -87,11 +96,22 @@ class _WrappedPlacePicker extends StatelessWidget {
             },
             icon: const Icon(Icons.check_outlined),
           ),
+          actions: [
+            if (canDelete)
+              IconButton(
+                onPressed: () {
+                  Navigator.of(context).pop(const OrNull<CameraPosition>(null));
+                },
+                icon: const Icon(Icons.delete_outline),
+              ),
+          ],
         ),
-        body: const _BodyView(),
+        body: const SafeArea(child: _BodyView()),
       ),
     );
   }
+
+  final bool canDelete;
 }
 
 class _BodyView extends StatelessWidget {

@@ -1688,6 +1688,9 @@ class AppLocalizationsPt extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'Acesso não autenticado. Por favor faça login novamente se o problema persistir';
 

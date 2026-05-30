@@ -334,6 +334,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -410,6 +411,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -490,6 +492,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -716,6 +719,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -784,6 +788,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -905,6 +910,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -973,6 +979,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -1099,6 +1106,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -1549,6 +1557,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1682,6 +1691,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -1821,6 +1831,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -1942,6 +1953,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -2010,6 +2022,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -2062,7 +2075,8 @@
     "recognizeInstructionDialogTitle",
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
-    "editMetadataWriteProgressTitle"
+    "editMetadataWriteProgressTitle",
+    "addLocationTitle"
   ],
 
   "zh": [
@@ -2214,6 +2228,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ],
 
@@ -2456,6 +2471,7 @@
     "recognizeInstructionDialogContent",
     "recognizeInstructionDialogButton",
     "editMetadataWriteProgressTitle",
+    "addLocationTitle",
     "errorServerNoCert"
   ]
 }

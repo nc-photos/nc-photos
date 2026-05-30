@@ -566,8 +566,9 @@ class _WrappedAppState extends State<_WrappedApp>
 
   Route<dynamic>? _handlePlacePickerRoute(RouteSettings settings) {
     try {
-      if (settings.name == PlacePicker.routeName) {
-        final args = settings.arguments as PlacePickerArguments?;
+      if (settings.name == PlacePicker.routeName &&
+          settings.arguments != null) {
+        final args = settings.arguments as PlacePickerArguments;
         return PlacePicker.buildRoute(args, settings);
       }
     } catch (e) {

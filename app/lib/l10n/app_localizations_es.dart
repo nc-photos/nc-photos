@@ -1689,6 +1689,9 @@ class AppLocalizationsEs extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'No estás autentificado. Por favor inicia sesión otra vez si el problema continúa.';
 

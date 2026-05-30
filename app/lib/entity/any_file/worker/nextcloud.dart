@@ -11,11 +11,16 @@ import 'package:nc_photos/download_handler.dart';
 import 'package:nc_photos/entity/any_file/any_file.dart';
 import 'package:nc_photos/entity/any_file/worker/adapter_mixin.dart';
 import 'package:nc_photos/entity/any_file/worker/factory.dart';
+import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/exception.dart';
+import 'package:nc_photos/geocoder_util.dart';
 import 'package:nc_photos/set_as_handler.dart';
 import 'package:nc_photos/use_case/copy.dart';
+import 'package:nc_photos/use_case/inflate_file_descriptor.dart';
 import 'package:nc_photos/use_case/put_file_binary.dart';
+import 'package:np_async/np_async.dart';
 import 'package:np_common/or_null.dart';
+import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_log/np_log.dart';
 
 part 'nextcloud.g.dart';
@@ -197,12 +202,44 @@ class AnyFileNextcloudReplaceWithBackupWorker
         bytes,
         onProgress: onProgress,
       );
-      // update db
-      unawaited(filesController.querySingle(_provider.file));
     } catch (e, stackTrace) {
       _log.severe("[replace] Failed while PutFileBinary", e, stackTrace);
       rethrow;
     }
+    unawaited(_syncNewFile());
+  }
+
+  Future<void> _syncNewFile() async {
+    // update db
+    await filesController.querySingle(_provider.file);
+    final newFd = filesController.stream.value.dataMap[_provider.file.fdId]!;
+    final newF = await InflateFileDescriptor(c)(account, [newFd]).first;
+    final newGps = newF.metadata?.gpsCoord;
+    OrNull<ImageLocation> locationUpdate;
+    try {
+      ImageLocation? location;
+      if (newGps != null) {
+        _log.fine("[_syncNewFile] Reverse geocoding for ${newF.path}");
+        if (!_isGeocoderInit) {
+          _isGeocoderInit = true;
+          await _geocoder.init();
+        }
+        final l = await _geocoder(newGps.lat, newGps.lng);
+        if (l != null) {
+          location = l.toImageLocation();
+        }
+      }
+      locationUpdate = OrNull(location ?? ImageLocation.empty());
+    } catch (e, stackTrace) {
+      _log.severe(
+        "[_syncNewFile] Failed while reverse geocoding: ${newF.path}",
+        e,
+        stackTrace,
+      );
+      // if failed, delete the old location
+      locationUpdate = const OrNull(null);
+    }
+    await filesController.updateProperty([newF], location: locationUpdate);
   }
 
   final FilesController filesController;
@@ -210,4 +247,7 @@ class AnyFileNextcloudReplaceWithBackupWorker
   final DiContainer c;
 
   final AnyFileNextcloudProvider _provider;
+
+  static final _geocoder = ReverseGeocoder();
+  static var _isGeocoderInit = false;
 }

@@ -192,6 +192,13 @@ extension _$_EditDateTimeToString on _EditDateTime {
   }
 }
 
+extension _$_EditGpsToString on _EditGps {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_EditGps {value: $value}";
+  }
+}
+
 extension _$_SetAlbumCoverFailedErrorToString on _SetAlbumCoverFailedError {
   String _$toString() {
     // ignore: unnecessary_string_interpolations

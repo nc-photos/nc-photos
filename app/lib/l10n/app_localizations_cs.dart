@@ -1689,6 +1689,9 @@ class AppLocalizationsCs extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'Neověřený přístup. Pokud problém přetrvává, přihlaste se znovu';
 

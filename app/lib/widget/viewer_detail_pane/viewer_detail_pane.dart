@@ -36,6 +36,7 @@ import 'package:nc_photos/widget/handler/add_selection_to_collection_handler.dar
 import 'package:nc_photos/widget/list_tile_center_leading.dart';
 import 'package:nc_photos/widget/page_visibility_mixin.dart';
 import 'package:nc_photos/widget/photo_date_time_edit_dialog.dart';
+import 'package:nc_photos/widget/place_picker/place_picker.dart';
 import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/size.dart';
@@ -198,11 +199,27 @@ class _WrappedViewerDetailPaneState extends State<_WrappedViewerDetailPane>
             const _NameItem(),
             const _OwnerItem(),
             const _TagItem(),
-            const _DateTimeItem(),
-            const _SizeItem(),
-            const _ModelItem(),
-            const _LocationItem(),
-            const _GpsItem(),
+            _BlocSelector(
+              selector: (state) => state.isLoading,
+              builder: (context, isLoading) {
+                if (isLoading) {
+                  return const SizedBox(
+                    height: 256,
+                    child: Center(child: CircularProgressIndicator()),
+                  );
+                } else {
+                  return const Column(
+                    children: [
+                      _DateTimeItem(),
+                      _SizeItem(),
+                      _ModelItem(),
+                      _LocationItem(),
+                      _GpsItem(),
+                    ],
+                  );
+                }
+              },
+            ),
           ],
         ),
       ),

@@ -1615,6 +1615,9 @@ class AppLocalizationsJa extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'ファイルをアップロード中...';
 
   @override
+  String get addLocationTitle => '位置情報を追加';
+
+  @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';
 
   @override

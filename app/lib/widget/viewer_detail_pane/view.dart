@@ -610,7 +610,24 @@ class _LocationItem extends StatelessWidget {
                 );
               },
             )
-          : const SizedBox.shrink(),
+          : ListTile(
+              leading: const ListTileCenterLeading(
+                child: Icon(Icons.location_on_outlined),
+              ),
+              title: Text(L10n.global().addLocationTitle),
+              trailing: const Icon(Icons.edit_outlined),
+              onTap: () async {
+                final result = await Navigator.of(context)
+                    .pushNamed<OrNull<CameraPosition>>(
+                      PlacePicker.routeName,
+                      arguments: const PlacePickerArguments(initialZoom: 16),
+                    );
+                if (result == null) {
+                  return;
+                }
+                context.addEvent(_EditGps(result.obj!.center));
+              },
+            ),
     );
   }
 
@@ -664,15 +681,41 @@ class _GpsItemState extends State<_GpsItem> {
                 duration: k.animationDurationNormal,
                 child: SizedBox(
                   height: 256,
-                  child: ValueStreamBuilder<GpsMapProvider>(
-                    stream: context.read<PrefController>().gpsMapProvider,
-                    builder: (context, gpsMapProvider) => StaticMap(
-                      providerHint: gpsMapProvider.requireData,
-                      location: CameraPosition(center: gps, zoom: 16),
-                      onTap: () => launchExternalMap(
-                        CameraPosition(center: gps, zoom: 16),
+                  child: Stack(
+                    children: [
+                      ValueStreamBuilder<GpsMapProvider>(
+                        stream: context.read<PrefController>().gpsMapProvider,
+                        builder: (context, gpsMapProvider) => StaticMap(
+                          providerHint: gpsMapProvider.requireData,
+                          location: CameraPosition(center: gps, zoom: 16),
+                          onTap: () => launchExternalMap(
+                            CameraPosition(center: gps, zoom: 16),
+                          ),
+                        ),
                       ),
-                    ),
+                      Positioned(
+                        top: 8,
+                        right: 8,
+                        child: FloatingActionButton.small(
+                          onPressed: () async {
+                            final result = await Navigator.of(context)
+                                .pushNamed<OrNull<CameraPosition>>(
+                                  PlacePicker.routeName,
+                                  arguments: PlacePickerArguments(
+                                    initialPosition: gps,
+                                    initialZoom: 16,
+                                    canDelete: true,
+                                  ),
+                                );
+                            if (result == null) {
+                              return;
+                            }
+                            context.addEvent(_EditGps(result.obj?.center));
+                          },
+                          child: const Icon(Icons.edit_outlined),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               )

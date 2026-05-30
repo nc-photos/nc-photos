@@ -117,3 +117,13 @@ class _EditDateTime implements _Event {
 
   final ZonedDateTime value;
 }
+
+@toString
+class _EditGps implements _Event {
+  const _EditGps(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final MapCoord? value;
+}

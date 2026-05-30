@@ -278,7 +278,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                     return;
                   }
                   final result = await Navigator.of(context)
-                      .pushNamed<CameraPosition>(
+                      .pushNamed<OrNull<CameraPosition>>(
                         PlacePicker.routeName,
                         arguments: PlacePickerArguments(
                           initialPosition:
@@ -294,7 +294,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                   }
                   context.addEvent(
                     _AddMapToCollection(
-                      result,
+                      result.obj!,
                       before: placePickerRequest.value!.before,
                     ),
                   );
@@ -333,7 +333,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                     return;
                   }
                   final result = await Navigator.of(context)
-                      .pushNamed<CameraPosition>(
+                      .pushNamed<OrNull<CameraPosition>>(
                         PlacePicker.routeName,
                         arguments: PlacePickerArguments(
                           initialPosition:
@@ -348,7 +348,7 @@ class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
                   context.addEvent(
                     _EditMap(
                       item: editMapRequest.value!.original,
-                      newLocation: result,
+                      newLocation: result.obj!,
                     ),
                   );
                 },

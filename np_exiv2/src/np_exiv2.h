@@ -114,6 +114,19 @@ FFI_PLUGIN_EXPORT int exiv2WriteFileDateTimeOriginal(const char *path,
                                                      const char *offsetTime);
 
 /**
+ * Write or remove the EXIF GPS tags (GPSLatitudeRef, GPSLatitude,
+ * GPSLongitudeRef and GPSLongitude) in the file at @a path
+ *
+ * If either one of the four GPS values is null, all tags will be removed.
+ * @return boolean
+ */
+FFI_PLUGIN_EXPORT int exiv2WriteFileGps(const char *path,
+                                        const char *latitudeRef,
+                                        const uint32_t *latitude,
+                                        const char *longitudeRef,
+                                        const uint32_t *longitude);
+
+/**
  * Release the resources of a Exiv2ReadResult object returned by
  * @a exiv2_read_file
  */

@@ -1645,6 +1645,7 @@
 	"@editMetadataWriteProgressTitle": {
 		"description": "Title of the progress dialog when uploading the file after editing its metadata"
 	},
+	"addLocationTitle": "Add location",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

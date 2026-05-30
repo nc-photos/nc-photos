@@ -1680,6 +1680,9 @@ class AppLocalizationsRu extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'Неавторизованный доступ. Если ошибка возникает снова, попробуйте перелогиниться';
 

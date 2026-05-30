@@ -1691,6 +1691,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get editMetadataWriteProgressTitle => 'Uploading file';
 
   @override
+  String get addLocationTitle => 'Add location';
+
+  @override
   String get errorUnauthenticated =>
       'Neautentifikovaný prístup. Prihláste sa znova, ak problém pretrváva';
 

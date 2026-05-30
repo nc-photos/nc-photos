@@ -1687,5 +1687,6 @@
 	"editMetadataWriteProgressTitle": "ファイルをアップロード中...",
 	"@editMetadataWriteProgressTitle": {
 		"description": "Title of the progress dialog when uploading the file after editing its metadata"
-	}
+	},
+	"addLocationTitle": "位置情報を追加"
 }
