@@ -350,6 +350,7 @@ class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
       return;
     }
     _coverUrl = url;
+    unawaited(_loadColorScheme(imageProvider, url));
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted || _coverUrl != url) {
         return;
@@ -398,6 +399,16 @@ class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
       _fadeController.value = 0;
       _controllers[_activeIndex].addListener(_transitionHandler);
     });
+  }
+
+  Future<void> _loadColorScheme(ImageProvider imageProvider, String url) async {
+    final colorScheme = await ColorScheme.fromImageProvider(
+      provider: imageProvider,
+    );
+    if (!mounted || _coverUrl != url) {
+      return;
+    }
+    context.addEvent(_SetCoverColorScheme(colorScheme));
   }
 
   String? _coverUrl;

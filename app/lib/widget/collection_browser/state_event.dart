@@ -36,6 +36,7 @@ class _State {
     required this.zoom,
     this.scale,
     this.importResult,
+    this.coverColorScheme,
     this.error,
     this.message,
   });
@@ -112,6 +113,8 @@ class _State {
   final double? scale;
 
   final Collection? importResult;
+
+  final ColorScheme? coverColorScheme;
 
   final ExceptionEvent? error;
   final String? message;
@@ -470,6 +473,16 @@ class _SetScale implements _Event {
   String toString() => _$toString();
 
   final double scale;
+}
+
+@toString
+class _SetCoverColorScheme implements _Event {
+  const _SetCoverColorScheme(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final ColorScheme value;
 }
 
 @toString

@@ -78,6 +78,8 @@ class _Bloc extends Bloc<_Event, _State>
     on<_EndScaling>(_onEndScaling);
     on<_SetScale>(_onSetScale);
 
+    on<_SetCoverColorScheme>(_onSetCoverColorScheme);
+
     on<_SetError>(_onSetError);
     on<_SetMessage>(_onSetMessage);
 
@@ -717,6 +719,11 @@ class _Bloc extends Bloc<_Event, _State>
 
   void _onSetScale(_SetScale ev, Emitter<_State> emit) {
     emit(state.copyWith(scale: ev.scale));
+  }
+
+  void _onSetCoverColorScheme(_SetCoverColorScheme ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(coverColorScheme: ev.value));
   }
 
   void _onSetError(_SetError ev, Emitter<_State> emit) {

@@ -144,15 +144,34 @@ class CollectionBrowser extends StatelessWidget {
   final Collection collection;
 }
 
-class _WrappedCollectionBrowser extends StatefulWidget {
+class _WrappedCollectionBrowser extends StatelessWidget {
   const _WrappedCollectionBrowser();
 
   @override
-  State<StatefulWidget> createState() => _WrappedCollectionBrowserState();
+  Widget build(BuildContext context) {
+    return _BlocSelector(
+      selector: (state) => state.coverColorScheme,
+      builder: (context, coverColorScheme) {
+        final themeData = coverColorScheme == null
+            ? Theme.of(context)
+            : (Theme.of(context).brightness == Brightness.light
+                  ? buildLightTheme(context, coverColorScheme)
+                  : buildDarkTheme(context, coverColorScheme));
+        return Theme(data: themeData, child: const _ThemedBody());
+      },
+    );
+  }
+}
+
+class _ThemedBody extends StatefulWidget {
+  const _ThemedBody();
+
+  @override
+  State<StatefulWidget> createState() => _ThemedBodyState();
 }
 
 @npLog
-class _WrappedCollectionBrowserState extends State<_WrappedCollectionBrowser>
+class _ThemedBodyState extends State<_ThemedBody>
     with RouteAware, PageVisibilityMixin {
   @override
   void initState() {

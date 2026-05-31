@@ -44,6 +44,7 @@ abstract class $_StateCopyWithWorker {
     int? zoom,
     double? scale,
     Collection? importResult,
+    ColorScheme? coverColorScheme,
     ExceptionEvent? error,
     String? message,
   });
@@ -84,6 +85,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic zoom,
     dynamic scale = copyWithNull,
     dynamic importResult = copyWithNull,
+    dynamic coverColorScheme = copyWithNull,
     dynamic error = copyWithNull,
     dynamic message = copyWithNull,
   }) {
@@ -147,6 +149,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       importResult: importResult == copyWithNull
           ? that.importResult
           : importResult as Collection?,
+      coverColorScheme: coverColorScheme == copyWithNull
+          ? that.coverColorScheme
+          : coverColorScheme as ColorScheme?,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
       message: message == copyWithNull ? that.message : message as String?,
     );
@@ -164,13 +169,12 @@ extension $_StateCopyWith on _State {
 // NpLogGenerator
 // **************************************************************************
 
-extension _$_WrappedCollectionBrowserStateNpLog
-    on _WrappedCollectionBrowserState {
+extension _$_ThemedBodyStateNpLog on _ThemedBodyState {
   // ignore: unused_element
   Logger get _log => log;
 
   static final log = Logger(
-    "widget.collection_browser.collection_browser._WrappedCollectionBrowserState",
+    "widget.collection_browser.collection_browser._ThemedBodyState",
   );
 }
 
@@ -199,7 +203,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, error: $error, message: $message}";
+    return "_State {collection: $collection, cover: $cover, items: [length: ${items.length}], rawItems: [length: ${rawItems.length}], itemsWhitelist: ${itemsWhitelist == null ? null : "{length: ${itemsWhitelist!.length}}"}, isLoading: $isLoading, transformedItems: [length: ${transformedItems.length}], selectedItems: {length: ${selectedItems.length}}, isSelectionRemovable: $isSelectionRemovable, isSelectionManageableFile: $isSelectionManageableFile, isSelectionDeletable: $isSelectionDeletable, shareRequest: $shareRequest, startSlideshowRequest: $startSlideshowRequest, slideshowRequest: $slideshowRequest, isEditMode: $isEditMode, isEditBusy: $isEditBusy, editName: $editName, editItems: ${editItems == null ? null : "[length: ${editItems!.length}]"}, editTransformedItems: ${editTransformedItems == null ? null : "[length: ${editTransformedItems!.length}]"}, editSort: ${editSort == null ? null : "${editSort!.name}"}, isAddMapBusy: $isAddMapBusy, editPickerMode: ${editPickerMode == null ? null : "${editPickerMode!.name}"}, newLabelRequest: $newLabelRequest, placePickerRequest: $placePickerRequest, editLabelRequest: $editLabelRequest, editMapRequest: $editMapRequest, isDragging: $isDragging, zoom: $zoom, scale: ${scale == null ? null : "${scale!.toStringAsFixed(3)}"}, importResult: $importResult, coverColorScheme: $coverColorScheme, error: $error, message: $message}";
   }
 }
 
@@ -469,6 +473,13 @@ extension _$_SetScaleToString on _SetScale {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetScale {scale: ${scale.toStringAsFixed(3)}}";
+  }
+}
+
+extension _$_SetCoverColorSchemeToString on _SetCoverColorScheme {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetCoverColorScheme {value: $value}";
   }
 }
 
