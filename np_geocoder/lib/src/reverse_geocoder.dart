@@ -57,14 +57,17 @@ class ReverseGeocoderLocationName {
 
 @npLog
 class ReverseGeocoder {
+  ReverseGeocoder._();
+
+  factory ReverseGeocoder() {
+    return _inst;
+  }
+
   Future<void> init({
     @visibleForTesting
     FutureOr<CommonDatabase> Function() dbBuilder = _openDatabase,
-  }) async {
-    final s = Stopwatch()..start();
-    _db = await dbBuilder();
-    _searchTree = _buildSearchTree(_db);
-    _log.info("[init] Elapsed time: ${s.elapsedMilliseconds}ms");
+  }) {
+    return _initFuture ??= _doInit(dbBuilder);
   }
 
   /// Convert a geographic coordinate (in degree) into a location
@@ -118,6 +121,13 @@ class ReverseGeocoder {
     }
     _log.info("[call] Found: $data");
     return data;
+  }
+
+  Future<void> _doInit(FutureOr<CommonDatabase> Function() dbBuilder) async {
+    final s = Stopwatch()..start();
+    _db = await dbBuilder();
+    _searchTree = _buildSearchTree(_db);
+    _log.info("[_doInit] Elapsed time: ${s.elapsedMilliseconds}ms");
   }
 
   ReverseGeocoderLocation? _queryPoint(int latitudeInt, int longitudeInt) {
@@ -191,6 +201,9 @@ class ReverseGeocoder {
 
   static const dataRevision = 20260301;
 
+  static final _inst = ReverseGeocoder._();
+
+  Future<void>? _initFuture;
   late final CommonDatabase _db;
   late final KDTree _searchTree;
 }
