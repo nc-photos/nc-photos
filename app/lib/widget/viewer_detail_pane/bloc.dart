@@ -27,7 +27,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       }),
     );
     _subscriptions.add(
-      stream.distinctBy((e) => e.file).listen((e) {
+      stream.distinctBy((e) => e.file).skip(1).listen((e) {
         add(const _FileUpdated());
       }),
     );
