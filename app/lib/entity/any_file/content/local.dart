@@ -8,9 +8,11 @@ import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/image_location/image_location.dart';
 import 'package:nc_photos/entity/local_file.dart';
+import 'package:nc_photos/geocoder_util.dart';
 import 'package:nc_photos/use_case/load_metadata.dart';
 import 'package:np_common/size.dart';
 import 'package:np_exiv2/np_exiv2.dart';
+import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_platform_local_media/np_platform_local_media.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';
@@ -114,7 +116,15 @@ class AnyFileLocalMetadataGetter implements AnyFileMetadataGetter {
   });
 
   @override
-  Future<ImageLocation?> get location => Future.value(null);
+  Future<ImageLocation?> get location => gpsCoord.then((e) async {
+    if (e == null) {
+      return null;
+    }
+    final geocoder = ReverseGeocoder();
+    await geocoder.init();
+    final result = await geocoder(e.latitude, e.longitude);
+    return result?.toImageLocation();
+  });
 
   @override
   Future<Duration?> get offsetTime =>
