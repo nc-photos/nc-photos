@@ -658,6 +658,20 @@ class _GpsItem extends StatefulWidget {
 
 class _GpsItemState extends State<_GpsItem> {
   @override
+  void initState() {
+    super.initState();
+    if (context.state.gps != null) {
+      _timer ??= Timer(const Duration(milliseconds: 750), () {
+        if (mounted) {
+          setState(() {
+            _shouldBlockGpsMap = false;
+          });
+        }
+      });
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _BlocListenerT(
       selector: (state) => state.gps,
