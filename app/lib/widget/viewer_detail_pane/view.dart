@@ -589,45 +589,54 @@ class _LocationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _BlocSelector(
-      selector: (state) => state.location,
-      builder: (context, location) => location?.countryCode != null
-          ? ListTile(
-              leading: const ListTileCenterLeading(
-                child: Icon(Icons.location_on_outlined),
-              ),
-              title: Text(
-                L10n.global().gpsPlaceText(
-                  location!.localizedNameOf(context) ?? "",
-                ),
-              ),
-              subtitle: _toSubtitle(context, location)?.let(Text.new),
-              trailing: const Icon(Icons.info_outline),
-              onTap: () {
-                showDialog(
-                  context: context,
-                  builder: (_) => const AboutGeocodingDialog(),
-                );
-              },
-            )
-          : ListTile(
-              leading: const ListTileCenterLeading(
-                child: Icon(Icons.location_on_outlined),
-              ),
-              title: Text(L10n.global().addLocationTitle),
-              trailing: const Icon(Icons.edit_outlined),
-              onTap: () async {
-                final result = await Navigator.of(context)
-                    .pushNamed<OrNull<CameraPosition>>(
-                      PlacePicker.routeName,
-                      arguments: const PlacePickerArguments(initialZoom: 16),
-                    );
-                if (result == null) {
-                  return;
-                }
-                context.addEvent(_EditGps(result.obj!.center));
-              },
+    return _BlocBuilder(
+      buildWhen: (previous, current) => previous.location != current.location,
+      builder: (context, state) {
+        if (state.gps == null) {
+          // no gps, show edit button
+          return ListTile(
+            leading: const ListTileCenterLeading(
+              child: Icon(Icons.location_on_outlined),
             ),
+            title: Text(L10n.global().addLocationTitle),
+            trailing: const Icon(Icons.edit_outlined),
+            onTap: () async {
+              final result = await Navigator.of(context)
+                  .pushNamed<OrNull<CameraPosition>>(
+                    PlacePicker.routeName,
+                    arguments: const PlacePickerArguments(initialZoom: 16),
+                  );
+              if (result == null) {
+                return;
+              }
+              context.addEvent(_EditGps(result.obj!.center));
+            },
+          );
+        } else if (state.location?.countryCode != null) {
+          // have gps + valid location
+          return ListTile(
+            leading: const ListTileCenterLeading(
+              child: Icon(Icons.location_on_outlined),
+            ),
+            title: Text(
+              L10n.global().gpsPlaceText(
+                state.location!.localizedNameOf(context) ?? "",
+              ),
+            ),
+            subtitle: _toSubtitle(context, state.location!)?.let(Text.new),
+            trailing: const Icon(Icons.info_outline),
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (_) => const AboutGeocodingDialog(),
+              );
+            },
+          );
+        } else {
+          // have gps but no location nearby
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
 
