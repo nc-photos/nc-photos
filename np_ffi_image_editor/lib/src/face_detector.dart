@@ -36,6 +36,10 @@ class FaceDetector {
       _log.info(
         "[detect] Face bbox: {l: ${bBox.left}, t: ${bBox.top}, r: ${bBox.right}, b: ${bBox.bottom}}",
       );
+      if (bBox.width < 32 || bBox.height < 32) {
+        _log.warning("[detect] Face too small, skip");
+        continue;
+      }
       var roi = bBox
           .inflate(bBox.longestSide * .12)
           .let(
