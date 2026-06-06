@@ -100,7 +100,9 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
                   return;
                 }
                 setState(() {
-                  if (_size == null) return;
+                  if (_size == null) {
+                    return;
+                  }
                   final pos = details.localPosition;
                   if (pos.dx > 0 &&
                       pos.dx < _size!.width &&
@@ -159,7 +161,9 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
                   },
                   onPanUpdate: (details) {
                     setState(() {
-                      if (_size == null) return;
+                      if (_size == null) {
+                        return;
+                      }
                       _moveTopByDy(details.delta.dy);
                       _moveLeftByDx(details.delta.dx);
                     });
@@ -180,7 +184,9 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
                   },
                   onPanUpdate: (details) {
                     setState(() {
-                      if (_size == null) return;
+                      if (_size == null) {
+                        return;
+                      }
                       _moveTopByDy(details.delta.dy);
                       _moveRightByDx(details.delta.dx);
                     });
@@ -201,7 +207,9 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
                   },
                   onPanUpdate: (details) {
                     setState(() {
-                      if (_size == null) return;
+                      if (_size == null) {
+                        return;
+                      }
                       _moveBottomByDy(details.delta.dy);
                       _moveLeftByDx(details.delta.dx);
                     });
@@ -222,7 +230,9 @@ class _WrappedCropControllerState extends State<_WrappedCropController> {
                   },
                   onPanUpdate: (details) {
                     setState(() {
-                      if (_size == null) return;
+                      if (_size == null) {
+                        return;
+                      }
                       _moveBottomByDy(details.delta.dy);
                       _moveRightByDx(details.delta.dx);
                     });
