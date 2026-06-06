@@ -44,7 +44,7 @@ class _Changelog900StrJa implements _Changelog900Str {
   @override
   String get sectionChange => "主な更新内容";
   @override
-  String get sectionChange1 => "WebP画像のメタデータの編集できるようになりました";
+  String get sectionChange1 => "WebP画像のメタデータも編集できるようになりました";
   @override
   String get sectionChange2 => "対応ファイルの位置情報を編集できるようになりました";
   @override

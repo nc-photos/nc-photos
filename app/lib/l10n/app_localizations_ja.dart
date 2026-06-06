@@ -862,16 +862,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get slideshowSetupDialogTitle => 'スライドショーの設定';
 
   @override
-  String get slideshowSetupDialogDurationTitle => '画像の長さ (MM:SS)';
+  String get slideshowSetupDialogDurationTitle => '表示時間 (MM:SS)';
 
   @override
   String get slideshowSetupDialogShuffleTitle => 'シャッフル';
 
   @override
-  String get slideshowSetupDialogRepeatTitle => '繰り返す';
+  String get slideshowSetupDialogRepeatTitle => '繰り返し再生';
 
   @override
-  String get slideshowSetupDialogReverseTitle => '反転する';
+  String get slideshowSetupDialogReverseTitle => '逆再生';
 
   @override
   String get linkCopiedNotification => 'リンクをコピーしました';
@@ -883,7 +883,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get shareMethodPreviewTitle => 'プレビュー';
 
   @override
-  String get shareMethodPreviewDescription => '低品質のプレビューを他のアプリと共有する (画像のみ)';
+  String get shareMethodPreviewDescription => '圧縮された画像を他のアプリと共有する (画像のみ)';
 
   @override
   String get shareMethodOriginalFileTitle => '元のファイル';

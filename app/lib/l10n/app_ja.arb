@@ -798,7 +798,7 @@
 	"@slideshowSetupDialogTitle": {
 		"description": "Setup slideshow before starting"
 	},
-	"slideshowSetupDialogDurationTitle": "画像の長さ (MM:SS)",
+	"slideshowSetupDialogDurationTitle": "表示時間 (MM:SS)",
 	"@slideshowSetupDialogDurationTitle": {
 		"description": "Set the duration of each image in MM:SS format. This setting is ignored for videos"
 	},
@@ -806,11 +806,11 @@
 	"@slideshowSetupDialogShuffleTitle": {
 		"description": "Whether to shuffle the collection"
 	},
-	"slideshowSetupDialogRepeatTitle": "繰り返す",
+	"slideshowSetupDialogRepeatTitle": "繰り返し再生",
 	"@slideshowSetupDialogRepeatTitle": {
 		"description": "Whether to restart the slideshow from the beginning after the last slide"
 	},
-	"slideshowSetupDialogReverseTitle": "反転する",
+	"slideshowSetupDialogReverseTitle": "逆再生",
 	"@slideshowSetupDialogReverseTitle": {
 		"description": "Whether to play the slideshow in reverse order"
 	},
@@ -826,7 +826,7 @@
 	"@shareMethodPreviewTitle": {
 		"description": "Share the preview of a file"
 	},
-	"shareMethodPreviewDescription": "低品質のプレビューを他のアプリと共有する (画像のみ)",
+	"shareMethodPreviewDescription": "圧縮された画像を他のアプリと共有する (画像のみ)",
 	"shareMethodOriginalFileTitle": "元のファイル",
 	"@shareMethodOriginalFileTitle": {
 		"description": "Share the original file"
