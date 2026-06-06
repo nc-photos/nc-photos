@@ -49,13 +49,17 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
   Future<void> _onInit(_Init ev, _Emitter emit) async {
     _log.info(ev);
     emit(state.copyWith(isLoading: true));
-    unawaited(_initCapability(emit));
-    unawaited(_initTag(emit));
-    try {
-      await _initMetadata(emit);
-    } finally {
-      emit(state.copyWith(isLoading: false));
-    }
+    await Future.wait([
+      _initCapability(emit),
+      _initTag(emit),
+      () async {
+        try {
+          await _initMetadata(emit);
+        } finally {
+          emit(state.copyWith(isLoading: false));
+        }
+      }(),
+    ]);
   }
 
   Future<void> _initMetadata(_Emitter emit) async {
