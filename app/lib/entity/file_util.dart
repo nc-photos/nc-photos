@@ -149,4 +149,4 @@ final supportedVideoFormatMimes = supportedFormatMimes
     .where((f) => f.startsWith("video/"))
     .toList();
 
-final supportedEditMetadataFormatMimes = ["image/jpeg"];
+final supportedEditMetadataFormatMimes = ["image/jpeg", "image/webp"];
