@@ -314,13 +314,20 @@ class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
       animation: controller,
       builder: (context, child) {
         final t = controller.value * 2 - 1;
-        final (dx, dy) = _isLandscape
+        final (dx, dy) = (_isLandscape ?? true)
             ? (-t * constraints.maxWidth * .25, .0)
             : (.0, -t * constraints.maxHeight * .25);
         return ClipRect(
           child: Transform.translate(
             offset: Offset(dx, dy),
-            child: Transform.scale(scale: 1.5, child: child),
+            child: Transform.scale(
+              scale: 1.5,
+              child: AnimatedOpacity(
+                opacity: _isLandscape == null ? 0 : 1,
+                duration: k.animationDurationLong,
+                child: child,
+              ),
+            ),
           ),
         );
       },
@@ -416,7 +423,7 @@ class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
   late AnimationController _fadeController;
   var _activeIndex = 0;
   var _isFading = false;
-  var _isLandscape = true;
+  bool? _isLandscape;
 }
 
 @npLog
