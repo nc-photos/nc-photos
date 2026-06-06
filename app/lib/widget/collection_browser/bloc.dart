@@ -867,7 +867,7 @@ class _Bloc extends Bloc<_Event, _State>
         url: getStaticViewUrlForImageFile(
           account,
           firstFile,
-          size: const SizeInt(k.coverSize, k.coverSize),
+          size: const SizeInt(k.photoLargeSize, k.photoLargeSize),
           isKeepAspectRatio: false,
         ),
         mime: firstFile.fdMime,
@@ -879,7 +879,10 @@ class _Bloc extends Bloc<_Event, _State>
 
   static CollectionCoverResult? _getCover(Collection collection) {
     try {
-      return collection.contentProvider.getCoverUrl(k.coverSize, k.coverSize);
+      return collection.contentProvider.getCoverUrl(
+        k.photoLargeSize,
+        k.photoLargeSize,
+      );
     } catch (_) {
       return null;
     }

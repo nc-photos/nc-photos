@@ -328,7 +328,7 @@ class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
         clipBehavior: Clip.hardEdge,
         fit: BoxFit.cover,
         child: CachedNetworkImageBuilder(
-          type: CachedNetworkImageType.cover,
+          type: CachedNetworkImageType.largeImage,
           imageUrl: cover.url,
           mime: cover.mime,
           account: context.bloc.account,
