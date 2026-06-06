@@ -1692,6 +1692,11 @@ class AppLocalizationsCs extends AppLocalizations {
   String get addLocationTitle => 'Add location';
 
   @override
+  String metadataEditBackupNotification(Object backup) {
+    return 'Original file backed up as $backup';
+  }
+
+  @override
   String get errorUnauthenticated =>
       'Neověřený přístup. Pokud problém přetrvává, přihlaste se znovu';
 

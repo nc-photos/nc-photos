@@ -26,6 +26,7 @@ class UpdateAnyFileMetadata {
     ZonedDateTime dateTime, {
     required Account account,
     void Function(UpdateAnyFileMetadataStep step, double progress)? onProgress,
+    void Function(String backupFilename)? onBackedUp,
   }) async {
     final getter = AnyFileContentGetterFactory.privateFileCopy(
       file,
@@ -52,6 +53,7 @@ class UpdateAnyFileMetadata {
         onProgress: (progress) {
           onProgress?.call(UpdateAnyFileMetadataStep.write, progress);
         },
+        onBackedUp: onBackedUp,
         shouldBackup: prefController.isBackupOnRemoteExifEditValue,
       );
     } finally {
@@ -65,6 +67,7 @@ class UpdateAnyFileMetadata {
     MapCoord? gps, {
     required Account account,
     void Function(UpdateAnyFileMetadataStep step, double progress)? onProgress,
+    void Function(String backupFilename)? onBackedUp,
   }) async {
     final String? gpsLatitudeRef;
     final List<exiv2.Rational>? gpsLatitude;
@@ -113,6 +116,7 @@ class UpdateAnyFileMetadata {
         onProgress: (progress) {
           onProgress?.call(UpdateAnyFileMetadataStep.write, progress);
         },
+        onBackedUp: onBackedUp,
         shouldBackup: prefController.isBackupOnRemoteExifEditValue,
       );
     } finally {

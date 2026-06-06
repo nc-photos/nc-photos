@@ -2979,6 +2979,12 @@ abstract class AppLocalizations {
   /// **'Add location'**
   String get addLocationTitle;
 
+  /// Original file is backed up before editing its metadata
+  ///
+  /// In en, this message translates to:
+  /// **'Original file backed up as {backup}'**
+  String metadataEditBackupNotification(Object backup);
+
   /// Error message when server responds with HTTP401
   ///
   /// In en, this message translates to:

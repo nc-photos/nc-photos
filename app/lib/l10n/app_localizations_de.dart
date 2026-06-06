@@ -1698,6 +1698,11 @@ class AppLocalizationsDe extends AppLocalizations {
   String get addLocationTitle => 'Add location';
 
   @override
+  String metadataEditBackupNotification(Object backup) {
+    return 'Original file backed up as $backup';
+  }
+
+  @override
   String get errorUnauthenticated =>
       'Nicht authentifizierter Zugriff. Bitte melden Sie sich erneut an, wenn das Problem weiterhin besteht';
 

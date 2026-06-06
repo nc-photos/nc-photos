@@ -131,6 +131,7 @@ class AnyFileLocalReplaceWithBackupWorker
   Future<void> replace(
     io.File srcFile, {
     void Function(double progress)? onProgress,
+    void Function(String backupFilename)? onBackedUp,
     required bool shouldBackup,
   }) async {
     final platformIdentifier = _provider.file.platformIdentifier;

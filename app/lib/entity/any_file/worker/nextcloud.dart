@@ -22,6 +22,7 @@ import 'package:np_async/np_async.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_log/np_log.dart';
+import 'package:path/path.dart' as path_lib;
 
 part 'nextcloud.g.dart';
 
@@ -164,13 +165,16 @@ class AnyFileNextcloudReplaceWithBackupWorker
   Future<void> replace(
     io.File srcFile, {
     void Function(double progress)? onProgress,
+    void Function(String backupFilename)? onBackedUp,
     required bool shouldBackup,
   }) async {
     final filePath = _provider.file.fdPath;
     // to play safe, we first backup the orig file
     if (shouldBackup) {
       try {
-        await Copy(c.fileRepo)(account, _provider.file, "${filePath}_original");
+        final backupPath = "${filePath}_original";
+        await Copy(c.fileRepo)(account, _provider.file, backupPath);
+        onBackedUp?.call(path_lib.basename(backupPath));
       } on ApiException catch (e, stackTrace) {
         if (e.response.statusCode == 412) {
           _log.fine("[replace] Original file already backed up, skip");

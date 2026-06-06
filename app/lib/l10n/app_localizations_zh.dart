@@ -1608,6 +1608,11 @@ class AppLocalizationsZh extends AppLocalizations {
   String get addLocationTitle => 'Add location';
 
   @override
+  String metadataEditBackupNotification(Object backup) {
+    return 'Original file backed up as $backup';
+  }
+
+  @override
   String get errorUnauthenticated => '未授权的存取，若问题持续请重新登录';
 
   @override

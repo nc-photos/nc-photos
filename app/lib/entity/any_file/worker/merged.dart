@@ -140,16 +140,19 @@ class AnyFileMergedReplaceWithBackupWorker
   Future<void> replace(
     io.File srcFile, {
     void Function(double progress)? onProgress,
+    void Function(String backupFilename)? onBackedUp,
     required bool shouldBackup,
   }) async {
     await _remoteDelegate.replace(
       srcFile,
       onProgress: onProgress,
+      onBackedUp: onBackedUp,
       shouldBackup: shouldBackup,
     );
     await _localDelegate.replace(
       srcFile,
       onProgress: onProgress,
+      onBackedUp: onBackedUp,
       shouldBackup: shouldBackup,
     );
   }

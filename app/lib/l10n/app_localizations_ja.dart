@@ -1618,6 +1618,11 @@ class AppLocalizationsJa extends AppLocalizations {
   String get addLocationTitle => '位置情報を追加';
 
   @override
+  String metadataEditBackupNotification(Object backup) {
+    return 'バックアップファイル$backupが作成されました';
+  }
+
+  @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';
 
   @override

@@ -1646,6 +1646,15 @@
 		"description": "Title of the progress dialog when uploading the file after editing its metadata"
 	},
 	"addLocationTitle": "Add location",
+	"metadataEditBackupNotification": "Original file backed up as {backup}",
+	"@metadataEditBackupNotification": {
+		"description": "Original file is backed up before editing its metadata",
+		"placeholders": {
+			"backup": {
+				"example": "IMG_123456789.jpg_original"
+			}
+		}
+	},
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

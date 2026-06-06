@@ -41,6 +41,7 @@ import 'package:np_common/object_util.dart';
 import 'package:np_common/or_null.dart';
 import 'package:np_common/size.dart';
 import 'package:np_common/try_or_null.dart';
+import 'package:np_common/unique.dart';
 import 'package:np_geocoder/np_geocoder.dart';
 import 'package:np_gps_map/np_gps_map.dart';
 import 'package:np_log/np_log.dart';
@@ -154,6 +155,23 @@ class _WrappedViewerDetailPaneState extends State<_WrappedViewerDetailPane>
               } else {
                 SnackBarManager().showSnackBarForException(error.error);
               }
+            }
+          },
+        ),
+        _BlocListenerT(
+          selector: (state) => state.editBackupFilename,
+          listener: (context, editBackupFilename) {
+            if (editBackupFilename != null && isPageVisible()) {
+              SnackBarManager().showSnackBar(
+                SnackBar(
+                  content: Text(
+                    L10n.global().metadataEditBackupNotification(
+                      editBackupFilename.value,
+                    ),
+                  ),
+                  duration: k.snackBarDurationNormal,
+                ),
+              );
             }
           },
         ),

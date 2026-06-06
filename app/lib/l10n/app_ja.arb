@@ -1688,5 +1688,14 @@
 	"@editMetadataWriteProgressTitle": {
 		"description": "Title of the progress dialog when uploading the file after editing its metadata"
 	},
-	"addLocationTitle": "位置情報を追加"
+	"addLocationTitle": "位置情報を追加",
+	"metadataEditBackupNotification": "バックアップファイル{backup}が作成されました",
+	"@metadataEditBackupNotification": {
+		"description": "Original file is backed up before editing its metadata",
+		"placeholders": {
+			"backup": {
+				"example": "IMG_123456789.jpg_original"
+			}
+		}
+	}
 }

@@ -1686,6 +1686,11 @@ class AppLocalizationsTr extends AppLocalizations {
   String get addLocationTitle => 'Add location';
 
   @override
+  String metadataEditBackupNotification(Object backup) {
+    return 'Original file backed up as $backup';
+  }
+
+  @override
   String get errorUnauthenticated =>
       'Erişim kimliğiniz doğrulanamadı. Sorun devam ederse lütfen tekrar oturum açın';
 

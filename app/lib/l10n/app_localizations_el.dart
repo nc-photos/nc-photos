@@ -1693,6 +1693,11 @@ class AppLocalizationsEl extends AppLocalizations {
   String get addLocationTitle => 'Add location';
 
   @override
+  String metadataEditBackupNotification(Object backup) {
+    return 'Original file backed up as $backup';
+  }
+
+  @override
   String get errorUnauthenticated =>
       'Μη εξουσιοδοτημένη πρόσβαση. Συνδεθείτε ξανά εάν το πρόβλημα συνεχίζεται';
 

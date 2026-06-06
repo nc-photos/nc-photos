@@ -27,6 +27,7 @@ final class _State {
     required this.canArchive,
     required this.canDelete,
     this.editMetadataProgress,
+    this.editBackupFilename,
     required this.isLoading,
     this.error,
   });
@@ -70,6 +71,7 @@ final class _State {
   final bool canDelete;
 
   final _EditMetadataProgress? editMetadataProgress;
+  final Unique<String>? editBackupFilename;
   final bool isLoading;
 
   final ExceptionEvent? error;

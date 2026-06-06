@@ -263,6 +263,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
             ),
           );
         },
+        onBackedUp: (backupFilename) {
+          emit(state.copyWith(editBackupFilename: Unique(backupFilename)));
+        },
       );
       emit(state.copyWith(editMetadataProgress: null));
     } catch (e, stackTrace) {
@@ -296,6 +299,9 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
               ),
             ),
           );
+        },
+        onBackedUp: (backupFilename) {
+          emit(state.copyWith(editBackupFilename: Unique(backupFilename)));
         },
       );
       emit(state.copyWith(editMetadataProgress: null));
