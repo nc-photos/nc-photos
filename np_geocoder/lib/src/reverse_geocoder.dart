@@ -8,8 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:kdtree/kdtree.dart';
 import 'package:logging/logging.dart';
 import 'package:np_common/localized_string.dart';
-import 'package:np_geocoder/src/native/db_util.dart'
-    if (dart.library.html) 'package:np_geocoder/src/web/db_util.dart';
+import 'package:np_geocoder/src/db_util.dart';
 import 'package:np_log/np_log.dart';
 import 'package:np_math/np_math.dart';
 import 'package:sqlite3/common.dart';
