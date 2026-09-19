@@ -371,15 +371,21 @@ class _Bloc extends Bloc<_Event, _State>
         e.file,
       ).isPermitted(AnyFileCapability.upload),
     );
-    emit(
-      state.copyWith(
-        selectedCanArchive: canArchive,
-        selectedCanDownload: canDownload,
-        selectedCanDelete: canDelete,
-        selectedCanAddToCollection: canAddToCollection,
-        selectedCanUpload: canUpload,
-      ),
-    );
+    if (state.selectedCanArchive != canArchive ||
+        state.selectedCanDownload != canDownload ||
+        state.selectedCanDelete != canDelete ||
+        state.selectedCanAddToCollection != canAddToCollection ||
+        state.selectedCanUpload != canUpload) {
+      emit(
+        state.copyWith(
+          selectedCanArchive: canArchive,
+          selectedCanDownload: canDownload,
+          selectedCanDelete: canDelete,
+          selectedCanAddToCollection: canAddToCollection,
+          selectedCanUpload: canUpload,
+        ),
+      );
+    }
   }
 
   void _onSelectionModeUpdated(_SelectionModeUpdated ev, _Emitter emit) {
