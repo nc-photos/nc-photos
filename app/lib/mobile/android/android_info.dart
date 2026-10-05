@@ -50,4 +50,6 @@ abstract class AndroidVersion {
   static const S = 31;
   // ignore: constant_identifier_names
   static const TIRAMISU = 33;
+  // ignore: constant_identifier_names
+  static const UPSIDE_DOWN_CAKE = 34;
 }
