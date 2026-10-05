@@ -192,21 +192,27 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
     Feedback.forLongPress(context);
     _dragScroller?.stopAutoScroll();
 
+    // long press w/o swiping = open to preview; long press w/ swiping = select
     _SwipeSelectState<T>? swipeSelectState;
     swipeSelectState = _SwipeSelectState<T>(
       beginPos: pos,
+      beginMetadata: metadata,
       isSelectMode: !widget.selectedItems.contains(metadata),
       originalSelectedItems: Set.of(widget.selectedItems),
       onUpdate: (details) {
         _onSwipeSelectUpdate(swipeSelectState!, details.globalPosition);
       },
       onEnd: (details) {
-        _onSwipeSelectEnd(swipeSelectState!);
+        _onSwipeSelectEnd(swipeSelectState!, isCanceled: false);
       },
       onCancel: () {
-        _onSwipeSelectEnd(swipeSelectState!);
+        _onSwipeSelectEnd(swipeSelectState!, isCanceled: true);
       },
     );
+    if (!_isSelecting) {
+      // always select the very first item
+      swipeSelectState.hasSwiped = true;
+    }
     _swipeSelectState = swipeSelectState;
     _dragScroller = EdgeDraggingAutoScroller(
       Scrollable.of(context),
@@ -215,8 +221,6 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
       },
       velocityScalar: 150,
     );
-
-    _applySwipeSelection(swipeSelectState);
     return swipeSelectState;
   }
 
@@ -225,7 +229,12 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
     final pos = _sectionByGlobalPosition(globalPosition);
     if (pos != null) {
       state.currentPos = pos;
-      _applySwipeSelection(state);
+      if (pos != state.beginPos) {
+        state.hasSwiped = true;
+      }
+      if (state.hasSwiped) {
+        _applySwipeSelection(state);
+      }
     }
     _dragScroller?.startAutoScrollIfNecessary(
       Rect.fromCenter(center: globalPosition, width: 160, height: 160),
@@ -239,7 +248,10 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
     _onSwipeSelectUpdate(state, _prevSwipeSelectPosition!);
   }
 
-  void _onSwipeSelectEnd(_SwipeSelectState<T> drag) {
+  void _onSwipeSelectEnd(
+    _SwipeSelectState<T> drag, {
+    required bool isCanceled,
+  }) {
     if (identical(_swipeSelectState, drag)) {
       _swipeSelectState = null;
       _prevSwipeSelectPosition = null;
@@ -247,6 +259,15 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
     _dragScroller?.stopAutoScroll();
     _swipeSelectRecognizer?.dispose();
     _swipeSelectRecognizer = null;
+    if (!isCanceled && !drag.hasSwiped) {
+      // w/o swiping = open to preview
+      _onItemTap(
+        context,
+        drag.beginPos.section,
+        drag.beginPos.index,
+        drag.beginMetadata,
+      );
+    }
   }
 
   /// Select items between two indexes [a] and [b] in [target] list
@@ -488,6 +509,7 @@ class _SectionPosition with EquatableMixin {
 class _SwipeSelectState<T extends SelectableItemMetadata> extends Drag {
   _SwipeSelectState({
     required this.beginPos,
+    required this.beginMetadata,
     required this.isSelectMode,
     required this.originalSelectedItems,
     this.onUpdate,
@@ -511,6 +533,7 @@ class _SwipeSelectState<T extends SelectableItemMetadata> extends Drag {
   }
 
   final _SectionPosition beginPos;
+  final T beginMetadata;
   // select/unselect
   final bool isSelectMode;
   final Set<T> originalSelectedItems;
@@ -519,4 +542,5 @@ class _SwipeSelectState<T extends SelectableItemMetadata> extends Drag {
   final void Function()? onCancel;
 
   _SectionPosition currentPos;
+  var hasSwiped = false;
 }
