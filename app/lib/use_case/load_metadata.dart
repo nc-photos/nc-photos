@@ -13,6 +13,7 @@ import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/entity/xmp.dart';
 import 'package:nc_photos/np_api_util.dart';
 import 'package:np_collection/np_collection.dart';
+import 'package:np_common/object_util.dart';
 import 'package:np_exiv2/np_exiv2.dart' as exiv2;
 import 'package:np_log/np_log.dart';
 
@@ -93,6 +94,20 @@ class LoadMetadata {
     // keys starting with 0x are probably some proprietary values that we'll
     // never use
     exifData.removeWhere((key, value) => key.startsWith("0x"));
+    if (exifData["GPSLatitude"].as<List<exiv2.Rational>>()?.every(
+              (e) => e.numerator == 0,
+            ) ==
+            true &&
+        exifData["GPSLongitude"].as<List<exiv2.Rational>>()?.every(
+              (e) => e.numerator == 0,
+            ) ==
+            true) {
+      exifData
+        ..remove("GPSLatitudeRef")
+        ..remove("GPSLatitude")
+        ..remove("GPSLongitudeRef")
+        ..remove("GPSLongitude");
+    }
     final exif = exifData.isNotEmpty ? Exif(exifData) : null;
 
     final xmpData = result.xmpData
