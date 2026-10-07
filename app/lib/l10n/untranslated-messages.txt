@@ -348,6 +348,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -445,6 +447,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -546,6 +550,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -789,6 +795,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -878,6 +886,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -1017,6 +1027,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -1106,6 +1118,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -1250,6 +1264,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -1714,6 +1730,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1865,6 +1883,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -2022,6 +2042,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -2161,6 +2183,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -2250,6 +2274,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -2272,7 +2298,9 @@
     "imageSegmentPickerInstruction",
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
-    "postCrashReportSubmitEmailButton"
+    "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide"
   ],
 
   "uk": [
@@ -2294,7 +2322,9 @@
     "imageSegmentPickerInstruction",
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
-    "postCrashReportSubmitEmailButton"
+    "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide"
   ],
 
   "zh": [
@@ -2464,6 +2494,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ],
 
@@ -2720,6 +2752,8 @@
     "postCrashReportDialogText",
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
+    "swipeSelectGuide",
+    "selectionModePreviewGuide",
     "errorServerNoCert"
   ]
 }

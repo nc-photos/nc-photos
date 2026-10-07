@@ -40,4 +40,5 @@ extension ThemeDataExtension on ThemeData {
 
 extension ColorSchemeExtension on ColorScheme {
   Color get onSurfaceLow => onSurface.withValues(alpha: .7);
+  Color get onSurfaceLowest => onSurface.withValues(alpha: .5);
 }

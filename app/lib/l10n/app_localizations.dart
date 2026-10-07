@@ -3059,6 +3059,18 @@ abstract class AppLocalizations {
   /// **'Email'**
   String get postCrashReportSubmitEmailButton;
 
+  /// No description provided for @swipeSelectGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'Long press and swipe to select multiple items'**
+  String get swipeSelectGuide;
+
+  /// No description provided for @selectionModePreviewGuide.
+  ///
+  /// In en, this message translates to:
+  /// **'In selection mode, long press an item to open it'**
+  String get selectionModePreviewGuide;
+
   /// Error message when server responds with HTTP401
   ///
   /// In en, this message translates to:

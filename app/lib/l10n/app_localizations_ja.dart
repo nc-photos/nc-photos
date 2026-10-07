@@ -1659,6 +1659,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get postCrashReportSubmitEmailButton => 'メール';
 
   @override
+  String get swipeSelectGuide => '長押ししたまま指を動かすと、複数の写真を選択できます';
+
+  @override
+  String get selectionModePreviewGuide => '選択モード中に写真を長押しすると、その写真を開けます';
+
+  @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';
 
   @override
