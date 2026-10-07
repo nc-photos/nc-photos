@@ -6,9 +6,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart' hide Selectable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/widget/selectable.dart';
 import 'package:nc_photos/widget/selectable_item_list.dart';
+import 'package:nc_photos/widget/swipe_select_guide/swipe_select_guide.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
@@ -221,6 +224,13 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
       },
       velocityScalar: 150,
     );
+    if (_prefController.isShowSwipeSelectGuideValue) {
+      showDialog(
+        context: context,
+        builder: (context) => const Dialog(child: SwipeSelectGuide()),
+      );
+      _prefController.setShowSwipeSelectGuide(false);
+    }
     return swipeSelectState;
   }
 
@@ -351,6 +361,8 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
   EdgeDraggingAutoScroller? _dragScroller;
   MultiDragGestureRecognizer? _swipeSelectRecognizer;
   Offset? _prevSwipeSelectPosition;
+
+  late final _prefController = context.read<PrefController>();
 }
 
 class _SliverSectionGridView extends StatelessWidget {
