@@ -80,10 +80,9 @@ class Rational {
 class Value {
   const Value({
     required this.typeId,
-    required Uint8List data,
-    required int count,
-  }) : _data = data,
-       _count = count;
+    required this._data,
+    required this._count,
+  });
 
   T as<T>() => asTyped() as T;
 
