@@ -10,5 +10,5 @@ extension _$__NpLog on __ {
   // ignore: unused_element
   Logger get _log => log;
 
-  static final log = Logger("src.native.db_util.__");
+  static final log = Logger("src.db_util.__");
 }
