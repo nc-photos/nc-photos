@@ -7,7 +7,6 @@ import 'package:np_db_sqlite/src/database.dart' as sql;
 import 'package:np_log/np_log.dart';
 import 'package:path/path.dart' as path_lib;
 import 'package:path_provider/path_provider.dart';
-import 'package:sqlite3_flutter_libs/sqlite3_flutter_libs.dart' as sql;
 
 part 'util.g.dart';
 
@@ -32,10 +31,6 @@ QueryExecutor openSqliteConnection() {
     final args = await getSqliteConnectionArgs();
     return openSqliteConnectionWithArgs(args);
   });
-}
-
-Future<void> applyWorkaroundToOpenSqlite3OnOldAndroidVersions() {
-  return sql.applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
 }
 
 /// Export [db] to [dir] and return the exported database file

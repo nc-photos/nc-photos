@@ -21,9 +21,6 @@ QueryExecutor openSqliteConnectionWithArgs(Map<String, dynamic> args) =>
 
 QueryExecutor openSqliteConnection() => impl.openSqliteConnection();
 
-Future<void> applyWorkaroundToOpenSqlite3OnOldAndroidVersions() =>
-    impl.applyWorkaroundToOpenSqlite3OnOldAndroidVersions();
-
 /// Export [db] to [dir] and return the exported database file
 ///
 /// User must have write access to [dir]. On mobile platforms, this typically

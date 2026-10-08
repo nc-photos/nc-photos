@@ -61,7 +61,7 @@ extension ${sortEnumName}IterableExtension on Iterable<$sortEnumName> {
   }
 
   bool _shouldIncludeField(FieldElement field) {
-    if (!field.isSynthetic) {
+    if (!field.isOriginGetterSetter) {
       // columns are getters
       return false;
     }

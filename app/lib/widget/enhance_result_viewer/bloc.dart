@@ -3,12 +3,8 @@ part of 'enhance_result_viewer.dart';
 @npLog
 class _Bloc extends Bloc<_Event, _State>
     with BlocLogger, BlocErrorCatcher<_Event, _State> {
-  _Bloc({
-    required DiContainer c,
-    required this.account,
-    required this.persistResult,
-  }) : _c = c,
-       super(_State.init()) {
+  _Bloc({required this._c, required this.account, required this.persistResult})
+    : super(_State.init()) {
     on<_LoadFile>(_onLoadFile);
     on<_SetError>((ev, emit) {
       _log.info(ev);
