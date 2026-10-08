@@ -235,7 +235,7 @@ dev_dependencies:
       path: copy_with_build
       ref: copy_with_build-3.1.0
   dart_style: 3.1.7
-  drift: 2.31.0
+  drift: 2.33.0
   # temporarily removed due to dependency issue
   # flutter_test:
   #   sdk: flutter
