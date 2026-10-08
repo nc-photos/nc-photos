@@ -18,16 +18,16 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-3.0.0
+      ref: to_string-3.1.0
       path: to_string
 
 dev_dependencies:
   build_runner: ^2.13.1
-  dart_style: 3.1.2
+  dart_style: 3.1.7
   np_lints:
     path: ../np_lints
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-3.0.1
+      ref: to_string_build-3.1.0
       path: to_string_build

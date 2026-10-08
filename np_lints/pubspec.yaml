@@ -10,4 +10,4 @@ dependencies:
   flutter_lints: ^4.0.0
 
 dev_dependencies:
-  dart_style: 3.1.2
+  dart_style: 3.1.7

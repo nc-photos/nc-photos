@@ -52,7 +52,7 @@ dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with
-      ref: copy_with-3.0.0
+      ref: copy_with-3.1.0
   crypto: ^3.0.3
   devicelocale: ^0.9.1
   device_info_plus: ^10.1.2
@@ -187,7 +187,7 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-3.0.0
+      ref: to_string-3.1.0
       path: to_string
   url_launcher: ^6.2.6
   uuid: ^4.5.1
@@ -233,8 +233,8 @@ dev_dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
-      ref: copy_with_build-3.0.1
-  dart_style: 3.1.2
+      ref: copy_with_build-3.1.0
+  dart_style: 3.1.7
   drift: 2.31.0
   # temporarily removed due to dependency issue
   # flutter_test:
@@ -250,7 +250,7 @@ dev_dependencies:
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-3.0.1
+      ref: to_string_build-3.1.0
       path: to_string_build
 
 # For information on the generic Dart part of this file, see the

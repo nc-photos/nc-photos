@@ -13,7 +13,7 @@ dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with
-      ref: copy_with-3.0.0
+      ref: copy_with-3.1.0
   equatable: ^2.0.5
   flutter:
     sdk: flutter
@@ -33,7 +33,7 @@ dependencies:
   to_string:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string-3.0.0
+      ref: to_string-3.1.0
       path: to_string
 
 dev_dependencies:
@@ -42,8 +42,8 @@ dev_dependencies:
     git:
       url: https://github.com/nkming2/dart-copy-with.git
       path: copy_with_build
-      ref: copy_with_build-3.0.1
-  dart_style: 3.1.2
+      ref: copy_with_build-3.1.0
+  dart_style: 3.1.7
   np_lints:
     path: ../np_lints
   np_log_build:
@@ -52,5 +52,5 @@ dev_dependencies:
   to_string_build:
     git:
       url: https://github.com/nkming2/dart-to-string.git
-      ref: to_string_build-3.0.1
+      ref: to_string_build-3.1.0
       path: to_string_build
