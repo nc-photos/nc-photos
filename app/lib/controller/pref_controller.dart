@@ -328,6 +328,12 @@ class PrefController {
     value: value,
   );
 
+  Future<void> setShowSwipeSelectGuide(bool value) => _set(
+    controller: _isShowSwipeSelectGuideController,
+    setter: (pref, value) => pref.setShowSwipeSelectGuide(value),
+    value: value,
+  );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -548,6 +554,10 @@ class PrefController {
   @npSubjectAccessor
   late final _isBackupOnRemoteExifEditController = BehaviorSubject.seeded(
     pref.isBackupOnRemoteExifEdit() ?? true,
+  );
+  @npSubjectAccessor
+  late final _isShowSwipeSelectGuideController = BehaviorSubject.seeded(
+    pref.isShowSwipeSelectGuide() ?? true,
   );
 }
 

@@ -338,6 +338,14 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isBackupOnRemoteExifEdit.distinct().skip(1);
   bool get isBackupOnRemoteExifEditValue =>
       _isBackupOnRemoteExifEditController.value;
+  // _isShowSwipeSelectGuideController
+  ValueStream<bool> get isShowSwipeSelectGuide =>
+      _isShowSwipeSelectGuideController.stream;
+  Stream<bool> get isShowSwipeSelectGuideNew => isShowSwipeSelectGuide.skip(1);
+  Stream<bool> get isShowSwipeSelectGuideChange =>
+      isShowSwipeSelectGuide.distinct().skip(1);
+  bool get isShowSwipeSelectGuideValue =>
+      _isShowSwipeSelectGuideController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

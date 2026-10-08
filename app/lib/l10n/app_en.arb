@@ -1667,6 +1667,8 @@
 	"postCrashReportDialogText": "The app crashed during the previous run. Sending the log to the developer could help to diagnose the issue. Do you wish to export the log?",
 	"postCrashReportSubmitDialogText": "Log saved, please report the issue to the developer on GitHub or via email with the log file attached. Thank you.",
 	"postCrashReportSubmitEmailButton": "Email",
+	"swipeSelectGuide": "Long press and swipe to select multiple items",
+	"selectionModePreviewGuide": "In selection mode, long press an item to open it",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

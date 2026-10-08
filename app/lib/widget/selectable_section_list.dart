@@ -2,17 +2,18 @@ import 'dart:math' as math;
 
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart' hide Selectable;
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:logging/logging.dart';
-import 'package:nc_photos/app_localizations.dart';
-import 'package:nc_photos/k.dart' as k;
-import 'package:nc_photos/session_storage.dart';
-import 'package:nc_photos/snack_bar_manager.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/widget/selectable.dart';
 import 'package:nc_photos/widget/selectable_item_list.dart';
+import 'package:nc_photos/widget/swipe_select_guide/swipe_select_guide.dart';
 import 'package:np_collection/np_collection.dart';
 import 'package:np_log/np_log.dart';
-import 'package:np_platform_util/np_platform_util.dart';
 import 'package:super_sliver_list/super_sliver_list.dart';
 
 export 'package:nc_photos/widget/selectable_item_list.dart'
@@ -95,6 +96,13 @@ class SelectableSectionList<T extends SelectableItemMetadata>
 class _SelectableSectionListState<T extends SelectableItemMetadata>
     extends State<SelectableSectionList<T>> {
   @override
+  void dispose() {
+    _dragScroller?.stopAutoScroll();
+    _swipeSelectRecognizer?.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return _SliverSectionGridView(
       key: _listKey,
@@ -116,21 +124,28 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
   Widget _buildItem(BuildContext context, int section, int index) {
     final meta = widget.sections[section].items[index];
     if (meta.isSelectable) {
-      return Selectable(
-        isSelected: widget.selectedItems.contains(meta),
-        iconSize: 32,
-        childBorderRadius:
-            widget.childBorderRadius ?? BorderRadius.circular(24),
-        indicatorAlignment: widget.indicatorAlignment,
-        onTap: () {
-          if (_isSelecting) {
-            _onItemSelect(context, section, index, meta);
-          } else {
-            _onItemTap(context, section, index, meta);
-          }
-        },
-        onLongPress: () => _onItemLongPress(section, index, meta),
-        child: widget.itemBuilder(context, section, index, meta),
+      final pos = _SectionPosition(section: section, index: index);
+      return Listener(
+        onPointerDown: (event) => _onItemPointerDown(context, event, pos, meta),
+        child: MetaData(
+          metaData: pos,
+          behavior: HitTestBehavior.opaque,
+          child: Selectable(
+            isSelected: widget.selectedItems.contains(meta),
+            iconSize: 32,
+            childBorderRadius:
+                widget.childBorderRadius ?? BorderRadius.circular(24),
+            indicatorAlignment: widget.indicatorAlignment,
+            onTap: () {
+              if (_isSelecting) {
+                _onItemSelect(context, section, index, meta);
+              } else {
+                _onItemTap(context, section, index, meta);
+              }
+            },
+            child: widget.itemBuilder(context, section, index, meta),
+          ),
+        ),
       );
     } else {
       return widget.itemBuilder(context, section, index, meta);
@@ -147,63 +162,121 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
       return;
     }
     final newSelectedItems = Set.of(widget.selectedItems);
-    final currentPos = _SectionPosition(section: section, index: index);
-    if (widget.selectedItems.contains(metadata)) {
-      // unselect
-      setState(() {
-        newSelectedItems.remove(metadata);
-        _lastSelectPosition = null;
-      });
-    } else {
-      setState(() {
-        // select single
-        newSelectedItems.add(metadata);
-        _lastSelectPosition = currentPos;
-      });
+    if (!newSelectedItems.remove(metadata)) {
+      newSelectedItems.add(metadata);
     }
-    widget.onSelectionChange?.call(context, newSelectedItems);
+    _notifySelectionChange(newSelectedItems);
   }
 
-  void _onItemLongPress(int section, int index, T metadata) {
-    if (!widget.sections[section].items.containsIdentical(metadata)) {
-      _log.warning(
-        "[_onItemLongPress] Item not found in backing list, ignoring",
-      );
+  void _onItemPointerDown(
+    BuildContext context,
+    PointerDownEvent event,
+    _SectionPosition pos,
+    T metadata,
+  ) {
+    if (_swipeSelectState != null) {
       return;
     }
-    final wasSelecting = _isSelecting;
-    final newSelectedItems = Set.of(widget.selectedItems);
-    final currentPos = _SectionPosition(section: section, index: index);
-    if (_isSelecting && _lastSelectPosition != null) {
-      setState(() {
-        _selectRange(newSelectedItems, _lastSelectPosition!, currentPos);
-        _lastSelectPosition = currentPos;
-      });
-    } else {
-      setState(() {
-        // select single
-        newSelectedItems.add(metadata);
-        _lastSelectPosition = currentPos;
-      });
-    }
-    widget.onSelectionChange?.call(context, newSelectedItems);
+    _swipeSelectRecognizer?.dispose();
+    final r = DelayedMultiDragGestureRecognizer(debugOwner: this);
+    r.gestureSettings = MediaQuery.maybeGestureSettingsOf(context);
+    r.onStart = (_) => _onSwipeSelectStart(pos, metadata);
+    r.addPointer(event);
+    _swipeSelectRecognizer = r;
+  }
 
-    // show notification on first entry to selection mode in each session
-    if (!wasSelecting) {
-      if (!SessionStorage().hasShowRangeSelectNotification) {
-        SnackBarManager().showSnackBar(
-          SnackBar(
-            content: Text(
-              getRawPlatform() == NpPlatform.web
-                  ? L10n.global().webSelectRangeNotification
-                  : L10n.global().mobileSelectRangeNotification,
-            ),
-            duration: k.snackBarDurationNormal,
-          ),
-          canBeReplaced: true,
-        );
-        SessionStorage().hasShowRangeSelectNotification = true;
+  _SwipeSelectState<T>? _onSwipeSelectStart(_SectionPosition pos, T metadata) {
+    if (!widget.sections[pos.section].items.containsIdentical(metadata)) {
+      _log.warning(
+        "[_onSwipeSelectStart] Item not found in backing list, ignoring",
+      );
+      return null;
+    }
+    Feedback.forLongPress(context);
+    _dragScroller?.stopAutoScroll();
+
+    // long press w/o swiping = open to preview; long press w/ swiping = select
+    _SwipeSelectState<T>? swipeSelectState;
+    swipeSelectState = _SwipeSelectState<T>(
+      beginPos: pos,
+      beginMetadata: metadata,
+      isSelectMode: !widget.selectedItems.contains(metadata),
+      originalSelectedItems: Set.of(widget.selectedItems),
+      onUpdate: (details) {
+        _onSwipeSelectUpdate(swipeSelectState!, details.globalPosition);
+      },
+      onEnd: (details) {
+        _onSwipeSelectEnd(swipeSelectState!, isCanceled: false);
+      },
+      onCancel: () {
+        _onSwipeSelectEnd(swipeSelectState!, isCanceled: true);
+      },
+    );
+    if (!_isSelecting) {
+      // always select the very first item
+      swipeSelectState.hasSwiped = true;
+    }
+    _swipeSelectState = swipeSelectState;
+    _dragScroller = EdgeDraggingAutoScroller(
+      Scrollable.of(context),
+      onScrollViewScrolled: () {
+        _onSwipeSelectAutoScrolled(swipeSelectState!);
+      },
+      velocityScalar: 150,
+    );
+    if (_prefController.isShowSwipeSelectGuideValue) {
+      showDialog(
+        context: context,
+        builder: (context) => const Dialog(child: SwipeSelectGuide()),
+      );
+      _prefController.setShowSwipeSelectGuide(false);
+    }
+    return swipeSelectState;
+  }
+
+  void _onSwipeSelectUpdate(_SwipeSelectState<T> state, Offset globalPosition) {
+    _prevSwipeSelectPosition = globalPosition;
+    final pos = _sectionByGlobalPosition(globalPosition);
+    if (pos != null) {
+      state.currentPos = pos;
+      if (pos != state.beginPos) {
+        state.hasSwiped = true;
       }
+      if (state.hasSwiped) {
+        _applySwipeSelection(state);
+      }
+    }
+    _dragScroller?.startAutoScrollIfNecessary(
+      Rect.fromCenter(center: globalPosition, width: 160, height: 160),
+    );
+  }
+
+  void _onSwipeSelectAutoScrolled(_SwipeSelectState<T> state) {
+    if (_prevSwipeSelectPosition == null) {
+      return;
+    }
+    _onSwipeSelectUpdate(state, _prevSwipeSelectPosition!);
+  }
+
+  void _onSwipeSelectEnd(
+    _SwipeSelectState<T> drag, {
+    required bool isCanceled,
+  }) {
+    if (identical(_swipeSelectState, drag)) {
+      _swipeSelectState = null;
+      _prevSwipeSelectPosition = null;
+    }
+    _dragScroller?.stopAutoScroll();
+    _swipeSelectRecognizer?.dispose();
+    _swipeSelectRecognizer = null;
+    if (!isCanceled && !drag.hasSwiped) {
+      // w/o swiping = open to preview
+      _onItemTap(
+        context,
+        drag.beginPos.section,
+        drag.beginPos.index,
+        drag.beginMetadata,
+      );
     }
   }
 
@@ -245,10 +318,51 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
     }
   }
 
+  void _applySwipeSelection(_SwipeSelectState<T> drag) {
+    final swipeSelected = <SelectableItemMetadata>{};
+    _selectRange(swipeSelected, drag.beginPos, drag.currentPos);
+    final newSelectedItems = Set.of(drag.originalSelectedItems);
+    if (drag.isSelectMode) {
+      newSelectedItems.addAll(swipeSelected.cast<T>());
+    } else {
+      newSelectedItems.removeAll(swipeSelected);
+    }
+    _notifySelectionChange(newSelectedItems);
+  }
+
+  void _notifySelectionChange(Set<T> newSelectedItems) {
+    if (setEquals(newSelectedItems, widget.selectedItems)) {
+      // no change
+      return;
+    }
+    widget.onSelectionChange?.call(context, newSelectedItems);
+  }
+
+  _SectionPosition? _sectionByGlobalPosition(Offset globalPosition) {
+    final view = View.maybeOf(context);
+    if (view == null) {
+      return null;
+    }
+    final result = HitTestResult();
+    WidgetsBinding.instance.hitTestInView(result, globalPosition, view.viewId);
+    for (final entry in result.path) {
+      final target = entry.target;
+      if (target is RenderMetaData && target.metaData is _SectionPosition) {
+        return target.metaData as _SectionPosition;
+      }
+    }
+    return null;
+  }
+
   bool get _isSelecting => widget.selectedItems.isNotEmpty;
 
-  _SectionPosition? _lastSelectPosition;
   final _listKey = GlobalKey();
+  _SwipeSelectState<T>? _swipeSelectState;
+  EdgeDraggingAutoScroller? _dragScroller;
+  MultiDragGestureRecognizer? _swipeSelectRecognizer;
+  Offset? _prevSwipeSelectPosition;
+
+  late final _prefController = context.read<PrefController>();
 }
 
 class _SliverSectionGridView extends StatelessWidget {
@@ -402,4 +516,43 @@ class _SectionPosition with EquatableMixin {
 
   final int section;
   final int index;
+}
+
+class _SwipeSelectState<T extends SelectableItemMetadata> extends Drag {
+  _SwipeSelectState({
+    required this.beginPos,
+    required this.beginMetadata,
+    required this.isSelectMode,
+    required this.originalSelectedItems,
+    this.onUpdate,
+    this.onEnd,
+    this.onCancel,
+  }) : currentPos = beginPos;
+
+  @override
+  void update(DragUpdateDetails details) {
+    onUpdate?.call(details);
+  }
+
+  @override
+  void end(DragEndDetails details) {
+    onEnd?.call(details);
+  }
+
+  @override
+  void cancel() {
+    onCancel?.call();
+  }
+
+  final _SectionPosition beginPos;
+  final T beginMetadata;
+  // select/unselect
+  final bool isSelectMode;
+  final Set<T> originalSelectedItems;
+  final void Function(DragUpdateDetails details)? onUpdate;
+  final void Function(DragEndDetails details)? onEnd;
+  final void Function()? onCancel;
+
+  _SectionPosition currentPos;
+  var hasSwiped = false;
 }

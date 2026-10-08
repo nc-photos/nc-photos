@@ -1712,5 +1712,7 @@
 	"imageEditBrushRadius": "サイズ",
 	"postCrashReportDialogText": "このアプリがクラッシュし、再起動しました。ログを開発者と共有すると、不具合の特定や修正に役立ちます。ログをエクスポートしますか？",
 	"postCrashReportSubmitDialogText": "ログをエクスポートしました。お手数ですが、GitHubかメールでこのログと共に不具合報告を提出してください。よろしくお願いします。",
-	"postCrashReportSubmitEmailButton": "メール"
+	"postCrashReportSubmitEmailButton": "メール",
+	"swipeSelectGuide": "長押ししたまま指を動かすと、複数の写真を選択できます",
+	"selectionModePreviewGuide": "選択モード中に写真を長押しすると、その写真を開けます"
 }

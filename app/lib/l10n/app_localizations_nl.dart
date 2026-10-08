@@ -1716,6 +1716,14 @@ class AppLocalizationsNl extends AppLocalizations {
   String get postCrashReportSubmitEmailButton => 'Email';
 
   @override
+  String get swipeSelectGuide =>
+      'Long press and swipe to select multiple items';
+
+  @override
+  String get selectionModePreviewGuide =>
+      'In selection mode, long press an item to open it';
+
+  @override
   String get errorUnauthenticated =>
       'Unauthenticated access. Please sign-in again if the problem continues';
 

@@ -258,6 +258,11 @@ extension on Pref {
       provider.getBool(PrefKey.backupOnRemoteExifEdit);
   Future<bool> setBackupOnRemoteExifEdit(bool value) =>
       provider.setBool(PrefKey.backupOnRemoteExifEdit, value);
+
+  bool? isShowSwipeSelectGuide() =>
+      provider.getBool(PrefKey.showSwipeSelectGuide);
+  Future<bool> setShowSwipeSelectGuide(bool value) =>
+      provider.setBool(PrefKey.showSwipeSelectGuide, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {
