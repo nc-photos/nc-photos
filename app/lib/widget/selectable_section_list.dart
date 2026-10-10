@@ -48,16 +48,14 @@ class SelectableSectionList<T extends SelectableItemMetadata>
     this.selectedItems = const {},
     required this.sectionHeaderBuilder,
     required this.itemBuilder,
-    this.maxCrossAxisExtent,
     this.childAspectRatio = 1,
-    this.mainAxisSpacing = 0,
     this.crossAxisSpacing = 0,
-    this.extentOptimizer,
+    required this.extentOptimizer,
     this.childBorderRadius,
     this.indicatorAlignment = Alignment.topLeft,
     this.onItemTap,
     this.onSelectionChange,
-  }) : assert(maxCrossAxisExtent != null || extentOptimizer != null);
+  });
 
   @override
   State<StatefulWidget> createState() => _SelectableSectionListState<T>();
@@ -74,15 +72,11 @@ class SelectableSectionList<T extends SelectableItemMetadata>
   )
   itemBuilder;
 
-  /// The maximum extent of tiles in the cross axis. Required if
-  /// [extentOptimizer] is null
-  final double? maxCrossAxisExtent;
   final double childAspectRatio;
-  final double mainAxisSpacing;
   final double crossAxisSpacing;
 
   // Optimize scrolling performance by providing a fixed extent for items
-  final SelectableSectionListExtentOptimizer? extentOptimizer;
+  final SelectableSectionListExtentOptimizer extentOptimizer;
 
   final BorderRadius? childBorderRadius;
   final Alignment indicatorAlignment;
@@ -113,9 +107,7 @@ class _SelectableSectionListState<T extends SelectableItemMetadata>
       },
       itemCount: (section) => widget.sections[section].items.length,
       itemBuilder: _buildItem,
-      maxCrossAxisExtent: widget.maxCrossAxisExtent,
       childAspectRatio: widget.childAspectRatio,
-      mainAxisSpacing: widget.mainAxisSpacing,
       crossAxisSpacing: widget.crossAxisSpacing,
       extentOptimizer: widget.extentOptimizer,
     );
@@ -372,56 +364,17 @@ class _SliverSectionGridView extends StatelessWidget {
     required this.sectionTitleBuilder,
     required this.itemCount,
     required this.itemBuilder,
-    this.maxCrossAxisExtent,
     this.childAspectRatio = 1,
-    this.mainAxisSpacing = 0,
     this.crossAxisSpacing = 0,
-    this.extentOptimizer,
+    required this.extentOptimizer,
   });
 
   @override
   Widget build(BuildContext context) {
-    if (extentOptimizer == null) {
-      return _unoptimizedBuild(context);
-    } else {
-      return _optimizedBuild(context);
-    }
-  }
-
-  Widget _unoptimizedBuild(BuildContext context) {
-    return SliverList.builder(
-      itemCount: sectionCount * 2,
-      itemBuilder: (context, index) {
-        final section = index ~/ 2;
-        if (index.isOdd) {
-          // item
-          return GridView.builder(
-            shrinkWrap: true,
-            padding: EdgeInsets.zero,
-            physics: const NeverScrollableScrollPhysics(),
-            gridDelegate: SliverGridDelegateWithMaxCrossAxisExtent(
-              maxCrossAxisExtent: maxCrossAxisExtent!,
-              childAspectRatio: childAspectRatio,
-              mainAxisSpacing: mainAxisSpacing,
-              crossAxisSpacing: crossAxisSpacing,
-            ),
-            itemCount: itemCount(section),
-            itemBuilder: (context, index) =>
-                itemBuilder(context, section, index),
-          );
-        } else {
-          // section title
-          return sectionTitleBuilder(context, section);
-        }
-      },
-    );
-  }
-
-  Widget _optimizedBuild(BuildContext context) {
     final sectionItemCounts = List.generate(sectionCount, itemCount);
     final sectionRowCounts = List.generate(
       sectionCount,
-      (i) => (sectionItemCounts[i] / extentOptimizer!.itemPerRow).ceil(),
+      (i) => (sectionItemCounts[i] / extentOptimizer.itemPerRow).ceil(),
     );
     final rowCount = sectionCount + sectionRowCounts.sum;
 
@@ -440,14 +393,14 @@ class _SliverSectionGridView extends StatelessWidget {
           return sectionTitleBuilder(context, section);
         } else {
           // item
-          final firstItemIndex = (row - 1) * extentOptimizer!.itemPerRow;
+          final firstItemIndex = (row - 1) * extentOptimizer.itemPerRow;
           final thisRowCount = math.min(
             sectionItemCounts[section] - firstItemIndex,
-            extentOptimizer!.itemPerRow,
+            extentOptimizer.itemPerRow,
           );
           return Row(
             children: List<Widget>.generate(
-              extentOptimizer!.itemPerRow,
+              extentOptimizer.itemPerRow,
               (i) => Expanded(
                 child: AspectRatio(
                   aspectRatio: childAspectRatio,
@@ -469,9 +422,9 @@ class _SliverSectionGridView extends StatelessWidget {
           index,
         );
         if (row == 0) {
-          return extentOptimizer!.titleExtentBuilder(section);
+          return extentOptimizer.titleExtentBuilder(section);
         } else {
-          return extentOptimizer!.itemExtentBuilder(section);
+          return extentOptimizer.itemExtentBuilder(section);
         }
       },
     );
@@ -500,12 +453,10 @@ class _SliverSectionGridView extends StatelessWidget {
   final int Function(int section) itemCount;
   final Widget Function(BuildContext context, int section, int index)
   itemBuilder;
-  final double? maxCrossAxisExtent;
   final double childAspectRatio;
-  final double mainAxisSpacing;
   final double crossAxisSpacing;
 
-  final SelectableSectionListExtentOptimizer? extentOptimizer;
+  final SelectableSectionListExtentOptimizer extentOptimizer;
 }
 
 class _SectionPosition with EquatableMixin {
