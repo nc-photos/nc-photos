@@ -11,7 +11,7 @@ import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/use_case/ls_single_file.dart';
-import 'package:nc_photos/widget/dir_picker.dart';
+import 'package:nc_photos/widget/dir_picker2/dir_picker.dart';
 import 'package:nc_photos/widget/processing_dialog.dart';
 import 'package:np_log/np_log.dart';
 
@@ -38,7 +38,7 @@ class RootPicker extends StatefulWidget {
     : this(key: key, account: args.account);
 
   @override
-  createState() => _RootPickerState();
+  State<StatefulWidget> createState() => _RootPickerState();
 
   final Account account;
 }
@@ -46,7 +46,7 @@ class RootPicker extends StatefulWidget {
 @npLog
 class _RootPickerState extends State<RootPicker> {
   @override
-  initState() {
+  void initState() {
     super.initState();
     _initAccount();
   }
@@ -72,63 +72,63 @@ class _RootPickerState extends State<RootPicker> {
     _dismissInitDialog();
     setState(() {
       _initialPicks = files;
+      _picks = files;
     });
   }
 
   @override
-  build(BuildContext context) {
-    return Scaffold(body: _buildContent(context));
-  }
-
-  Widget _buildContent(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Text(
-                  L10n.global().rootPickerHeaderText,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: AlignmentDirectional.topStart,
-                  child: Text(L10n.global().rootPickerSubHeaderText),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: _initialPicks == null
-                ? Container()
-                : DirPicker(
-                    key: _pickerKey,
-                    account: widget.account,
-                    strippedRootDir: "",
-                    initialPicks: _initialPicks,
-                    onConfirmed: (picks) => _onPickerConfirmed(context, picks),
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  Text(
+                    L10n.global().rootPickerHeaderText,
+                    style: Theme.of(context).textTheme.headlineSmall,
+                    textAlign: TextAlign.center,
                   ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: () => _onSkipPressed(context),
-                  child: Text(L10n.global().skipButtonLabel),
-                ),
-                ElevatedButton(
-                  onPressed: _onConfirmPressed,
-                  child: Text(L10n.global().confirmButtonLabel),
-                ),
-              ],
+                  const SizedBox(height: 8),
+                  Align(
+                    alignment: AlignmentDirectional.topStart,
+                    child: Text(L10n.global().rootPickerSubHeaderText),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: _initialPicks == null
+                  ? Container()
+                  : DirPicker(
+                      account: widget.account,
+                      strippedRootDir: "",
+                      initialPicks: _initialPicks,
+                      onChanged: (picks) => _onPickerChanged(context, picks),
+                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () => _onSkipPressed(context),
+                    child: Text(L10n.global().skipButtonLabel),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _onPickerConfirmed(context);
+                    },
+                    child: Text(L10n.global().confirmButtonLabel),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -160,11 +160,15 @@ class _RootPickerState extends State<RootPicker> {
     });
   }
 
-  void _onConfirmPressed() {
-    _pickerKey.currentState?.confirm();
+  void _onPickerChanged(BuildContext context, List<File> picks) {
+    _picks = picks;
   }
 
-  void _onPickerConfirmed(BuildContext context, List<File> picks) {
+  void _onPickerConfirmed(BuildContext context) {
+    final picks = _picks;
+    if (picks == null) {
+      return;
+    }
     final roots = picks.map((e) => e.strippedPath).toList();
     if (roots.isEmpty) {
       SnackBarManager().showSnackBar(
@@ -205,8 +209,8 @@ class _RootPickerState extends State<RootPicker> {
     Navigator.of(context).pop();
   }
 
-  final _pickerKey = GlobalKey<DirPickerState>();
   List<File>? _initialPicks;
+  List<File>? _picks;
 
   bool _isInitDialogShown = false;
 }

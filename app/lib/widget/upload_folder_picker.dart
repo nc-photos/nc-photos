@@ -5,7 +5,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/entity/file.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
-import 'package:nc_photos/widget/dir_picker.dart';
+import 'package:nc_photos/widget/dir_picker2/dir_picker.dart';
 import 'package:np_log/np_log.dart';
 
 part 'upload_folder_picker.g.dart';
@@ -49,7 +49,7 @@ class _UploadFolderPickerState extends State<UploadFolderPicker> {
   @override
   void initState() {
     super.initState();
-    _path = "/${widget.initialValue}";
+    _path = widget.initialValue;
   }
 
   @override
@@ -73,12 +73,11 @@ class _UploadFolderPickerState extends State<UploadFolderPicker> {
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
-              child: Text(_path),
+              child: Text("/$_path"),
             ),
             const SizedBox(height: 24),
             Expanded(
               child: DirPicker(
-                key: _pickerKey,
                 account: widget.account,
                 strippedRootDir: "",
                 initialPicks: [
@@ -91,7 +90,6 @@ class _UploadFolderPickerState extends State<UploadFolderPicker> {
                     ),
                 ],
                 isMultipleSelections: false,
-                onConfirmed: (picks) => _onPickerConfirmed(context, picks),
                 onChanged: (picks) => _onPickerChanged(context, picks),
               ),
             ),
@@ -102,7 +100,7 @@ class _UploadFolderPickerState extends State<UploadFolderPicker> {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      _pickerKey.currentState?.confirm();
+                      _onPickerConfirmed(context);
                     },
                     child: Text(L10n.global().confirmButtonLabel),
                   ),
@@ -118,24 +116,17 @@ class _UploadFolderPickerState extends State<UploadFolderPicker> {
   void _onPickerChanged(BuildContext context, List<File> picks) {
     setState(() {
       if (picks.isEmpty) {
-        _path = "/";
+        _path = "";
       } else {
-        _path = "/${picks.first.strippedPath}";
+        _path = picks.first.strippedPath;
       }
     });
   }
 
-  void _onPickerConfirmed(BuildContext context, List<File> picks) {
-    if (picks.isEmpty) {
-      _log.info("[_onPickerConfirmed] Picked: /}");
-      Navigator.of(context).pop("");
-    } else {
-      _log.info("[_onPickerConfirmed] Picked: ${picks.first.strippedPath}");
-      Navigator.of(context).pop(picks.first.strippedPath);
-    }
+  void _onPickerConfirmed(BuildContext context) {
+    _log.info("[_onPickerConfirmed] Picked: ${_path.isEmpty ? "/" : _path}");
+    Navigator.of(context).pop(_path);
   }
-
-  final _pickerKey = GlobalKey<DirPickerState>();
 
   late String _path;
 }

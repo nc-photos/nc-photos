@@ -7,8 +7,7 @@ import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/k.dart' as k;
 import 'package:nc_photos/snack_bar_manager.dart';
-import 'package:nc_photos/widget/dir_picker.dart';
-import 'package:np_collection/np_collection.dart';
+import 'package:nc_photos/widget/dir_picker2/dir_picker.dart';
 import 'package:np_log/np_log.dart';
 
 part 'share_folder_picker.g.dart';
@@ -41,7 +40,7 @@ class ShareFolderPicker extends StatefulWidget {
     : this(key: key, account: args.account, initialValue: args.initialValue);
 
   @override
-  createState() => _ShareFolderPickerState();
+  State<StatefulWidget> createState() => _ShareFolderPickerState();
 
   final Account account;
   final String initialValue;
@@ -50,82 +49,96 @@ class ShareFolderPicker extends StatefulWidget {
 @npLog
 class _ShareFolderPickerState extends State<ShareFolderPicker> {
   @override
-  build(BuildContext context) {
-    return Scaffold(body: _buildContent(context));
+  void initState() {
+    super.initState();
+    _path = widget.initialValue;
   }
 
-  Widget _buildContent(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(24),
-            child: Column(
-              children: [
-                Text(
-                  L10n.global().settingsShareFolderDialogTitle,
-                  style: Theme.of(context).textTheme.headlineSmall,
-                  textAlign: TextAlign.center,
-                ),
-                const SizedBox(height: 8),
-                Align(
-                  alignment: AlignmentDirectional.topStart,
-                  child: Text(
-                    L10n.global().settingsShareFolderPickerDescription,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Expanded(
-            child: DirPicker(
-              key: _pickerKey,
-              account: widget.account,
-              strippedRootDir: "",
-              initialPicks: [
-                if (widget.initialValue.isNotEmpty)
-                  File(
-                    path: file_util.unstripPath(
-                      widget.account,
-                      widget.initialValue,
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: AlignmentDirectional.center,
+                    child: Text(
+                      L10n.global().settingsShareFolderDialogTitle,
+                      style: Theme.of(context).textTheme.headlineSmall,
+                      textAlign: TextAlign.center,
                     ),
                   ),
-              ],
-              isMultipleSelections: false,
-              onConfirmed: (picks) => _onPickerConfirmed(context, picks),
+                  const SizedBox(height: 8),
+                  Text(L10n.global().settingsShareFolderPickerDescription),
+                  const SizedBox(height: 8),
+                  Text("/$_path"),
+                ],
+              ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                TextButton(
-                  onPressed: _onDefaultPressed,
-                  child: Text(L10n.global().defaultButtonLabel),
-                ),
-                ElevatedButton(
-                  onPressed: _onConfirmPressed,
-                  child: Text(L10n.global().confirmButtonLabel),
-                ),
-              ],
+            Expanded(
+              child: DirPicker(
+                account: widget.account,
+                strippedRootDir: "",
+                initialPicks: [
+                  if (widget.initialValue.isNotEmpty)
+                    File(
+                      path: file_util.unstripPath(
+                        widget.account,
+                        widget.initialValue,
+                      ),
+                    ),
+                ],
+                isMultipleSelections: false,
+                onChanged: (picks) => _onPickerChanged(context, picks),
+              ),
             ),
-          ),
-        ],
+            Padding(
+              padding: const EdgeInsets.all(16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      _onDefaultPressed(context);
+                    },
+                    child: Text(L10n.global().defaultButtonLabel),
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      _onConfirmPressed(context);
+                    },
+                    child: Text(L10n.global().confirmButtonLabel),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
-  void _onDefaultPressed() {
+  void _onDefaultPressed(BuildContext context) {
     Navigator.of(context).pop("");
   }
 
-  void _onConfirmPressed() {
-    _pickerKey.currentState?.confirm();
+  void _onPickerChanged(BuildContext context, List<File> picks) {
+    setState(() {
+      if (picks.isEmpty) {
+        _path = "";
+      } else {
+        _path = picks.first.strippedPath;
+      }
+    });
   }
 
-  void _onPickerConfirmed(BuildContext context, List<File> picks) {
-    if (picks.isEmpty) {
+  void _onConfirmPressed(BuildContext context) {
+    if (_path.isEmpty) {
       SnackBarManager().showSnackBar(
         SnackBar(
           content: Text(L10n.global().albumDirPickerListEmptyNotification),
@@ -133,12 +146,10 @@ class _ShareFolderPickerState extends State<ShareFolderPicker> {
         ),
       );
     } else {
-      _log.info(
-        "[_onPickerConfirmed] Picked: ${picks.map((e) => e.strippedPath).toReadableString()}",
-      );
-      Navigator.of(context).pop(picks.first.strippedPath);
+      _log.info("[_onConfirmPressed] Picked: $_path");
+      Navigator.of(context).pop(_path);
     }
   }
 
-  final _pickerKey = GlobalKey<DirPickerState>();
+  late String _path;
 }
