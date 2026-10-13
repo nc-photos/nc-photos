@@ -12,6 +12,7 @@ import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/account_pref_controller.dart';
 import 'package:nc_photos/controller/persons_controller.dart';
 import 'package:nc_photos/controller/places_controller.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/controller/server_controller.dart';
 import 'package:nc_photos/entity/collection/builder.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
@@ -22,6 +23,7 @@ import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/file_view_util.dart';
 import 'package:nc_photos/help_utils.dart' as help_util;
 import 'package:nc_photos/k.dart' as k;
+import 'package:nc_photos/place_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_util.dart';
 import 'package:nc_photos/theme.dart';
@@ -62,6 +64,7 @@ class SearchLanding extends StatelessWidget {
         placesController: accountController.placesController,
         accountPrefController: accountController.accountPrefController,
         serverController: accountController.serverController,
+        prefController: context.read(),
         locale: Localizations.localeOf(context),
       ),
       child: _WrappedSearchLanding(

@@ -9,6 +9,7 @@ class _Bloc extends Bloc<_Event, _State>
     required this.placesController,
     required this.accountPrefController,
     required this.serverController,
+    required this.prefController,
     required this.locale,
   }) : super(_State.init()) {
     on<_LoadPersons>(_onLoadPersons);
@@ -16,6 +17,20 @@ class _Bloc extends Bloc<_Event, _State>
     on<_LoadPlaces>(_onLoadPlaces);
     on<_TransformPlaceItems>(_onTransformPlaceItems);
     on<_SetError>(_onSetError);
+
+    _subscriptions.add(
+      prefController.placeSortChange.listen((_) {
+        add(_TransformPlaceItems(state.places));
+      }),
+    );
+  }
+
+  @override
+  Future<void> close() {
+    for (final s in _subscriptions) {
+      s.cancel();
+    }
+    return super.close();
   }
 
   @override
@@ -96,15 +111,9 @@ class _Bloc extends Bloc<_Event, _State>
     Emitter<_State> emit,
   ) async {
     _log.info(ev);
+    final sorter = getPlaceSorter(prefController.placeSortValue);
     final transformed = ev.places.name
-        .sorted((a, b) {
-          final compare = b.count.compareTo(a.count);
-          if (compare == 0) {
-            return a.name.ofLocale(locale).compareTo(b.name.ofLocale(locale));
-          } else {
-            return compare;
-          }
-        })
+        .sorted((a, b) => sorter(a, b, locale))
         .take(10)
         .map((e) => _PlaceItem(account: account, place: e))
         .toList();
@@ -121,5 +130,8 @@ class _Bloc extends Bloc<_Event, _State>
   final PlacesController placesController;
   final AccountPrefController accountPrefController;
   final ServerController serverController;
+  final PrefController prefController;
   final Locale locale;
+
+  final _subscriptions = <StreamSubscription>[];
 }

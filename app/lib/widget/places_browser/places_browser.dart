@@ -17,6 +17,7 @@ import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
 import 'package:nc_photos/exception_event.dart';
 import 'package:nc_photos/file_view_util.dart';
+import 'package:nc_photos/place_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/use_case/list_location_group.dart';
@@ -35,19 +36,6 @@ part 'places_browser.g.dart';
 part 'state_event.dart';
 part 'type.dart';
 part 'view.dart';
-
-enum PlaceSort {
-  count(0),
-  name(1),
-  latestDate(2);
-
-  const PlaceSort(this.value);
-
-  static PlaceSort? tryFromValue(int value) =>
-      PlaceSort.values.firstWhereOrNull((e) => e.value == value);
-
-  final int value;
-}
 
 /// Show a list of all people associated with this account
 class PlacesBrowser extends StatelessWidget {

@@ -61,7 +61,7 @@ class _Bloc extends Bloc<_Event, _State>
     Emitter<_State> emit,
   ) async {
     _log.info(ev);
-    final sorter = _getSorter(state.sort);
+    final sorter = getPlaceSorter(state.sort);
     final transformedPlaces = ev.places.name
         .sorted((a, b) => sorter(a, b, locale))
         .map((e) => _Item(account: account, place: e))
@@ -90,36 +90,4 @@ class _Bloc extends Bloc<_Event, _State>
   final Locale locale;
 
   final _subscriptions = <StreamSubscription>[];
-}
-
-int Function(LocationGroup a, LocationGroup b, Locale locale) _getSorter(
-  PlaceSort sort,
-) {
-  return switch (sort) {
-    PlaceSort.count => _countSorter,
-    PlaceSort.name => _nameSorter,
-    PlaceSort.latestDate => _latestDateSorter,
-  };
-}
-
-int _countSorter(LocationGroup a, LocationGroup b, Locale locale) {
-  final compare = b.count.compareTo(a.count);
-  if (compare == 0) {
-    return _nameSorter(a, b, locale);
-  } else {
-    return compare;
-  }
-}
-
-int _nameSorter(LocationGroup a, LocationGroup b, Locale locale) {
-  return a.name.ofLocale(locale).compareTo(b.name.ofLocale(locale));
-}
-
-int _latestDateSorter(LocationGroup a, LocationGroup b, Locale locale) {
-  final compare = b.latestDateTime.compareTo(a.latestDateTime);
-  if (compare == 0) {
-    return _nameSorter(a, b, locale);
-  } else {
-    return compare;
-  }
 }
