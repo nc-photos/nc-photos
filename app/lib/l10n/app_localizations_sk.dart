@@ -1745,6 +1745,12 @@ class AppLocalizationsSk extends AppLocalizations {
       'In selection mode, long press an item to open it';
 
   @override
+  String get placeSortOptionPhotoCount => 'Most photos';
+
+  @override
+  String get placeSortOptionName => 'Place name';
+
+  @override
   String get errorUnauthenticated =>
       'Neautentifikovaný prístup. Prihláste sa znova, ak problém pretrváva';
 

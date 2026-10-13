@@ -11,6 +11,7 @@ import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/bloc_util.dart';
 import 'package:nc_photos/controller/account_controller.dart';
 import 'package:nc_photos/controller/places_controller.dart';
+import 'package:nc_photos/controller/pref_controller.dart';
 import 'package:nc_photos/entity/collection/builder.dart';
 import 'package:nc_photos/entity/file_descriptor.dart';
 import 'package:nc_photos/entity/file_util.dart' as file_util;
@@ -35,8 +36,18 @@ part 'state_event.dart';
 part 'type.dart';
 part 'view.dart';
 
-typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
-typedef _BlocListener = BlocListener<_Bloc, _State>;
+enum PlaceSort {
+  count(0),
+  name(1),
+  latestDate(2);
+
+  const PlaceSort(this.value);
+
+  static PlaceSort? tryFromValue(int value) =>
+      PlaceSort.values.firstWhereOrNull((e) => e.value == value);
+
+  final int value;
+}
 
 /// Show a list of all people associated with this account
 class PlacesBrowser extends StatelessWidget {
@@ -56,6 +67,7 @@ class PlacesBrowser extends StatelessWidget {
       create: (_) => _Bloc(
         account: accountController.account,
         placesController: accountController.placesController,
+        prefController: context.read(),
         locale: Localizations.localeOf(context),
       ),
       child: const _WrappedPlacesBrowser(),
@@ -83,12 +95,6 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
-        _BlocListener(
-          listenWhen: (previous, current) => previous.places != current.places,
-          listener: (context, state) {
-            _bloc.add(_TransformItems(state.places));
-          },
-        ),
         _BlocListener(
           listenWhen: (previous, current) => previous.error != current.error,
           listener: (context, state) {
@@ -154,4 +160,16 @@ class _WrappedPlacesBrowserState extends State<_WrappedPlacesBrowser>
   }
 
   late final _bloc = context.read<_Bloc>();
+}
+
+typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
+typedef _BlocListener = BlocListener<_Bloc, _State>;
+// typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
+// typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+// typedef _Emitter = Emitter<_State>;
+
+extension on BuildContext {
+  _Bloc get bloc => read<_Bloc>();
+  _State get state => bloc.state;
+  void addEvent(_Event event) => bloc.add(event);
 }

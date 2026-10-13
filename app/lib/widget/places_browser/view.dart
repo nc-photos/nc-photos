@@ -10,6 +10,11 @@ class _AppBar extends StatelessWidget {
       floating: true,
       actions: [
         IconButton(
+          onPressed: () => _onSortPressed(context),
+          icon: const Icon(Icons.sort_outlined),
+          tooltip: L10n.global().sortTooltip,
+        ),
+        IconButton(
           onPressed: () {
             showDialog(
               context: context,
@@ -20,6 +25,31 @@ class _AppBar extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> _onSortPressed(BuildContext context) async {
+    final sort = context.state.sort;
+    final result = await showDialog<PlaceSort>(
+      context: context,
+      builder: (context) => FancyOptionPicker(
+        title: Text(L10n.global().sortOptionDialogTitle),
+        items: PlaceSort.values
+            .map(
+              (e) => FancyOptionPickerItem(
+                label: e.userString(context),
+                isSelected: sort == e,
+                onSelect: () {
+                  Navigator.of(context).pop(e);
+                },
+              ),
+            )
+            .toList(),
+      ),
+    );
+    if (result == null || result == sort) {
+      return;
+    }
+    context.addEvent(_SetSort(result));
   }
 }
 
@@ -207,5 +237,15 @@ class _LocationPlaceholder extends StatelessWidget {
         color: Theme.of(context).listPlaceholderForegroundColor,
       ),
     );
+  }
+}
+
+extension on PlaceSort {
+  String userString(BuildContext context) {
+    return switch (this) {
+      PlaceSort.count => L10n.global().placeSortOptionPhotoCount,
+      PlaceSort.name => L10n.global().placeSortOptionName,
+      PlaceSort.latestDate => L10n.global().sortOptionTimeDescendingLabel,
+    };
   }
 }

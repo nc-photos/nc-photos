@@ -263,6 +263,11 @@ extension on Pref {
       provider.getBool(PrefKey.showSwipeSelectGuide);
   Future<bool> setShowSwipeSelectGuide(bool value) =>
       provider.setBool(PrefKey.showSwipeSelectGuide, value);
+
+  PlaceSort? getPlaceSort() =>
+      provider.getInt(PrefKey.placeSort)?.let(PlaceSort.tryFromValue);
+  Future<bool> setPlaceSort(PlaceSort value) =>
+      provider.setInt(PrefKey.placeSort, value.value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {

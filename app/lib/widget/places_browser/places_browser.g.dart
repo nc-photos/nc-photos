@@ -18,6 +18,7 @@ abstract class $_StateCopyWithWorker {
     bool? isLoading,
     List<_Item>? transformedPlaceItems,
     List<_Item>? transformedCountryItems,
+    PlaceSort? sort,
     ExceptionEvent? error,
   });
 }
@@ -31,6 +32,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic isLoading,
     dynamic transformedPlaceItems,
     dynamic transformedCountryItems,
+    dynamic sort,
     dynamic error = copyWithNull,
   }) {
     return _State(
@@ -41,6 +43,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       transformedCountryItems:
           transformedCountryItems as List<_Item>? ??
           that.transformedCountryItems,
+      sort: sort as PlaceSort? ?? that.sort,
       error: error == copyWithNull ? that.error : error as ExceptionEvent?,
     );
   }
@@ -87,7 +90,7 @@ extension _$_ItemNpLog on _Item {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {places: $places, isLoading: $isLoading, transformedPlaceItems: [length: ${transformedPlaceItems.length}], transformedCountryItems: [length: ${transformedCountryItems.length}], error: $error}";
+    return "_State {places: $places, isLoading: $isLoading, transformedPlaceItems: [length: ${transformedPlaceItems.length}], transformedCountryItems: [length: ${transformedCountryItems.length}], sort: ${sort.name}, error: $error}";
   }
 }
 
@@ -109,5 +112,12 @@ extension _$_TransformItemsToString on _TransformItems {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_TransformItems {places: $places}";
+  }
+}
+
+extension _$_SetSortToString on _SetSort {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetSort {sort: ${sort.name}}";
   }
 }

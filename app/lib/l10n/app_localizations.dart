@@ -3071,6 +3071,18 @@ abstract class AppLocalizations {
   /// **'In selection mode, long press an item to open it'**
   String get selectionModePreviewGuide;
 
+  /// No description provided for @placeSortOptionPhotoCount.
+  ///
+  /// In en, this message translates to:
+  /// **'Most photos'**
+  String get placeSortOptionPhotoCount;
+
+  /// No description provided for @placeSortOptionName.
+  ///
+  /// In en, this message translates to:
+  /// **'Place name'**
+  String get placeSortOptionName;
+
   /// Error message when server responds with HTTP401
   ///
   /// In en, this message translates to:

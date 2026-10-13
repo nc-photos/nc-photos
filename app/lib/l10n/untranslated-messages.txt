@@ -350,6 +350,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -449,6 +451,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -552,6 +556,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -797,6 +803,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -888,6 +896,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -1029,6 +1039,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -1120,6 +1132,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -1266,6 +1280,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -1732,6 +1748,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorUnauthenticated",
     "errorDisconnected",
     "errorLocked",
@@ -1885,6 +1903,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -2044,6 +2064,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -2185,6 +2207,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -2276,6 +2300,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -2300,7 +2326,9 @@
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
-    "selectionModePreviewGuide"
+    "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName"
   ],
 
   "uk": [
@@ -2324,7 +2352,9 @@
     "postCrashReportSubmitDialogText",
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
-    "selectionModePreviewGuide"
+    "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName"
   ],
 
   "zh": [
@@ -2496,6 +2526,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ],
 
@@ -2754,6 +2786,8 @@
     "postCrashReportSubmitEmailButton",
     "swipeSelectGuide",
     "selectionModePreviewGuide",
+    "placeSortOptionPhotoCount",
+    "placeSortOptionName",
     "errorServerNoCert"
   ]
 }

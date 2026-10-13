@@ -1660,6 +1660,12 @@ class AppLocalizationsZh extends AppLocalizations {
       'In selection mode, long press an item to open it';
 
   @override
+  String get placeSortOptionPhotoCount => 'Most photos';
+
+  @override
+  String get placeSortOptionName => 'Place name';
+
+  @override
   String get errorUnauthenticated => '未授权的存取，若问题持续请重新登录';
 
   @override

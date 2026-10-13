@@ -137,7 +137,8 @@ enum PrefKey implements PrefKeyInterface {
   isEnableLocalFile,
   isViewerUseOriginalImage,
   backupOnRemoteExifEdit,
-  showSwipeSelectGuide;
+  showSwipeSelectGuide,
+  placeSort;
 
   @override
   String toStringKey() {
@@ -205,6 +206,7 @@ enum PrefKey implements PrefKeyInterface {
       PrefKey.isViewerUseOriginalImage => "isViewerUseOriginalImage",
       PrefKey.backupOnRemoteExifEdit => "backupOnRemoteExifEdit",
       PrefKey.showSwipeSelectGuide => "showSwipeSelectGuide",
+      PrefKey.placeSort => "placeSort",
     };
   }
 }

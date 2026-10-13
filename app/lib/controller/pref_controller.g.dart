@@ -346,6 +346,11 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
       isShowSwipeSelectGuide.distinct().skip(1);
   bool get isShowSwipeSelectGuideValue =>
       _isShowSwipeSelectGuideController.value;
+  // _placeSortController
+  ValueStream<PlaceSort> get placeSort => _placeSortController.stream;
+  Stream<PlaceSort> get placeSortNew => placeSort.skip(1);
+  Stream<PlaceSort> get placeSortChange => placeSort.distinct().skip(1);
+  PlaceSort get placeSortValue => _placeSortController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

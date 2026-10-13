@@ -8,14 +8,16 @@ class _State {
     required this.isLoading,
     required this.transformedPlaceItems,
     required this.transformedCountryItems,
+    required this.sort,
     this.error,
   });
 
-  factory _State.init() => const _State(
-    places: LocationGroupResult([], [], [], []),
+  factory _State.init({required PlaceSort sort}) => _State(
+    places: const LocationGroupResult([], [], [], []),
     isLoading: false,
-    transformedPlaceItems: [],
-    transformedCountryItems: [],
+    transformedPlaceItems: const [],
+    transformedCountryItems: const [],
+    sort: sort,
   );
 
   @override
@@ -25,6 +27,7 @@ class _State {
   final bool isLoading;
   final List<_Item> transformedPlaceItems;
   final List<_Item> transformedCountryItems;
+  final PlaceSort sort;
 
   final ExceptionEvent? error;
 }
@@ -57,4 +60,14 @@ class _TransformItems implements _Event {
   String toString() => _$toString();
 
   final LocationGroupResult places;
+}
+
+@toString
+class _SetSort implements _Event {
+  const _SetSort(this.sort);
+
+  @override
+  String toString() => _$toString();
+
+  final PlaceSort sort;
 }

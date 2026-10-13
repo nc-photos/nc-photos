@@ -1669,6 +1669,8 @@
 	"postCrashReportSubmitEmailButton": "Email",
 	"swipeSelectGuide": "Long press and swipe to select multiple items",
 	"selectionModePreviewGuide": "In selection mode, long press an item to open it",
+	"placeSortOptionPhotoCount": "Most photos",
+	"placeSortOptionName": "Place name",
 
 	"errorUnauthenticated": "Unauthenticated access. Please sign-in again if the problem continues",
 	"@errorUnauthenticated": {

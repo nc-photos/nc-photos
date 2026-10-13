@@ -1749,6 +1749,12 @@ class AppLocalizationsDe extends AppLocalizations {
       'In selection mode, long press an item to open it';
 
   @override
+  String get placeSortOptionPhotoCount => 'Most photos';
+
+  @override
+  String get placeSortOptionName => 'Place name';
+
+  @override
   String get errorUnauthenticated =>
       'Nicht authentifizierter Zugriff. Bitte melden Sie sich erneut an, wenn das Problem weiterhin besteht';
 

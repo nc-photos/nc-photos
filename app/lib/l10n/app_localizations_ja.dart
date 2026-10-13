@@ -664,7 +664,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get genericProcessingDialogContent => 'お待ち下さい';
 
   @override
-  String get sortTooltip => 'ソート';
+  String get sortTooltip => '並べ替え';
 
   @override
   String get sortOptionDialogTitle => '並べ替え';
@@ -1663,6 +1663,12 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get selectionModePreviewGuide => '選択モード中に写真を長押しすると、その写真を開けます';
+
+  @override
+  String get placeSortOptionPhotoCount => '写真の多い順';
+
+  @override
+  String get placeSortOptionName => '場所の名前';
 
   @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';
