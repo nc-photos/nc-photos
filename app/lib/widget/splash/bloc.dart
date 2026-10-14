@@ -101,6 +101,12 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       if (exitInfo == null) {
         return;
       }
+      if (DateTime.now().difference(exitInfo.time) > const Duration(days: 1)) {
+        _log.warning(
+          "[_handleCrash] App crashed but it's too long ago: $exitInfo",
+        );
+        return;
+      }
       if (exitInfo.reason == ExitInfoReason.crash ||
           exitInfo.reason == ExitInfoReason.crashNative) {
         _log.warning("[_handleCrash] App crashed in the prev run: $exitInfo");
