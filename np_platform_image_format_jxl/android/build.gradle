@@ -33,6 +33,11 @@ android {
     }
 
     buildTypes {
+        profile {
+            if (it.hasProperty("matchingFallbacks")) {
+                matchingFallbacks = ["release"]
+            }
+        }
         release {
             minifyEnabled false
         }
