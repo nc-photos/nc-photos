@@ -986,7 +986,7 @@ class _Bloc extends Bloc<_Event, _State>
   final double obstructedViewTop;
 
   final _itemTransformerQueue =
-      ComputeQueue<_ItemTransformerArgument, _ItemTransformerResult>();
+      SingleComputeQueue<_ItemTransformerArgument, _ItemTransformerResult>();
   final _subscriptions = <StreamSubscription>[];
   var _isHandlingError = false;
   var _isInitialLoad = true;
