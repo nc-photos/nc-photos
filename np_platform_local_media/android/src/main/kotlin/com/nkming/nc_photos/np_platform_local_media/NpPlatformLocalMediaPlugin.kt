@@ -28,6 +28,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Semaphore
+import kotlinx.coroutines.sync.withPermit
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileNotFoundException
@@ -49,6 +51,8 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, PluginRegistry.ActivityR
     CoroutineScope by MainScope() {
     companion object {
         private const val TAG = "NpPlatformLocalMediaPlugin"
+
+        private val thumbnailLoadSemaphore = Semaphore(4)
     }
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
@@ -420,30 +424,35 @@ private class PigeonApiImpl : MyHostApi, ActivityAware, PluginRegistry.ActivityR
             return
         }
         launch(Dispatchers.IO) {
-            try {
-                val uri = platformIdentifier.toUri()
-                val original = context!!.contentResolver.loadThumbnail(
-                    uri, Size(width.toInt(), height.toInt()), null
-                )
-                var bitmap = original
-                if (bitmap.width > width && bitmap.height > height) {
-                    bitmap = bitmap.scale(
-                        minOf(width.toInt(), (height * bitmap.aspectRatio()).toInt()),
-                        minOf(height.toInt(), (width / bitmap.aspectRatio()).toInt())
+            val result = thumbnailLoadSemaphore.withPermit {
+                try {
+                    val uri = platformIdentifier.toUri()
+                    val original = context!!.contentResolver.loadThumbnail(
+                        uri, Size(width.toInt(), height.toInt()), null
                     )
-                    original.recycle()
+                    var bitmap = original
+                    if (bitmap.width > width && bitmap.height > height) {
+                        bitmap = bitmap.scale(
+                            minOf(width.toInt(), (height * bitmap.aspectRatio()).toInt()),
+                            minOf(height.toInt(), (width / bitmap.aspectRatio()).toInt())
+                        )
+                        original.recycle()
+                    }
+                    val bytes = ByteArrayOutputStream().use {
+                        bitmap.compress(Bitmap.CompressFormat.JPEG, 82, it)
+                        it.toByteArray()
+                    }
+                    bitmap.recycle()
+                    Result.success(bytes)
+                } catch (e: FileNotFoundException) {
+                    Result.failure(
+                        FlutterError("fileNotFoundException", e.message, null)
+                    )
+                } catch (e: Throwable) {
+                    Result.failure(FlutterError("systemException", e.message, null))
                 }
-                val bytes = ByteArrayOutputStream().use {
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 82, it)
-                    it.toByteArray()
-                }
-                bitmap.recycle()
-                callback(Result.success(bytes))
-            } catch (e: FileNotFoundException) {
-                callback(Result.failure(FlutterError("fileNotFoundException", e.message, null)))
-            } catch (e: Throwable) {
-                callback(Result.failure(FlutterError("systemException", e.message, null)))
             }
+            callback(result)
         }
     }
 
