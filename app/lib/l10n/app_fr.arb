@@ -317,13 +317,11 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Personnaliser l'amélioration des images et l'éditeur",
-	"settingsEnhanceMaxResolutionTitle2": "Résolution des images pour l'amélioration",
-	"settingsEnhanceMaxResolutionDescription": "Les photos avec une resolution supérieure seront réduites.\n\nLes images hautes résolutions prennent beaucoup plus de temps et de mémoire à traîter. Baisser cette résolution si l'application se ferme pendants le traitement de vos photos.",
 	"settingsImageEditSaveResultsToServerTitle": "Enregistrer les résultats sur le server",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
 	},
-	"settingsImageEditSaveResultsToServerTrueDescription": "Les résultats sont sauvegardées sur le server, ou sur l'appareil si l'envoi échou.",
+	"settingsImageEditSaveResultsToServerTrueDescription": "Les résultats sont sauvegardés sur le serveur, ou sur l'appareil si l'envoi échoue.",
 	"settingsImageEditSaveResultsToServerFalseDescription": "Les résultats sont sauvegardés sur l'appareil",
 	"settingsThemeTitle": "Thème",
 	"settingsThemeDescription": "Personnalisez l'apparence de l'application",
@@ -869,7 +867,7 @@
 	"@locationLabel": {
 		"description": "Show where the file is located"
 	},
-	"multipleFilesLinkShareDialogContent": "Nextcloud ne prend pas en charge le lien de partage pour plusieurs fichiers. L'application copiera à la place les fichiers dans un nouveau dossier et partagera le dossier à la place.",
+	"multipleFilesLinkShareDialogContent": "Nextcloud ne prend pas en charge le partage de lien pour plusieurs fichiers. L'application copiera à la place les fichiers dans un nouveau dossier et partagera le dossier à la place.",
 	"@multipleFilesLinkShareDialogContent": {
 		"description": "Dialog shown when sharing multiple files as link"
 	},
@@ -1071,8 +1069,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "AMÉLIORER",
-	"enhanceIntroDialogTitle": "Amélioré vos photos",
-	"enhanceIntroDialogDescription": "Vos photos sont traîter sur l'appareil. Par défaut, elle sont réduite à 2048x1546. Vous pouvez ajuster la résolution dans les paramètres",
 	"enhanceLowLightTitle": "Amélioration pour basse lumière",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"
@@ -1086,7 +1082,7 @@
 	"@collectionEditedPhotosLabel": {
 		"description": "List photos on your device that were modified by the app, via image enhancements or the image editor"
 	},
-	"deletePermanentlyLocalConfirmationDialogContent": "Les éléments sélectionné serons supprimer définitivement de l'appareil.\n\nCette action n'est pas réversible",
+	"deletePermanentlyLocalConfirmationDialogContent": "Les éléments sélectionnés seront supprimer définitivement de l'appareil.\n\nCette action est irréversible",
 	"@deletePermanentlyLocalConfirmationDialogContent": {
 		"description": "Make sure the user wants to delete the items from the current device"
 	},
@@ -1094,7 +1090,7 @@
 	"@enhancePortraitBlurTitle": {
 		"description": "Blur the background of a photo"
 	},
-	"enhancePortraitBlurDescription": "Ajoute un effet de flou a l'arrière de vos photos, fonctionne mieux pour les portraits",
+	"enhancePortraitBlurDescription": "Floute l'arrière-plan de vos photos, fonctionne mieux pour les portraits",
 	"enhancePortraitBlurParamBlurLabel": "Niveau de flou",
 	"@enhancePortraitBlurParamBlurLabel": {
 		"description": "This parameter sets the radius of the blur filter"
@@ -1103,7 +1099,7 @@
 	"@enhanceSuperResolution4xTitle": {
 		"description": "Upscale an image. The algorithm implemented in the app will upscale to 4x the original resolution (eg, 100x100 to 400x400)"
 	},
-	"enhanceSuperResolution4xDescription": "Augmente la résolution de vos photos par 4 (voir l'aide pour plus de détail sur la résolution maximum)",
+	"enhanceSuperResolution4xDescription": "Augmente la résolution de vos photos par 4 (voir l'aide pour plus de détails sur la résolution maximum)",
 	"enhanceStyleTransferTitle": "Transfert de style",
 	"@enhanceStyleTransferTitle": {
 		"description": "Transfer the image style from a reference image to a photo"
@@ -1121,7 +1117,7 @@
 	"@enhanceColorPopTitle": {
 		"description": "Desaturate the background of a photo"
 	},
-	"enhanceColorPopDescription": "Desature l'arrière plan des photos, fonctionne mieux avec les portraits",
+	"enhanceColorPopDescription": "Désature l'arrière-plan des photos, fonctionne mieux avec les portraits",
 	"enhanceGenericParamWeightLabel": "Poids",
 	"@enhanceGenericParamWeightLabel": {
 		"description": "This generic parameter sets the weight of the applied effect. The effect will be more obvious when the weight is high."
@@ -1362,7 +1358,7 @@
 	"@errorAlbumDowngrade": {
 		"description": "Album files are versioned. Overwriting a newer version is disallowed as it will lead to unexpected data loss"
 	},
-	"errorNoStoragePermission": "Exiger une autorisation d'accès au stockage",
+	"errorNoStoragePermission": "Autorisation d'accès au stockage nécessaire",
 	"@errorNoStoragePermission": {
 		"description": "Missing permission on Android"
 	},
@@ -1470,7 +1466,7 @@
 	"homeTabMapBrowser": "Carte",
 	"mapBrowserSetDefaultDateRangeButton": "Définir par défaut",
 	"todayText": "Aujourd'hui",
-	"settingsExifSupportTitle2": "Prise en charge EXIF ​​côté client",
+	"settingsExifSupportTitle2": "Traitement EXIF ​​côté client",
 	"@settingsExifSupportTitle2": {
 		"description": "Title of the EXIF support setting"
 	},
@@ -1481,7 +1477,7 @@
 	"@exifSupportNextcloud28Notes": {
 		"description": "Extra notes for Nextcloud 28+"
 	},
-	"exifSupportConfirmationDialogTitle2": "Activer la prise en charge EXIF côté client ?",
+	"exifSupportConfirmationDialogTitle2": "Activer le traitement EXIF côté client ?",
 	"@exifSupportConfirmationDialogTitle2": {
 		"description": "Title of the dialog to confirm enabling exif support"
 	},
@@ -1516,5 +1512,55 @@
 	"@albumAddMapTooltip": {
 		"description": "Add a map that display between photos to an album"
 	},
-	"fileNotFound": "Fichier introuvable"
+	"fileNotFound": "Fichier introuvable",
+	"settingsExifWifiOnlyTitle": "Traitement EXIF seulement avec Wi-Fi",
+	"@settingsExifWifiOnlyTitle": {
+		"description": "Whether to only process EXIF data when connected to a Wi-Fi network"
+	},
+	"settingsExifWifiOnlyFalseSubtitle": "Coûts supplémentaires possibles",
+	"@settingsExifWifiOnlyFalseSubtitle": {
+		"description": "Shown when users allow processing exif data over any network"
+	},
+	"settingsEnhanceMaxResolutionTitle2": "Amélioration de la résolution de l'image",
+	"settingsEnhanceMaxResolutionDescription": "Les photos ayant une résolution supérieure à celle sélectionnée seront réduites.\n\nLes photos haute résolution demandent significativement plus de mémoire et de temps de traitement. Merci de réduire ce paramètre si l'application plante lors de l'amélioration de vos photos.",
+	"enhanceIntroDialogTitle": "Améliorer vos photos",
+	"enhanceIntroDialogDescription": "Vos photos sont traitées en local. Par défaut, elles sont réduites à 2048x1536. Vous pouvez ajuster la résolution de sortie dans les paramètres.",
+	"refreshMenuLabel": "Recharger",
+	"@refreshMenuLabel": {
+		"description": "Label of the refresh entry in menu"
+	},
+	"archiveSelectedProcessingNotification": "{count, plural, one{Archivage de 1 élément} other{Archivage de {count} éléments}}",
+	"@archiveSelectedProcessingNotification": {
+		"description": "Archiving the selected items",
+		"placeholders": {
+			"count": {
+				"example": "1"
+			}
+		}
+	},
+	"unarchiveSelectedProcessingNotification": "{count, plural, one{Désarchivage de 1 élément} other{Désarchivage de {count} éléments}}",
+	"@unarchiveSelectedProcessingNotification": {
+		"description": "Unarchiving selected items",
+		"placeholders": {
+			"count": {
+				"example": "1"
+			}
+		}
+	},
+	"deleteProcessingNotification": "Élément supprimé",
+	"@deleteProcessingNotification": {
+		"description": "Inform user that the item is being deleted"
+	},
+	"exifSupportDetails": "L'activation du traitement EXIF va mettre en forme différentes métadonnées comme la date de capture, la référence de la caméra... Dans le but de lire ces métadonnées, une utilisation supplémentaires de la connexion internet sera requise pour télécharger l'intégralité de l'image. L'application commencera le téléchargement seulement quand elle sera connectée au WiFi.",
+	"@exifSupportDetails": {
+		"description": "Detailed description of the exif support feature"
+	},
+	"metadataTaskPauseNoWiFiNotification": "En attente du WiFi",
+	"@metadataTaskPauseNoWiFiNotification": {
+		"description": "Shown when the app has paused reading image metadata"
+	},
+	"alternativeSignIn": "Connectez-vous plutôt avec vos identifiants",
+	"@alternativeSignIn": {
+		"description": "Sign in using username and password instead of the recommended Nextcloud login flow"
+	}
 }

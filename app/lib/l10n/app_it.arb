@@ -313,8 +313,6 @@
 	"settingsShowDateInAlbumTitle": "Raggruppa le foto per data",
 	"settingsShowDateInAlbumDescription": "Si applica solo quando l'album viene ordinato per data",
 	"settingsImageEditDescription": "Personalizza i miglioramenti e l'editor dell'immagine",
-	"settingsEnhanceMaxResolutionTitle2": "Risoluzione dell'immagine per i miglioramenti",
-	"settingsEnhanceMaxResolutionDescription": "Le immagini più grandi della risoluzione selezionata verranno scalate.\n\nLe immagini ad alta risoluzione richiedono memoria e tempo di processo significativamente più lunghi. Per favore riduci gquesto parametro se l'app va in crash durante il miglioramento delle tue foto.",
 	"settingsImageEditSaveResultsToServerTitle": "Salva i risultati sul server",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1059,8 +1057,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "MIGLIORA",
-	"enhanceIntroDialogTitle": "Migliora le tue foto",
-	"enhanceIntroDialogDescription": "Le tue foto sono processate localmente nel tuo dispositivo. Sono ridotte a 2048x1536 per preimpostazione. Puoi modificare la risoluzione di uscita su Impostazioni",
 	"enhanceLowLightTitle": "Migliora sottoesposizione",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

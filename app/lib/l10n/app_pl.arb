@@ -308,8 +308,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Dostosuj ulepszenia obrazu i edytor obrazów",
-	"settingsEnhanceMaxResolutionTitle2": "Rozdzielczość obrazu dla ulepszeń",
-	"settingsEnhanceMaxResolutionDescription": "Zdjęcia większe niż wybrana rozdzielczość zostaną zmniejszone. Zdjęcia w wysokiej rozdzielczości wymagają znacznie więcej pamięci i czasu na przetwarzanie. Obniż to ustawienie, jeśli aplikacja uległa awarii podczas poprawiania zdjęć.",
 	"settingsImageEditSaveResultsToServerTitle": "Zapisz rezultat na serwerze",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1062,8 +1060,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "ULEPSZ",
-	"enhanceIntroDialogTitle": "Ulepsz swoje zdjęcia",
-	"enhanceIntroDialogDescription": "Twoje zdjęcia są przetwarzane lokalnie na Twoim urządzeniu. Domyślnie są one skalowane do rozdzielczości 2048x1536. Rozdzielczość wyjściową możesz dostosować w Ustawieniach",
 	"enhanceLowLightTitle": "Ulepszenia przy słabym oświetleniu",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

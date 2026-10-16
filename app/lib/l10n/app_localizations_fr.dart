@@ -236,7 +236,7 @@ class AppLocalizationsFr extends AppLocalizations {
   String get settingsMetadataTitle => 'Métadonnées';
 
   @override
-  String get settingsExifSupportTitle2 => 'Prise en charge EXIF ​​côté client';
+  String get settingsExifSupportTitle2 => 'Traitement EXIF ​​côté client';
 
   @override
   String get settingsExifSupportTrueSubtitle =>
@@ -390,7 +390,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get settingsImageEditSaveResultsToServerTrueDescription =>
-      'Les résultats sont sauvegardées sur le server, ou sur l\'appareil si l\'envoi échou.';
+      'Les résultats sont sauvegardés sur le serveur, ou sur l\'appareil si l\'envoi échoue.';
 
   @override
   String get settingsImageEditSaveResultsToServerFalseDescription =>
@@ -563,7 +563,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get exifSupportConfirmationDialogTitle2 =>
-      'Activer la prise en charge EXIF côté client ?';
+      'Activer le traitement EXIF côté client ?';
 
   @override
   String get captureLogDetails =>
@@ -975,7 +975,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get multipleFilesLinkShareDialogContent =>
-      'Nextcloud ne prend pas en charge le lien de partage pour plusieurs fichiers. L\'application copiera à la place les fichiers dans un nouveau dossier et partagera le dossier à la place.';
+      'Nextcloud ne prend pas en charge le partage de lien pour plusieurs fichiers. L\'application copiera à la place les fichiers dans un nouveau dossier et partagera le dossier à la place.';
 
   @override
   String get folderNameInputHint => 'Nom de dossier';
@@ -1170,14 +1170,14 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get deletePermanentlyLocalConfirmationDialogContent =>
-      'Les éléments sélectionné serons supprimer définitivement de l\'appareil.\n\nCette action n\'est pas réversible';
+      'Les éléments sélectionnés seront supprimer définitivement de l\'appareil.\n\nCette action est irréversible';
 
   @override
   String get enhancePortraitBlurTitle => 'Flou d\'arrière plan';
 
   @override
   String get enhancePortraitBlurDescription =>
-      'Ajoute un effet de flou a l\'arrière de vos photos, fonctionne mieux pour les portraits';
+      'Floute l\'arrière-plan de vos photos, fonctionne mieux pour les portraits';
 
   @override
   String get enhancePortraitBlurParamBlurLabel => 'Niveau de flou';
@@ -1187,7 +1187,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get enhanceSuperResolution4xDescription =>
-      'Augmente la résolution de vos photos par 4 (voir l\'aide pour plus de détail sur la résolution maximum)';
+      'Augmente la résolution de vos photos par 4 (voir l\'aide pour plus de détails sur la résolution maximum)';
 
   @override
   String get enhanceStyleTransferTitle => 'Transfert de style';
@@ -1208,7 +1208,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get enhanceColorPopDescription =>
-      'Desature l\'arrière plan des photos, fonctionne mieux avec les portraits';
+      'Désature l\'arrière-plan des photos, fonctionne mieux avec les portraits';
 
   @override
   String get enhanceGenericParamWeightLabel => 'Poids';
@@ -1791,7 +1791,7 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get errorNoStoragePermission =>
-      'Exiger une autorisation d\'accès au stockage';
+      'Autorisation d\'accès au stockage nécessaire';
 
   @override
   String get errorServerNoCert =>

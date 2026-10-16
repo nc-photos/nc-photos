@@ -308,8 +308,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "自定义图片增强与编辑器",
-	"settingsEnhanceMaxResolutionTitle2": "图片增强的分辨率",
-	"settingsEnhanceMaxResolutionDescription": "大于选定分辨率的图片会被缩小。\n\n高分辨率的图片需要更多的内存和时间进行处理。如果增强图片时应用发生了崩溃，请降低该数值。",
 	"settingsImageEditSaveResultsToServerTitle": "将编辑后的图片保存至服务器",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1053,8 +1051,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "图片增强",
-	"enhanceIntroDialogTitle": "增强你的图片",
-	"enhanceIntroDialogDescription": "你的图片将会在本地处理，默认情况下会降低分辨率至2048x1536，你可以随时在设置的输出分辨率中调整",
 	"enhanceLowLightTitle": "弱光优化",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

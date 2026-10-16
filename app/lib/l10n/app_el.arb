@@ -270,7 +270,6 @@
 	"settingsMapProviderTitle": "Πάροχος χάρτη",
 	"settingsShowDateInAlbumTitle": "Ομαδοποίηση φωτογραφιών κατά ημερομηνία",
 	"settingsShowDateInAlbumDescription": "Εφαρμογή μόνο όταν το άλμπουμ είναι ταξινομημένο κατά χρόνο",
-	"settingsEnhanceMaxResolutionDescription": "Οι φωτογραφίες μεγαλύτερες από την επιλεγμένη ανάλυση θα μειωθούν.\n\nΟι φωτογραφίες υψηλής ανάλυσης απαιτούν πολύ περισσότερη μνήμη και χρόνο για επεξεργασία. Μειώστε αυτή τη ρύθμιση εάν η εφαρμογή διακοπεί κατά τη βελτίωση των φωτογραφιών.",
 	"settingsThemeTitle": "Εμφάνιση",
 	"settingsThemeDescription": "Προσαρμογή της εμφάνισης της εφαρμογής",
 	"settingsFollowSystemThemeTitle": "Χρήση εμφάνισης συστήματος",
@@ -975,8 +974,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "ΒΕΛΤΙΩΣΗ",
-	"enhanceIntroDialogTitle": "Βελτίωση φωτογραφιών",
-	"enhanceIntroDialogDescription": "Οι φωτογραφίες επεξεργάζονται τοπικά στη συσκευή. Από προεπιλογή μειώνονται σε 2048x1536. Μπορείτε να προσαρμόσετε την ανάλυση εξόδου στις Ρυθμίσεις",
 	"enhanceLowLightTitle": "Βελτίωση χαμηλού φωτισμού",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

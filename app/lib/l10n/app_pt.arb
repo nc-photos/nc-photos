@@ -313,8 +313,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Customize o editor de aprimoramento de imagens",
-	"settingsEnhanceMaxResolutionTitle2": "Resolução das imagens aprimoradas",
-	"settingsEnhanceMaxResolutionDescription": "Resoluções de entrara maiores que a determinada serão reduzidas. Fotos em alta resolução requerem significativamente mais memória RAM e processamento. Por gentileza reduza o parâmetro de resolução das imagens aprimoradas caso o app trave",
 	"settingsImageEditSaveResultsToServerTitle": "Salve os resultados diretamente no servidor",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1063,8 +1061,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "APRIMORAR",
-	"enhanceIntroDialogTitle": "Aprimore uma foto",
-	"enhanceIntroDialogDescription": "Suas fotos são processadas localmente no aparelho. Por padrão, elas são reduzidas a 2048x1536. Você pode ajustar a resolução en configurações",
 	"enhanceLowLightTitle": "Retoque para pouca luz",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

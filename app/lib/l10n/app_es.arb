@@ -317,8 +317,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Personaliza la edición y retoque de imágenes",
-	"settingsEnhanceMaxResolutionTitle2": "Resolución máxima al guardar retoques",
-	"settingsEnhanceMaxResolutionDescription": "Las fotos con mayor resolución que la ajustada serán reducidas.\n\nLas fotos con resolución alta requerirán más memoria y tiempo para procesarlas. Reduce el valor de este ajuste si la aplicación se cuelga.",
 	"settingsImageEditSaveResultsToServerTitle": "Guardar en el servidor",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1071,8 +1069,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "RETOCAR",
-	"enhanceIntroDialogTitle": "Retoca tus fotos",
-	"enhanceIntroDialogDescription": "Tus fotos son procesadas localmente en tu dispositivo. Por defecto, son reducidas a 2048x1536. Puedes ajustar la resolución de guardado en Ajustes>Editor",
 	"enhanceLowLightTitle": "Mejorar poca luz",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

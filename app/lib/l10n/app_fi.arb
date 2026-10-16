@@ -317,8 +317,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Muokkaa kuvien parannusta ja kuvaeditoria",
-	"settingsEnhanceMaxResolutionTitle2": "Kuvaresoluutio muokkausta varten",
-	"settingsEnhanceMaxResolutionDescription": "Määritettyä resoluutiota suuremmat kuvat skaalataan määritettyyn resoluutioon.\n\nKorkean resoluution kuvien käsittely vie huomattavasti enemmän muistia ja aikaa. Mikäli sovellus kaatuu käsittelyn aikana, vähennä tämän asetuksen arvoa.",
 	"settingsImageEditSaveResultsToServerTitle": "Tallenna muokkaus palvelimelle",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1071,8 +1069,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "PARANNA",
-	"enhanceIntroDialogTitle": "Paranna kuviasi",
-	"enhanceIntroDialogDescription": "Kuviasi käsitellään paikallisesti laitteellasi. Oletuksena kuvat skaalataan resoluutioon 2048x1536. Voit muuttaa tämän resoluution asetuksista.",
 	"enhanceLowLightTitle": "Hämärässä otettujen kuvien parannus",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

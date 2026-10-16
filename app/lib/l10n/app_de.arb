@@ -317,8 +317,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Personalisiere Bildverbesserungen und den Bildeditor",
-	"settingsEnhanceMaxResolutionTitle2": "Bildauflösung für Verbesserungen",
-	"settingsEnhanceMaxResolutionDescription": "Fotos, die größer als die gewählte Auflösung sind, werden herunterskaliert.\n\nFotos mit hoher Auflösung benötigen deutlich mehr Speicher und Zeit für die Verarbeitung. Bitte verringern Sie diese Einstellung, falls die App beim Verbessern Ihrer Fotos abgestürzt ist.",
 	"settingsImageEditSaveResultsToServerTitle": "Ergebnisse auf dem Server speichern",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1071,8 +1069,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "VERBESSERN",
-	"enhanceIntroDialogTitle": "Verbessern Sie ihre Fotos",
-	"enhanceIntroDialogDescription": "Ihre Fotos werden lokal auf Ihrem Gerät verarbeitet. Standardmäßig werden sie auf 2048x1536 herunterskaliert. Sie können die Ausgabeauflösung in den Einstellungen anpassen",
 	"enhanceLowLightTitle": "Verbesserung bei schlechten Lichtverhältnissen",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

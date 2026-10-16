@@ -317,8 +317,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Настроить параметры улучшений и редактора изображений",
-	"settingsEnhanceMaxResolutionTitle2": "Разрешение изображения для улучшений",
-	"settingsEnhanceMaxResolutionDescription": "Фотографии, размер которых превышает выбранное разрешение, будут уменьшены.\n\nДля обработки фотографий высокого разрешения требуется значительно больше памяти и времени. Уменьшите этот параметр, если при улучшении фотографий произошел сбой приложения.",
 	"settingsImageEditSaveResultsToServerTitle": "Сохранить результат на сервер",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1071,8 +1069,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "УЛУЧШИТЬ",
-	"enhanceIntroDialogTitle": "Улучшите ваши фото",
-	"enhanceIntroDialogDescription": "Обработка фотографий производится на устройстве. По умолчанию они уменьшаются до 2048x1536. Настроить выходное разрешение можно в Настройках",
 	"enhanceLowLightTitle": "Улучшение освещения",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"

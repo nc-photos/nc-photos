@@ -317,8 +317,6 @@
 		"description": "Include settings for image enhancements and the image editor"
 	},
 	"settingsImageEditDescription": "Prispôsobiť vylepšenia obrázkov a editor obrázkov",
-	"settingsEnhanceMaxResolutionTitle2": "Rozlíšenie obrázkov pre vylepšenia",
-	"settingsEnhanceMaxResolutionDescription": "Fotografie väčšie než zvolené rozlíšenie budú zmenšené.\n\nVeľmi vysoké rozlíšenie vyžaduje podstatne viac pamäte a času na spracovanie. Ak aplikácia padá pri vylepšovaní fotiek, znížte túto hodnotu.",
 	"settingsImageEditSaveResultsToServerTitle": "Ukladať výsledky na server",
 	"@settingsImageEditSaveResultsToServerTitle": {
 		"description": "Whether to save the edit/enhance results to server instead of the current device"
@@ -1071,8 +1069,6 @@
 		"description": "Enhance a photo"
 	},
 	"enhanceButtonLabel": "VYLEPŠIŤ",
-	"enhanceIntroDialogTitle": "Vylepšite svoje fotografie",
-	"enhanceIntroDialogDescription": "Vaše fotografie sa spracovávajú lokálne na vašom zariadení. Predvolene sa zmenšia na 2048x1536. Výstupné rozlíšenie môžete upraviť v Nastaveniach",
 	"enhanceLowLightTitle": "Vylepšenie pri slabom svetle",
 	"@enhanceLowLightTitle": {
 		"description": "Enhance a photo taken in low-light environment"
