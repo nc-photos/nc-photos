@@ -95,6 +95,9 @@ class _VisibleDatesFinder {
       }
       if (section.logicalY < viewportBottom &&
           section.logicalY + section.logicalHeight > viewportTop) {
+        if (section.rowCount == 0) {
+          continue;
+        }
         final itemLogicalY = section.logicalY + dateHeight;
         final firstVisibleRow = ((viewportTop - itemLogicalY) / itemSize)
             .floor()
