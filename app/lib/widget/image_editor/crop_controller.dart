@@ -2,7 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:logging/logging.dart';
-import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
+import 'package:nc_photos/widget/image_editor/transform_toolbar_util.dart';
 import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
 import 'package:np_log/np_log.dart';
 import 'package:np_platform_raw_image/np_platform_raw_image.dart';

@@ -9,12 +9,12 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   }) : super(_State.init()) {
     on<_InitSrc>(_onInitSrc);
     on<_SetActiveTool>(_onSetActiveTool);
-    on<_SetCropMode>(_onSetCropMode);
     on<_SetFaceSelectionMode>(_onSetFaceSelectionMode);
     on<_SetFaceSelectorImageSize>(_onSetFaceSelectorImageSize);
     on<_SetPixelFilters>(_onSetPixelFilters);
     on<_SetTransformFilters>(_onSetTransformFilters);
-    on<_SetCropFilter>(_onSetCropFilter);
+    on<_UpdateTransformFilter>(_onUpdateTransformFilter);
+    on<_SetActiveTransformTool>(_onSetActiveTransformTool);
     on<_SetFaceLandmarks>(_onSetFaceLandmarks);
     on<_ToggleFaceSelection>(_onToggleFaceSelection);
     on<_FaceFilterValueChanged>(_onFaceFilterValueChanged);
@@ -95,15 +95,10 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     emit(
       state.copyWith(
         activeTool: ev.value,
-        isCropMode: false,
+        activeTransformTool: null,
         isFaceSelectionMode: false,
       ),
     );
-  }
-
-  void _onSetCropMode(_SetCropMode ev, _Emitter emit) {
-    _log.info(ev);
-    emit(state.copyWith(isCropMode: ev.value));
   }
 
   void _onSetFaceSelectionMode(_SetFaceSelectionMode ev, _Emitter emit) {
@@ -130,27 +125,11 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     emit(
       state.copyWith(
         transformFilters: ev.value,
-        // modifying transformation filters resets face detection
-        faceLandmarks: null,
-        selectedFaces: const [],
-        hasSelectedFaceReset: state.selectedFaces.isNotEmpty
-            ? Unique(true)
-            : null,
-      ),
-    );
-    _updatePreview();
-  }
-
-  void _onSetCropFilter(_SetCropFilter ev, _Emitter emit) {
-    _log.info(ev);
-    emit(
-      state.copyWith(
-        cropFilter: ev.value,
         markupFilter: state.markupFilter.copyWith(
           strokes: _remapStrokesForCrop(
             state.markupFilter.strokes,
-            oldCropFilter: state.cropFilter,
-            newCropFilter: ev.value,
+            oldCropFilter: _cropFilterOf(state.transformFilters),
+            newCropFilter: _cropFilterOf(ev.value),
           ),
         ),
         // modifying transformation filters resets face detection
@@ -162,6 +141,24 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       ),
     );
     _updatePreview();
+  }
+
+  void _onUpdateTransformFilter(_UpdateTransformFilter ev, _Emitter emit) {
+    _log.info(ev);
+    final type = ev.value.getToolType();
+    final next = state.transformFilters.toList();
+    final idx = next.indexWhere((f) => f.getToolType() == type);
+    if (idx == -1) {
+      next.add(ev.value);
+    } else {
+      next[idx] = ev.value;
+    }
+    add(_SetTransformFilters(next));
+  }
+
+  void _onSetActiveTransformTool(_SetActiveTransformTool ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(activeTransformTool: ev.value));
   }
 
   void _onSetFaceLandmarks(_SetFaceLandmarks ev, _Emitter emit) {
@@ -311,7 +308,6 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
           dstJpegPath: jpegFile.path,
           pixelFilters: pixelFilters,
           transformFilters: state.transformFilters,
-          cropFilter: state.cropFilter,
           markupFilter: state.markupFilter,
         );
         emit(state.copyWith(saveState: _SaveState.save));
@@ -362,7 +358,6 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
           state.src!,
           pixelFilters: pixelFilters,
           transformFilters: state.transformFilters,
-          cropFilter: state.cropFilter,
           markupFilter: markupFilter,
         );
         add(_SetDst(result, markupFilter.strokes.map((s) => s.id).toSet()));
@@ -378,13 +373,12 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       if (landmarks == null) {
         var src = state.src!;
         var isTransofrmed = false;
-        if (state.transformFilters.isNotEmpty || state.cropFilter != null) {
+        if (state.transformFilters.isNotEmpty) {
           // apply transformation filters as they will affect face detection
           src = await _applyFilters(
             src,
             pixelFilters: [],
             transformFilters: state.transformFilters,
-            cropFilter: state.cropFilter,
             markupFilter: null,
           );
           isTransofrmed = true;
@@ -413,13 +407,11 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     Rgba8Image src, {
     required List<image_editor.Edit> pixelFilters,
     required List<TransformArguments> transformFilters,
-    required TransformArguments? cropFilter,
     required MarkupArguments? markupFilter,
     bool useIsolate = true,
   }) async {
     Future<Rgba8Image> _do() async {
       final edits = [
-        cropFilter?.toEdit(),
         ...transformFilters.map((f) => f.toEdit()),
         ...pixelFilters,
         markupFilter?.toEdit(),
@@ -444,7 +436,6 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     required String dstJpegPath,
     required List<image_editor.Edit> pixelFilters,
     required List<TransformArguments> transformFilters,
-    required TransformArguments? cropFilter,
     required MarkupArguments? markupFilter,
   }) async {
     await Isolate.run(() async {
@@ -452,7 +443,6 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
         src,
         pixelFilters: pixelFilters,
         transformFilters: transformFilters,
-        cropFilter: cropFilter,
         markupFilter: markupFilter,
         // already in isolate
         useIsolate: false,
@@ -519,6 +509,9 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
       return ++_processorToken;
     });
   }
+
+  static CropArguments? _cropFilterOf(List<TransformArguments> filters) =>
+      filters.whereType<CropArguments>().firstOrNull;
 
   // Both radius and coords are normalized to the image size. Since crop would
   // change the image size, we need to remap them

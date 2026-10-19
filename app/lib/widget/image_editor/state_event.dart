@@ -12,7 +12,6 @@ class _State {
     this.dst,
     required this.pixelFilters,
     required this.transformFilters,
-    this.cropFilter,
     required this.markupFilter,
     required this.appliedStrokeIds,
     required this.isApplyingFilters,
@@ -22,7 +21,7 @@ class _State {
     this.hasSelectedFaceReset,
     required this.shouldNotifySelectFace,
     required this.activeTool,
-    required this.isCropMode,
+    this.activeTransformTool,
     required this.isFaceSelectionMode,
     this.faceSelectorImageSize,
     this.quitRequest,
@@ -44,7 +43,6 @@ class _State {
       selectedFaces: [],
       shouldNotifySelectFace: false,
       activeTool: _ToolType.color,
-      isCropMode: false,
       isFaceSelectionMode: false,
       downloadProgress: 0,
     );
@@ -54,7 +52,6 @@ class _State {
   String toString() => _$toString();
 
   bool get isModified =>
-      cropFilter != null ||
       transformFilters.isNotEmpty ||
       pixelFilters.isNotEmpty ||
       markupFilter.strokes.isNotEmpty;
@@ -64,7 +61,6 @@ class _State {
 
   final List<PixelArguments> pixelFilters;
   final List<TransformArguments> transformFilters;
-  final CropArguments? cropFilter;
   final MarkupArguments markupFilter;
   final Set<int> appliedStrokeIds;
   final bool isApplyingFilters;
@@ -78,7 +74,7 @@ class _State {
   final bool shouldNotifySelectFace;
 
   final _ToolType activeTool;
-  final bool isCropMode;
+  final TransformToolType? activeTransformTool;
   final bool isFaceSelectionMode;
   final Size? faceSelectorImageSize;
 
@@ -110,16 +106,6 @@ class _SetActiveTool implements _Event {
   String toString() => _$toString();
 
   final _ToolType value;
-}
-
-@toString
-class _SetCropMode implements _Event {
-  const _SetCropMode(this.value);
-
-  @override
-  String toString() => _$toString();
-
-  final bool value;
 }
 
 @toString
@@ -163,13 +149,23 @@ class _SetTransformFilters implements _Event {
 }
 
 @toString
-class _SetCropFilter implements _Event {
-  const _SetCropFilter(this.value);
+class _UpdateTransformFilter implements _Event {
+  const _UpdateTransformFilter(this.value);
 
   @override
   String toString() => _$toString();
 
-  final CropArguments? value;
+  final TransformArguments value;
+}
+
+@toString
+class _SetActiveTransformTool implements _Event {
+  const _SetActiveTransformTool(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final TransformToolType? value;
 }
 
 @toString

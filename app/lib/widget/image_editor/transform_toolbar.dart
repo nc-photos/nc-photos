@@ -1,37 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:nc_photos/app_localizations.dart';
+import 'package:nc_photos/widget/image_editor/crop_controller.dart';
+import 'package:nc_photos/widget/image_editor/orientation_view.dart';
 import 'package:nc_photos/widget/image_editor/toolbar_button.dart';
-import 'package:np_ffi_image_editor/np_ffi_image_editor.dart' as image_editor;
+import 'package:nc_photos/widget/image_editor/transform_toolbar_util.dart';
+import 'package:np_collection/np_collection.dart';
+import 'package:np_common/object_util.dart';
 
-enum TransformToolType { crop, orientation }
-
-abstract class TransformArguments {
-  image_editor.Edit? toEdit();
-
-  TransformToolType getToolType();
-}
+export 'package:nc_photos/widget/image_editor/transform_toolbar_util.dart';
 
 class TransformToolbar extends StatefulWidget {
   const TransformToolbar({
     super.key,
     required this.initialState,
     required this.onActiveFiltersChanged,
-    required this.isCropModeChanged,
-    required this.onCropToolDeactivated,
+    required this.onActiveToolChanged,
   });
 
   @override
-  createState() => _TransformToolbarState();
+  State<StatefulWidget> createState() => _TransformToolbarState();
 
   final List<TransformArguments> initialState;
   final ValueChanged<Iterable<TransformArguments>> onActiveFiltersChanged;
-  final ValueChanged<bool> isCropModeChanged;
-  final VoidCallback onCropToolDeactivated;
+  final ValueChanged<TransformToolType?> onActiveToolChanged;
 }
 
 class _TransformToolbarState extends State<TransformToolbar> {
   @override
-  initState() {
+  void initState() {
     super.initState();
     for (final s in widget.initialState) {
       _filters[s.getToolType()] = s;
@@ -39,7 +35,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
   }
 
   @override
-  build(BuildContext context) =>
+  Widget build(BuildContext context) =>
       Column(children: [_buildFilterOption(context), _buildFilterBar(context)]);
 
   Widget _buildFilterOption(BuildContext context) {
@@ -76,19 +72,18 @@ class _TransformToolbarState extends State<TransformToolbar> {
                 label: L10n.global().imageEditTransformCrop,
                 onPressed: _onCropPressed,
                 isSelected: _selectedFilter == TransformToolType.crop,
-                activationOrder: _filters.containsKey(TransformToolType.crop)
-                    ? -1
-                    : null,
+                activationOrder: _filters.keys
+                    .indexOf(TransformToolType.crop)
+                    .let((i) => i == -1 ? null : i),
               ),
               ToolbarButton(
                 icon: Icons.rotate_90_degrees_ccw_outlined,
                 label: L10n.global().imageEditTransformOrientation,
                 onPressed: _onOrientationPressed,
                 isSelected: _selectedFilter == TransformToolType.orientation,
-                activationOrder:
-                    _filters.containsKey(TransformToolType.orientation)
-                    ? -1
-                    : null,
+                activationOrder: _filters.keys
+                    .indexOf(TransformToolType.orientation)
+                    .let((i) => i == -1 ? null : i),
               ),
               const SizedBox(width: 16),
             ],
@@ -100,8 +95,59 @@ class _TransformToolbarState extends State<TransformToolbar> {
 
   Widget _buildOrientationOption(BuildContext context) {
     final value =
-        (_filters[TransformToolType.orientation] as _OrientationArguments)
-            .value;
+        (_filters[TransformToolType.orientation] as OrientationArguments).value;
+    return _OrientationOption(
+      value: value,
+      onValuePressed: (value) {
+        setState(() {
+          _filters[TransformToolType.orientation] = OrientationArguments(value);
+        });
+        _notifyFiltersChanged();
+      },
+    );
+  }
+
+  void _onFilterPressed(TransformToolType type, TransformArguments defArgs) {
+    var isChanged = false;
+    if (_selectedFilter == type) {
+      // deactivate filter
+      setState(() {
+        _selectedFilter = null;
+        _filters.remove(type);
+      });
+      isChanged = true;
+    } else {
+      setState(() {
+        _selectedFilter = type;
+        _filters[type] ??= defArgs;
+      });
+    }
+    widget.onActiveToolChanged(_selectedFilter);
+    if (isChanged) {
+      _notifyFiltersChanged();
+    }
+  }
+
+  void _onCropPressed() =>
+      _onFilterPressed(TransformToolType.crop, const CropArguments(0, 0, 1, 1));
+  void _onOrientationPressed() => _onFilterPressed(
+    TransformToolType.orientation,
+    const OrientationArguments(0),
+  );
+
+  void _notifyFiltersChanged() {
+    widget.onActiveFiltersChanged.call(_filters.values);
+  }
+
+  final _filters = <TransformToolType, TransformArguments>{};
+  TransformToolType? _selectedFilter;
+}
+
+class _OrientationOption extends StatelessWidget {
+  const _OrientationOption({required this.value, required this.onValuePressed});
+
+  @override
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.all(8),
       child: Wrap(
@@ -116,7 +162,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
                   label:
                       "180\n${L10n.global().imageEditTransformOrientationCounterclockwise}",
                   isSelected: value == 180,
-                  onPressed: () => _onOrientationOptionPressed(180),
+                  onPressed: () => onValuePressed(180),
                 ),
               ),
               Flexible(
@@ -126,7 +172,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
                   label:
                       "90\n${L10n.global().imageEditTransformOrientationCounterclockwise}",
                   isSelected: value == 90,
-                  onPressed: () => _onOrientationOptionPressed(90),
+                  onPressed: () => onValuePressed(90),
                 ),
               ),
               Flexible(
@@ -135,7 +181,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
                 child: _OrientationButton(
                   label: "0\n ",
                   isSelected: value == 0,
-                  onPressed: () => _onOrientationOptionPressed(0),
+                  onPressed: () => onValuePressed(0),
                 ),
               ),
               Flexible(
@@ -145,7 +191,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
                   label:
                       "90\n${L10n.global().imageEditTransformOrientationClockwise}",
                   isSelected: value == -90,
-                  onPressed: () => _onOrientationOptionPressed(-90),
+                  onPressed: () => onValuePressed(-90),
                 ),
               ),
               Flexible(
@@ -155,7 +201,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
                   label:
                       "180\n${L10n.global().imageEditTransformOrientationClockwise}",
                   isSelected: value == -180,
-                  onPressed: () => _onOrientationOptionPressed(-180),
+                  onPressed: () => onValuePressed(-180),
                 ),
               ),
             ],
@@ -165,83 +211,8 @@ class _TransformToolbarState extends State<TransformToolbar> {
     );
   }
 
-  void _onFilterPressed(TransformToolType type, TransformArguments defArgs) {
-    var isChanged = false;
-    if (_selectedFilter == type) {
-      // deactivate filter
-      setState(() {
-        _selectedFilter = null;
-        _filters.remove(type);
-      });
-      isChanged = true;
-      if (type == TransformToolType.crop) {
-        widget.isCropModeChanged(false);
-        widget.onCropToolDeactivated();
-      }
-    } else {
-      if (_selectedFilter == TransformToolType.crop) {
-        widget.isCropModeChanged(false);
-      }
-      setState(() {
-        _selectedFilter = type;
-        if (!_filters.containsKey(type)) {
-          _filters[type] = defArgs;
-          isChanged = true;
-        }
-      });
-      if (type == TransformToolType.crop) {
-        widget.isCropModeChanged(true);
-      }
-    }
-    if (isChanged) {
-      _notifyFiltersChanged();
-    }
-  }
-
-  void _onCropPressed() =>
-      _onFilterPressed(TransformToolType.crop, const _DummyCropArguments());
-  void _onOrientationPressed() => _onFilterPressed(
-    TransformToolType.orientation,
-    const _OrientationArguments(0),
-  );
-
-  void _onOrientationOptionPressed(int value) {
-    setState(() {
-      _filters[TransformToolType.orientation] = _OrientationArguments(value);
-    });
-    _notifyFiltersChanged();
-  }
-
-  void _notifyFiltersChanged() {
-    widget.onActiveFiltersChanged.call(_filters.values);
-  }
-
-  final _filters = <TransformToolType, TransformArguments>{};
-  TransformToolType? _selectedFilter;
-}
-
-// arguments for crop is handled by its controller, this is used to restore
-// state in the toolbar only
-class _DummyCropArguments implements TransformArguments {
-  const _DummyCropArguments();
-
-  @override
-  image_editor.Edit? toEdit() => null;
-
-  @override
-  getToolType() => TransformToolType.crop;
-}
-
-class _OrientationArguments implements TransformArguments {
-  const _OrientationArguments(this.value);
-
-  @override
-  image_editor.Edit toEdit() => image_editor.OrientationEdit(value);
-
-  @override
-  getToolType() => TransformToolType.orientation;
-
   final int value;
+  final void Function(int value) onValuePressed;
 }
 
 class _OrientationButton extends StatelessWidget {
@@ -252,7 +223,7 @@ class _OrientationButton extends StatelessWidget {
   });
 
   @override
-  build(BuildContext context) {
+  Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: ClipRRect(

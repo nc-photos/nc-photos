@@ -4,6 +4,7 @@ import 'dart:isolate';
 import 'dart:math';
 
 import 'package:clock/clock.dart';
+import 'package:collection/collection.dart';
 import 'package:copy_with/copy_with.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ import 'package:nc_photos/widget/image_editor/crop_controller.dart';
 import 'package:nc_photos/widget/image_editor/effect_toolbar/effect_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/markup_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/markup_toolbar_util.dart';
+import 'package:nc_photos/widget/image_editor/orientation_view.dart';
 import 'package:nc_photos/widget/image_editor/pixel_toolbar_util.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
@@ -57,9 +59,9 @@ import 'package:to_string/to_string.dart';
 
 part 'app_bar.dart';
 part 'bloc.dart';
-part 'markup_canvas.dart';
 part 'face_selector.dart';
 part 'image_editor.g.dart';
+part 'markup_canvas.dart';
 part 'save_dialog.dart';
 part 'state_event.dart';
 part 'tool_bar.dart';
@@ -320,22 +322,15 @@ class _Body extends StatelessWidget {
               buildWhen: (previous, current) =>
                   previous.src != current.src ||
                   previous.dst != current.dst ||
-                  previous.isCropMode != current.isCropMode ||
                   previous.isFaceSelectionMode != current.isFaceSelectionMode ||
-                  previous.activeTool != current.activeTool,
+                  previous.activeTool != current.activeTool ||
+                  previous.activeTransformTool != current.activeTransformTool,
               builder: (context, state) {
                 if (state.src == null) {
                   return const SizedBox.shrink();
-                } else if (state.isCropMode) {
-                  return CropController(
-                    // crop always work on the src, otherwise we'll be
-                    // cropping repeatedly
-                    image: state.src!,
-                    initialState: context.state.cropFilter,
-                    onCropChanged: (cropFilter) {
-                      context.addEvent(_SetCropFilter(cropFilter));
-                    },
-                  );
+                } else if (state.activeTool == _ToolType.transform &&
+                    state.activeTransformTool != null) {
+                  return const _TransformToolBody();
                 } else if (state.isFaceSelectionMode) {
                   return const _FaceSelector();
                 } else if (state.activeTool == _ToolType.markup) {
@@ -381,11 +376,8 @@ class _Body extends StatelessWidget {
                     _SetTransformFilters(transformFilters.toList()),
                   );
                 },
-                isCropModeChanged: (value) {
-                  context.addEvent(_SetCropMode(value));
-                },
-                onCropToolDeactivated: () {
-                  context.addEvent(const _SetCropFilter(null));
+                onActiveToolChanged: (tool) {
+                  context.addEvent(_SetActiveTransformTool(tool));
                 },
               ),
               _ToolType.markup => _BlocSelector<MarkupArguments>(
@@ -419,6 +411,44 @@ class _Body extends StatelessWidget {
           SizedBox(height: MediaQuery.paddingOf(context).bottom),
         ],
       ),
+    );
+  }
+}
+
+class _TransformToolBody extends StatelessWidget {
+  const _TransformToolBody();
+
+  @override
+  Widget build(BuildContext context) {
+    return _BlocBuilder(
+      buildWhen: (previous, current) =>
+          previous.src != current.src ||
+          previous.activeTransformTool != current.activeTransformTool ||
+          previous.transformFilters != current.transformFilters,
+      builder: (context, state) => switch (state.activeTransformTool!) {
+        TransformToolType.crop =>
+          state.src != null
+              ? CropController(
+                  image: state.src!,
+                  initialState: state.transformFilters
+                      .whereType<CropArguments>()
+                      .firstOrNull,
+                  onCropChanged: (cropFilter) {
+                    context.addEvent(_UpdateTransformFilter(cropFilter));
+                  },
+                )
+              : const Center(child: CircularProgressIndicator()),
+
+        TransformToolType.orientation =>
+          state.src != null
+              ? OrientationView(
+                  image: state.src!,
+                  state: state.transformFilters
+                      .whereType<OrientationArguments>()
+                      .firstOrNull,
+                )
+              : const Center(child: CircularProgressIndicator()),
+      },
     );
   }
 }
