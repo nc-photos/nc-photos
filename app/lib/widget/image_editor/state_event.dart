@@ -22,6 +22,7 @@ class _State {
     required this.shouldNotifySelectFace,
     required this.activeTool,
     this.activeTransformTool,
+    this.transformPreviewSrc,
     required this.isFaceSelectionMode,
     this.faceSelectorImageSize,
     this.quitRequest,
@@ -75,6 +76,8 @@ class _State {
 
   final _ToolType activeTool;
   final TransformToolType? activeTransformTool;
+  // image used for transform
+  final Rgba8Image? transformPreviewSrc;
   final bool isFaceSelectionMode;
   final Size? faceSelectorImageSize;
 
@@ -166,6 +169,16 @@ class _SetActiveTransformTool implements _Event {
   String toString() => _$toString();
 
   final TransformToolType? value;
+}
+
+@toString
+class _SetTransformPreviewSrc implements _Event {
+  const _SetTransformPreviewSrc(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Rgba8Image value;
 }
 
 @toString

@@ -15,6 +15,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_SetTransformFilters>(_onSetTransformFilters);
     on<_UpdateTransformFilter>(_onUpdateTransformFilter);
     on<_SetActiveTransformTool>(_onSetActiveTransformTool);
+    on<_SetTransformPreviewSrc>(_onSetTransformPreviewSrc);
     on<_SetFaceLandmarks>(_onSetFaceLandmarks);
     on<_ToggleFaceSelection>(_onToggleFaceSelection);
     on<_FaceFilterValueChanged>(_onFaceFilterValueChanged);
@@ -92,10 +93,12 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onSetActiveTool(_SetActiveTool ev, _Emitter emit) {
     _log.info(ev);
+    ++_transformPreviewToken;
     emit(
       state.copyWith(
         activeTool: ev.value,
         activeTransformTool: null,
+        transformPreviewSrc: null,
         isFaceSelectionMode: false,
       ),
     );
@@ -158,7 +161,18 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
 
   void _onSetActiveTransformTool(_SetActiveTransformTool ev, _Emitter emit) {
     _log.info(ev);
-    emit(state.copyWith(activeTransformTool: ev.value));
+    final token = ++_transformPreviewToken;
+    emit(
+      state.copyWith(activeTransformTool: ev.value, transformPreviewSrc: null),
+    );
+    if (ev.value != null) {
+      _updateTransformPreview(ev.value!, token);
+    }
+  }
+
+  void _onSetTransformPreviewSrc(_SetTransformPreviewSrc ev, _Emitter emit) {
+    _log.info(ev);
+    emit(state.copyWith(transformPreviewSrc: ev.value));
   }
 
   void _onSetFaceLandmarks(_SetFaceLandmarks ev, _Emitter emit) {
@@ -367,6 +381,34 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     });
   }
 
+  Future<void> _updateTransformPreview(
+    TransformToolType tool,
+    int token,
+  ) async {
+    if (state.src == null) {
+      return;
+    }
+    final pos = state.transformFilters.indexWhere(
+      (e) => e.getToolType() == tool,
+    );
+    // only apply filters before this one
+    final filters = pos == -1
+        ? state.transformFilters
+        : state.transformFilters.sublist(0, pos);
+    final result = filters.isEmpty
+        ? state.src!
+        : await _applyFilters(
+            state.src!,
+            pixelFilters: const [],
+            transformFilters: filters,
+            markupFilter: null,
+          );
+    if (isClosed || token != _transformPreviewToken) {
+      return;
+    }
+    add(_SetTransformPreviewSrc(result));
+  }
+
   Future<List<image_editor.Edit>> _preparePixelFilters() async {
     if (state.pixelFilters.any((e) => e is PixelFaceArguments)) {
       var landmarks = state.faceLandmarks;
@@ -568,6 +610,7 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   final _processorTokenMutex = Mutex();
   final _processorMutex = Mutex();
 
+  var _transformPreviewToken = 0;
   var _brushStrokeToken = 0;
 
   var _isHandlingError = false;

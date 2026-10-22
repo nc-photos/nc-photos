@@ -28,6 +28,7 @@ abstract class $_StateCopyWithWorker {
     bool? shouldNotifySelectFace,
     _ToolType? activeTool,
     TransformToolType? activeTransformTool,
+    Rgba8Image? transformPreviewSrc,
     bool? isFaceSelectionMode,
     Size? faceSelectorImageSize,
     Unique<void>? quitRequest,
@@ -59,6 +60,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic shouldNotifySelectFace,
     dynamic activeTool,
     dynamic activeTransformTool = copyWithNull,
+    dynamic transformPreviewSrc = copyWithNull,
     dynamic isFaceSelectionMode,
     dynamic faceSelectorImageSize = copyWithNull,
     dynamic quitRequest = copyWithNull,
@@ -97,6 +99,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       activeTransformTool: activeTransformTool == copyWithNull
           ? that.activeTransformTool
           : activeTransformTool as TransformToolType?,
+      transformPreviewSrc: transformPreviewSrc == copyWithNull
+          ? that.transformPreviewSrc
+          : transformPreviewSrc as Rgba8Image?,
       isFaceSelectionMode:
           isFaceSelectionMode as bool? ?? that.isFaceSelectionMode,
       faceSelectorImageSize: faceSelectorImageSize == copyWithNull
@@ -137,7 +142,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], markupFilter: $markupFilter, appliedStrokeIds: {length: ${appliedStrokeIds.length}}, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, shouldNotifySelectFace: $shouldNotifySelectFace, activeTool: ${activeTool.name}, activeTransformTool: ${activeTransformTool == null ? null : "${activeTransformTool!.name}"}, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], markupFilter: $markupFilter, appliedStrokeIds: {length: ${appliedStrokeIds.length}}, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, shouldNotifySelectFace: $shouldNotifySelectFace, activeTool: ${activeTool.name}, activeTransformTool: ${activeTransformTool == null ? null : "${activeTransformTool!.name}"}, transformPreviewSrc: $transformPreviewSrc, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
@@ -194,6 +199,13 @@ extension _$_SetActiveTransformToolToString on _SetActiveTransformTool {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetActiveTransformTool {value: ${value == null ? null : "${value!.name}"}}";
+  }
+}
+
+extension _$_SetTransformPreviewSrcToString on _SetTransformPreviewSrc {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetTransformPreviewSrc {value: $value}";
   }
 }
 

@@ -422,14 +422,14 @@ class _TransformToolBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return _BlocBuilder(
       buildWhen: (previous, current) =>
-          previous.src != current.src ||
+          previous.transformPreviewSrc != current.transformPreviewSrc ||
           previous.activeTransformTool != current.activeTransformTool ||
           previous.transformFilters != current.transformFilters,
       builder: (context, state) => switch (state.activeTransformTool!) {
         TransformToolType.crop =>
-          state.src != null
+          state.transformPreviewSrc != null
               ? CropController(
-                  image: state.src!,
+                  image: state.transformPreviewSrc!,
                   initialState: state.transformFilters
                       .whereType<CropArguments>()
                       .firstOrNull,
@@ -440,9 +440,9 @@ class _TransformToolBody extends StatelessWidget {
               : const Center(child: CircularProgressIndicator()),
 
         TransformToolType.orientation =>
-          state.src != null
+          state.transformPreviewSrc != null
               ? OrientationView(
-                  image: state.src!,
+                  image: state.transformPreviewSrc!,
                   state: state.transformFilters
                       .whereType<OrientationArguments>()
                       .firstOrNull,
