@@ -8,6 +8,7 @@ class StatefulSlider extends StatefulWidget {
     this.min = 0.0,
     this.max = 1.0,
     this.divisions,
+    this.onChanged,
     this.onChangeEnd,
   });
 
@@ -18,6 +19,7 @@ class StatefulSlider extends StatefulWidget {
   final double min;
   final double max;
   final int? divisions;
+  final ValueChanged<double>? onChanged;
   final ValueChanged<double>? onChangeEnd;
 }
 
@@ -39,6 +41,7 @@ class _StatefulSliderState extends State<StatefulSlider> {
         setState(() {
           _value = value;
         });
+        widget.onChanged?.call(value);
       },
       onChangeEnd: widget.onChangeEnd,
     );

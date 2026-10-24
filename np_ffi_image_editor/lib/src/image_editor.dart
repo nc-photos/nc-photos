@@ -208,6 +208,23 @@ class SketchEdit implements Edit {
   final double hatching;
 }
 
+class StraightenEdit implements Edit {
+  const StraightenEdit({required this.degree, required this.position});
+
+  @override
+  JsonObj toJson() => {
+    "type": "straighten",
+    "degree": degree,
+    "positionX": position.dx,
+    "positionY": position.dy,
+  };
+
+  // rotation degree, [-90, 90]
+  final int degree;
+  // relative offset of the ROI from the center [-1, 1]
+  final Offset position;
+}
+
 class TintEdit implements Edit {
   const TintEdit(this.weight);
 

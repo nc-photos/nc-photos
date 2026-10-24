@@ -39,6 +39,7 @@ class PixelToolSlider extends StatelessWidget {
     required this.min,
     required this.max,
     required this.initialValue,
+    this.onChanged,
     this.onChangeEnd,
     this.isShowMinMax = true,
   });
@@ -76,6 +77,7 @@ class PixelToolSlider extends StatelessWidget {
             initialValue: initialValue.toDouble(),
             min: min.toDouble(),
             max: max.toDouble(),
+            onChanged: onChanged,
             onChangeEnd: onChangeEnd,
           ),
         ],
@@ -86,6 +88,7 @@ class PixelToolSlider extends StatelessWidget {
   final double min;
   final double max;
   final double initialValue;
+  final ValueChanged<double>? onChanged;
   final ValueChanged<double>? onChangeEnd;
   final bool isShowMinMax;
 }

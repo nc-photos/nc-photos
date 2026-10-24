@@ -42,6 +42,7 @@ import 'package:nc_photos/widget/image_editor/markup_toolbar.dart';
 import 'package:nc_photos/widget/image_editor/markup_toolbar_util.dart';
 import 'package:nc_photos/widget/image_editor/orientation_view.dart';
 import 'package:nc_photos/widget/image_editor/pixel_toolbar_util.dart';
+import 'package:nc_photos/widget/image_editor/straighten_view.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar.dart';
 import 'package:nc_photos/widget/image_editor_persist_option_dialog.dart';
 import 'package:nc_photos/widget/local_result_viewer/local_result_viewer.dart';
@@ -372,12 +373,32 @@ class _Body extends StatelessWidget {
               _ToolType.transform => TransformToolbar(
                 initialState: context.state.transformFilters,
                 onActiveFiltersChanged: (transformFilters) {
+                  // handle straighten differently. find a better way later
+                  final straighten = context.state.transformFilters
+                      .whereType<StraightenArguments>()
+                      .firstOrNull;
                   context.addEvent(
-                    _SetTransformFilters(transformFilters.toList()),
+                    _SetTransformFilters(
+                      transformFilters
+                          .map(
+                            (e) => e is StraightenArguments
+                                ? (straighten ?? e)
+                                : e,
+                          )
+                          .toList(),
+                    ),
                   );
                 },
                 onActiveToolChanged: (tool) {
                   context.addEvent(_SetActiveTransformTool(tool));
+                },
+                onIntermediateStraightenValueChanged: (value) {
+                  context.addEvent(_SetIntermediateStraightenDegree(value));
+                },
+                onStraightenValueChanged: (value) {
+                  context
+                    ..addEvent(_SetIntermediateStraightenDegree(value))
+                    ..addEvent(_SetStraightenDegree(value));
                 },
               ),
               _ToolType.markup => _BlocSelector<MarkupArguments>(
@@ -446,6 +467,27 @@ class _TransformToolBody extends StatelessWidget {
                   state: state.transformFilters
                       .whereType<OrientationArguments>()
                       .firstOrNull,
+                )
+              : const Center(child: CircularProgressIndicator()),
+
+        TransformToolType.straighten =>
+          state.transformPreviewSrc != null
+              ? _BlocSelector(
+                  selector: (state) => state.intermediateStraightenValue,
+                  builder: (context, intermediateStraightenValue) =>
+                      StraightenView(
+                        image: state.transformPreviewSrc!,
+                        value: intermediateStraightenValue,
+                        position:
+                            state.transformFilters
+                                .whereType<StraightenArguments>()
+                                .firstOrNull
+                                ?.position ??
+                            Offset.zero,
+                        onPositionChanged: (position) {
+                          context.addEvent(_SetStraightenPosition(position));
+                        },
+                      ),
                 )
               : const Center(child: CircularProgressIndicator()),
       },

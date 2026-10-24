@@ -16,6 +16,11 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     on<_UpdateTransformFilter>(_onUpdateTransformFilter);
     on<_SetActiveTransformTool>(_onSetActiveTransformTool);
     on<_SetTransformPreviewSrc>(_onSetTransformPreviewSrc);
+    on<_SetIntermediateStraightenDegree>((ev, emit) {
+      emit(state.copyWith(intermediateStraightenValue: ev.value));
+    });
+    on<_SetStraightenDegree>(_onSetStraightenDegree);
+    on<_SetStraightenPosition>(_onSetStraightenPosition);
     on<_SetFaceLandmarks>(_onSetFaceLandmarks);
     on<_ToggleFaceSelection>(_onToggleFaceSelection);
     on<_FaceFilterValueChanged>(_onFaceFilterValueChanged);
@@ -49,7 +54,10 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   bool Function(dynamic, dynamic)? get shouldLog => (currentState, nextState) {
     currentState = currentState as _State;
     nextState = nextState as _State;
-    return currentState.downloadProgress == nextState.downloadProgress;
+    return currentState.downloadProgress == nextState.downloadProgress &&
+        (identical(currentState.transformFilters, nextState.transformFilters) ||
+            currentState.transformFilters.length !=
+                nextState.transformFilters.length);
   };
 
   @override
@@ -165,6 +173,18 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
     emit(
       state.copyWith(activeTransformTool: ev.value, transformPreviewSrc: null),
     );
+    if (ev.value == TransformToolType.straighten) {
+      emit(
+        state.copyWith(
+          intermediateStraightenValue:
+              state.transformFilters
+                  .whereType<StraightenArguments>()
+                  .firstOrNull
+                  ?.degree ??
+              0,
+        ),
+      );
+    }
     if (ev.value != null) {
       _updateTransformPreview(ev.value!, token);
     }
@@ -173,6 +193,32 @@ class _IeBloc extends Bloc<_Event, _State> with BlocLogger {
   void _onSetTransformPreviewSrc(_SetTransformPreviewSrc ev, _Emitter emit) {
     _log.info(ev);
     emit(state.copyWith(transformPreviewSrc: ev.value));
+  }
+
+  void _onSetStraightenDegree(_SetStraightenDegree ev, _Emitter emit) {
+    _log.info(ev);
+    final next = state.transformFilters.toList();
+    final idx = next.indexWhere((e) => e is StraightenArguments);
+    if (idx == -1) {
+      next.add(StraightenArguments(degree: ev.value, position: Offset.zero));
+    } else {
+      next[idx] = (next[idx] as StraightenArguments).copyWith(degree: ev.value);
+    }
+    add(_SetTransformFilters(next));
+  }
+
+  void _onSetStraightenPosition(_SetStraightenPosition ev, _Emitter emit) {
+    _log.info(ev);
+    final next = state.transformFilters.toList();
+    final idx = next.indexWhere((e) => e is StraightenArguments);
+    if (idx == -1) {
+      next.add(StraightenArguments(degree: 0, position: ev.value));
+    } else {
+      next[idx] = (next[idx] as StraightenArguments).copyWith(
+        position: ev.value,
+      );
+    }
+    add(_SetTransformFilters(next));
   }
 
   void _onSetFaceLandmarks(_SetFaceLandmarks ev, _Emitter emit) {

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:nc_photos/app_localizations.dart';
 import 'package:nc_photos/widget/image_editor/crop_controller.dart';
 import 'package:nc_photos/widget/image_editor/orientation_view.dart';
+import 'package:nc_photos/widget/image_editor/pixel_toolbar_util.dart';
+import 'package:nc_photos/widget/image_editor/straighten_view.dart';
 import 'package:nc_photos/widget/image_editor/toolbar_button.dart';
 import 'package:nc_photos/widget/image_editor/transform_toolbar_util.dart';
 import 'package:np_collection/np_collection.dart';
@@ -15,6 +17,8 @@ class TransformToolbar extends StatefulWidget {
     required this.initialState,
     required this.onActiveFiltersChanged,
     required this.onActiveToolChanged,
+    required this.onStraightenValueChanged,
+    required this.onIntermediateStraightenValueChanged,
   });
 
   @override
@@ -23,6 +27,8 @@ class TransformToolbar extends StatefulWidget {
   final List<TransformArguments> initialState;
   final ValueChanged<Iterable<TransformArguments>> onActiveFiltersChanged;
   final ValueChanged<TransformToolType?> onActiveToolChanged;
+  final ValueChanged<int> onStraightenValueChanged;
+  final ValueChanged<int> onIntermediateStraightenValueChanged;
 }
 
 class _TransformToolbarState extends State<TransformToolbar> {
@@ -43,6 +49,10 @@ class _TransformToolbarState extends State<TransformToolbar> {
     switch (_selectedFilter) {
       case TransformToolType.orientation:
         child = _buildOrientationOption(context);
+        break;
+
+      case TransformToolType.straighten:
+        child = _buildStraightenOption(context);
         break;
 
       case TransformToolType.crop:
@@ -85,6 +95,15 @@ class _TransformToolbarState extends State<TransformToolbar> {
                     .indexOf(TransformToolType.orientation)
                     .let((i) => i == -1 ? null : i),
               ),
+              ToolbarButton(
+                icon: Icons.straighten_outlined,
+                label: "Straighten",
+                onPressed: _onStraightenPressed,
+                isSelected: _selectedFilter == TransformToolType.straighten,
+                activationOrder: _filters.keys
+                    .indexOf(TransformToolType.straighten)
+                    .let((i) => i == -1 ? null : i),
+              ),
               const SizedBox(width: 16),
             ],
           ),
@@ -103,6 +122,30 @@ class _TransformToolbarState extends State<TransformToolbar> {
           _filters[TransformToolType.orientation] = OrientationArguments(value);
         });
         _notifyFiltersChanged();
+      },
+    );
+  }
+
+  Widget? _buildStraightenOption(BuildContext context) {
+    return PixelToolSlider(
+      key: Key(TransformToolType.straighten.name),
+      min: -90,
+      max: 90,
+      initialValue:
+          -(_filters[TransformToolType.straighten] as StraightenArguments)
+              .degree
+              .toDouble(),
+      isShowMinMax: false,
+      onChanged: (value) {
+        widget.onIntermediateStraightenValueChanged(-value.round());
+      },
+      onChangeEnd: (value) {
+        widget.onStraightenValueChanged(-value.round());
+        setState(() {
+          _filters[TransformToolType.straighten] =
+              (_filters[TransformToolType.straighten] as StraightenArguments)
+                  .copyWith(degree: -value.round());
+        });
       },
     );
   }
@@ -133,6 +176,10 @@ class _TransformToolbarState extends State<TransformToolbar> {
   void _onOrientationPressed() => _onFilterPressed(
     TransformToolType.orientation,
     const OrientationArguments(0),
+  );
+  void _onStraightenPressed() => _onFilterPressed(
+    TransformToolType.straighten,
+    const StraightenArguments(degree: 0, position: Offset.zero),
   );
 
   void _notifyFiltersChanged() {

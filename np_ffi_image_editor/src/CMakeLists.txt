@@ -31,6 +31,7 @@ add_library(np_ffi_image_editor SHARED
   "edit/posterization.cpp"
   "edit/saturation.cpp"
   "edit/sketch.cpp"
+  "edit/straighten.cpp"
   "edit/tint.cpp"
   "edit/toon.cpp"
   "edit/warmth.cpp"

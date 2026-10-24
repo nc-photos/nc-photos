@@ -23,6 +23,7 @@ class _State {
     required this.activeTool,
     this.activeTransformTool,
     this.transformPreviewSrc,
+    required this.intermediateStraightenValue,
     required this.isFaceSelectionMode,
     this.faceSelectorImageSize,
     this.quitRequest,
@@ -44,6 +45,7 @@ class _State {
       selectedFaces: [],
       shouldNotifySelectFace: false,
       activeTool: _ToolType.color,
+      intermediateStraightenValue: 0,
       isFaceSelectionMode: false,
       downloadProgress: 0,
     );
@@ -78,6 +80,7 @@ class _State {
   final TransformToolType? activeTransformTool;
   // image used for transform
   final Rgba8Image? transformPreviewSrc;
+  final int intermediateStraightenValue;
   final bool isFaceSelectionMode;
   final Size? faceSelectorImageSize;
 
@@ -179,6 +182,36 @@ class _SetTransformPreviewSrc implements _Event {
   String toString() => _$toString();
 
   final Rgba8Image value;
+}
+
+@toString
+class _SetIntermediateStraightenDegree implements _Event {
+  const _SetIntermediateStraightenDegree(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final int value;
+}
+
+@toString
+class _SetStraightenDegree implements _Event {
+  const _SetStraightenDegree(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final int value;
+}
+
+@toString
+class _SetStraightenPosition implements _Event {
+  const _SetStraightenPosition(this.value);
+
+  @override
+  String toString() => _$toString();
+
+  final Offset value;
 }
 
 @toString

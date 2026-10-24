@@ -13,6 +13,7 @@
 #include "edit/posterization.h"
 #include "edit/saturation.h"
 #include "edit/sketch.h"
+#include "edit/straighten.h"
 #include "edit/tint.h"
 #include "edit/toon.h"
 #include "edit/warmth.h"
@@ -168,6 +169,12 @@ parseEdits(const nlohmann::json &json) {
         const auto degree = e["degree"].get<int>();
         products.push_back(
             make_unique<np_image_editor::edit::Orientation>(degree));
+      } else if (type == "straighten") {
+        const auto degree = e["degree"].get<int>();
+        const auto positionX = e["positionX"].get<float>();
+        const auto positionY = e["positionY"].get<float>();
+        products.push_back(make_unique<np_image_editor::edit::Straighten>(
+            degree, positionX, positionY));
       }
     }
   }

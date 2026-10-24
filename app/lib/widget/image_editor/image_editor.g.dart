@@ -29,6 +29,7 @@ abstract class $_StateCopyWithWorker {
     _ToolType? activeTool,
     TransformToolType? activeTransformTool,
     Rgba8Image? transformPreviewSrc,
+    int? intermediateStraightenValue,
     bool? isFaceSelectionMode,
     Size? faceSelectorImageSize,
     Unique<void>? quitRequest,
@@ -61,6 +62,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic activeTool,
     dynamic activeTransformTool = copyWithNull,
     dynamic transformPreviewSrc = copyWithNull,
+    dynamic intermediateStraightenValue,
     dynamic isFaceSelectionMode,
     dynamic faceSelectorImageSize = copyWithNull,
     dynamic quitRequest = copyWithNull,
@@ -102,6 +104,9 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       transformPreviewSrc: transformPreviewSrc == copyWithNull
           ? that.transformPreviewSrc
           : transformPreviewSrc as Rgba8Image?,
+      intermediateStraightenValue:
+          intermediateStraightenValue as int? ??
+          that.intermediateStraightenValue,
       isFaceSelectionMode:
           isFaceSelectionMode as bool? ?? that.isFaceSelectionMode,
       faceSelectorImageSize: faceSelectorImageSize == copyWithNull
@@ -142,7 +147,7 @@ extension $_StateCopyWith on _State {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], markupFilter: $markupFilter, appliedStrokeIds: {length: ${appliedStrokeIds.length}}, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, shouldNotifySelectFace: $shouldNotifySelectFace, activeTool: ${activeTool.name}, activeTransformTool: ${activeTransformTool == null ? null : "${activeTransformTool!.name}"}, transformPreviewSrc: $transformPreviewSrc, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
+    return "_State {src: $src, dst: $dst, pixelFilters: [length: ${pixelFilters.length}], transformFilters: [length: ${transformFilters.length}], markupFilter: $markupFilter, appliedStrokeIds: {length: ${appliedStrokeIds.length}}, isApplyingFilters: $isApplyingFilters, postTransformSrc: $postTransformSrc, faceLandmarks: ${faceLandmarks == null ? null : "[length: ${faceLandmarks!.length}]"}, selectedFaces: [length: ${selectedFaces.length}], hasSelectedFaceReset: $hasSelectedFaceReset, shouldNotifySelectFace: $shouldNotifySelectFace, activeTool: ${activeTool.name}, activeTransformTool: ${activeTransformTool == null ? null : "${activeTransformTool!.name}"}, transformPreviewSrc: $transformPreviewSrc, intermediateStraightenValue: $intermediateStraightenValue, isFaceSelectionMode: $isFaceSelectionMode, faceSelectorImageSize: $faceSelectorImageSize, quitRequest: $quitRequest, saveState: ${saveState == null ? null : "${saveState!.name}"}, downloadProgress: ${downloadProgress.toStringAsFixed(3)}, savedFile: ${savedFile == null ? null : "${savedFile!.path}"}, error: $error, initError: $initError, saveError: $saveError}";
   }
 }
 
@@ -206,6 +211,28 @@ extension _$_SetTransformPreviewSrcToString on _SetTransformPreviewSrc {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetTransformPreviewSrc {value: $value}";
+  }
+}
+
+extension _$_SetIntermediateStraightenDegreeToString
+    on _SetIntermediateStraightenDegree {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetIntermediateStraightenDegree {value: $value}";
+  }
+}
+
+extension _$_SetStraightenDegreeToString on _SetStraightenDegree {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetStraightenDegree {value: $value}";
+  }
+}
+
+extension _$_SetStraightenPositionToString on _SetStraightenPosition {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetStraightenPosition {value: $value}";
   }
 }
 
