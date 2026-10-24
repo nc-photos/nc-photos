@@ -179,7 +179,7 @@ class _MemoryCollectionItemViewState extends State<_MemoryCollectionItemView> {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(56),
       child: SizedBox(
         width: _MemoryCollectionItemView.width,
         height: _MemoryCollectionItemView.height,
@@ -208,44 +208,19 @@ class _MemoryCollectionItemViewState extends State<_MemoryCollectionItemView> {
               ),
             ),
             Positioned(
-              top: 0,
-              bottom: 8,
-              left: 0,
-              right: 0,
-              child: FittedBox(
-                alignment: Alignment.center,
-                fit: BoxFit.none,
-                child: Text(
-                  "${widget.year}".substring(2),
-                  style: TextStyle(
-                    fontSize: 184,
-                    fontWeight: FontWeight.w900,
-                    letterSpacing: -8,
-                    color:
-                        (Theme.of(context).brightness == Brightness.light
-                                ? _colorScheme?.primary
-                                : _colorScheme?.inversePrimary)
-                            ?.withValues(alpha: .20) ??
-                        Colors.black12,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ),
-            Positioned(
               bottom: 0,
               left: 0,
               right: 0,
               child: Container(
                 color:
                     (_colorScheme?.primaryContainer ??
-                            Theme.of(context).colorScheme.inverseSurface)
-                        .withValues(alpha: 0.75),
+                    Theme.of(context).colorScheme.inverseSurface),
                 alignment: Alignment.center,
-                padding: const EdgeInsets.all(4),
+                padding: const EdgeInsets.all(6),
                 child: Text(
-                  widget.label,
+                  "${widget.year}",
                   style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.bold,
                     color:
                         _colorScheme?.onPrimaryContainer ??
                         Theme.of(context).colorScheme.onInverseSurface,
