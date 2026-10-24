@@ -77,17 +77,19 @@ internal class MediaStoreChannelHandler(context: Context) :
 	override fun onAttachedToActivity(binding: ActivityPluginBinding) {
 		activity = binding.activity
 
-		val cr = binding.activity.applicationContext.contentResolver
-		cr.registerContentObserver(
-			MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-			true,
-			imageObserver
-		)
-		cr.registerContentObserver(
-			MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-			true,
-			videoObserver
-		)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			val cr = binding.activity.applicationContext.contentResolver
+			cr.registerContentObserver(
+				MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+				true,
+				imageObserver
+			)
+			cr.registerContentObserver(
+				MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+				true,
+				videoObserver
+			)
+		}
 	}
 
 	override fun onReattachedToActivityForConfigChanges(
@@ -97,12 +99,14 @@ internal class MediaStoreChannelHandler(context: Context) :
 	}
 
 	override fun onDetachedFromActivity() {
-		activity?.applicationContext?.contentResolver?.unregisterContentObserver(
-			imageObserver
-		)
-		activity?.applicationContext?.contentResolver?.unregisterContentObserver(
-			videoObserver
-		)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+			activity?.applicationContext?.contentResolver?.unregisterContentObserver(
+				imageObserver
+			)
+			activity?.applicationContext?.contentResolver?.unregisterContentObserver(
+				videoObserver
+			)
+		}
 		activity = null
 	}
 
