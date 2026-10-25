@@ -1668,7 +1668,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get placeSortOptionPhotoCount => '写真の多い順';
 
   @override
-  String get placeSortOptionName => '場所の名前';
+  String get placeSortOptionName => '名前順';
 
   @override
   String get errorUnauthenticated => '認証されていないアクセスです。問題が解決しない場合は、再度サインインしてください';

@@ -1716,5 +1716,5 @@
 	"swipeSelectGuide": "長押ししたまま指を動かすと、複数の写真を選択できます",
 	"selectionModePreviewGuide": "選択モード中に写真を長押しすると、その写真を開けます",
 	"placeSortOptionPhotoCount": "写真の多い順",
-	"placeSortOptionName": "場所の名前"
+	"placeSortOptionName": "名前順"
 }
