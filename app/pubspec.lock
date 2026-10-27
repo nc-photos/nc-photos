@@ -582,11 +582,12 @@ packages:
   flutter_isolate:
     dependency: "direct main"
     description:
-      name: flutter_isolate
-      sha256: "36a84e1a22371d8092ea2121145b330c24fb272acb951fb30c60ba44926b8fb3"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.1.0"
+      path: "."
+      ref: "2.1.0-nc-photos-1"
+      resolved-ref: "7c24a1e4535cb5dd281c7fc9b8b980262a76c764"
+      url: "https://github.com/nc-photos/flutter_isolate.git"
+    source: git
+    version: "2.1.0-pre"
   flutter_lints:
     dependency: transitive
     description:
