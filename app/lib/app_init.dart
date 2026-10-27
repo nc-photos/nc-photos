@@ -170,7 +170,7 @@ void _initEquatable() {
 
 Future<void> _initSelfSignedCertManager() async {
   try {
-    return SelfSignedCertManager().init();
+    await SelfSignedCertManager().init();
   } catch (e, stackTrace) {
     _log.shout(
       "[_initSelfSignedCertManager] Failed to load self signed certs",
