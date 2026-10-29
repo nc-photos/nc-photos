@@ -46,7 +46,7 @@ class PersonFaceRecognitionProvider
   );
 
   @override
-  Matrix4? getCoverTransform(int viewportSize, int width, int height) => null;
+  Matrix4? getCoverTransform(Size viewportSize, Size imageSize) => null;
 
   @override
   List<Object?> get props => [account, person];

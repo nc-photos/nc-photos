@@ -15,14 +15,18 @@ class _PersonItemView extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(72 / 2),
-              child: PersonThumbnail(
-                dimension: 72,
-                account: account,
-                person: item.person,
-                coverUrl: item.coverUrl,
-                coverMime: item.coverMime,
+            child: SizedBox(
+              width: 88,
+              height: 112,
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(32),
+                child: PersonThumbnail(
+                  size: const Size(88, 112),
+                  account: account,
+                  person: item.person,
+                  coverUrl: item.coverUrl,
+                  coverMime: item.coverMime,
+                ),
               ),
             ),
           ),
@@ -55,7 +59,6 @@ class _PlaceItemView extends StatelessWidget {
         children: [
           Center(
             child: _LocationCoverImage(
-              dimension: 72,
               account: account,
               coverUrl: item.coverUrl,
               coverMime: item.coverMime,
@@ -115,7 +118,6 @@ class _LocationCoverPlaceholder extends StatelessWidget {
 
 class _LocationCoverImage extends StatelessWidget {
   const _LocationCoverImage({
-    required this.dimension,
     required this.account,
     required this.coverUrl,
     required this.coverMime,
@@ -135,10 +137,11 @@ class _LocationCoverImage extends StatelessWidget {
       cover = const FittedBox(child: _LocationCoverPlaceholder());
     }
 
-    return SizedBox.square(
-      dimension: dimension,
+    return SizedBox(
+      width: 88,
+      height: 112,
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(dimension / 2),
+        borderRadius: BorderRadius.circular(32),
         child: Container(
           color: Theme.of(context).listPlaceholderBackgroundColor,
           constraints: const BoxConstraints.expand(),
@@ -148,7 +151,6 @@ class _LocationCoverImage extends StatelessWidget {
     );
   }
 
-  final double dimension;
   final Account account;
   final String? coverUrl;
   final String? coverMime;

@@ -273,7 +273,7 @@ class _PeopleSection extends StatelessWidget {
                 );
               } else {
                 return SizedBox(
-                  height: 128,
+                  height: 176,
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     scrollDirection: Axis.horizontal,
@@ -354,7 +354,7 @@ class _PlaceSection extends StatelessWidget {
                 );
               } else {
                 return SizedBox(
-                  height: 128,
+                  height: 176,
                   child: ListView.builder(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     scrollDirection: Axis.horizontal,

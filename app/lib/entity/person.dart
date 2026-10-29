@@ -53,8 +53,8 @@ class Person with EquatableMixin {
   );
 
   /// See [PersonContentProvider.getCoverTransform]
-  Matrix4? getCoverTransform(int viewportSize, int width, int height) =>
-      contentProvider.getCoverTransform(viewportSize, width, height);
+  Matrix4? getCoverTransform(Size viewportSize, Size imageSize) =>
+      contentProvider.getCoverTransform(viewportSize, imageSize);
 
   @override
   List<Object?> get props => [name, contentProvider];
@@ -88,7 +88,5 @@ abstract class PersonContentProvider with EquatableMixin {
   });
 
   /// Return the transformation matrix to focus the face
-  ///
-  /// Only viewport in square is supported
-  Matrix4? getCoverTransform(int viewportSize, int width, int height);
+  Matrix4? getCoverTransform(Size viewportSize, Size imageSize);
 }

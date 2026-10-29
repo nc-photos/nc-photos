@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:collection/collection.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -52,7 +54,7 @@ class PersonRecognizeProvider
   );
 
   @override
-  Matrix4? getCoverTransform(int viewportSize, int imgW, int imgH) {
+  Matrix4? getCoverTransform(Size viewportSize, Size imageSize) {
     final detection = items?.firstOrNull?.faceDetections?.firstWhereOrNull(
       (e) => e["title"] == face.label,
     );
@@ -70,38 +72,46 @@ class PersonRecognizeProvider
       return null;
     }
 
-    // move image to the face
-    double mx = imgW * -faceXNorm;
-    double my = imgH * -faceYNorm;
-    // add offset in case image is not a square
-    if (imgW > imgH) {
-      mx += (imgW - imgH) / 2;
-    } else if (imgH > imgW) {
-      my += (imgH - imgW) / 2;
+    if (imageSize.width <= 0 ||
+        imageSize.height <= 0 ||
+        faceWNorm <= 0 ||
+        faceHNorm <= 0) {
+      return null;
     }
+
+    final coverScale = math.max(
+      viewportSize.width / imageSize.width,
+      viewportSize.height / imageSize.height,
+    );
+    final coverW = imageSize.width * coverScale;
+    final coverH = imageSize.height * coverScale;
+    final coverDx = (viewportSize.width - coverW) / 2;
+    final coverDy = (viewportSize.height - coverH) / 2;
+
+    final faceX = coverDx + coverW * faceXNorm;
+    final faceY = coverDy + coverH * faceYNorm;
+    final faceW = coverW * faceWNorm;
+    final faceH = coverH * faceHNorm;
 
     // scale image to focus on the face
-    final faceW = imgW * faceWNorm;
-    final faceH = imgH * faceHNorm;
-    double ms;
-    if (faceW > faceH) {
-      ms = viewportSize / faceW;
-    } else {
-      ms = viewportSize / faceH;
-    }
-    // slightly scale down to include pixels around the face
-    ms *= .75;
+    final ms = math.max(
+      // slightly scale down to include pixels around the face
+      math.min(viewportSize.width / faceW, viewportSize.height / faceH) * .75,
+      1.0,
+    );
+    final scaledW = coverW * ms;
+    final scaledH = coverH * ms;
 
     // center the scaled image
-    final resultFaceW = faceW * ms;
-    final resultFaceH = faceH * ms;
-    final cx = (viewportSize - resultFaceW) / 2;
-    final cy = (viewportSize - resultFaceH) / 2;
+    var left = viewportSize.width / 2 - (faceX + faceW / 2) * ms + ms * coverDx;
+    var top = viewportSize.height / 2 - (faceY + faceH / 2) * ms + ms * coverDy;
+    // keep the whole viewport covered by the image
+    left = left.clamp(viewportSize.width - scaledW, 0);
+    top = top.clamp(viewportSize.height - scaledH, 0);
 
     return Matrix4.identity()
-      ..translateByDouble(cx, cy, 0, 1)
-      ..scaleByDouble(ms, ms, ms, 1)
-      ..translateByDouble(mx, my, 0, 1);
+      ..translateByDouble(left - ms * coverDx, top - ms * coverDy, 0, 1)
+      ..scaleByDouble(ms, ms, ms, 1);
   }
 
   @override

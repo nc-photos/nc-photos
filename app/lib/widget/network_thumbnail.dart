@@ -15,6 +15,7 @@ class NetworkRectThumbnail extends StatefulWidget {
     required this.mime,
     this.dimension,
     this.cacheType = CachedNetworkImageType.thumbnail,
+    this.clipBehavior = Clip.hardEdge,
     required this.errorBuilder,
     this.onSize,
     this.onDominantColor,
@@ -32,6 +33,7 @@ class NetworkRectThumbnail extends StatefulWidget {
   final String? mime;
   final double? dimension;
   final CachedNetworkImageType cacheType;
+  final Clip clipBehavior;
   final Widget Function(BuildContext context) errorBuilder;
   final ValueChanged<Size>? onSize;
   final ValueChanged<ColorScheme>? onDominantColor;
@@ -41,7 +43,7 @@ class NetworkRectThumbnailState extends State<NetworkRectThumbnail> {
   @override
   Widget build(BuildContext context) {
     final child = FittedBox(
-      clipBehavior: Clip.hardEdge,
+      clipBehavior: widget.clipBehavior,
       fit: BoxFit.cover,
       child: CachedNetworkImageBuilder(
         type: widget.cacheType,

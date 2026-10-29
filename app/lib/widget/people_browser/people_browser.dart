@@ -198,7 +198,7 @@ class _ItemView extends StatelessWidget {
           coverUrl: item.coverUrl,
           coverMime: item.coverMime,
           person: item.person,
-          dimension: constraints.maxWidth,
+          size: Size(constraints.maxWidth, constraints.maxHeight),
         ),
       ),
     );
