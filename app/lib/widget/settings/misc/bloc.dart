@@ -7,11 +7,13 @@ class _Bloc extends Bloc<_Event, _State>
     : super(
         _State(
           isDoubleTapExit: prefController.isDoubleTapExitValue,
+          isEnableAnimation: prefController.isEnableAnimationValue,
           appLockType: securePrefController.protectedPageAuthTypeValue,
         ),
       ) {
     on<_Init>(_onInit);
     on<_SetDoubleTapExit>(_onSetDoubleTapExit);
+    on<_SetEnableAnimation>(_onSetEnableAnimation);
   }
 
   @override
@@ -24,6 +26,15 @@ class _Bloc extends Bloc<_Event, _State>
         emit,
         prefController.isDoubleTapExitChange,
         onData: (data) => state.copyWith(isDoubleTapExit: data),
+        onError: (e, stackTrace) {
+          _log.severe("[_onInit] Uncaught exception", e, stackTrace);
+          return state.copyWith(error: ExceptionEvent(e, stackTrace));
+        },
+      ),
+      forEach(
+        emit,
+        prefController.isEnableAnimationChange,
+        onData: (data) => state.copyWith(isEnableAnimation: data),
         onError: (e, stackTrace) {
           _log.severe("[_onInit] Uncaught exception", e, stackTrace);
           return state.copyWith(error: ExceptionEvent(e, stackTrace));
@@ -44,6 +55,11 @@ class _Bloc extends Bloc<_Event, _State>
   void _onSetDoubleTapExit(_SetDoubleTapExit ev, Emitter<_State> emit) {
     _log.info(ev);
     prefController.setDoubleTapExit(ev.value);
+  }
+
+  void _onSetEnableAnimation(_SetEnableAnimation ev, Emitter<_State> emit) {
+    _log.info(ev);
+    prefController.setEnableAnimation(ev.value);
   }
 
   final PrefController prefController;

@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -411,6 +410,9 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get settingsDoubleTapExitTitle => '双击退出';
+
+  @override
+  String get settingsEnableAnimationTitle => 'Animations';
 
   @override
   String get settingsPhotosTabSortByNameTitle => '通过文件名排列图片';

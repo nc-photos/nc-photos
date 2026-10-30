@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -439,6 +438,9 @@ class AppLocalizationsPl extends AppLocalizations {
 
   @override
   String get settingsDoubleTapExitTitle => 'Kliknij dwukrotnie, aby wyjść';
+
+  @override
+  String get settingsEnableAnimationTitle => 'Animations';
 
   @override
   String get settingsPhotosTabSortByNameTitle =>

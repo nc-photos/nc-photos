@@ -797,6 +797,12 @@ abstract class AppLocalizations {
   /// **'Double tap to exit'**
   String get settingsDoubleTapExitTitle;
 
+  /// Toggle some UI animations
+  ///
+  /// In en, this message translates to:
+  /// **'Animations'**
+  String get settingsEnableAnimationTitle;
+
   /// Sort photos listed in the Photos tab by filename (descending)
   ///
   /// In en, this message translates to:

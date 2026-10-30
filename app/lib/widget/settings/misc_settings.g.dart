@@ -15,6 +15,7 @@ part of 'misc_settings.dart';
 abstract class $_StateCopyWithWorker {
   _State call({
     bool? isDoubleTapExit,
+    bool? isEnableAnimation,
     ProtectedPageAuthType? appLockType,
     ExceptionEvent? error,
   });
@@ -26,11 +27,13 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
   @override
   _State call({
     dynamic isDoubleTapExit,
+    dynamic isEnableAnimation,
     dynamic appLockType = copyWithNull,
     dynamic error = copyWithNull,
   }) {
     return _State(
       isDoubleTapExit: isDoubleTapExit as bool? ?? that.isDoubleTapExit,
+      isEnableAnimation: isEnableAnimation as bool? ?? that.isEnableAnimation,
       appLockType: appLockType == copyWithNull
           ? that.appLockType
           : appLockType as ProtectedPageAuthType?,
@@ -64,7 +67,7 @@ extension _$_BlocNpLog on _Bloc {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {isDoubleTapExit: $isDoubleTapExit, appLockType: ${appLockType == null ? null : "${appLockType!.name}"}, error: $error}";
+    return "_State {isDoubleTapExit: $isDoubleTapExit, isEnableAnimation: $isEnableAnimation, appLockType: ${appLockType == null ? null : "${appLockType!.name}"}, error: $error}";
   }
 }
 
@@ -79,5 +82,12 @@ extension _$_SetDoubleTapExitToString on _SetDoubleTapExit {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
     return "_SetDoubleTapExit {value: $value}";
+  }
+}
+
+extension _$_SetEnableAnimationToString on _SetEnableAnimation {
+  String _$toString() {
+    // ignore: unnecessary_string_interpolations
+    return "_SetEnableAnimation {value: $value}";
   }
 }

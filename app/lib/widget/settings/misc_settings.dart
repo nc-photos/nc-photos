@@ -83,6 +83,18 @@ class _WrappedMiscSettingsState extends State<_WrappedMiscSettings>
                     );
                   },
                 ),
+                _BlocSelector<bool>(
+                  selector: (state) => state.isEnableAnimation,
+                  builder: (_, state) {
+                    return SwitchListTile(
+                      title: Text(L10n.global().settingsEnableAnimationTitle),
+                      value: state,
+                      onChanged: (value) {
+                        _bloc.add(_SetEnableAnimation(value));
+                      },
+                    );
+                  },
+                ),
                 _BlocSelector<ProtectedPageAuthType?>(
                   selector: (state) => state.appLockType,
                   builder: (context, appLockType) => ListTile(

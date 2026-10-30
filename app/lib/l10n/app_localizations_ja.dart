@@ -1,6 +1,5 @@
 // ignore: unused_import
 import 'package:intl/intl.dart' as intl;
-
 import 'app_localizations.dart';
 
 // ignore_for_file: type=lint
@@ -417,6 +416,9 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get settingsDoubleTapExitTitle => '終了前に確認する';
+
+  @override
+  String get settingsEnableAnimationTitle => 'Animations';
 
   @override
   String get settingsPhotosTabSortByNameTitle => '写真をファイル名で並べ替える';

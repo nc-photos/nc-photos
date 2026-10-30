@@ -341,6 +341,12 @@ class PrefController {
     value: value,
   );
 
+  Future<void> setEnableAnimation(bool value) => _set(
+    controller: _isEnableAnimationController,
+    setter: (pref, value) => pref.setEnableAnimation(value),
+    value: value,
+  );
+
   Future<bool> _set<T>({
     required BehaviorSubject<T> controller,
     required Future<bool> Function(Pref pref, T value) setter,
@@ -569,6 +575,10 @@ class PrefController {
   @npSubjectAccessor
   late final _placeSortController = BehaviorSubject.seeded(
     pref.getPlaceSort() ?? PlaceSort.count,
+  );
+  @npSubjectAccessor
+  late final _isEnableAnimationController = BehaviorSubject.seeded(
+    pref.isEnableAnimation() ?? true,
   );
 }
 

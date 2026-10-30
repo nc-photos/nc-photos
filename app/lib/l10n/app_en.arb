@@ -404,6 +404,10 @@
 	"@settingsDoubleTapExitTitle": {
 		"description": "If enabled, users need to tap the back button twice to exit app"
 	},
+	"settingsEnableAnimationTitle": "Animations",
+	"@settingsEnableAnimationTitle": {
+		"description": "Toggle some UI animations"
+	},
 	"settingsPhotosTabSortByNameTitle": "Sort by filename in Photos",
 	"@settingsPhotosTabSortByNameTitle": {
 		"description": "Sort photos listed in the Photos tab by filename (descending)"

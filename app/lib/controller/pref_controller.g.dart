@@ -351,6 +351,13 @@ extension $PrefControllerNpSubjectAccessor on PrefController {
   Stream<PlaceSort> get placeSortNew => placeSort.skip(1);
   Stream<PlaceSort> get placeSortChange => placeSort.distinct().skip(1);
   PlaceSort get placeSortValue => _placeSortController.value;
+  // _isEnableAnimationController
+  ValueStream<bool> get isEnableAnimation =>
+      _isEnableAnimationController.stream;
+  Stream<bool> get isEnableAnimationNew => isEnableAnimation.skip(1);
+  Stream<bool> get isEnableAnimationChange =>
+      isEnableAnimation.distinct().skip(1);
+  bool get isEnableAnimationValue => _isEnableAnimationController.value;
 }
 
 extension $SecurePrefControllerNpSubjectAccessor on SecurePrefController {

@@ -268,6 +268,10 @@ extension on Pref {
       provider.getInt(PrefKey.placeSort)?.let(PlaceSort.tryFromValue);
   Future<bool> setPlaceSort(PlaceSort value) =>
       provider.setInt(PrefKey.placeSort, value.value);
+
+  bool? isEnableAnimation() => provider.getBool(PrefKey.isEnableAnimation);
+  Future<bool> setEnableAnimation(bool value) =>
+      provider.setBool(PrefKey.isEnableAnimation, value);
 }
 
 MapCoord? _tryMapCoordFromJson(dynamic json) {
