@@ -38,9 +38,9 @@ class _AppBar extends StatelessWidget {
               children: [
                 BackButton(
                   style: IconButton.styleFrom(
-                    backgroundColor: Theme.of(
-                      context,
-                    ).colorScheme.surfaceContainer,
+                    backgroundColor: Theme.of(context)
+                        .colorScheme
+                        .surfaceContainer,
                   ),
                 ),
                 const Spacer(),
@@ -49,9 +49,9 @@ class _AppBar extends StatelessWidget {
                     icon: const Icon(Icons.slideshow_outlined),
                     tooltip: L10n.global().slideshowTooltip,
                     style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainer,
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .surfaceContainer,
                     ),
                     onPressed: () {
                       context.addEvent(const _StartSlideshow());
@@ -63,16 +63,15 @@ class _AppBar extends StatelessWidget {
                     icon: const AssetIcon(asset.icAddCollectionsOutlined24),
                     tooltip: L10n.global().addToCollectionsViewTooltip,
                     style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainer,
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .surfaceContainer,
                     ),
                   ),
                 if (state.items.isNotEmpty || canRename || canShare)
                   PopupMenuButton<_MenuOption>(
-                    tooltip: MaterialLocalizations.of(
-                      context,
-                    ).moreButtonTooltip,
+                    tooltip: MaterialLocalizations.of(context)
+                        .moreButtonTooltip,
                     itemBuilder: (_) => [
                       if (canRename)
                         PopupMenuItem(
@@ -113,9 +112,9 @@ class _AppBar extends StatelessWidget {
                       _onMenuSelected(context, option);
                     },
                     style: IconButton.styleFrom(
-                      backgroundColor: Theme.of(
-                        context,
-                      ).colorScheme.surfaceContainer,
+                      backgroundColor: Theme.of(context)
+                          .colorScheme
+                          .surfaceContainer,
                     ),
                   ),
               ].separated((_) => const SizedBox(width: 4)).toList(),
@@ -213,7 +212,11 @@ class _CoverViewState extends State<_CoverView> with TickerProviderStateMixin {
       duration: const Duration(milliseconds: 1800),
     );
     _controllers[_activeIndex].addListener(_transitionHandler);
-    _controllers[_activeIndex].forward();
+    if (context.bloc.prefController.isEnableAnimationValue) {
+      _controllers[_activeIndex].forward();
+    } else {
+      _controllers[_activeIndex].value = .5;
+    }
   }
 
   @override
@@ -519,9 +522,8 @@ class _SelectionAppBar extends StatelessWidget {
   }
 
   Future<void> _onSelectionAddPressed(BuildContext context) async {
-    final collection = await Navigator.of(
-      context,
-    ).pushNamed<Collection>(CollectionPicker.routeName);
+    final collection = await Navigator.of(context)
+        .pushNamed<Collection>(CollectionPicker.routeName);
     if (collection == null) {
       return;
     }
