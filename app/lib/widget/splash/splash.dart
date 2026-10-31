@@ -171,9 +171,10 @@ class _WrappedSplash extends StatelessWidget {
   Future<void> _exportLog(BuildContext context) async {
     final log = await PlatformLog.dump();
     final exitInfo = context.state.exitInfo!;
+    const appInfo = "App version: ${k.versionStr}";
     await FlutterFileSaver().writeFileAsString(
       fileName: "nc_photos_log.txt",
-      data: "$exitInfo\n$log",
+      data: "$exitInfo\n$appInfo\n$log",
     );
   }
 
