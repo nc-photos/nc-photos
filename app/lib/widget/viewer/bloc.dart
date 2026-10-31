@@ -280,14 +280,33 @@ class _Bloc extends Bloc<_Event, _State>
       // collection not ready
       return;
     }
-    var merged = {
-      ...state.anyFiles,
-      // this is safe because collection does not support local files
-      if (collectionId != null)
+    Map<String, AnyFile> merged;
+    if (collectionId != null) {
+      merged = {
+        ...state.anyFiles,
+        // this is safe because collection does not support local files
         ...state.collectionItems!.map(
           (_, e) => e.file.toAnyFile().let((f) => MapEntry(f.id, f)),
         ),
-    };
+      };
+    } else {
+      merged = {
+        ...state.anyFiles,
+        // make the file accessible via merged id or remote/local id. Needed
+        // for dynamic collections. A workaround but probably safe because
+        // remote/local IDs are also "supposed" to be unique...
+        ...state.anyFiles.entries
+            .where((e) => e.value.provider is AnyFileMergedProvider)
+            .expand((e) {
+              final p = e.value.provider as AnyFileMergedProvider;
+              return [
+                MapEntry(p.remote.id, e.value),
+                MapEntry(p.local.id, e.value),
+              ];
+            })
+            .toMap(),
+      };
+    }
     if (merged.isEmpty) {
       merged = {initialFile.id: initialFile};
     }
