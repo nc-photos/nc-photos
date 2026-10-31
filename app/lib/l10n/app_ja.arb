@@ -597,19 +597,19 @@
 	"@sortOptionTimeDescendingLabel": {
 		"description": "Sort by time, in descending order"
 	},
-	"sortOptionFilenameAscendingLabel": "ファイル名",
+	"sortOptionFilenameAscendingLabel": "ファイル名順",
 	"@sortOptionFilenameAscendingLabel": {
 		"description": "Sort by filename, in ascending order"
 	},
-	"sortOptionFilenameDescendingLabel": "ファイル名 (降順)",
+	"sortOptionFilenameDescendingLabel": "ファイル名順（降順）",
 	"@sortOptionFilenameDescendingLabel": {
 		"description": "Sort by filename, in descending order"
 	},
-	"sortOptionAlbumNameLabel": "アルバム名",
+	"sortOptionAlbumNameLabel": "名前順",
 	"@sortOptionAlbumNameLabel": {
 		"description": "Sort by album name, in ascending order"
 	},
-	"sortOptionAlbumNameDescendingLabel": "アルバム名 (降順)",
+	"sortOptionAlbumNameDescendingLabel": "名前順（降順）",
 	"@sortOptionAlbumNameDescendingLabel": {
 		"description": "Sort by album name, in descending order"
 	},
@@ -1716,5 +1716,7 @@
 	"swipeSelectGuide": "長押ししたまま指を動かすと、複数の写真を選択できます",
 	"selectionModePreviewGuide": "選択モード中に写真を長押しすると、その写真を開けます",
 	"placeSortOptionPhotoCount": "写真の多い順",
-	"placeSortOptionName": "名前順"
+	"placeSortOptionName": "名前順",
+	"imageEditTransformStraighten": "傾き補正",
+	"settingsEnableAnimationTitle": "アニメーション"
 }

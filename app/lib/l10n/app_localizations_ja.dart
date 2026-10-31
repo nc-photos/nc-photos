@@ -419,7 +419,7 @@ class AppLocalizationsJa extends AppLocalizations {
   String get settingsDoubleTapExitTitle => '終了前に確認する';
 
   @override
-  String get settingsEnableAnimationTitle => 'Animations';
+  String get settingsEnableAnimationTitle => 'アニメーション';
 
   @override
   String get settingsPhotosTabSortByNameTitle => '写真をファイル名で並べ替える';
@@ -680,16 +680,16 @@ class AppLocalizationsJa extends AppLocalizations {
   String get sortOptionTimeDescendingLabel => '新着順';
 
   @override
-  String get sortOptionFilenameAscendingLabel => 'ファイル名';
+  String get sortOptionFilenameAscendingLabel => 'ファイル名順';
 
   @override
-  String get sortOptionFilenameDescendingLabel => 'ファイル名 (降順)';
+  String get sortOptionFilenameDescendingLabel => 'ファイル名順（降順）';
 
   @override
-  String get sortOptionAlbumNameLabel => 'アルバム名';
+  String get sortOptionAlbumNameLabel => '名前順';
 
   @override
-  String get sortOptionAlbumNameDescendingLabel => 'アルバム名 (降順)';
+  String get sortOptionAlbumNameDescendingLabel => '名前順（降順）';
 
   @override
   String get sortOptionManualLabel => 'マニュアル';
