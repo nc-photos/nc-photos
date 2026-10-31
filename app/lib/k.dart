@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 /// Version string shown in settings page
-const versionStr = "93.2";
-const version = 9302;
+const versionStr = "94.0";
+const version = 9400;
 
 /// Show a snack bar for a short amount of time
 const snackBarDurationShort = Duration(seconds: 4);
