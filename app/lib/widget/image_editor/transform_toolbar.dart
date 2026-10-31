@@ -97,7 +97,7 @@ class _TransformToolbarState extends State<TransformToolbar> {
               ),
               ToolbarButton(
                 icon: Icons.straighten_outlined,
-                label: "Straighten",
+                label: L10n.global().imageEditTransformStraighten,
                 onPressed: _onStraightenPressed,
                 isSelected: _selectedFilter == TransformToolType.straighten,
                 activationOrder: _filters.keys

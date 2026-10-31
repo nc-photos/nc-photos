@@ -1299,6 +1299,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get imageEditTransformCrop => 'Zuschneiden';
 
   @override
+  String get imageEditTransformStraighten => 'Straighten';
+
+  @override
   String get imageEditToolbarEffectLabel => 'Effect';
 
   @override

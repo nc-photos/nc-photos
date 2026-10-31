@@ -1299,6 +1299,10 @@
 	"@imageEditTransformCrop": {
 		"description": "Crop the image"
 	},
+	"imageEditTransformStraighten": "Straighten",
+	"@imageEditTransformStraighten": {
+		"description": "Straighten the image"
+	},
 	"imageEditToolbarEffectLabel": "Effect",
 	"imageEditEffectHalftone": "Halftone",
 	"imageEditEffectPixelation": "Pixelation",

@@ -1294,6 +1294,9 @@ class AppLocalizationsSk extends AppLocalizations {
   String get imageEditTransformCrop => 'Orezať';
 
   @override
+  String get imageEditTransformStraighten => 'Straighten';
+
+  @override
   String get imageEditToolbarEffectLabel => 'Effect';
 
   @override

@@ -2261,6 +2261,12 @@ abstract class AppLocalizations {
   /// **'Crop'**
   String get imageEditTransformCrop;
 
+  /// Straighten the image
+  ///
+  /// In en, this message translates to:
+  /// **'Straighten'**
+  String get imageEditTransformStraighten;
+
   /// No description provided for @imageEditToolbarEffectLabel.
   ///
   /// In en, this message translates to:

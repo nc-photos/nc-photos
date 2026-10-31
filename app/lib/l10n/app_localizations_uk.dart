@@ -1290,6 +1290,9 @@ class AppLocalizationsUk extends AppLocalizations {
   String get imageEditTransformCrop => 'Обрізати';
 
   @override
+  String get imageEditTransformStraighten => 'Straighten';
+
+  @override
   String get imageEditToolbarEffectLabel => 'Ефект';
 
   @override
