@@ -42,6 +42,9 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
   void initState() {
     super.initState();
     _initController().onError((e, stackTrace) {
+      if (!mounted) {
+        return;
+      }
       _log.shout("[initState] Failed while _initController", e, stackTrace);
       SnackBarManager().showSnackBarForException(e);
       widget.onLoadFailure?.call(e, stackTrace);
@@ -59,8 +62,8 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
   @override
   void dispose() {
     _lifecycleListener.dispose();
-    _controller.removeListener(_onControllerChanged);
-    _controllerValue?.dispose();
+    _controllerValue?.removeListener(_onControllerChanged);
+    _disposeController();
     super.dispose();
   }
 
@@ -83,33 +86,68 @@ class _LivePhotoViewerState extends State<LivePhotoViewer> {
 
   Future<void> _initController() async {
     try {
-      _controllerValue = await _createVideoController();
-      await _controller.initialize();
-      await _controller.setVolume(0);
-      await _controller.setLooping(true);
+      final controller = await AnyFilePresenterFactory.videoPlayerController(
+        widget.file,
+        account: widget.account,
+      ).build(livePhotoType: widget.livePhotoType);
+      if (!mounted) {
+        _log.info(
+          "[_initController] Dismissed while creating video controller",
+        );
+        _disposeController(controller);
+        return;
+      }
+      _controllerValue = controller;
+      await controller.initialize();
+      if (!mounted) {
+        _log.info(
+          "[_initController] Dismissed while initializing video controller",
+        );
+        _disposeController();
+        return;
+      }
+      unawaited(controller.setVolume(0));
+      unawaited(controller.setLooping(true));
       widget.onLoaded?.call();
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (_key.currentContext != null) {
           widget.onHeightChanged?.call(_key.currentContext!.size!.height);
         }
       });
-      _controller.addListener(_onControllerChanged);
+      controller.addListener(_onControllerChanged);
       setState(() {
         _isControllerInitialized = true;
       });
-      await _controller.play();
+      unawaited(controller.play());
     } catch (e, stackTrace) {
       _log.shout("[_initController] Failed while initialize", e, stackTrace);
+      _disposeController();
+      if (!mounted) {
+        return;
+      }
       SnackBarManager().showSnackBarForException(e);
       widget.onLoadFailure?.call(e, stackTrace);
     }
   }
 
-  Future<VideoPlayerController> _createVideoController() {
-    return AnyFilePresenterFactory.videoPlayerController(
-      widget.file,
-      account: widget.account,
-    ).build(livePhotoType: widget.livePhotoType);
+  void _disposeController([VideoPlayerController? controller]) {
+    if (controller == null) {
+      controller = _controllerValue;
+      _controllerValue = null;
+      _isControllerInitialized = false;
+    }
+    if (controller == null) {
+      return;
+    }
+    unawaited(
+      controller.dispose().onError((e, stackTrace) {
+        _log.warning(
+          "[_disposeController] Failed while disposing video controller",
+          e,
+          stackTrace,
+        );
+      }),
+    );
   }
 
   Widget _buildPlayer(BuildContext context) {

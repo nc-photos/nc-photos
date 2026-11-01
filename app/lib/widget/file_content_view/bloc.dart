@@ -53,7 +53,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   @override
   Future<void> close() {
-    _videoController?.dispose();
+    _disposeVideoController();
     for (final s in _subscriptions) {
       s.cancel();
     }
@@ -236,8 +236,22 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
 
   Future<void> _initVideo(_Emitter emit) async {
     try {
-      final controller = await _initVideoController();
+      final controller = await AnyFilePresenterFactory.videoPlayerController(
+        file,
+        account: account,
+      ).build();
+      if (isClosed) {
+        _log.info("[_initVideo] Dismissed while creating video controller");
+        _disposeVideoController(controller);
+        return;
+      }
       _videoController = controller;
+      await controller.initialize();
+      if (isClosed) {
+        _log.info("[_initVideo] Dismissed while initializing video controller");
+        _disposeVideoController();
+        return;
+      }
       unawaited(
         controller.setVolume(prefController.isVideoPlayerMuteValue ? 0 : 1),
       );
@@ -261,17 +275,30 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       }
     } catch (e, stackTrace) {
       _log.shout("[_initVideo] Failed while initialize", e, stackTrace);
-      emit(state.copyWith(loadError: (error: e, stackTrace: stackTrace)));
+      _disposeVideoController();
+      if (!isClosed) {
+        emit(state.copyWith(loadError: (error: e, stackTrace: stackTrace)));
+      }
     }
   }
 
-  Future<VideoPlayerController> _initVideoController() async {
-    final controller = await AnyFilePresenterFactory.videoPlayerController(
-      file,
-      account: account,
-    ).build();
-    await controller.initialize();
-    return controller;
+  void _disposeVideoController([VideoPlayerController? controller]) {
+    if (controller == null) {
+      controller = _videoController;
+      _videoController = null;
+    }
+    if (controller == null) {
+      return;
+    }
+    unawaited(
+      controller.dispose().onError((e, stackTrace) {
+        _log.warning(
+          "[_disposeVideoController] Failed while disposing video controller",
+          e,
+          stackTrace,
+        );
+      }),
+    );
   }
 
   final PrefController prefController;
