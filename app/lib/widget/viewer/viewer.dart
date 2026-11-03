@@ -301,11 +301,7 @@ class _WrappedViewerState extends State<_WrappedViewer>
                         : null,
                     body: Stack(
                       children: [
-                        OrientationBuilder(
-                          builder: (context, orientation) => _ContentBody(
-                            key: Key("viewer._ContentBody.${orientation.name}"),
-                          ),
-                        ),
+                        const _ContentBody(),
                         _BlocSelector(
                           selector: (state) => state.isBusy,
                           builder: (context, isBusy) => isBusy
