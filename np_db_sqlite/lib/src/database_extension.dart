@@ -200,39 +200,46 @@ extension SqliteDbExtension on SqliteDb {
     ByAccount account,
     List<DbFileKey> keys,
   ) {
-    final query = _queryFiles().let((q) {
-      q
-        ..setQueryMode(
-          FilesQueryMode.expression,
-          expressions: [
-            files.fileId,
-            accountFiles.relativePath,
-            accountFiles.rowId,
-            accountFiles.account,
-            accountFiles.file,
-          ],
+    return keys
+        .withPartition(
+          (sublist) {
+            final query = _queryFiles().let((q) {
+              q
+                ..setQueryMode(
+                  FilesQueryMode.expression,
+                  expressions: [
+                    files.fileId,
+                    accountFiles.relativePath,
+                    accountFiles.rowId,
+                    accountFiles.account,
+                    accountFiles.file,
+                  ],
+                )
+                ..setAccount(account);
+              return q.build();
+            });
+            final fileIds = sublist.map((k) => k.fileId).nonNulls;
+            final relativePaths = sublist.map((k) => k.relativePath).nonNulls;
+            query.where(
+              files.fileId.isIn(fileIds) |
+                  accountFiles.relativePath.isIn(relativePaths),
+            );
+            return query
+                .map(
+                  (r) => MapEntry(
+                    r.read(files.fileId)!,
+                    AccountFileRowIds(
+                      accountFileRowId: r.read(accountFiles.rowId)!,
+                      accountRowId: r.read(accountFiles.account)!,
+                      fileRowId: r.read(accountFiles.file)!,
+                    ),
+                  ),
+                )
+                .get();
+          },
+          // /2 because each key becomes 2 conditions
+          _maxByFileIdsSize ~/ 2,
         )
-        ..setAccount(account);
-      return q.build();
-    });
-    final fileIds = keys.map((k) => k.fileId).nonNulls;
-    final relativePaths = keys.map((k) => k.relativePath).nonNulls;
-    query.where(
-      files.fileId.isIn(fileIds) |
-          accountFiles.relativePath.isIn(relativePaths),
-    );
-    return query
-        .map(
-          (r) => MapEntry(
-            r.read(files.fileId)!,
-            AccountFileRowIds(
-              accountFileRowId: r.read(accountFiles.rowId)!,
-              accountRowId: r.read(accountFiles.account)!,
-              fileRowId: r.read(accountFiles.file)!,
-            ),
-          ),
-        )
-        .get()
         .then((e) => e.toMap());
   }
 
