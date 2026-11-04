@@ -168,10 +168,18 @@ class _ContentBodyState extends State<_ContentBody> {
                           child: AppIntermediateCircularProgressIndicator(),
                         );
                       } else {
-                        return _PageView(
-                          key: Key("Viewer-$afId"),
-                          afId: afId,
-                          pageHeight: MediaQuery.of(context).size.height,
+                        // only the current page should take part in hero
+                        // flights, other pages may still be alive offscreen
+                        return _BlocSelector<bool>(
+                          selector: (state) => state.index == i,
+                          builder: (context, isCurrent) => HeroMode(
+                            enabled: isCurrent,
+                            child: _PageView(
+                              key: Key("Viewer-$afId"),
+                              afId: afId,
+                              pageHeight: MediaQuery.of(context).size.height,
+                            ),
+                          ),
                         );
                       }
                     },
