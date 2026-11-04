@@ -79,10 +79,6 @@ part 'logger.dart';
 part 'my_app.g.dart';
 part 'state_event.dart';
 
-typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
-// typedef _BlocListener = BlocListener<_Bloc, _State>;
-// typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -201,7 +197,17 @@ class _WrappedAppState extends State<_WrappedApp>
             supportedLocales: AppLocalizations.supportedLocales,
             builder: (context, child) {
               MyApp._globalContext = context;
-              return _ThemedMyApp(child: child!);
+              return _ThemedMyApp(
+                child: _BlocSelector(
+                  selector: (state) => state.isEnableAnimation,
+                  builder: (context, isEnableAnimation) => isEnableAnimation
+                      ? HeroControllerScope(
+                          controller: _heroController,
+                          child: child!,
+                        )
+                      : HeroControllerScope.none(child: child!),
+                ),
+              );
             },
             debugShowCheckedModeBanner: false,
             scrollBehavior: const _MyScrollBehavior(),
@@ -215,6 +221,7 @@ class _WrappedAppState extends State<_WrappedApp>
   void dispose() {
     SnackBarManager().unregisterHandler(this);
     NavigationManager().unsetHandler(this);
+    _heroController.dispose();
     super.dispose();
   }
 
@@ -727,6 +734,7 @@ class _WrappedAppState extends State<_WrappedApp>
   late final _bloc = context.read<_Bloc>();
   final _scaffoldMessengerKey = GlobalKey<ScaffoldMessengerState>();
   final _navigatorKey = GlobalKey<NavigatorState>();
+  final _heroController = MaterialApp.createMaterialHeroController();
 }
 
 class _ThemedMyApp extends StatelessWidget {
@@ -760,3 +768,9 @@ class _MyScrollBehavior extends MaterialScrollBehavior {
     PointerDeviceKind.mouse,
   };
 }
+
+typedef _BlocBuilder = BlocBuilder<_Bloc, _State>;
+// typedef _BlocListener = BlocListener<_Bloc, _State>;
+// typedef _BlocListenerT<T> = BlocListenerT<_Bloc, _State, T>;
+typedef _BlocSelector<T> = BlocSelector<_Bloc, _State, T>;
+// typedef _Emitter = Emitter<_State>;

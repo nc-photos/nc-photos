@@ -11,6 +11,7 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
           isUseBlackInDarkTheme: prefController.isUseBlackInDarkThemeValue,
           seedColor: prefController.seedColorValue?.value,
           secondarySeedColor: prefController.secondarySeedColorValue?.value,
+          isEnableAnimation: prefController.isEnableAnimationValue,
         ),
       ) {
     on<_Init>(_onInit);
@@ -45,6 +46,10 @@ class _Bloc extends Bloc<_Event, _State> with BlocLogger {
       emit.forEachIgnoreError<ColorInt?>(
         prefController.secondarySeedColorChange,
         onData: (data) => state.copyWith(secondarySeedColor: data?.value),
+      ),
+      emit.forEachIgnoreError<bool>(
+        prefController.isEnableAnimationChange,
+        onData: (data) => state.copyWith(isEnableAnimation: data),
       ),
     ]);
   }

@@ -20,6 +20,7 @@ abstract class $_StateCopyWithWorker {
     bool? isUseBlackInDarkTheme,
     int? seedColor,
     int? secondarySeedColor,
+    bool? isEnableAnimation,
   });
 }
 
@@ -34,6 +35,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
     dynamic isUseBlackInDarkTheme,
     dynamic seedColor = copyWithNull,
     dynamic secondarySeedColor = copyWithNull,
+    dynamic isEnableAnimation,
   }) {
     return _State(
       language: language as language_util.AppLanguage? ?? that.language,
@@ -46,6 +48,7 @@ class _$_StateCopyWithWorkerImpl implements $_StateCopyWithWorker {
       secondarySeedColor: secondarySeedColor == copyWithNull
           ? that.secondarySeedColor
           : secondarySeedColor as int?,
+      isEnableAnimation: isEnableAnimation as bool? ?? that.isEnableAnimation,
     );
   }
 
@@ -103,7 +106,7 @@ extension _$_NavigatorLoggerNpLog on _NavigatorLogger {
 extension _$_StateToString on _State {
   String _$toString() {
     // ignore: unnecessary_string_interpolations
-    return "_State {language: $language, isDarkTheme: $isDarkTheme, isFollowSystemTheme: $isFollowSystemTheme, isUseBlackInDarkTheme: $isUseBlackInDarkTheme, seedColor: $seedColor, secondarySeedColor: $secondarySeedColor}";
+    return "_State {language: $language, isDarkTheme: $isDarkTheme, isFollowSystemTheme: $isFollowSystemTheme, isUseBlackInDarkTheme: $isUseBlackInDarkTheme, seedColor: $seedColor, secondarySeedColor: $secondarySeedColor, isEnableAnimation: $isEnableAnimation}";
   }
 }
 
