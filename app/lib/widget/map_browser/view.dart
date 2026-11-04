@@ -249,97 +249,102 @@ class _DateRangeControlPanel extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    return Container(
-      decoration: BoxDecoration(
-        color: theme.elevate(theme.colorScheme.surface, 2),
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(blurRadius: 4, offset: Offset(0, 2), color: Colors.black26),
-        ],
-      ),
-      child: Material(
-        type: MaterialType.transparency,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16),
+      child: BackdropFilter(
+        filter: Theme.of(context).appBarBlurFilter,
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme
+                .elevate(theme.colorScheme.surface, 2)
+                .withValues(alpha: .75),
+            borderRadius: BorderRadius.circular(16),
+          ),
+          child: Material(
+            type: MaterialType.transparency,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(
-                    child: Text(
-                      L10n.global().mapBrowserDateRangeLabel,
-                      style: Theme.of(context).listTileTheme.titleTextStyle,
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Text(
+                          L10n.global().mapBrowserDateRangeLabel,
+                          style: Theme.of(context).listTileTheme.titleTextStyle,
+                        ),
+                      ),
+                      Expanded(
+                        child: _BlocSelector<_DateRangeType>(
+                          selector: (state) => state.dateRangeType,
+                          builder: (context, dateRangeType) =>
+                              DropdownButtonFormField<_DateRangeType>(
+                                items: _DateRangeType.values
+                                    .map(
+                                      (e) => DropdownMenuItem(
+                                        value: e,
+                                        child: Text(e.toDisplayString()),
+                                      ),
+                                    )
+                                    .toList(),
+                                initialValue: dateRangeType,
+                                onChanged: (value) {
+                                  if (value != null) {
+                                    context.addEvent(_SetDateRangeType(value));
+                                  }
+                                },
+                              ),
+                        ),
+                      ),
+                    ],
                   ),
-                  Expanded(
-                    child: _BlocSelector<_DateRangeType>(
-                      selector: (state) => state.dateRangeType,
-                      builder: (context, dateRangeType) =>
-                          DropdownButtonFormField<_DateRangeType>(
-                            items: _DateRangeType.values
-                                .map(
-                                  (e) => DropdownMenuItem(
-                                    value: e,
-                                    child: Text(e.toDisplayString()),
-                                  ),
-                                )
-                                .toList(),
-                            initialValue: dateRangeType,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: _BlocSelector<DateRange>(
+                          selector: (state) => state.localDateRange,
+                          builder: (context, localDateRange) => _DateField(
+                            localDateRange.from!,
                             onChanged: (value) {
-                              if (value != null) {
-                                context.addEvent(_SetDateRangeType(value));
-                              }
+                              context.addEvent(
+                                _SetLocalDateRange(
+                                  localDateRange.copyWith(from: value.toDate()),
+                                ),
+                              );
                             },
                           ),
-                    ),
+                        ),
+                      ),
+                      const Text(" - "),
+                      Expanded(
+                        child: _BlocSelector<DateRange>(
+                          selector: (state) => state.localDateRange,
+                          builder: (context, localDateRange) => _DateField(
+                            localDateRange.to!,
+                            onChanged: (value) {
+                              context.addEvent(
+                                _SetLocalDateRange(
+                                  localDateRange.copyWith(to: value.toDate()),
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
+                  const SizedBox(height: 8),
+                  const Align(
+                    alignment: Alignment.centerRight,
+                    child: _SetAsDefaultSwitch(),
+                  ),
+                  const SizedBox(height: 8),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: _BlocSelector<DateRange>(
-                      selector: (state) => state.localDateRange,
-                      builder: (context, localDateRange) => _DateField(
-                        localDateRange.from!,
-                        onChanged: (value) {
-                          context.addEvent(
-                            _SetLocalDateRange(
-                              localDateRange.copyWith(from: value.toDate()),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                  const Text(" - "),
-                  Expanded(
-                    child: _BlocSelector<DateRange>(
-                      selector: (state) => state.localDateRange,
-                      builder: (context, localDateRange) => _DateField(
-                        localDateRange.to!,
-                        onChanged: (value) {
-                          context.addEvent(
-                            _SetLocalDateRange(
-                              localDateRange.copyWith(to: value.toDate()),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 8),
-              const Align(
-                alignment: Alignment.centerRight,
-                child: _SetAsDefaultSwitch(),
-              ),
-              const SizedBox(height: 8),
-            ],
+            ),
           ),
         ),
       ),

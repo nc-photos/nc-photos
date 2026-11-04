@@ -31,6 +31,7 @@ import 'package:nc_photos/np_api_util.dart';
 import 'package:nc_photos/snack_bar_manager.dart';
 import 'package:nc_photos/stream_extension.dart';
 import 'package:nc_photos/stream_util.dart';
+import 'package:nc_photos/theme.dart';
 import 'package:nc_photos/widget/collection_browser/collection_browser.dart';
 import 'package:nc_photos/widget/measure.dart';
 import 'package:nc_photos/widget/network_thumbnail.dart';
