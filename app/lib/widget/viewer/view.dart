@@ -23,16 +23,6 @@ class _ContentBodyState extends State<_ContentBody> {
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    final size = MediaQuery.sizeOf(context);
-    if (_lastSize != null && size != _lastSize) {
-      _restorePageAfterResize();
-    }
-    _lastSize = size;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return MultiBlocListener(
       listeners: [
@@ -218,29 +208,10 @@ class _ContentBodyState extends State<_ContentBody> {
   }
 
   void _onPageViewChanged() {
-    if (_isRestoringPage) {
-      return;
-    }
     final currPage = _pageViewController.pageF;
     if (currPage != null && (context.state.index - currPage).abs() >= .9) {
       context.addEvent(_SetIndex(currPage.round()));
     }
-  }
-
-  void _restorePageAfterResize() {
-    _isRestoringPage = true;
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (!mounted) {
-        return;
-      }
-      if (_pageViewController.hasClients &&
-          _pageViewController.position.hasViewportDimension) {
-        final index = context.state.index;
-        _log.info("[_restorePageAfterResize] Restore page: $index");
-        _pageViewController.jumpToPage(index);
-      }
-      _isRestoringPage = false;
-    });
   }
 
   // prevent view getting disposed
@@ -248,9 +219,6 @@ class _ContentBodyState extends State<_ContentBody> {
   late final _pageViewController = InfiniteScrollController(
     initialPage: context.state.index,
   );
-
-  Size? _lastSize;
-  var _isRestoringPage = false;
 }
 
 class _PageView extends StatefulWidget {
